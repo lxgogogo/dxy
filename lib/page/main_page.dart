@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: const Color(0xff008EFF),
         unselectedItemColor: const Color(0xff3B5078),
         showSelectedLabels: true, // 取消显示选中项的标签
-          showUnselectedLabels: true, // 取消显示未选中项的标签
+        showUnselectedLabels: true, // 取消显示未选中项的标签
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 38.px,
               height: 40.px,
             ),
-            label: 'Page 1',
+            label: '首页',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 38.px,
               height: 40.px,
             ),
-            label: 'Page 2',
+            label: '论坛',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
@@ -64,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 38.px,
               height: 40.px,
             ),
-            label: 'Page 3',
+            label: '消息',
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
@@ -74,7 +74,7 @@ class _MainScreenState extends State<MainScreen> {
               width: 38.px,
               height: 40.px,
             ),
-            label: 'Page 4',
+            label: '我的',
           ),
         ],
       ),
@@ -87,7 +87,54 @@ class Page1 extends StatelessWidget {
   Widget build(BuildContext context) {
     print('a');
     return Center(
-      child: Text('Page 1'),
+      child: Container(
+          width: 150.px,
+          height: 54.px,
+          padding: EdgeInsets.all(10.px),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            //flutter 上下颜色渐变
+            //#F9CF3A, #FFD43E00
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFEEF7FE),
+                Color(0xFFDDEDFA),
+                // Color.fromRGBO(140, 190, 233, 1),
+                // Color.fromRGBO(190, 214, 235, 1),
+                // Color.fromRGBO(140, 190, 233, 1),
+                // Color.fromRGBO(194, 216, 235, 1),
+                // Color.fromRGBO(140, 190, 233, 1),
+                // Color.fromRGBO(193, 215, 235, 1),
+                // Color.fromRGBO(140, 190, 233, 1),
+              ],
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.white,
+                blurRadius: 4.0,
+                spreadRadius: -4.0,
+                offset: Offset(0.0, 4.0),
+              ),
+              BoxShadow(
+                color: Color.fromRGBO(148, 197, 239, 0.74),
+                blurRadius: 9.4,
+                spreadRadius: -9.4,
+                offset: Offset(0.0, -4.0),
+              )
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(26.px)),
+          ),
+          child: Text(
+            '进阶策略',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Color(0xFF56748F),
+                fontSize: 28.px,
+                
+                fontWeight: FontWeight.bold),
+          )),
     );
   }
 }

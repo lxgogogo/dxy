@@ -50,6 +50,7 @@ dependencies:
   dynamic_tabbar: ^1.0.6
   group_button: ^5.3.4
   card_swiper: ^3.0.1
+  get: ^4.6.6
 
 
 

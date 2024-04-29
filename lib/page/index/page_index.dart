@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/route_manager.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/index/page_search.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -84,6 +87,7 @@ class _IndexPageState extends State<IndexPage> {
             ),
             onPressed: () {
               // 登录按钮点击事件
+              Get.to(SearchPage());
             },
           ),
         ],
@@ -155,7 +159,11 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   Widget bookItem(int index) {
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        Get.to(const BookDetailPage());
+      },
+      child: Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -179,7 +187,7 @@ class _IndexPageState extends State<IndexPage> {
           ))
         ],
       ),
-    );
+    ),);
   }
 
   Widget listDataItem(int index) {

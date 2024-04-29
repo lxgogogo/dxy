@@ -14,7 +14,7 @@ class ForumTabPage extends StatefulWidget {
   State<ForumTabPage> createState() => _ForumTabPageState();
 }
 
-class _ForumTabPageState extends State<ForumTabPage> {
+class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderStateMixin{
   List<TabData> forumParentTabs = [];
   // List<String> tabTitles = ['全部板块', '交流大厅', '咪牌技巧', '千王之王', '赌王争霸'];
 

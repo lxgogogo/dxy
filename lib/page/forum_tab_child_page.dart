@@ -20,6 +20,7 @@ class ForumTabChildPage extends StatefulWidget {
 class _ForumTabChildPageState extends State<ForumTabChildPage> {
   late int tabIdValue;
   late String filterValue = '';
+  late int selectFilterIndex = 0;
   late Map<int, dynamic> filterMap = {};
 
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -274,12 +275,13 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
       isRadio: true,
       buttons: ["时间最新", "回帖最多", "点赞最多"],
       onSelected: (selected, date, context) {
-        print('[fornumLog]ddddddddddddddddddddd===>$selected');
+        print('[forumLog]ddddddddddddddddddddd===>$selected');
         setState(() {
           filterValue = selected;
+          selectFilterIndex = getKeyByValue(selected)!;
         });
       },
-      controller: GroupButtonController(selectedIndex: 0),
+      controller: GroupButtonController(selectedIndex: selectFilterIndex),
       //默认0位置选中
       options: GroupButtonOptions(
         selectedShadow: const [],
@@ -312,6 +314,15 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
         elevation: 0,
       ),
     );
+  }
+
+  int? getKeyByValue(String selected) {
+    for (var entry in filterMap.entries) {
+      if (entry.value == selected) {
+        return entry.key;
+      }
+    }
+    return 0;
   }
 
 // Widget foot() {

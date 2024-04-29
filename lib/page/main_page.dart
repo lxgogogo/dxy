@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:holdem/page/index/page_index.dart';
 import 'package:holdem/utils/size_fit.dart';
 
-import 'forum_tab_page.dart';
+import 'forum/page_forum_tab.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

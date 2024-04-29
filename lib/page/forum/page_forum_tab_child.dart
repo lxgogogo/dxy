@@ -6,7 +6,7 @@ import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../utils/constants.dart';
+import '../../utils/constants.dart';
 
 class ForumTabChildPage extends StatefulWidget {
   int tabId;
@@ -57,11 +57,11 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-        width: 20.px,
+        height: 3.px,
       ),
       getFilterConditionView(),
       SizedBox(
-        width: 10.px,
+        height: 10.px,
       ),
       Expanded(child: listView())
     ]);

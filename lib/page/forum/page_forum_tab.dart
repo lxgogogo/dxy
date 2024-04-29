@@ -2,10 +2,10 @@ import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:holdem/page/forum_tab_child_page.dart';
+import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/utils/size_fit.dart';
 
-import '../utils/constants.dart';
+import '../../utils/constants.dart';
 
 class ForumTabPage extends StatefulWidget {
   const ForumTabPage({super.key});
@@ -41,9 +41,11 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    SizeFit.initialize(context);
     return Scaffold(
       appBar: null,
-      body: getTabView(),
+      body: SafeArea(
+        child: getTabView()),
       backgroundColor: sortBtnBgtColor,
       floatingActionButton: bottomFloatingButton(),
     );
@@ -63,10 +65,10 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
   Widget getTabView() {
     return DynamicTabBarWidget(
       dynamicTabs: forumParentTabs,
-      isScrollable: true,
+      isScrollable: false,
       showBackIcon: false,
       showNextIcon: false,
-      labelPadding: EdgeInsets.only(left: 20),
+      labelPadding: EdgeInsets.fromLTRB(6, 0, 6, 0),
       indicatorColor: Colors.transparent,
       //底部下标颜色
       enableFeedback: false,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/page/index/page_index.dart';
+import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import 'forum/page_forum_tab.dart';
@@ -13,7 +14,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [IndexPage(), ForumTabPage(), Page3(), Page4()];
+  final List<Widget> _pages = [IndexPage(), ForumTabPage(), MessagePage(), Page4()];
 
   @override
   Widget build(BuildContext context) {

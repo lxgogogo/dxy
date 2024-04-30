@@ -3,21 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:holdem/utils/size_fit.dart';
 
-
 ///
 /// 左侧圆形头像，右侧顶部text，右侧底部2个text
 ///
 class CircleImageWithText extends StatelessWidget {
   final String imageUrl;
+  final double imageWidth;
+  final double imageHeight;
   final String topText;
+  final TextStyle topTextStyle;
   final String bottomText1;
   final String bottomText2;
+  final TextStyle bottomText1Style;
+  final TextStyle bottomText2Style;
 
-  CircleImageWithText(
-      {required this.imageUrl,
-      required this.topText,
-      required this.bottomText1,
-      required this.bottomText2});
+  CircleImageWithText({
+    required this.imageUrl,
+    required this.imageWidth,
+    required this.imageHeight,
+    required this.topText,
+    required this.topTextStyle,
+    required this.bottomText1,
+    required this.bottomText2,
+    required this.bottomText1Style,
+    required this.bottomText2Style,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +36,26 @@ class CircleImageWithText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.fromLTRB(0,0,5,0),
           child: ClipOval(
             child: Image.network(
               imageUrl,
-              width: 50,
-              height: 50,
+              width: imageWidth,
+              height: imageHeight,
               fit: BoxFit.cover,
             ),
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildTopText(),
-            _buildBottomText(),
-          ],
-        ),
+        Container(
+          height: imageHeight ,
+          child:Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTopText(),
+              Expanded(child: _buildBottomText()),
+            ],
+          ) ,
+        )
       ],
     ));
   }
@@ -51,30 +64,32 @@ class CircleImageWithText extends StatelessWidget {
     return Align(
       alignment: Alignment.topLeft,
       child: Padding(
-        padding: EdgeInsets.only(top: 10.0),
+        padding: EdgeInsets.only(top: 0),
         child: Text(
           topText,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: topTextStyle,
         ),
       ),
     );
   }
 
   Widget _buildBottomText() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 10.0),
+    return Padding(
+        padding: EdgeInsets.only(bottom: 0),
         child: Row(children: [
-          Text(bottomText1),
+          Visibility(child:  Text(
+            bottomText1,
+            style: bottomText1Style,
+          ),visible: bottomText1.isEmpty ? false : true,)
+         ,
           SizedBox(
-            width: 10.px,
+            width: bottomText1.isEmpty ? 0 : 10.px,
           ),
-          Text(bottomText2)
+          Visibility(child:  Text(
+            bottomText2,
+            style: bottomText2Style,
+          ),visible: bottomText2.isEmpty ? false : true,)
         ]),
-      ),
     );
   }
 }

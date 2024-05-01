@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
 
@@ -14,13 +15,14 @@ class _BookDetailPageState extends State<BookDetailPage> {
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
     return Scaffold(
-        extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-        appBar: AppBar(
-          backgroundColor: Colors.transparent, // 设置导航条背景透明
-          elevation: 0, // 去除导航条的阴影
-          title: Text('hhh'),
-        ),
-        body: Stack(
+      extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
+      backgroundColor: kBgColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent, // 设置导航条背景透明
+        elevation: 0, // 去除导航条的阴影
+        // title: Text('hhh'),
+      ),
+      body: Stack(
         children: [
           Positioned(
             top: 0,
@@ -31,20 +33,194 @@ class _BookDetailPageState extends State<BookDetailPage> {
               fit: BoxFit.cover,
             ),
           ),
-          Container(
-            color: kBgColor, // 设置背景颜色为灰色
-            child: Column(
-              children: [
-                SafeArea(
-                    child: SizedBox(
-                  height: 0.px,
-                )),
-                Expanded(child: Container())
-              ],
-            ),
+          Positioned(bottom: 0,left: 0,right: 0,height: 50,
+            child: Container(color: Colors.white,),
           ),
+          SafeArea(
+              child: Column(
+            children: [
+              SizedBox(
+                width: 375.px,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 16.px,
+                  ),
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(5.px), // 设置圆角半径
+                      child: Image.network(
+                        'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                        fit: BoxFit.cover,
+                        width: 120.px,
+                        height: 165.px,
+                      )),
+                  SizedBox(
+                    width: 12.px,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          '无限德州理论与实践',
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: Color(0xff3B5078),
+                              fontSize: 19.px,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 10.px,
+                        ),
+                        Text(
+                          '作者：迪米勒,斯克兰斯基\n出版社：Two Plus Two Publishing LLC\n发行时间：2006',
+                          style: TextStyle(
+                              color: Color(0xff3B5078),
+                              fontSize: 12.px,
+                              height: 1.8),
+                        ),
+                        // Expanded(child: Container()),
+                        // Text('下载资源',style: TextStyle(color: Colors.red),),
+                        SizedBox(
+                          height: 8.px,
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 3.px),
+                                decoration: BoxDecoration(
+                                  //flutter 上下颜色渐变
+                                  //#F9CF3A, #FFD43E00
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15.px)),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Color(0xFF3275F2),
+                                      Color(0xFF52C0FC),
+                                      Color(0xFF1E92F6),
+                                      Color(0xFF1E92F6),
+                                      Color(0xFF3DB4FD),
+                                      Color(0xFF1E92F6),
+                                      Color(0xFF1E92F6),
+                                      Color(0xFF52C0FC),
+                                      Color(0xFF3275F2),
+                                      // Color.fromRGBO(140, 190, 233, 1),
+                                      // Color.fromRGBO(190, 214, 235, 1),
+                                      // Color.fromRGBO(140, 190, 233, 1),
+                                      // Color.fromRGBO(194, 216, 235, 1),
+                                      // Color.fromRGBO(140, 190, 233, 1),
+                                      // Color.fromRGBO(193, 215, 235, 1),
+                                      // Color.fromRGBO(140, 190, 233, 1),
+                                    ],
+                                  ),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff30AEFB),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(15.px)),
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xFF63C2FF),
+                                        Color(0xFF1FA7FF),
+                                        Color(0xFF0775FA),
+                                      ],
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 13.px, vertical: 5.px),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/download.png',
+                                        width: 20.px,
+                                        height: 20.px,
+                                      ),
+                                      Text(
+                                        '下载资源',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15.px,
+                  ),
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: 15.px, left: 16.px, right: 16.px, bottom: 15.px),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      '详情介绍',
+                      style: TextStyle(
+                          color: Color(0xff3B5078),
+                          fontSize: 16.px,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 5.px,
+                    ),
+                    Text(
+                      '扑克是一种不断发展的游戏。它的魅力之一就是因为扑克有很多的游戏策略和很多的个人风格，所以没有一种完美的打法能保持不败。的确有些风格对抗一些选手很有效，但有时候却适得其…',
+                      maxLines: 10,
+                      style: TextStyle(
+                          color: Color(0xff666666),
+                          fontSize: 14.px,
+                          height: 1.4),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                width: 375.px,
+                padding: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.px),
+                        topRight: Radius.circular(15.px))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      '评论',
+                      style: TextStyle(color: Color(0xff3B5078),fontSize: 17.px,fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 18.px,),
+                    CommentItem(),
+                    // CommentItem(),
+                  ],
+                ),
+              ))
+            ],
+          ))
         ],
       ),
-        );
+    );
   }
 }

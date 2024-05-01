@@ -44,6 +44,7 @@ class _IndexPageState extends State<IndexPage> {
     SizeFit.initialize(context);
     return Scaffold(
       extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
+      backgroundColor: kBgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent, // 设置导航条背景透明
         elevation: 0, // 去除导航条的阴影
@@ -104,7 +105,7 @@ class _IndexPageState extends State<IndexPage> {
             ),
           ),
           Container(
-            color: kBgColor, // 设置背景颜色为灰色
+            color: Colors.transparent, // 设置背景颜色为灰色
             child: Column(
               children: [
                 SafeArea(

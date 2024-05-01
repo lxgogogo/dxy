@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_search.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -192,7 +193,11 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   Widget listDataItem(int index) {
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        Get.to(VideoListPage());
+      },
+      child: Container(
         padding: EdgeInsets.all(12.px),
         margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
         decoration: BoxDecoration(
@@ -303,6 +308,6 @@ class _IndexPageState extends State<IndexPage> {
               ),
             ))
           ],
-        ));
+        )),);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/holdem_btn.dart';
 
 class BookDetailPage extends StatefulWidget {
   const BookDetailPage({super.key});
@@ -90,72 +91,25 @@ class _BookDetailPageState extends State<BookDetailPage> {
                         ),
                         Row(
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 3.px),
-                                decoration: BoxDecoration(
-                                  //flutter 上下颜色渐变
-                                  //#F9CF3A, #FFD43E00
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15.px)),
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Color(0xFF3275F2),
-                                      Color(0xFF52C0FC),
-                                      Color(0xFF1E92F6),
-                                      Color(0xFF1E92F6),
-                                      Color(0xFF3DB4FD),
-                                      Color(0xFF1E92F6),
-                                      Color(0xFF1E92F6),
-                                      Color(0xFF52C0FC),
-                                      Color(0xFF3275F2),
-                                      // Color.fromRGBO(140, 190, 233, 1),
-                                      // Color.fromRGBO(190, 214, 235, 1),
-                                      // Color.fromRGBO(140, 190, 233, 1),
-                                      // Color.fromRGBO(194, 216, 235, 1),
-                                      // Color.fromRGBO(140, 190, 233, 1),
-                                      // Color.fromRGBO(193, 215, 235, 1),
-                                      // Color.fromRGBO(140, 190, 233, 1),
-                                    ],
-                                  ),
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff30AEFB),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(15.px)),
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        Color(0xFF63C2FF),
-                                        Color(0xFF1FA7FF),
-                                        Color(0xFF0775FA),
-                                      ],
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 13.px, vertical: 5.px),
-                                  child: Row(
+                            HoldemHighlightBtn(
+                              onTap: (){
+                                print('点击了下载资源');
+                              },
+                              child: Row(
                                     children: [
                                       Image.asset(
                                         'assets/images/download.png',
                                         width: 20.px,
                                         height: 20.px,
                                       ),
-                                      Text(
+                                      const Text(
                                         '下载资源',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold),
                                       )
                                     ],
-                                  ),
-                                ),
-                              ),
-                            )
+                                  )),
                           ],
                         )
                       ],

@@ -2,12 +2,16 @@ import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:holdem/page/forum/page_comment_input.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 import '../../view/forum/CircleImageWithText.dart';
+import '../../view/forum/ToastUtils.dart';
 
 class PostDetailPage extends StatefulWidget {
   int postId; //帖子id
@@ -106,8 +110,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           ? followedStatusBtn()
                           : IconButton(
                               onPressed: () {
+                                if (isFollowed) {
+                                  return;
+                                }
                                 setState(() {
                                   isFollowed = true;
+                                  ToastUtils.showToast( '已关注');
                                 });
                               },
                               icon: Image.asset(
@@ -293,26 +301,46 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     width: 16,
                   ),
                   Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: '我来说两句',
-                        filled: true,
-                        fillColor: AppTheme.color_EFEFEF,
-                        hintStyle: AppTheme.text999999Size14,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
+                      child: GestureDetector(
+                    onTap: () {
+                      //跳转评论输入页面
+                      Get.to(CommentInputPage(postId: currentPostId));
+                    },
+                    child: Container(
+                      height: 40.px,
+                      decoration: BoxDecoration(
+                        color: AppTheme.color_EFEFEF,
+                        borderRadius: BorderRadius.circular(25),
                       ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10), // 设置内边距
+                      child: Text('我来说两句', style: AppTheme.text999999Size14),
                     ),
-                  ),
+                  )
+
+                      // TextField(
+                      //   decoration: InputDecoration(
+                      //     hintText: '我来说两句',
+                      //     filled: true,
+                      //     fillColor: AppTheme.color_EFEFEF,
+                      //     hintStyle: AppTheme.text999999Size14,
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide.none,
+                      //       borderRadius: BorderRadius.circular(25.0),
+                      //     ),
+                      //     focusedBorder: OutlineInputBorder(
+                      //       borderSide: BorderSide.none,
+                      //       borderRadius: BorderRadius.circular(25.0),
+                      //     ),
+                      //   ),
+                      // ),
+                      ),
                   SizedBox(width: 10),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        //跳转评论列表页面
+                        ToastUtils.showToast('跳转评论列表');
+                      },
                       icon: Image.asset(
                         'assets/images/small_comments.png',
                         width: 25.px,
@@ -321,7 +349,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   IconButton(
                       onPressed: () {
                         setState(() {
-                          isCollected = true;
+                          isCollected = !isCollected;
+                          ToastUtils.showToast(isCollected ? '收藏成功' : '取消收藏');
                         });
                       },
                       icon: Image.asset(

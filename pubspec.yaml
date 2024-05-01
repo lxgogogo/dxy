@@ -51,7 +51,7 @@ dependencies:
   group_button: ^5.3.4
   card_swiper: ^3.0.1
   get: ^4.6.6
-
+  fluttertoast: ^8.2.5
 
 
 

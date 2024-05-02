@@ -7,6 +7,7 @@ import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart'
 import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
@@ -271,8 +272,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     children: [
                       IconButton(
                           onPressed: () {
-                            //跳转评论列表页面
-                            // ToastUtils.showToast('跳转评论列表');
+                            Get.to(AitUserPage());
                           },
                           icon: Image.asset(
                             'assets/images/ait.png',

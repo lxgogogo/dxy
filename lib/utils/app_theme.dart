@@ -14,6 +14,7 @@ class AppTheme {
   static const color_EFEFEF = Color(0xFFEFEFEF);
   static const color_F3F3F3 = Color(0xFFF3F3F3);
   static const color_000000 = Color(0xFF000000);
+  static const color_FFFFFF = Color(0xFFFFFFFF);
   static const color_0D000000 = Color(0x0D000000);
   static const color_1A000000 = Color(0x1A000000); //10%透明
   static const color_50000000 = Color(0x5000000); //2%透明
@@ -23,6 +24,11 @@ class AppTheme {
   static const TextStyle text3B5078Size17 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 17,
+    color: color_3B5078,
+  );
+  static const TextStyle text3B5078Size15 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 15,
     color: color_3B5078,
   );
   static const TextStyle text3B5078Size22 = TextStyle(
@@ -72,20 +78,44 @@ class AppTheme {
     color: color_999999,
   );
 
+  static const TextStyle text999999Size16W500 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    color: color_999999,
+  );
+
+  static const TextStyle text000000Size16W500 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    color: color_000000,
+  );
+
   static const TextStyle text999999Size13 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 13,
     color: color_999999,
   );
   static const TextStyle text000000Size16 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     fontSize: 16,
     color: color_000000,
+  );
+
+  static const TextStyle textFFFFFFSize16 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: color_FFFFFF,
   );
 
   static const TextStyle text333333Size17 = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 17,
+    color: color_333333,
+  );
+
+  static const TextStyle text333333Size15 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 15,
     color: color_333333,
   );
 }

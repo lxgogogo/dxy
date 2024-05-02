@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:holdem/page/comment/page_comment.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../page/forum/page_comment_input.dart';
@@ -96,7 +97,8 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   IconButton(
                       onPressed: () {
                         //跳转评论列表页面
-                        ToastUtils.showToast('跳转评论列表');
+                        // ToastUtils.showToast('跳转评论列表');
+                        Get.to(CommentPage());
                       },
                       icon: Image.asset(
                         'assets/images/small_comments.png',

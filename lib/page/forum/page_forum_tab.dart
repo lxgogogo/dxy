@@ -1,8 +1,8 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
+import 'package:holdem/page/forum/page_publish_posts.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../../utils/constants.dart';
@@ -101,7 +101,7 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
       //   children: [Icon(Icons.add), Text('发帖')],
       // ),
       onPressed: () {
-        setState(() {});
+        Get.to(PublishPostsPage());
       },
       shape: CircleBorder(),
     );

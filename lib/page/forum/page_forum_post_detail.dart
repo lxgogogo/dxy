@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/forum/page_comment_input.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/label_view.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
@@ -34,6 +36,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
     '评论内容评论内容评论内容评论内容',
     '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容',
     '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容'
+  ];
+
+  List<String> labelData = [
+    '标签1',
+    '标签2',
+    '标签13',
+    '标签14',
   ];
 
   @override
@@ -153,6 +162,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       ); // 替换image_$index.jpg为对应的图片路径
                     }),
                 SizedBox(height: 10),
+                // Expanded(child: LabelView(isEditLabel: false, labelData: labelData))
                 Row(
                   children: [
                     labelView(),
@@ -188,7 +198,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget commentsContent() {
     List<Widget> commentsList = [];
     for (int i = 0; i < items.length; i++) {
-      commentsList.add(listDataItem(i));
+      commentsList.add(CommentItem());
     }
     return Column(
       children: commentsList,

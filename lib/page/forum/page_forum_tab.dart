@@ -92,8 +92,9 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
   Widget bottomFloatingButton() {
     return FloatingActionButton(
       child: Image.asset('assets/images/posting_btn.png',
-        width: 80.px,
-        height: 80.px,
+        width: 100.px,
+        height: 106.px,
+        fit: BoxFit.fill,
     ),
       backgroundColor: Colors.transparent,
       // Column(

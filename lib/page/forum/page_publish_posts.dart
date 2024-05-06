@@ -91,7 +91,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         child: Column(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(16, 15, 16, 0),
+          margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
           height: 45.px,
           child: TextFormField(
               maxLines: 1,

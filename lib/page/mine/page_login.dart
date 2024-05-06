@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
+
+import '../../utils/app_theme.dart';
+import '../../utils/size_fit.dart';
+
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeFit.initialize(context);
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/images/back.png',
+            width: 22.px,
+            height: 22.px,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: AppTheme.white,
+        title: null,
+        centerTitle: true,
+      ),
+      body: SafeArea(child: contentView()),
+      backgroundColor: AppTheme.white,
+    );
+  }
+
+  Widget contentView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            margin: EdgeInsets.fromLTRB(40.px, 48.px, 16.px, 0),
+            child: Text(
+              "欢迎登录",
+              style: AppTheme.text3B5078Size23,
+            )),
+        Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 40.px),
+          padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+          child: Row(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/email.png',
+                width: 22.px,
+                height: 22.px,
+              ),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none, // 没有边框
+                    hintText: '请输入邮箱地址',
+                    hintStyle: AppTheme.text999999Size16,
+                    contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
+          height: 0.5,
+          color: AppTheme.color_F3F3F3,
+        ),
+        Container(
+          color: Colors.white,
+          margin: EdgeInsets.only(top: 10.px),
+          padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+          child: Row(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/password.png',
+                width: 22.px,
+                height: 22.px,
+              ),
+              Expanded(
+                child: TextField(
+                  obscureText: true, // 输入内容显示为密文
+                  decoration: InputDecoration(
+                    border: InputBorder.none, // 没有边框
+                    hintText: '请输入密码',
+                    hintStyle: AppTheme.text999999Size16,
+                    contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
+          height: 0.5,
+          color: AppTheme.color_F3F3F3,
+        ),
+        SizedBox(
+          height: 30.px,
+        ),
+        Center(
+            child: IconButton(
+                icon: Image.asset(
+                  'assets/images/login_btn.png',
+                  width: 295.px,
+                  height: 42.5.px,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                })),
+        Container(
+            margin: EdgeInsets.fromLTRB(40.px, 10.px, 40.px, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    ToastUtils.showToast('忘记密码');
+                  },
+                  child: Text(
+                    '忘记密码',
+                    style: AppTheme.text3B5078Size14,
+                  ),
+                ),
+                Expanded(child: Container()),
+                GestureDetector(
+                  onTap: () {
+                    ToastUtils.showToast('注册账号');
+                  },
+                  child: Text(
+                    '注册账号',
+                    style: AppTheme.text3B5078Size14,
+                  ),
+                )
+              ],
+            ))
+      ],
+    );
+  }
+}

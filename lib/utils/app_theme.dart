@@ -21,9 +21,36 @@ class AppTheme {
   static const color_30000000 = Color(0x3000000); //20%透明
   static const color_333333 = Color(0xFF333333);
 
+  static const TextStyle text3B5078Size23 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 23,
+    color: color_3B5078,
+  );
+
+  static const TextStyle text3B5078Size20 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 20,
+    color: color_3B5078,
+  );
+
   static const TextStyle text3B5078Size17 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 17,
+    color: color_3B5078,
+  );
+  static const TextStyle text3B5078Size16 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    color: color_3B5078,
+  );
+  static const TextStyle text3B5078Size14 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: color_3B5078,
+  );
+  static const TextStyle text3B5078Size12 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
     color: color_3B5078,
   );
   static const TextStyle text3B5078Size15 = TextStyle(

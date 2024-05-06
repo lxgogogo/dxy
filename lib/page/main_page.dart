@@ -4,6 +4,7 @@ import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import 'forum/page_forum_tab.dart';
+import 'mine/page_mine.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,7 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [IndexPage(), ForumTabPage(), MessagePage(), Page4()];
+  final List<Widget> _pages = [IndexPage(), ForumTabPage(), MessagePage(), MinePage()];
 
   @override
   Widget build(BuildContext context) {

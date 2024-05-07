@@ -145,4 +145,11 @@ class AppTheme {
     fontSize: 15,
     color: color_333333,
   );
+
+  static const TextStyle text008EFFSize16 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: color_008EFF,
+  );
+
 }

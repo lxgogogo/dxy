@@ -1,12 +1,8 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
-import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -235,7 +231,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                 child: IconButton(
                   onPressed: () {
                     //跳转评论列表页面
-                    // ToastUtils.showToast('跳转评论列表');
+                    setState(() {
+                      imageData.remove(text);
+                    });
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',

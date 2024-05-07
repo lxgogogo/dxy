@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/page_login.dart';
+import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../utils/app_theme.dart';
@@ -60,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               GestureDetector(
                   onTap: () {
-                    ToastUtils.showToast("修改密码");
+                    Get.to(RegisterAccountPage(type: RegisterAccountPage.PageType_ModifyPassword,));
                   },
                   child: const ListTile(
                     leading: ImageIcon(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:holdem/page/mine/page_mine_follow.dart';
+import 'package:holdem/page/mine/page_personal.dart';
 import 'package:holdem/page/mine/page_settings.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/constants.dart';
@@ -176,7 +177,7 @@ class _MinePageState extends State<MinePage> {
             height: 24.px,
           ),
           onPressed: () {
-            Get.to(SettingsPage());
+            Get.to(PersonalPage());
           },
         )
       ],

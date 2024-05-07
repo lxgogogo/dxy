@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../utils/app_theme.dart';
@@ -12,6 +14,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final TextEditingController _controllerAccount = TextEditingController();
+  final TextEditingController _controllerPw = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -47,14 +53,14 @@ class _LoginPageState extends State<LoginPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            margin: EdgeInsets.fromLTRB(40.px, 48.px, 16.px, 0),
+            margin: EdgeInsets.fromLTRB(40.px, 40.px, 16.px, 0),
             child: Text(
               "欢迎登录",
               style: AppTheme.text3B5078Size23,
             )),
         Container(
           color: Colors.white,
-          margin: EdgeInsets.only(top: 40.px),
+          margin: EdgeInsets.only(top: 35.px),
           padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
           child: Row(
             children: <Widget>[
@@ -65,10 +71,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Expanded(
                 child: TextField(
+                  controller: _controllerAccount,
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
                     hintText: '请输入邮箱地址',
-                    hintStyle: AppTheme.text999999Size16,
+                    hintStyle: AppTheme.text999999Size14,
                     contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
                   ),
                 ),
@@ -94,11 +101,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Expanded(
                 child: TextField(
+                  controller: _controllerPw,
                   obscureText: true, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
                     hintText: '请输入密码',
-                    hintStyle: AppTheme.text999999Size16,
+                    hintStyle: AppTheme.text999999Size14,
                     contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
                   ),
                 ),
@@ -122,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 42.5.px,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                    login();
                 })),
         Container(
             margin: EdgeInsets.fromLTRB(40.px, 10.px, 40.px, 0),
@@ -131,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    ToastUtils.showToast('忘记密码');
+                    Get.to(RegisterAccountPage(type: RegisterAccountPage.PageType_ForgotPassword,));
                   },
                   child: Text(
                     '忘记密码',
@@ -141,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                 Expanded(child: Container()),
                 GestureDetector(
                   onTap: () {
-                    ToastUtils.showToast('注册账号');
+                    Get.to(RegisterAccountPage(type: RegisterAccountPage.PageType_RegisterAccount,));
                   },
                   child: Text(
                     '注册账号',
@@ -152,5 +160,19 @@ class _LoginPageState extends State<LoginPage> {
             ))
       ],
     );
+  }
+
+  void login() {
+    var account = _controllerAccount.text;
+    var password = _controllerPw.text;
+    if (account.isEmpty) {
+      ToastUtils.showToast('邮箱不能为空');
+      return;
+    }
+    if (password.isEmpty) {
+      ToastUtils.showToast('密码不能为空');
+      return;
+    }
+    //登录
   }
 }

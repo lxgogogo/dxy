@@ -6,6 +6,7 @@ import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_search.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -23,6 +24,13 @@ class _IndexPageState extends State<IndexPage> {
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
+
+      @override
+  void initState() {
+    super.initState();
+    NetRequest().getBoardList();
+  }
 
   void _onRefresh() async {
     // monitor network fetch

@@ -84,7 +84,7 @@ class Http {
   // 读取本地配置
   Map<String, dynamic>? getAuthorizationHeader() {
     String? token = StorageUtil().prefs!.getString('token');
-    print('header token=======${token!}');
+    // print('header token=======${token!}');
     Map<String, dynamic> headers = {
       'system': kIsWeb
           ? "web"
@@ -94,7 +94,7 @@ class Http {
       'lang': 'zh_TW',
       // 'deviceid': Global().deviceId,
       "vcode": "1.0.0",
-      "X-Auth-Token": token,
+      "X-Auth-Token": token??'',
     };
     // 从getx或者sputils中获取
     // String accessToken = Global.accessToken;

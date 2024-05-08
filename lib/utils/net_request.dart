@@ -11,7 +11,7 @@ typedef FailureCallback = void Function(String errorMsg);
 
 class NetRequest {
   Future getBoardList() async {
-    var data = await HttpUtils.get(Api.boardList);
+    var data = await HttpUtils.post(Api.boardList);
     print(data);
     return data;
   }

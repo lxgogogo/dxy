@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
+import '../../model/user.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
+import '../../utils/storage.dart';
 
 class RegisterAccountPage extends StatefulWidget {
   static const PageType_RegisterAccount = 1; //注册
@@ -81,8 +86,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
   }
 
   Widget contentView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         Container(
             margin: EdgeInsets.fromLTRB(40.px, 40.px, 16.px, 0),
@@ -141,7 +145,18 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                     )
                   : GestureDetector(
                       onTap: () {
+                        var email = _controllerEmail.text;
+                        if (email.isEmpty) {
+                            ToastUtils.showToast('邮箱不能为空');
+                            return;
+                        }
                         _startCountdown();
+                        NetRequest().sendCode(
+                            pageType == RegisterAccountPage.PageType_RegisterAccount
+                                ? NetRequest.SEND_CODE_TYPE_REGISTER
+                                : NetRequest.SEND_CODE_TYPE_RESET_PW, email, (data) {
+
+                        });
                       },
                       child: Text(
                         '发送验证码',
@@ -280,6 +295,15 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
       return;
     }
     //提交
+    NetRequest().registerAccount(email, password, code, (data) {
+      UserProfile userProfile = UserProfile.fromJson(data['user']);
+      //本地保存一份用户信息，退出登录清空
+      ToastUtils.showToast('注册成功');
+      Global().hasLogin = true;
+      StorageUtil().setBool('hasLogin', true);
+      StorageUtil().setJSON('userInfo', userProfile);
+      Navigator.of(context).pop();
+    });
   }
 
   String getPageTitle() {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/page/index/page_index.dart';
 import 'package:holdem/page/message/page_message.dart';
+import 'package:holdem/page/mine/page_login.dart';
+import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import 'forum/page_forum_tab.dart';
@@ -38,6 +41,9 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
+            if(index == 3 && !Global().hasLogin) {
+              Get.to(LoginPage());
+            }
           });
         },
         items: [

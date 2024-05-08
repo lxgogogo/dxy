@@ -1,10 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
+import '../../model/user.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
+import '../../utils/storage.dart';
+import '../main_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -29,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
     SizeFit.initialize(context);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+        leading: Visibility(child: IconButton(
           icon: Image.asset(
             'assets/images/back.png',
             width: 22.px,
@@ -38,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-        ),
+        ),visible: Global().hasLogin ? true: false),
         backgroundColor: AppTheme.white,
         title: null,
         centerTitle: true,
@@ -163,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() {
+    FocusScope.of(context).requestFocus(FocusNode());
     var account = _controllerAccount.text;
     var password = _controllerPw.text;
     if (account.isEmpty) {
@@ -174,5 +182,16 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     //登录
+    NetRequest().userLogin(account, password, (data) {
+      UserProfile userProfile = UserProfile.fromJson(data['user']);
+      ToastUtils.showToast('登录成功${userProfile.nickname}');
+      Global().hasLogin = true;
+      Global().token = data['token'];
+      StorageUtil().setBool('hasLogin', true);
+      StorageUtil().setJSON('userInfo', userProfile);
+      StorageUtil().prefs!.setString('token', data['token']);
+      Navigator.of(context).pop();
+    });
+
   }
 }

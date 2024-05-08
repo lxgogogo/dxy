@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/main_page.dart';
+import 'package:holdem/utils/global.dart';
+import 'package:holdem/utils/storage.dart';
 
 void main() {
   runApp(const MyApp());
+  initStore();
+}
+
+Future<void> initStore() async {
+  await StorageUtil().init();
+  if (StorageUtil().prefs!.getString("token") != null) {
+    Global().hasLogin = true;
+    Global().token = StorageUtil().prefs!.getString("token")!;
+    print('has Login');
+  }
 }
 
 class MyApp extends StatelessWidget {

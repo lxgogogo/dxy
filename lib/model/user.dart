@@ -4,8 +4,11 @@ class UserProfile {
   String? nickname;
   String? avatar;
   String? token;
+  int? followedCount;
+  int? fansCount;
 
-  UserProfile({this.id, this.nickname, this.avatar, this.account, this.token});
+  UserProfile({this.id, this.nickname, this.avatar, this.account,
+    this.token, this.followedCount,this.fansCount});
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -23,6 +26,12 @@ class UserProfile {
     if (json["token"] is String) {
       token = json["token"];
     }
+    if (json["followedCount"] is int) {
+      followedCount = json["followedCount"];
+    }
+    if (json["fansCount"] is int) {
+      fansCount = json["fansCount"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +41,8 @@ class UserProfile {
     _data["avatar"] = avatar;
     _data["account"] = account;
     _data["token"] = token;
+    _data["followedCount"] = followedCount;
+    _data["fansCount"] = fansCount;
     return _data;
   }
 }

@@ -12,6 +12,7 @@ class Api{
   static const String logout = '$baseUrl/passport/logout';
   static const String resetPassword = '$baseUrl/passport/resetPassword';
   static const String sendCode = '$baseUrl/passport/sendCode';
+  static const String user = '$baseUrl/user';
 
   
 }

@@ -75,4 +75,22 @@ class NetRequest {
       ToastUtils.showToast(resp.message!);
     }
   }
+
+  ///获取用户本人信息
+  Future getUserInfo(
+      String account, String password, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['account'] = account;
+    params['password'] = password;
+
+    Map<String, dynamic> response = await HttpUtils.get(Api.user, params: params);
+    LogUtils.printAll("getUserInfo===>$response");
+    Response resp = Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("getUserInfo success===>");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
 }

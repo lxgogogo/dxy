@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:holdem/utils/storage.dart';
+
+import 'global.dart';
 
 class Http {
   static final Http _instance = Http._internal();
@@ -80,6 +83,8 @@ class Http {
   // 添加认证
   // 读取本地配置
   Map<String, dynamic>? getAuthorizationHeader() {
+    String? token = StorageUtil().prefs!.getString('token');
+    print('header token=======${token!}');
     Map<String, dynamic> headers = {
       'system': kIsWeb
           ? "web"
@@ -89,7 +94,7 @@ class Http {
       'lang': 'zh_TW',
       // 'deviceid': Global().deviceId,
       "vcode": "1.0.0",
-      // "token": Global().token,
+      "X-Auth-Token": token,
     };
     // 从getx或者sputils中获取
     // String accessToken = Global.accessToken;

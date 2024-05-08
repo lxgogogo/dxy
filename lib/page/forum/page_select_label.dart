@@ -18,10 +18,10 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
   late bool isEditLabel = false;
   late bool isShowCreateInputView = false;
   List<String> labelData = [
-    '标签1',
-    '标签2',
-    '标签13',
-    '标签14',
+    '娱乐巅峰',
+    '人生赢家',
+    '生死看淡',
+    '不服就干',
   ];
 
   @override
@@ -98,17 +98,21 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                 width: 16.px,
                 height: 16.px,
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () {},
             ),
           ],
         ),
         Expanded(
             child: Container(
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: LabelView(isEditLabel: true, labelData: labelData))
-            )
+                child: LabelView(
+                  key: ValueKey('label'),
+                  isEditLabel: true,
+                  labelData: labelData,
+                  onTap: (labelValue) {
+                    Navigator.pop(context, labelValue);
+                  },
+                )))
       ],
     );
   }

@@ -79,7 +79,7 @@ class _InformationEditPageState extends State<InformationEditPage>
 
   Widget contentView() {
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 15, 16, 0),
+      margin: EdgeInsets.fromLTRB(16, 5, 16, 0),
       height: 45.px,
       child: TextFormField(
         maxLines: 1, //

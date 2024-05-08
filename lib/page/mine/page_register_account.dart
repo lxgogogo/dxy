@@ -125,7 +125,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                 child: TextField(
                   controller: _controllerCode,
                   keyboardType: TextInputType.number,
-                  maxLength: 8,
+                  // maxLength: 8,
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
                     hintText: '验证码',

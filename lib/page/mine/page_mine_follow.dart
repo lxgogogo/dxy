@@ -88,9 +88,6 @@ class _MineFollowPageState extends State<MineFollowPage> {
   Widget contentView() {
     return Column(
       children: [
-        SizedBox(
-          height: 20,
-        ),
         Expanded(child: listView())
       ],
     );

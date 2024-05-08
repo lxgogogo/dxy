@@ -12,16 +12,16 @@ class AitUserPage extends StatefulWidget {
   _AitUserPageState createState() => _AitUserPageState();
 }
 
-class CustomObject {
+class UserBean {
   String name;
   bool isFollowed;
 
-  CustomObject(this.name, this.isFollowed);
+  UserBean(this.name, this.isFollowed);
 }
 
 class _AitUserPageState extends State<AitUserPage> {
-  List<CustomObject> items = List.generate(7, (index) {
-    return CustomObject('小小少年 $index', (index % 2 == 0 ? true : false));
+  List<UserBean> items = List.generate(7, (index) {
+    return UserBean('小小少年$index', (index % 2 == 0 ? true : false));
   });
 
   RefreshController _refreshController =
@@ -106,7 +106,7 @@ class _AitUserPageState extends State<AitUserPage> {
           ],
         ),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         Expanded(child: listView())
       ],
@@ -131,47 +131,52 @@ class _AitUserPageState extends State<AitUserPage> {
   }
 
   Widget listDataItem(int index) {
-    return Container(
-      height: 45,
-      margin: EdgeInsets.only(top: 10, bottom: 10),
-      padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
-      child: Row(children: [
-        Container(
-            height: 45,
-            child: Center(
-                child: ClipOval(
-              child: Image.network(
-                'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                width: 45,
-                height: 45,
-                fit: BoxFit.cover,
-              ),
-            ))),
-        SizedBox(
-          width: 10,
-        ),
-        Text(
-          items[index].name,
-          style: AppTheme.text3B5078Size15,
-        ),
-        Expanded(child: Text('')),
-        // items[index].isFollowed == true
-        //     ? followedStatusBtn()
-        //     :
-        IconButton(
-            onPressed: () {
-              ToastUtils.showToast('已关注');
-              // setState(() {
-              //
-              // });
-            },
-            icon: Image.asset(
-              'assets/images/follow_btn.png',
-              width: 62,
-              height: 28,
-            ))
-      ]),
-    );
+    return GestureDetector(
+      onTap: () {
+        print('===================' + items[index].name);
+        Navigator.pop(context, items[index]);
+      },
+      child: Container(
+        height: 45,
+        margin: EdgeInsets.only(top: 10, bottom: 10),
+        padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
+        child: Row(children: [
+          Container(
+              height: 45,
+              child: Center(
+                  child: ClipOval(
+                    child: Image.network(
+                      'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                      width: 45,
+                      height: 45,
+                      fit: BoxFit.cover,
+                    ),
+                  ))),
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            items[index].name,
+            style: AppTheme.text3B5078Size15,
+          ),
+          Expanded(child: Text('')),
+          // items[index].isFollowed == true
+          //     ? followedStatusBtn()
+          //     :
+          IconButton(
+              onPressed: () {
+                ToastUtils.showToast('已关注');
+                // setState(() {
+                //
+                // });
+              },
+              icon: Image.asset(
+                'assets/images/follow_btn.png',
+                width: 62,
+                height: 28,
+              ))
+        ]),
+      ),);
   }
 
   Widget topSearchView() {

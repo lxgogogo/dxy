@@ -20,6 +20,7 @@ class AppTheme {
   static const color_50000000 = Color(0x5000000); //2%透明
   static const color_30000000 = Color(0x3000000); //20%透明
   static const color_333333 = Color(0xFF333333);
+  static const color_476DB7 = Color(0xFF476DB7);
 
   static const TextStyle text3B5078Size23 = TextStyle(
     fontWeight: FontWeight.w500,

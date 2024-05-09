@@ -1,6 +1,11 @@
 class Api{
   static const String baseUrl = 'https://bbs.api.robot-9.com/api';
 
+  //首页
+  static const String indexCategory = '$baseUrl/category/list';
+  static const String indexList = '$baseUrl/content/list';
+  static const String contentShow = '$baseUrl/content/show';
+
   //论坛
   static const String boardList = '$baseUrl/board/list';
   static const String threadList = '$baseUrl/thread/list';

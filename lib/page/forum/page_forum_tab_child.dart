@@ -75,7 +75,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
     return Row(
       children: [
         SizedBox(
-          width: 15.px,
+          width: 5.px,
         ),
         Text('排序',
             style: TextStyle(
@@ -100,7 +100,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (c, i) => PostListItemView( itemIndex: i),
+        itemBuilder: (c, i) => PostListItemView( itemIndex: i, isForumList: true,),
         // itemExtent: 160.0,
         itemCount: items.length,
       ),

@@ -39,11 +39,12 @@ class _MainScreenState extends State<MainScreen> {
         showSelectedLabels: true, // 取消显示选中项的标签
         showUnselectedLabels: true, // 取消显示未选中项的标签
         onTap: (int index) {
+          if(index == 3 && !Global().hasLogin) {
+            Get.to(LoginPage());
+            return;
+          }
           setState(() {
             _currentIndex = index;
-            if(index == 3 && !Global().hasLogin) {
-              Get.to(LoginPage());
-            }
           });
         },
         items: [

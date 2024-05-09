@@ -9,8 +9,9 @@ import '../../utils/app_theme.dart';
 
 class PostListItemView extends StatefulWidget {
   int itemIndex;
+  bool isForumList;
 
-  PostListItemView({Key? key, required this.itemIndex}) : super(key: key);
+  PostListItemView({Key? key, required this.itemIndex, required this.isForumList}) : super(key: key);
 
   @override
   _PostDetailBottomViewState createState() => _PostDetailBottomViewState();
@@ -19,12 +20,14 @@ class PostListItemView extends StatefulWidget {
 class _PostDetailBottomViewState extends State<PostListItemView> {
   bool isCollected = false;
   late int itemIndex;
+  late bool isForumList;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     itemIndex = widget.itemIndex;
+    isForumList = widget.isForumList;
   }
 
   @override
@@ -39,16 +42,16 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
         },
         child: Container(
             padding: EdgeInsets.all(12.px),
-            margin: EdgeInsets.only(top: 10.px, left: 10.px, right: 10.px),
+            margin: EdgeInsets.only(top: 10.px, left: 0.px, right: 0.px),
             decoration: BoxDecoration(
               //flutter 上下颜色渐变
               //#F9CF3A, #FFD43E00
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFFEEF7FE),
-                  Color(0xFFEEF7FF),
+                  isForumList ? Colors.white : Color(0xFFEEF7FE),
+                  isForumList ? Colors.white : Color(0xFFEEF7FF),
                 ],
               ),
               boxShadow: const [

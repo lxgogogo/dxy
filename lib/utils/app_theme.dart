@@ -99,6 +99,11 @@ class AppTheme {
     fontSize: 14,
     color: color_999999,
   );
+  static const TextStyle text999999Size15 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 15,
+    color: color_999999,
+  );
 
   static const TextStyle text999999Size16 = TextStyle(
     fontWeight: FontWeight.w400,

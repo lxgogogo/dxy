@@ -8,10 +8,13 @@ import 'package:get/get.dart';
 import 'package:holdem/page/mine/page_edit_information.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../model/user.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:permission_handler/permission_handler.dart';
+
+import 'login_helper.dart';
 
 class PersonalPage extends StatefulWidget {
   PersonalPage({Key? key}) : super(key: key);
@@ -26,12 +29,23 @@ class _PersonalPageState extends State<PersonalPage> {
   String imageUrl = ""; //本地图片地址
   String netImageUrl = ""; //服务器接口获取到的图片地址
   ImageProvider? avatar = const AssetImage("assets/images/default_avatar.png");
+  late UserProfile _userProfile;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    userName = '我是一只小小鸟';
+    _userProfile = UserProfile();
+    getUserInfo();
+  }
+
+  void getUserInfo() {
+    LoginHelper().getUserInfo((data) {
+      setState(() {
+        _userProfile = data;
+        userName = _userProfile.nickname;
+      });
+    });
   }
 
   @override
@@ -84,12 +98,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                     // 中间文本
                     trailing: ClipOval(
-                      child: Image.network(
-                        'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                        width: 45,
-                        height: 45,
-                        fit: BoxFit.cover,
-                      ),
+                      child: LoginHelper().getUserAvatar(_userProfile.avatar != null ? _userProfile.avatar! : '')
                     ),
                     contentPadding: EdgeInsets.fromLTRB(16, 10, 10, 10),
                   )),
@@ -109,7 +118,8 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                     // 中间文本
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Text(userName ,style: AppTheme.text666666Size14,),
+                      Text(_userProfile != null && _userProfile.nickname != null
+                          ? _userProfile.nickname! : '' ,style: AppTheme.text666666Size14,),
                       ImageIcon(
                         AssetImage('assets/images/item_arrow.png'),
                         size: 22,
@@ -125,7 +135,7 @@ class _PersonalPageState extends State<PersonalPage> {
                   onTap: () {
 
                   },
-                  child: const ListTile(
+                  child: ListTile(
                     leading: null,
                     title: Text(
                       '邮箱',
@@ -133,7 +143,8 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                     // 中间文本
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Text('luserEmai@gmail.com', style: AppTheme.text666666Size14,),
+                      Text(_userProfile != null && _userProfile.account != null
+                          ? _userProfile.account! : '', style: AppTheme.text666666Size14,),
                       ImageIcon(
                         AssetImage('assets/images/item_arrow.png'),
                         size: 22,

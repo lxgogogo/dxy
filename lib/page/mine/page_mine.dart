@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/page/mine/page_mine_follow.dart';
 import 'package:holdem/page/mine/page_personal.dart';
 import 'package:holdem/page/mine/page_settings.dart';
@@ -14,7 +15,10 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/PostListView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/storage.dart';
+import 'login_helper.dart';
 
 class MinePage extends StatefulWidget {
   const MinePage({super.key});
@@ -28,6 +32,7 @@ class _MinePageState extends State<MinePage> {
   final List<String> tabs = ['帖子', '收藏', '评论'];
 
   late UserProfile userProfile = UserProfile();
+  var actionEventBus;
 
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController1 =
@@ -70,15 +75,19 @@ class _MinePageState extends State<MinePage> {
     // TODO: implement initState
     super.initState();
     getUserInfo();
+    //接受通知刷新页面
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.refreshPersonalProfile.eventBusTypeName) {
+        getUserInfo();
+      }
+    });
   }
 
   void getUserInfo() {
-    String? token = StorageUtil().prefs!.getString('token');
-    print('token=======' + token!);
-    NetRequest().getUserInfo('levin@163.com', '123456', (data) {
-      UserProfile user = UserProfile.fromJson(data);
+    LoginHelper().getUserInfo((data) {
       setState(() {
-        userProfile = user;
+        userProfile = data;
         print('userProfile=======' + userProfile!.nickname!);
       });
     });
@@ -154,13 +163,7 @@ class _MinePageState extends State<MinePage> {
           ),
           child: Stack(children: <Widget>[
             ClipOval(
-                child: CachedNetworkImage(
-              imageUrl: userProfile.avatar != null ? userProfile.avatar! : '',
-              placeholder: (context, url) =>
-                  Image.asset('assets/images/default_avatar.png'),
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/images/default_avatar.png'),
-            )
+                child: LoginHelper().getUserAvatar(userProfile.avatar != null ? userProfile.avatar! : '')
                 // Image.network(
                 //   'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
                 //   width: 60,
@@ -180,7 +183,8 @@ class _MinePageState extends State<MinePage> {
                 height: 8,
               ),
               Text(
-                userProfile!=null && userProfile.nickname != null ? userProfile.nickname! : '',
+                userProfile!=null && userProfile.nickname != null
+                    ? userProfile.nickname! : '',
                 style: AppTheme.text3B5078Size20,
               ),
               GestureDetector(
@@ -189,13 +193,16 @@ class _MinePageState extends State<MinePage> {
                 },
                 child: Row(
                   children: [
-                    Text(userProfile!.followedCount.toString(),
+                    Text(
+                        userProfile!=null && userProfile.followedCount != null
+                            ? userProfile!.followedCount.toString() : '0',
                         style: AppTheme.text3B5078Size16),
                     Text(' 关注', style: AppTheme.text3B5078Size12),
                     SizedBox(
                       width: 20.px,
                     ),
-                    Text(userProfile!.fansCount.toString(),
+                    Text( userProfile!=null && userProfile.fansCount != null
+                        ? userProfile!.fansCount.toString() : '0',
                         style: AppTheme.text3B5078Size16),
                     Text(' 粉丝', style: AppTheme.text3B5078Size12),
                   ],
@@ -282,7 +289,8 @@ class _MinePageState extends State<MinePage> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (c, i) => PostListItemView(itemIndex: i),
+        padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+        itemBuilder: (c, i) => PostListItemView(itemIndex: i, isForumList: false),
         // itemExtent: 160.0,
         itemCount: items.length,
       ),

@@ -8,6 +8,8 @@ import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../model/user.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
 import '../../utils/storage.dart';
@@ -184,12 +186,18 @@ class _LoginPageState extends State<LoginPage> {
     //登录
     NetRequest().userLogin(account, password, (data) {
       UserProfile userProfile = UserProfile.fromJson(data['user']);
-      ToastUtils.showToast('登录成功${userProfile.nickname}');
+      ToastUtils.showToast('登录成功');
       Global().hasLogin = true;
       Global().token = data['token'];
       StorageUtil().setBool('hasLogin', true);
-      StorageUtil().setJSON('userInfo', userProfile);
       StorageUtil().prefs!.setString('token', data['token']);
+      //保存账号密码，获取本人信息接口需要
+      StorageUtil().prefs!.setString('userAccount', account);
+      StorageUtil().prefs!.setString('userPw', password);
+
+      //通知个人信息页面刷新
+      EventBusManager.eventBus
+          .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
       Navigator.of(context).pop();
     });
 

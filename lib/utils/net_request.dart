@@ -3,7 +3,6 @@ import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/response.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
-import '../model/user.dart';
 import 'log_utils.dart';
 
 typedef SuccessCallback = void Function(dynamic data);
@@ -16,6 +15,19 @@ class NetRequest {
     return data;
   }
 
+
+  ///论坛顶部板块列表
+  Future getBoardData(SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+
+    Map<String, dynamic> response = await HttpUtils.post(Api.boardList,params: params);
+    Response resp = Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
 
   ///注册
   // register 注册
@@ -76,9 +88,25 @@ class NetRequest {
     }
   }
 
+  ///退出登录
+  Future logout(SuccessCallback onSuccess) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.logout);
+    LogUtils.printAll("logout===>$response");
+    Response resp = Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("logout success===>");
+      onSuccess(response);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///获取用户本人信息
   Future getUserInfo(
-      String account, String password, SuccessCallback onSuccess) async {
+      String account,
+      String password,
+      SuccessCallback onSuccess,
+      FailureCallback onFailure) async {
     Map<String, Object> params = {};
     params['account'] = account;
     params['password'] = password;
@@ -90,7 +118,7 @@ class NetRequest {
       LogUtils.printAll("getUserInfo success===>");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      onFailure(resp.message!);
     }
   }
 }

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../utils/app_theme.dart';
+import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
+import '../../utils/storage.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -140,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             child: GestureDetector(
               onTap: () {
-               Get.to(LoginPage());
+                logout();
               },
               child: const ListTile(
                 leading: ImageIcon(
@@ -161,5 +164,20 @@ class _SettingsPageState extends State<SettingsPage> {
             )),
       ],
     );
+  }
+
+  void logout() {
+    NetRequest().logout((data) {
+      //清除本地所有用户信息
+      Global().hasLogin = false;
+      Global().token = '';
+      StorageUtil().setBool('hasLogin', false);
+      StorageUtil().prefs!.setString('token', '');
+      StorageUtil().prefs!.setString('userAccount', '');
+      StorageUtil().prefs!.setString('userPw', '');
+      //回到首页
+      Navigator.of(context).pop();
+      //通知首页tab回到主页
+    });
   }
 }

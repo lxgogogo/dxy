@@ -7,8 +7,8 @@ class HttpUtils {
     required String baseUrl,
     // int connectTimeout = 15000,
     // int receiveTimeout = 15000,
-    Duration connectTimeout = const Duration(seconds: 10),
-    Duration receiveTimeout = const Duration(seconds: 10),
+    Duration connectTimeout = const Duration(seconds: 20),
+    Duration receiveTimeout = const Duration(seconds: 20),
     List<Interceptor>? interceptors,
   }) {
     Http().init(

@@ -22,7 +22,7 @@ class _IndexPageState extends State<IndexPage> {
   int _currentTabIndex = 0;
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
 
-  List<ArticleBean> articleList = [];
+  List<ArticleBean> articles = [];
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -40,7 +40,7 @@ class _IndexPageState extends State<IndexPage> {
     },(data){
       List<ArticleBean> dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
       setState(() {
-        articleList = dataList;
+        articles = dataList;
       });
     });
   }
@@ -148,14 +148,14 @@ class _IndexPageState extends State<IndexPage> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(),
+      header: const WaterDropHeader(),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
         itemBuilder: (c, i) => listDataItem(i),
         // itemExtent: 160.0,
-        itemCount: items.length,
+        itemCount: articles.length,
       ),
     );
   }
@@ -164,7 +164,7 @@ class _IndexPageState extends State<IndexPage> {
     return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: WaterDropHeader(),
+        header: const WaterDropHeader(),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -214,6 +214,7 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   Widget listDataItem(int index) {
+    ArticleBean article = articles[index];
     return GestureDetector(
       onTap: (){
         Get.to(VideoListPage());
@@ -266,7 +267,7 @@ class _IndexPageState extends State<IndexPage> {
               ),
               clipBehavior: Clip.antiAlias,
               child: Image.network(
-                'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                article.cover??'',
                 width: 145.px,
                 height: 120.px,
                 fit: BoxFit.cover,
@@ -280,7 +281,7 @@ class _IndexPageState extends State<IndexPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    '阿丽塔概念设计图曝光 女主身体内部如同艺术品',
+                    article.title??'',
                     maxLines: 3,
                     style: TextStyle(
                       color: const Color(0xff3B5078),
@@ -317,7 +318,7 @@ class _IndexPageState extends State<IndexPage> {
                         width: 5.px,
                       ),
                       Text(
-                        '16',
+                        article.commentCount.toString(),
                         style: TextStyle(
                           color: const Color(0xff666666),
                           fontSize: 14.px,

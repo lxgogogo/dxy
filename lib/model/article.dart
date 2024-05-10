@@ -18,29 +18,29 @@ class ArticleBean{
     if (json["author"] is String) {
       author = json["author"];
     }
-    if (json["category_id"] is int) {
+    if (json["category_id"] is num) {
       categoryId = json["category_id"];
     }
-    if (json["comment_count"] is int) {
-      commentCount = json["comment_count"];
+    if (json["commentCount"] is num) {
+      commentCount = json["commentCount"];
     }
     if (json["cover"] is String) {
       cover = json["cover"];
     }
-    if (json["created_at"] is String) {
-      createdAt = json["created_at"];
+    if (json["createdAt"] is String) {
+      createdAt = json["createdAt"];
     }
     if (json["description"] is String) {
       description = json["description"];
     }
-    if (json["favorite_count"] is int) {
-      favoriteCount = json["favorite_count"];
+    if (json["favoriteCount"] is num) {
+      favoriteCount = json["favoriteCount"];
     }
-    if (json["id"] is int) {
+    if (json["id"] is num) {
       id = json["id"];
     }
-    if (json["like_count"] is int) {
-      likeCount = json["like_count"];
+    if (json["likeCount"] is num) {
+      likeCount = json["likeCount"];
     }
     if (json["title"] is String) {
       title = json["title"];
@@ -48,8 +48,8 @@ class ArticleBean{
     if (json["type"] is String) {
       type = json["type"];
     }
-    if (json["updated_at"] is String) {
-      updatedAt = json["updated_at"];
+    if (json["updatedAt"] is String) {
+      updatedAt = json["updatedAt"];
     }
 
   }
@@ -68,7 +68,7 @@ class ArticleBean{
     _data["title"] = title;
     _data["type"] = type;
     _data["updated_at"] = updatedAt;
-    
+
     return _data;
   }
 }

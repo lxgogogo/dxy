@@ -217,7 +217,7 @@ class _IndexPageState extends State<IndexPage> {
     ArticleBean article = articles[index];
     return GestureDetector(
       onTap: (){
-        Get.to(VideoListPage());
+        Get.to(VideoListPage(id: article.id??0,));
       },
       child: Container(
         padding: EdgeInsets.all(12.px),

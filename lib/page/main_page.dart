@@ -18,7 +18,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [IndexPage(), ForumTabPage(), MessagePage(), MinePage()];
+  final List<Widget> _pages = [
+    IndexPage(),
+    ForumTabPage(),
+    MessagePage(),
+    MinePage()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
         showSelectedLabels: true, // 取消显示选中项的标签
         showUnselectedLabels: true, // 取消显示未选中项的标签
         onTap: (int index) {
-          if(index == 3 && !Global().hasLogin) {
+          if ((index == 2 || index == 3) && !Global().hasLogin) {
             Get.to(LoginPage());
             return;
           }
@@ -144,7 +149,6 @@ class Page1 extends StatelessWidget {
             style: TextStyle(
                 color: Color(0xFF56748F),
                 fontSize: 28.px,
-                
                 fontWeight: FontWeight.bold),
           )),
     );

@@ -6,7 +6,8 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class VideoListPage extends StatefulWidget {
-  const VideoListPage({super.key});
+  int id;
+  VideoListPage({super.key,required this.id});
 
   @override
   State<VideoListPage> createState() => _VideoListPageState();

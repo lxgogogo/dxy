@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/main_page.dart';
 import 'package:holdem/utils/global.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // EasyLoading.init();
     return GetMaterialApp(
       title: '德州论坛',
       debugShowCheckedModeBanner: false,
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MainScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }

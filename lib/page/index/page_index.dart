@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
+import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_search.dart';
 import 'package:holdem/page/index/page_video_list.dart';
@@ -21,6 +22,7 @@ class _IndexPageState extends State<IndexPage> {
   int _currentTabIndex = 0;
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
 
+  List<ArticleBean> articleList = [];
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -29,7 +31,18 @@ class _IndexPageState extends State<IndexPage> {
       @override
   void initState() {
     super.initState();
-    NetRequest().getBoardList();
+    NetRequest().indexList({
+      'pageNum':1,
+      'pageSize':10,
+      'filters':{
+        'categoryAlias':'news'//'article'
+      }
+    },(data){
+      List<ArticleBean> dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
+      setState(() {
+        articleList = dataList;
+      });
+    });
   }
 
   void _onRefresh() async {

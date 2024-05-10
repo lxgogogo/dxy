@@ -1,0 +1,74 @@
+class ArticleBean{
+  String? author;
+  int? categoryId;
+  int? commentCount;
+  String? cover;
+  String? createdAt;
+  String? description;
+  int? favoriteCount;
+  int? id;
+  int? likeCount;
+  String? title;
+  String? type;
+  String? updatedAt;
+
+  ArticleBean({this.author, this.categoryId, this.commentCount, this.cover, this.createdAt, this.description, this.favoriteCount, this.id, this.likeCount, this.title, this.type, this.updatedAt});
+
+  ArticleBean.fromJson(Map<String, dynamic> json) {
+    if (json["author"] is String) {
+      author = json["author"];
+    }
+    if (json["category_id"] is int) {
+      categoryId = json["category_id"];
+    }
+    if (json["comment_count"] is int) {
+      commentCount = json["comment_count"];
+    }
+    if (json["cover"] is String) {
+      cover = json["cover"];
+    }
+    if (json["created_at"] is String) {
+      createdAt = json["created_at"];
+    }
+    if (json["description"] is String) {
+      description = json["description"];
+    }
+    if (json["favorite_count"] is int) {
+      favoriteCount = json["favorite_count"];
+    }
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["like_count"] is int) {
+      likeCount = json["like_count"];
+    }
+    if (json["title"] is String) {
+      title = json["title"];
+    }
+    if (json["type"] is String) {
+      type = json["type"];
+    }
+    if (json["updated_at"] is String) {
+      updatedAt = json["updated_at"];
+    }
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["author"] = author;
+    _data["category_id"] = categoryId;
+    _data["comment_count"] = commentCount;
+    _data["cover"] = cover;
+    _data["created_at"] = createdAt;
+    _data["description"] = description;
+    _data["favorite_count"] = favoriteCount;
+    _data["id"] = id;
+    _data["like_count"] = likeCount;
+    _data["title"] = title;
+    _data["type"] = type;
+    _data["updated_at"] = updatedAt;
+    
+    return _data;
+  }
+}

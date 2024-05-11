@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../model/user.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
 import '../../utils/storage.dart';
@@ -297,12 +300,16 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
     //提交
     NetRequest().registerAccount(email, password, code, (data) {
       UserProfile userProfile = UserProfile.fromJson(data['user']);
-      //本地保存一份用户信息，退出登录清空
       ToastUtils.showToast('注册成功');
-      Global().hasLogin = true;
-      StorageUtil().setBool('hasLogin', true);
-      StorageUtil().setJSON('userInfo', userProfile);
-      Navigator.of(context).pop();
+      // Global().hasLogin = true;
+      // StorageUtil().setBool('hasLogin', true);
+      // StorageUtil().setJSON('userInfo', userProfile);
+      //成功后直接登录 通知关闭登录页面
+      LoginHelper().userLogin(email, password,(data){
+        EventBusManager.eventBus
+            .fire(EventBusAction.closeLoginPage.eventBusTypeName);
+        Navigator.of(context).pop();
+      });
     });
   }
 

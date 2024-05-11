@@ -1,19 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
-import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
-import '../../model/user.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
-import '../../utils/storage.dart';
-import '../main_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -26,11 +20,19 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _controllerAccount = TextEditingController();
   final TextEditingController _controllerPw = TextEditingController();
+  var actionEventBus;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    //接受注册成功的通知，主动关闭当前页面
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.closeLoginPage.eventBusTypeName) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   @override
@@ -38,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     SizeFit.initialize(context);
     return Scaffold(
       appBar: AppBar(
-        leading: Visibility(child: IconButton(
+        leading: IconButton(
           icon: Image.asset(
             'assets/images/back.png',
             width: 22.px,
@@ -47,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-        ),visible: Global().hasLogin ? true: false),
+        ),
         backgroundColor: AppTheme.white,
         title: null,
         centerTitle: true,
@@ -184,22 +186,25 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     //登录
-    NetRequest().userLogin(account, password, (data) {
-      UserProfile userProfile = UserProfile.fromJson(data['user']);
-      ToastUtils.showToast('登录成功');
-      Global().hasLogin = true;
-      Global().token = data['token'];
-      StorageUtil().setBool('hasLogin', true);
-      StorageUtil().prefs!.setString('token', data['token']);
-      //保存账号密码，获取本人信息接口需要
-      StorageUtil().prefs!.setString('userAccount', account);
-      StorageUtil().prefs!.setString('userPw', password);
-
-      //通知个人信息页面刷新
-      EventBusManager.eventBus
-          .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+    LoginHelper().userLogin(account, password,(data){
       Navigator.of(context).pop();
     });
+    // NetRequest().userLogin(account, password, (data) {
+    //   UserProfile userProfile = UserProfile.fromJson(data['user']);
+    //   ToastUtils.showToast('登录成功');
+    //   Global().hasLogin = true;
+    //   Global().token = data['token'];
+    //   StorageUtil().setBool('hasLogin', true);
+    //   StorageUtil().prefs!.setString('token', data['token']);
+    //   //保存账号密码，获取本人信息接口需要
+    //   StorageUtil().prefs!.setString('userAccount', account);
+    //   StorageUtil().prefs!.setString('userPw', password);
+    //
+    //   //通知个人信息页面刷新
+    //   EventBusManager.eventBus
+    //       .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+    //   Navigator.of(context).pop();
+    // });
 
   }
 }

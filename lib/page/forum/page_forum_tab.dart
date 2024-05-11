@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,12 +5,13 @@ import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/page/forum/page_publish_posts.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
 
-import '../../model/plate.dart';
+import '../../model/board_info.dart';
 import '../../utils/constants.dart';
 
 class ForumTabPage extends StatefulWidget {
-  const ForumTabPage({super.key});
+  ForumTabPage({super.key});
 
   @override
   State<ForumTabPage> createState() => _ForumTabPageState();
@@ -20,6 +19,8 @@ class ForumTabPage extends StatefulWidget {
 
 class _ForumTabPageState extends State<ForumTabPage>
     with SingleTickerProviderStateMixin {
+  late int currentBoardId = 0;
+  late List<BoardInfo> boardInfoList;
 
   //默认全部板块
   List<TabData> forumParentTabs = [
@@ -35,22 +36,24 @@ class _ForumTabPageState extends State<ForumTabPage>
   @override
   void initState() {
     super.initState();
+    boardInfoList = [];
     getPlateData();
   }
 
   void getPlateData() {
     NetRequest().getBoardData((data) {
-      List<PlateInfo> dataList =
-          List<PlateInfo>.from(data.map((plate) => PlateInfo.fromJson(plate)));
+      List<BoardInfo> dataList =
+          List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
       setState(() {
+        boardInfoList = dataList;
         for (int i = 0; i < dataList.length; i++) {
-          PlateInfo plateInfo = dataList[i];
+          BoardInfo boardInfo = dataList[i];
           forumParentTabs.add(TabData(
             index: i + 1,
             title: Tab(
-              child: Text(plateInfo.name!),
+              child: Text(boardInfo.name!),
             ),
-            content: ForumTabChildPage(tabId: plateInfo.id!),
+            content: ForumTabChildPage(tabId: boardInfo.id!),
           ));
         }
       });
@@ -73,7 +76,8 @@ class _ForumTabPageState extends State<ForumTabPage>
     return Container(
       margin: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
       child: DynamicTabBarWidget(
-        onAddTabMoveTo: MoveToTab.idol, //当添加新标签时，指示器将保持在当前0位置标签上。
+        onAddTabMoveTo: MoveToTab.idol,
+        //当添加新标签时，指示器将保持在当前0位置标签上。
         dynamicTabs: forumParentTabs,
         isScrollable: true,
         padding: EdgeInsets.only(left: 5.px),
@@ -95,9 +99,15 @@ class _ForumTabPageState extends State<ForumTabPage>
             color: tabTitleUnselectColor,
             fontSize: 17.px,
             fontWeight: FontWeight.w400),
-        onTabChanged: (index) {},
-        onTabControllerUpdated: (controller) {
+        onTabChanged: (index) {
+          if (index == 0) {
+            currentBoardId = 0;
+          } else {
+            //默认增加了全部 下标-1
+            currentBoardId = boardInfoList[index! - 1].id!;
+          }
         },
+        onTabControllerUpdated: (controller) {},
       ),
     );
   }
@@ -117,7 +127,7 @@ class _ForumTabPageState extends State<ForumTabPage>
       //   children: [Icon(Icons.add), Text('发帖')],
       // ),
       onPressed: () {
-        Get.to(PublishPostsPage());
+        Get.to(PublishPostsPage(currentBoardId: currentBoardId));
       },
       shape: CircleBorder(),
     );

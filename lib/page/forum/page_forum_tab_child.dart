@@ -4,8 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:group_button/group_button.dart';
+import 'package:holdem/model/board_list.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -26,6 +28,9 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   late String filterValue = '';
   late int selectFilterIndex = 0;
   late Map<int, dynamic> filterMap = {};
+  int pageNum = 1;
+  int pageSize = 10;
+  String boardSort = NetRequest.BOARD_SORT_TIME;
 
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
@@ -55,6 +60,19 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
     filterMap[1] = '回帖最多';
     filterMap[2] = '点赞最多';
     filterValue = filterMap[0].toString();
+
+    reqListData();
+  }
+  reqListData () {
+    //tabIdValue = 0全部板块,不传boardId
+    NetRequest().getThreadListByBoard(pageNum.toString(), pageSize.toString(),
+        boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
+          BoardList boardList = BoardList.fromJson(data);
+          print('getThreadListByBoard===total=============${boardList.pager?.total.toString()}');
+          boardList.list?.forEach((element) {
+            print('getThreadListByBoard================${element.title!}');
+          });
+    });
   }
 
   @override
@@ -114,9 +132,16 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
       buttons: ["时间最新", "回帖最多", "点赞最多"],
       onSelected: (selected, date, context) {
         print('[forumLog]ddddddddddddddddddddd===>$selected');
+        boardSort = selected == '时间最新'
+            ? NetRequest.BOARD_SORT_TIME
+              : selected == '回帖最多'
+                ? NetRequest.BOARD_SORT_COMMENT
+                : NetRequest.BOARD_SORT_LIKE;
+
         setState(() {
           filterValue = selected;
           selectFilterIndex = getKeyByValue(selected)!;
+          reqListData();
         });
       },
       controller: GroupButtonController(selectedIndex: selectFilterIndex),

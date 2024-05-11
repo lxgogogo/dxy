@@ -19,7 +19,9 @@ import '../../utils/app_theme.dart';
 import '../../widget/label_view.dart';
 
 class PublishPostsPage extends StatefulWidget {
-  const PublishPostsPage({super.key});
+  int currentBoardId;
+
+  PublishPostsPage({super.key, required this.currentBoardId});
 
   @override
   State<PublishPostsPage> createState() => _PublishPostsPageState();
@@ -27,7 +29,8 @@ class PublishPostsPage extends StatefulWidget {
 
 class _PublishPostsPageState extends State<PublishPostsPage>
     with SingleTickerProviderStateMixin {
-  late int currentPostId;
+  late int currentBoardId; //所属板块id
+
   final TextEditingController controllerTitle = TextEditingController();
   final controller = DetectableTextEditingController(
     regExp: detectionRegExp(),
@@ -44,6 +47,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   @override
   void initState() {
     super.initState();
+    currentBoardId = widget.currentBoardId;
+    print("publish post board id ==$currentBoardId");
     controller.addListener(() {
       setState(() {});
     });
@@ -335,10 +340,16 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     if (result != null) {
       List<String> files =
           result.paths.where((path) => path != null).cast<String>().toList();
-      for (String path in files) {
-        imageData.add(path);
+      if (result.files.length > 9) {
+        ToastUtils.showToast('最多可选择9个文件');
+        return;
+      } else {
+        for (String path in files) {
+          imageData.add(path);
+        }
+        setState(() {});
       }
-      setState(() {});
+
     } else {
       // User canceled the picker
     }

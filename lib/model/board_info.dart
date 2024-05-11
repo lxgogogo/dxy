@@ -1,10 +1,10 @@
-class PlateInfo {
+class BoardInfo {
   int? id;
   String? name;
 
-  PlateInfo({this.id, this.name});
+  BoardInfo({this.id, this.name});
 
-  PlateInfo.fromJson(Map<String, dynamic> json) {
+  BoardInfo.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
       id = json["id"];
     }

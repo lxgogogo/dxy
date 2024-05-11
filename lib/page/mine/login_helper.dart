@@ -54,8 +54,10 @@ class LoginHelper {
   }
 
   //获取图像
-  Widget getUserAvatar(String avatarUrl) {
+  Widget getUserAvatar(String avatarUrl, double width, double height) {
     return CachedNetworkImage(
+      width: width,
+      height: height,
       imageUrl: avatarUrl.isNotEmpty ? avatarUrl : '',
       placeholder: (context, url) =>
           Image.asset('assets/images/default_avatar.png'),

@@ -98,7 +98,8 @@ class _PersonalPageState extends State<PersonalPage> {
                     ),
                     // 中间文本
                     trailing: ClipOval(
-                      child: LoginHelper().getUserAvatar(_userProfile.avatar != null ? _userProfile.avatar! : '')
+                      child: LoginHelper().getUserAvatar(_userProfile.avatar != null ? _userProfile.avatar! : '',
+                          45, 45)
                     ),
                     contentPadding: EdgeInsets.fromLTRB(16, 10, 10, 10),
                   )),

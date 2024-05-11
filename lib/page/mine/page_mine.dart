@@ -15,6 +15,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/PostListView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../model/board_list.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/storage.dart';
@@ -35,6 +36,8 @@ class _MinePageState extends State<MinePage> {
   var actionEventBus;
 
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  List<BoardBean> boardPostList = [];
+
   RefreshController _refreshController1 =
       RefreshController(initialRefresh: false);
   RefreshController _refreshController2 =
@@ -74,6 +77,10 @@ class _MinePageState extends State<MinePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    items.forEach((element) {
+      boardPostList.add(BoardBean(title: element));
+    });
+
     getUserInfo();
     //接受通知刷新页面
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
@@ -163,7 +170,8 @@ class _MinePageState extends State<MinePage> {
           ),
           child: Stack(children: <Widget>[
             ClipOval(
-                child: LoginHelper().getUserAvatar(userProfile.avatar != null ? userProfile.avatar! : '')
+                child: LoginHelper().getUserAvatar(
+                    userProfile.avatar != null ? userProfile.avatar! : '', 60, 60)
                 // Image.network(
                 //   'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
                 //   width: 60,
@@ -290,7 +298,7 @@ class _MinePageState extends State<MinePage> {
       onLoading: _onLoading,
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-        itemBuilder: (c, i) => PostListItemView(itemIndex: i, isForumList: false),
+        itemBuilder: (c, i) => PostListItemView(itemIndex: i, isForumList: false,boardBean: boardPostList[i],),
         // itemExtent: 160.0,
         itemCount: items.length,
       ),

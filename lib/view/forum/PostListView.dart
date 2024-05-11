@@ -2,16 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/size_fit.dart';
 
+import '../../model/board_list.dart';
 import '../../page/forum/page_forum_post_detail.dart';
 import '../../utils/app_theme.dart';
 
 class PostListItemView extends StatefulWidget {
   int itemIndex;
   bool isForumList;
+  BoardBean boardBean;
 
-  PostListItemView({Key? key, required this.itemIndex, required this.isForumList}) : super(key: key);
+  PostListItemView({Key? key, required this.itemIndex, required this.isForumList, required this.boardBean}) : super(key: key);
 
   @override
   _PostDetailBottomViewState createState() => _PostDetailBottomViewState();
@@ -21,6 +24,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
   bool isCollected = false;
   late int itemIndex;
   late bool isForumList;
+  BoardBean boardBean = BoardBean();
 
   @override
   void initState() {
@@ -28,6 +32,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
     super.initState();
     itemIndex = widget.itemIndex;
     isForumList = widget.isForumList;
+    boardBean = widget.boardBean;
   }
 
   @override
@@ -38,7 +43,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
   Widget listDataItem(int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(PostDetailPage(postId: 111111));
+          Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
         },
         child: Container(
             padding: EdgeInsets.all(12.px),
@@ -69,7 +74,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题这是一个标题',
+                    boardBean.title! ?? '',
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
@@ -82,19 +87,15 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                     children: [
                       Container(
                         child: ClipOval(
-                          child: Image.network(
-                            'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                            width: 30,
-                            height: 30,
-                            fit: BoxFit.cover,
-                          ),
+                          child: LoginHelper().getUserAvatar(boardBean.user != null ? boardBean.user!.avatar! : ''
+                              , 30, 30),
                         ),
                       ),
                       SizedBox(
                         width: 5.px,
                       ),
                       Text(
-                        '这个昵称',
+                        boardBean.user != null ?  boardBean.user!.nickname! : '',
                         style: AppTheme.text666666Size13,
                       )
                     ],
@@ -115,26 +116,27 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                           SizedBox(
                             height: 5.px,
                           ),
-                          mediaContent(index)
+                          mediaContent(index, boardBean.pics!)
                         ],
                       ),
-                      visible: index == 2 ? false : true),
+                      visible: boardBean.pics!.length == 0 ? false : true),
                   SizedBox(
                     height: 5.px,
                   ),
                   Text(
-                    '121 赞同 · 78 评论 · 90 收藏',
+                    '${boardBean.likeCount}赞同 · ${boardBean.commentCount}评论 · ${boardBean.favoriteCount}收藏',
                     style: AppTheme.text999999Size12,
                     maxLines: 1,
                   )
                 ])));
   }
 
-  Widget mediaContent(int index) {
-    if (index == 0) {
+  Widget mediaContent(int index, List<String> pics) {
+    int picCount = pics.length;
+    if (picCount == 1) {
       return singleImageView(
-          'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp');
-    } else if (index == 1) {
+          pics.first);
+    } else if (picCount == 999) {
       //视频
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0), // 设置圆角半径
@@ -166,15 +168,13 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
               ],
             )),
       );
-    } else if (index == 2) {
-      //不显示
+    } else if (picCount == 0) {//不显示
       return Image.network(
         'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
         width: 335,
         height: 188,
       );
-    } else if (index == 3) {
-      //2张
+    } else if (picCount == 2) {
       int num = 2;
       double screenWidth = MediaQuery.of(context).size.width;
       double imageWidth = (screenWidth - 5 * (num - 1) - 20 - 10 -15) /
@@ -182,15 +182,15 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
       return Row(
         children: [
           multipleImageView(imageWidth,
-              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp'),
+              pics[0]),
           const SizedBox(
             width: 5,
           ),
           multipleImageView(imageWidth,
-              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp'),
+              pics[1]),
         ],
       );
-    } else if (index == 4) {
+    } else if (picCount >=3) {
       //大于等于3张
       int num = 3;
       double screenWidth = MediaQuery
@@ -202,22 +202,22 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
       return Row(
         children: [
           multipleImageView(imageWidth,
-              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp'),
+              pics[0]),
           const SizedBox(
             width: 5,
           ),
           multipleImageView(imageWidth,
-              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp'),
+              pics[1]),
           const SizedBox(
             width: 5,
           ),
           multipleImageView(imageWidth,
-              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp'),
+              pics[2]),
         ],
       );
     } else {
       return singleImageView(
-          'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp');
+          pics[0]);
     }
   }
 

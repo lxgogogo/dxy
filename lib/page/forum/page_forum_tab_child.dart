@@ -31,8 +31,8 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   int pageNum = 1;
   int pageSize = 10;
   String boardSort = NetRequest.BOARD_SORT_TIME;
-
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  List<BoardBean> boardPostList = [];
+  // List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -47,7 +47,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
-    items.add((items.length + 1).toString());
+    // boardPostList.add((boardPostList.length + 1));
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
@@ -68,10 +68,14 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
     NetRequest().getThreadListByBoard(pageNum.toString(), pageSize.toString(),
         boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
           BoardList boardList = BoardList.fromJson(data);
-          print('getThreadListByBoard===total=============${boardList.pager?.total.toString()}');
-          boardList.list?.forEach((element) {
-            print('getThreadListByBoard================${element.title!}');
+          setState(() {
+            boardPostList = boardList.list!;
           });
+
+          // print('getThreadListByBoard===total=============${boardList.pager?.total.toString()}');
+          // boardList.list?.forEach((element) {
+          //   print('getThreadListByBoard================${element.title!}');
+          // });
     });
   }
 
@@ -103,9 +107,8 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
         SizedBox(
           width: 10.px,
         ),
-        groupRadio(),
-      ],
-    );
+        Expanded(child: groupRadio()),
+      ]);
   }
 
   ///列表数据
@@ -118,9 +121,12 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (c, i) => PostListItemView( itemIndex: i, isForumList: true,),
+        itemBuilder: (c, i) =>
+            PostListItemView(itemIndex: i,
+              isForumList: true,
+              boardBean: boardPostList[i]??  BoardBean(),),
         // itemExtent: 160.0,
-        itemCount: items.length,
+        itemCount: boardPostList.length,
       ),
     );
   }

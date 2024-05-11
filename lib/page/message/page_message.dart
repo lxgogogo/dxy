@@ -21,6 +21,8 @@ class _MessagePageState extends State<MessagePage> {
     Tab(text: '收藏'),
   ];
 
+  final List<String> types = ['at', 'comment', 'like', 'favorate'];
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +32,7 @@ class _MessagePageState extends State<MessagePage> {
         title: Tab(
           child: Text(myTabs[i].text.toString()),
         ),
-        content: MessageTabChildPage(tabId: i),
+        content: MessageTabChildPage(type: types[i]),
       ));
     }
   }
@@ -41,7 +43,7 @@ class _MessagePageState extends State<MessagePage> {
       isScrollable: false,
       showBackIcon: false,
       showNextIcon: false,
-      labelPadding: EdgeInsets.fromLTRB(6, 0, 6, 0),
+      labelPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
       indicatorColor: Colors.transparent,
       //底部下标颜色
       enableFeedback: false,

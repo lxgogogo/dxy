@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // ignore: must_be_immutable
 class MessageTabChildPage extends StatefulWidget {
-  int tabId;
-  MessageTabChildPage({super.key, required this.tabId});
+  String type;
+  MessageTabChildPage({super.key, required this.type});
 
   @override
   State<MessageTabChildPage> createState() => _MessageTabChildPageState();
@@ -15,6 +16,24 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+
+  @override
+  void initState() {
+    super.initState();
+    NetRequest().messageList({
+      'pageNum': 1,
+      'pageSize': 10,
+      'filters': {
+        'type':widget.type
+      }
+    }, (data) {
+      // List<ArticleBean> dataList = List<ArticleBean>.from(
+      //     data['list'].map((article) => ArticleBean.fromJson(article)));
+      // setState(() {
+      //   articles = dataList;
+      // });
+    });
+  }
 
   void _onRefresh() async {
     // monitor network fetch

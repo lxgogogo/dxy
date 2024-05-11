@@ -10,6 +10,9 @@ class Api{
   static const String boardList = '$baseUrl/board/list';
   static const String threadList = '$baseUrl/thread/list';
 
+  //消息
+  static const String messageList = '$baseUrl/message/list';
+
 
   //账号相关
   static const String login = '$baseUrl/passport/login';

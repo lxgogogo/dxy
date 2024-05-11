@@ -27,18 +27,18 @@ class _IndexPageState extends State<IndexPage> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
-
-      @override
+  @override
   void initState() {
     super.initState();
     NetRequest().indexList({
-      'pageNum':1,
-      'pageSize':10,
-      'filters':{
-        'categoryAlias':'news'//'article'
+      'pageNum': 1,
+      'pageSize': 10,
+      'filters': {
+        'categoryAlias': 'news' //'article'
       }
-    },(data){
-      List<ArticleBean> dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
+    }, (data) {
+      List<ArticleBean> dataList = List<ArticleBean>.from(
+          data['list'].map((article) => ArticleBean.fromJson(article)));
       setState(() {
         articles = dataList;
       });
@@ -61,6 +61,38 @@ class _IndexPageState extends State<IndexPage> {
     _refreshController.loadComplete();
   }
 
+  void getVideos(){
+    NetRequest().indexList({
+      'pageNum': 1,
+      'pageSize': 10,
+      'filters': {
+        'categoryAlias': 'video' //'article'
+      }
+    }, (data) {
+      List<ArticleBean> dataList = List<ArticleBean>.from(
+          data['list'].map((article) => ArticleBean.fromJson(article)));
+      setState(() {
+        articles = dataList;
+      });
+    });
+  }
+
+  void getArticles() {
+    NetRequest().indexList({
+      'pageNum': 1,
+      'pageSize': 10,
+      'filters': {
+        'categoryAlias': 'book' //'article'
+      }
+    }, (data) {
+      List<ArticleBean> dataList = List<ArticleBean>.from(
+          data['list'].map((article) => ArticleBean.fromJson(article)));
+      setState(() {
+        articles = dataList;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
@@ -77,6 +109,12 @@ class _IndexPageState extends State<IndexPage> {
                 onTap: () {
                   setState(() {
                     _currentTabIndex = index;
+                    if (index==1){
+                      getVideos();
+                    }
+                    if (index==2){
+                      getArticles();
+                    }
                   });
                 },
                 child: Container(
@@ -183,153 +221,157 @@ class _IndexPageState extends State<IndexPage> {
 
   Widget bookItem(int index) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Get.to(const BookDetailPage());
       },
       child: Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10.px))),
-      child: Column(
-        children: [
-          Image.network(
-            'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-            width: 171.px,
-            height: 145.px,
-            fit: BoxFit.cover,
-          ),
-          Expanded(
-              child: Container(
-            padding: EdgeInsets.all(10.px),
-            child: Text(
-              'ELKY当今德州锦标赛打法转行德扑的…',
-              maxLines: 2,
-              style: TextStyle(color: Color(0xff3B5078)),
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10.px))),
+        child: Column(
+          children: [
+            Image.network(
+              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+              width: 171.px,
+              height: 145.px,
+              fit: BoxFit.cover,
             ),
-          ))
-        ],
+            Expanded(
+                child: Container(
+              padding: EdgeInsets.all(10.px),
+              child: Text(
+                'ELKY当今德州锦标赛打法转行德扑的…',
+                maxLines: 2,
+                style: TextStyle(color: Color(0xff3B5078)),
+              ),
+            ))
+          ],
+        ),
       ),
-    ),);
+    );
   }
 
   Widget listDataItem(int index) {
     ArticleBean article = articles[index];
     return GestureDetector(
-      onTap: (){
-        Get.to(VideoListPage(id: article.id??0,));
+      onTap: () {
+        Get.to(VideoListPage(
+          id: article.id ?? 0,
+        ));
       },
       child: Container(
-        padding: EdgeInsets.all(12.px),
-        margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-        decoration: BoxDecoration(
-          //flutter 上下颜色渐变
-          //#F9CF3A, #FFD43E00
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFEEF7FE),
-              Color(0xFFFFFFFF),
-              // Color.fromRGBO(140, 190, 233, 1),
-              // Color.fromRGBO(190, 214, 235, 1),
-              // Color.fromRGBO(140, 190, 233, 1),
-              // Color.fromRGBO(194, 216, 235, 1),
-              // Color.fromRGBO(140, 190, 233, 1),
-              // Color.fromRGBO(193, 215, 235, 1),
-              // Color.fromRGBO(140, 190, 233, 1),
-            ],
-          ),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.white,
-              blurRadius: 4.0,
-              spreadRadius: -4.0,
-              offset: Offset(0.0, 6.0),
+          padding: EdgeInsets.all(12.px),
+          margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+          decoration: BoxDecoration(
+            //flutter 上下颜色渐变
+            //#F9CF3A, #FFD43E00
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFEEF7FE),
+                Color(0xFFFFFFFF),
+                // Color.fromRGBO(140, 190, 233, 1),
+                // Color.fromRGBO(190, 214, 235, 1),
+                // Color.fromRGBO(140, 190, 233, 1),
+                // Color.fromRGBO(194, 216, 235, 1),
+                // Color.fromRGBO(140, 190, 233, 1),
+                // Color.fromRGBO(193, 215, 235, 1),
+                // Color.fromRGBO(140, 190, 233, 1),
+              ],
             ),
-            // BoxShadow(
-            //   color: Color.fromRGBO(148, 197, 239, 0.74),
-            //   blurRadius: 9.4,
-            //   spreadRadius: -9.4,
-            //   offset: Offset(0.0, -4.0),
-            // )
-          ],
-          borderRadius: BorderRadius.all(Radius.circular(13.px)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 145.px,
-              height: 120.px,
-              margin: EdgeInsets.only(right: 15.px),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8.px)),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.white,
+                blurRadius: 4.0,
+                spreadRadius: -4.0,
+                offset: Offset(0.0, 6.0),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: Image.network(
-                article.cover??'',
+              // BoxShadow(
+              //   color: Color.fromRGBO(148, 197, 239, 0.74),
+              //   blurRadius: 9.4,
+              //   spreadRadius: -9.4,
+              //   offset: Offset(0.0, -4.0),
+              // )
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(13.px)),
+          ),
+          child: Row(
+            children: [
+              Container(
                 width: 145.px,
                 height: 120.px,
-                fit: BoxFit.cover,
+                margin: EdgeInsets.only(right: 15.px),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.px)),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Image.network(
+                  article.cover ?? '',
+                  width: 145.px,
+                  height: 120.px,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Expanded(
-                child: SizedBox(
-              height: 120.px,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    article.title??'',
-                    maxLines: 3,
-                    style: TextStyle(
-                      color: const Color(0xff3B5078),
-                      fontSize: 16.px,
+              Expanded(
+                  child: SizedBox(
+                height: 120.px,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      article.title ?? '',
+                      maxLines: 3,
+                      style: TextStyle(
+                        color: const Color(0xff3B5078),
+                        fontSize: 16.px,
+                      ),
                     ),
-                  ),
-                  // Spacer(),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/time.png',
-                        width: 20.px,
-                        height: 20.px,
-                      ),
-                      SizedBox(
-                        width: 5.px,
-                      ),
-                      Text(
-                        '13:00',
-                        style: TextStyle(
-                          color: const Color(0xff666666),
-                          fontSize: 14.px,
+                    // Spacer(),
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/time.png',
+                          width: 20.px,
+                          height: 20.px,
                         ),
-                      ),
-                      SizedBox(
-                        width: 30.px,
-                      ),
-                      Image.asset(
-                        'assets/images/comment.png',
-                        width: 20.px,
-                        height: 20.px,
-                      ),
-                      SizedBox(
-                        width: 5.px,
-                      ),
-                      Text(
-                        article.commentCount.toString(),
-                        style: TextStyle(
-                          color: const Color(0xff666666),
-                          fontSize: 14.px,
+                        SizedBox(
+                          width: 5.px,
                         ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ))
-          ],
-        )),);
+                        Text(
+                          '13:00',
+                          style: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 14.px,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30.px,
+                        ),
+                        Image.asset(
+                          'assets/images/comment.png',
+                          width: 20.px,
+                          height: 20.px,
+                        ),
+                        SizedBox(
+                          width: 5.px,
+                        ),
+                        Text(
+                          article.commentCount.toString(),
+                          style: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 14.px,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ))
+            ],
+          )),
+    );
   }
 }

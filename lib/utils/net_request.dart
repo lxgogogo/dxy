@@ -23,6 +23,18 @@ class NetRequest {
     }
   }
 
+  Future messageList(
+      Map<String, Object> params, SuccessCallback onSuccess) async {
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.messageList, params: params);
+    Response resp = Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   Future getBoardList() async {
     var data = await HttpUtils.post(Api.boardList);
     print(data);

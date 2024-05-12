@@ -12,6 +12,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/constants.dart';
+import '../../utils/log_utils.dart';
 import '../../view/forum/PostListView.dart';
 
 class ForumTabChildPage extends StatefulWidget {
@@ -69,13 +70,9 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
         boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
           BoardList boardList = BoardList.fromJson(data);
           setState(() {
+            LogUtils.printAll("getThreadListByBoard===>${boardList.pager!.pageSize!}");
             boardPostList = boardList.list!;
           });
-
-          // print('getThreadListByBoard===total=============${boardList.pager?.total.toString()}');
-          // boardList.list?.forEach((element) {
-          //   print('getThreadListByBoard================${element.title!}');
-          // });
     });
   }
 
@@ -122,10 +119,10 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
       onLoading: _onLoading,
       child: ListView.builder(
         itemBuilder: (c, i) =>
+        boardPostList != null ?
             PostListItemView(itemIndex: i,
               isForumList: true,
-              boardBean: boardPostList[i]??  BoardBean(),),
-        // itemExtent: 160.0,
+              boardBean: boardPostList[i],) : null,
         itemCount: boardPostList.length,
       ),
     );

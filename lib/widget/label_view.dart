@@ -35,7 +35,7 @@ class _LabelViewState extends State<LabelView> {
     labelData = widget.labelData;
     onTap = widget.onTap;
     return ReorderableGridView.count(
-      key: ValueKey('label'),
+      key: ValueKey('label1'),
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       crossAxisSpacing: 10,
@@ -51,17 +51,17 @@ class _LabelViewState extends State<LabelView> {
           }),
       children: this.labelData.map((e) => buildItem("$e")).toList(),
       onReorder: (oldIndex, newIndex) {
-        setState(() {
-          final element = labelData.removeAt(oldIndex);
-          labelData.insert(newIndex, element);
-        });
+        // setState(() {
+        //   final element = labelData.removeAt(oldIndex);
+        //   labelData.insert(newIndex, element);
+        // });
       },
     );
   }
 
   Widget buildItem(String labelValue) {
     return GestureDetector(
-        key: ValueKey('label'),
+        key: ValueKey('label2'),
         onTap: () {
           //item点击
           if (onTap != null) {
@@ -69,7 +69,7 @@ class _LabelViewState extends State<LabelView> {
           }
         },
         child: Container(
-            key: ValueKey('label'),
+            key: ValueKey('label3'),
             // width: isEditLabel ? 109.px : 68.px,
             height: isEditLabel ? 30.px : 25.px,
             decoration: BoxDecoration(

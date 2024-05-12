@@ -9,6 +9,8 @@ import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../model/board_info.dart';
 import '../../utils/constants.dart';
+import '../../utils/global.dart';
+import '../mine/page_login.dart';
 
 class ForumTabPage extends StatefulWidget {
   ForumTabPage({super.key});
@@ -122,11 +124,11 @@ class _ForumTabPageState extends State<ForumTabPage>
         fit: BoxFit.fill,
       ),
       backgroundColor: Colors.transparent,
-      // Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [Icon(Icons.add), Text('发帖')],
-      // ),
       onPressed: () {
+        // if (!Global().hasLogin) {
+        //   Get.to(LoginPage());
+        //   return;
+        // }
         Get.to(PublishPostsPage(currentBoardId: currentBoardId));
       },
       shape: CircleBorder(),

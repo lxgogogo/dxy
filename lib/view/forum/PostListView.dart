@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/size_fit.dart';
 
@@ -95,7 +96,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                         width: 5.px,
                       ),
                       Text(
-                        boardBean.user != null ?  boardBean.user!.nickname! : '',
+                        boardBean.user!=null ? boardBean.user.toString() : '',
                         style: AppTheme.text666666Size13,
                       )
                     ],
@@ -103,8 +104,8 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                   SizedBox(
                     height: 5.px,
                   ),
-                  const Text(
-                    '很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本很长的文本',
+                   Text(
+                    boardBean.content!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppTheme.text666666Size14,
@@ -116,10 +117,10 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                           SizedBox(
                             height: 5.px,
                           ),
-                          mediaContent(index, boardBean.pics!)
+                          mediaContent(index, boardBean.files! ?? [])
                         ],
                       ),
-                      visible: boardBean.pics!.length == 0 ? false : true),
+                      visible: boardBean.files!.length == 0 ? false : true),
                   SizedBox(
                     height: 5.px,
                   ),
@@ -131,12 +132,12 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                 ])));
   }
 
-  Widget mediaContent(int index, List<String> pics) {
-    int picCount = pics.length;
+  Widget mediaContent(int index, List<UploadFile> files) {
+    int picCount = files.length;
     if (picCount == 1) {
       return singleImageView(
-          pics.first);
-    } else if (picCount == 999) {
+          getFilesUrl(files[0]));
+    } else if (picCount == 1 && files[0].type == 'video') {
       //视频
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0), // 设置圆角半径
@@ -148,7 +149,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                   width: 335,
                   height: 188,
                   child: Image.network(
-                    'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                    getFilesUrl(files[0]),
                     width: 335,
                     height: 188,
                     fit: BoxFit.fill,
@@ -182,12 +183,12 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
       return Row(
         children: [
           multipleImageView(imageWidth,
-              pics[0]),
+        getFilesUrl(files[0])),
           const SizedBox(
             width: 5,
           ),
           multipleImageView(imageWidth,
-              pics[1]),
+    getFilesUrl(files[1])),
         ],
       );
     } else if (picCount >=3) {
@@ -202,44 +203,51 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
       return Row(
         children: [
           multipleImageView(imageWidth,
-              pics[0]),
+        getFilesUrl(files[0])),
           const SizedBox(
             width: 5,
           ),
           multipleImageView(imageWidth,
-              pics[1]),
+    getFilesUrl(files[1])),
           const SizedBox(
             width: 5,
           ),
           multipleImageView(imageWidth,
-              pics[2]),
+          getFilesUrl(files[2])),
         ],
       );
     } else {
       return singleImageView(
-          pics[0]);
+          getFilesUrl(files[0]));
     }
   }
 
-  Widget singleImageView(String imgUrl) {
+  Widget singleImageView(String? imgUrl) {
     return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Image.network(
-          imgUrl,
+          imgUrl!,
           width: 130,
           height: 90,
           fit: BoxFit.fill,
         ));
   }
 
-  Widget multipleImageView(double imageWidth, String imgUrl) {
+  Widget multipleImageView(double imageWidth, String? imgUrl) {
     return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Image.network(
-          imgUrl,
+          imgUrl!,
           width: imageWidth,
           height: 111,
           fit: BoxFit.cover,
         ));
+  }
+
+  String getFilesUrl(UploadFile uploadFile) {
+    if (uploadFile.type == 'video') {
+       return uploadFile.posterUrl!;
+    }
+    return uploadFile.url!;
   }
 }

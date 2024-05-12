@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:holdem/utils/storage.dart';
 
 import 'global.dart';
+import 'log_utils.dart';
 
 class Http {
   static final Http _instance = Http._internal();
@@ -188,15 +189,16 @@ class Http {
     Options? options,
     CancelToken? cancelToken,
   }) async {
-    // LogUtils.printAll("params===>$params");
+    LogUtils.printAll("postFile params===>$params");
+    String fileName = params?['file'].split('/').last; // 获取文件名
     var file = await MultipartFile.fromFile(params?['file'],
-        filename: 'cado_qr_code_img.jpg');
+        filename: fileName);
     FormData formData = FormData.fromMap({
       'file': file,
-      'fileType': params?['fileType'],
-      'timestamp': params?['timestamp'],
-      'apiKey': params?['apiKey'],
-      'sign': params?['sign'],
+      // 'fileType': params?['fileType'],
+      // 'timestamp': params?['timestamp'],
+      //  'apiKey': params?['apiKey'],
+      // 'sign': params?['sign'],
     });
 
     Options requestOptions = options ?? Options();

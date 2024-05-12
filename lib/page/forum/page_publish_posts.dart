@@ -5,13 +5,16 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
+import '../../model/upload_file.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/net_request.dart';
 import '../../widget/label_view.dart';
 
 class PublishPostsPage extends StatefulWidget {
@@ -28,15 +31,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   late int currentBoardId; //所属板块id
 
   final TextEditingController controllerTitle = TextEditingController();
-  final controller = DetectableTextEditingController(
+  final _controller = DetectableTextEditingController(
     regExp: detectionRegExp(),
   );
 
-  final imageData = [];
-
-  final _scrollController = ScrollController();
-  final _gridViewKey = GlobalKey();
   final customLabel = <String>[];
+  final imageData = <String>[]; //选择相册返回的本地地址集合
+  final imageUrlList= <UploadFile>[]; //发布提交是的图片地址集合
+  final aitList = <int>[];
 
   String aitUserContent = ''; //@用户的内容
 
@@ -45,8 +47,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     super.initState();
     currentBoardId = widget.currentBoardId;
     print("publish post board id ==$currentBoardId");
-    controller.addListener(() {
-      setState(() {});
+    _controller.addListener(() {
+
     });
   }
 
@@ -81,9 +83,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         actions: [
           IconButton(
               onPressed: () {
-                //提交评论
-                String title = controllerTitle.text;
-                String content = controller.text;
+                publishPosts();
               },
               icon: Image.asset(
                 'assets/images/release.png',
@@ -128,9 +128,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           child: DetectableTextField(
               maxLines: 5,
               style: AppTheme.text000000Size16,
-              controller: controller,
+              controller: _controller,
               onChanged: (text) {
-                // _updateText();
+                _handleTextChange();
               },
               decoration: const InputDecoration(
                 hintText: '请输入正文',
@@ -277,8 +277,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                               UserBean user =
                                   UserBean(result.name, result.isFollowed);
                               setState(() {
-                                String originalContent = controller.text;
-                                controller.text =
+                                String originalContent = _controller.text;
+                                _controller.text =
                                     '@${user.name} $originalContent';
                                 print('forumLog=====' + aitUserContent);
                               });
@@ -298,8 +298,15 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                             );
                             // 在这里处理从ResultPage返回的标签主体
                             if (result != null) {
+                              if(customLabel!= null && customLabel.length == 3) {
+                                ToastUtils.showToast('最多选择3个标签');
+                                result;
+                              }
                               setState(() {
                                 customLabel.add(result);
+                                customLabel.forEach((element) {
+                                  print('object=====>$element');
+                                });
                               });
                             }
                           },
@@ -348,6 +355,73 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
     } else {
       // User canceled the picker
+    }
+  }
+
+  ///先上传文件，文件上传完，提交发布帖子
+  void publishPosts() {
+    String title = controllerTitle.text;
+    String content = _controller.text;
+
+    if (title.isEmpty) {
+      ToastUtils.showToast('标题不能为空');
+      return;
+    }
+    if (content.isEmpty) {
+      ToastUtils.showToast('内容不能为空');
+      return;
+    }
+
+    Iterable<Match> matches = atSignRegExp.allMatches(content); // 获取所有匹配项
+
+    for (Match match in matches) {
+      print('🌶Tap: $match');
+      print('Found: ${match.group(0)}'); // 输出匹配到的数字
+    }
+
+    imageData.forEach((element) async {
+      // XFile? compressedImage = await compressAndGetFile(File(element),element);
+      // print('uploadFile path==='  + compressedImage!.path);
+      NetRequest().uploadFile(element, (data) {
+          UploadFile uploadFile = UploadFile.fromJson(data);
+          print('uploadFile url==='  + uploadFile.url!);
+          imageUrlList.add(uploadFile);
+      });
+    });
+
+    if (imageUrlList != null && imageUrlList.length == imageData.length) {
+      NetRequest().threadCreate(title, content,
+          currentBoardId, customLabel, imageUrlList, aitList, (data) {
+            Navigator.pop(context);
+          });
+    }
+  }
+
+  Future<XFile?> compressAndGetFile(File file, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path, targetPath,
+      quality: 50,
+      rotate: 180,
+    );
+    return result;
+  }
+
+  void _handleTextChange() {
+    String text = _controller.text.toString();
+    // 获取当前光标位置
+    final int selectionIndex = _controller.selection.baseOffset;
+
+    // 检查前一个字符是否为'@'且当前字符位置之前是否存在以空格或者文本开头结束的人名
+    final RegExp userAtMentionRegex = RegExp(r'(@\S+)\s*$');
+    final Match match = userAtMentionRegex.firstMatch(text.substring(0, selectionIndex)) as Match;
+
+    if (match != null && match.start == selectionIndex - match[0]!.length) {
+      // 如果匹配到'@用户名'且光标正好在用户名之后，则删除整个'@用户名'
+      _controller.text = text.substring(0, selectionIndex - match[0]!.length);
+      _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+    } else {
+      // 否则正常处理文本变化
+      // 这里不需要做任何操作，因为TextField会自动处理文本变化
     }
   }
 }

@@ -298,7 +298,9 @@ class _MinePageState extends State<MinePage> {
       onLoading: _onLoading,
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-        itemBuilder: (c, i) => PostListItemView(itemIndex: i, isForumList: false,boardBean: boardPostList[i],),
+        itemBuilder: (c, i) => PostListItemView(
+          itemIndex: i, isForumList: false,
+          boardBean: boardPostList[i]??  BoardBean(),),
         // itemExtent: 160.0,
         itemCount: items.length,
       ),

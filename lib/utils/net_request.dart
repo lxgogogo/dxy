@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:holdem/utils/api.dart';
 import 'package:holdem/utils/http_utils.dart';
-import 'package:holdem/utils/response.dart';
+import 'package:holdem/utils/response.dart' as HttpUtilsResonse;
 import 'package:holdem/view/forum/ToastUtils.dart';
 
+import '../model/upload_file.dart';
 import 'log_utils.dart';
 
 typedef SuccessCallback = void Function(dynamic data);
@@ -15,7 +17,7 @@ class NetRequest {
       Map<String, Object> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.indexList, params: params);
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
     } else {
@@ -27,7 +29,7 @@ class NetRequest {
       Map<String, Object> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.messageList, params: params);
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp =  HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
     } else {
@@ -47,7 +49,7 @@ class NetRequest {
 
     Map<String, dynamic> response =
         await HttpUtils.post(Api.boardList, params: params);
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
     } else {
@@ -90,9 +92,52 @@ class NetRequest {
 
     Map<String, dynamic> response =
         await HttpUtils.post(Api.threadList, params: params);
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("getThreadListByBoard===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///上传文件
+  Future uploadFile(
+      String filePath,
+      SuccessCallback onSuccess) async {
+
+    Map<String, Object> params = {};
+    params['file'] = filePath;
+
+    Map<String, dynamic> response =
+    await HttpUtils.postFile(Api.uploadFile, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("uploadFile===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///发布帖子
+  Future threadCreate(
+      String title, String content, int boardId,
+      List<String> tags,List<UploadFile> pics,List<int> at,
+      SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['title'] = title;
+    params['content'] = content;
+    params['boardId'] = boardId;
+    params['tags'] = tags;
+    params['pics'] = pics;
+    params['at'] = at;
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.threadCreate, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("threadCreate===>$response");
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message!);
@@ -114,7 +159,7 @@ class NetRequest {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.sendCode, params: params);
     LogUtils.printAll("sendCode===>$response");
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("sendCode success===>");
       onSuccess(response['data']);
@@ -134,7 +179,7 @@ class NetRequest {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.register, params: params);
     LogUtils.printAll("registerAccount===>$response");
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("registerAccount success===>");
       onSuccess(response['data']);
@@ -153,7 +198,7 @@ class NetRequest {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.login, params: params);
     LogUtils.printAll("userLogin===>$response");
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("getUserProfile success===>");
       onSuccess(response['data']);
@@ -166,7 +211,7 @@ class NetRequest {
   Future logout(SuccessCallback onSuccess) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.logout);
     LogUtils.printAll("logout===>$response");
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("logout success===>");
       onSuccess(response);
@@ -185,7 +230,7 @@ class NetRequest {
     Map<String, dynamic> response =
         await HttpUtils.get(Api.user, params: params);
     LogUtils.printAll("getUserInfo===>$response");
-    Response resp = Response.fromJson(response);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("getUserInfo success===>");
       onSuccess(response['data']);

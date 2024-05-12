@@ -1,4 +1,5 @@
 import 'package:holdem/model/board_info.dart';
+import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/model/user.dart';
 
 /// pager : {"total":1,"pageNum":0,"pageSize":10}
@@ -39,6 +40,7 @@ class BoardBean {
   UserProfile? user;
   BoardInfo? board;
   String? title;
+  String? content;
   String? createdAt;
   int? commentCount;
   int? favoriteCount;
@@ -47,12 +49,14 @@ class BoardBean {
   bool? favorited;
   List<String>? tags;
   List<String>? pics;
+  List<UploadFile>? files;
 
   BoardBean(
       {this.id,
       this.user,
       this.board,
       this.title,
+      this.content,
       this.createdAt,
       this.commentCount,
       this.favoriteCount,
@@ -60,7 +64,8 @@ class BoardBean {
       this.liked,
       this.favorited,
       this.tags,
-      this.pics
+      this.pics,
+      this.files
       });
 
   BoardBean.fromJson(Map<String, dynamic> json) {
@@ -69,6 +74,9 @@ class BoardBean {
     }
     if (json["title"] is String) {
       title = json["title"];
+    }
+    if (json["content"] is String) {
+      content = json["content"];
     }
     if (json["createdAt"] is String) {
       createdAt = json["createdAt"];
@@ -102,6 +110,13 @@ class BoardBean {
           .toList();
     }
 
+    if (json["files"] is List) {
+      files = json["files"] == null
+          ? null
+          : (json["files"] as List)
+          .map((e) =>  UploadFile.fromJson(e))
+          .toList();
+    }
     if (json["pics"] is List) {
       pics = json["pics"] == null
           ? null
@@ -117,11 +132,13 @@ class BoardBean {
     _data["user"] = user;
     _data["board"] = board;
     _data["title"] = title;
+    _data["content"] = content;
     _data["commentCount"] = commentCount;
     _data["favoriteCount"] = favoriteCount;
     _data["likeCount"] = likeCount;
     _data["liked"] = liked;
-    _data["favorited"] = favorited;
+    _data["tags"] = tags;
+    _data["files"] = files;
     return _data;
   }
 }

@@ -33,7 +33,9 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   int pageSize = 10;
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
-  // List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  bool _isMounted = false;
+
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -57,6 +59,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   void initState() {
     tabIdValue = widget.tabId;
     super.initState();
+    _isMounted = true;
     filterMap[0] = '时间最新';
     filterMap[1] = '回帖最多';
     filterMap[2] = '点赞最多';
@@ -69,18 +72,18 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
     NetRequest().getThreadListByBoard(pageNum.toString(), pageSize.toString(),
         boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
           BoardList boardList = BoardList.fromJson(data);
-          setState(() {
-            boardPostList = boardList.list!;
-          });
-
-          boardPostList.forEach((element) {
-            if (element != null) {
-
-            LogUtils.printAll("getThreadListByBoard element===>${element.user?.nickname}");
-            LogUtils.printAll("getThreadListByBoard board===>${element.board?.id}");
-            }
-          });
+          if (_isMounted) {
+            setState(() {
+              boardPostList = boardList.list!;
+            });
+          }
     });
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
   }
 
   @override
@@ -147,12 +150,13 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
               : selected == '回帖最多'
                 ? NetRequest.BOARD_SORT_COMMENT
                 : NetRequest.BOARD_SORT_LIKE;
-
-        setState(() {
-          filterValue = selected;
-          selectFilterIndex = getKeyByValue(selected)!;
-          reqListData();
-        });
+        if (_isMounted) {
+          setState(() {
+            filterValue = selected;
+            selectFilterIndex = getKeyByValue(selected)!;
+            reqListData();
+          });
+        }
       },
       controller: GroupButtonController(selectedIndex: selectFilterIndex),
       //默认0位置选中

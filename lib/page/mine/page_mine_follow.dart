@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/model/followed_fans_list.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/app_theme.dart';
@@ -6,23 +8,23 @@ import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
 
 class MineFollowPage extends StatefulWidget {
-  MineFollowPage({Key? key}) : super(key: key);
+  bool isFollowPage = true;
+
+  MineFollowPage({Key? key, required this.isFollowPage}) : super(key: key);
 
   @override
   _MineFollowPageState createState() => _MineFollowPageState();
 }
 
-class CustomObject {
-  String name;
-  bool isFollowed;
-
-  CustomObject(this.name, this.isFollowed);
-}
 
 class _MineFollowPageState extends State<MineFollowPage> {
-  List<CustomObject> items = List.generate(7, (index) {
-    return CustomObject('小小少年 $index', (index % 2 == 0 ? true : false));
-  });
+
+  int pageNum = 1;
+  int pageSize = 10;
+  bool isFollowPage = true;
+
+  List<FollowedFansBean> followOrFanUserList = [];
+  bool _isMounted = false;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -49,6 +51,32 @@ class _MineFollowPageState extends State<MineFollowPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _isMounted =true;
+    isFollowPage = widget.isFollowPage;
+    getDataList();
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
+  }
+
+  getDataList() {
+    if (isFollowPage) {
+      NetRequest()
+          .followedList(pageNum.toString(), pageSize.toString(), '', (data) {
+            if(_isMounted) {
+              setState(() {
+                FollowedFansList followOrFan = FollowedFansList.fromJson(data);
+                followOrFanUserList = followOrFan.list!;
+              });
+            }
+      });
+    } else {
+      NetRequest()
+          .fansList(pageNum.toString(), pageSize.toString(), '', (data) {});
+    }
   }
 
   @override
@@ -67,8 +95,8 @@ class _MineFollowPageState extends State<MineFollowPage> {
           },
         ),
         backgroundColor: Colors.white,
-        title: const Text(
-          '我的关注',
+        title: Text(
+          isFollowPage ? '我的关注' : '我的粉丝',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
@@ -87,9 +115,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   Widget contentView() {
     return Column(
-      children: [
-        Expanded(child: listView())
-      ],
+      children: [Expanded(child: listView())],
     );
   }
 
@@ -105,7 +131,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
       child: ListView.builder(
         itemBuilder: (c, i) => listDataItem(i),
         // itemExtent: 160.0,
-        itemCount: items.length,
+        itemCount: followOrFanUserList.length,
       ),
     );
   }
@@ -131,7 +157,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
           width: 10,
         ),
         Text(
-          items[index].name,
+          followOrFanUserList[index].thread!.user!.nickname!,
           style: AppTheme.text3B5078Size15,
         ),
         Expanded(child: Text('')),
@@ -159,7 +185,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
         height: 40,
         child: Center(
             child: Padding(
-          padding: const EdgeInsets.only(left: 16,right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: TextField(
             controller: searchController,
             decoration: InputDecoration(

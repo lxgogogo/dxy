@@ -5,6 +5,7 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:holdem/model/user.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -38,6 +39,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   final imageData = <String>[]; //选择相册返回的本地地址集合
   final imageUrlList= <UploadFile>[]; //发布提交是的图片地址集合
   final aitList = <int>[];
+  final  aitUserBeanList = <UserProfile>[]; //@返回的所有用户集合，
 
   String aitUserContent = ''; //@用户的内容
 

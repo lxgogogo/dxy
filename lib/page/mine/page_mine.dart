@@ -1,15 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/page/mine/page_mine_follow.dart';
 import 'package:holdem/page/mine/page_personal.dart';
 import 'package:holdem/page/mine/page_settings.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/constants.dart';
-import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/PostListView.dart';
@@ -32,10 +29,13 @@ class _MinePageState extends State<MinePage> {
   int _currentTabIndex = 0;
   final List<String> tabs = ['帖子', '收藏', '评论'];
 
+  int pageNum = 1;
+  int pageSize = 10;
+
   late UserProfile userProfile = UserProfile();
   var actionEventBus;
 
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  // List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   List<BoardBean> boardPostList = [];
 
   RefreshController _refreshController1 =
@@ -62,7 +62,7 @@ class _MinePageState extends State<MinePage> {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
-    items.add((items.length + 1).toString());
+    // items.add((items.length + 1).toString());
     if (mounted) setState(() {});
     if (_currentTabIndex == 0) {
       _refreshController1.loadComplete();
@@ -77,9 +77,17 @@ class _MinePageState extends State<MinePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    items.forEach((element) {
-      boardPostList.add(BoardBean(title: element));
+    var ownerId = StorageUtil().prefs!.getString('ownerId');
+    NetRequest().getThreadListByBoard(pageNum.toString(), pageSize.toString(),
+        NetRequest.BOARD_SORT_TIME, '', '1', '', (data) {
+      BoardList boardList = BoardList.fromJson(data);
+      setState(() {
+        boardPostList = boardList.list!;
+      });
     });
+    // items.forEach((element) {
+    //   boardPostList.add(BoardBean(title: element));
+    // });
 
     getUserInfo();
     //接受通知刷新页面
@@ -171,7 +179,9 @@ class _MinePageState extends State<MinePage> {
           child: Stack(children: <Widget>[
             ClipOval(
                 child: LoginHelper().getUserAvatar(
-                    userProfile.avatar != null ? userProfile.avatar! : '', 60, 60)
+                    userProfile.avatar != null ? userProfile.avatar! : '',
+                    60,
+                    60)
                 // Image.network(
                 //   'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
                 //   width: 60,
@@ -184,40 +194,50 @@ class _MinePageState extends State<MinePage> {
         Container(
           height: 60,
           margin: EdgeInsets.only(left: 16.px),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 8,
-              ),
-              Text(
-                userProfile!=null && userProfile.nickname != null
-                    ? userProfile.nickname! : '',
-                style: AppTheme.text3B5078Size20,
-              ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              userProfile != null && userProfile.nickname != null
+                  ? userProfile.nickname!
+                  : '',
+              style: AppTheme.text3B5078Size20,
+            ),
+            Row(children: [
               GestureDetector(
-                onTap: () {
-                  Get.to(MineFollowPage());
-                },
                 child: Row(
                   children: [
                     Text(
-                        userProfile!=null && userProfile.followedCount != null
-                            ? userProfile!.followedCount.toString() : '0',
+                        userProfile != null && userProfile.followedCount != null
+                            ? userProfile!.followedCount.toString()
+                            : '0',
                         style: AppTheme.text3B5078Size16),
                     Text(' 关注', style: AppTheme.text3B5078Size12),
-                    SizedBox(
-                      width: 20.px,
-                    ),
-                    Text( userProfile!=null && userProfile.fansCount != null
-                        ? userProfile!.fansCount.toString() : '0',
-                        style: AppTheme.text3B5078Size16),
-                    Text(' 粉丝', style: AppTheme.text3B5078Size12),
                   ],
                 ),
-              )
-            ],
-          ),
+                onTap: () {
+                  Get.to(MineFollowPage(isFollowPage: true));
+                },
+              ),
+              SizedBox(
+                width: 20.px,
+              ),
+              GestureDetector(
+                  child: Row(children: [
+                Text(
+                    userProfile != null && userProfile.fansCount != null
+                        ? userProfile!.fansCount.toString()
+                        : '0',
+                    style: AppTheme.text3B5078Size16),
+                Text(' 粉丝', style: AppTheme.text3B5078Size12)
+              ]),
+                onTap: () {
+                  Get.to(MineFollowPage(isFollowPage: false));
+                },)
+            ]),
+          ]),
         ),
         Expanded(
           child: Text(''),
@@ -299,10 +319,12 @@ class _MinePageState extends State<MinePage> {
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
         itemBuilder: (c, i) => PostListItemView(
-          itemIndex: i, isForumList: false,
-          boardBean: boardPostList[i]??  BoardBean(),),
+          itemIndex: i,
+          isForumList: false,
+          boardBean: boardPostList[i] ?? BoardBean(),
+        ),
         // itemExtent: 160.0,
-        itemCount: items.length,
+        itemCount: boardPostList.length,
       ),
     );
   }

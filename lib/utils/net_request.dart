@@ -132,6 +132,75 @@ class NetRequest {
     }
   }
 
+  ///关注列表
+  Future followedList(
+    String pageNum, String pageSize, String q,
+    SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+
+    Map<String, Object> filters = {};
+    if (q.isNotEmpty) {
+      filters['q'] =q;
+    }
+    params['filters'] = filters;
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.followedList, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("followedList===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///粉丝列表
+  Future fansList(
+      String pageNum, String pageSize, String q,
+      SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+
+    Map<String, Object> filters = {};
+    if (q.isNotEmpty) {
+      filters['q'] =q;
+    }
+    params['filters'] = filters;
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.fansList, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("fansList===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///关注、取消关注
+  Future followerToggle(
+      String userId, bool state,
+      SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['userId'] = userId;
+    params['state'] = state;
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.followerToggle, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("followerToggle===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///发布帖子
   Future threadCreate(
       String title, String content, int boardId,

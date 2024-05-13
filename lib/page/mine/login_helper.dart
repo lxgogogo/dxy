@@ -25,6 +25,7 @@ class LoginHelper {
       Global().token = data['token'];
       StorageUtil().setBool('hasLogin', true);
       StorageUtil().prefs!.setString('token', data['token']);
+      StorageUtil().prefs!.setString('ownerId', userProfile.id!.toString());
       //保存账号密码，获取本人信息接口需要
       StorageUtil().prefs!.setString('userAccount', account);
       StorageUtil().prefs!.setString('userPw', password);
@@ -72,6 +73,7 @@ class LoginHelper {
     Global().hasLogin = false;
     Global().token = '';
     StorageUtil().setBool('hasLogin', false);
+    StorageUtil().prefs!.setString('ownerId', '');
     StorageUtil().prefs!.setString('token', '');
     StorageUtil().prefs!.setString('userAccount', '');
     StorageUtil().prefs!.setString('userPw', '');

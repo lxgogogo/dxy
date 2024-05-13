@@ -24,5 +24,9 @@ class Api{
   static const String sendCode = '$baseUrl/passport/sendCode';
   static const String user = '$baseUrl/user';
 
+  static const String followedList = '$baseUrl/follower/followed/list';
+  static const String fansList = '$baseUrl/follower/fans/list';
+  static const String followerToggle = '$baseUrl/follower/follower/toggle'; //关注 - 添加/取消
+
   
 }

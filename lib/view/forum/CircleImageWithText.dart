@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 ///
@@ -36,25 +37,20 @@ class CircleImageWithText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: EdgeInsets.fromLTRB(0,0,5,0),
+          padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
           child: ClipOval(
-            child: Image.network(
-              imageUrl,
-              width: imageWidth,
-              height: imageHeight,
-              fit: BoxFit.cover,
-            ),
-          ),
+              child: LoginHelper()
+                  .getUserAvatar(imageUrl, imageWidth, imageHeight)),
         ),
         Container(
-          height: imageHeight ,
-          child:Column(
+          height: imageHeight,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildTopText(),
               Expanded(child: _buildBottomText()),
             ],
-          ) ,
+          ),
         )
       ],
     ));
@@ -75,21 +71,26 @@ class CircleImageWithText extends StatelessWidget {
 
   Widget _buildBottomText() {
     return Padding(
-        padding: EdgeInsets.only(bottom: 0),
-        child: Row(children: [
-          Visibility(child:  Text(
+      padding: EdgeInsets.only(bottom: 0),
+      child: Row(children: [
+        Visibility(
+          child: Text(
             bottomText1,
             style: bottomText1Style,
-          ),visible: bottomText1.isEmpty ? false : true,)
-         ,
-          SizedBox(
-            width: bottomText1.isEmpty ? 0 : 10.px,
           ),
-          Visibility(child:  Text(
+          visible: bottomText1.isEmpty ? false : true,
+        ),
+        SizedBox(
+          width: bottomText1.isEmpty ? 0 : 10.px,
+        ),
+        Visibility(
+          child: Text(
             bottomText2,
             style: bottomText2Style,
-          ),visible: bottomText2.isEmpty ? false : true,)
-        ]),
+          ),
+          visible: bottomText2.isEmpty ? false : true,
+        )
+      ]),
     );
   }
 }

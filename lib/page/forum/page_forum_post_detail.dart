@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/forum/page_comment_input.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/label_view.dart';
 
+import '../../model/board_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 import '../../view/forum/CircleImageWithText.dart';
@@ -27,7 +30,9 @@ class PostDetailPage extends StatefulWidget {
 
 class _PostDetailPageState extends State<PostDetailPage> {
   late int currentPostId;
-  bool isFollowed = false;
+  // bool isFollowed = false;
+  bool _isMounted = false;
+  BoardBean? boardBean;
 
   List<String> items = [
     '评论内容评论内容评论内容评论内容',
@@ -49,6 +54,23 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void initState() {
     super.initState();
     currentPostId = widget.postId;
+    _isMounted = true;
+    NetRequest().threadShow(currentPostId.toString(), (data) {
+      if (_isMounted) {
+        setState(() {
+          boardBean = BoardBean.fromJson(data);
+        });
+
+        print('object=========${boardBean!.user!.nickname!}');
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _isMounted = false;
   }
 
   @override
@@ -90,6 +112,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         Container(
             padding: EdgeInsets.fromLTRB(16, 5, 16, 17),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   '大标题大标题大标题大标题大标题大标题大标题大标题大标题大标题',
@@ -106,26 +129,20 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     children: [
                       CircleImageWithText(
                           imageUrl:
-                              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                          (boardBean != null && boardBean!.user != null) ? boardBean!.user!.avatar! : '',
                           imageWidth: 40,
                           imageHeight: 40,
-                          topText: '我是一只小小鸟',
+                          topText: boardBean != null ? boardBean!.user!.nickname! : '',
                           topTextStyle: const TextStyle(),
-                          bottomText1: '发布于2019-2-26 20:30',
+                          bottomText1: boardBean != null ? '发布于${boardBean!.createdAt}'  : '',
                           bottomText1Style: AppTheme.text999999Size11,
                           bottomText2: '',
                           bottomText2Style: const TextStyle()),
-                      isFollowed
+                      (boardBean != null ? boardBean!.user!.followed! : false)
                           ? followedStatusBtn()
                           : IconButton(
                               onPressed: () {
-                                if (isFollowed) {
-                                  return;
-                                }
-                                setState(() {
-                                  isFollowed = true;
-                                  ToastUtils.showToast( '已关注');
-                                });
+                                _followToggle();
                               },
                               icon: Image.asset(
                                 'assets/images/follow_btn.png',
@@ -134,16 +151,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               ))
                     ]),
                 SizedBox(height: 16),
-                Text(
-                    '玩hhpoker俱乐部德扑蕞重要的一点是，在打牌过程中的每个阶段都能知道蕞好的牌是什么。在翻牌前，会相对比较简单。你所能看到的只是自己的两张暗牌，翻牌以后，在转牌、河牌，牌面会变得比较复杂，连老手都经常会搞错。因此，初学hhpoker俱乐部德扑的朋友，首先要练习读牌面。',
-                    style: AppTheme.text666666Size16),
+                Container(
+                  child: Text(
+                      boardBean!= null ? boardBean!.content! : '',
+                    style: AppTheme.text666666Size16),)
+                ,
                 SizedBox(
                   height: 15.px,
                 ),
                 GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: 9,
+                    itemCount: boardBean != null ? boardBean!.files!.length : 0,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 10.0,
@@ -152,10 +171,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          print('Image Clicked!');
                         },
                         child: Image.network(
-                          'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                          _getImageUrl(boardBean!.files![index]),
                           width: 100,
                           height: 100,
                         ),
@@ -195,6 +213,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
+  String _getImageUrl(UploadFile uploadFile) {
+    if (uploadFile.type == 'video'){
+      return uploadFile.posterUrl!;
+    } else{
+      return uploadFile.url!;
+    }
+  }
+
   Widget commentsContent() {
     List<Widget> commentsList = [];
     for (int i = 0; i < items.length; i++) {
@@ -202,76 +228,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
     return Column(
       children: commentsList,
-    );
-  }
-
-  Widget listDataItem(int i) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipOval(
-            child: Image.network(
-          'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-          width: 40,
-          height: 40,
-          fit: BoxFit.cover,
-        )),
-        Expanded(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '这是昵称',
-              style: AppTheme.text666666Size14,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              items[i].toString(),
-              style: AppTheme.text666666Size14,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                          child: const Row(children: [
-                        Icon(Icons.message, color: Colors.grey),
-                        SizedBox(width: 10),
-                        Text(
-                          '回复',
-                          style: AppTheme.text999999Size12,
-                        )
-                      ])),
-                      GestureDetector(
-                        child: const Row(
-                          children: [
-                            Icon(Icons.favorite, color: Colors.grey),
-                            SizedBox(width: 10),
-                            Text(
-                              '2222',
-                              style: AppTheme.text999999Size12,
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            )
-          ],
-        ))
-      ],
     );
   }
 
@@ -291,6 +247,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
+  void _followToggle() {
+     NetRequest().followerToggle(boardBean!.user!.id.toString(),
+         !boardBean!.user!.followed!, (data) {
+
+         });
+  }
 
   Widget followedStatusBtn() {
     return Container(

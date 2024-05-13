@@ -15,6 +15,7 @@ class Api{
   static const String messageBadge = '$baseUrl/message/badge';
 
   static const String threadCreate = '$baseUrl/thread/create';
+  static const String threadShow = '$baseUrl/thread/show';
   static const String uploadFile = '$baseUrl/upload';
 
   //评论

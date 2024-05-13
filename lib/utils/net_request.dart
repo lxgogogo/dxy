@@ -125,6 +125,21 @@ class NetRequest {
     }
   }
 
+  ///帖子详情
+  Future threadShow(String id , SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['id'] = id;
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.threadShow, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("threadShow===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///上传文件
   Future uploadFile(
       String filePath,

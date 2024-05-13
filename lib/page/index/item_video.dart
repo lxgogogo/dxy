@@ -20,6 +20,10 @@ class _VideoItemState extends State<VideoItem> {
     SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
+        if (widget.article.type == 'videoList') {
+          Get.to(VideoListPage(id: widget.article.id ?? 0));
+          return;
+        }
         Get.to(VideoDetailPage(
           id: widget.article.id ?? 0,
         ));

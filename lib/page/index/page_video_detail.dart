@@ -24,10 +24,12 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     super.initState();
 
     NetRequest().articleDetail({'id': widget.id}, (data) {
-      setState(() {
-        articleDetailBean = ArticleDetailBean.fromJson(data);
-        print('视频详情数据：$data');
-      });
+      if (mounted) {
+        setState(() {
+          articleDetailBean = ArticleDetailBean.fromJson(data);
+          print('视频详情数据：$data');
+        });
+      }
     });
   }
 

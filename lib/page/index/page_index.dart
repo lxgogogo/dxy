@@ -40,10 +40,9 @@ class _IndexPageState extends State<IndexPage> {
         content: IndexTabChildPage(type: types[i]),
       ));
     }
-
   }
 
-  void getVideos(){
+  void getVideos() {
     NetRequest().indexList({
       'pageNum': 1,
       'pageSize': 10,
@@ -79,14 +78,41 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
     return Scaffold(
-        // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-        appBar: AppBar(
-          // backgroundColor: Colors.transparent, // 设置导航条背景透明
-          // elevation: 0, // 去除导航条的阴影
-          title: Text('首页'),
-          
-        ),
-        body: getTabView(),);
+      extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
+      backgroundColor: kBgColor,
+      // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
+      appBar: AppBar(
+        backgroundColor: Colors.transparent, // 设置导航条背景透明
+        // elevation: 0, // 去除导航条的阴影
+        title: Text('首页'),
+      ),
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/images/home_top.png', // 替换为你的图片路径
+              fit: BoxFit.cover,
+            ),
+          ),
+          Container(
+            color: Colors.transparent, // 设置背景颜色为灰色
+            child: Column(
+              children: [
+                SafeArea(
+                    child: SizedBox(
+                  height: 0.px,
+                )),
+                Expanded(child: getTabView())
+              ],
+            ),
+          ),
+        ],
+      ),
+      // body: getTabView(),
+    );
   }
 
   Widget getTabView() {
@@ -114,8 +140,6 @@ class _IndexPageState extends State<IndexPage> {
       onTabControllerUpdated: (TabController) {},
     );
   }
-
-
 
 /*
   @override
@@ -206,6 +230,4 @@ class _IndexPageState extends State<IndexPage> {
     );
   }
 */
-
-  
 }

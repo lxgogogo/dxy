@@ -1,22 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class VideoListPage extends StatefulWidget {
   int id;
-  VideoListPage({super.key,required this.id});
+  VideoListPage({super.key, required this.id});
 
   @override
   State<VideoListPage> createState() => _VideoListPageState();
 }
 
 class _VideoListPageState extends State<VideoListPage> {
+  List<ArticleBean> articles = [];
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  int pageNum = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    reqListData();
+  }
+
+  reqListData() {
+    NetRequest().indexList({
+      'pageNum': pageNum,
+      'pageSize': 10,
+      'filters': {
+        'listId': widget.id //'article'
+      }
+    }, (data) {
+      if (pageNum == 1) {
+      } else {}
+
+      List<ArticleBean> dataList = List<ArticleBean>.from(
+          data['list'].map((article) => ArticleBean.fromJson(article)));
+
+      if (mounted) {
+        setState(() {
+          articles = dataList;
+        });
+      }
+    });
+  }
 
   void _onRefresh() async {
     // monitor network fetch
@@ -49,22 +81,25 @@ class _VideoListPageState extends State<VideoListPage> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(),
+      header: const WaterDropHeader(),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
         itemBuilder: (c, i) => videoDataItem(i),
         // itemExtent: 160.0,
-        itemCount: items.length,
+        itemCount: articles.length,
       ),
     );
   }
 
   Widget videoDataItem(int index) {
+    ArticleBean article = articles[index];
     return GestureDetector(
       onTap: () {
-        Get.to(VideoDetailPage(id: 0,));
+        Get.to(VideoDetailPage(
+          id: article.id??0,
+        ));
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.px),
@@ -79,7 +114,7 @@ class _VideoListPageState extends State<VideoListPage> {
             ClipRRect(
                 borderRadius: BorderRadius.circular(5.px),
                 child: Image.network(
-                  'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                  article.cover??'',
                   width: 160.px,
                   height: 90.px,
                   fit: BoxFit.cover,
@@ -93,7 +128,7 @@ class _VideoListPageState extends State<VideoListPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  '无限德州理论与实践无限德州理论与实践 1',
+                  article.title??'',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis, // 超出显示省略号
                   style: TextStyle(
@@ -140,7 +175,7 @@ class _VideoListPageState extends State<VideoListPage> {
                       width: 5.px,
                     ),
                     Text(
-                      '16',
+                      article.likeCount.toString(),
                       style: TextStyle(
                         color: const Color(0xff999999),
                         fontSize: 14.px,

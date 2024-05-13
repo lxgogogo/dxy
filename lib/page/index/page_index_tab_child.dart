@@ -36,46 +36,35 @@ class _IndexTabChildPageState extends State<IndexTabChildPage> {
         'categoryAlias': widget.type //'article'
       }
     }, (data) {
-
-      if (pageNum==1){
-        
-      }
-      else {
-
-      }
-
-
       List<ArticleBean> dataList = List<ArticleBean>.from(
           data['list'].map((article) => ArticleBean.fromJson(article)));
 
       if (mounted) {
         setState(() {
-          articles = dataList;
+          if (pageNum == 1) {
+            articles = dataList;
+          } else {
+            articles.addAll(dataList);
+          }
         });
       }
+      _refreshController.loadComplete();
+      _refreshController.refreshCompleted();
     });
   }
 
   void _onRefresh() async {
-    if (kDebugMode) {
-      print('${widget.type} _onRefresh');
-    }
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    setState(() {
+      pageNum = 1;
+    });
+    reqListData();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    if (kDebugMode) {
-      print('${widget.type} _onRefresh');
-    }
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length + 1).toString());
-    if (mounted) setState(() {});
-    _refreshController.loadComplete();
+    setState(() {
+      pageNum++;
+    });
+    reqListData();
   }
 
   @override

@@ -22,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerPw = TextEditingController();
   var actionEventBus;
 
+  FocusNode _focusNode = FocusNode();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -31,6 +33,11 @@ class _LoginPageState extends State<LoginPage> {
       if (event.toString() ==
           EventBusAction.closeLoginPage.eventBusTypeName) {
         Navigator.of(context).pop();
+      }
+    });
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(_focusNode);
       }
     });
   }
@@ -113,6 +120,7 @@ class _LoginPageState extends State<LoginPage> {
               Expanded(
                 child: TextField(
                   controller: _controllerPw,
+                  focusNode: _focusNode,
                   obscureText: true, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框

@@ -3,14 +3,14 @@ class ArticleBean{
   int? categoryId;
   int? commentCount;
   String? cover;
-  String? createdAt;
+  DateTime? createdAt;
   String? description;
   int? favoriteCount;
   int? id;
   int? likeCount;
   String? title;
   String? type;
-  String? updatedAt;
+  DateTime? updatedAt;
 
   ArticleBean({this.author, this.categoryId, this.commentCount, this.cover, this.createdAt, this.description, this.favoriteCount, this.id, this.likeCount, this.title, this.type, this.updatedAt});
 
@@ -28,7 +28,7 @@ class ArticleBean{
       cover = json["cover"];
     }
     if (json["createdAt"] is String) {
-      createdAt = json["createdAt"];
+      createdAt = DateTime.parse(json["createdAt"]);
     }
     if (json["description"] is String) {
       description = json["description"];
@@ -49,7 +49,7 @@ class ArticleBean{
       type = json["type"];
     }
     if (json["updatedAt"] is String) {
-      updatedAt = json["updatedAt"];
+      updatedAt = DateTime.parse(json["updatedAt"]);
     }
 
   }

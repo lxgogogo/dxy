@@ -5,6 +5,7 @@ import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
+import 'package:holdem/widget/post_detail_bottom_view.dart';
 
 class BookDetailPage extends StatefulWidget {
   int id;
@@ -193,6 +194,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
           ))
         ],
       ),
+      bottomSheet: PostDetailBottomView(postId: widget.id,)
     );
   }
 }

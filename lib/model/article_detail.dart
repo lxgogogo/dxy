@@ -3,7 +3,7 @@ class ArticleDetailBean {
   int? categoryId;
   String? cover;
   int? commentCount;
-  String? createdAt;
+  DateTime? createdAt;
   int? favoriteCount;
   bool? favorited;
   int? id;
@@ -11,7 +11,7 @@ class ArticleDetailBean {
   int? listId;
   String? title;
   String? type;
-  String? updatedAt;
+  DateTime? updatedAt;
   VideoBean? video;
   BookBean? book;
 
@@ -46,7 +46,7 @@ class ArticleDetailBean {
       commentCount = json["commentCount"];
     }
     if (json["createdAt"] is String) {
-      createdAt = json["createdAt"];
+      createdAt = DateTime.parse(json["createdAt"]);
     }
     if (json["favoriteCount"] is int) {
       favoriteCount = json["favoriteCount"];
@@ -70,7 +70,7 @@ class ArticleDetailBean {
       type = json["type"];
     }
     if (json["updatedAt"] is String) {
-      updatedAt = json["updatedAt"];
+      updatedAt = DateTime.parse(json["updatedAt"]);
     }
     if (json["video"] is Map) {
       video = VideoBean.fromJson(json["video"]);

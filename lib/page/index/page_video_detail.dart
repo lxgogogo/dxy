@@ -5,6 +5,7 @@ import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
+import 'package:holdem/widget/post_detail_bottom_view.dart';
 
 // ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
@@ -29,6 +30,15 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           articleDetailBean = ArticleDetailBean.fromJson(data);
           print('视频详情数据：$data');
         });
+      }
+    });
+
+    NetRequest().commentList({
+      'pageNum': 1,
+      'pageSize': 10,
+      'filters': {'relType': 'content', 'relId': widget.id}
+    }, (data) {
+      if (mounted) {
       }
     });
   }
@@ -65,7 +75,8 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                       children: [
                         ClipOval(
                           child: Image.network(
-                            'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                            articleDetailBean.cover??'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                            // 'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
                             width: 40.px,
                             height: 40.px,
                             fit: BoxFit.cover,
@@ -128,7 +139,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   child: Stack(
                     children: [
                       Image.network(
-                        'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                        articleDetailBean.cover??'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
                         width: 375.px,
                         height: 210.px,
                         fit: BoxFit.cover,
@@ -173,6 +184,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
               )
             ],
           ),
-        ));
+        ),
+        bottomSheet: PostDetailBottomView(postId: widget.id,),);
   }
 }

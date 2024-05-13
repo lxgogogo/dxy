@@ -75,11 +75,33 @@ class _VideoItemState extends State<VideoItem> {
                   borderRadius: BorderRadius.all(Radius.circular(8.px)),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: Image.network(
-                  widget.article.cover ?? '',
-                  width: 145.px,
-                  height: 120.px,
-                  fit: BoxFit.cover,
+                child: Stack(
+                  children: [
+                    Image.network(
+                      widget.article.cover ?? '',
+                      width: 145.px,
+                      height: 120.px,
+                      fit: BoxFit.cover,
+                    ),
+                    if (widget.article.type == 'videoList')
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.px, vertical: 8.px),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.px),
+                              bottomRight: Radius.circular(8.px),
+                            ),
+                          ),
+                          child: Image.asset('assets/images/collection.png',
+                              width: 13.px, height: 13.px),
+                        ),
+                      ),
+                  ],
                 ),
               ),
               Expanded(

@@ -12,9 +12,13 @@ class Api{
 
   //消息
   static const String messageList = '$baseUrl/message/list';
+  static const String messageBadge = '$baseUrl/message/badge';
 
   static const String threadCreate = '$baseUrl/thread/create';
   static const String uploadFile = '$baseUrl/upload';
+
+  //评论
+  static const String commentList = '$baseUrl/comment/list';
 
   //账号相关
   static const String login = '$baseUrl/passport/login';

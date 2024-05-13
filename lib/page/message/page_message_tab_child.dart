@@ -23,15 +23,16 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
     NetRequest().messageList({
       'pageNum': 1,
       'pageSize': 10,
-      'filters': {
-        'type':widget.type
-      }
+      'filters': {'type': widget.type}
     }, (data) {
       // List<ArticleBean> dataList = List<ArticleBean>.from(
       //     data['list'].map((article) => ArticleBean.fromJson(article)));
       // setState(() {
       //   articles = dataList;
       // });
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 

@@ -12,7 +12,7 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  List<TabData> forumParentTabs = [];
+  List<TabData> parentTabs = [];
 
   final List<Tab> myTabs = const <Tab>[
     Tab(text: '@我的'),
@@ -27,7 +27,7 @@ class _MessagePageState extends State<MessagePage> {
   void initState() {
     super.initState();
     for (int i = 0; i < myTabs.length; i++) {
-      forumParentTabs.add(TabData(
+      parentTabs.add(TabData(
         index: i,
         title: Tab(
           child: Text(myTabs[i].text.toString()),
@@ -39,7 +39,7 @@ class _MessagePageState extends State<MessagePage> {
 
   Widget getTabView() {
     return DynamicTabBarWidget(
-      dynamicTabs: forumParentTabs,
+      dynamicTabs: parentTabs,
       isScrollable: false,
       showBackIcon: false,
       showNextIcon: false,

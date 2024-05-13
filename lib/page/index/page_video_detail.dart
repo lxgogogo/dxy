@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -8,21 +9,25 @@ import 'package:holdem/widget/holdem_btn.dart';
 // ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
   int id;
-  VideoDetailPage({super.key,required this.id});
+  VideoDetailPage({super.key, required this.id});
 
   @override
   State<VideoDetailPage> createState() => _VideoDetailPageState();
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
+  ArticleDetailBean articleDetailBean = ArticleDetailBean();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    NetRequest().articleDetail({'id':widget.id}, (data) {
-      print('视频详情数据：$data');
+    NetRequest().articleDetail({'id': widget.id}, (data) {
+      setState(() {
+        articleDetailBean = ArticleDetailBean.fromJson(data);
+        print('视频详情数据：$data');
+      });
     });
   }
 
@@ -34,6 +39,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           // elevation: 0, // 去除导航条的阴影
           title: Text('视频详情'),
         ),
+        // ignore: unnecessary_null_comparison
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -45,7 +51,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 padding: EdgeInsets.symmetric(horizontal: 16.px),
                 child: Column(
                   children: [
-                    Text('AK在不同位置不同入局：翻牌三张发出来后怎么打？',
+                    Text(articleDetailBean.title ?? '',
                         style: TextStyle(
                             color: Color(0xff3B5078),
                             fontSize: 22.px,

@@ -1,6 +1,4 @@
-
-
-class ArticleDetailBean{
+class ArticleDetailBean {
   ArticleCategoryBean? category;
   int? categoryId;
   String? cover;
@@ -15,8 +13,24 @@ class ArticleDetailBean{
   String? type;
   String? updatedAt;
   VideoBean? video;
+  BookBean? book;
 
-  ArticleDetailBean({this.category, this.categoryId, this.cover, this.commentCount, this.createdAt, this.favoriteCount, this.favorited, this.id, this.likeCount, this.listId, this.title, this.type, this.updatedAt, this.video});
+  ArticleDetailBean(
+      {this.category,
+      this.categoryId,
+      this.cover,
+      this.commentCount,
+      this.createdAt,
+      this.favoriteCount,
+      this.favorited,
+      this.id,
+      this.likeCount,
+      this.listId,
+      this.title,
+      this.type,
+      this.updatedAt,
+      this.video,
+      this.book});
 
   ArticleDetailBean.fromJson(Map<String, dynamic> json) {
     if (json["category"] is Map) {
@@ -61,10 +75,13 @@ class ArticleDetailBean{
     if (json["video"] is Map) {
       video = VideoBean.fromJson(json["video"]);
     }
+    if (json["book"] is Map){
+      book = BookBean.fromJson(json["book"]);
+    }
   }
 }
 
-class ArticleCategoryBean{
+class ArticleCategoryBean {
   int? id;
   String? name;
   String? alias;
@@ -84,7 +101,31 @@ class ArticleCategoryBean{
   }
 }
 
-class VideoBean{
+class BookBean {
+  int? id;
+  String? downloadUrl;
+  String? publishDate;
+  String? publisher;
+
+  BookBean({this.id, this.downloadUrl, this.publishDate, this.publisher});
+
+  BookBean.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["downloadUrl"] is String) {
+      downloadUrl = json["downloadUrl"];
+    }
+    if (json["publishDate"] is String) {
+      publishDate = json["publishDate"];
+    }
+    if (json["publisher"] is String) {
+      publisher = json["publisher"];
+    }
+  }
+}
+
+class VideoBean {
   int? duration;
   int? id;
   int? num;
@@ -110,5 +151,4 @@ class VideoBean{
       sourceUrl = json["sourceUrl"];
     }
   }
-
 }

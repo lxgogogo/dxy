@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 
 class BookDetailPage extends StatefulWidget {
-  const BookDetailPage({super.key});
+  int id;
+  BookDetailPage({super.key,required this.id});
 
   @override
   State<BookDetailPage> createState() => _BookDetailPageState();
 }
 
 class _BookDetailPageState extends State<BookDetailPage> {
+  ArticleDetailBean articleDetailBean = ArticleDetailBean();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    NetRequest().articleDetail({'id': widget.id}, (data) {
+      setState(() {
+        articleDetailBean = ArticleDetailBean.fromJson(data);
+        print('book详情数据：$data');
+      });
+    });
+  }
+    
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
@@ -67,7 +85,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '无限德州理论与实践',
+                          articleDetailBean.title??'',
                           maxLines: 2,
                           style: TextStyle(
                               color: Color(0xff3B5078),

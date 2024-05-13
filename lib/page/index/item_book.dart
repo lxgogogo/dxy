@@ -19,7 +19,7 @@ class _BookItemState extends State<BookItem> {
     SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
-        Get.to(const BookDetailPage());
+        Get.to(BookDetailPage(id:widget.article.id ?? 0));
       },
       child: Container(
         clipBehavior: Clip.antiAlias,
@@ -29,7 +29,7 @@ class _BookItemState extends State<BookItem> {
         child: Column(
           children: [
             Image.network(
-              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+              widget.article.cover ?? '',
               width: 171.px,
               height: 145.px,
               fit: BoxFit.cover,
@@ -38,7 +38,7 @@ class _BookItemState extends State<BookItem> {
                 child: Container(
               padding: EdgeInsets.all(10.px),
               child: Text(
-                'ELKY当今德州锦标赛打法转行德扑的…',
+                widget.article.title ?? '',
                 maxLines: 2,
                 style: TextStyle(color: Color(0xff3B5078)),
               ),

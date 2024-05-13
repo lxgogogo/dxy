@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 
+// ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
-  const VideoDetailPage({super.key});
+  int id;
+  VideoDetailPage({super.key,required this.id});
 
   @override
   State<VideoDetailPage> createState() => _VideoDetailPageState();
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    NetRequest().articleDetail({'id':widget.id}, (data) {
+      print('视频详情数据：$data');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);

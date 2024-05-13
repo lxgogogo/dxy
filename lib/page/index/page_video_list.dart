@@ -64,7 +64,7 @@ class _VideoListPageState extends State<VideoListPage> {
   Widget videoDataItem(int index) {
     return GestureDetector(
       onTap: () {
-        Get.to(const VideoDetailPage());
+        Get.to(VideoDetailPage(id: 0,));
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.px),

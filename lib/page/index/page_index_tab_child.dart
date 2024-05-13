@@ -20,6 +20,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage> {
   List<ArticleBean> articles = [];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  int pageNum = 1;
 
   @override
   void initState() {
@@ -29,12 +30,21 @@ class _IndexTabChildPageState extends State<IndexTabChildPage> {
 
   reqListData() {
     NetRequest().indexList({
-      'pageNum': 1,
+      'pageNum': pageNum,
       'pageSize': 10,
       'filters': {
         'categoryAlias': widget.type //'article'
       }
     }, (data) {
+
+      if (pageNum==1){
+        
+      }
+      else {
+
+      }
+
+
       List<ArticleBean> dataList = List<ArticleBean>.from(
           data['list'].map((article) => ArticleBean.fromJson(article)));
 
@@ -47,6 +57,9 @@ class _IndexTabChildPageState extends State<IndexTabChildPage> {
   }
 
   void _onRefresh() async {
+    if (kDebugMode) {
+      print('${widget.type} _onRefresh');
+    }
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -55,6 +68,9 @@ class _IndexTabChildPageState extends State<IndexTabChildPage> {
 
   void _onLoading() async {
     // monitor network fetch
+    if (kDebugMode) {
+      print('${widget.type} _onRefresh');
+    }
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     // items.add((items.length + 1).toString());

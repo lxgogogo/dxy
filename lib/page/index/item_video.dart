@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/size_fit.dart';
 
@@ -19,7 +20,7 @@ class _VideoItemState extends State<VideoItem> {
     SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
-        Get.to(VideoListPage(
+        Get.to(VideoDetailPage(
           id: widget.article.id ?? 0,
         ));
       },

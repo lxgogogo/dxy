@@ -70,8 +70,15 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
         boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
           BoardList boardList = BoardList.fromJson(data);
           setState(() {
-            LogUtils.printAll("getThreadListByBoard===>${boardList.pager!.pageSize!}");
             boardPostList = boardList.list!;
+          });
+
+          boardPostList.forEach((element) {
+            if (element != null) {
+
+            LogUtils.printAll("getThreadListByBoard element===>${element.user?.nickname}");
+            LogUtils.printAll("getThreadListByBoard board===>${element.board?.id}");
+            }
           });
     });
   }
@@ -122,7 +129,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
         boardPostList != null ?
             PostListItemView(itemIndex: i,
               isForumList: true,
-              boardBean: boardPostList[i],) : null,
+              boardBean: boardPostList[i]) : null,
         itemCount: boardPostList.length,
       ),
     );

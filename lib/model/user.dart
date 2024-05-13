@@ -1,8 +1,8 @@
 class UserProfile {
   int? id;
-  String? account;
   String? nickname;
   String? avatar;
+  String? account;
   String? token;
   int? followedCount;
   int? fansCount;

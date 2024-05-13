@@ -5,7 +5,6 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -397,14 +396,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     }
   }
 
-  Future<XFile?> compressAndGetFile(File file, String targetPath) async {
-    var result = await FlutterImageCompress.compressAndGetFile(
-      file.absolute.path, targetPath,
-      quality: 50,
-      rotate: 180,
-    );
-    return result;
-  }
+  // Future<XFile?> compressAndGetFile(File file, String targetPath) async {
+  //   var result = await FlutterImageCompress.compressAndGetFile(
+  //     file.absolute.path, targetPath,
+  //     quality: 50,
+  //     rotate: 180,
+  //   );
+  //   return result;
+  // }
 
   void _handleTextChange() {
     String text = _controller.text.toString();

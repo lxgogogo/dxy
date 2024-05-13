@@ -96,7 +96,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                         width: 5.px,
                       ),
                       Text(
-                        boardBean.user!=null ? boardBean.user.toString() : '',
+                        boardBean.user!=null ? boardBean.user!.nickname! : '',
                         style: AppTheme.text666666Size13,
                       )
                     ],
@@ -105,7 +105,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                     height: 5.px,
                   ),
                    Text(
-                    boardBean.content!,
+                     boardBean.content!= null ? boardBean.content! :'',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: AppTheme.text666666Size14,
@@ -117,10 +117,10 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                           SizedBox(
                             height: 5.px,
                           ),
-                          mediaContent(index, boardBean.files! ?? [])
+                          mediaContent(index, boardBean.files !=null ? boardBean.files! :  [])
                         ],
                       ),
-                      visible: boardBean.files!.length == 0 ? false : true),
+                      visible: boardBean.files !=null && boardBean.files!.length == 0 ? false : true),
                   SizedBox(
                     height: 5.px,
                   ),

@@ -81,12 +81,13 @@ class BoardBean {
     if (json["createdAt"] is String) {
       createdAt = json["createdAt"];
     }
-    if (json["user"] is UserProfile) {
-      user = json["user"];
+    if (json['user'] != null) {
+      user = UserProfile.fromJson(json['user']);
     }
-    if (json["board"] is BoardInfo) {
-      board = json["board"];
+    if (json['board'] != null) {
+      board = BoardInfo.fromJson(json['user']);
     }
+
     if (json["commentCount"] is int) {
       commentCount = json["commentCount"];
     }

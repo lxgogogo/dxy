@@ -250,7 +250,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _followToggle() {
      NetRequest().followerToggle(boardBean!.user!.id.toString(),
          !boardBean!.user!.followed!, (data) {
+            if(_isMounted) {
+              setState(() {
 
+              });
+            }
          });
   }
 

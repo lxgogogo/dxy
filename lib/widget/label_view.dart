@@ -9,9 +9,9 @@ typedef void OnTapCallback(String value);
 class LabelView extends StatefulWidget {
   bool isEditLabel = false;
   List<String> labelData = [];
-  OnTapCallback onTap;
+  OnTapCallback onItemTap;
 
-  LabelView({Key? key, required this.isEditLabel, required this.labelData, required this.onTap})
+  LabelView({Key? key, required this.isEditLabel, required this.labelData, required this.onItemTap})
       : super(key: key);
 
   @override
@@ -33,7 +33,7 @@ class _LabelViewState extends State<LabelView> {
   Widget build(BuildContext context) {
     isEditLabel = widget.isEditLabel;
     labelData = widget.labelData;
-    onTap = widget.onTap;
+    onTap = widget.onItemTap;
     return ReorderableGridView.count(
       key: ValueKey('label1'),
       shrinkWrap: true,
@@ -101,6 +101,11 @@ class _LabelViewState extends State<LabelView> {
                             fontWeight: FontWeight.w200),
                       ),
                       GestureDetector(
+                        onTap: () { //删除当前标签
+                          setState(() {
+                            labelData.remove(labelValue);
+                          });
+                        },
                         child: Icon(
                           Icons.close,
                           size: 15,

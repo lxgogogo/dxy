@@ -1,14 +1,18 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:holdem/utils/storage.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/label_view.dart';
-import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
 
 class SelectLabelPage extends StatefulWidget {
-  SelectLabelPage({Key? key}) : super(key: key);
+  List<String> selectedLabelList = []; //上个页面已经选择的标签集
+
+  SelectLabelPage({Key? key, required this.selectedLabelList})
+      : super(key: key);
 
   @override
   _SelectLabelPageState createState() => _SelectLabelPageState();
@@ -17,17 +21,31 @@ class SelectLabelPage extends StatefulWidget {
 class _SelectLabelPageState extends State<SelectLabelPage> {
   late bool isEditLabel = false;
   late bool isShowCreateInputView = false;
-  List<String> labelData = [
-    '娱乐巅峰',
-    '人生赢家',
-    '生死看淡',
-    '不服就干',
-  ];
+
+  List<String> selectedLabelList = []; //上个页面已经选择的标签集
+
+  List<String> labelData = [];
+
+  bool _isMounted = false;
+  final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    selectedLabelList = widget.selectedLabelList;
+    _isMounted = true;
+
+    if (StorageUtil().prefs != null ) {
+      labelData = StorageUtil().prefs!.getStringList('userLabel')?? [];
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _isMounted = false;
   }
 
   @override
@@ -51,7 +69,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
-        bottom: const PreferredSize(
+        bottom:  PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
             color: AppTheme.color_F3F3F3,
@@ -98,7 +116,17 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                 width: 16.px,
                 height: 16.px,
               ),
-              onPressed: () {},
+              onPressed: () {
+                //清空
+                if (_isMounted) {
+                  setState(() {
+                    if (labelData != null) {
+                      labelData.clear();
+                      StorageUtil().prefs!.setStringList('userLabel', []);
+                    }
+                  });
+                }
+              },
             ),
           ],
         ),
@@ -109,12 +137,28 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                   key: ValueKey('label'),
                   isEditLabel: true,
                   labelData: labelData,
-                  onTap: (labelValue) {
+                  onItemTap: (labelValue) {
+                    if (_isUserSelectedLabel(labelValue)) {
+                      ToastUtils.showToast('已选择当前标签');
+                      return;
+                    }
                     Navigator.pop(context, labelValue);
                   },
                 )))
       ],
     );
+  }
+
+  //判断是否用户已经选择过的标签
+  bool _isUserSelectedLabel(String labelValue) {
+    if (selectedLabelList != null && selectedLabelList.length > 0) {
+      for (var element in selectedLabelList) {
+        if (element == labelValue) {
+          return true; // 如果找到匹配项，立即返回 true
+        }
+      }
+    }
+    return false;
   }
 
   Widget buildItem(String text) {
@@ -155,7 +199,11 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          textAlignVertical: TextAlignVertical.center, // 将文本垂直居中
+                          controller: controller,
+                          maxLength: 4,
                           decoration: InputDecoration(
+                            counterText: '',
                             hintText: '标签内容',
                             filled: true,
                             fillColor: AppTheme.color_EFEFEF,
@@ -173,7 +221,14 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                       ),
                       SizedBox(width: 10),
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            if (_isMounted) {
+                              setState(() {
+                                labelData.add(controller.text);
+                                StorageUtil().prefs!.setStringList('userLabel', labelData);
+                              });
+                            }
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                               color: AppTheme.color_008EFF,

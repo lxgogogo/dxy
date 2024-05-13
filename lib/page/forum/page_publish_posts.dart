@@ -35,22 +35,29 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     regExp: detectionRegExp(),
   );
 
-  final customLabel = <String>[];
+  final customLabelList = <String>[];
   final imageData = <String>[]; //选择相册返回的本地地址集合
-  final imageUrlList= <UploadFile>[]; //发布提交是的图片地址集合
+  final imageUrlList = <UploadFile>[]; //发布提交是的图片地址集合
   final aitList = <int>[];
-  final  aitUserBeanList = <UserProfile>[]; //@返回的所有用户集合，
+  final aitUserBeanList = <UserProfile>[]; //@返回的所有用户集合，
 
   String aitUserContent = ''; //@用户的内容
+  bool _isMounted = false;
 
   @override
   void initState() {
     super.initState();
+    _isMounted = true;
     currentBoardId = widget.currentBoardId;
     print("publish post board id ==$currentBoardId");
-    _controller.addListener(() {
+    _controller.addListener(() {});
+  }
 
-    });
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _isMounted = false;
   }
 
   @override
@@ -157,9 +164,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             child: Padding(
                 padding: EdgeInsets.fromLTRB(14.px, 6.px, 14.px, 0),
                 child: LabelView(
-                  isEditLabel: false,
-                  labelData: customLabel,
-                  onTap: (labelValue){
+                  isEditLabel: true,
+                  labelData: customLabelList,
+                  onItemTap: (labelValue) {
 
                   },
                 )))
@@ -292,23 +299,26 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                           )),
                       IconButton(
                           onPressed: () async {
+                            if (customLabelList != null &&
+                                customLabelList.length == 3) {
+                              ToastUtils.showToast('最多选择3个标签');
+                              return;
+                            }
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SelectLabelPage()),
+                                  builder: (context) => SelectLabelPage(selectedLabelList: customLabelList,)),
                             );
                             // 在这里处理从ResultPage返回的标签主体
                             if (result != null) {
-                              if(customLabel!= null && customLabel.length == 3) {
-                                ToastUtils.showToast('最多选择3个标签');
-                                result;
-                              }
-                              setState(() {
-                                customLabel.add(result);
-                                customLabel.forEach((element) {
-                                  print('object=====>$element');
+                              if (_isMounted) {
+                                setState(() {
+                                  customLabelList.add(result);
+                                  customLabelList.forEach((element) {
+                                    print('object=====>$element');
+                                  });
                                 });
-                              });
+                              }
                             }
                           },
                           icon: Image.asset(
@@ -353,7 +363,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         }
         setState(() {});
       }
-
     } else {
       // User canceled the picker
     }
@@ -384,17 +393,18 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       // XFile? compressedImage = await compressAndGetFile(File(element),element);
       // print('uploadFile path==='  + compressedImage!.path);
       NetRequest().uploadFile(element, (data) {
-          UploadFile uploadFile = UploadFile.fromJson(data);
-          print('uploadFile url==='  + uploadFile.url!);
-          imageUrlList.add(uploadFile);
+        UploadFile uploadFile = UploadFile.fromJson(data);
+        print('uploadFile url===' + uploadFile.url!);
+        imageUrlList.add(uploadFile);
       });
     });
 
     if (imageUrlList != null && imageUrlList.length == imageData.length) {
-      NetRequest().threadCreate(title, content,
-          currentBoardId, customLabel, imageUrlList, aitList, (data) {
-            Navigator.pop(context);
-          });
+      NetRequest().threadCreate(
+          title, content, currentBoardId, customLabelList, imageUrlList, aitList,
+          (data) {
+        Navigator.pop(context);
+      });
     }
   }
 
@@ -414,12 +424,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
     // 检查前一个字符是否为'@'且当前字符位置之前是否存在以空格或者文本开头结束的人名
     final RegExp userAtMentionRegex = RegExp(r'(@\S+)\s*$');
-    final Match match = userAtMentionRegex.firstMatch(text.substring(0, selectionIndex)) as Match;
+    final Match match = userAtMentionRegex
+        .firstMatch(text.substring(0, selectionIndex)) as Match;
 
     if (match != null && match.start == selectionIndex - match[0]!.length) {
       // 如果匹配到'@用户名'且光标正好在用户名之后，则删除整个'@用户名'
       _controller.text = text.substring(0, selectionIndex - match[0]!.length);
-      _controller.selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+      _controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: _controller.text.length));
     } else {
       // 否则正常处理文本变化
       // 这里不需要做任何操作，因为TextField会自动处理文本变化

@@ -31,7 +31,7 @@ class Api{
 
   static const String followedList = '$baseUrl/follower/followed/list';
   static const String fansList = '$baseUrl/follower/fans/list';
-  static const String followerToggle = '$baseUrl/follower/follower/toggle'; //关注 - 添加/取消
+  static const String followerToggle = '$baseUrl/follower/toggle'; //关注 - 添加/取消
 
   
 }

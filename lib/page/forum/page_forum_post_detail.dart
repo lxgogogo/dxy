@@ -1,22 +1,13 @@
-import 'package:dynamic_tabbar/dynamic_tabbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/page/forum/page_comment_input.dart';
-import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/label_view.dart';
 
 import '../../model/board_list.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/constants.dart';
 import '../../view/forum/CircleImageWithText.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../../widget/label_view.dart';
 import '../../widget/post_detail_bottom_view.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -102,7 +93,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ],
         ),
         body: SafeArea(child: contentView()),
-        bottomSheet: PostDetailBottomView(postId: currentPostId,relId: -1, relType: ''),
+        bottomSheet:
+            PostDetailBottomView(postId: currentPostId, relId: -1, relType: ''),
         backgroundColor: Colors.white);
   }
 
@@ -114,8 +106,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '大标题大标题大标题大标题大标题大标题大标题大标题大标题大标题',
+                Text(
+                  boardBean != null ? boardBean!.title! : '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTheme.text3B5078Size22,
@@ -129,12 +121,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     children: [
                       CircleImageWithText(
                           imageUrl:
-                          (boardBean != null && boardBean!.user != null) ? boardBean!.user!.avatar! : '',
+                              (boardBean != null && boardBean!.user != null)
+                                  ? boardBean!.user!.avatar!
+                                  : '',
                           imageWidth: 40,
                           imageHeight: 40,
-                          topText: boardBean != null ? boardBean!.user!.nickname! : '',
+                          topText: boardBean != null
+                              ? boardBean!.user!.nickname!
+                              : '',
                           topTextStyle: const TextStyle(),
-                          bottomText1: boardBean != null ? '发布于${boardBean!.createdAt}'  : '',
+                          bottomText1: boardBean != null
+                              ? '发布于${boardBean!.createdAt}'
+                              : '',
                           bottomText1Style: AppTheme.text999999Size11,
                           bottomText2: '',
                           bottomText2Style: const TextStyle()),
@@ -152,10 +150,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     ]),
                 SizedBox(height: 16),
                 Container(
-                  child: Text(
-                      boardBean!= null ? boardBean!.content! : '',
-                    style: AppTheme.text666666Size16),)
-                ,
+                  child: Text(boardBean != null ? boardBean!.content! : '',
+                      style: AppTheme.text666666Size16),
+                ),
                 SizedBox(
                   height: 15.px,
                 ),
@@ -170,8 +167,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
-                        onTap: () {
-                        },
+                        onTap: () {},
                         child: Image.network(
                           _getImageUrl(boardBean!.files![index]),
                           width: 100,
@@ -180,20 +176,25 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       ); // 替换image_$index.jpg为对应的图片路径
                     }),
                 SizedBox(height: 10),
-                // Expanded(child: LabelView(isEditLabel: false, labelData: labelData))
-                Row(
-                  children: [
-                    labelView(),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    labelView(),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    labelView(),
-                  ],
-                ),
+                // Expanded(child: LabelView(isEditLabel: false, labelData: labelData, onItemTap: (value){}))
+                // Visibility(
+                //   child: Row(
+                //     children: [
+                //       Visibility(
+                //         child: labelView(boardBean!.tags![0]),
+                //       ),
+                //       SizedBox(
+                //         width: 10,
+                //       ),
+                //       labelView(''),
+                //       SizedBox(
+                //         width: 10,
+                //       ),
+                //       labelView(''),
+                //     ],
+                //   ),
+                //   visible: boardBean!.tags!.isNotEmpty ? true : false,
+                // )
               ],
             )),
         Container(height: 10.px, color: AppTheme.color_F3F3F3),
@@ -214,9 +215,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   String _getImageUrl(UploadFile uploadFile) {
-    if (uploadFile.type == 'video'){
+    if (uploadFile.type == 'video') {
       return uploadFile.posterUrl!;
-    } else{
+    } else {
       return uploadFile.url!;
     }
   }
@@ -231,7 +232,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Widget labelView() {
+  Widget labelView(String labelValue) {
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.color_1A008EFF,
@@ -239,7 +240,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
       child: Text(
-        '这是标签',
+        labelValue,
         style: TextStyle(
           color: AppTheme.color_008EFF,
         ),
@@ -248,14 +249,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void _followToggle() {
-     NetRequest().followerToggle(boardBean!.user!.id.toString(),
-         !boardBean!.user!.followed!, (data) {
-            if(_isMounted) {
-              setState(() {
-
-              });
-            }
-         });
+    NetRequest().followerToggle(
+        boardBean!.user!.id.toString(), !boardBean!.user!.followed!, (data) {
+      if (_isMounted) {
+        setState(() {});
+      }
+    });
   }
 
   Widget followedStatusBtn() {

@@ -285,14 +285,14 @@ class NetRequest {
   ///发布帖子
   Future threadCreate(
       String title, String content, int boardId,
-      List<String> tags,List<UploadFile> pics,List<int> at,
+      List<String> tags,List<UploadFile> files,List<int> at,
       SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
     params['title'] = title;
     params['content'] = content;
     params['boardId'] = boardId;
     params['tags'] = tags;
-    params['pics'] = pics;
+    params['files'] = files;
     params['at'] = at;
 
     Map<String, dynamic> response =
@@ -303,7 +303,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       LogUtils.printAll("threadCreate===>$response");
-      ToastUtils.showToast(resp.message!);
+      ToastUtils.showToast('发布成功');
     }
   }
 
@@ -399,6 +399,25 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       onFailure(resp.message!);
+    }
+  }
+
+  ///更新图像
+  Future updateAvatar(
+      String filePath,
+      SuccessCallback onSuccess) async {
+
+    Map<String, Object> params = {};
+    params['file'] = filePath;
+
+    Map<String, dynamic> response =
+    await HttpUtils.postFile(Api.updateAvatar, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("updateAvatar===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
     }
   }
 }

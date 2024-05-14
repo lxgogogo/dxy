@@ -405,7 +405,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
         if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
           NetRequest().threadCreate(
-              title, content, currentBoardId, customLabelList, imageUrlList, aitList,
+              title, content, 1, customLabelList, imageUrlList, aitList,
                   (data) {
                 Navigator.pop(context);
               });

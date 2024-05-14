@@ -5,6 +5,7 @@ class Api{
   static const String indexCategory = '$baseUrl/category/list';
   static const String indexList = '$baseUrl/content/list';
   static const String contentShow = '$baseUrl/content/show';
+  static const String indexBanner = '$baseUrl/sectionData/list';
 
   //论坛
   static const String boardList = '$baseUrl/board/list';

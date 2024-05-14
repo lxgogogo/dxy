@@ -20,7 +20,7 @@ class IndexPage extends StatefulWidget {
   State<IndexPage> createState() => _IndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixin {
   int _currentTabIndex = 0;
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
   final List<String> types = ['news', 'video', 'book', 'course'];
@@ -89,6 +89,19 @@ class _IndexPageState extends State<IndexPage> {
         backgroundColor: Colors.transparent, // 设置导航条背景透明
         // elevation: 0, // 去除导航条的阴影
         title: Text('首页'),
+        actions: [
+          IconButton(
+            icon: Image.asset(
+              'assets/images/navi_search.png',
+              width: 35.px,
+              height: 38.px,
+            ),
+            onPressed: () {
+              // 登录按钮点击事件
+              Get.to(SearchPage());
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -144,6 +157,10 @@ class _IndexPageState extends State<IndexPage> {
       onTabControllerUpdated: (TabController) {},
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 /*
   @override

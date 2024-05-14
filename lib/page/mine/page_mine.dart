@@ -15,7 +15,7 @@ import 'package:holdem/view/forum/PostListView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
-import '../../model/followed_fans_list.dart';
+import '../../model/thread_list.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/storage.dart';
@@ -100,7 +100,7 @@ class _MinePageState extends State<MinePage> {
     } else if (_currentTabIndex == 1) {
       //收藏
       NetRequest().userFavoriteList(pageNum, pageSize, '', (data) {
-        FollowedFansList followedFansList = FollowedFansList.fromJson(data);
+        ThreadList followedFansList = ThreadList.fromJson(data);
         if (mounted) {
           setState(() {
             List<BoardBean> currentBoardList = [];

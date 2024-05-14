@@ -185,6 +185,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             ],
           ),
         ),
-        bottomSheet: PostDetailBottomView(postId: widget.id,),);
+        bottomSheet: PostDetailBottomView(postId: widget.id,relId: -1, relType: ''),);
   }
 }

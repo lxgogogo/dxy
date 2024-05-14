@@ -98,6 +98,10 @@ class AppTheme {
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: color_999999,
+  );static const TextStyle textFFFFFFSize14 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: color_FFFFFF,
   );
   static const TextStyle text999999Size15 = TextStyle(
     fontWeight: FontWeight.w400,

@@ -102,7 +102,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ],
         ),
         body: SafeArea(child: contentView()),
-        bottomSheet: PostDetailBottomView(postId: currentPostId,),
+        bottomSheet: PostDetailBottomView(postId: currentPostId,relId: -1, relType: ''),
         backgroundColor: Colors.white);
   }
 

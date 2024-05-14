@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:holdem/model/followed_fans_list.dart';
+import 'package:holdem/model/followed_list.dart';
+import 'package:holdem/model/user.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
+import '../../widget/follow_btn.dart';
 
 class MineFollowPage extends StatefulWidget {
   bool isFollowPage = true;
@@ -23,7 +26,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
   int pageSize = 10;
   bool isFollowPage = true;
 
-  List<FollowedFansBean> followOrFanUserList = [];
+  List<UserProfile> followOrFanUserList = [];
   bool _isMounted = false;
 
   RefreshController _refreshController =
@@ -68,7 +71,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
           .followedList(pageNum.toString(), pageSize.toString(), '', (data) {
             if(_isMounted) {
               setState(() {
-                FollowedFansList followOrFan = FollowedFansList.fromJson(data);
+                FollowedList followOrFan = FollowedList.fromJson(data);
                 followOrFanUserList = followOrFan.list!;
               });
             }
@@ -146,38 +149,34 @@ class _MineFollowPageState extends State<MineFollowPage> {
             height: 45,
             child: Center(
                 child: ClipOval(
-              child: Image.network(
-                'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                width: 45,
-                height: 45,
-                fit: BoxFit.cover,
-              ),
+              child: LoginHelper().getUserAvatar(
+                  followOrFanUserList[index].avatar!.isNotEmpty
+                  ? followOrFanUserList[index].avatar! : '',45.px, 45.px),
             ))),
         SizedBox(
           width: 10,
         ),
         Text(
-          (followOrFanUserList[index].thread != null
-              && followOrFanUserList[index].thread!.user != null)
-              ? followOrFanUserList[index].thread!.user!.nickname! : '',
+          followOrFanUserList[index].nickname!.isNotEmpty
+              ? followOrFanUserList[index].nickname! : '',
           style: AppTheme.text3B5078Size15,
         ),
         Expanded(child: Text('')),
-        // items[index].isFollowed == true
-        //     ? followedStatusBtn()
-        //     :
-        IconButton(
-            onPressed: () {
-              ToastUtils.showToast('已关注');
-              // setState(() {
-              //
-              // });
-            },
-            icon: Image.asset(
-              'assets/images/follow_btn.png',
-              width: 62,
-              height: 28,
-            ))
+        // IconButton(
+        //     onPressed: () {
+        //       ToastUtils.showToast('已关注');
+        //       // setState(() {
+        //       //
+        //       // });
+        //     },
+        //     icon: Image.asset(
+        //       'assets/images/follow_btn.png',
+        //       width: 62,
+        //       height: 28,
+        //     ))
+        FollowBtn(isFollowed: followOrFanUserList[index].followed!, onTap:  () {
+
+        })
       ]),
     );
   }
@@ -227,16 +226,5 @@ class _MineFollowPageState extends State<MineFollowPage> {
             ),
           ),
         )));
-  }
-
-  Widget followedStatusBtn() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.color_0D000000,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
-      child: Text('已关注', style: AppTheme.text999999Size13),
-    );
   }
 }

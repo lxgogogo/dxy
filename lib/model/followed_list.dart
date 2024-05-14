@@ -1,18 +1,15 @@
-import 'package:holdem/model/board_info.dart';
-import 'package:holdem/model/board_list.dart';
-import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/model/user.dart';
 
 /// pager : {"total":1,"pageNum":0,"pageSize":10}
 /// list : [{"id":2,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"titletitletitletitle 你好","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false},{"id":1,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"title","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false}]
 
-class FollowedFansList {
+class FollowedList {
   Paper? pager;
-  List<FollowedFansBean>? list;
+  List<UserProfile>? list;
 
-  FollowedFansList({this.pager, this.list});
+  FollowedList({this.pager, this.list});
 
-  FollowedFansList.fromJson(Map<String, dynamic> json) {
+  FollowedList.fromJson(Map<String, dynamic> json) {
     if (json["pager"] is Paper) {
       pager = json["pager"];
     }
@@ -21,7 +18,7 @@ class FollowedFansList {
       list = json["list"] == null
           ? null
           : (json["list"] as List)
-              .map((e) => FollowedFansBean.fromJson(e))
+              .map((e) => UserProfile.fromJson(e))
               .toList();
     }
   }
@@ -32,34 +29,6 @@ class FollowedFansList {
     if (list != null) {
       _data["list"] = list?.map((e) => e.toJson()).toList();
     }
-    return _data;
-  }
-}
-
-class FollowedFansBean {
-  int? id;
-  String? createdAt;
-  BoardBean? thread;
-  FollowedFansBean({this.id, this.createdAt, this.thread});
-
-  FollowedFansBean.fromJson(Map<String, dynamic> json) {
-    if (json["id"] is int) {
-      id = json["id"];
-    }
-    if (json["createdAt"] is String) {
-      createdAt = json["createdAt"];
-    }
-    if (json['thread'] != null) {
-      thread = BoardBean.fromJson(json['thread']);
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id"] = id;
-    _data["createdAt"] = createdAt;
-    _data["thread"] = thread;
-
     return _data;
   }
 }

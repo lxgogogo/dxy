@@ -17,8 +17,10 @@ import '../view/forum/ToastUtils.dart';
  */
 class PostDetailBottomView extends StatefulWidget {
   int postId; //帖子id
+  int relId;
+  String relType;
 
-  PostDetailBottomView({Key? key, required this.postId}) : super(key: key);
+  PostDetailBottomView({Key? key, required this.postId, required this.relId,required this.relType}) : super(key: key);
 
   @override
   _PostDetailBottomViewState createState() => _PostDetailBottomViewState();
@@ -27,12 +29,16 @@ class PostDetailBottomView extends StatefulWidget {
 class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   bool isCollected = false;
   late int currentPostId;
+  late int relId;
+  late String relType;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     currentPostId = widget.postId;
+    relId = widget.relId;
+    relType = widget.relType;
   }
   @override
   Widget build(BuildContext context) {

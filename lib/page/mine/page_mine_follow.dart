@@ -157,7 +157,9 @@ class _MineFollowPageState extends State<MineFollowPage> {
           width: 10,
         ),
         Text(
-          followOrFanUserList[index].thread!.user!.nickname!,
+          (followOrFanUserList[index].thread != null
+              && followOrFanUserList[index].thread!.user != null)
+              ? followOrFanUserList[index].thread!.user!.nickname! : '',
           style: AppTheme.text3B5078Size15,
         ),
         Expanded(child: Text('')),

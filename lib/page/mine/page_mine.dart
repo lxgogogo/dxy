@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/mine/page_mine_follow.dart';
 import 'package:holdem/page/mine/page_personal.dart';
 import 'package:holdem/page/mine/page_settings.dart';
@@ -13,6 +15,7 @@ import 'package:holdem/view/forum/PostListView.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
+import '../../model/followed_fans_list.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/storage.dart';
@@ -35,8 +38,8 @@ class _MinePageState extends State<MinePage> {
   late UserProfile userProfile = UserProfile();
   var actionEventBus;
 
-  // List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
   List<BoardBean> boardPostList = [];
+  List<CommentBean> commentDataList = [];
 
   RefreshController _refreshController1 =
       RefreshController(initialRefresh: false);
@@ -46,50 +49,25 @@ class _MinePageState extends State<MinePage> {
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    if (_currentTabIndex == 0) {
-      _refreshController1.refreshCompleted();
-    } else if (_currentTabIndex == 1) {
-      _refreshController2.refreshCompleted();
-    } else if (_currentTabIndex == 2) {
-      _refreshController3.refreshCompleted();
-    }
+    setState(() {
+      pageNum = 1;
+    });
+    reqListData();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length + 1).toString());
-    if (mounted) setState(() {});
-    if (_currentTabIndex == 0) {
-      _refreshController1.loadComplete();
-    } else if (_currentTabIndex == 1) {
-      _refreshController2.loadComplete();
-    } else if (_currentTabIndex == 2) {
-      _refreshController3.loadComplete();
-    }
+    setState(() {
+      pageNum++;
+    });
+    reqListData();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    var ownerId = StorageUtil().prefs!.getString('ownerId');
-    NetRequest().getThreadListByBoard(pageNum.toString(), pageSize.toString(),
-        NetRequest.BOARD_SORT_TIME, '', '1', '', (data) {
-      BoardList boardList = BoardList.fromJson(data);
-      setState(() {
-        boardPostList = boardList.list!;
-      });
-    });
-    // items.forEach((element) {
-    //   boardPostList.add(BoardBean(title: element));
-    // });
-
     getUserInfo();
+    reqListData();
     //接受通知刷新页面
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
       if (event.toString() ==
@@ -97,6 +75,65 @@ class _MinePageState extends State<MinePage> {
         getUserInfo();
       }
     });
+  }
+
+  reqListData() {
+    if (_currentTabIndex == 0) {
+      //帖子
+      var ownerId = StorageUtil().prefs!.getString('ownerId');
+      NetRequest().getThreadListByBoard(
+          pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '',
+          (data) {
+        BoardList boardList = BoardList.fromJson(data);
+        if (mounted) {
+          setState(() {
+            if (pageNum == 1) {
+              boardPostList = boardList.list!;
+            } else {
+              boardPostList.addAll(boardList.list!);
+            }
+          });
+        }
+      });
+      _refreshController1.refreshCompleted();
+      _refreshController1.loadComplete();
+    } else if (_currentTabIndex == 1) {
+      //收藏
+      NetRequest().userFavoriteList(pageNum, pageSize, '', (data) {
+        FollowedFansList followedFansList = FollowedFansList.fromJson(data);
+        if (mounted) {
+          setState(() {
+            List<BoardBean> currentBoardList = [];
+            for (var element in followedFansList.list!) {
+              currentBoardList.add(element.thread!);
+            }
+            if (pageNum == 1) {
+              boardPostList = currentBoardList;
+            } else {
+              boardPostList.addAll(currentBoardList);
+            }
+          });
+        }
+      });
+      _refreshController2.refreshCompleted();
+      _refreshController2.loadComplete();
+    } else if (_currentTabIndex == 2) {
+      //评论
+      NetRequest().userCommentList(pageNum, pageSize, '', (data) {
+        CommentList commentList = CommentList.fromJson(data);
+        if (mounted) {
+          setState(() {
+            if (pageNum == 1) {
+              commentDataList = commentList.list!;
+            } else {
+              commentDataList.addAll(commentList.list!);
+            }
+          });
+        }
+      });
+      _refreshController3.refreshCompleted();
+      _refreshController3.loadComplete();
+    }
   }
 
   void getUserInfo() {
@@ -225,17 +262,18 @@ class _MinePageState extends State<MinePage> {
                 width: 20.px,
               ),
               GestureDetector(
-                  child: Row(children: [
-                Text(
-                    userProfile != null && userProfile.fansCount != null
-                        ? userProfile!.fansCount.toString()
-                        : '0',
-                    style: AppTheme.text3B5078Size16),
-                Text(' 粉丝', style: AppTheme.text3B5078Size12)
-              ]),
+                child: Row(children: [
+                  Text(
+                      userProfile != null && userProfile.fansCount != null
+                          ? userProfile!.fansCount.toString()
+                          : '0',
+                      style: AppTheme.text3B5078Size16),
+                  Text(' 粉丝', style: AppTheme.text3B5078Size12)
+                ]),
                 onTap: () {
                   Get.to(MineFollowPage(isFollowPage: false));
-                },)
+                },
+              )
             ]),
           ]),
         ),
@@ -278,6 +316,13 @@ class _MinePageState extends State<MinePage> {
                 onTap: () {
                   setState(() {
                     _currentTabIndex = index;
+                    if (boardPostList.isNotEmpty) {
+                      boardPostList.clear();
+                    }
+                    if (commentDataList.isNotEmpty) {
+                      commentDataList.clear();
+                    }
+                    reqListData();
                   });
                 },
                 child: Container(
@@ -318,13 +363,17 @@ class _MinePageState extends State<MinePage> {
       onLoading: _onLoading,
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-        itemBuilder: (c, i) => PostListItemView(
-          itemIndex: i,
-          isForumList: false,
-          boardBean: boardPostList[i] ?? BoardBean(),
-        ),
+        itemBuilder: (c, i) => _currentTabIndex == 2
+            ? CommentItem()
+            : PostListItemView(
+                itemIndex: i,
+                isForumList: false,
+                boardBean: boardPostList[i] ?? BoardBean(),
+              ),
         // itemExtent: 160.0,
-        itemCount: boardPostList.length,
+        itemCount: _currentTabIndex == 2
+            ? commentDataList.length
+            : boardPostList.length,
       ),
     );
   }

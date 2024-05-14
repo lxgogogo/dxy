@@ -94,7 +94,7 @@ class NetRequest {
   static const String BOARD_SORT_LIKE = "like";
 
   Future getThreadListByBoard(
-      String pageNum, String pageSize, String boardSort,
+      int pageNum, int pageSize, String boardSort,
       String boardId,String ownerId,String q,
       SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
@@ -113,7 +113,7 @@ class NetRequest {
       filters['q'] =q;
     }
     params['filters'] = filters;
-
+    LogUtils.printAll("getThreadListByBoard params===>$params");
     Map<String, dynamic> response =
         await HttpUtils.post(Api.threadList, params: params);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
@@ -228,6 +228,60 @@ class NetRequest {
     }
   }
 
+  ///收藏列表 user/favorite/list
+  Future userFavoriteList(
+      int pageNum, int pageSize, String relType,
+      SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+
+    Map<String, Object> filters = {};
+    //"relType": "thread" // 可选 评论类型, thread 帖子、 content 内容
+    if (relType.isNotEmpty) {
+      filters['relType'] =relType;
+    }
+    params['filters'] = filters;
+
+    LogUtils.printAll("userFavoriteList params===>$params");
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.userFavoriteList, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("userFavoriteList===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///评论列表
+  Future userCommentList(
+      int pageNum, int pageSize, String relType,
+      SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+
+    Map<String, Object> filters = {};
+    //"relType": "thread" // 可选 评论类型, thread 帖子、 content 内容
+    if (relType.isNotEmpty) {
+      filters['relType'] =relType;
+    }
+    params['filters'] = filters;
+
+    LogUtils.printAll("userCommentList params===>$params");
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.userCommentList, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("userCommentList===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///发布帖子
   Future threadCreate(
       String title, String content, int boardId,
@@ -248,6 +302,7 @@ class NetRequest {
       LogUtils.printAll("threadCreate===>$response");
       onSuccess(response['data']);
     } else {
+      LogUtils.printAll("threadCreate===>$response");
       ToastUtils.showToast(resp.message!);
     }
   }

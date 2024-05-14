@@ -182,7 +182,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    if (_focusNode.hasFocus) {
+      FocusScope.of(context).unfocus();
+    }
     var account = _controllerAccount.text;
     var password = _controllerPw.text;
     if (account.isEmpty) {

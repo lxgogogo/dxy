@@ -39,20 +39,19 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+
   void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    setState(() {
+      pageNum = 1;
+    });
+    reqListData();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // boardPostList.add((boardPostList.length + 1));
-    if (mounted) setState(() {});
-    _refreshController.loadComplete();
+    setState(() {
+      pageNum++;
+    });
+    reqListData();
   }
 
   @override
@@ -69,14 +68,20 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
   }
   reqListData () {
     //tabIdValue = 0全部板块,不传boardId
-    NetRequest().getThreadListByBoard(pageNum.toString(), pageSize.toString(),
+    NetRequest().getThreadListByBoard(pageNum, pageSize,
         boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
           BoardList boardList = BoardList.fromJson(data);
-          if (_isMounted) {
+          if (mounted) {
             setState(() {
-              boardPostList = boardList.list!;
+              if (pageNum == 1) {
+                boardPostList = boardList.list!;
+              } else {
+                boardPostList.addAll(boardList.list!);
+              }
             });
           }
+          _refreshController.loadComplete();
+          _refreshController.refreshCompleted();
     });
   }
 
@@ -201,31 +206,4 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> {
     }
     return 0;
   }
-
-// Widget foot() {
-// return CustomFooter(buildContent);
-//   (BuildContext context,LoadStatus mode){
-//   Widget body ;
-//   if(mode==LoadStatus.idle){
-//     body =  Text("上拉加载");
-//   }
-//   else if(mode==LoadStatus.loading){
-//     body =  CupertinoActivityIndicator();
-//   }
-//   else if(mode == LoadStatus.failed){
-//     body = Text("加载失败！点击重试！");
-//   }
-//   else if(mode == LoadStatus.canLoading){
-//     body = Text("松手,加载更多!");
-//   }
-//   else{
-//     body = Text("没有更多数据了!");
-//   }
-//   return Container(
-//     height: 55.0,
-//     child: Center(child:body),
-//   );
-// },
-// )
-// }
 }

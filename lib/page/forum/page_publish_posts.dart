@@ -373,6 +373,10 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     String title = controllerTitle.text;
     String content = _controller.text;
 
+    if (imageUrlList.isNotEmpty) {
+      imageUrlList.clear();
+    }
+
     if (title.isEmpty) {
       ToastUtils.showToast('标题不能为空');
       return;
@@ -396,16 +400,18 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         UploadFile uploadFile = UploadFile.fromJson(data);
         print('uploadFile url===' + uploadFile.url!);
         imageUrlList.add(uploadFile);
+
+        print('uploadFile url===${ imageUrlList.length}' + 'imageData|==>${imageData.length}');
+
+        if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
+          NetRequest().threadCreate(
+              title, content, currentBoardId, customLabelList, imageUrlList, aitList,
+                  (data) {
+                Navigator.pop(context);
+              });
+        }
       });
     });
-
-    if (imageUrlList != null && imageUrlList.length == imageData.length) {
-      NetRequest().threadCreate(
-          title, content, currentBoardId, customLabelList, imageUrlList, aitList,
-          (data) {
-        Navigator.pop(context);
-      });
-    }
   }
 
   // Future<XFile?> compressAndGetFile(File file, String targetPath) async {

@@ -28,6 +28,8 @@ class Api{
   static const String resetPassword = '$baseUrl/passport/resetPassword';
   static const String sendCode = '$baseUrl/passport/sendCode';
   static const String user = '$baseUrl/user';
+  static const String userFavoriteList = '$baseUrl/user/favorite/list';
+  static const String userCommentList = '$baseUrl/user/comment/list';
 
   static const String followedList = '$baseUrl/follower/followed/list';
   static const String fansList = '$baseUrl/follower/fans/list';

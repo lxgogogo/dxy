@@ -5,7 +5,6 @@ import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/page/forum/page_publish_posts.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../../model/board_info.dart';
 import '../../utils/constants.dart';
@@ -125,10 +124,10 @@ class _ForumTabPageState extends State<ForumTabPage>
       ),
       backgroundColor: Colors.transparent,
       onPressed: () {
-        // if (!Global().hasLogin) {
-        //   Get.to(LoginPage());
-        //   return;
-        // }
+        if (!Global().hasLogin) {
+          Get.to(LoginPage());
+          return;
+        }
         Get.to(PublishPostsPage(currentBoardId: currentBoardId));
       },
       shape: CircleBorder(),

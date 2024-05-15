@@ -6,6 +6,8 @@ import 'package:holdem/utils/size_fit.dart';
 
 import '../../model/board_list.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/CircleImageWithText.dart';
 import '../../widget/label_view.dart';
 import '../../widget/post_detail_bottom_view.dart';
@@ -24,6 +26,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   // bool isFollowed = false;
   bool _isMounted = false;
   BoardBean? boardBean;
+  var actionEventBus;
 
   List<String> items = [
     '评论内容评论内容评论内容评论内容',
@@ -46,13 +49,22 @@ class _PostDetailPageState extends State<PostDetailPage> {
     super.initState();
     currentPostId = widget.postId;
     _isMounted = true;
+    reqPostDetail();
+    //接受通知刷新页面
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
+        reqPostDetail();
+      }
+    });
+  }
+
+  reqPostDetail(){
     NetRequest().threadShow(currentPostId.toString(), (data) {
       if (_isMounted) {
         setState(() {
           boardBean = BoardBean.fromJson(data);
         });
-
-        print('object=========${boardBean!.user!.nickname!}');
       }
     });
   }
@@ -93,8 +105,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ],
         ),
         body: SafeArea(child: contentView()),
-        bottomSheet:
-            PostDetailBottomView(postId: currentPostId, relId: -1, relType: ''),
+        bottomSheet: PostDetailBottomView(
+            viewParams: PostBottomViewParams(
+          postId: currentPostId,
+          relId: currentPostId,
+          relType: NetRequest.COMMENT_TYPE_THREAD,
+          favoriteState: boardBean?.favorited!,
+          title: boardBean?.title!,
+          content: boardBean?.content!,
+          files: boardBean?.files!,
+        )),
         backgroundColor: Colors.white);
   }
 

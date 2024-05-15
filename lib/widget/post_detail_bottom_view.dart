@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/comment/page_comment.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 
+import '../model/upload_file.dart';
 import '../page/forum/page_comment_input.dart';
+import '../page/mine/page_login.dart';
 import '../utils/app_theme.dart';
+import '../utils/global.dart';
 import '../view/forum/ToastUtils.dart';
 
 /**
@@ -16,30 +20,35 @@ import '../view/forum/ToastUtils.dart';
  * @Date:  2024/5/1
  */
 class PostDetailBottomView extends StatefulWidget {
-  int postId; //帖子id
-  int relId;
-  String relType;
+  PostBottomViewParams viewParams;
 
-  PostDetailBottomView({Key? key, required this.postId, required this.relId,required this.relType}) : super(key: key);
+  PostDetailBottomView({Key? key, required this.viewParams}) : super(key: key);
 
   @override
   _PostDetailBottomViewState createState() => _PostDetailBottomViewState();
 }
 
 class _PostDetailBottomViewState extends State<PostDetailBottomView> {
-  bool isCollected = false;
-  late int currentPostId;
-  late int relId;
-  late String relType;
+  bool _isFavorite = false;
+  late PostBottomViewParams viewParams;
+  bool _isMounted = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentPostId = widget.postId;
-    relId = widget.relId;
-    relType = widget.relType;
+    _isMounted = true;
+    viewParams = widget.viewParams;
+    _isFavorite = viewParams.favoriteState ?? false;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _isMounted = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return bottomInputView();
@@ -66,39 +75,27 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   ),
                   Expanded(
                       child: GestureDetector(
-                        onTap: () {
-                          //跳转评论输入页面
-                          Get.to(CommentInputPage(postId: currentPostId));
-                        },
-                        child: Container(
-                          height: 40.px,
-                          decoration: BoxDecoration(
-                            color: AppTheme.color_EFEFEF,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10), // 设置内边距
-                          child: Text('我来说两句', style: AppTheme.text999999Size14),
-                        ),
-                      )
-
-                    // TextField(
-                    //   decoration: InputDecoration(
-                    //     hintText: '我来说两句',
-                    //     filled: true,
-                    //     fillColor: AppTheme.color_EFEFEF,
-                    //     hintStyle: AppTheme.text999999Size14,
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide.none,
-                    //       borderRadius: BorderRadius.circular(25.0),
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderSide: BorderSide.none,
-                    //       borderRadius: BorderRadius.circular(25.0),
-                    //     ),
-                    //   ),
-                    // ),
-                  ),
+                    onTap: () {
+                      if (!Global().hasLogin) {
+                        Get.to(LoginPage());
+                        return;
+                      }
+                      //跳转评论输入页面
+                      Get.to(CommentInputPage(
+                          relType: viewParams.relType!,
+                          relId: viewParams.relId!));
+                    },
+                    child: Container(
+                      height: 40.px,
+                      decoration: BoxDecoration(
+                        color: AppTheme.color_EFEFEF,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10), // 设置内边距
+                      child: Text('我来说两句', style: AppTheme.text999999Size14),
+                    ),
+                  )),
                   SizedBox(width: 10),
                   IconButton(
                       onPressed: () {
@@ -113,13 +110,14 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       )),
                   IconButton(
                       onPressed: () {
-                        setState(() {
-                          isCollected = !isCollected;
-                          ToastUtils.showToast(isCollected ? '收藏成功' : '取消收藏');
-                        });
+                        if (!Global().hasLogin) {
+                          Get.to(LoginPage());
+                          return;
+                        }
+                        _favoriteToggle();
                       },
                       icon: Image.asset(
-                        isCollected
+                        _isFavorite
                             ? 'assets/images/small_collect_selected.png'
                             : 'assets/images/small_collect_unselect.png',
                         width: 25.px,
@@ -190,58 +188,58 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               ),
               Expanded(
                   child: Column(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            ToastUtils.showToast('分享到Facebook');
-                          },
-                          icon: Image.asset(
-                            'assets/images/share_facebook.png',
-                            width: 50.px,
-                            height: 50.px,
-                          )),
-                      Text(
-                        'Facebook',
-                        style: AppTheme.text666666Size13,
-                      )
-                    ],
-                  )),
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        ToastUtils.showToast('分享到Facebook');
+                      },
+                      icon: Image.asset(
+                        'assets/images/share_facebook.png',
+                        width: 50.px,
+                        height: 50.px,
+                      )),
+                  Text(
+                    'Facebook',
+                    style: AppTheme.text666666Size13,
+                  )
+                ],
+              )),
               Expanded(
                   child: Column(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            ToastUtils.showToast('分享到Twitter');
-                          },
-                          icon: Image.asset(
-                            'assets/images/share_twitter.png',
-                            width: 50.px,
-                            height: 50.px,
-                          )),
-                      Text(
-                        'Twitter',
-                        style: AppTheme.text666666Size13,
-                      )
-                    ],
-                  )),
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        ToastUtils.showToast('分享到Twitter');
+                      },
+                      icon: Image.asset(
+                        'assets/images/share_twitter.png',
+                        width: 50.px,
+                        height: 50.px,
+                      )),
+                  Text(
+                    'Twitter',
+                    style: AppTheme.text666666Size13,
+                  )
+                ],
+              )),
               Expanded(
                   child: Column(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            ToastUtils.showToast('复制链接');
-                          },
-                          icon: Image.asset(
-                            'assets/images/share_link.png',
-                            width: 50.px,
-                            height: 50.px,
-                          )),
-                      Text(
-                        '复制链接',
-                        style: AppTheme.text666666Size13,
-                      )
-                    ],
-                  )),
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        ToastUtils.showToast('复制链接');
+                      },
+                      icon: Image.asset(
+                        'assets/images/share_link.png',
+                        width: 50.px,
+                        height: 50.px,
+                      )),
+                  Text(
+                    '复制链接',
+                    style: AppTheme.text666666Size13,
+                  )
+                ],
+              )),
               SizedBox(
                 width: 14,
               )
@@ -251,4 +249,36 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
       ),
     );
   }
+
+  void _favoriteToggle() {
+    NetRequest().favoriteToggle(
+        viewParams.relType!, viewParams.relId!, _isFavorite, (data) {
+      if (_isMounted) {
+        ToastUtils.showToast(_isFavorite ? '取消成功' : '收藏成功');
+        setState(() {
+          _isFavorite = !_isFavorite;
+        });
+      }
+    });
+  }
+}
+
+class PostBottomViewParams {
+  int? postId; //帖子id
+  int? relId; // 评论对象id
+  String? relType; //  评论对象类型   // thread 帖子，content 内容，comment 评论
+  bool? favoriteState; //收藏状态 true  false
+  String? title; //帖子标题
+  String? content; //帖子内容
+  List<UploadFile>? files; // 帖子的图片或者视频集合
+
+  PostBottomViewParams({
+    this.postId,
+    @required this.relId,
+    @required this.relType,
+    @required this.favoriteState,
+    @required this.title,
+    @required this.content,
+    @required this.files,
+  });
 }

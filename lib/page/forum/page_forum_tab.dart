@@ -77,8 +77,7 @@ class _ForumTabPageState extends State<ForumTabPage>
     return Container(
       margin: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
       child: DynamicTabBarWidget(
-        onAddTabMoveTo: MoveToTab.idol,
-        //当添加新标签时，指示器将保持在当前0位置标签上。
+        onAddTabMoveTo: MoveToTab.idol, //当添加新标签时，指示器将保持在当前0位置标签上。
         dynamicTabs: forumParentTabs,
         isScrollable: true,
         padding: EdgeInsets.only(left: 5.px),

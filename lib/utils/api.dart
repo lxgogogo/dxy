@@ -21,6 +21,7 @@ class Api{
 
   //评论
   static const String commentList = '$baseUrl/comment/list';
+  static const String commentCreate = '$baseUrl/comment/create';
 
   //账号相关
   static const String login = '$baseUrl/passport/login';
@@ -40,6 +41,10 @@ class Api{
   static const String followedList = '$baseUrl/follower/followed/list';
   static const String fansList = '$baseUrl/follower/fans/list';
   static const String followerToggle = '$baseUrl/follower/toggle'; //关注 - 添加/取消
+
+
+  static const String favoriteToggle = '$baseUrl/favorite/toggle'; //收藏 - 添加/取消
+  static const String favoriteDelete = '$baseUrl/favorite/delete';  //收藏删除
 
   
 }

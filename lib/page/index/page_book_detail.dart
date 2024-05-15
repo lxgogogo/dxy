@@ -194,7 +194,15 @@ class _BookDetailPageState extends State<BookDetailPage> {
           ))
         ],
       ),
-      bottomSheet: PostDetailBottomView(postId: widget.id, relId: -1, relType: ''),
+      bottomSheet: PostDetailBottomView(viewParams: PostBottomViewParams(
+        postId: widget.id,
+        relId: 1,
+        relType: '',
+        favoriteState: true,
+        title: '',
+        content: '',
+        files: [],
+      )),
     );
   }
 }

@@ -4,15 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
 
 class CommentInputPage extends StatefulWidget {
-  int postId; //帖子id
-  CommentInputPage({super.key, required this.postId});
+  String relType; //// 评论对象类型
+  int relId; //// 评论对象id
+
+  CommentInputPage({super.key, required this.relType, required this.relId});
 
   @override
   State<CommentInputPage> createState() => _CommentInputPageState();
@@ -20,13 +25,15 @@ class CommentInputPage extends StatefulWidget {
 
 class _CommentInputPageState extends State<CommentInputPage>
     with SingleTickerProviderStateMixin {
-  late int currentPostId;
+  late  String relType;
+  late int relId;
   final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    currentPostId = widget.postId;
+    relId = widget.relId;
+    relType = widget.relType;
   }
 
   @override
@@ -61,9 +68,9 @@ class _CommentInputPageState extends State<CommentInputPage>
           IconButton(
               onPressed: () {
                 //提交评论
-                String text = controller.text;
-                if (text.isNotEmpty) {
-                  ToastUtils.showToast( '提交服务器:$text');
+                String commentContent = controller.text;
+                if (commentContent.isNotEmpty) {
+                  _submitComment(commentContent);
                 } else {
                   ToastUtils.showToast('评论内容不能为空');
                 }
@@ -78,6 +85,16 @@ class _CommentInputPageState extends State<CommentInputPage>
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
     );
+  }
+
+  void _submitComment(String commentContent) {
+    NetRequest().commentCreate(relType, relId, commentContent, (data) {
+      //通知刷新帖子详情
+      EventBusManager.eventBus
+          .fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
+      ToastUtils.showToast( '发布成功');
+      Navigator.pop(context);
+    });
   }
 
   Widget contentView() {

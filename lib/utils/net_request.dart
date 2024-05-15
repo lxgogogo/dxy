@@ -522,4 +522,68 @@ class NetRequest {
       ToastUtils.showToast(resp.message!);
     }
   }
+
+  ///发布评论
+  static const String COMMENT_TYPE_THREAD = "thread";
+  static const String COMMENT_TYPE_CONTENT = "content";
+  static const String COMMENT_TYPE_COMMENT = "comment";
+  Future commentCreate(String relType, int relId,
+      String content, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['relType'] = relType; //// 评论对象类型   // thread 帖子，content 内容，comment 评论
+    params['relId'] = relId; // 评论对象id
+    params['content'] = content;
+
+    LogUtils.printAll("commentCreate params===>$params");
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.commentCreate, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("commentCreate===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///删除收藏
+  Future favoriteDelete(int id, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['id'] = id; //// 收藏id
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.favoriteDelete, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("favoriteDelete===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///收藏操作 取消、收藏
+  Future favoriteToggle(String relType, int relId,
+      bool state, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['relType'] = relType; //// 类型 thread 帖子，content 内容
+    params['relId'] = relId; // 收藏对象id
+    params['state'] = state;
+
+    LogUtils.printAll("favoriteToggle params===>$params");
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.favoriteToggle, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("favoriteToggle===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
 }

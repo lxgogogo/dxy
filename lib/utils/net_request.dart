@@ -341,9 +341,10 @@ class NetRequest {
     if (resp.code == 200) {
       LogUtils.printAll("threadCreate===>$response");
       onSuccess(response['data']);
+      ToastUtils.showToast('发布成功');
     } else {
       LogUtils.printAll("threadCreate===>$response");
-      ToastUtils.showToast('发布成功');
+      ToastUtils.showToast(resp.message!);
     }
   }
 
@@ -458,6 +459,64 @@ class NetRequest {
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("updateAvatar===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///更新资料
+  Future userUpdate(String nickname, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['nickname'] = nickname;
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.userUpdate, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("userUpdate===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///版本检测
+  Future appVersion(SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.appVersion, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("appVersion===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///用户搜索
+  Future userSearch(int pageNum, int pageSize,
+      String q, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+
+    Map<String, Object> filters = {};
+    if (q.isNotEmpty) {
+      filters['q'] = q;
+    }
+    params['filters'] = filters;
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.userSearch, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("appVersion===>$response");
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message!);

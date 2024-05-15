@@ -282,12 +282,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                             );
                             // 在这里处理从ResultPage返回的结果
                             if (result != null) {
-                              UserBean user =
-                                  UserBean(result.name, result.isFollowed);
+                              var nickname = result.nickname;
+                              var userId = result.id;
                               setState(() {
                                 String originalContent = _controller.text;
                                 _controller.text =
-                                    '@${user.name} $originalContent';
+                                    '@${nickname} $originalContent';
                                 print('forumLog=====' + aitUserContent);
                               });
                             }

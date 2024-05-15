@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
+import '../../view/forum/ToastUtils.dart';
 
 class InformationEditPage extends StatefulWidget {
   String editContent; //
@@ -57,16 +61,12 @@ class _InformationEditPageState extends State<InformationEditPage>
           IconButton(
               onPressed: () {
                 //提交
-                String text = controller.text;
-                if (isTextFiledIsEmpty) {
-                  return;
-                }
-
+                _submitUpdate();
               },
               icon: Image.asset(
                 isTextFiledIsEmpty
-                    ?'assets/images/finish_disable.png'
-                    :'assets/images/finish_enable.png',
+                    ? 'assets/images/finish_disable.png'
+                    : 'assets/images/finish_enable.png',
                 width: 50.px,
                 height: 29.px,
               ))
@@ -75,6 +75,20 @@ class _InformationEditPageState extends State<InformationEditPage>
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
     );
+  }
+
+  void _submitUpdate() {
+    String nickname = controller.text;
+    if (isTextFiledIsEmpty) {
+      return;
+    }
+    NetRequest().userUpdate(nickname, (data) {
+      ToastUtils.showToast('修改成功');
+      //通知各页面刷新
+      EventBusManager.eventBus
+          .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      Navigator.pop(context);
+    });
   }
 
   Widget contentView() {

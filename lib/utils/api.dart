@@ -34,6 +34,8 @@ class Api{
   static const String userSearch = '$baseUrl/user/search';
   static const String updatePassword = '$baseUrl/user/updatePassword';
   static const String updateAvatar = '$baseUrl/user/updateAvatar';
+  static const String userUpdate = '$baseUrl/user/update';
+  static const String appVersion = '$baseUrl/appVersion';
 
   static const String followedList = '$baseUrl/follower/followed/list';
   static const String fansList = '$baseUrl/follower/fans/list';

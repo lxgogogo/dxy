@@ -1,16 +1,13 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 
+import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
-import '../../utils/storage.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -116,7 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 0.5.px),
               GestureDetector(
                   onTap: () {
-                    ToastUtils.showToast("检测新版本");
+                    _checkAppVersion();
                   },
                   child: const ListTile(
                     leading: ImageIcon(
@@ -166,6 +163,15 @@ class _SettingsPageState extends State<SettingsPage> {
             )),
       ],
     );
+  }
+
+  void  _checkAppVersion() {
+    NetRequest().appVersion((data) {
+      AppVersion appVersion = AppVersion.fromJson(data);
+      if (appVersion.forced!) {
+         ToastUtils.showToast('强制升级');
+      }
+    });
   }
 
   void logout() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holdem/model/followed_list.dart';
+import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -35,19 +35,17 @@ class _MineFollowPageState extends State<MineFollowPage> {
   final TextEditingController searchController = TextEditingController();
 
   void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    setState(() {
+      pageNum = 1;
+    });
+    reqListData();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length + 1).toString() as CustomObject);
-    if (mounted) setState(() {});
-    _refreshController.loadComplete();
+    setState(() {
+      pageNum++;
+    });
+    reqListData();
   }
 
   @override
@@ -56,7 +54,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
     super.initState();
     _isMounted =true;
     isFollowPage = widget.isFollowPage;
-    getDataList();
+    reqListData();
   }
 
   @override
@@ -65,20 +63,30 @@ class _MineFollowPageState extends State<MineFollowPage> {
     super.dispose();
   }
 
-  getDataList() {
+  reqListData() {
     if (isFollowPage) {
       NetRequest()
           .followedList(pageNum.toString(), pageSize.toString(), '', (data) {
-            if(_isMounted) {
+                UserDataList followOrFan = UserDataList.fromJson(data);
+            if (_isMounted) {
               setState(() {
-                FollowedList followOrFan = FollowedList.fromJson(data);
-                followOrFanUserList = followOrFan.list!;
+                if (pageNum == 1) {
+                  followOrFanUserList = followOrFan.list!;
+                } else {
+                  followOrFanUserList.addAll(followOrFan.list!);
+                }
               });
             }
+            _refreshController.loadComplete();
+            _refreshController.refreshCompleted();
       });
     } else {
       NetRequest()
-          .fansList(pageNum.toString(), pageSize.toString(), '', (data) {});
+          .fansList(pageNum.toString(), pageSize.toString(), '', (data) {
+
+        _refreshController.loadComplete();
+        _refreshController.refreshCompleted();
+      });
     }
   }
 
@@ -162,20 +170,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
           style: AppTheme.text3B5078Size15,
         ),
         Expanded(child: Text('')),
-        // IconButton(
-        //     onPressed: () {
-        //       ToastUtils.showToast('已关注');
-        //       // setState(() {
-        //       //
-        //       // });
-        //     },
-        //     icon: Image.asset(
-        //       'assets/images/follow_btn.png',
-        //       width: 62,
-        //       height: 28,
-        //     ))
         FollowBtn(isFollowed: followOrFanUserList[index].followed!, onTap:  () {
-
         })
       ]),
     );

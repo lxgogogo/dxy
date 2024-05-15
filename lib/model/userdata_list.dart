@@ -3,13 +3,13 @@ import 'package:holdem/model/user.dart';
 /// pager : {"total":1,"pageNum":0,"pageSize":10}
 /// list : [{"id":2,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"titletitletitletitle 你好","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false},{"id":1,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"title","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false}]
 
-class FollowedList {
+class UserDataList {
   Paper? pager;
   List<UserProfile>? list;
 
-  FollowedList({this.pager, this.list});
+  UserDataList({this.pager, this.list});
 
-  FollowedList.fromJson(Map<String, dynamic> json) {
+  UserDataList.fromJson(Map<String, dynamic> json) {
     if (json["pager"] is Paper) {
       pager = json["pager"];
     }

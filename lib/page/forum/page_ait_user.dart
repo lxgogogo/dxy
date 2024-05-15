@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../model/user.dart';
+import '../../model/userdata_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
+import '../../widget/follow_btn.dart';
+import '../mine/login_helper.dart';
 
 class AitUserPage extends StatefulWidget {
   AitUserPage({Key? key}) : super(key: key);
@@ -12,17 +17,12 @@ class AitUserPage extends StatefulWidget {
   _AitUserPageState createState() => _AitUserPageState();
 }
 
-class UserBean {
-  String name;
-  bool isFollowed;
-
-  UserBean(this.name, this.isFollowed);
-}
-
 class _AitUserPageState extends State<AitUserPage> {
-  List<UserBean> items = List.generate(7, (index) {
-    return UserBean('小小少年$index', (index % 2 == 0 ? true : false));
-  });
+  int pageNum = 1;
+  int pageSize = 10;
+
+  List<UserProfile> followOrFanUserList = [];
+  bool _isMounted = false;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -30,25 +30,49 @@ class _AitUserPageState extends State<AitUserPage> {
   final TextEditingController searchController = TextEditingController();
 
   void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    setState(() {
+      pageNum = 1;
+    });
+    reqListData();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // items.add((items.length + 1).toString() as CustomObject);
-    if (mounted) setState(() {});
-    _refreshController.loadComplete();
+    setState(() {
+      pageNum++;
+    });
+    reqListData();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _isMounted = true;
+    reqListData();
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
+  }
+
+  reqListData() {
+    NetRequest().followedList(pageNum.toString(), pageSize.toString(), '',
+        (data) {
+      UserDataList followOrFan = UserDataList.fromJson(data);
+      if (_isMounted) {
+        setState(() {
+          if (pageNum == 1) {
+            followOrFanUserList = followOrFan.list!;
+          } else {
+            followOrFanUserList.addAll(followOrFan.list!);
+          }
+        });
+      }
+      _refreshController.loadComplete();
+      _refreshController.refreshCompleted();
+    });
   }
 
   @override
@@ -100,7 +124,7 @@ class _AitUserPageState extends State<AitUserPage> {
                     style: AppTheme.text3B5078Size15,
                   )),
               onTap: () {
-                ToastUtils.showToast('搜索' + searchController.text.toString());
+                _userSearch();
               },
             )
           ],
@@ -111,6 +135,31 @@ class _AitUserPageState extends State<AitUserPage> {
         Expanded(child: listView())
       ],
     );
+  }
+
+  void _userSearch() {
+    print('search text==>${searchController.text}');
+    if (searchController.text.isEmpty) {
+      return;
+    }
+    //请求搜索关键字的用户列表   清空原有列表
+    NetRequest().userSearch(pageNum, pageSize, searchController.text, (data) {
+      UserDataList userDataList = UserDataList.fromJson(data);
+      if (_isMounted) {
+        setState(() {
+          followOrFanUserList.clear();
+          if (userDataList.list!.isNotEmpty && userDataList.list!.length > 0) {
+            if (pageNum == 1) {
+              followOrFanUserList = userDataList.list!;
+            } else {
+              followOrFanUserList.addAll(userDataList.list!);
+            }
+          }
+        });
+        _refreshController.loadComplete();
+        _refreshController.refreshCompleted();
+      }
+    });
   }
 
   ///列表数据
@@ -125,58 +174,47 @@ class _AitUserPageState extends State<AitUserPage> {
       child: ListView.builder(
         itemBuilder: (c, i) => listDataItem(i),
         // itemExtent: 160.0,
-        itemCount: items.length,
+        itemCount: followOrFanUserList.length,
       ),
     );
   }
 
   Widget listDataItem(int index) {
     return GestureDetector(
-      onTap: () {
-        print('===================' + items[index].name);
-        Navigator.pop(context, items[index]);
-      },
-      child: Container(
-        height: 45,
-        margin: EdgeInsets.only(top: 10, bottom: 10),
-        padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
-        child: Row(children: [
-          Container(
-              height: 45,
-              child: Center(
-                  child: ClipOval(
-                    child: Image.network(
-                      'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                      width: 45,
-                      height: 45,
-                      fit: BoxFit.cover,
-                    ),
-                  ))),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            items[index].name,
-            style: AppTheme.text3B5078Size15,
-          ),
-          Expanded(child: Text('')),
-          // items[index].isFollowed == true
-          //     ? followedStatusBtn()
-          //     :
-          IconButton(
-              onPressed: () {
-                ToastUtils.showToast('已关注');
-                // setState(() {
-                //
-                // });
-              },
-              icon: Image.asset(
-                'assets/images/follow_btn.png',
-                width: 62,
-                height: 28,
-              ))
-        ]),
-      ),);
+        onTap: () {
+          print('===================' + followOrFanUserList[index].nickname!);
+          Navigator.pop(context, followOrFanUserList[index]);
+        },
+        child: Container(
+          height: 45,
+          margin: EdgeInsets.only(top: 10, bottom: 10),
+          padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
+          child: Row(children: [
+            Container(
+                height: 45,
+                child: Center(
+                    child: ClipOval(
+                  child: LoginHelper().getUserAvatar(
+                      followOrFanUserList[index].avatar!.isNotEmpty
+                          ? followOrFanUserList[index].avatar!
+                          : '',
+                      45.px,
+                      45.px),
+                ))),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              followOrFanUserList[index].nickname!.isNotEmpty
+                  ? followOrFanUserList[index].nickname!
+                  : '',
+              style: AppTheme.text3B5078Size15,
+            ),
+            Expanded(child: Text('')),
+            FollowBtn(
+                isFollowed: followOrFanUserList[index].followed!, onTap: () {})
+          ]),
+        ));
   }
 
   Widget topSearchView() {
@@ -184,7 +222,7 @@ class _AitUserPageState extends State<AitUserPage> {
         height: 40,
         child: Center(
             child: Padding(
-          padding: const EdgeInsets.only(left: 16,right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16),
           child: TextField(
             controller: searchController,
             decoration: InputDecoration(
@@ -205,9 +243,16 @@ class _AitUserPageState extends State<AitUserPage> {
                   height: 20,
                 ),
                 onPressed: () {
-                  setState(() {
-                    searchController.text = '';
-                  });
+                  if (_isMounted) {
+                    setState(() {
+                      searchController.text = '';
+                    });
+                    //重新刷新原有未搜索列表
+                    if (followOrFanUserList.isNotEmpty) {
+                      followOrFanUserList.clear();
+                    }
+                    reqListData();
+                  }
                 },
               ),
               filled: true,
@@ -224,16 +269,5 @@ class _AitUserPageState extends State<AitUserPage> {
             ),
           ),
         )));
-  }
-
-  Widget followedStatusBtn() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.color_0D000000,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
-      child: Text('已关注', style: AppTheme.text999999Size13),
-    );
   }
 }

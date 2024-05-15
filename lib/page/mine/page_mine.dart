@@ -206,28 +206,25 @@ class _MinePageState extends State<MinePage> {
         SizedBox(
           width: 16.px,
         ),
-        Container(
-          width: 62,
-          height: 62,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white, width: 2),
-          ),
-          child: Stack(children: <Widget>[
-            ClipOval(
-                child: LoginHelper().getUserAvatar(
-                    userProfile.avatar != null ? userProfile.avatar! : '',
-                    60,
-                    60)
-                // Image.network(
-                //   'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                //   width: 60,
-                //   height: 60,
-                //   fit: BoxFit.cover,
-                // ),
-                ),
-          ]),
-        ),
+        GestureDetector(
+            onTap: () {
+              Get.to(PersonalPage());
+            },
+            child: Container(
+              width: 62,
+              height: 62,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: Stack(children: <Widget>[
+                ClipOval(
+                    child: LoginHelper().getUserAvatar(
+                        userProfile.avatar != null ? userProfile.avatar! : '',
+                        60,
+                        60)),
+              ]),
+            )),
         Container(
           height: 60,
           margin: EdgeInsets.only(left: 16.px),

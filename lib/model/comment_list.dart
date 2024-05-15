@@ -36,6 +36,7 @@ class CommentBean {
   int? replyCount;
   int? likeCount;
   Content? content;
+  User? user;
 
   CommentBean({
     this.id,
@@ -47,6 +48,7 @@ class CommentBean {
     this.createdAt,
     this.replyCount,
     this.likeCount,
+    this.user,
   });
 
   CommentBean.fromJson(Map<String, dynamic> json) {
@@ -77,6 +79,10 @@ class CommentBean {
       likeCount = json["likeCount"];
     }
 
+    if (json["user"] is Map) {
+      user = User.fromJson(json["user"]);
+    }
+
     if (json["at"] is List) {
       at = json["at"] == null
           ? null
@@ -95,8 +101,42 @@ class CommentBean {
     _data["content"] = content;
     _data["replyCount"] = replyCount;
     _data["likeCount"] = likeCount;
+    _data["user"] = user;
     return _data;
   }
+}
+
+class User {
+  int? id;
+  String? avatar;
+  String? nickname;
+
+  User({
+    this.id,
+    this.avatar,
+    this.nickname,
+  });
+
+  User.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["avatar"] is String) {
+      avatar = json["avatar"];
+    }
+    if (json["nickname"] is String) {
+      nickname = json["nickname"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["id"] = id;
+    _data["avatar"] = avatar;
+    _data["nickname"] = nickname;
+    return _data;
+  }
+
 }
 
 class Content {

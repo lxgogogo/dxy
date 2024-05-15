@@ -194,6 +194,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
           ))
         ],
       ),
+<<<<<<< Updated upstream
       bottomSheet: PostDetailBottomView(viewParams: PostBottomViewParams(
         postId: widget.id,
         relId: 1,
@@ -203,6 +204,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
         content: '',
         files: [],
       )),
+=======
+      bottomSheet: PostDetailBottomView(postId: widget.id, relId: widget.id, relType: 'content'),
+>>>>>>> Stashed changes
     );
   }
 }

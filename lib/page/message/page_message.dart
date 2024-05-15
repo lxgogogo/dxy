@@ -11,7 +11,7 @@ class MessagePage extends StatefulWidget {
   State<MessagePage> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage> {
+class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin {
   List<TabData> parentTabs = [];
 
   final List<Tab> myTabs = const <Tab>[
@@ -76,4 +76,8 @@ class _MessagePageState extends State<MessagePage> {
         ),
         body: getTabView(),);
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

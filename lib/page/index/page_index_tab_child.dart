@@ -109,7 +109,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
         children: [
           Container(
             height: 40.px,
-            color: Colors.orange,
+            // color: Colors.orange,
             child: Row(
               children: [
                 ...List<Widget>.generate(categorys.length, (index) {

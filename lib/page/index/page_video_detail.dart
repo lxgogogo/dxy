@@ -185,6 +185,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             ],
           ),
         ),
+<<<<<<< Updated upstream
         bottomSheet: PostDetailBottomView(viewParams: PostBottomViewParams(
           postId: widget.id,
           relId: 1,
@@ -194,5 +195,8 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           content: '',
           files: [],
         )),);
+=======
+        bottomSheet: PostDetailBottomView(postId: widget.id,relId: widget.id, relType: 'content'),);
+>>>>>>> Stashed changes
   }
 }

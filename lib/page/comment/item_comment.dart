@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:intl/intl.dart';
 
 class CommentItem extends StatefulWidget {
-  const CommentItem({super.key});
+  CommentBean commentBean;
+  CommentItem({super.key, required this.commentBean});
 
   @override
   State<CommentItem> createState() => _CommentItemState();
@@ -16,12 +19,16 @@ class _CommentItemState extends State<CommentItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        ClipOval(
-          child: Image.network(
-            'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-            width: 40.px,
-            height: 40.px,
-            fit: BoxFit.cover,
+        SizedBox(
+          width: 40.px,
+          height: 40.px,
+          child: ClipOval(
+            child: Image.network(
+              widget.commentBean.user!.avatar!,
+              width: 40.px,
+              height: 40.px,
+              // fit: BoxFit.cover,
+            ),
           ),
         ),
         SizedBox(
@@ -33,16 +40,18 @@ class _CommentItemState extends State<CommentItem> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              '用户昵称',
+              widget.commentBean.user!.nickname!,
               style: TextStyle(color: Color(0xff3B5078), fontSize: 13.px),
             ),
             SizedBox(height: 3.px),
             Text(
-              '阿丽塔概念设计图曝光 女主身体内部如同艺术品',
+              widget.commentBean.contentStr ?? '',
               style: TextStyle(
                   color: const Color(0xff333333), fontSize: 14.px, height: 1.5),
             ),
-            SizedBox(height: 5.px,),
+            SizedBox(
+              height: 5.px,
+            ),
             Container(
                 padding: EdgeInsets.only(left: 9.px),
                 decoration: BoxDecoration(
@@ -91,7 +100,7 @@ class _CommentItemState extends State<CommentItem> {
             Row(
               children: [
                 Text(
-                  '2-24 12:22',
+                  widget.commentBean.createdAt!=null ? DateFormat('MM-dd hh:mm').format(widget.commentBean.createdAt!):'',
                   style: TextStyle(color: Color(0xff999999), fontSize: 14.px),
                 ),
                 const Spacer(),
@@ -104,7 +113,7 @@ class _CommentItemState extends State<CommentItem> {
                   width: 5.px,
                 ),
                 Text(
-                  '1300',
+                  widget.commentBean.replyCount!.toString(),
                   style: TextStyle(
                     color: const Color(0xff999999),
                     fontSize: 14.px,
@@ -122,7 +131,7 @@ class _CommentItemState extends State<CommentItem> {
                   width: 5.px,
                 ),
                 Text(
-                  '16',
+                  widget.commentBean.likeCount!.toString(),
                   style: TextStyle(
                     color: const Color(0xff999999),
                     fontSize: 14.px,

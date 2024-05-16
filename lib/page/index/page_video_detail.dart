@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/model/article_detail.dart';
+import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -18,6 +19,7 @@ class VideoDetailPage extends StatefulWidget {
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
+  List<CommentBean> comments = [];
 
   @override
   void initState() {
@@ -39,6 +41,11 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
       'filters': {'relType': 'content', 'relId': widget.id}
     }, (data) {
       if (mounted) {
+        List<CommentBean> dataList = List<CommentBean>.from(
+            data['list'].map((comment) => CommentBean.fromJson(comment)));
+        setState(() {
+          comments = dataList;
+        });
       }
     });
   }
@@ -177,8 +184,13 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                     SizedBox(
                       height: 18.px,
                     ),
-                    CommentItem(),
                     // CommentItem(),
+                    // CommentItem(),
+                    ...List.generate(comments.length, (index){
+                      return CommentItem(
+                        commentBean: comments[index],
+                      );
+                    })
                   ],
                 ),
               )

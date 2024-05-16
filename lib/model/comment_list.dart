@@ -32,10 +32,11 @@ class CommentBean {
   String? relType;
   List<String>? at;
   String? comment;
-  String? createdAt;
+  DateTime? createdAt;
   int? replyCount;
   int? likeCount;
   Content? content;
+  String? contentStr;
   User? user;
 
   CommentBean({
@@ -45,6 +46,7 @@ class CommentBean {
     this.at,
     this.comment,
     this.content,
+    this.contentStr,
     this.createdAt,
     this.replyCount,
     this.likeCount,
@@ -62,14 +64,18 @@ class CommentBean {
     if (json["relType"] is String) {
       relType = json["relType"];
     }
-    if (json["content"] is String) {
-      content = json["content"];
-    }
+    // if (json["content"] is String) {
+    //   content = json["content"];
+    // }
     if (json["createdAt"] is String) {
-      createdAt = json["createdAt"];
+      createdAt = DateTime.parse(json["createdAt"]);
     }
-    if (json['content'] != null) {
+    if (json['content'] != null && json['content'] is Map) {
       content = Content.fromJson(json['content']);
+    }
+
+    if (json["content"] is String) {
+      contentStr = json["content"];
     }
 
     if (json["replyCount"] is int) {
@@ -99,6 +105,7 @@ class CommentBean {
     _data["comment"] = comment;
     _data["createdAt"] = createdAt;
     _data["content"] = content;
+    _data["contentStr"] = contentStr;
     _data["replyCount"] = replyCount;
     _data["likeCount"] = likeCount;
     _data["user"] = user;

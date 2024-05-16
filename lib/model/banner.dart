@@ -1,4 +1,4 @@
-class BannerBean{
+class BannerBean {
   String? title;
   String? img;
   String? jumpValue;
@@ -7,17 +7,36 @@ class BannerBean{
   int? status;
   DateTime? createdAt;
 
-  BannerBean({this.title, this.img, this.jumpValue, this.jumpType, this.sort, this.status, this.createdAt});
+  BannerBean(
+      {this.title,
+      this.img,
+      this.jumpValue,
+      this.jumpType,
+      this.sort,
+      this.status,
+      this.createdAt});
 
-  factory BannerBean.fromJson(Map<String, dynamic> json){
-    return BannerBean(
-      title: json['title'],
-      img: json['img'],
-      jumpValue: json['jumpValue'],
-      jumpType: json['jumpType'],
-      sort: json['sort'],
-      status: json['status'],
-      createdAt: DateTime.parse(json['createdAt'])
-    );
+  BannerBean.fromJson(Map<String, dynamic> json) {
+    if (json["title"] is String) {
+      title = json["title"];
+    }
+    if (json["img"] is String) {
+      img = json["img"];
+    }
+    if (json["jumpValue"] is String) {
+      jumpValue = json["jumpValue"];
+    }
+    if (json["jumpType"] is String) {
+      jumpType = json["jumpType"];
+    }
+    if (json["sort"] is int) {
+      sort = json["sort"];
+    }
+    if (json["status"] is int) {
+      status = json["status"];
+    }
+    if (json["createdAt"] is String) {
+      createdAt = DateTime.parse(json["createdAt"]);
+    }
   }
 }

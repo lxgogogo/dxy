@@ -185,7 +185,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       style: TextStyle(color: Color(0xff3B5078),fontSize: 17.px,fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 18.px,),
-                    CommentItem(),
+                    // CommentItem(),
                     // CommentItem(),
                   ],
                 ),

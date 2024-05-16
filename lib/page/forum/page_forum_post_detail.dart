@@ -245,7 +245,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget commentsContent() {
     List<Widget> commentsList = [];
     for (int i = 0; i < items.length; i++) {
-      commentsList.add(CommentItem());
+      // commentsList.add(CommentItem());
     }
     return Column(
       children: commentsList,

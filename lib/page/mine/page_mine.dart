@@ -361,7 +361,12 @@ class _MinePageState extends State<MinePage> {
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
         itemBuilder: (c, i) => _currentTabIndex == 2
-            ? CommentItem()
+            // ? CommentItem()
+            ? PostListItemView(
+                itemIndex: i,
+                isForumList: false,
+                boardBean: boardPostList[i] ?? BoardBean(),
+              )
             : PostListItemView(
                 itemIndex: i,
                 isForumList: false,

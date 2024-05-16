@@ -3,24 +3,28 @@ import 'dart:io';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/page/forum/media_helper.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import 'package:video_player/video_player.dart';
 
+import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/net_request.dart';
 import '../../widget/label_view.dart';
 
 class PublishPostsPage extends StatefulWidget {
-  int currentBoardId;
+  List<BoardInfo> boardInfoList;
 
-  PublishPostsPage({super.key, required this.currentBoardId});
+  PublishPostsPage({super.key, required this.boardInfoList});
 
   @override
   State<PublishPostsPage> createState() => _PublishPostsPageState();
@@ -28,7 +32,9 @@ class PublishPostsPage extends StatefulWidget {
 
 class _PublishPostsPageState extends State<PublishPostsPage>
     with SingleTickerProviderStateMixin {
-  late int currentBoardId; //所属板块id
+  // late int currentBoardId; //所属板块id
+  late List<BoardInfo> boardInfoList;
+  List<String> items = [];
 
   final TextEditingController controllerTitle = TextEditingController();
   final _controller = DetectableTextEditingController(
@@ -43,14 +49,31 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   String aitUserContent = ''; //@用户的内容
   bool _isMounted = false;
+  String _counter = 'video';
+  String? selectedBoardValue;
+
+  late VideoPlayerController _playController;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool isShowVideoView = false;
+
+  bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
     _isMounted = true;
-    currentBoardId = widget.currentBoardId;
-    print("publish post board id ==$currentBoardId");
+    boardInfoList = widget.boardInfoList;
     _controller.addListener(() {});
+    boardInfoList.forEach((element) {
+      print("publish post board ==${element.name}");
+      items.add(element.name!);
+    });
+
+    _playController = VideoPlayerController.network('');
+    _initializeVideoPlayerFuture = _playController.initialize().then((_) {
+      // Ensure the first frame is shown after the video is initialized
+      setState(() {});
+    });
   }
 
   @override
@@ -58,6 +81,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     // TODO: implement dispose
     super.dispose();
     _isMounted = false;
+    _playController.dispose();
   }
 
   @override
@@ -109,29 +133,74 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   Widget contentView() {
     return ListView(
       children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-          height: 45.px,
-          child: TextFormField(
-              maxLines: 1,
-              style: AppTheme.text000000Size16W500,
-              controller: controllerTitle,
-              decoration: const InputDecoration(
-                hintText: '起个标题吧',
-                hintStyle: AppTheme.text999999Size16W500,
-                border: InputBorder.none,
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppTheme.color_F3F3F3),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+                child: Container(
+              margin: EdgeInsets.fromLTRB(20.px, 0, 10.px, 0),
+              // height: 45.px,
+              child: TextFormField(
+                  style: AppTheme.text000000Size16W500,
+                  maxLength: 30,
+                  controller: controllerTitle,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 3), // 调整文本位置
+                    hintText: '起个标题吧',
+                    counterText: '',
+                    hintStyle: AppTheme.text999999Size16W500,
+                    border: InputBorder.none,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppTheme.color_F3F3F3),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppTheme.color_F3F3F3),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  )),
+            )),
+            DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                isExpanded: true,
+                hint: Text(
+                  '选择板块',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).hintColor,
+                  ),
                 ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: AppTheme.color_F3F3F3),
+                items: items
+                    .map((String item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: AppTheme.text999999Size14,
+                          ),
+                        ))
+                    .toList(),
+                value: selectedBoardValue,
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedBoardValue = value;
+                  });
+                },
+                buttonStyleData: const ButtonStyleData(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  height: 40,
+                  width: 120,
                 ),
-                filled: true,
-                fillColor: Colors.white,
-              )),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 40,
+                ),
+              ),
+            ),
+          ],
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(16, 5, 16, 0),
+          margin: EdgeInsets.fromLTRB(10.px, 5.px, 10.px, 0),
           height: 150.px,
           child: DetectableTextField(
               maxLines: 5,
@@ -154,10 +223,16 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                 fillColor: Colors.white,
               )),
         ),
+        Container(
+            padding: EdgeInsets.fromLTRB(18.px, 0, 18.px, 0),
+            child: Text(
+              '单个视频或者最多9张图片',
+              style: AppTheme.text999999Size11,
+            )),
         Expanded(
           child: Padding(
             padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-            child: imageGridView(),
+            child: _mediaShowView(),
           ),
         ),
         Expanded(
@@ -166,9 +241,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                 child: LabelView(
                   isEditLabel: true,
                   labelData: customLabelList,
-                  onItemTap: (labelValue) {
-
-                  },
+                  onItemTap: (labelValue) {},
                 )))
       ],
     );
@@ -195,60 +268,157 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         });
       },
       footer: [
-        IconButton(
-            onPressed: () {
-              openFilePicker();
-            },
-            icon: Image.asset(
-              'assets/images/image_add.png',
-              width: 111,
-              height: 111,
-              fit: BoxFit.cover,
-            )),
+        imageData.length == 9
+            ? Container()
+            : IconButton(
+                onPressed: () {
+                  openFilePicker();
+                },
+                icon: Image.asset(
+                  'assets/images/image_add.png',
+                  width: 111,
+                  height: 111,
+                  fit: BoxFit.cover,
+                )),
       ],
     );
   }
 
   Widget buildItem(String text) {
-    if (text.isNotEmpty && text.contains('http')) {
-      return Center(
-          key: ValueKey(text),
-          child: Image.network(
-            text,
-            width: 101,
-            height: 101,
-            fit: BoxFit.cover,
-          ));
-    } else {
-      return Center(
-          key: ValueKey(text),
-          child: Stack(
-            children: [
-              Image.file(
+    return Center(
+        key: ValueKey(text),
+        child: Stack(
+          children: [
+            GestureDetector(
+              child: Image.file(
                 File(text),
                 width: 98,
                 height: 98,
                 fit: BoxFit.cover,
               ),
-              Positioned(
-                right: -10,
-                top: -10,
-                child: IconButton(
-                    onPressed: () {
-                      //跳转评论列表页面
-                      setState(() {
-                        imageData.remove(text);
-                      });
-                    },
-                    icon: Image.asset(
-                      'assets/images/close_black.png',
-                      width: 25.px,
-                      height: 25.px,
-                    )),
-              )
-            ],
-          ));
+              onTap: () {},
+            ),
+            Positioned(
+              right: -10,
+              top: -10,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      imageData.remove(text);
+                    });
+                  },
+                  icon: Image.asset(
+                    'assets/images/close_black.png',
+                    width: 25.px,
+                    height: 25.px,
+                  )),
+            )
+          ],
+        ));
+  }
+
+  Future<void> _pickAndPlayVideo(videoPath) async {
+    if (videoPath != null) {
+      _playController = VideoPlayerController.file(File(videoPath));
+      await _playController.initialize();
+      _playController.play();
+      setState(() {
+        _isPlaying = true;
+      });
     }
+  }
+
+  double calculateVideoPlayerWidth(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double videoAspectRatio = _playController.value.aspectRatio;
+    return screenWidth / videoAspectRatio;
+  }
+
+  Widget _mediaShowView() {
+    if (isShowVideoView) {
+      return Container(
+          padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
+          height: 300.px,
+          width: calculateVideoPlayerWidth(context),
+          child: Stack(alignment: Alignment.center, children: [
+            _playController.value.isInitialized
+                ? FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: SizedBox(
+                      width: _playController.value.size.width,
+                      height: _playController.value.size.height,
+                      child: VideoPlayer(_playController),
+                    ),
+                  )
+                : Container(),
+            _isPlaying
+                ? SizedBox.shrink()
+                : IconButton(
+                    icon: Icon(Icons.play_arrow),
+                    iconSize: 64,
+                    onPressed: () {
+                      _pickAndPlayVideo(imageData[0]);
+                    },
+                  ),
+            Positioned(
+              right: -10,
+              top: -10,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      imageData.clear();
+                      isShowVideoView = false;
+                    });
+                  },
+                  icon: Image.asset(
+                    'assets/images/close_black.png',
+                    width: 25.px,
+                    height: 25.px,
+                  )),
+            )
+          ]));
+    } else {
+      return imageGridView();
+    }
+
+    // if (path.isNotEmpty && path.endsWith('mp4')) {
+    //   // if (_isMounted) {
+    //   //   setState(() {
+    //   //     videoFileUrl = path;
+    //   //   });
+    //   // }
+    //   _playController = VideoPlayerController.file(
+    //     File(path), // 替换为您的视频 URL
+    //   );
+    //   _initializeVideoPlayerFuture = _playController.initialize();
+    //   return GestureDetector(
+    //     onTap: () {
+    //       _pickAndPlayVideo(path);
+    //     },
+    //     child: FutureBuilder(
+    //     future: _initializeVideoPlayerFuture,
+    //     builder: (context, snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.done) {
+    //         return AspectRatio(
+    //           aspectRatio: _playController.value.aspectRatio,
+    //           child: VideoPlayer(_playController),
+    //         );
+    //       } else {
+    //         return Center(child: CircularProgressIndicator());
+    //       }
+    //     },
+    //   ),);
+    // } else {
+    //   return GestureDetector(
+    //     child: Image.file(
+    //       File(path),
+    //       width: 98,
+    //       height: 98,
+    //       fit: BoxFit.cover,
+    //     ),
+    //     onTap: () {},
+    //   );
+    // }
   }
 
   Widget bottomView() {
@@ -282,6 +452,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                             );
                             // 在这里处理从ResultPage返回的结果
                             if (result != null) {
+                              aitUserBeanList.add(result);
                               var nickname = result.nickname;
                               var userId = result.id;
                               setState(() {
@@ -307,7 +478,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SelectLabelPage(selectedLabelList: customLabelList,)),
+                                  builder: (context) => SelectLabelPage(
+                                        selectedLabelList: customLabelList,
+                                      )),
                             );
                             // 在这里处理从ResultPage返回的标签主体
                             if (result != null) {
@@ -331,6 +504,10 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   SizedBox(width: 10),
                   IconButton(
                       onPressed: () async {
+                        if (!isCanOpenPicker()) {
+                          ToastUtils.showToast('单个视频或者最多9张图片');
+                          return;
+                        }
                         openFilePicker();
                       },
                       icon: Image.asset(
@@ -349,22 +526,91 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg']);
+        allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4']);
 
     if (result != null) {
       List<String> files =
           result.paths.where((path) => path != null).cast<String>().toList();
-      if (result.files.length > 9) {
-        ToastUtils.showToast('最多可选择9个文件');
+      if (result.files.length > 9 ||
+          result.files.length + imageData.length > 9) {
+        ToastUtils.showToast('单个视频或者最多9张图片');
         return;
-      } else {
-        for (String path in files) {
-          imageData.add(path);
-        }
-        setState(() {});
       }
+
+      if (files.length > 1) {
+        for (String path in files) {
+          if (path.endsWith('mp4')) {
+            ToastUtils.showToast('单个视频或者最多9张图片');
+            return;
+          }
+        }
+      }
+
+      for (String path in files) {
+        print('FilePickerResult: ' + path);
+        imageData.add(path);
+      }
+      setState(() {
+        if (imageData.isNotEmpty &&
+            imageData.length == 1 &&
+            imageData[0].endsWith('mp4')) {
+          isShowVideoView = true;
+        } else {
+          isShowVideoView = false;
+        }
+      });
     } else {
       // User canceled the picker
+    }
+  }
+
+  bool isCanOpenPicker() {
+    if (isShowVideoView) {
+      return false;
+    }
+    if (imageData.length  == 9) {
+      return false;
+    }
+    return true;
+  }
+
+  ///板块id
+  int _getBoardIdByName() {
+    if (selectedBoardValue!.isNotEmpty) {
+      for (BoardInfo boardInfo in boardInfoList) {
+        if (boardInfo.name == selectedBoardValue) {
+          return boardInfo.id!;
+        }
+      }
+    }
+    return -1;
+  }
+
+  void _aitUserData() {
+    String content = _controller.text;
+    Iterable<Match> matches = atSignRegExp.allMatches(content); // 获取所有匹配项
+    List<String> containsAitStrList = []; // 包含@符号的文本
+    List<String> splitNameList = []; // 分割@符号的后存放用户名称
+    for (Match match in matches) {
+      print('Found=====================: ${match.group(0)}'); // 输出匹配到
+      var matchStr = match.group(0);
+      containsAitStrList.add(matchStr!);
+    }
+    if (containsAitStrList.isNotEmpty && containsAitStrList.length > 0) {
+      for (String aitStr in containsAitStrList) {
+        List<String> aitStrList = aitStr.split('@');
+        splitNameList.add(aitStrList[1]);
+      }
+    }
+    //循环名称list获取所有@用户信息
+    if (splitNameList.isNotEmpty && splitNameList.length > 0) {
+      for (String userName in splitNameList) {
+        for (UserProfile userProfile in aitUserBeanList) {
+          if (userName == userProfile.nickname) {
+            aitList.add(userProfile.id!); //@用户的id集合
+          }
+        }
+      }
     }
   }
 
@@ -377,38 +623,38 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       imageUrlList.clear();
     }
 
-    if (title.isEmpty) {
-      ToastUtils.showToast('标题不能为空');
+    if (_getBoardIdByName == -1) {
+      ToastUtils.showToast('请选择发帖板块');
       return;
     }
+
+    if (title.isEmpty || title.length < 5) {
+      ToastUtils.showToast('请输入5-30个字符标题');
+      return;
+    }
+
     if (content.isEmpty) {
       ToastUtils.showToast('内容不能为空');
       return;
     }
 
-    Iterable<Match> matches = atSignRegExp.allMatches(content); // 获取所有匹配项
-
-    for (Match match in matches) {
-      print('🌶Tap: $match');
-      print('Found: ${match.group(0)}'); // 输出匹配到的数字
-    }
+    _aitUserData();
 
     imageData.forEach((element) async {
-      // XFile? compressedImage = await compressAndGetFile(File(element),element);
-      // print('uploadFile path==='  + compressedImage!.path);
       NetRequest().uploadFile(element, (data) {
         UploadFile uploadFile = UploadFile.fromJson(data);
         print('uploadFile url===' + uploadFile.url!);
         imageUrlList.add(uploadFile);
 
-        print('uploadFile url===${ imageUrlList.length}' + 'imageData|==>${imageData.length}');
+        print('uploadFile url===${imageUrlList.length}' +
+            'imageData|==>${imageData.length}');
 
-        if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
-          NetRequest().threadCreate(
-              title, content, 1, customLabelList, imageUrlList, aitList,
-                  (data) {
-                Navigator.pop(context);
-              });
+        if (imageUrlList.isNotEmpty &&
+            imageUrlList.length == imageData.length) {
+          NetRequest().threadCreate(title, content, _getBoardIdByName(),
+              customLabelList, imageUrlList, aitList, (data) {
+            Navigator.pop(context);
+          });
         }
       });
     });

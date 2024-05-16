@@ -3,6 +3,7 @@ import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../model/board_list.dart';
 import '../../utils/app_theme.dart';
@@ -11,6 +12,7 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/CircleImageWithText.dart';
 import '../../widget/label_view.dart';
 import '../../widget/post_detail_bottom_view.dart';
+import 'media_helper.dart';
 
 class PostDetailPage extends StatefulWidget {
   int postId; //帖子id
@@ -27,6 +29,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
   bool _isMounted = false;
   BoardBean? boardBean;
   var actionEventBus;
+  List<String> imageUrlList = [];
+
+  late VideoPlayerController _playController;
+  late Future<void> _initializeVideoPlayerFuture;
+  bool _isPlaying = false;
+  late String videoUrl;
 
   List<String> items = [
     '评论内容评论内容评论内容评论内容',
@@ -35,13 +43,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     '评论内容评论内容评论内容评论内容',
     '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容',
     '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容'
-  ];
-
-  List<String> labelData = [
-    '标签1',
-    '标签2',
-    '标签13',
-    '标签14',
   ];
 
   @override
@@ -57,16 +58,49 @@ class _PostDetailPageState extends State<PostDetailPage> {
         reqPostDetail();
       }
     });
+
+    _playController = VideoPlayerController.network('');
+    _initializeVideoPlayerFuture = _playController.initialize().then((_) {
+      // Ensure the first frame is shown after the video is initialized
+      setState(() {});
+    });
   }
 
-  reqPostDetail(){
+  reqPostDetail() {
     NetRequest().threadShow(currentPostId.toString(), (data) {
       if (_isMounted) {
         setState(() {
           boardBean = BoardBean.fromJson(data);
+          //所有图片集合
+          if (boardBean!.files!.isNotEmpty) {
+            for (var element in boardBean!.files!) {
+              if (boardBean!.files!.isNotEmpty &&
+                  boardBean!.files!.length == 1) {
+                if (element.type == 'video') {
+                  videoUrl = element.url!;
+                  imageUrlList.add(_getImageUrl(element));
+                } else {
+                  imageUrlList.add(_getImageUrl(element));
+                }
+              } else {
+                imageUrlList.add(_getImageUrl(element));
+              }
+            }
+          }
         });
       }
     });
+  }
+
+  Future<void> _pickAndPlayVideo(videoUrl) async {
+    if (videoUrl != null) {
+      _playController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      await _playController.initialize();
+      _playController.play();
+      setState(() {
+        _isPlaying = true;
+      });
+    }
   }
 
   @override
@@ -74,6 +108,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     // TODO: implement dispose
     super.dispose();
     _isMounted = false;
+    _playController.dispose();
   }
 
   @override
@@ -176,47 +211,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 SizedBox(
                   height: 15.px,
                 ),
-                GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: boardBean != null ? boardBean!.files!.length : 0,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: Image.network(
-                          _getImageUrl(boardBean!.files![index]),
-                          width: 100,
-                          height: 100,
-                        ),
-                      ); // 替换image_$index.jpg为对应的图片路径
-                    }),
-                SizedBox(height: 10),
-                // Expanded(child: LabelView(isEditLabel: false, labelData: labelData, onItemTap: (value){}))
-                // Visibility(
-                //   child: Row(
-                //     children: [
-                //       Visibility(
-                //         child: labelView(boardBean!.tags![0]),
-                //       ),
-                //       SizedBox(
-                //         width: 10,
-                //       ),
-                //       labelView(''),
-                //       SizedBox(
-                //         width: 10,
-                //       ),
-                //       labelView(''),
-                //     ],
-                //   ),
-                //   visible: boardBean!.tags!.isNotEmpty ? true : false,
-                // )
+                _showMediaView(),
               ],
             )),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 10.px),
+            child: LabelView(
+                isEditLabel: false,
+                labelData: boardBean != null ? boardBean!.tags! : [],
+                onItemTap: (value) {}),
+          ),
+        ),
         Container(height: 10.px, color: AppTheme.color_F3F3F3),
         Container(
             padding: EdgeInsets.fromLTRB(16, 15, 16, 0),
@@ -232,6 +238,73 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ]))
       ],
     );
+  }
+
+  ///显示媒体文件 图片或者视频
+  Widget _showMediaView() {
+    if (boardBean != null &&
+        boardBean!.files!.isNotEmpty &&
+        boardBean!.files!.length == 1 &&
+        boardBean!.files![0].type == 'video') {
+      return Container(
+          padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
+          height: 300.px,
+          // width: calculateVideoPlayerWidth(context),
+          child: Center(
+            child: Stack(alignment: Alignment.center, children: [
+              _playController.value.isInitialized
+                  ? FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: SizedBox(
+                        width: _playController.value.size.width,
+                        height: _playController.value.size.height,
+                        child: VideoPlayer(_playController),
+                      ),
+                    )
+                  : Container(),
+              _isPlaying
+                  ? SizedBox.shrink()
+                  : Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.network(
+                          imageUrlList[0],
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.play_arrow),
+                          iconSize: 64,
+                          onPressed: () {
+                            _pickAndPlayVideo(videoUrl);
+                          },
+                        ),
+                      ],
+                    )
+            ]),
+          ));
+    } else {
+      return GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: boardBean != null ? boardBean!.files!.length : 0,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+          ),
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                MediaHelper().imagePerView(context, imageUrlList, index);
+              },
+              child: Image.network(
+                imageUrlList[index],
+                width: 100,
+                height: 100,
+              ),
+            ); // 替换image_$index.jpg为对应的图片路径
+          });
+    }
+    return Text('');
   }
 
   String _getImageUrl(UploadFile uploadFile) {
@@ -270,7 +343,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   void _followToggle() {
     NetRequest().followerToggle(
-        boardBean!.user!.id.toString(), !boardBean!.user!.followed!, (data) {
+        boardBean!.user!.id!, !boardBean!.user!.followed!, (data) {
       if (_isMounted) {
         setState(() {});
       }

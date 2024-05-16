@@ -134,7 +134,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
 
   Widget mediaContent(int index, List<UploadFile> files) {
     int picCount = files.length;
-    if (picCount == 1) {
+    if (picCount == 1 && files[0].type == 'image') {
       return singleImageView(
           getFilesUrl(files[0]));
     } else if (picCount == 1 && files[0].type == 'video') {
@@ -152,7 +152,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                     getFilesUrl(files[0]),
                     width: 335,
                     height: 188,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Container(

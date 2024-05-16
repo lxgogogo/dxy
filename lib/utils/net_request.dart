@@ -246,7 +246,7 @@ class NetRequest {
 
   ///关注、取消关注
   Future followerToggle(
-      String userId, bool state, SuccessCallback onSuccess) async {
+      int userId, bool state, SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
     params['userId'] = userId;
     params['state'] = state;

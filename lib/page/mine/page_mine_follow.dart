@@ -171,6 +171,15 @@ class _MineFollowPageState extends State<MineFollowPage> {
         ),
         Expanded(child: Text('')),
         FollowBtn(isFollowed: followOrFanUserList[index].followed!, onTap:  () {
+
+          NetRequest().followerToggle(
+              followOrFanUserList[index].id!,
+              !followOrFanUserList[index].followed!, (data) {
+
+              setState(() {
+                followOrFanUserList[index].followed = !followOrFanUserList[index].followed!;
+              });
+          });
         })
       ]),
     );

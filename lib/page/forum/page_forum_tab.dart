@@ -127,7 +127,7 @@ class _ForumTabPageState extends State<ForumTabPage>
           Get.to(LoginPage());
           return;
         }
-        Get.to(PublishPostsPage(currentBoardId: currentBoardId));
+        Get.to(PublishPostsPage(boardInfoList: boardInfoList));
       },
       shape: CircleBorder(),
     );

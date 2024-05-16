@@ -586,4 +586,47 @@ class NetRequest {
       ToastUtils.showToast(resp.message!);
     }
   }
+
+  ///修改密码
+  Future updatePassword(String oldPassword, String newPassword,
+       SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['oldPassword'] = oldPassword;
+    params['newPassword'] = newPassword;
+
+    LogUtils.printAll("updatePassword params===>$params");
+
+    Map<String, dynamic> response =
+    await HttpUtils.post(Api.updatePassword, params: params);
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("updatePassword===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+    ///忘记密码 == 重置密码
+    Future resetPassword(String account, String password,
+        String code, SuccessCallback onSuccess) async {
+      Map<String, Object> params = {};
+      params['account'] = account;
+      params['password'] = password;
+      params['code'] = code;
+
+      LogUtils.printAll("resetPassword params===>$params");
+
+      Map<String, dynamic> response =
+      await HttpUtils.post(Api.resetPassword, params: params);
+      HttpUtilsResonse.Response resp =
+      HttpUtilsResonse.Response.fromJson(response);
+      if (resp.code == 200) {
+        LogUtils.printAll("resetPassword===>$response");
+        onSuccess(response['data']);
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
+    }
+
 }

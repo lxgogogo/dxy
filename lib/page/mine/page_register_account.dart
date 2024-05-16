@@ -35,6 +35,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
   var pageType = -1;
 
   final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerOldPw= TextEditingController();
   final TextEditingController _controllerCode = TextEditingController();
   final TextEditingController _controllerPw = TextEditingController();
   final TextEditingController _controllerAgainPw = TextEditingController();
@@ -97,34 +98,64 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               getPageTitle(),
               style: AppTheme.text3B5078Size23,
             )),
-        Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 35.px),
-          padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  controller: _controllerEmail,
-                  decoration: InputDecoration(
-                    border: InputBorder.none, // 没有边框
-                    hintText: '请输入邮箱地址',
-                    hintStyle: AppTheme.text999999Size14,
-                    contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+        Visibility(
+          child: Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 35.px),
+            padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: _controllerEmail,
+                    decoration: InputDecoration(
+                      border: InputBorder.none, // 没有边框
+                      hintText: '请输入邮箱地址',
+                      hintStyle: AppTheme.text999999Size14,
+                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          visible: pageType == RegisterAccountPage.PageType_ModifyPassword
+              ? false
+              : true,
+        ),
+        Visibility(
+          child: Container(
+            color: Colors.white,
+            margin: EdgeInsets.only(top: 35.px),
+            padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: _controllerOldPw,
+                    decoration: InputDecoration(
+                      border: InputBorder.none, // 没有边框
+                      hintText: '请输入原密码',
+                      hintStyle: AppTheme.text999999Size14,
+                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          visible: pageType == RegisterAccountPage.PageType_ModifyPassword
+              ? true
+              : false,
         ),
         Container(
           margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
           height: 0.5,
           color: AppTheme.color_F3F3F3,
         ),
-        Container(
+        Visibility(child:Container(
           color: Colors.white,
-          margin: EdgeInsets.only(top: 10.px),
+          margin: EdgeInsets.only(top: 3.px),
           padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
           child: Row(
             children: <Widget>[
@@ -143,40 +174,46 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ),
               _isCountingDown
                   ? Text(
-                      '$_countdown秒后可重新发送',
-                      style: AppTheme.text999999Size16,
-                    )
+                '$_countdown秒后可重新发送',
+                style: AppTheme.text999999Size16,
+              )
                   : GestureDetector(
-                      onTap: () {
-                        var email = _controllerEmail.text;
-                        if (email.isEmpty) {
-                            ToastUtils.showToast('邮箱不能为空');
-                            return;
-                        }
-                        _startCountdown();
-                        NetRequest().sendCode(
-                            pageType == RegisterAccountPage.PageType_RegisterAccount
-                                ? NetRequest.SEND_CODE_TYPE_REGISTER
-                                : NetRequest.SEND_CODE_TYPE_RESET_PW, email, (data) {
-
-                        });
-                      },
-                      child: Text(
-                        '发送验证码',
-                        style: AppTheme.text008EFFSize16,
-                      ),
-                    )
+                onTap: () {
+                  var email = _controllerEmail.text;
+                  if (email.isEmpty) {
+                    ToastUtils.showToast('邮箱不能为空');
+                    return;
+                  }
+                  _startCountdown();
+                  NetRequest().sendCode(
+                      pageType ==
+                          RegisterAccountPage.PageType_RegisterAccount
+                          ? NetRequest.SEND_CODE_TYPE_REGISTER
+                          : NetRequest.SEND_CODE_TYPE_RESET_PW,
+                      email,
+                          (data) {});
+                },
+                child: Text(
+                  '发送验证码',
+                  style: AppTheme.text008EFFSize16,
+                ),
+              )
             ],
           ),
         ),
-        Container(
+            visible: pageType == RegisterAccountPage.PageType_ModifyPassword
+            ? false
+            : true),
+        Visibility(child: Container(
           margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
           height: 0.5,
-          color: AppTheme.color_F3F3F3,
-        ),
+          color: AppTheme.color_F3F3F3,),
+          visible: pageType == RegisterAccountPage.PageType_ModifyPassword
+            ? false
+            : true,),
         Container(
           color: Colors.white,
-          margin: EdgeInsets.only(top: 10.px),
+          margin: EdgeInsets.only(top: 3.px),
           padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
           child: Row(
             children: <Widget>[
@@ -186,7 +223,10 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                   obscureText: !_isVisible, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
-                    hintText: '密码',
+                    hintText:
+                        pageType == RegisterAccountPage.PageType_RegisterAccount
+                            ? '密码'
+                            : '请设置新密码',
                     hintStyle: AppTheme.text999999Size14,
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                   ),
@@ -216,7 +256,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         ),
         Container(
           color: Colors.white,
-          margin: EdgeInsets.only(top: 10.px),
+          margin: EdgeInsets.only(top: 3.px),
           padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
           child: Row(
             children: <Widget>[
@@ -226,7 +266,10 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                   obscureText: !_isVisible, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
-                    hintText: '再次输入密码',
+                    hintText:
+                        pageType == RegisterAccountPage.PageType_RegisterAccount
+                            ? '再次输入密码'
+                            : '再次输入新密码',
                     hintStyle: AppTheme.text999999Size14,
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                   ),
@@ -260,7 +303,9 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         Center(
             child: IconButton(
                 icon: Image.asset(
-                  'assets/images/registration_btn.png',
+                  pageType == RegisterAccountPage.PageType_RegisterAccount
+                      ?'assets/images/registration_btn.png'
+                      :'assets/images/confirm_btn.png',
                   width: 295.px,
                   height: 42.5.px,
                 ),
@@ -276,15 +321,24 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
     var email = _controllerEmail.text;
     var code = _controllerCode.text;
     var password = _controllerPw.text;
+    var oldPassword = _controllerOldPw.text;
     var againPassword = _controllerAgainPw.text;
-    if (email.isEmpty) {
-      ToastUtils.showToast('邮箱不能为空');
-      return;
+    if (pageType == RegisterAccountPage.PageType_ModifyPassword) {
+      if (oldPassword.isEmpty) {
+        ToastUtils.showToast('原密码不能为空');
+        return;
+      }
+    } else {
+      if (email.isEmpty) {
+        ToastUtils.showToast('邮箱不能为空');
+        return;
+      }
+      if (code.isEmpty) {
+        ToastUtils.showToast('验证码不能为空');
+        return;
+      }
     }
-    if (code.isEmpty) {
-      ToastUtils.showToast('验证码不能为空');
-      return;
-    }
+
     if (password.isEmpty) {
       ToastUtils.showToast('密码不能为空');
       return;
@@ -297,20 +351,35 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
       ToastUtils.showToast('两次输入的密码不一致');
       return;
     }
-    //提交
-    NetRequest().registerAccount(email, password, code, (data) {
-      UserProfile userProfile = UserProfile.fromJson(data['user']);
-      ToastUtils.showToast('注册成功');
-      // Global().hasLogin = true;
-      // StorageUtil().setBool('hasLogin', true);
-      // StorageUtil().setJSON('userInfo', userProfile);
-      //成功后直接登录 通知关闭登录页面
-      LoginHelper().userLogin(email, password,(data){
-        EventBusManager.eventBus
-            .fire(EventBusAction.closeLoginPage.eventBusTypeName);
+    //注册
+    if (pageType == RegisterAccountPage.PageType_RegisterAccount) {
+      //提交
+      NetRequest().registerAccount(email, password, code, (data) {
+        ToastUtils.showToast('注册成功');
+        //成功后直接登录 通知关闭登录页面
+        LoginHelper().userLogin(email, password, (data) {
+          EventBusManager.eventBus
+              .fire(EventBusAction.closeLoginPage.eventBusTypeName);
+          Navigator.of(context).pop();
+        });
+      });
+    } else if (pageType == RegisterAccountPage.PageType_ModifyPassword) {// 修改密码
+      NetRequest().updatePassword(oldPassword, password, (data) {
+        ToastUtils.showToast('修改密码成功');
+        //保存账号密码，获取本人信息接口需要
+        StorageUtil().prefs!.setString('userAccount', email);
+        StorageUtil().prefs!.setString('userPw', password);
         Navigator.of(context).pop();
       });
-    });
+    } else if (pageType == RegisterAccountPage.PageType_ForgotPassword) {//忘记密码
+      NetRequest().registerAccount(email, password, code, (data) {
+        ToastUtils.showToast('重置密码成功');
+        //保存账号密码，获取本人信息接口需要
+        StorageUtil().prefs!.setString('userAccount', email);
+        StorageUtil().prefs!.setString('userPw', password);
+        Navigator.of(context).pop();
+      });
+    }
   }
 
   String getPageTitle() {

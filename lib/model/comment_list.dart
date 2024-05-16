@@ -38,6 +38,7 @@ class CommentBean {
   Content? content;
   String? contentStr;
   User? user;
+  bool? liked;
 
   CommentBean({
     this.id,
@@ -51,6 +52,7 @@ class CommentBean {
     this.replyCount,
     this.likeCount,
     this.user,
+    this.liked
   });
 
   CommentBean.fromJson(Map<String, dynamic> json) {
@@ -88,6 +90,9 @@ class CommentBean {
     if (json["user"] is Map) {
       user = User.fromJson(json["user"]);
     }
+    if (json["liked"] is bool) {
+      liked = json["liked"];
+    }
 
     if (json["at"] is List) {
       at = json["at"] == null
@@ -109,6 +114,7 @@ class CommentBean {
     _data["replyCount"] = replyCount;
     _data["likeCount"] = likeCount;
     _data["user"] = user;
+    _data['liked'] = liked;
     return _data;
   }
 }

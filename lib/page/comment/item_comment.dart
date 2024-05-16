@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/page/forum/page_comment_input.dart';
+import 'package:holdem/page/mine/page_login.dart';
+import 'package:holdem/utils/global.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:intl/intl.dart';
 
@@ -100,41 +105,75 @@ class _CommentItemState extends State<CommentItem> {
             Row(
               children: [
                 Text(
-                  widget.commentBean.createdAt!=null ? DateFormat('MM-dd hh:mm').format(widget.commentBean.createdAt!):'',
+                  widget.commentBean.createdAt != null
+                      ? DateFormat('MM-dd hh:mm')
+                          .format(widget.commentBean.createdAt!)
+                      : '',
                   style: TextStyle(color: Color(0xff999999), fontSize: 14.px),
                 ),
                 const Spacer(),
-                Image.asset(
-                  'assets/images/reply.png',
-                  width: 20.px,
-                  height: 20.px,
-                ),
-                SizedBox(
-                  width: 5.px,
-                ),
-                Text(
-                  widget.commentBean.replyCount!.toString(),
-                  style: TextStyle(
-                    color: const Color(0xff999999),
-                    fontSize: 14.px,
+                GestureDetector(
+                  onTap: (){
+                    if (!Global().hasLogin) {
+                        Get.to(LoginPage());
+                        return;
+                      }
+                      //跳转评论输入页面
+                      Get.to(CommentInputPage(
+                          relType: 'comment',
+                          relId: widget.commentBean.id!));
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/reply.png',
+                        width: 20.px,
+                        height: 20.px,
+                      ),
+                      SizedBox(
+                        width: 5.px,
+                      ),
+                      Text(
+                        widget.commentBean.replyCount!.toString(),
+                        style: TextStyle(
+                          color: const Color(0xff999999),
+                          fontSize: 14.px,
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 SizedBox(
                   width: 30.px,
                 ),
-                Image.asset(
-                  'assets/images/praise.png',
-                  width: 18.px,
-                  height: 18.px,
-                ),
-                SizedBox(
-                  width: 5.px,
-                ),
-                Text(
-                  widget.commentBean.likeCount!.toString(),
-                  style: TextStyle(
-                    color: const Color(0xff999999),
-                    fontSize: 14.px,
+                GestureDetector(
+                  onTap: () {
+                    NetRequest().contentLike({
+                      'relType': 'comment',
+                      'relId': widget.commentBean.id!,
+                      'state': true
+                    }, (data) {});
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        widget.commentBean.liked!
+                            ? 'assets/images/praised.png'
+                            : 'assets/images/praise.png',
+                        width: 18.px,
+                        height: 18.px,
+                      ),
+                      SizedBox(
+                        width: 5.px,
+                      ),
+                      Text(
+                        widget.commentBean.likeCount!.toString(),
+                        style: TextStyle(
+                          color: const Color(0xff999999),
+                          fontSize: 14.px,
+                        ),
+                      )
+                    ],
                   ),
                 )
               ],

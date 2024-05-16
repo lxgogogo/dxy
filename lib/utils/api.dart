@@ -22,6 +22,7 @@ class Api{
   //评论
   static const String commentList = '$baseUrl/comment/list';
   static const String commentCreate = '$baseUrl/comment/create';
+  static const String like = '$baseUrl/like/toggle'; //点赞 - 添加/取消
 
   //账号相关
   static const String login = '$baseUrl/passport/login';

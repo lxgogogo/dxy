@@ -3,9 +3,11 @@ import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../model/board_list.dart';
+import '../../model/comment_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
@@ -30,6 +32,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   BoardBean? boardBean;
   var actionEventBus;
   List<String> imageUrlList = [];
+  List<CommentBean> comments = [];
 
   late VideoPlayerController _playController;
   late Future<void> _initializeVideoPlayerFuture;
@@ -87,6 +90,20 @@ class _PostDetailPageState extends State<PostDetailPage> {
               }
             }
           }
+        });
+      }
+    });
+
+    NetRequest().commentList({
+      'pageNum': 1,
+      'pageSize': 10,
+      'filters': {'relType': 'content', 'relId': currentPostId}
+    }, (data) {
+      if (mounted) {
+        List<CommentBean> dataList = List<CommentBean>.from(
+            data['list'].map((comment) => CommentBean.fromJson(comment)));
+        setState(() {
+          comments = dataList;
         });
       }
     });
@@ -186,7 +203,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               : '',
                           topTextStyle: const TextStyle(),
                           bottomText1: boardBean != null
-                              ? '发布于${boardBean!.createdAt}'
+                              ? '发布于${DateFormat('MM-dd hh:mm').format(boardBean!.createdAt!)}'
                               : '',
                           bottomText1Style: AppTheme.text999999Size11,
                           bottomText2: '',
@@ -317,8 +334,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   Widget commentsContent() {
     List<Widget> commentsList = [];
-    for (int i = 0; i < items.length; i++) {
-      // commentsList.add(CommentItem());
+    for (int i = 0; i < comments.length; i++) {
+      commentsList.add(CommentItem(commentBean: comments[i]));
     }
     return Column(
       children: commentsList,
@@ -359,6 +376,5 @@ class _PostDetailPageState extends State<PostDetailPage> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
       child: Text('已关注', style: AppTheme.text999999Size13),
     );
-    ;
   }
 }

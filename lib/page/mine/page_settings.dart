@@ -4,6 +4,7 @@ import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
@@ -165,11 +166,69 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void  _checkAppVersion() {
-    NetRequest().appVersion((data) {
+  void  _checkAppVersion()  async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String currentVersion = packageInfo.version;
+
+    print('currentVersion========================' + currentVersion);
+
+    NetRequest().appVersion((data){
       AppVersion appVersion = AppVersion.fromJson(data);
-      if (appVersion.forced!) {
-         ToastUtils.showToast('强制升级');
+      String latestVersion = appVersion.androidVersion!;
+      if (latestVersion.compareTo(currentVersion) > 0) {
+        // 强制升级
+        bool forceUpdate = appVersion.forced!;
+        if (forceUpdate) {
+          // 这里可以弹出不可取消的弹窗提示用户升级
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('发现新版本'),
+                content: Text(
+                    '发现新版本，请立即升级至最新版本 $latestVersion'),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: Text('立即升级'),
+                    onPressed: () {
+                      // 跳转至应用商店等下载新版本
+                      ToastUtils.showToast('跳转至应用商店等下载新版本');
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // 普通升级
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('升级提示'),
+                content: Text('发现新版本 $latestVersion，是否立即升级？'),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('取消'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text('升级'),
+                    onPressed: () {
+                      // 跳转至应用商店等下载新版本
+                      ToastUtils.showToast('跳转至应用商店等下载新版本');
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        ToastUtils.showToast('当前已经是最新版本');
       }
     });
   }

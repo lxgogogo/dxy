@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/page/mine/page_mine_child.dart';
 import 'package:holdem/page/mine/page_mine_follow.dart';
 import 'package:holdem/page/mine/page_personal.dart';
 import 'package:holdem/page/mine/page_settings.dart';
@@ -28,7 +31,8 @@ class MinePage extends StatefulWidget {
   State<MinePage> createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> {
+class _MinePageState extends State<MinePage>
+    with SingleTickerProviderStateMixin {
   int _currentTabIndex = 0;
   final List<String> tabs = ['帖子', '收藏', '评论'];
 
@@ -37,37 +41,42 @@ class _MinePageState extends State<MinePage> {
 
   late UserProfile userProfile = UserProfile();
   var actionEventBus;
+  bool _isMounted = false;
 
   List<BoardBean> boardPostList = [];
   List<CommentBean> commentDataList = [];
 
-  RefreshController _refreshController1 =
-      RefreshController(initialRefresh: false);
-  RefreshController _refreshController2 =
-      RefreshController(initialRefresh: false);
-  RefreshController _refreshController3 =
-      RefreshController(initialRefresh: false);
+  late TabController _tabController =
+      TabController(length: 3, vsync: this); // 3 为选项卡数量
 
-  void _onRefresh() async {
-    setState(() {
-      pageNum = 1;
-    });
-    reqListData();
-  }
-
-  void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
-    reqListData();
-  }
+  // RefreshController _refreshController1 =
+  //     RefreshController(initialRefresh: false);
+  // RefreshController _refreshController2 =
+  //     RefreshController(initialRefresh: false);
+  // RefreshController _refreshController3 =
+  //     RefreshController(initialRefresh: false);
+  //
+  // void _onRefresh() async {
+  //   setState(() {
+  //     pageNum = 1;
+  //   });
+  //   // reqListData();
+  // }
+  //
+  // void _onLoading() async {
+  //   setState(() {
+  //     pageNum++;
+  //   });
+  //   // reqListData();
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserInfo();
-    reqListData();
+    // reqListData();
+    _isMounted = true;
     //接受通知刷新页面
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
       if (event.toString() ==
@@ -77,63 +86,10 @@ class _MinePageState extends State<MinePage> {
     });
   }
 
-  reqListData() {
-    if (_currentTabIndex == 0) {
-      //帖子
-      var ownerId = StorageUtil().prefs!.getString('ownerId');
-      NetRequest().getThreadListByBoard(
-          pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '',
-          (data) {
-        BoardList boardList = BoardList.fromJson(data);
-        if (mounted) {
-          setState(() {
-            if (pageNum == 1) {
-              boardPostList = boardList.list!;
-            } else {
-              boardPostList.addAll(boardList.list!);
-            }
-          });
-        }
-      });
-      _refreshController1.refreshCompleted();
-      _refreshController1.loadComplete();
-    } else if (_currentTabIndex == 1) {
-      //收藏
-      NetRequest().userFavoriteList(pageNum, pageSize, '', (data) {
-        ThreadList followedFansList = ThreadList.fromJson(data);
-        if (mounted) {
-          setState(() {
-            List<BoardBean> currentBoardList = [];
-            for (var element in followedFansList.list!) {
-              currentBoardList.add(element.thread!);
-            }
-            if (pageNum == 1) {
-              boardPostList = currentBoardList;
-            } else {
-              boardPostList.addAll(currentBoardList);
-            }
-          });
-        }
-      });
-      _refreshController2.refreshCompleted();
-      _refreshController2.loadComplete();
-    } else if (_currentTabIndex == 2) {
-      //评论
-      NetRequest().userCommentList(pageNum, pageSize, '', (data) {
-        CommentList commentList = CommentList.fromJson(data);
-        if (mounted) {
-          setState(() {
-            if (pageNum == 1) {
-              commentDataList = commentList.list!;
-            } else {
-              commentDataList.addAll(commentList.list!);
-            }
-          });
-        }
-      });
-      _refreshController3.refreshCompleted();
-      _refreshController3.loadComplete();
-    }
+  @override
+  void dispose() {
+    _isMounted = false;
+    super.dispose();
   }
 
   void getUserInfo() {
@@ -169,7 +125,6 @@ class _MinePageState extends State<MinePage> {
       ),
       body: Stack(
         children: [
-          // Positioned(left: 16, top: 100, child: userInfoView()),
           Positioned(
             top: 0,
             left: 0,
@@ -188,14 +143,77 @@ class _MinePageState extends State<MinePage> {
                   height: 0.px,
                 )),
                 userInfoView(),
-                tabView(),
+                _tabBar(),
                 Expanded(
-                    child: Container(color: Colors.white, child: listView()))
+                    child: Container(color: Colors.white, child: _tabBarView()))
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _tabBar() {
+    return Container(
+        margin: EdgeInsets.only(top: 23.px),
+        padding: EdgeInsets.only(top: 10.px, bottom: 5.px),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: 5.px,
+            ),
+            ...List<Widget>.generate(tabs.length, (index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _currentTabIndex = index;
+                    _tabController.index = index;
+                  });
+                },
+                child: Container(
+                  // margin: EdgeInsets.only(left:41.px,right: 51.px),
+                  child: Column(
+                    children: [
+                      Text(tabs[index],
+                          style: TextStyle(
+                              color: _currentTabIndex == index
+                                  ? Color(0xff008EFF)
+                                  : Color(0xff647A9C),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.px)),
+                      _currentTabIndex == index
+                          ? Image.asset('assets/images/tab_sel.png',
+                              width: 30.px, height: 6.px)
+                          : Container(),
+                    ],
+                  ),
+                ),
+              );
+            }),
+            SizedBox(
+              width: 5.px,
+            )
+          ],
+        ));
+  }
+
+  Widget _tabBarView() {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        MineChildPage(tabIndex: 0),
+        MineChildPage(tabIndex: 1),
+        MineChildPage(tabIndex: 2),
+      ],
     );
   }
 
@@ -289,104 +307,5 @@ class _MinePageState extends State<MinePage> {
         )
       ],
     );
-  }
-
-  Widget tabView() {
-    return Container(
-        margin: EdgeInsets.only(top: 23.px),
-        padding: EdgeInsets.only(top: 10.px, bottom: 5.px),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12),
-            topRight: Radius.circular(12),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 5.px,
-            ),
-            ...List<Widget>.generate(tabs.length, (index) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _currentTabIndex = index;
-                    if (boardPostList.isNotEmpty) {
-                      boardPostList.clear();
-                    }
-                    if (commentDataList.isNotEmpty) {
-                      commentDataList.clear();
-                    }
-                    reqListData();
-                  });
-                },
-                child: Container(
-                  // margin: EdgeInsets.only(left:41.px,right: 51.px),
-                  child: Column(
-                    children: [
-                      Text(tabs[index],
-                          style: TextStyle(
-                              color: _currentTabIndex == index
-                                  ? Color(0xff008EFF)
-                                  : Color(0xff647A9C),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.px)),
-                      _currentTabIndex == index
-                          ? Image.asset('assets/images/tab_sel.png',
-                              width: 30.px, height: 6.px)
-                          : Container(),
-                    ],
-                  ),
-                ),
-              );
-            }),
-            SizedBox(
-              width: 5.px,
-            )
-          ],
-        ));
-  }
-
-  ///列表数据
-  Widget listView() {
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      header: WaterDropHeader(),
-      controller: getRefreshController(),
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: ListView.builder(
-        padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-        itemBuilder: (c, i) => _currentTabIndex == 2
-            // ? CommentItem()
-            ? PostListItemView(
-                itemIndex: i,
-                isForumList: false,
-                boardBean: boardPostList[i] ?? BoardBean(),
-              )
-            : PostListItemView(
-                itemIndex: i,
-                isForumList: false,
-                boardBean: boardPostList[i] ?? BoardBean(),
-              ),
-        // itemExtent: 160.0,
-        itemCount: _currentTabIndex == 2
-            ? commentDataList.length
-            : boardPostList.length,
-      ),
-    );
-  }
-
-  getRefreshController() {
-    if (_currentTabIndex == 0) {
-      return _refreshController1;
-    } else if (_currentTabIndex == 1) {
-      return _refreshController2;
-    } else if (_currentTabIndex == 2) {
-      return _refreshController3;
-    }
   }
 }

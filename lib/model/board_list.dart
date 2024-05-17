@@ -41,7 +41,7 @@ class BoardBean {
   BoardInfo? board;
   String? title;
   String? content;
-  String? createdAt;
+  DateTime? createdAt;
   int? commentCount;
   int? favoriteCount;
   int? likeCount;
@@ -79,7 +79,7 @@ class BoardBean {
       content = json["content"];
     }
     if (json["createdAt"] is String) {
-      createdAt = json["createdAt"];
+      createdAt = DateTime.parse(json["createdAt"]);
     }
     if (json['user'] != null) {
       user = UserProfile.fromJson(json['user']);

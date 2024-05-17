@@ -6,7 +6,8 @@ class CSearchBar extends StatefulWidget {
   ValueChanged<String>? onChanged;
   bool hasPadding;
 
-  CSearchBar({super.key, this.hasPadding = true, this.onSubmitted,this.onChanged});
+  CSearchBar(
+      {super.key, this.hasPadding = true, this.onSubmitted, this.onChanged});
 
   @override
   State<CSearchBar> createState() => _CSearchBarState();
@@ -27,7 +28,8 @@ class _CSearchBarState extends State<CSearchBar> {
     // }
     return searchContent();
   }
- searchContent(){
+
+  searchContent() {
     return Row(
       children: [
         Expanded(
@@ -49,42 +51,57 @@ class _CSearchBarState extends State<CSearchBar> {
                 ),
                 Expanded(
                     child: TextField(
-                      controller: searchController,
-                      onChanged: (value) {
-                        widget.onChanged?.call(value);
-                        if(mounted){setState(() {
-                          strKey = value;
-                        });}
-                      },
-                      onSubmitted: widget.onSubmitted,
-                      cursorHeight: 14.px,
-                      style: TextStyle(height: 1, fontSize: 14.px,color: Color(0xff333333)),
-                      decoration: InputDecoration(
-                          isDense: true,
-                          counterText: "",
-                          hintText: '搜索内容',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.zero,
-                          hintStyle: TextStyle(
-                              color: const Color(0xFFBBBBBB),
-                              fontSize: 14.px,
-                              height: 1.0)),
-                    )),
+                  controller: searchController,
+                  onChanged: (value) {
+                    widget.onChanged?.call(value);
+                    if (mounted) {
+                      setState(() {
+                        strKey = value;
+                      });
+                    }
+                  },
+                  onSubmitted: widget.onSubmitted,
+                  cursorHeight: 14.px,
+                  style: TextStyle(
+                      height: 1, fontSize: 14.px, color: Color(0xff333333)),
+                  decoration: InputDecoration(
+                      isDense: true,
+                      counterText: "",
+                      hintText: '搜索内容',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: TextStyle(
+                          color: const Color(0xFFBBBBBB),
+                          fontSize: 14.px,
+                          height: 1.0)),
+                )),
+                strKey.isNotEmpty
+                    ? SizedBox(
+                        width: 15.px,
+                      )
+                    : Container(),
+                strKey.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          widget.onChanged?.call('');
+                          searchController.text = '';
+                          if (mounted) {
+                            setState(() {
+                              strKey = '';
+                            });
+                          }
+                        },
+                        child: Image.asset(
+                          'assets/images/clear.png',
+                          width: 20.px,
+                          height: 20.px,
+                        ))
+                    : Container(),
               ],
             ),
           ),
         ),
-        strKey.isNotEmpty?SizedBox(width: 15.px,):Container(),
-        strKey.isNotEmpty?GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              widget.onChanged?.call('');
-              searchController.text = '';
-              if(mounted){setState(() {
-                strKey = '';
-              });}
-            },
-            child: Image.asset('assets/images/clear.png',width: 20.px,height: 20.px,)):Container(),
       ],
     );
   }

@@ -1,7 +1,12 @@
+import 'dart:html';
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/search_bar.dart';
+import '../../utils/storage.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -11,7 +16,19 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
+  List<String> items = [];
+  late String key;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    List<String>? list = StorageUtil().prefs!.getStringList('search');
+    setState(() {
+      items = list ?? [];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +47,64 @@ class _SearchPageState extends State<SearchPage> {
             Get.back();
           },
         ),
-        title: CSearchBar(),
+        title: CSearchBar(
+          onChanged: (value) {
+            setState(() {
+              key = value;
+            });
+          },
+        ),
         actions: [
-          TextButton(onPressed: () => {}, child: Text('搜索'))
+          TextButton(
+              onPressed: () {
+                if (key != null) {
+                  setState(() {
+                    items.insert(0, key);
+                    StorageUtil().prefs!.setStringList('search', items);
+                  });
+
+                  // StorageUtil().prefs!.setString('token', data['token']);
+                }
+              },
+              child: Text('搜索',
+                  style: TextStyle(
+                      color: const Color(0xff3B5078), fontSize: 15.px)))
           // GestureDetector(child: Text('搜索'),)
         ],
       ),
       body: Column(
         children: [
+          SizedBox(
+            height: 8.px,
+          ),
           Row(
-            children: [Text('热门搜索'), Text('清空历史记录')],
+            children: [
+              SizedBox(
+                width: 16.px,
+              ),
+              Text(
+                '搜索历史',
+                style:
+                    TextStyle(color: const Color(0xff333333), fontSize: 15.px),
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    items = [];
+                    StorageUtil().prefs!.setStringList('search', items);
+                  });
+                },
+                child: Image.asset('assets/images/label_del.png',
+                    width: 16.px, height: 16.px),
+              ),
+              SizedBox(
+                width: 16.px,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 8.px,
           ),
           Expanded(
               child: ListView.builder(
@@ -54,21 +119,40 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget listDataItem(int index) {
     return Container(
-      child: Row(children: [
-        Image.asset(
+      height: 36.px,
+      padding: EdgeInsets.symmetric(horizontal: 16.px),
+      child: Row(
+        children: [
+          Image.asset(
             'assets/images/clock.png',
             width: 16.px,
             height: 16.px,
           ),
-          Expanded(child: Text('hello world'),),
-          Image.asset(
-            'assets/images/delete.png',
-            width: 16.px,
-            height: 16.px,
+          SizedBox(
+            width: 4.px,
           ),
-          
-        
-      ],),
+          Expanded(
+            child: Text(
+              items[index],
+              style: TextStyle(color: const Color(0xff666666), fontSize: 15.px),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              setState(() {
+                items.removeAt(index);
+                StorageUtil().prefs!.setStringList('search', items);
+              });
+            
+            },
+            child: Image.asset(
+              'assets/images/delete.png',
+              width: 16.px,
+              height: 16.px,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

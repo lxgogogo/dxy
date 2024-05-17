@@ -227,7 +227,12 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
         children: [
           if (banners.length > 0)
             Container(
-              height: 200.px,
+              margin: EdgeInsets.only(left: 20.px, right: 20.px,top: 10.px),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.px),
+              ),
+              height: 160.px,
               child: Swiper(
                 itemCount: banners.length,
                 itemBuilder: (BuildContext context, int index) {

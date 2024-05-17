@@ -31,6 +31,7 @@ class CommentBean {
   int? relId;
   String? relType;
   List<String>? at;
+  List<Reply>? replies;
   String? comment;
   DateTime? createdAt;
   int? replyCount;
@@ -52,7 +53,8 @@ class CommentBean {
     this.replyCount,
     this.likeCount,
     this.user,
-    this.liked
+    this.liked,
+    this.replies,
   });
 
   CommentBean.fromJson(Map<String, dynamic> json) {
@@ -99,6 +101,9 @@ class CommentBean {
           ? null
           : (json["at"] as List).map((e) => e.toString()).toList();
     }
+    if (json["replies"] is List) {
+      replies = (json["replies"] as List).map((e) => Reply.fromJson(e)).toList();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +120,7 @@ class CommentBean {
     _data["likeCount"] = likeCount;
     _data["user"] = user;
     _data['liked'] = liked;
+    _data['replies'] = replies;
     return _data;
   }
 }
@@ -150,6 +156,35 @@ class User {
     return _data;
   }
 
+}
+
+class Reply{
+  int? id;
+  String? content;
+  DateTime? createdAt;
+  User? user;
+
+  Reply({
+    this.id,
+    this.content,
+    this.createdAt,
+    this.user,
+  });
+
+  Reply.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["content"] is String) {
+      content = json["content"];
+    }
+    if (json["createdAt"] is String) {
+      createdAt = DateTime.parse(json["createdAt"]);
+    }
+    if (json["user"] is Map) {
+      user = User.fromJson(json["user"]);
+    }
+  }
 }
 
 class Content {

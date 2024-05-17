@@ -54,38 +54,42 @@ class _CommentItemState extends State<CommentItem> {
               style: TextStyle(
                   color: const Color(0xff333333), fontSize: 14.px, height: 1.5),
             ),
-            SizedBox(
-              height: 5.px,
-            ),
-            Container(
-                padding: EdgeInsets.only(left: 9.px),
-                decoration: BoxDecoration(
-                    border: Border(
-                        left: BorderSide(
-                            width: 3.px,
-                            color: Colors.black.withOpacity(0.05)))),
-                child: Container(
-                  padding: EdgeInsets.all(10.px),
+            if (widget.commentBean.replies != null &&
+                widget.commentBean.replies!.length > 0)
+              SizedBox(
+                height: 5.px,
+              ),
+            if (widget.commentBean.replies != null &&
+                widget.commentBean.replies!.length > 0)
+              Container(
+                  padding: EdgeInsets.only(left: 9.px),
                   decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.05),
-                      borderRadius: BorderRadius.all(Radius.circular(10.px))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('用户1：说的好',
-                          style: TextStyle(
-                              color: Color(0xff666666),
-                              fontSize: 14.px,
-                              height: 2.0)),
-                      Text('用户2：说的好回复评论说的好回复评论说的好回复评论',
-                          style: TextStyle(
-                              color: Color(0xff666666),
-                              fontSize: 14.px,
-                              height: 2.0))
-                    ],
-                  ),
-                )),
+                      border: Border(
+                          left: BorderSide(
+                              width: 3.px,
+                              color: Colors.black.withOpacity(0.05)))),
+                  child: Container(
+                    padding: EdgeInsets.all(10.px),
+                    decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.05),
+                        borderRadius: BorderRadius.all(Radius.circular(10.px))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ...List.generate(widget.commentBean.replies!.length,
+                            (index) {
+                          Reply reply = widget.commentBean.replies![index];
+                          return Text(
+                              '${reply.user!.nickname}：${reply.content}',
+                              style: TextStyle(
+                                  color: Color(0xff666666),
+                                  fontSize: 14.px,
+                                  height: 2.0));
+                        })
+                      ],
+                    ),
+                  )),
             // Row(children: [
             //   Container(
             //     width: 3.px,
@@ -113,15 +117,14 @@ class _CommentItemState extends State<CommentItem> {
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     if (!Global().hasLogin) {
-                        Get.to(LoginPage());
-                        return;
-                      }
-                      //跳转评论输入页面
-                      Get.to(CommentInputPage(
-                          relType: 'comment',
-                          relId: widget.commentBean.id!));
+                      Get.to(LoginPage());
+                      return;
+                    }
+                    //跳转评论输入页面
+                    Get.to(CommentInputPage(
+                        relType: 'comment', relId: widget.commentBean.id!));
                   },
                   child: Row(
                     children: [

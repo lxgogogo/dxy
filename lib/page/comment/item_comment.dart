@@ -8,6 +8,8 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:intl/intl.dart';
 
+import '../mine/login_helper.dart';
+
 class CommentItem extends StatefulWidget {
   CommentBean commentBean;
   CommentItem({super.key, required this.commentBean});
@@ -27,13 +29,18 @@ class _CommentItemState extends State<CommentItem> {
         SizedBox(
           width: 40.px,
           height: 40.px,
-          child: ClipOval(
-            child: Image.network(
-              widget.commentBean.user!.avatar!,
-              width: 40.px,
-              height: 40.px,
-              // fit: BoxFit.cover,
-            ),
+          child:
+          ClipOval(
+            child: LoginHelper().getUserAvatar(
+                widget.commentBean.user != null
+                    ? widget.commentBean.user!.avatar! :'',
+                40.px, 40.px),
+            // Image.network(
+            //   widget.commentBean.user != null ? widget.commentBean.user!.avatar! :'',
+            //   width: 40.px,
+            //   height: 40.px,
+            //   // fit: BoxFit.cover,
+            // ),
           ),
         ),
         SizedBox(
@@ -45,7 +52,7 @@ class _CommentItemState extends State<CommentItem> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              widget.commentBean.user!.nickname!,
+              widget.commentBean.user!= null ? widget.commentBean.user!.nickname! : '',
               style: TextStyle(color: Color(0xff3B5078), fontSize: 13.px),
             ),
             SizedBox(height: 3.px),
@@ -160,7 +167,7 @@ class _CommentItemState extends State<CommentItem> {
                   child: Row(
                     children: [
                       Image.asset(
-                        widget.commentBean.liked!
+                        widget.commentBean.liked?? false
                             ? 'assets/images/praised.png'
                             : 'assets/images/praise.png',
                         width: 18.px,

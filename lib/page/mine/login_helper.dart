@@ -48,9 +48,7 @@ class LoginHelper {
       UserProfile user = UserProfile.fromJson(data);
       getSuccessCallback(user);
     }, (errorMsg) {
-      //需要重新登录
-      clearGlobalUserInfo();
-      Get.to(LoginPage());
+
     });
   }
 

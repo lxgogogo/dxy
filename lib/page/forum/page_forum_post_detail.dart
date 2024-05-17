@@ -39,15 +39,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
   bool _isPlaying = false;
   late String videoUrl;
 
-  List<String> items = [
-    '评论内容评论内容评论内容评论内容',
-    '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容',
-    '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容',
-    '评论内容评论内容评论内容评论内容',
-    '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容',
-    '评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容'
-  ];
-
   @override
   void initState() {
     super.initState();

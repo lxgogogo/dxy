@@ -3,6 +3,7 @@ import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/app_theme.dart';
@@ -19,9 +20,7 @@ class MineFollowPage extends StatefulWidget {
   _MineFollowPageState createState() => _MineFollowPageState();
 }
 
-
 class _MineFollowPageState extends State<MineFollowPage> {
-
   int pageNum = 1;
   int pageSize = 10;
   bool isFollowPage = true;
@@ -52,7 +51,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _isMounted =true;
+    _isMounted = true;
     isFollowPage = widget.isFollowPage;
     reqListData();
   }
@@ -65,25 +64,24 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   reqListData() {
     if (isFollowPage) {
-      NetRequest()
-          .followedList(pageNum.toString(), pageSize.toString(), '', (data) {
-                UserDataList followOrFan = UserDataList.fromJson(data);
-            if (_isMounted) {
-              setState(() {
-                if (pageNum == 1) {
-                  followOrFanUserList = followOrFan.list!;
-                } else {
-                  followOrFanUserList.addAll(followOrFan.list!);
-                }
-              });
+      NetRequest().followedList(pageNum.toString(), pageSize.toString(), '',
+          (data) {
+        UserDataList followOrFan = UserDataList.fromJson(data);
+        if (_isMounted) {
+          setState(() {
+            if (pageNum == 1) {
+              followOrFanUserList = followOrFan.list!;
+            } else {
+              followOrFanUserList.addAll(followOrFan.list!);
             }
-            _refreshController.loadComplete();
-            _refreshController.refreshCompleted();
+          });
+        }
+        _refreshController.loadComplete();
+        _refreshController.refreshCompleted();
       });
     } else {
-      NetRequest()
-          .fansList(pageNum.toString(), pageSize.toString(), '', (data) {
-
+      NetRequest().fansList(pageNum.toString(), pageSize.toString(), '',
+          (data) {
         _refreshController.loadComplete();
         _refreshController.refreshCompleted();
       });
@@ -125,8 +123,12 @@ class _MineFollowPageState extends State<MineFollowPage> {
   }
 
   Widget contentView() {
-    return Column(
-      children: [Expanded(child: listView())],
+    return Center(
+      child:
+        Expanded(
+            child: followOrFanUserList.isNotEmpty
+                ? listView()
+                : const NoDataView())
     );
   }
 
@@ -159,28 +161,32 @@ class _MineFollowPageState extends State<MineFollowPage> {
                 child: ClipOval(
               child: LoginHelper().getUserAvatar(
                   followOrFanUserList[index].avatar!.isNotEmpty
-                  ? followOrFanUserList[index].avatar! : '',45.px, 45.px),
+                      ? followOrFanUserList[index].avatar!
+                      : '',
+                  45.px,
+                  45.px),
             ))),
         SizedBox(
           width: 10,
         ),
         Text(
           followOrFanUserList[index].nickname!.isNotEmpty
-              ? followOrFanUserList[index].nickname! : '',
+              ? followOrFanUserList[index].nickname!
+              : '',
           style: AppTheme.text3B5078Size15,
         ),
         Expanded(child: Text('')),
-        FollowBtn(isFollowed: followOrFanUserList[index].followed!, onTap:  () {
-
-          NetRequest().followerToggle(
-              followOrFanUserList[index].id!,
-              !followOrFanUserList[index].followed!, (data) {
-
-              setState(() {
-                followOrFanUserList[index].followed = !followOrFanUserList[index].followed!;
+        FollowBtn(
+            isFollowed: followOrFanUserList[index].followed!,
+            onTap: () {
+              NetRequest().followerToggle(followOrFanUserList[index].id!,
+                  !followOrFanUserList[index].followed!, (data) {
+                setState(() {
+                  followOrFanUserList[index].followed =
+                      !followOrFanUserList[index].followed!;
+                });
               });
-          });
-        })
+            })
       ]),
     );
   }

@@ -9,6 +9,7 @@ import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/constants.dart';
@@ -102,7 +103,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKee
       SizedBox(
         height: 10.px,
       ),
-      Expanded(child: listView())
+      Expanded(child: boardPostList.isNotEmpty ? listView() : NoDataView())
     ]);
   }
 

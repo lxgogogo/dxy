@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,19 +8,20 @@ import '../../model/thread_list.dart';
 import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/PostListView.dart';
+import '../../widget/no_data.dart';
 import '../comment/item_comment.dart';
 
 class MineChildPage extends StatefulWidget {
   int tabIndex;
 
-  MineChildPage({Key? key,required this.tabIndex}) : super(key: key);
+  MineChildPage({Key? key, required this.tabIndex}) : super(key: key);
 
   @override
   _MineChildPageState createState() => _MineChildPageState();
 }
 
-class _MineChildPageState extends State<MineChildPage> with AutomaticKeepAliveClientMixin{
-
+class _MineChildPageState extends State<MineChildPage>
+    with AutomaticKeepAliveClientMixin {
   int tabIndex = 0;
   int pageNum = 1;
   int pageSize = 10;
@@ -34,7 +33,7 @@ class _MineChildPageState extends State<MineChildPage> with AutomaticKeepAliveCl
   List<CommentBean> commentDataList = [];
 
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     setState(() {
@@ -59,24 +58,25 @@ class _MineChildPageState extends State<MineChildPage> with AutomaticKeepAliveCl
     reqListData();
     print('==========================tabIndex:' + tabIndex.toString());
   }
+
   reqListData() {
     if (tabIndex == 0) {
       //帖子
       var ownerId = StorageUtil().prefs!.getString('ownerId');
       NetRequest().getThreadListByBoard(
           pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '',
-              (data) {
-            BoardList boardList = BoardList.fromJson(data);
-            if (_isMounted) {
-              setState(() {
-                if (pageNum == 1) {
-                  boardPostList = boardList.list!;
-                } else {
-                  boardPostList.addAll(boardList.list!);
-                }
-              });
+          (data) {
+        BoardList boardList = BoardList.fromJson(data);
+        if (_isMounted) {
+          setState(() {
+            if (pageNum == 1) {
+              boardPostList = boardList.list!;
+            } else {
+              boardPostList.addAll(boardList.list!);
             }
           });
+        }
+      });
       _refreshController.refreshCompleted();
       _refreshController.loadComplete();
     } else if (tabIndex == 1) {
@@ -120,7 +120,11 @@ class _MineChildPageState extends State<MineChildPage> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
-    return listView();
+    if (tabIndex == 2) {
+      return commentDataList.isNotEmpty ? listView() : const NoDataView();
+    } else {
+      return boardPostList.isNotEmpty ? listView() : const NoDataView();
+    }
   }
 
   ///列表数据
@@ -135,16 +139,15 @@ class _MineChildPageState extends State<MineChildPage> with AutomaticKeepAliveCl
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
         itemBuilder: (c, i) => tabIndex == 2
-            ? CommentItem(commentBean: commentDataList[i] ??  CommentBean())
+            ? CommentItem(commentBean: commentDataList[i] ?? CommentBean())
             : PostListItemView(
-          itemIndex: i,
-          isForumList: false,
-          boardBean: boardPostList[i] ?? BoardBean(),
-        ),
+                itemIndex: i,
+                isForumList: false,
+                boardBean: boardPostList[i] ?? BoardBean(),
+              ),
         // itemExtent: 160.0,
-        itemCount: tabIndex == 2
-            ? commentDataList.length
-            : boardPostList.length,
+        itemCount:
+            tabIndex == 2 ? commentDataList.length : boardPostList.length,
       ),
     );
   }

@@ -1,12 +1,14 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/api.dart';
 import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/response.dart' as HttpUtilsResonse;
 import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../model/upload_file.dart';
+import '../page/mine/page_login.dart';
 import 'log_utils.dart';
 
 typedef SuccessCallback = void Function(dynamic data);
@@ -227,7 +229,13 @@ class NetRequest {
       LogUtils.printAll("followedList===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
@@ -271,7 +279,13 @@ class NetRequest {
       LogUtils.printAll("followerToggle===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
@@ -355,8 +369,13 @@ class NetRequest {
       onSuccess(response['data']);
       ToastUtils.showToast('发布成功');
     } else {
-      LogUtils.printAll("threadCreate===>$response");
-      ToastUtils.showToast(resp.message!);
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
@@ -456,7 +475,13 @@ class NetRequest {
       LogUtils.printAll("getUserInfo success===>");
       onSuccess(response['data']);
     } else {
-      onFailure(resp.message!);
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
@@ -556,7 +581,13 @@ class NetRequest {
       LogUtils.printAll("commentCreate===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
@@ -573,7 +604,13 @@ class NetRequest {
       LogUtils.printAll("favoriteDelete===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
@@ -595,7 +632,13 @@ class NetRequest {
       LogUtils.printAll("favoriteToggle===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+       if (_isNeedLoginResponse(resp)) {
+         //需要重新登录
+         LoginHelper().clearGlobalUserInfo();
+         Get.to(LoginPage());
+       } else {
+         ToastUtils.showToast(resp.message!);
+       }
     }
   }
 
@@ -639,6 +682,13 @@ class NetRequest {
       } else {
         ToastUtils.showToast(resp.message!);
       }
+    }
+
+   bool _isNeedLoginResponse(HttpUtilsResonse.Response resp) {
+      if (resp.code == 401 && resp.message! == '需要登录') {
+        return true;
+      }
+      return false;
     }
 
 }

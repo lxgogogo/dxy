@@ -7,7 +7,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/forum/media_helper.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -57,6 +56,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   bool isShowVideoView = false;
 
   bool _isPlaying = false;
+  String? removeAitContentInputText; // 输入框文本 去掉@用户的内容，剩余的正常输入的文本
 
   @override
   void initState() {
@@ -177,7 +177,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                           value: item,
                           child: Text(
                             item,
-                            style: AppTheme.text999999Size14,
+                            style: AppTheme.text666666Size14,
                           ),
                         ))
                     .toList(),
@@ -591,6 +591,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     Iterable<Match> matches = atSignRegExp.allMatches(content); // 获取所有匹配项
     List<String> containsAitStrList = []; // 包含@符号的文本
     List<String> splitNameList = []; // 分割@符号的后存放用户名称
+
+
     for (Match match in matches) {
       print('Found=====================: ${match.group(0)}'); // 输出匹配到
       var matchStr = match.group(0);
@@ -598,10 +600,15 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     }
     if (containsAitStrList.isNotEmpty && containsAitStrList.length > 0) {
       for (String aitStr in containsAitStrList) {
+        content =  content.replaceAll(aitStr, "");
         List<String> aitStrList = aitStr.split('@');
         splitNameList.add(aitStrList[1]);
       }
     }
+
+    print('final input text:${content}');
+    removeAitContentInputText = content; //最终的帖子内容文本
+
     //循环名称list获取所有@用户信息
     if (splitNameList.isNotEmpty && splitNameList.length > 0) {
       for (String userName in splitNameList) {
@@ -616,8 +623,10 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   ///先上传文件，文件上传完，提交发布帖子
   void publishPosts() {
+    _aitUserData();
+
     String title = controllerTitle.text;
-    String content = _controller.text;
+    String content = removeAitContentInputText!;
 
     if (imageUrlList.isNotEmpty) {
       imageUrlList.clear();
@@ -637,8 +646,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       ToastUtils.showToast('内容不能为空');
       return;
     }
-
-    _aitUserData();
 
     imageData.forEach((element) async {
       NetRequest().uploadFile(element, (data) {

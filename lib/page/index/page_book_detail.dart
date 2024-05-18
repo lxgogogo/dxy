@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/model/article_detail.dart';
+import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
+import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:intl/intl.dart';
 
 class BookDetailPage extends StatefulWidget {
   int id;
@@ -17,6 +20,8 @@ class BookDetailPage extends StatefulWidget {
 
 class _BookDetailPageState extends State<BookDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
+  List<CommentBean> comments = [];
+  bool loaded = false;
 
   @override
   void initState() {
@@ -27,6 +32,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
       setState(() {
         articleDetailBean = ArticleDetailBean.fromJson(data);
         print('book详情数据：$data');
+        loaded = true;
       });
     });
   }
@@ -72,7 +78,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(5.px), // 设置圆角半径
                       child: Image.network(
-                        'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                        articleDetailBean.cover??'',
                         fit: BoxFit.cover,
                         width: 120.px,
                         height: 165.px,
@@ -97,7 +103,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           height: 10.px,
                         ),
                         Text(
-                          '作者：迪米勒,斯克兰斯基\n出版社：Two Plus Two Publishing LLC\n发行时间：2006',
+                          '作者：${articleDetailBean.author??''}\n出版社：${articleDetailBean.book?.publisher??''}\n发行时间：${DateFormat('yyyy-MM-dd')
+                            .format(articleDetailBean.book?.publishDate??DateTime.now())}',
                           style: TextStyle(
                               color: Color(0xff3B5078),
                               fontSize: 12.px,
@@ -185,6 +192,10 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       style: TextStyle(color: Color(0xff3B5078),fontSize: 17.px,fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 18.px,),
+                    if (loaded && comments.length == 0)
+                          Center(
+                            child: NoDataView(),
+                          ),
                     // CommentItem(),
                     // CommentItem(),
                   ],

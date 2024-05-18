@@ -1,5 +1,7 @@
 class ArticleDetailBean {
   ArticleCategoryBean? category;
+  ArticleContent? article;
+  String? author;
   int? categoryId;
   String? cover;
   int? commentCount;
@@ -10,6 +12,7 @@ class ArticleDetailBean {
   int? likeCount;
   int? listId;
   String? title;
+  String? description;
   String? type;
   DateTime? updatedAt;
   VideoBean? video;
@@ -17,6 +20,8 @@ class ArticleDetailBean {
 
   ArticleDetailBean(
       {this.category,
+      this.article,
+      this.author,
       this.categoryId,
       this.cover,
       this.commentCount,
@@ -27,6 +32,7 @@ class ArticleDetailBean {
       this.likeCount,
       this.listId,
       this.title,
+      this.description,
       this.type,
       this.updatedAt,
       this.video,
@@ -35,6 +41,12 @@ class ArticleDetailBean {
   ArticleDetailBean.fromJson(Map<String, dynamic> json) {
     if (json["category"] is Map) {
       category = ArticleCategoryBean.fromJson(json["category"]);
+    }
+    if (json["author"] is String) {
+      author = json["author"];
+    }
+    if (json["article"] is Map) {
+      article = ArticleContent.fromJson(json["article"]);
     }
     if (json["category_id"] is int) {
       categoryId = json["categoryId"];
@@ -66,6 +78,9 @@ class ArticleDetailBean {
     if (json["title"] is String) {
       title = json["title"];
     }
+    if (json["description"] is String) {
+      description = json["description"];
+    }
     if (json["type"] is String) {
       type = json["type"];
     }
@@ -79,6 +94,24 @@ class ArticleDetailBean {
       book = BookBean.fromJson(json["book"]);
     }
   }
+}
+
+class ArticleContent{
+  int? id;
+  String? content;
+
+  ArticleContent({this.id, this.content});
+
+  ArticleContent.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["content"] is String) {
+      content = json["content"];
+    }
+  }
+
+
 }
 
 class ArticleCategoryBean {
@@ -104,7 +137,7 @@ class ArticleCategoryBean {
 class BookBean {
   int? id;
   String? downloadUrl;
-  String? publishDate;
+  DateTime? publishDate;
   String? publisher;
 
   BookBean({this.id, this.downloadUrl, this.publishDate, this.publisher});
@@ -117,7 +150,7 @@ class BookBean {
       downloadUrl = json["downloadUrl"];
     }
     if (json["publishDate"] is String) {
-      publishDate = json["publishDate"];
+      publishDate = DateTime.parse(json["publishDate"]);
     }
     if (json["publisher"] is String) {
       publisher = json["publisher"];

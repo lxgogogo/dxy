@@ -37,10 +37,11 @@ class _BookItemState extends State<BookItem> {
             Expanded(
                 child: Container(
               padding: EdgeInsets.all(10.px),
+              alignment: Alignment.centerLeft,
               child: Text(
                 widget.article.title ?? '',
                 maxLines: 2,
-                style: TextStyle(color: Color(0xff3B5078)),
+                style: TextStyle(color: Color(0xff3B5078),fontSize: 14.px),
               ),
             ))
           ],

@@ -29,6 +29,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   int pageNum = 1;
+  int parentId = 1;
 
   @override
   void initState() {
@@ -67,7 +68,10 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       'pageNum': pageNum,
       'pageSize': 10,
       'filters': {
-        'categoryAlias': widget.type //'article'
+        'categoryAlias': widget.type == 'course' && parentId != 1
+            ? null
+            : widget.type, //'article'
+        'categoryId': widget.type == 'course' ? parentId : null,
       }
     }, (data) {
       List<ArticleBean> dataList = List<ArticleBean>.from(
@@ -124,6 +128,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                               onTap: () {
                                 setState(() {
                                   categorySel = index;
+                                  parentId = categorys[index].id ?? 0;
                                 });
                                 reqListData();
                               })
@@ -135,6 +140,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                               onTap: () {
                                 setState(() {
                                   pageNum = 1;
+                                  parentId = categorys[index].id ?? 0;
                                 });
                                 reqListData();
                               }));
@@ -227,7 +233,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
         children: [
           if (banners.length > 0)
             Container(
-              margin: EdgeInsets.only(left: 20.px, right: 20.px,top: 10.px),
+              margin: EdgeInsets.only(left: 20.px, right: 20.px, top: 10.px),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.px),

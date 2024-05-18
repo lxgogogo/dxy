@@ -5,6 +5,7 @@ class ArticleBean{
   String? cover;
   DateTime? createdAt;
   String? description;
+  int? duration;
   int? favoriteCount;
   int? id;
   int? likeCount;
@@ -23,6 +24,9 @@ class ArticleBean{
     }
     if (json["commentCount"] is num) {
       commentCount = json["commentCount"];
+    }
+    if (json['duration'] is num) {
+      duration = json['duration'];
     }
     if (json["cover"] is String) {
       cover = json["cover"];
@@ -68,6 +72,7 @@ class ArticleBean{
     _data["title"] = title;
     _data["type"] = type;
     _data["updated_at"] = updatedAt;
+    _data['duration'] = duration;
 
     return _data;
   }

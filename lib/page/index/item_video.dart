@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
+import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -15,6 +16,16 @@ class VideoItem extends StatefulWidget {
 }
 
 class _VideoItemState extends State<VideoItem> {
+
+
+  String formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$twoDigitMinutes:$twoDigitSeconds';
+  }
+
+
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
@@ -24,9 +35,14 @@ class _VideoItemState extends State<VideoItem> {
           Get.to(VideoListPage(id: widget.article.id ?? 0));
           return;
         }
-        Get.to(VideoDetailPage(
-          id: widget.article.id ?? 0,
-        ));
+        if (widget.article.type == 'video') {
+          Get.to(VideoDetailPage(id: widget.article.id ?? 0));
+          return;
+        }
+        Get.to(ArticleDetailPage(id: widget.article.id ?? 0));
+        // Get.to(VideoDetailPage(
+        //   id: widget.article.id ?? 0,
+        // ));
       },
       child: Container(
           padding: EdgeInsets.all(12.px),
@@ -120,43 +136,46 @@ class _VideoItemState extends State<VideoItem> {
                       ),
                     ),
                     // Spacer(),
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/time.png',
-                          width: 20.px,
-                          height: 20.px,
-                        ),
-                        SizedBox(
-                          width: 5.px,
-                        ),
-                        Text(
-                          '13:00',
-                          style: TextStyle(
-                            color: const Color(0xff666666),
-                            fontSize: 14.px,
+                    if (widget.article.type != 'videoList')
+                      Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/time.png',
+                            width: 20.px,
+                            height: 20.px,
                           ),
-                        ),
-                        SizedBox(
-                          width: 30.px,
-                        ),
-                        Image.asset(
-                          'assets/images/comment.png',
-                          width: 20.px,
-                          height: 20.px,
-                        ),
-                        SizedBox(
-                          width: 5.px,
-                        ),
-                        Text(
-                          widget.article.commentCount.toString(),
-                          style: TextStyle(
-                            color: const Color(0xff666666),
-                            fontSize: 14.px,
+                          SizedBox(
+                            width: 5.px,
                           ),
-                        )
-                      ],
-                    )
+                          Text(
+                            widget.article.duration != null
+                                ? formatDuration(Duration(seconds: widget.article.duration ?? 0))
+                                : '',
+                            style: TextStyle(
+                              color: const Color(0xff666666),
+                              fontSize: 14.px,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30.px,
+                          ),
+                          Image.asset(
+                            'assets/images/comment.png',
+                            width: 20.px,
+                            height: 20.px,
+                          ),
+                          SizedBox(
+                            width: 5.px,
+                          ),
+                          Text(
+                            widget.article.commentCount.toString(),
+                            style: TextStyle(
+                              color: const Color(0xff666666),
+                              fontSize: 14.px,
+                            ),
+                          )
+                        ],
+                      )
                   ],
                 ),
               ))

@@ -6,7 +6,6 @@ import '../../model/user.dart';
 import '../../model/userdata_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
-import '../../view/forum/ToastUtils.dart';
 import '../../widget/follow_btn.dart';
 import '../mine/login_helper.dart';
 
@@ -212,7 +211,15 @@ class _AitUserPageState extends State<AitUserPage> {
             ),
             Expanded(child: Text('')),
             FollowBtn(
-                isFollowed: followOrFanUserList[index].followed!, onTap: () {})
+                isFollowed: followOrFanUserList[index].followed!, onTap: () {
+              NetRequest().followerToggle(followOrFanUserList[index].id!,
+                  !followOrFanUserList[index].followed!, (data) {
+                    setState(() {
+                      followOrFanUserList[index].followed =
+                      !followOrFanUserList[index].followed!;
+                    });
+                  });
+            })
           ]),
         ));
   }

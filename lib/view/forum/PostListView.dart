@@ -161,7 +161,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                   decoration: const BoxDecoration(
                     color: Colors.transparent,
                     image: DecorationImage(
-                      image: AssetImage('assets/images/play_btn.png'),
+                      image: AssetImage('assets/images/play_btn.png',),
                       fit: BoxFit.cover,
                     ),
                   ),

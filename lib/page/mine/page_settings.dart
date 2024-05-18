@@ -8,6 +8,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -239,6 +241,9 @@ class _SettingsPageState extends State<SettingsPage> {
       //回到首页
       Navigator.of(context).pop();
       //通知首页tab回到主页
+      EventBusManager.eventBus
+          .fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
+
     });
   }
 }

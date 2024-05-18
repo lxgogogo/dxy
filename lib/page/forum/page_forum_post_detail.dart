@@ -285,8 +285,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           imageUrlList[0],
                         ),
                         IconButton(
-                          icon: Icon(Icons.play_arrow),
-                          iconSize: 64,
+                          icon: Image.asset('assets/images/play_btn.png',
+                            width: 35.px,
+                            height: 35.px,),
                           onPressed: () {
                             _pickAndPlayVideo(videoUrl);
                           },

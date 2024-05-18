@@ -275,6 +275,7 @@ class NetRequest {
         await HttpUtils.post(Api.followerToggle, params: params);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
+    LogUtils.printAll("followerToggle params===>$params");
     if (resp.code == 200) {
       LogUtils.printAll("followerToggle===>$response");
       onSuccess(response['data']);
@@ -553,7 +554,7 @@ class NetRequest {
     HttpUtilsResonse.Response resp =
     HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
-      LogUtils.printAll("appVersion===>$response");
+      LogUtils.printAll("userSearch===>$response");
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message!);

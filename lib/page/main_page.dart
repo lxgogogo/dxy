@@ -6,6 +6,8 @@ import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/size_fit.dart';
 
+import '../utils/eventbus/EventBusAction.dart';
+import '../utils/eventbus/EventBusManager.dart';
 import 'forum/page_forum_tab.dart';
 import 'mine/page_mine.dart';
 
@@ -24,6 +26,23 @@ class _MainScreenState extends State<MainScreen> {
     MessagePage(),
     MinePage()
   ];
+
+  var actionEventBus;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //接受退出登录之后首页tab通知切换到0位置
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.noticeMainTabSwitchHome.eventBusTypeName) {
+        setState(() {
+          _currentIndex = 0;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

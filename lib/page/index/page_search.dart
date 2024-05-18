@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/page/index/page_search_result.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/search_bar.dart';
@@ -57,6 +58,7 @@ class _SearchPageState extends State<SearchPage> {
                   setState(() {
                     items.insert(0, key);
                     StorageUtil().prefs!.setStringList('search', items);
+                    Get.to(SearchResultPage(keyword: key,));
                   });
 
                   // StorageUtil().prefs!.setString('token', data['token']);
@@ -128,18 +130,23 @@ class _SearchPageState extends State<SearchPage> {
             width: 4.px,
           ),
           Expanded(
-            child: Text(
-              items[index],
-              style: TextStyle(color: const Color(0xff666666), fontSize: 15.px),
+            child: GestureDetector(
+              onTap: (){
+                Get.to(SearchResultPage(keyword: items[index],));
+              },
+              child: Text(
+                items[index],
+                style:
+                    TextStyle(color: const Color(0xff666666), fontSize: 15.px),
+              ),
             ),
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               setState(() {
                 items.removeAt(index);
                 StorageUtil().prefs!.setStringList('search', items);
               });
-            
             },
             child: Image.asset(
               'assets/images/delete.png',

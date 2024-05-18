@@ -1,11 +1,16 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
+import 'package:holdem/page/index/page_article_detail.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
@@ -222,6 +227,25 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
     );
   }
 
+  jumpPage(BannerBean bean){
+    var id = int.parse(bean.jumpValue!);
+    if (bean.jumpType == 'book'){
+      Get.to(BookDetailPage(id: id));
+    }
+    else if (bean.jumpType == 'article'){
+      Get.to(ArticleDetailPage(id: id));
+    }
+    else if (bean.jumpType == 'videoList'){
+      Get.to(VideoListPage(id: id));
+    }
+    else if (bean.jumpType == 'video'){
+      Get.to(VideoDetailPage(id: id));
+    }
+    else if (bean.jumpType == 'thread'){
+
+    }
+  }
+
   contentItem(int index) {
     if (widget.type == 'book') {
       return BookItem(
@@ -242,9 +266,14 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
               child: Swiper(
                 itemCount: banners.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Image.network(
-                    banners[index].img ?? '',
-                    fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: (){
+                      jumpPage(banners[index]);
+                    },
+                    child: Image.network(
+                      banners[index].img ?? '',
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
                 pagination: SwiperPagination(),

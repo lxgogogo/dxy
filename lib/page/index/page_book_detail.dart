@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:html' as html;
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
@@ -12,7 +16,7 @@ import 'package:intl/intl.dart';
 
 class BookDetailPage extends StatefulWidget {
   int id;
-  BookDetailPage({super.key,required this.id});
+  BookDetailPage({super.key, required this.id});
 
   @override
   State<BookDetailPage> createState() => _BookDetailPageState();
@@ -36,7 +40,38 @@ class _BookDetailPageState extends State<BookDetailPage> {
       });
     });
   }
-    
+
+  // void downloadFile(String url, String fileName) async {
+  //   try {
+  //     var dio = Dio();
+  //     var response = await dio.get(url,
+  //         options: Options(responseType: ResponseType.bytes));
+  //     final content = response.data;
+  //     final link = AnchorElement(
+  //         href: 'data:application/octet-stream;charset=utf-16le;base64,' +
+  //             base64.encode(content))
+  //       ..setAttribute('download', fileName)
+  //       ..click();
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  void downloadRemoteFile(String url, String fileName) {
+    html.AnchorElement anchor = html.AnchorElement(
+      href: url,
+    );
+    anchor.setAttribute('download', fileName);
+    anchor.click();
+    anchor.remove();
+  }
+
+  String getFileNameFromUrl(String url) {
+    Uri uri = Uri.parse(url);
+    List<String> pathSegments = uri.pathSegments;
+    return pathSegments.last;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
@@ -59,8 +94,14 @@ class _BookDetailPageState extends State<BookDetailPage> {
               fit: BoxFit.cover,
             ),
           ),
-          Positioned(bottom: 0,left: 0,right: 0,height: 50,
-            child: Container(color: Colors.white,),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 50,
+            child: Container(
+              color: Colors.white,
+            ),
           ),
           SafeArea(
               child: Column(
@@ -78,7 +119,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                   ClipRRect(
                       borderRadius: BorderRadius.circular(5.px), // 设置圆角半径
                       child: Image.network(
-                        articleDetailBean.cover??'',
+                        articleDetailBean.cover ?? '',
                         fit: BoxFit.cover,
                         width: 120.px,
                         height: 165.px,
@@ -92,7 +133,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          articleDetailBean.title??'',
+                          articleDetailBean.title ?? '',
                           maxLines: 2,
                           style: TextStyle(
                               color: Color(0xff3B5078),
@@ -103,8 +144,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                           height: 10.px,
                         ),
                         Text(
-                          '作者：${articleDetailBean.author??''}\n出版社：${articleDetailBean.book?.publisher??''}\n发行时间：${DateFormat('yyyy-MM-dd')
-                            .format(articleDetailBean.book?.publishDate??DateTime.now())}',
+                          '作者：${articleDetailBean.author ?? ''}\n出版社：${articleDetailBean.book?.publisher ?? ''}\n发行时间：${DateFormat('yyyy-MM-dd').format(articleDetailBean.book?.publishDate ?? DateTime.now())}',
                           style: TextStyle(
                               color: Color(0xff3B5078),
                               fontSize: 12.px,
@@ -118,24 +158,29 @@ class _BookDetailPageState extends State<BookDetailPage> {
                         Row(
                           children: [
                             HoldemHighlightBtn(
-                              onTap: (){
-                                print('点击了下载资源');
-                              },
-                              child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/download.png',
-                                        width: 20.px,
-                                        height: 20.px,
-                                      ),
-                                      const Text(
-                                        '下载资源',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  )),
+                                onTap: () {
+                                  print('点击了下载资源');
+                                  String fileName = getFileNameFromUrl(
+                                      articleDetailBean.book!.downloadUrl!);
+                                  downloadRemoteFile(
+                                      articleDetailBean.book!.downloadUrl!,
+                                      fileName);
+                                },
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/download.png',
+                                      width: 20.px,
+                                      height: 20.px,
+                                    ),
+                                    const Text(
+                                      '下载资源',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
                           ],
                         )
                       ],
@@ -189,13 +234,18 @@ class _BookDetailPageState extends State<BookDetailPage> {
                   children: [
                     Text(
                       '评论',
-                      style: TextStyle(color: Color(0xff3B5078),fontSize: 17.px,fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: Color(0xff3B5078),
+                          fontSize: 17.px,
+                          fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 18.px,),
+                    SizedBox(
+                      height: 18.px,
+                    ),
                     if (loaded && comments.length == 0)
-                          Center(
-                            child: NoDataView(),
-                          ),
+                      Center(
+                        child: NoDataView(),
+                      ),
                     // CommentItem(),
                     // CommentItem(),
                   ],
@@ -205,7 +255,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
           ))
         ],
       ),
-      bottomSheet: PostDetailBottomView(viewParams: PostBottomViewParams(
+      bottomSheet: PostDetailBottomView(
+          viewParams: PostBottomViewParams(
         postId: widget.id,
         relId: widget.id,
         relType: 'content',

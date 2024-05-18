@@ -167,17 +167,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                 isExpanded: true,
                 hint: Text(
                   '选择板块',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).hintColor,
-                  ),
+                  style: AppTheme.text666666Size15,
                 ),
                 items: items
                     .map((String item) => DropdownMenuItem<String>(
                           value: item,
                           child: Text(
                             item,
-                            style: AppTheme.text666666Size14,
+                            style: AppTheme.text333333Size15,
                           ),
                         ))
                     .toList(),

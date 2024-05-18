@@ -27,7 +27,6 @@ class PostDetailPage extends StatefulWidget {
 
 class _PostDetailPageState extends State<PostDetailPage> {
   late int currentPostId;
-  // bool isFollowed = false;
   bool _isMounted = false;
   BoardBean? boardBean;
   var actionEventBus;
@@ -38,6 +37,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   late Future<void> _initializeVideoPlayerFuture;
   bool _isPlaying = false;
   late String videoUrl;
+  late PostBottomViewParams postBottomViewParams;
+  bool isLoadOk = false;
 
   @override
   void initState() {
@@ -81,6 +82,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
               }
             }
           }
+
+          postBottomViewParams =  PostBottomViewParams(
+            postId: currentPostId,
+            relId: currentPostId,
+            relType: NetRequest.COMMENT_TYPE_THREAD,
+            favoriteState: boardBean?.favorited!,
+            title: boardBean?.title!,
+            content: boardBean?.content!,
+            files: boardBean?.files!,
+          );
+
+          isLoadOk = true;
         });
       }
     });
@@ -148,18 +161,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ],
         ),
         body: SafeArea(child: contentView()),
-        bottomSheet: PostDetailBottomView(
-            viewParams: PostBottomViewParams(
-          postId: currentPostId,
-          relId: currentPostId,
-          relType: NetRequest.COMMENT_TYPE_THREAD,
-          favoriteState: boardBean?.favorited!,
-          title: boardBean?.title!,
-          content: boardBean?.content!,
-          files: boardBean?.files!,
-        )),
+        bottomSheet: isLoadOk ? PostDetailBottomView(
+            viewParams: postBottomViewParams) : Container(),
         backgroundColor: Colors.white);
   }
+
 
   Widget contentView() {
     return ListView(

@@ -1,12 +1,8 @@
-import 'dart:html';
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/search_bar.dart';
-import '../../utils/storage.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});

@@ -39,7 +39,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
     super.initState();
     _isMounted = true;
     viewParams = widget.viewParams;
-    _isFavorite = viewParams.favoriteState ?? false;
+    _isFavorite = viewParams.favoriteState != null ? viewParams.favoriteState! : false;
   }
 
   @override
@@ -252,7 +252,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   void _favoriteToggle() {
     NetRequest().favoriteToggle(
-        viewParams.relType!, viewParams.relId!, _isFavorite, (data) {
+        viewParams.relType!, viewParams.relId!, !_isFavorite, (data) {
       if (_isMounted) {
         ToastUtils.showToast(_isFavorite ? '取消成功' : '收藏成功');
         setState(() {

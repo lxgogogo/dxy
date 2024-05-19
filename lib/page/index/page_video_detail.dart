@@ -3,11 +3,14 @@ import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/eventbus/EventBusAction.dart';
+import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:video_player/video_player.dart';
 
 // ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
@@ -20,25 +23,50 @@ class VideoDetailPage extends StatefulWidget {
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
+  late VideoPlayerController _playController;
   List<CommentBean> comments = [];
   bool loaded = false;
+  var actionEventBus;
+  int pageNum = 1;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    requestDetail();
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
+        requestDetail();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _playController.dispose();
+  }
+
+  requestDetail() {
     NetRequest().articleDetail({'id': widget.id}, (data) {
       if (mounted) {
         setState(() {
           articleDetailBean = ArticleDetailBean.fromJson(data);
           print('视频详情数据：$data');
+          _playController = VideoPlayerController.networkUrl(
+              Uri.parse(articleDetailBean.video!.sourceUrl!))
+            ..initialize().then((_) {
+              setState(() {});
+            });
         });
       }
     });
 
     NetRequest().commentList({
-      'pageNum': 1,
+      'pageNum': pageNum,
       'pageSize': 10,
       'filters': {'relType': 'content', 'relId': widget.id}
     }, (data) {
@@ -53,6 +81,13 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     });
   }
 
+  Future<void> play() async {
+    _playController = VideoPlayerController.networkUrl(
+        Uri.parse(articleDetailBean.video!.sourceUrl!));
+    await _playController.initialize();
+    _playController.play();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
@@ -62,169 +97,135 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
         title: Text('视频详情'),
       ),
       // ignore: unnecessary_null_comparison
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              width: 375.px,
-              height: 15.px,
+      body: detail(),
+      bottomSheet: loaded
+          ? PostDetailBottomView(
+              viewParams: PostBottomViewParams(
+              postId: widget.id,
+              relId: widget.id,
+              relType: 'content',
+              favoriteState: articleDetailBean.favorited ?? false,
+              title: '',
+              content: '',
+              files: [],
+            ))
+          : Container(),
+    );
+  }
+
+  detail() {
+    if (!loaded) return Container();
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            width: 375.px,
+            height: 15.px,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.px),
+            child: Column(
+              children: [
+                Text(articleDetailBean.title ?? '',
+                    style: TextStyle(
+                        color: Color(0xff3B5078),
+                        fontSize: 22.px,
+                        fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 15.px,
+                ),
+                Text(articleDetailBean.description ?? '',
+                    style: TextStyle(
+                        color: Color(0xff3B5078),
+                        fontSize: 16.px,
+                        fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 15.px,
+                ),
+              ],
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.px),
-              child: Column(
-                children: [
-                  Text(articleDetailBean.title ?? '',
-                      style: TextStyle(
-                          color: Color(0xff3B5078),
-                          fontSize: 22.px,
-                          fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    height: 15.px,
-                  ),
-                  Text(articleDetailBean.description ?? '',
-                      style: TextStyle(
-                          color: Color(0xff3B5078),
-                          fontSize: 16.px,
-                          fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    height: 15.px,
-                  ),
-                  /*
-                  Row(
-                    children: [
-                      ClipOval(
-                        child: Image.network(
-                          articleDetailBean.cover ??
-                              'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                          // 'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                          width: 40.px,
-                          height: 40.px,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 12.px,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'data',
-                            style: TextStyle(
-                                color: Color(0xff3B5078), fontSize: 13.px),
-                          ),
-                          Text(
-                            '发布于2019-2-26 20:30',
-                            style: TextStyle(
-                                color: Color(0xff999999), fontSize: 11.px),
-                          )
-                        ],
-                      ),
-                      Spacer(),
-                      HoldemHighlightBtn(
-                          onTap: () {
-                            print('点击了下载资源1');
-                          },
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/add.png',
-                                width: 12.px,
-                                height: 12.px,
-                              ),
-                              SizedBox(
-                                width: 2.px,
-                              ),
-                              const Text(
-                                '关注',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ))
-                    ],
-                  )*/
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.px,
-            ),
-            GestureDetector(
+          ),
+          SizedBox(
+            height: 10.px,
+          ),
+          GestureDetector(
+              onTap: () {
+                _playController.value.isPlaying
+                    ? _playController.pause()
+                    : _playController.play();
+                setState(() {});
+              },
               child: Container(
                 width: 375.px,
                 height: 210.px,
                 child: Stack(
                   children: [
-                    Image.network(
-                      articleDetailBean.cover ??
-                          'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                      width: 375.px,
-                      height: 210.px,
-                      fit: BoxFit.cover,
-                    ),
+                    _playController.value.isInitialized
+                        ? VideoPlayer(_playController)
+                        : Image.network(
+                            articleDetailBean.cover ??
+                                'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                            width: 375.px,
+                            height: 210.px,
+                            fit: BoxFit.cover,
+                          ),
                     Center(
-                      child: Image.asset(
-                        'assets/images/play.png',
-                        width: 50.px,
-                        height: 50.px,
-                      ),
+                      child: _playController.value.isPlaying
+                          ? Opacity(
+                              opacity: 0,
+                              child: Image.asset(
+                                'assets/images/play.png',
+                                width: 50.px,
+                                height: 50.px,
+                              ),
+                            )
+                          : Image.asset(
+                              'assets/images/play.png',
+                              width: 50.px,
+                              height: 50.px,
+                            ),
                     )
                   ],
                 ),
-              ),
+              )),
+          Container(
+            width: 375.px,
+            padding: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.px),
+                    topRight: Radius.circular(15.px))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  '评论',
+                  style: TextStyle(
+                      color: Color(0xff3B5078),
+                      fontSize: 17.px,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 18.px,
+                ),
+                if (comments.length == 0)
+                  Center(
+                    child: NoDataView(),
+                  ),
+                // CommentItem(),
+                // CommentItem(),
+                ...List.generate(comments.length, (index) {
+                  return CommentItem(
+                    commentBean: comments[index],
+                  );
+                })
+              ],
             ),
-            Container(
-              width: 375.px,
-              padding: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15.px),
-                      topRight: Radius.circular(15.px))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '评论',
-                    style: TextStyle(
-                        color: Color(0xff3B5078),
-                        fontSize: 17.px,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 18.px,
-                  ),
-                  if (loaded && comments.length == 0)
-                    Center(
-                      child: NoDataView(),
-                    ),
-                  // CommentItem(),
-                  // CommentItem(),
-                  ...List.generate(comments.length, (index) {
-                    return CommentItem(
-                      commentBean: comments[index],
-                    );
-                  })
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
-      bottomSheet: PostDetailBottomView(
-          viewParams: PostBottomViewParams(
-        postId: widget.id,
-        relId: widget.id,
-        relType: 'content',
-        favoriteState: true,
-        title: '',
-        content: '',
-        files: [],
-      )),
     );
   }
 }

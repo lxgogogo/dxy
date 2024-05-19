@@ -3,6 +3,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/utils/eventbus/EventBusAction.dart';
+import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
@@ -21,12 +23,23 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
   List<CommentBean> comments = [];
   bool loaded = false;
+  int pageNum = 1;
+  var actionEventBus;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    requestDetail();
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
+        requestDetail();
+      }
+    });
+  }
 
+  requestDetail() {
     NetRequest().articleDetail({'id': widget.id}, (data) {
       if (mounted) {
         setState(() {
@@ -37,7 +50,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     });
 
     NetRequest().commentList({
-      'pageNum': 1,
+      'pageNum': pageNum,
       'pageSize': 10,
       'filters': {'relType': 'content', 'relId': widget.id}
     }, (data) {
@@ -131,16 +144,16 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           ],
         ),
       ),
-      bottomSheet: PostDetailBottomView(
+      bottomSheet: loaded?PostDetailBottomView(
           viewParams: PostBottomViewParams(
         postId: widget.id,
         relId: widget.id,
         relType: 'content',
-        favoriteState: true,
+        favoriteState: articleDetailBean.favorited ?? false,
         title: '',
         content: '',
         files: [],
-      )),
+      )):Container(),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,8 @@ import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/eventbus/EventBusAction.dart';
+import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
@@ -16,7 +17,6 @@ import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:intl/intl.dart';
 
 // import 'dart:html' as html show kIsWeb, AnchorElement;
-
 
 class BookDetailPage extends StatefulWidget {
   int id;
@@ -30,18 +30,45 @@ class _BookDetailPageState extends State<BookDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
   List<CommentBean> comments = [];
   bool loaded = false;
+  int pageNum = 1;
+  var actionEventBus;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    requestDetail();
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
+        requestDetail();
+      }
+    });
+  }
+
+  requestDetail() {
     NetRequest().articleDetail({'id': widget.id}, (data) {
       setState(() {
         articleDetailBean = ArticleDetailBean.fromJson(data);
         print('book详情数据：$data');
         loaded = true;
       });
+    });
+
+    NetRequest().commentList({
+      'pageNum': pageNum,
+      'pageSize': 10,
+      'filters': {'relType': 'content', 'relId': widget.id}
+    }, (data) {
+      if (mounted) {
+        List<CommentBean> dataList = List<CommentBean>.from(
+            data['list'].map((comment) => CommentBean.fromJson(comment)));
+        setState(() {
+          comments = dataList;
+          loaded = true;
+        });
+      }
     });
   }
 
@@ -262,16 +289,18 @@ class _BookDetailPageState extends State<BookDetailPage> {
           ))
         ],
       ),
-      bottomSheet: PostDetailBottomView(
-          viewParams: PostBottomViewParams(
-        postId: widget.id,
-        relId: widget.id,
-        relType: 'content',
-        favoriteState: true,
-        title: '',
-        content: '',
-        files: [],
-      )),
+      bottomSheet: loaded
+          ? PostDetailBottomView(
+              viewParams: PostBottomViewParams(
+              postId: widget.id,
+              relId: widget.id,
+              relType: 'content',
+              favoriteState: articleDetailBean.favorited ?? false,
+              title: '',
+              content: '',
+              files: [],
+            ))
+          : Container(),
     );
   }
 }

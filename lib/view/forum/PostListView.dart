@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/model/upload_file.dart';
@@ -104,13 +105,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                   SizedBox(
                     height: 5.px,
                   ),
-                   Text(
-                     boardBean.content!= null ? boardBean.content! :'',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTheme.text666666Size14,
-                    softWrap: true,
-                  ),
+                  _showTextContentView(),
                   Visibility(
                       child: Column(
                         children: [
@@ -130,6 +125,44 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                     maxLines: 1,
                   )
                 ])));
+  }
+
+  ///显示内容
+  Widget _showTextContentView() {
+    if (boardBean != null &&  boardBean!.content!.isNotEmpty) {
+      if (boardBean!.content!.contains('<p>') || boardBean!.content!.contains('</p>')) {
+        return Container(
+          height: 90.px,
+          child: Html(
+            data:boardBean!.content!,
+            extensions: [
+              TagExtension(
+                tagsToExtend: {"flutter"},
+                child: const FlutterLogo(),
+              ),
+            ],
+            style: {
+              "p.fancy": Style(
+                textAlign: TextAlign.center,
+                backgroundColor: Colors.grey,
+                margin: Margins(left: Margin(10, Unit.px), right: Margin.auto()),
+                // width: Width(300, Unit.px),
+                fontWeight: FontWeight.bold,
+              ),
+            },
+          ),
+        );
+      } else  {
+        return  Text(
+          boardBean.content!= null ? boardBean.content! :'',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: AppTheme.text666666Size14,
+          softWrap: true,
+        );
+      }
+    }
+    return  Container();
   }
 
   Widget mediaContent(int index, List<UploadFile> files) {

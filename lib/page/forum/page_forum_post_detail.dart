@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -218,10 +219,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               ))
                     ]),
                 SizedBox(height: 16),
-                Container(
-                  child: Text(boardBean != null ? boardBean!.content! : '',
-                      style: AppTheme.text666666Size16),
-                ),
+                _showContentView(),
                 SizedBox(
                   height: 15.px,
                 ),
@@ -252,6 +250,38 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ]))
       ],
     );
+  }
+
+  ///显示内容
+  Widget _showContentView() {
+    if (boardBean != null &&  boardBean!.content!.isNotEmpty) {
+       if (boardBean!.content!.contains('<p>') || boardBean!.content!.contains('</p>')) {
+         return Html(
+         data:boardBean!.content!,
+           extensions: [
+             TagExtension(
+               tagsToExtend: {"flutter"},
+               child: const FlutterLogo(),
+             ),
+           ],
+           style: {
+             "p.fancy": Style(
+               textAlign: TextAlign.center,
+               backgroundColor: Colors.grey,
+               margin: Margins(left: Margin(20, Unit.px), right: Margin.auto()),
+               width: Width(300, Unit.px),
+               fontWeight: FontWeight.bold,
+             ),
+           },
+         );
+       } else  {
+         return Container(
+           child: Text(boardBean != null ? boardBean!.content! : '',
+               style: AppTheme.text666666Size16),
+         );
+       }
+    }
+    return  Container();
   }
 
   ///显示媒体文件 图片或者视频

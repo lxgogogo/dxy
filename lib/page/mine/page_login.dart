@@ -67,8 +67,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget contentView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         Container(
             margin: EdgeInsets.fromLTRB(40.px, 40.px, 16.px, 0),

@@ -244,7 +244,7 @@ class _MinePageState extends State<MinePage>
               ]),
             )),
         Container(
-          height: 60,
+          height: 61.px,
           margin: EdgeInsets.only(left: 16.px),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

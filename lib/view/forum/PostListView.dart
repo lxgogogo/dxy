@@ -16,7 +16,12 @@ class PostListItemView extends StatefulWidget {
   bool isForumList;
   BoardBean boardBean;
 
-  PostListItemView({Key? key, required this.itemIndex, required this.isForumList, required this.boardBean}) : super(key: key);
+  PostListItemView(
+      {Key? key,
+      required this.itemIndex,
+      required this.isForumList,
+      required this.boardBean})
+      : super(key: key);
 
   @override
   _PostDetailBottomViewState createState() => _PostDetailBottomViewState();
@@ -89,15 +94,19 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                     children: [
                       Container(
                         child: ClipOval(
-                          child: LoginHelper().getUserAvatar(boardBean.user != null ? boardBean.user!.avatar! : ''
-                              , 30, 30),
+                          child: LoginHelper().getUserAvatar(
+                              boardBean.user != null
+                                  ? boardBean.user!.avatar!
+                                  : '',
+                              30,
+                              30),
                         ),
                       ),
                       SizedBox(
                         width: 5.px,
                       ),
                       Text(
-                        boardBean.user!=null ? boardBean.user!.nickname! : '',
+                        boardBean.user != null ? boardBean.user!.nickname! : '',
                         style: AppTheme.text666666Size13,
                       )
                     ],
@@ -112,10 +121,14 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                           SizedBox(
                             height: 5.px,
                           ),
-                          mediaContent(index, boardBean.files !=null ? boardBean.files! :  [])
+                          mediaContent(index,
+                              boardBean.files != null ? boardBean.files! : [])
                         ],
                       ),
-                      visible: boardBean.files !=null && boardBean.files!.length == 0 ? false : true),
+                      visible: boardBean.files != null &&
+                              boardBean.files!.length == 0
+                          ? false
+                          : true),
                   SizedBox(
                     height: 5.px,
                   ),
@@ -129,12 +142,13 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
 
   ///显示内容
   Widget _showTextContentView() {
-    if (boardBean != null &&  boardBean!.content!.isNotEmpty) {
-      if (boardBean!.content!.contains('<p>') || boardBean!.content!.contains('</p>')) {
+    if (boardBean != null && boardBean!.content!.isNotEmpty) {
+      if (boardBean!.content!.contains('<p>') ||
+          boardBean!.content!.contains('</p>')) {
         return Container(
           height: 90.px,
           child: Html(
-            data:boardBean!.content!,
+            data: boardBean!.content!,
             extensions: [
               TagExtension(
                 tagsToExtend: {"flutter"},
@@ -145,16 +159,17 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
               "p.fancy": Style(
                 textAlign: TextAlign.center,
                 backgroundColor: Colors.grey,
-                margin: Margins(left: Margin(10, Unit.px), right: Margin.auto()),
+                margin:
+                    Margins(left: Margin(10, Unit.px), right: Margin.auto()),
                 // width: Width(300, Unit.px),
                 fontWeight: FontWeight.bold,
               ),
             },
           ),
         );
-      } else  {
-        return  Text(
-          boardBean.content!= null ? boardBean.content! :'',
+      } else {
+        return Text(
+          boardBean.content != null ? boardBean.content! : '',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: AppTheme.text666666Size14,
@@ -162,47 +177,49 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
         );
       }
     }
-    return  Container();
+    return Container();
   }
 
   Widget mediaContent(int index, List<UploadFile> files) {
     int picCount = files.length;
     if (picCount == 1 && files[0].type == 'image') {
-      return singleImageView(
-          getFilesUrl(files[0]));
+      return singleImageView(getFilesUrl(files[0]));
     } else if (picCount == 1 && files[0].type == 'video') {
       //视频
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0), // 设置圆角半径
         child: Center(
             child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 335,
-                  height: 188,
-                  child: Image.network(
-                    getFilesUrl(files[0]),
-                    width: 335,
-                    height: 188,
-                    fit: BoxFit.cover,
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 335,
+              height: 188,
+              child: Image.network(
+                getFilesUrl(files[0]),
+                width: 335,
+                height: 188,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              width: 35,
+              height: 35,
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/play_btn.png',
                   ),
+                  fit: BoxFit.cover,
                 ),
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/play_btn.png',),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ],
-            )),
+              ),
+            ),
+          ],
+        )),
       );
-    } else if (picCount == 0) {//不显示
+    } else if (picCount == 0) {
+      //不显示
       return Image.network(
         'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
         width: 335,
@@ -211,48 +228,73 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
     } else if (picCount == 2) {
       int num = 2;
       double screenWidth = MediaQuery.of(context).size.width;
-      double imageWidth = (screenWidth - 5 * (num - 1) - 20 - 10 -15) /
+      double imageWidth = (screenWidth - 5 * (num - 1) - 20 - 10 - 15) /
           num; // 计算每张图片的宽度 间距5 卡片左右间距10 内边距左右20
-      return Row(
-        children: [
-          multipleImageView(imageWidth,
-        getFilesUrl(files[0])),
-          const SizedBox(
-            width: 5,
-          ),
-          multipleImageView(imageWidth,
-    getFilesUrl(files[1])),
-        ],
-      );
-    } else if (picCount >=3) {
+      List<String> imageUrlList = [];
+      imageUrlList.add(getFilesUrl(files[0]));
+      imageUrlList.add(getFilesUrl(files[1]));
+      return multipleImageWrap(2, imageUrlList);
+      //     Row(
+      //     children: [
+      //       multipleImageView(imageWidth,
+      //     getFilesUrl(files[0])),
+      //       const SizedBox(
+      //         width: 5,
+      //       ),
+      //       multipleImageView(imageWidth,
+      // getFilesUrl(files[1])),
+      //     ],
+      //   );
+    } else if (picCount >= 3) {
       //大于等于3张
       int num = 3;
-      double screenWidth = MediaQuery
-          .of(context)
-          .size
-          .width;
+      double screenWidth = MediaQuery.of(context).size.width;
       double imageWidth = (screenWidth - 5 * (num - 1) - 20 - 25) /
           num; // 计算每张图片的宽度 间距5 卡片左右间距10 内边距左右20
-      return Row(
-        children: [
-          multipleImageView(imageWidth,
-        getFilesUrl(files[0])),
-          const SizedBox(
-            width: 5,
-          ),
-          multipleImageView(imageWidth,
-    getFilesUrl(files[1])),
-          const SizedBox(
-            width: 5,
-          ),
-          multipleImageView(imageWidth,
-          getFilesUrl(files[2])),
-        ],
-      );
+      List<String> imageUrlList = [];
+      imageUrlList.add(getFilesUrl(files[0]));
+      imageUrlList.add(getFilesUrl(files[1]));
+      imageUrlList.add(getFilesUrl(files[2]));
+      return multipleImageWrap(3, imageUrlList);
+      //     Row(
+      //     crossAxisAlignment: CrossAxisAlignment.start,
+      //     children: [
+      //       multipleImageView(imageWidth,
+      //     getFilesUrl(files[0])),
+      //       const SizedBox(
+      //         width: 5,
+      //       ),
+      //       multipleImageView(imageWidth,
+      // getFilesUrl(files[1])),
+      //       const SizedBox(
+      //         width: 5,
+      //       ),
+      //       multipleImageView(imageWidth,
+      //       getFilesUrl(files[2])),
+      //     ],
+      //   );
     } else {
-      return singleImageView(
-          getFilesUrl(files[0]));
+      return singleImageView(getFilesUrl(files[0]));
     }
+  }
+
+  Widget multipleImageWrap(int imageCount, List<String> imgUrlList) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: imageCount,
+        crossAxisSpacing: 5.0,
+        mainAxisSpacing: 5.0,
+      ),
+      itemCount:
+          imageCount, // total number of images (you can change this according to your requirement)
+      itemBuilder: (BuildContext context, int index) {
+        return multipleImageView(
+            (MediaQuery.of(context).size.width - 25) / imageCount,
+            imgUrlList[index]);
+      },
+    );
   }
 
   Widget singleImageView(String? imgUrl) {
@@ -267,19 +309,22 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
   }
 
   Widget multipleImageView(double imageWidth, String? imgUrl) {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(
-          imgUrl!,
-          width: imageWidth,
-          height: 111,
-          fit: BoxFit.cover,
-        ));
+    return AspectRatio(
+      aspectRatio: 1,
+      child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Image.network(
+            imgUrl!,
+            width: imageWidth,
+            height: 111,
+            fit: BoxFit.cover,
+          )),
+    );
   }
 
   String getFilesUrl(UploadFile uploadFile) {
     if (uploadFile.type == 'video') {
-       return uploadFile.posterUrl!;
+      return uploadFile.posterUrl!;
     }
     return uploadFile.url!;
   }

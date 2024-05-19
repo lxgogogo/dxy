@@ -21,7 +21,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
     Tab(text: '收藏'),
   ];
 
-  final List<String> types = ['at', 'comment', 'like', 'favorate'];
+  final List<String> types = ['at', 'comment', 'like', 'favorite'];
 
   @override
   void initState() {

@@ -13,14 +13,11 @@ class HttpUtils {
   }) {
     Http().init(
       baseUrl: baseUrl,
-      
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
       interceptors: interceptors,
     );
   }
-
-
 
   static Future get(
     String path, {
@@ -51,7 +48,7 @@ class HttpUtils {
     CancelToken? cancelToken,
     bool showLoading = true,
   }) async {
-    if(showLoading){
+    if (showLoading) {
       EasyLoading.show(status: 'loading...');
     }
     var ret = await Http().post(
@@ -61,10 +58,26 @@ class HttpUtils {
       options: options,
       cancelToken: cancelToken,
     );
-    if(showLoading){
+    if (showLoading) {
       EasyLoading.dismiss();
     }
     return ret;
+  }
+
+  static Future postBytesFile(
+    String path,
+    data, {
+    Map<String, dynamic>? params,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    return await Http().postBytesFile(
+      path,
+      data: data,
+      params: params ?? {},
+      options: options,
+      cancelToken: cancelToken,
+    );
   }
 
   static Future postFile(
@@ -73,9 +86,9 @@ class HttpUtils {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
-        bool showLoading = true,
+    bool showLoading = true,
   }) async {
-    if(showLoading){
+    if (showLoading) {
       EasyLoading.show(status: 'loading...');
     }
     var ret = await Http().postFile(
@@ -85,7 +98,7 @@ class HttpUtils {
       options: options,
       cancelToken: cancelToken,
     );
-    if(showLoading){
+    if (showLoading) {
       EasyLoading.dismiss();
     }
     return ret;

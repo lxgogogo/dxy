@@ -5,7 +5,9 @@ import 'package:detectable_text_field/widgets/detectable_text_editing_controller
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
@@ -41,7 +43,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   );
 
   final customLabelList = <String>[];
-  final imageData = <String>[]; //选择相册返回的本地地址集合
+  final imageData = []; //选择相册返回的本地地址集合
   final imageUrlList = <UploadFile>[]; //发布提交是的图片地址集合
   final aitList = <int>[];
   final aitUserBeanList = <UserProfile>[]; //@返回的所有用户集合，
@@ -247,7 +249,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   Widget imageGridView() {
     return ReorderableGridView.count(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       crossAxisCount: 3,
@@ -257,7 +259,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           builder: (index, child, screenshot) {
             return child;
           }),
-      children: this.imageData.map((e) => buildItem("$e")).toList(),
       onReorder: (oldIndex, newIndex) {
         setState(() {
           final element = imageData.removeAt(oldIndex);
@@ -278,7 +279,41 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   fit: BoxFit.cover,
                 )),
       ],
+      children: imageData.map((e) => kIsWeb?buildWebItem(e):buildItem("$e")).toList(),
     );
+  }
+
+  Widget buildWebItem(file){
+    return Center(
+        key: ValueKey(file.name),
+        child: Stack(
+          children: [
+            GestureDetector(
+              child: Image.memory(
+                Uint8List.fromList(file.bytes),
+                width: 98,
+                height: 98,
+                fit: BoxFit.cover,
+              ),
+              onTap: () {},
+            ),
+            Positioned(
+              right: -10,
+              top: -10,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      // imageData.remove(text);
+                    });
+                  },
+                  icon: Image.asset(
+                    'assets/images/close_black.png',
+                    width: 25.px,
+                    height: 25.px,
+                  )),
+            )
+          ],
+        ));
   }
 
   Widget buildItem(String text) {
@@ -526,6 +561,36 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4']);
 
     if (result != null) {
+      if (kIsWeb) {
+        var files = result.files;
+        if (files.length > 9 || files.length + imageData.length > 9) {
+          ToastUtils.showToast('单个视频或者最多9张图片');
+          return;
+        }
+        if (files.length > 1) {
+          for (var file in files) {
+            if (file.extension == 'mp4'||file.extension == 'mov') {
+              ToastUtils.showToast('单个视频或者最多9张图片');
+              return;
+            }
+          }
+        }
+
+        for (var file in files) {
+          imageData.add(file);
+        }
+
+        setState(() {
+        if (imageData.isNotEmpty &&
+            imageData.length == 1 &&
+            imageData[0].extension == 'mp4') {
+          isShowVideoView = true;
+        } else {
+          isShowVideoView = false;
+        }
+      });
+        return;
+      }
       List<String> files =
           result.paths.where((path) => path != null).cast<String>().toList();
       if (result.files.length > 9 ||
@@ -565,7 +630,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     if (isShowVideoView) {
       return false;
     }
-    if (imageData.length  == 9) {
+    if (imageData.length == 9) {
       return false;
     }
     return true;
@@ -589,7 +654,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     List<String> containsAitStrList = []; // 包含@符号的文本
     List<String> splitNameList = []; // 分割@符号的后存放用户名称
 
-
     for (Match match in matches) {
       print('Found=====================: ${match.group(0)}'); // 输出匹配到
       var matchStr = match.group(0);
@@ -597,7 +661,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     }
     if (containsAitStrList.isNotEmpty && containsAitStrList.length > 0) {
       for (String aitStr in containsAitStrList) {
-        content =  content.replaceAll(aitStr, "");
+        content = content.replaceAll(aitStr, "");
         List<String> aitStrList = aitStr.split('@');
         splitNameList.add(aitStrList[1]);
       }
@@ -645,6 +709,25 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     }
 
     imageData.forEach((element) async {
+      if (kIsWeb){
+        NetRequest().uploadBytesFile(element.bytes, (data) {
+          UploadFile uploadFile = UploadFile.fromJson(data);
+          print('uploadFile url===' + uploadFile.url!);
+          imageUrlList.add(uploadFile);
+
+          print('uploadFile url===${imageUrlList.length}' +
+              'imageData|==>${imageData.length}');
+
+          if (imageUrlList.isNotEmpty &&
+              imageUrlList.length == imageData.length) {
+            NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                customLabelList, imageUrlList, aitList, (data) {
+              Navigator.pop(context);
+            });
+          }
+        });
+        return;
+      }
       NetRequest().uploadFile(element, (data) {
         UploadFile uploadFile = UploadFile.fromJson(data);
         print('uploadFile url===' + uploadFile.url!);

@@ -208,6 +208,20 @@ class NetRequest {
     }
   }
 
+  Future uploadBytesFile(var data, SuccessCallback onSuccess) async {
+
+    Map<String, dynamic> response =
+        await HttpUtils.postBytesFile(Api.uploadFile,data, params: {});
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("uploadFile===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///关注列表
   Future followedList(String pageNum, String pageSize, String q,
       SuccessCallback onSuccess) async {

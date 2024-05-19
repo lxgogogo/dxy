@@ -84,7 +84,9 @@ class Http {
   // 添加认证
   // 读取本地配置
   Map<String, dynamic>? getAuthorizationHeader() {
-    String? token = StorageUtil().prefs != null ? StorageUtil().prefs!.getString('token') : '';
+    String? token = StorageUtil().prefs != null
+        ? StorageUtil().prefs!.getString('token')
+        : '';
     // print('header token=======${token!}');
     Map<String, dynamic> headers = {
       'system': kIsWeb
@@ -99,7 +101,7 @@ class Http {
     };
     // 从getx或者sputils中获取
     // String accessToken = Global.accessToken;
-    String accessToken = '';//Global().token;
+    String accessToken = ''; //Global().token;
     if (accessToken.isNotEmpty) {
       headers['center-token'] = accessToken;
     }
@@ -191,8 +193,8 @@ class Http {
   }) async {
     LogUtils.printAll("postFile params===>$params");
     String fileName = params?['file'].split('/').last; // 获取文件名
-    var file = await MultipartFile.fromFile(params?['file'],
-        filename: fileName);
+    var file =
+        await MultipartFile.fromFile(params?['file'], filename: fileName);
     FormData formData = FormData.fromMap({
       'file': file,
       // 'fileType': params?['fileType'],
@@ -209,6 +211,31 @@ class Http {
     var response = await dio.post(
       path,
       data: formData,
+      // data: data,
+      // queryParameter5s: params,
+      options: requestOptions,
+      cancelToken: cancelToken ?? _cancelToken,
+    );
+    print('net url:$path \n data:${response.data}');
+    return response.data;
+  }
+
+  Future postBytesFile(
+    String path, {
+    Map<String, dynamic>? params,
+    data,
+    Options? options,
+    CancelToken? cancelToken,
+  }) async {
+    Options requestOptions = options ?? Options();
+    Map<String, dynamic>? _authorization = getAuthorizationHeader();
+    _authorization!['Content-Type'] = 'application/octet-stream';
+    if (_authorization != null) {
+      requestOptions = requestOptions.copyWith(headers: _authorization);
+    }
+    var response = await dio.post(
+      path,
+      data: data,
       // data: data,
       // queryParameter5s: params,
       options: requestOptions,

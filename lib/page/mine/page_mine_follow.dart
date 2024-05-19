@@ -82,6 +82,16 @@ class _MineFollowPageState extends State<MineFollowPage> {
     } else {
       NetRequest().fansList(pageNum.toString(), pageSize.toString(), '',
           (data) {
+            UserDataList followOrFan = UserDataList.fromJson(data);
+            if (_isMounted) {
+              setState(() {
+                if (pageNum == 1) {
+                  followOrFanUserList = followOrFan.list!;
+                } else {
+                  followOrFanUserList.addAll(followOrFan.list!);
+                }
+              });
+            }
         _refreshController.loadComplete();
         _refreshController.refreshCompleted();
       });

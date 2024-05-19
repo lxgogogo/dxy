@@ -5,6 +5,7 @@ import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class VideoItem extends StatefulWidget {
@@ -129,6 +130,7 @@ class _VideoItemState extends State<VideoItem> {
                   children: [
                     Text(
                       widget.article.title ?? '',
+                      overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: TextStyle(
                         color: const Color(0xff3B5078),
@@ -148,9 +150,10 @@ class _VideoItemState extends State<VideoItem> {
                             width: 5.px,
                           ),
                           Text(
-                            widget.article.duration != null
-                                ? formatDuration(Duration(seconds: widget.article.duration ?? 0))
-                                : '',
+                            DateFormat('M月d日').format(widget.article.createdAt??DateTime.now()),
+                            // widget.article.duration != null
+                            //     ? formatDuration(Duration(seconds: widget.article.duration ?? 0))
+                            //     : '',
                             style: TextStyle(
                               color: const Color(0xff666666),
                               fontSize: 14.px,

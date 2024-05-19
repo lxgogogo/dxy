@@ -30,13 +30,13 @@ class _BookItemState extends State<BookItem> {
           children: [
             Image.network(
               widget.article.cover ?? '',
-              width: 171.px,
-              height: 145.px,
+              width: 172.px,
+              height: 246.px,
               fit: BoxFit.cover,
             ),
             Expanded(
                 child: Container(
-              padding: EdgeInsets.all(10.px),
+              padding: EdgeInsets.symmetric(horizontal: 10.px),
               alignment: Alignment.centerLeft,
               child: Text(
                 widget.article.title ?? '',

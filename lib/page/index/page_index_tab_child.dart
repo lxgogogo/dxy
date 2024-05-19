@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
 import 'package:holdem/model/index_category.dart';
+import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
@@ -204,7 +205,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
             padding: EdgeInsets.symmetric(horizontal: 12.px),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.85,
+              childAspectRatio: 0.57,
               crossAxisSpacing: 8.px,
               mainAxisSpacing: 8.px,
             ),
@@ -227,22 +228,18 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
     );
   }
 
-  jumpPage(BannerBean bean){
+  jumpPage(BannerBean bean) {
     var id = int.parse(bean.jumpValue!);
-    if (bean.jumpType == 'book'){
+    if (bean.jumpType == 'book') {
       Get.to(BookDetailPage(id: id));
-    }
-    else if (bean.jumpType == 'article'){
+    } else if (bean.jumpType == 'article') {
       Get.to(ArticleDetailPage(id: id));
-    }
-    else if (bean.jumpType == 'videoList'){
+    } else if (bean.jumpType == 'videoList') {
       Get.to(VideoListPage(id: id));
-    }
-    else if (bean.jumpType == 'video'){
+    } else if (bean.jumpType == 'video') {
       Get.to(VideoDetailPage(id: id));
-    }
-    else if (bean.jumpType == 'thread'){
-
+    } else if (bean.jumpType == 'thread') {
+      Get.to(PostDetailPage(postId: id));
     }
   }
 
@@ -267,7 +264,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                 itemCount: banners.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       jumpPage(banners[index]);
                     },
                     child: Image.network(

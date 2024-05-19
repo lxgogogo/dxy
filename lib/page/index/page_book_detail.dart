@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'dart:html' as html;
+
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
@@ -13,6 +14,9 @@ import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:intl/intl.dart';
+
+// import 'dart:html' as html show kIsWeb, AnchorElement;
+
 
 class BookDetailPage extends StatefulWidget {
   int id;
@@ -58,12 +62,14 @@ class _BookDetailPageState extends State<BookDetailPage> {
   // }
 
   void downloadRemoteFile(String url, String fileName) {
-    html.AnchorElement anchor = html.AnchorElement(
-      href: url,
-    );
-    anchor.setAttribute('download', fileName);
-    anchor.click();
-    anchor.remove();
+    // if (kIsWeb) {
+    //   html.AnchorElement anchor = html.AnchorElement(
+    //     href: url,
+    //   );
+    //   anchor.setAttribute('download', fileName);
+    //   anchor.click();
+    //   anchor.remove();
+    // }
   }
 
   String getFileNameFromUrl(String url) {
@@ -192,6 +198,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                 ],
               ),
               Container(
+                alignment: Alignment.topLeft,
                 margin: EdgeInsets.only(
                     top: 15.px, left: 16.px, right: 16.px, bottom: 15.px),
                 child: Column(
@@ -209,7 +216,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       height: 5.px,
                     ),
                     Text(
-                      '扑克是一种不断发展的游戏。它的魅力之一就是因为扑克有很多的游戏策略和很多的个人风格，所以没有一种完美的打法能保持不败。的确有些风格对抗一些选手很有效，但有时候却适得其…',
+                      articleDetailBean.description ?? '',
                       maxLines: 10,
                       style: TextStyle(
                           color: Color(0xff666666),

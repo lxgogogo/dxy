@@ -3,13 +3,11 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
-import '../../model/comment_list.dart';
 import '../../model/thread_list.dart';
 import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/PostListView.dart';
 import '../../widget/no_data.dart';
-import '../comment/item_comment.dart';
 
 class MineChildPage extends StatefulWidget {
   int tabIndex;
@@ -30,7 +28,7 @@ class _MineChildPageState extends State<MineChildPage>
   bool _isMounted = false;
 
   List<BoardBean> boardPostList = [];
-  List<CommentBean> commentDataList = [];
+  List<ThreadListBean> commentDataList = [];
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -102,7 +100,7 @@ class _MineChildPageState extends State<MineChildPage>
     } else if (tabIndex == 2) {
       //评论
       NetRequest().userCommentList(pageNum, pageSize, '', (data) {
-        CommentList commentList = CommentList.fromJson(data);
+        ThreadList commentList = ThreadList.fromJson(data);
         if (_isMounted) {
           setState(() {
             if (pageNum == 1) {
@@ -139,7 +137,11 @@ class _MineChildPageState extends State<MineChildPage>
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
         itemBuilder: (c, i) => tabIndex == 2
-            ? CommentItem(commentBean: commentDataList[i] ?? CommentBean())
+            ? PostListItemView(
+                itemIndex: i,
+                isForumList: false,
+                boardBean: commentDataList[i].thread ?? BoardBean(),
+              )
             : PostListItemView(
                 itemIndex: i,
                 isForumList: false,

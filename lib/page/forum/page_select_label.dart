@@ -203,6 +203,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                           controller: controller,
                           maxLength: 4,
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(10.px, 3, 10.px, 0),
                             counterText: '',
                             hintText: '标签内容',
                             filled: true,
@@ -226,6 +227,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                               setState(() {
                                 labelData.add(controller.text);
                                 StorageUtil().prefs!.setStringList('userLabel', labelData);
+                                controller.text = ''; //清空输入框
                               });
                             }
                           },

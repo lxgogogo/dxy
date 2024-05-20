@@ -32,6 +32,8 @@ class _MineChildPageState extends State<MineChildPage>
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  RefreshController _refreshController2 =
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     setState(() {
@@ -111,17 +113,21 @@ class _MineChildPageState extends State<MineChildPage>
           });
         }
       });
-      _refreshController.refreshCompleted();
-      _refreshController.loadComplete();
+      _refreshController2.refreshCompleted();
+      _refreshController2.loadComplete();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (tabIndex == 2) {
-      return commentDataList.isNotEmpty ? listView() : const NoDataView();
+      return Expanded(
+        child: commentDataList.isNotEmpty ? listView() : const NoDataView(),
+      );
     } else {
-      return boardPostList.isNotEmpty ? listView() : const NoDataView();
+      return Expanded(
+          child: boardPostList.isNotEmpty ? listView() : const NoDataView());
     }
   }
 
@@ -131,22 +137,17 @@ class _MineChildPageState extends State<MineChildPage>
       enablePullDown: true,
       enablePullUp: true,
       header: WaterDropHeader(),
-      controller: _refreshController,
+      controller: tabIndex == 2 ? _refreshController2 : _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-        itemBuilder: (c, i) => tabIndex == 2
-            ? PostListItemView(
-                itemIndex: i,
-                isForumList: false,
-                boardBean: commentDataList[i].thread ?? BoardBean(),
-              )
-            : PostListItemView(
-                itemIndex: i,
-                isForumList: false,
-                boardBean: boardPostList[i] ?? BoardBean(),
-              ),
+        itemBuilder: (c, i) => PostListItemView(
+          itemIndex: i,
+          isForumList: false,
+          boardBean:
+              tabIndex == 2 ? commentDataList[i].thread! : boardPostList[i],
+        ),
         // itemExtent: 160.0,
         itemCount:
             tabIndex == 2 ? commentDataList.length : boardPostList.length,

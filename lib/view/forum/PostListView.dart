@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -116,19 +114,19 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                   ),
                   _showTextContentView(),
                   Visibility(
+                      visible:
+                          boardBean.files != null && boardBean.files!.isEmpty
+                              ? false
+                              : true,
                       child: Column(
                         children: [
                           SizedBox(
                             height: 5.px,
                           ),
                           mediaContent(index,
-                              boardBean.files != null ? boardBean.files! : [])
+                              boardBean.files != null ? boardBean.files! : []),
                         ],
-                      ),
-                      visible: boardBean.files != null &&
-                              boardBean.files!.length == 0
-                          ? false
-                          : true),
+                      )),
                   SizedBox(
                     height: 5.px,
                   ),
@@ -142,13 +140,12 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
 
   ///显示内容
   Widget _showTextContentView() {
-    if (boardBean != null && boardBean!.content!.isNotEmpty) {
-      if (boardBean!.content!.contains('<p>') ||
-          boardBean!.content!.contains('</p>')) {
-        return Container(
+    if (boardBean.content!.isNotEmpty) {
+      if (boardBean.content!.contains('<p>')) {
+        return SizedBox(
           height: 90.px,
           child: Html(
-            data: boardBean!.content!,
+            data: boardBean.content!,
             extensions: [
               TagExtension(
                 tagsToExtend: {"flutter"},
@@ -176,11 +173,13 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
           softWrap: true,
         );
       }
+    } else {
+      return Container();
     }
-    return Container();
   }
 
   Widget mediaContent(int index, List<UploadFile> files) {
+    print('files======length==${files.length}');
     int picCount = files.length;
     if (picCount == 1 && files[0].type == 'image') {
       return singleImageView(getFilesUrl(files[0]));
@@ -220,81 +219,61 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
       );
     } else if (picCount == 0) {
       //不显示
-      return Image.network(
-        'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-        width: 335,
-        height: 188,
-      );
+      return Container();
     } else if (picCount == 2) {
-      int num = 2;
-      double screenWidth = MediaQuery.of(context).size.width;
-      double imageWidth = (screenWidth - 5 * (num - 1) - 20 - 10 - 15) /
-          num; // 计算每张图片的宽度 间距5 卡片左右间距10 内边距左右20
       List<String> imageUrlList = [];
       imageUrlList.add(getFilesUrl(files[0]));
       imageUrlList.add(getFilesUrl(files[1]));
       return multipleImageWrap(2, imageUrlList);
-      //     Row(
-      //     children: [
-      //       multipleImageView(imageWidth,
-      //     getFilesUrl(files[0])),
-      //       const SizedBox(
-      //         width: 5,
-      //       ),
-      //       multipleImageView(imageWidth,
-      // getFilesUrl(files[1])),
-      //     ],
-      //   );
     } else if (picCount >= 3) {
       //大于等于3张
-      int num = 3;
-      double screenWidth = MediaQuery.of(context).size.width;
-      double imageWidth = (screenWidth - 5 * (num - 1) - 20 - 25) /
-          num; // 计算每张图片的宽度 间距5 卡片左右间距10 内边距左右20
       List<String> imageUrlList = [];
       imageUrlList.add(getFilesUrl(files[0]));
       imageUrlList.add(getFilesUrl(files[1]));
       imageUrlList.add(getFilesUrl(files[2]));
       return multipleImageWrap(3, imageUrlList);
-      //     Row(
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     children: [
-      //       multipleImageView(imageWidth,
-      //     getFilesUrl(files[0])),
-      //       const SizedBox(
-      //         width: 5,
-      //       ),
-      //       multipleImageView(imageWidth,
-      // getFilesUrl(files[1])),
-      //       const SizedBox(
-      //         width: 5,
-      //       ),
-      //       multipleImageView(imageWidth,
-      //       getFilesUrl(files[2])),
-      //     ],
-      //   );
     } else {
       return singleImageView(getFilesUrl(files[0]));
     }
   }
 
   Widget multipleImageWrap(int imageCount, List<String> imgUrlList) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: imageCount,
-        crossAxisSpacing: 5.0,
-        mainAxisSpacing: 5.0,
-      ),
-      itemCount:
-          imageCount, // total number of images (you can change this according to your requirement)
-      itemBuilder: (BuildContext context, int index) {
-        return multipleImageView(
-            (MediaQuery.of(context).size.width - 25) / imageCount,
-            imgUrlList[index]);
-      },
+    double widthNum = (MediaQuery.of(context).size.width - 60) / imageCount;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center, // 水平居中
+      children: List.generate(
+        imgUrlList.length, // 生成指定数量的图片Widget
+            (index) {
+          // 确保图片URL索引在列表范围内
+          String imageUrl = imgUrlList.length > index ? imgUrlList[index] : '';
+          return multipleImageView(widthNum, imageUrl);
+        },
+      ).map((image) {
+        // 在每个图片Widget之间添加5个单位的间距
+        return Padding(
+          padding: const EdgeInsets.only(right: 5.0),
+          child: image,
+        );
+      }).toList(),
     );
+
+    // return GridView.builder(
+    //         shrinkWrap: true,
+    //         physics: NeverScrollableScrollPhysics(),
+    //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    //           childAspectRatio:
+    //               ((MediaQuery.of(context).size.width - 25) / imageCount) / 111,
+    //           crossAxisCount: imageCount,
+    //           crossAxisSpacing: 5.0,
+    //           mainAxisSpacing: 5.0,
+    //         ),
+    //         itemCount: imageCount,
+    //         // total number of images (you can change this according to your requirement)
+    //         itemBuilder: (BuildContext context, int index) {
+    //           return multipleImageView(
+    //               (MediaQuery.of(context).size.width - 25) / imageCount,
+    //               imgUrlList[index]);
+    //         });
   }
 
   Widget singleImageView(String? imgUrl) {
@@ -302,24 +281,21 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
         borderRadius: BorderRadius.circular(8.0),
         child: Image.network(
           imgUrl!,
-          width: 130,
-          height: 90,
-          fit: BoxFit.fill,
+          width: 130.px,
+          height: 90.px,
+          fit: BoxFit.cover,
         ));
   }
 
   Widget multipleImageView(double imageWidth, String? imgUrl) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: ClipRRect(
+    return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
           child: Image.network(
             imgUrl!,
             width: imageWidth,
-            height: 111,
+            height: 111.px,
             fit: BoxFit.cover,
-          )),
-    );
+          ));
   }
 
   String getFilesUrl(UploadFile uploadFile) {

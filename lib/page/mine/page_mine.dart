@@ -244,12 +244,12 @@ class _MinePageState extends State<MinePage>
               ]),
             )),
         Container(
-          height: 61.px,
+          // height: 63.px,
           margin: EdgeInsets.only(left: 16.px),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             SizedBox(
-              height: 8,
+              height: 6,
             ),
             Text(
               userProfile != null && userProfile.nickname != null

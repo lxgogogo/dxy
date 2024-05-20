@@ -226,15 +226,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 _showMediaView(),
               ],
             )),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 10.px),
-            child: LabelView(
-                isEditLabel: false,
-                labelData: boardBean != null ? boardBean!.tags! : [],
-                onItemTap: (value) {}),
+        Row(children: [
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 10.px),
+              child: LabelView(
+                  isEditLabel: false,
+                  labelData: boardBean != null ? boardBean!.tags! : [],
+                  onItemTap: (value) {}),
+            ),
           ),
-        ),
+        ],),
         Container(height: 10.px, color: AppTheme.color_F3F3F3),
         Container(
             padding: EdgeInsets.fromLTRB(16, 15, 16, 0),

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -122,12 +123,9 @@ class _MineChildPageState extends State<MineChildPage>
   Widget build(BuildContext context) {
     super.build(context);
     if (tabIndex == 2) {
-      return Expanded(
-        child: commentDataList.isNotEmpty ? listView() : const NoDataView(),
-      );
+      return commentDataList.isNotEmpty ? Container(color: Colors.white,child:listView()) : const NoDataView();
     } else {
-      return Expanded(
-          child: boardPostList.isNotEmpty ? listView() : const NoDataView());
+      return  boardPostList.isNotEmpty ? Container(color: Colors.white,child:listView()) : const NoDataView();
     }
   }
 

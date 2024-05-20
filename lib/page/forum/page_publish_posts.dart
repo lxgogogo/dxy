@@ -228,20 +228,23 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               '单个视频或者最多9张图片',
               style: AppTheme.text999999Size11,
             )),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-            child: _mediaShowView(),
-          ),
-        ),
-        Expanded(
+        Row(children: [
+          Expanded(
             child: Padding(
-                padding: EdgeInsets.fromLTRB(14.px, 6.px, 14.px, 0),
-                child: LabelView(
-                  isEditLabel: true,
-                  labelData: customLabelList,
-                  onItemTap: (labelValue) {},
-                )))
+              padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+              child: _mediaShowView(),
+            ),
+          )]),
+        Row(children: [
+          Expanded(
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(14.px, 6.px, 14.px, 0),
+                  child: LabelView(
+                    isEditLabel: true,
+                    labelData: customLabelList,
+                    onItemTap: (labelValue) {},
+                  )))
+        ],),
       ],
     );
   }
@@ -303,7 +306,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               child: IconButton(
                   onPressed: () {
                     setState(() {
-                      // imageData.remove(text);
+                      imageData.remove(file);
                     });
                   },
                   icon: Image.asset(

@@ -205,7 +205,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.fromLTRB(10.px, 3, 10.px, 0),
                             counterText: '',
-                            hintText: '标签内容',
+                            hintText: '标签内容（最多四个字）',
                             filled: true,
                             fillColor: AppTheme.color_EFEFEF,
                             hintStyle: AppTheme.text999999Size14,

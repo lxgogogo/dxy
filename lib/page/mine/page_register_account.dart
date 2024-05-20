@@ -31,6 +31,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
   int _countdown = 60;
   bool _isCountingDown = false;
   bool _isVisible = false;
+  bool _isVisibleAgain = false;
 
   var pageType = -1;
 
@@ -184,7 +185,11 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                     ToastUtils.showToast('邮箱不能为空');
                     return;
                   }
-                  _startCountdown();
+                  if (!LoginHelper().isValidEmail(email)) {
+                    ToastUtils.showToast('请输入正确格式邮箱');
+                    return;
+                  }
+                  _startCountdown(); //启动倒计时
                   NetRequest().sendCode(
                       pageType ==
                           RegisterAccountPage.PageType_RegisterAccount
@@ -263,7 +268,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               Expanded(
                 child: TextField(
                   controller: _controllerAgainPw,
-                  obscureText: !_isVisible, // 输入内容显示为密文
+                  obscureText: !_isVisibleAgain, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
                     hintText:
@@ -277,7 +282,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ),
               IconButton(
                 icon: Image.asset(
-                  _isVisible
+                  _isVisibleAgain
                       ? 'assets/images/eye_visible.png'
                       : 'assets/images/eye_invisible.png',
                   width: 22.px,
@@ -285,7 +290,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _isVisible = !_isVisible;
+                    _isVisibleAgain = !_isVisibleAgain;
                   });
                 },
               ),

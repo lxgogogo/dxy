@@ -144,8 +144,7 @@ class _MinePageState extends State<MinePage>
                 )),
                 userInfoView(),
                 _tabBar(),
-                Expanded(
-                    child: Container(color: Colors.white, child: _tabBarView()))
+                Expanded(child: _tabBarView())
               ],
             ),
           ),

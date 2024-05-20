@@ -76,4 +76,11 @@ class LoginHelper {
     StorageUtil().prefs!.setString('userAccount', '');
     StorageUtil().prefs!.setString('userPw', '');
   }
+
+  bool isValidEmail(String email) {
+    // 邮箱正则表达式
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    // 使用正则表达式进行匹配
+    return emailRegex.hasMatch(email);
+  }
 }

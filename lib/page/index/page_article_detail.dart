@@ -125,16 +125,17 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                           Center(
                             child: NoDataView(),
                           ),
-                        SizedBox(
-                          height: 100.px,
-                        ),
+
                         // CommentItem(),
                         // CommentItem(),
                         ...List.generate(comments.length, (index) {
                           return CommentItem(
                             commentBean: comments[index],
                           );
-                        })
+                        }),
+                        SizedBox(
+                          height: 100.px,
+                        ),
                       ],
                     ),
                   )
@@ -144,16 +145,18 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           ],
         ),
       ),
-      bottomSheet: loaded?PostDetailBottomView(
-          viewParams: PostBottomViewParams(
-        postId: widget.id,
-        relId: widget.id,
-        relType: 'content',
-        favoriteState: articleDetailBean.favorited ?? false,
-        title: '',
-        content: '',
-        files: [],
-      )):Container(),
+      bottomSheet: loaded
+          ? PostDetailBottomView(
+              viewParams: PostBottomViewParams(
+              postId: widget.id,
+              relId: widget.id,
+              relType: 'content',
+              favoriteState: articleDetailBean.favorited ?? false,
+              title: '',
+              content: '',
+              files: [],
+            ))
+          : Container(),
     );
   }
 }

@@ -32,7 +32,7 @@ class ArticleBean{
       cover = json["cover"];
     }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json["description"] is String) {
       description = json["description"];
@@ -53,7 +53,7 @@ class ArticleBean{
       type = json["type"];
     }
     if (json["updatedAt"] is String) {
-      updatedAt = DateTime.parse(json["updatedAt"]);
+      updatedAt = DateTime.parse(json["updatedAt"]).toLocal();
     }
 
   }

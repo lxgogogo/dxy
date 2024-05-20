@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
               Expanded(
                 child: TextField(
                   controller: _controllerPw,
-                  focusNode: _focusNode,
+                  // focusNode: _focusNode,
                   obscureText: true, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框

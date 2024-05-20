@@ -72,7 +72,7 @@ class CommentBean {
     //   content = json["content"];
     // }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json['content'] != null && json['content'] is Map) {
       content = Content.fromJson(json['content']);
@@ -179,7 +179,7 @@ class Reply{
       content = json["content"];
     }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json["user"] is Map) {
       user = User.fromJson(json["user"]);

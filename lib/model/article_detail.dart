@@ -58,7 +58,7 @@ class ArticleDetailBean {
       commentCount = json["commentCount"];
     }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json["favoriteCount"] is int) {
       favoriteCount = json["favoriteCount"];
@@ -85,7 +85,7 @@ class ArticleDetailBean {
       type = json["type"];
     }
     if (json["updatedAt"] is String) {
-      updatedAt = DateTime.parse(json["updatedAt"]);
+      updatedAt = DateTime.parse(json["updatedAt"]).toLocal();
     }
     if (json["video"] is Map) {
       video = VideoBean.fromJson(json["video"]);
@@ -150,7 +150,7 @@ class BookBean {
       downloadUrl = json["downloadUrl"];
     }
     if (json["publishDate"] is String) {
-      publishDate = DateTime.parse(json["publishDate"]);
+      publishDate = DateTime.parse(json["publishDate"]).toLocal();
     }
     if (json["publisher"] is String) {
       publisher = json["publisher"];

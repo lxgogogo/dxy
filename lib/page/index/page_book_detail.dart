@@ -194,7 +194,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             HoldemHighlightBtn(
                                 onTap: () {
                                   print('点击了下载资源');
-                                  launchUrl( Uri.parse(articleDetailBean.book!.downloadUrl!));
+                                  launchUrl(Uri.parse(
+                                      articleDetailBean.book!.downloadUrl!));
                                   // String fileName = getFileNameFromUrl(
                                   //     articleDetailBean.book!.downloadUrl!);
                                   // downloadRemoteFile(
@@ -282,6 +283,14 @@ class _BookDetailPageState extends State<BookDetailPage> {
                       Center(
                         child: NoDataView(),
                       ),
+                    ...List.generate(comments.length, (index) {
+                      return CommentItem(
+                        commentBean: comments[index],
+                      );
+                    }),
+                    SizedBox(
+                      height: 100.px,
+                    ),
                     // CommentItem(),
                     // CommentItem(),
                   ],

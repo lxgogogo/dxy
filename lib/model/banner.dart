@@ -36,7 +36,7 @@ class BannerBean {
       status = json["status"];
     }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
   }
 }

@@ -36,7 +36,7 @@ class MessageBean{
       description = json["description"];
     }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json["fromUser"] is Map) {
       fromUser = MessageUser.fromJson(json["fromUser"]);

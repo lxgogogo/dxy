@@ -201,7 +201,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               : '',
                           topTextStyle: const TextStyle(),
                           bottomText1: boardBean != null
-                              ? '发布于${DateFormat('MM-dd hh:mm').format(boardBean!.createdAt!)}'
+                              ? '发布于${DateFormat('MM-dd HH:mm').format(boardBean!.createdAt!)}'
                               : '',
                           bottomText1Style: AppTheme.text999999Size11,
                           bottomText2: '',

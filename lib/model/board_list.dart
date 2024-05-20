@@ -79,7 +79,7 @@ class BoardBean {
       content = json["content"];
     }
     if (json["createdAt"] is String) {
-      createdAt = DateTime.parse(json["createdAt"]);
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json['user'] != null) {
       user = UserProfile.fromJson(json['user']);

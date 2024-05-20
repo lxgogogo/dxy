@@ -117,7 +117,7 @@ class _CommentItemState extends State<CommentItem> {
               children: [
                 Text(
                   widget.commentBean.createdAt != null
-                      ? DateFormat('MM-dd hh:mm')
+                      ? DateFormat('MM-dd HH:mm')
                           .format(widget.commentBean.createdAt!)
                       : '',
                   style: TextStyle(color: Color(0xff999999), fontSize: 14.px),
@@ -161,8 +161,16 @@ class _CommentItemState extends State<CommentItem> {
                     NetRequest().contentLike({
                       'relType': 'comment',
                       'relId': widget.commentBean.id!,
-                      'state': true
-                    }, (data) {});
+                      'state': widget.commentBean.liked!?false:true
+                    }, (data) {
+                      setState(() {
+                        widget.commentBean.liked = !widget.commentBean.liked!;
+                        int count = widget.commentBean.likeCount!;
+                        widget.commentBean.likeCount = widget.commentBean.liked!
+                            ? count + 1
+                            : count - 1;
+                      });
+                    });
                   },
                   child: Row(
                     children: [

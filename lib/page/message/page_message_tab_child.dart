@@ -182,7 +182,7 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
                       width: 8.px,
                     ),
                     Text(
-                        DateFormat('MM-dd hh:mm')
+                        DateFormat('MM-dd HH:mm')
                             .format(messageBean.createdAt!),
                         style: TextStyle(
                             color: Color(0xff999999), fontSize: 11.px))

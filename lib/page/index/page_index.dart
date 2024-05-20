@@ -33,7 +33,7 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
     super.initState();
 
     // String dateString = '2024-05-06T17:12:03+08:00';
-    // DateTime date = DateTime.parse(dateString);
+    // DateTime date = DateTime.parse(dateString).toLocal();
 
     for (int i = 0; i < tabs.length; i++) {
       parentTabs.add(TabData(

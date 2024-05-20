@@ -220,7 +220,10 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   return CommentItem(
                     commentBean: comments[index],
                   );
-                })
+                }),
+                SizedBox(
+                  height: 100.px,
+                ),
               ],
             ),
           )

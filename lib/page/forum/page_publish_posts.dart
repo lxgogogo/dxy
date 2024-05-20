@@ -70,12 +70,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       print("publish post board ==${element.name}");
       items.add(element.name!);
     });
-
-    _playController = VideoPlayerController.network('');
-    _initializeVideoPlayerFuture = _playController.initialize().then((_) {
-      // Ensure the first frame is shown after the video is initialized
-      setState(() {});
-    });
   }
 
   @override
@@ -371,6 +365,11 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   Widget _mediaShowView() {
     if (isShowVideoView) {
+      _playController = VideoPlayerController.network('');
+      _initializeVideoPlayerFuture = _playController.initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized
+        setState(() {});
+      });
       return Container(
           padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
           height: 300.px,

@@ -12,7 +12,7 @@ class HoldemNormalBtn extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-            padding: EdgeInsets.only(bottom: 3.px),
+            padding: EdgeInsets.only(bottom: 2.px),
             decoration: BoxDecoration(
               //flutter 上下颜色渐变
               //#F9CF3A, #FFD43E00
@@ -23,8 +23,8 @@ class HoldemNormalBtn extends StatelessWidget {
                 colors: [
                   Color(0xFF8cbee9),
                   Color(0xFFbed6eb),
-                  Color(0xFF8cbee9),
-                  Color(0xFFc2d8eb),
+                  // Color(0xFF8cbee9),
+                  // Color(0xFFc2d8eb),
                   Color(0xFF8cbee9),
                   Color(0xFFc1d7eb),
                   Color(0xFF8cbee9),
@@ -73,7 +73,7 @@ class HoldemHighlightBtn extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-            padding: EdgeInsets.only(bottom: 3.px),
+            padding: EdgeInsets.only(bottom: 2.px),
             decoration: BoxDecoration(
               //flutter 上下颜色渐变
               //#F9CF3A, #FFD43E00

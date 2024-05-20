@@ -88,13 +88,13 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
       appBar: AppBar(
         backgroundColor: Colors.transparent, // 设置导航条背景透明
         // elevation: 0, // 去除导航条的阴影
-        title: Text('首页'),
+        title: Image.asset('assets/images/title_logo.png', width: 80, height: 25),
         actions: [
           IconButton(
             icon: Image.asset(
               'assets/images/navi_search.png',
-              width: 35.px,
-              height: 38.px,
+              width: 35,
+              height: 38,
             ),
             onPressed: () {
               // 登录按钮点击事件

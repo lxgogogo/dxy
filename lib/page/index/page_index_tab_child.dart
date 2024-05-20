@@ -122,9 +122,10 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
             // color: Colors.orange,
             child: Row(
               children: [
+                SizedBox(width: 6.px,),
                 ...List<Widget>.generate(categorys.length, (index) {
                   return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.px),
+                      padding: EdgeInsets.only(left: 10.px),
                       child: index != categorySel
                           ? HoldemNormalBtn(
                               child: Text(
@@ -197,7 +198,8 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       return SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
-          header: const WaterDropHeader(),
+          header: const WaterDropHeader(waterDropColor: Color(0xff008EFF),
+          complete: Text('加载完成',style: TextStyle(color: Colors.red),),),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
@@ -216,7 +218,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(),
+      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF),),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
@@ -254,7 +256,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
         children: [
           if (banners.length > 0)
             Container(
-              margin: EdgeInsets.only(left: 20.px, right: 20.px, top: 10.px),
+              margin: EdgeInsets.only(left: 16.px, right: 16.px, top: 10.px),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.px),

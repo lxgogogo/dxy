@@ -710,7 +710,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
     imageData.forEach((element) async {
       if (kIsWeb){
-        NetRequest().uploadBytesFile(element.bytes, (data) {
+        NetRequest().uploadBytesFile(element, (data) {
           UploadFile uploadFile = UploadFile.fromJson(data);
           print('uploadFile url===' + uploadFile.url!);
           imageUrlList.add(uploadFile);

@@ -66,14 +66,14 @@ class HttpUtils {
 
   static Future postBytesFile(
     String path,
-    data, {
+    file, {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
   }) async {
     return await Http().postBytesFile(
       path,
-      data: data,
+      file: file,
       params: params ?? {},
       options: options,
       cancelToken: cancelToken,

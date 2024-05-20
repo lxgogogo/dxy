@@ -223,7 +223,7 @@ class Http {
   Future postBytesFile(
     String path, {
     Map<String, dynamic>? params,
-    data,
+    file,
     Options? options,
     CancelToken? cancelToken,
   }) async {
@@ -233,9 +233,18 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
+    FormData formData = FormData.fromMap({
+      // 'file': file,
+      // ignore: prefer_interpolation_to_compose_strings
+      'file':MultipartFile.fromBytes(file.bytes,filename: 'temp.'+file.extension)
+      // 'fileType': params?['fileType'],
+      // 'timestamp': params?['timestamp'],
+      //  'apiKey': params?['apiKey'],
+      // 'sign': params?['sign'],
+    });
     var response = await dio.post(
       path,
-      data: data,
+      data: formData,
       // data: data,
       // queryParameter5s: params,
       options: requestOptions,

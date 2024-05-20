@@ -9,6 +9,7 @@ import 'package:holdem/page/mine/page_edit_information.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../model/upload_file.dart';
 import '../../model/user.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
@@ -190,11 +191,21 @@ class _PersonalPageState extends State<PersonalPage> {
   _webSelectImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: false,
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg']);
+        type: FileType.image);
     if (result != null) {
-      File file = File(result.files.single.path!);
-      String imagePath = file.path;
+      var files = result.files;
+      print('FilePickerResult=============:' + files.first.name);
+      NetRequest().updateAvatarBytesFile(files.first, (data) {
+
+        // UploadFile uploadFile = UploadFile.fromJson(data);
+        // setState(() {
+        //   netImageUrl = uploadFile.url!;
+        // });
+        // print('FilePickerResult url============' + uploadFile.url!);
+        //通知个人信息页面刷新
+        EventBusManager.eventBus
+            .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      });
     }
   }
 

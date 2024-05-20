@@ -89,31 +89,31 @@ class _SettingsPageState extends State<SettingsPage> {
                   margin: EdgeInsets.only(left: 60.px),
                   width: MediaQuery.of(context).size.width,
                   height: 0.5.px),
-              GestureDetector(
-                  onTap: () {
-                    ToastUtils.showToast("关于我们");
-                  },
-                  child: const ListTile(
-                    leading: ImageIcon(
-                      AssetImage('assets/images/about_us.png'),
-                      size: 22,
-                    ),
-                    title: Text(
-                      '关于我们',
-                      style: AppTheme.text333333Size15,
-                    ),
-                    // 中间文本
-                    trailing: ImageIcon(
-                      AssetImage('assets/images/item_arrow.png'),
-                      size: 22,
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
-                  )),
-              Container(
-                  color: AppTheme.color_1A000000,
-                  margin: EdgeInsets.only(left: 60.px),
-                  width: MediaQuery.of(context).size.width,
-                  height: 0.5.px),
+              // GestureDetector(
+              //     onTap: () {
+              //       ToastUtils.showToast("关于我们");
+              //     },
+              //     child: const ListTile(
+              //       leading: ImageIcon(
+              //         AssetImage('assets/images/about_us.png'),
+              //         size: 22,
+              //       ),
+              //       title: Text(
+              //         '关于我们',
+              //         style: AppTheme.text333333Size15,
+              //       ),
+              //       // 中间文本
+              //       trailing: ImageIcon(
+              //         AssetImage('assets/images/item_arrow.png'),
+              //         size: 22,
+              //       ),
+              //       contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
+              //     )),
+              // Container(
+              //     color: AppTheme.color_1A000000,
+              //     margin: EdgeInsets.only(left: 60.px),
+              //     width: MediaQuery.of(context).size.width,
+              //     height: 0.5.px),
               GestureDetector(
                   onTap: () {
                     _checkAppVersion();

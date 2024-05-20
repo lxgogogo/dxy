@@ -499,6 +499,20 @@ class NetRequest {
       }
     }
   }
+  ///更新图像 FILE
+  Future updateAvatarBytesFile(var data, SuccessCallback onSuccess) async {
+
+    Map<String, dynamic> response =
+    await HttpUtils.postBytesFile(Api.updateAvatar,data, params: {});
+    HttpUtilsResonse.Response resp =
+    HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("updateAvatar===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
 
   ///更新图像
   Future updateAvatar(String filePath, SuccessCallback onSuccess) async {

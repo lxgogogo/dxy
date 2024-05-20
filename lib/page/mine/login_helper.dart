@@ -57,6 +57,7 @@ class LoginHelper {
     return CachedNetworkImage(
       width: width,
       height: height,
+      fit: BoxFit.cover,
       imageUrl: avatarUrl.isNotEmpty ? avatarUrl : '',
       placeholder: (context, url) =>
           Image.asset('assets/images/default_avatar.png'),

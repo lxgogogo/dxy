@@ -229,7 +229,7 @@ class Http {
   }) async {
     Options requestOptions = options ?? Options();
     Map<String, dynamic>? _authorization = getAuthorizationHeader();
-    _authorization!['Content-Type'] = 'application/octet-stream';
+    // _authorization!['Content-Type'] = 'application/octet-stream';
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }

@@ -104,9 +104,9 @@ class _VideoListPageState extends State<VideoListPage> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.px),
         margin: EdgeInsets.symmetric(horizontal: 10.px),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             border: Border(
-                bottom: BorderSide(width: 1.px, color: Color(0xffe5e5e5)))),
+                bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

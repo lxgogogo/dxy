@@ -139,7 +139,7 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
       showBackIcon: false,
       showNextIcon: false,
       labelPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-      indicatorColor: Colors.transparent,
+      indicatorColor: const Color(0xff008EFF),
       //底部下标颜色
       enableFeedback: false,
       dividerHeight: 0,

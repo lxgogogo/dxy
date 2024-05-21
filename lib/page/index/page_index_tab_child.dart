@@ -122,7 +122,9 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
             // color: Colors.orange,
             child: Row(
               children: [
-                SizedBox(width: 6.px,),
+                SizedBox(
+                  width: 6.px,
+                ),
                 ...List<Widget>.generate(categorys.length, (index) {
                   return Container(
                       padding: EdgeInsets.only(left: 10.px),
@@ -130,7 +132,10 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                           ? HoldemNormalBtn(
                               child: Text(
                                 categorys[index].name ?? '',
-                                style: TextStyle(color: Color(0xff56748F)),
+                                style: TextStyle(
+                                    color: Color(0xff56748F),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
                               ),
                               onTap: () {
                                 setState(() {
@@ -142,7 +147,10 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                           : HoldemHighlightBtn(
                               child: Text(
                                 categorys[index].name ?? '',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
                               ),
                               onTap: () {
                                 setState(() {
@@ -198,13 +206,18 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       return SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
-          header: const WaterDropHeader(waterDropColor: Color(0xff008EFF),
-          complete: Text('加载完成',style: TextStyle(color: Colors.red),),),
+          header: const WaterDropHeader(
+            waterDropColor: Color(0xff008EFF),
+            complete: Text(
+              '加载完成',
+              style: TextStyle(color: Color(0xff647A9C)),
+            ),
+          ),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
           child: GridView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 12.px),
+            padding: EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.57,
@@ -218,7 +231,9 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF),),
+      header: const WaterDropHeader(
+        waterDropColor: Color(0xff008EFF),
+      ),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
@@ -261,21 +276,39 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.px),
               ),
-              height: 160.px,
+              height: 170.px,
               child: Swiper(
                 itemCount: banners.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      jumpPage(banners[index]);
-                    },
-                    child: Image.network(
-                      banners[index].img ?? '',
-                      fit: BoxFit.cover,
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 10.px),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.px),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        jumpPage(banners[index]);
+                      },
+                      child: Image.network(
+                        banners[index].img ?? '',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   );
                 },
-                pagination: SwiperPagination(),
+                pagination: SwiperPagination(
+                  alignment: Alignment.bottomCenter,
+                  margin: EdgeInsets.only(bottom: 0.px),
+                  // builder: (BuildContext context, SwiperPluginConfig config) {
+                  //   return CustomP(config.activeIndex);
+                  // }
+                  builder: const RectSwiperPaginationBuilder(
+                      color: Color(0xffADCCE8),
+                      activeColor: Color(0xff008EFF),
+                      size: Size(30, 10),
+                      activeSize: Size(30, 10)),
+                ),
                 autoplay: true,
               ),
             ),

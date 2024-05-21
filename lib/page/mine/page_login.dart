@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
                     hintText: '请输入邮箱地址',
-                    hintStyle: AppTheme.text999999Size14,
+                    hintStyle: AppTheme.text999999Size16,
                     contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
                   ),
                 ),
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
                     hintText: '请输入密码',
-                    hintStyle: AppTheme.text999999Size14,
+                    hintStyle: AppTheme.text999999Size16,
                     contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
                   ),
                 ),

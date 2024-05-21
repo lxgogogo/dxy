@@ -176,15 +176,15 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKee
           fontSize: 14.px,
           color: forumAppMainColor,
         ),
-        selectedColor: Colors.transparent,
+        selectedColor: AppTheme.color_1A008EFF, //选择背景
         unselectedShadow: const [],
-        unselectedColor: Colors.white,
+        unselectedColor: AppTheme.color_80FFFFFF, //未选择背景
         unselectedTextStyle: TextStyle(
           fontSize: 13.px,
           color: tabTitleUnselectColor,
         ),
         selectedBorderColor: forumAppMainColor,
-        unselectedBorderColor: Colors.transparent,
+        unselectedBorderColor: AppTheme.color_80FFFFFF,
         borderRadius: BorderRadius.circular(100),
         spacing: 10,
         runSpacing: 10,

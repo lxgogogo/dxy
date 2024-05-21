@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/main_page.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:oktoast/oktoast.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +28,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // EasyLoading.init();
-    return GetMaterialApp(
+    return OKToast(
+        child: GetMaterialApp(
       title: '德州论坛',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -45,12 +48,12 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
         useMaterial3: true,
       ),
       home: const MainScreen(),
       builder: EasyLoading.init(),
-    );
+    ));
   }
 }
 

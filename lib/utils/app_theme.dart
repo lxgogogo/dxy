@@ -19,6 +19,7 @@ class AppTheme {
   static const color_1A000000 = Color(0x1A000000); //10%透明
   static const color_50000000 = Color(0x5000000); //2%透明
   static const color_30000000 = Color(0x3000000); //20%透明
+  static const color_80FFFFFF = Color(0x80FFFFFF); //50%透明
   static const color_333333 = Color(0xFF333333);
   static const color_476DB7 = Color(0xFF476DB7);
 

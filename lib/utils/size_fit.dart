@@ -27,6 +27,10 @@ class SizeFit {
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData!.size.width;
     screenHeight = _mediaQueryData!.size.height;
+
+    if (screenWidth!>900){
+      screenWidth = 900;
+    }
     rpx = screenWidth!/standardWidth;
     px = screenWidth!/standardWidth*2;
   }

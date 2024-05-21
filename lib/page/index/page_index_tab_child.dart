@@ -276,12 +276,12 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.px),
               ),
-              height: 170.px,
+              height: 160.px+20,
               child: Swiper(
                 itemCount: banners.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    margin: EdgeInsets.only(bottom: 10.px),
+                    margin: const EdgeInsets.only(bottom: 20),
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.px),

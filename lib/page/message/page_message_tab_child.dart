@@ -96,7 +96,7 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (c, i) => messageCommentItem(messages[i]),
+        itemBuilder: (c, i) => messageCommentItem(messages[i],i),
         // itemExtent: 160.0,
         itemCount: messages.length,
       ),
@@ -121,7 +121,7 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
     }
   }
 
-  Widget messageCommentItem(MessageBean messageBean) {
+  Widget messageCommentItem(MessageBean messageBean,int index) {
     String title = '@了我';
     String str = messageBean.description ?? '';
     if (widget.type == 'comment') {
@@ -136,7 +136,7 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
       margin: EdgeInsets.only(left: 16.px, right: 16.px),
       decoration: BoxDecoration(
           border: Border(
-              bottom: BorderSide(color: Color(0xffE5E5E5), width: 1.px))),
+              bottom: BorderSide(color: index==messages.length-1?Colors.transparent:const Color(0xffE5E5E5), width: 1))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -218,6 +218,7 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
                             ),
                           Container(
                             padding: EdgeInsets.all(10.px),
+                            width: 300.px,
                             decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(0.05),
                                 borderRadius:

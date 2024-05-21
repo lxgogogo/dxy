@@ -92,6 +92,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         // elevation: 0, // 去除导航条的阴影
         title: Text('视频详情'),
@@ -124,6 +125,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.px),
+            color: Colors.white,
             child: Column(
               children: [
                 Text(articleDetailBean.title ?? '',
@@ -158,6 +160,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
               child: Container(
                 width: 375.px,
                 height: 210.px,
+                color: Colors.white,
                 child: Stack(
                   children: [
                     _playController.value.isInitialized

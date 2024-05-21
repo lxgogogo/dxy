@@ -154,7 +154,7 @@ class _CommentItemState extends State<CommentItem> {
                   ),
                 ),
                 SizedBox(
-                  width: 30.px,
+                  width: 15.px,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -197,7 +197,7 @@ class _CommentItemState extends State<CommentItem> {
               ],
             ),
             Container(
-              height: 1.px,
+              height: 1,
               margin: EdgeInsets.symmetric(vertical: 20.px),
               color: Colors.black.withOpacity(0.1),
             )

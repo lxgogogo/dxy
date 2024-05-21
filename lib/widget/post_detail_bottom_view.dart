@@ -126,6 +126,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   IconButton(
                       onPressed: () {
                         showModalBottomSheet(
+                            backgroundColor: AppTheme.white,
                             context: context,
                             builder: (BuildContext context) {
                               return sharePopView();
@@ -145,8 +146,17 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   Widget sharePopView() {
     return Container(
-      height: 180,
-      margin: EdgeInsets.fromLTRB(6, 5, 6, 15),
+      height: 180.px,
+      width: MediaQuery.of(context).size.width,
+      // color: AppTheme.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0), // 顶部左侧设置圆角
+          topRight: Radius.circular(20.0), // 顶部右侧设置圆角
+        ),
+        color: AppTheme.white,
+      ),
+      padding: EdgeInsets.fromLTRB(6, 5, 6, 15),
       child: Column(
         children: <Widget>[
           Row(
@@ -154,14 +164,14 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
             children: <Widget>[
               Flexible(
                 child: Container(
-                  width: 46.px,
+                  width: 35.px,
                 ), // 占位用于调整间距
               ),
               Expanded(
                 child: Center(
                   child: Text(
                     '分享',
-                    style: AppTheme.text000000Size16,
+                    style: AppTheme.text000000Size16W500,
                   ),
                 ),
               ),
@@ -178,7 +188,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 30,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

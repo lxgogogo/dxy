@@ -329,6 +329,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ]),
           ));
     } else {
+      double widthNum = (MediaQuery.of(context).size.width - 60) / 3;
       return GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -345,8 +346,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
               },
               child: Image.network(
                 imageUrlList[index],
-                width: 100,
-                height: 100,
+                width: widthNum,
+                height: 111.px,
+                fit: BoxFit.cover,
               ),
             ); // 替换image_$index.jpg为对应的图片路径
           });

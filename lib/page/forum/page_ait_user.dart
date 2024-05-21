@@ -190,18 +190,19 @@ class _AitUserPageState extends State<AitUserPage> {
           padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
           child: Row(children: [
             Container(
-                height: 45,
+                height: 45.px,
+                width: 45.px,
                 child: Center(
                     child: ClipOval(
                   child: LoginHelper().getUserAvatar(
                       followOrFanUserList[index].avatar!.isNotEmpty
                           ? followOrFanUserList[index].avatar!
                           : '',
-                      45.px,
-                      45.px),
+                      45,
+                      45),
                 ))),
             SizedBox(
-              width: 10,
+              width: 5,
             ),
             Text(
               followOrFanUserList[index].nickname!.isNotEmpty
@@ -226,7 +227,7 @@ class _AitUserPageState extends State<AitUserPage> {
 
   Widget topSearchView() {
     return Container(
-        height: 40,
+        height: 40.px,
         child: Center(
             child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
@@ -234,12 +235,12 @@ class _AitUserPageState extends State<AitUserPage> {
             controller: searchController,
             decoration: InputDecoration(
               hintText: '搜索用户',
-              contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+              contentPadding: EdgeInsets.fromLTRB(-3, 5, 0, 0),
               prefixIcon: IconButton(
                 icon: Image.asset(
                   'assets/images/search_icon.png',
-                  width: 15,
-                  height: 15,
+                  width: 15.px,
+                  height: 15.px,
                 ),
                 onPressed: () {},
               ),
@@ -264,7 +265,7 @@ class _AitUserPageState extends State<AitUserPage> {
               ),
               filled: true,
               fillColor: AppTheme.color_EFEFEF,
-              hintStyle: AppTheme.text999999Size14,
+              hintStyle: AppTheme.text999999Size15,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(8.0),

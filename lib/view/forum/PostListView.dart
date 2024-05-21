@@ -149,7 +149,10 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
             extensions: [
               TagExtension(
                 tagsToExtend: {"flutter"},
-                child: const FlutterLogo(),
+                child: const FlutterLogo(
+                  textColor: AppTheme.color_008EFF,
+                  size: 14,
+                ),
               ),
             ],
             style: {

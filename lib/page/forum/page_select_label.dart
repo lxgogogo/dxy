@@ -36,8 +36,8 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
     selectedLabelList = widget.selectedLabelList;
     _isMounted = true;
 
-    if (StorageUtil().prefs != null ) {
-      labelData = StorageUtil().prefs!.getStringList('userLabel')?? [];
+    if (StorageUtil().prefs != null) {
+      labelData = StorageUtil().prefs!.getStringList('userLabel') ?? [];
     }
   }
 
@@ -69,7 +69,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
-        bottom:  PreferredSize(
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(1.0),
           child: Divider(
             color: AppTheme.color_F3F3F3,
@@ -105,12 +105,14 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-                margin: EdgeInsets.only(left: 16),
+                margin: EdgeInsets.fromLTRB(16.px, 0.px, 0, 0),
                 child: Text(
                   '我的标签',
                   style: AppTheme.text333333Size15,
                 )),
-            IconButton(
+            Container(
+              margin: EdgeInsets.only(right: 10.px),
+                child: IconButton(
               icon: Image.asset(
                 'assets/images/label_del.png',
                 width: 16.px,
@@ -127,9 +129,10 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                   });
                 }
               },
-            ),
+            ))
           ],
         ),
+        SizedBox(height: 5.px,),
         Expanded(
             child: Container(
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -199,11 +202,13 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
-                          textAlignVertical: TextAlignVertical.center, // 将文本垂直居中
+                          textAlignVertical: TextAlignVertical.center,
+                          // 将文本垂直居中
                           controller: controller,
                           maxLength: 4,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.fromLTRB(10.px, 3, 10.px, 0),
+                            contentPadding:
+                                EdgeInsets.fromLTRB(10.px, 3, 10.px, 0),
                             counterText: '',
                             hintText: '标签内容（最多四个字）',
                             filled: true,
@@ -226,7 +231,9 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                             if (_isMounted) {
                               setState(() {
                                 labelData.add(controller.text);
-                                StorageUtil().prefs!.setStringList('userLabel', labelData);
+                                StorageUtil()
+                                    .prefs!
+                                    .setStringList('userLabel', labelData);
                                 controller.text = ''; //清空输入框
                               });
                             }

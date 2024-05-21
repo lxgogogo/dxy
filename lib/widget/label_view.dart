@@ -76,7 +76,7 @@ class _LabelViewState extends State<LabelView> {
               color: AppTheme.color_1A008EFF,
               borderRadius: BorderRadius.circular(6),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
             // 设置内边距
             child: Row(
               children: [
@@ -86,7 +86,7 @@ class _LabelViewState extends State<LabelView> {
                   maxLines: 1,
                           labelValue,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 15,
                     fontWeight: FontWeight.w400,
                     color: AppTheme.color_008EFF,
                   ),
@@ -100,17 +100,29 @@ class _LabelViewState extends State<LabelView> {
                             color: AppTheme.color_999999,
                             fontWeight: FontWeight.w200),
                       ),
-                      GestureDetector(
-                        onTap: () { //删除当前标签
+                    IconButton(
+                      icon: Image.asset(
+                        'assets/images/label_close.png',
+                        width: 15.px,
+                        height: 15.px,
+                      ),
+                      onPressed: () {
                           setState(() {
                             labelData.remove(labelValue);
                           });
-                        },
-                        child: Icon(
-                          Icons.close,
-                          size: 15,
-                        ),
-                      )
+                      },
+                    )
+                      // GestureDetector(
+                      //   onTap: () { //删除当前标签
+                      //     setState(() {
+                      //       labelData.remove(labelValue);
+                      //     });
+                      //   },
+                      //   child: Icon(
+                      //     Icons.close,
+                      //     size: 15,
+                      //   ),
+                      // )
                     ],
                   ),
                   visible: isEditLabel ? true : false,

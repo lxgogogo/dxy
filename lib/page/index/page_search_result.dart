@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/item_video.dart';
@@ -6,6 +7,8 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../utils/app_theme.dart';
 
 class SearchResultPage extends StatefulWidget {
   String keyword;
@@ -77,9 +80,25 @@ class _SearchResultPageState extends State<SearchResultPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent, // 设置导航条背景透明
         elevation: 0, // 去除导航条的阴影
-        // title: Text('hhh'),
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/images/back.png',
+            width: 22.px,
+            height: 22.px,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body:content());
+      body:_contentView());
+  }
+
+  Widget _contentView() {
+    return Container(
+      margin: EdgeInsets.only(top: 30.px),
+      child: content(),
+    );
   }
 
   Widget content() {

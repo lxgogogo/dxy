@@ -34,11 +34,11 @@ class _CSearchBarState extends State<CSearchBar> {
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15.px),
+            padding: EdgeInsets.symmetric(horizontal: 10.px),
             height: 35.px,
             decoration: BoxDecoration(
                 color: const Color(0xFFF1F1F1),
-                borderRadius: BorderRadius.circular(10.px)),
+                borderRadius: BorderRadius.circular(6.px)),
             child: Row(
               children: [
                 Icon(
@@ -47,7 +47,7 @@ class _CSearchBarState extends State<CSearchBar> {
                   color: const Color(0xff999999),
                 ),
                 SizedBox(
-                  width: 10.px,
+                  width: 5.px,
                 ),
                 Expanded(
                     child: TextField(

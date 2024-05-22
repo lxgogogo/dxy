@@ -233,7 +233,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
               child: LabelView(
                   isEditLabel: false,
                   labelData: boardBean != null ? boardBean!.tags! : [],
-                  onItemTap: (value) {}),
+                  onItemTap: (value) {}, onDelTap: (value) {},
+              ),
             ),
           ),
         ],),

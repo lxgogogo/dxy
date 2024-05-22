@@ -237,6 +237,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     isEditLabel: true,
                     labelData: customLabelList,
                     onItemTap: (labelValue) {},
+                    onDelTap: (value) {
+                      setState(() {
+                        print('==========value=============${value}');
+                        customLabelList.remove(value);
+                      });
+                    },
                   )))
         ],),
       ],
@@ -705,8 +711,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       return;
     }
 
-    if (content.isEmpty) {
-      ToastUtils.showToast('内容不能为空');
+    if (content.isEmpty || content.length < 10) {
+      ToastUtils.showToast('帖子内容长度不能小于10个字符');
       return;
     }
 

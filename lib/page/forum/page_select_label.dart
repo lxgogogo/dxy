@@ -147,6 +147,15 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                     }
                     Navigator.pop(context, labelValue);
                   },
+                  onDelTap: (value) {
+                    setState(() {
+                      print('==========value=============${value}');
+                      labelData.remove(value);
+                      StorageUtil()
+                          .prefs!
+                          .setStringList('userLabel', labelData);
+                    });
+                  },
                 )))
       ],
     );

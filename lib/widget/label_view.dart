@@ -10,8 +10,9 @@ class LabelView extends StatefulWidget {
   bool isEditLabel = false;
   List<String> labelData = [];
   OnTapCallback onItemTap;
+  OnTapCallback onDelTap;
 
-  LabelView({Key? key, required this.isEditLabel, required this.labelData, required this.onItemTap})
+  LabelView({Key? key, required this.isEditLabel, required this.labelData, required this.onItemTap,required this.onDelTap})
       : super(key: key);
 
   @override
@@ -22,6 +23,7 @@ class _LabelViewState extends State<LabelView> {
   late bool isEditLabel = false;
   late List<String> labelData = [];
   late OnTapCallback onTap;
+  late OnTapCallback onDelTap;
 
   @override
   void initState() {
@@ -34,14 +36,17 @@ class _LabelViewState extends State<LabelView> {
     isEditLabel = widget.isEditLabel;
     labelData = widget.labelData;
     onTap = widget.onItemTap;
-    return ReorderableGridView.count(
+    onDelTap = widget.onDelTap;
+    return ReorderableGridView.builder(
       key: ValueKey('label1'),
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      crossAxisCount: isEditLabel ? 3 : 4,
-      childAspectRatio: isEditLabel ? 3 : 2.5,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        crossAxisCount: isEditLabel ? 3 : 4,
+        childAspectRatio: isEditLabel ? 3 : 2.5,
+      ),
       // 设置宽高比为
       dragEnabled: false,
       dragWidgetBuilderV2: DragWidgetBuilderV2(
@@ -49,13 +54,17 @@ class _LabelViewState extends State<LabelView> {
           builder: (index, child, screenshot) {
             return child;
           }),
-      children: this.labelData.map((e) => buildItem("$e")).toList(),
+      // children: this.labelData.map((e) => buildItem("$e")).toList(),
       onReorder: (oldIndex, newIndex) {
         // setState(() {
         //   final element = labelData.removeAt(oldIndex);
         //   labelData.insert(newIndex, element);
         // });
       },
+      itemCount: labelData.length,
+      itemBuilder: (BuildContext context, int index) {
+        return buildItem(labelData[index]);
+    },
     );
   }
 
@@ -100,29 +109,29 @@ class _LabelViewState extends State<LabelView> {
                             color: AppTheme.color_999999,
                             fontWeight: FontWeight.w200),
                       ),
-                    IconButton(
-                      icon: Image.asset(
-                        'assets/images/label_close.png',
-                        width: 15.px,
-                        height: 15.px,
+                    // IconButton(
+                    //   icon: Image.asset(
+                    //     'assets/images/label_close.png',
+                    //     width: 15.px,
+                    //     height: 15.px,
+                    //   ),
+                    //   onPressed: () {
+                    //       setState(() {
+                    //         labelData.remove(labelValue);
+                    //       });
+                    //   },
+                    // )
+                      GestureDetector(
+                        onTap: () { //删除当前标签
+                          onDelTap(labelValue);
+
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 15.px,
+                        ),
                       ),
-                      onPressed: () {
-                          setState(() {
-                            labelData.remove(labelValue);
-                          });
-                      },
-                    )
-                      // GestureDetector(
-                      //   onTap: () { //删除当前标签
-                      //     setState(() {
-                      //       labelData.remove(labelValue);
-                      //     });
-                      //   },
-                      //   child: Icon(
-                      //     Icons.close,
-                      //     size: 15,
-                      //   ),
-                      // )
+                      SizedBox(width: 5.px,)
                     ],
                   ),
                   visible: isEditLabel ? true : false,

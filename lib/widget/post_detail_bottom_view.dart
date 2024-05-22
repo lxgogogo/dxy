@@ -134,7 +134,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         var shareData = {
                           "title": 'MDN',
                           "text": 'Learn web development on MDN!',
-                          "url": 'https://developer.mozilla.org',
+                          "url": 'https://bbs.api.robot-9.com/',
                         };
                         html.window.navigator.share(shareData);
                         // html.window.navigator.share(shareData);

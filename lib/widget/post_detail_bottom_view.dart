@@ -1,9 +1,14 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/comment/page_comments.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:universal_html/html.dart' as html;  
 
 import '../model/upload_file.dart';
 import '../page/forum/page_comment_input.dart';
@@ -39,7 +44,8 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
     super.initState();
     _isMounted = true;
     viewParams = widget.viewParams;
-    _isFavorite = viewParams.favoriteState != null ? viewParams.favoriteState! : false;
+    _isFavorite =
+        viewParams.favoriteState != null ? viewParams.favoriteState! : false;
   }
 
   @override
@@ -101,7 +107,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       onPressed: () {
                         //跳转评论列表页面
                         // ToastUtils.showToast('跳转评论列表');
-                        Get.to(CommentListPage(id:viewParams.relId!));
+                        Get.to(CommentListPage(id: viewParams.relId!));
                       },
                       icon: Image.asset(
                         'assets/images/small_comments.png',
@@ -125,12 +131,20 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       )),
                   IconButton(
                       onPressed: () {
-                        showModalBottomSheet(
-                            backgroundColor: AppTheme.white,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return sharePopView();
-                            });
+                        var shareData = {
+                          "title": 'MDN',
+                          "text": 'Learn web development on MDN!',
+                          "url": 'https://developer.mozilla.org',
+                        };
+                        html.window.navigator.share(shareData);
+                        // html.window.navigator.share(shareData);
+                        // Share.shareXFiles([XFile('https://bbs.api.robot-9.com/static/avatar.png')], text: 'Great picture');
+                        //   showModalBottomSheet(
+                        //       backgroundColor: AppTheme.white,
+                        //       context: context,
+                        //       builder: (BuildContext context) {
+                        //         return sharePopView();
+                        //       });
                       },
                       icon: Image.asset(
                         'assets/images/small_share.png',

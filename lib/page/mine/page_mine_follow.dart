@@ -134,11 +134,12 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   Widget contentView() {
     return Center(
-      child:
+      child:Row(children: [
         Expanded(
             child: followOrFanUserList.isNotEmpty
                 ? listView()
                 : const NoDataView())
+      ],)
     );
   }
 
@@ -192,8 +193,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
               NetRequest().followerToggle(followOrFanUserList[index].id!,
                   !followOrFanUserList[index].followed!, (data) {
                 setState(() {
-                  followOrFanUserList[index].followed =
-                      !followOrFanUserList[index].followed!;
+                  followOrFanUserList.remove(followOrFanUserList[index]);
                 });
               });
             })

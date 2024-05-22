@@ -12,6 +12,7 @@ import '../../model/comment_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
+import '../../utils/storage.dart';
 import '../../view/forum/CircleImageWithText.dart';
 import '../../widget/label_view.dart';
 import '../../widget/post_detail_bottom_view.dart';
@@ -167,6 +168,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
         backgroundColor: Colors.white);
   }
 
+  ///是自己的帖子 不显示关注
+  bool isOwnerPost() {
+    if (boardBean != null ) {
+      var ownerId = StorageUtil().prefs!.getString('ownerId');
+       if (boardBean!.user!.id!.toString() == ownerId) {
+         return true;
+       }
+    }
+    return false;
+  }
 
   Widget contentView() {
     return ListView(
@@ -206,17 +217,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           bottomText1Style: AppTheme.text999999Size11,
                           bottomText2: '',
                           bottomText2Style: const TextStyle()),
-                      (boardBean != null ? boardBean!.user!.followed! : false)
+                      Visibility(
+                          visible: isOwnerPost() ? false : true,
+                          child:
+                          (boardBean != null ? boardBean!.user!.followed! : false)
                           ? followedStatusBtn()
                           : IconButton(
-                              onPressed: () {
-                                _followToggle();
-                              },
-                              icon: Image.asset(
-                                'assets/images/follow_btn.png',
-                                width: 62,
-                                height: 28,
-                              ))
+                          onPressed: () {
+                            _followToggle();
+                          },
+                          icon: Image.asset(
+                            'assets/images/follow_btn.png',
+                            width: 62,
+                            height: 28,
+                          )))
+
                     ]),
                 SizedBox(height: 16),
                 _showContentView(),

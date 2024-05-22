@@ -1,9 +1,12 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
+import '../../model/comment_list.dart';
 import '../../model/thread_list.dart';
 import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
@@ -29,12 +32,14 @@ class _MineChildPageState extends State<MineChildPage>
   bool _isMounted = false;
 
   List<BoardBean> boardPostList = [];
-  List<ThreadListBean> commentDataList = [];
+  List<BoardBean> commentDataList = [];
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   RefreshController _refreshController2 =
       RefreshController(initialRefresh: false);
+
+  bool loaded = false;
 
   void _onRefresh() async {
     setState(() {
@@ -75,6 +80,7 @@ class _MineChildPageState extends State<MineChildPage>
             } else {
               boardPostList.addAll(boardList.list!);
             }
+            loaded = true;
           });
         }
       });
@@ -88,13 +94,40 @@ class _MineChildPageState extends State<MineChildPage>
           setState(() {
             List<BoardBean> currentBoardList = [];
             for (var element in followedFansList.list!) {
-              currentBoardList.add(element.thread!);
+              if (element.relType != null) {
+                if (element.relType == 'thread') {
+                  currentBoardList.add(element.thread != null ? element.thread! : BoardBean());
+                } else if (element.relType == 'content') {
+                  BoardBean boardBean = BoardBean(
+                      id: element.content!.id!,
+                      relType: element.relType!,
+                      title: element.content!.title!,
+                      content: element.content!.description!,
+                      files: [UploadFile(url: element.content!.cover!)],
+                      favoriteCount: element.content!.favoriteCount,
+                      commentCount: element.content!.commentCount,
+                      likeCount: element.content!.likeCount,
+                  );
+                  currentBoardList.add(boardBean);
+                } else if (element.relType == 'comment') {
+                  BoardBean boardBean = BoardBean(
+                    title: element.content!.title!,
+                    content: element.content!.description!,
+                    files: [UploadFile(url: element.content!.cover!)],
+                    favoriteCount: element.content!.favoriteCount,
+                    commentCount: element.content!.commentCount,
+                    likeCount: element.content!.likeCount,
+                  );
+                  currentBoardList.add(element.comment != null ? element.comment! : BoardBean());
+                }
+              }
             }
             if (pageNum == 1) {
               boardPostList = currentBoardList;
             } else {
               boardPostList.addAll(currentBoardList);
             }
+            loaded = true;
           });
         }
       });
@@ -103,14 +136,37 @@ class _MineChildPageState extends State<MineChildPage>
     } else if (tabIndex == 2) {
       //评论
       NetRequest().userCommentList(pageNum, pageSize, '', (data) {
-        ThreadList commentList = ThreadList.fromJson(data);
+        CommentList commentList = CommentList.fromJson(data);
         if (_isMounted) {
           setState(() {
-            if (pageNum == 1) {
-              commentDataList = commentList.list!;
-            } else {
-              commentDataList.addAll(commentList.list!);
+            List<BoardBean> currentBoardList = [];
+            for (var element in commentList.list!) {
+              if (element.relType != null) {
+                if (element.relType == 'thread') {
+                  currentBoardList.add(element.thread != null ? element.thread! : BoardBean());
+                } else if (element.relType == 'content') {
+                  BoardBean boardBean = BoardBean(
+                    id: element.content!.id!,
+                    relType: element.relType!,
+                    title: element.content!.title!,
+                    content: element.content!.description!,
+                    files: [UploadFile(url: element.content!.cover!)],
+                    favoriteCount: element.content!.favoriteCount,
+                    commentCount: element.content!.commentCount,
+                    likeCount: element.content!.likeCount,
+                  );
+                  currentBoardList.add(boardBean);
+                } else if (element.relType == 'comment') {
+
+                }
+              }
             }
+            if (pageNum == 1) {
+              commentDataList = currentBoardList;
+            } else {
+              commentDataList.addAll(currentBoardList);
+            }
+            loaded = true;
           });
         }
       });
@@ -122,15 +178,14 @@ class _MineChildPageState extends State<MineChildPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (tabIndex == 2) {
-      return commentDataList.isNotEmpty ? Container(color: Colors.white,child:listView()) : const NoDataView();
-    } else {
-      return  boardPostList.isNotEmpty ? Container(color: Colors.white,child:listView()) : const NoDataView();
-    }
+    return Container(color: Colors.white,child:listView());
   }
 
   ///列表数据
   Widget listView() {
+    if (loaded && (tabIndex == 2 ? commentDataList.length == 0 : boardPostList.length ==0)) {
+      return Center(child: NoDataView(),);
+    }
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -144,7 +199,7 @@ class _MineChildPageState extends State<MineChildPage>
           itemIndex: i,
           isForumList: false,
           boardBean:
-              tabIndex == 2 ? (commentDataList[i].thread != null ? commentDataList[i].thread! :BoardBean()) : boardPostList[i],
+              tabIndex == 2 ? commentDataList[i] : boardPostList[i],
         ),
         // itemExtent: 160.0,
         itemCount:

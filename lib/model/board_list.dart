@@ -50,6 +50,7 @@ class BoardBean {
   List<String>? tags;
   List<String>? pics;
   List<UploadFile>? files;
+  String? relType;
 
   BoardBean(
       {this.id,
@@ -65,7 +66,8 @@ class BoardBean {
       this.favorited,
       this.tags,
       this.pics,
-      this.files
+      this.files,
+      this.relType
       });
 
   BoardBean.fromJson(Map<String, dynamic> json) {
@@ -77,6 +79,8 @@ class BoardBean {
     }
     if (json["content"] is String) {
       content = json["content"];
+    }if (json["relType"] is String) {
+      relType = json["relType"];
     }
     if (json["createdAt"] is String) {
       createdAt = DateTime.parse(json["createdAt"]).toLocal();
@@ -140,6 +144,7 @@ class BoardBean {
     _data["liked"] = liked;
     _data["tags"] = tags;
     _data["files"] = files;
+    _data["relType"] = relType;
     return _data;
   }
 }

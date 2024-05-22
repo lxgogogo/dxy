@@ -1,3 +1,5 @@
+import 'board_list.dart';
+
 class CommentList {
   Paper? pager;
   List<CommentBean>? list;
@@ -30,6 +32,7 @@ class CommentBean {
   int? id;
   int? relId;
   String? relType;
+  BoardBean? thread;
   List<String>? at;
   List<Reply>? replies;
   String? comment;
@@ -48,6 +51,7 @@ class CommentBean {
     this.at,
     this.comment,
     this.content,
+    this.thread,
     this.contentStr,
     this.createdAt,
     this.replyCount,
@@ -104,6 +108,10 @@ class CommentBean {
     if (json["replies"] is List) {
       replies = (json["replies"] as List).map((e) => Reply.fromJson(e)).toList();
     }
+
+    if (json['thread'] != null) {
+      thread = BoardBean.fromJson(json['thread']);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +129,7 @@ class CommentBean {
     _data["user"] = user;
     _data['liked'] = liked;
     _data['replies'] = replies;
+    _data['thread'] = thread;
     return _data;
   }
 }

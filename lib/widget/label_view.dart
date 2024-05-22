@@ -104,7 +104,7 @@ class _LabelViewState extends State<LabelView> {
                   child: Row(
                     children: [
                       Text(
-                        '丨',
+                        '|',
                         style: TextStyle(
                             color: AppTheme.color_999999,
                             fontWeight: FontWeight.w200),
@@ -121,6 +121,7 @@ class _LabelViewState extends State<LabelView> {
                     //       });
                     //   },
                     // )
+                      SizedBox(width: 3.px,),
                       GestureDetector(
                         onTap: () { //删除当前标签
                           onDelTap(labelValue);
@@ -131,7 +132,7 @@ class _LabelViewState extends State<LabelView> {
                           size: 15.px,
                         ),
                       ),
-                      SizedBox(width: 5.px,)
+                      SizedBox(width: 3.px,)
                     ],
                   ),
                   visible: isEditLabel ? true : false,

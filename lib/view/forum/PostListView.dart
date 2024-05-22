@@ -7,6 +7,7 @@ import 'package:holdem/utils/size_fit.dart';
 
 import '../../model/board_list.dart';
 import '../../page/forum/page_forum_post_detail.dart';
+import '../../page/index/page_article_detail.dart';
 import '../../utils/app_theme.dart';
 
 class PostListItemView extends StatefulWidget {
@@ -48,7 +49,15 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
   Widget listDataItem(int index) {
     return GestureDetector(
         onTap: () {
-          Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
+          if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
+            if (boardBean.relType == 'content') {
+              Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
+            }  else if (boardBean.relType == 'comment') {
+
+            }
+          } else {
+            Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
+          }
         },
         child: Container(
             padding: EdgeInsets.all(12.px),

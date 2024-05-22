@@ -216,8 +216,7 @@ class _AitUserPageState extends State<AitUserPage> {
               NetRequest().followerToggle(followOrFanUserList[index].id!,
                   !followOrFanUserList[index].followed!, (data) {
                     setState(() {
-                      followOrFanUserList[index].followed =
-                      !followOrFanUserList[index].followed!;
+                      followOrFanUserList.remove(followOrFanUserList[index]);
                     });
                   });
             })

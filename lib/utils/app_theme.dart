@@ -7,6 +7,7 @@ class AppTheme {
   static const Color white = Color(0xFFFFFFFF);
   static const color_008EFF = Color(0xff008EFF);
   static const color_1A008EFF = Color(0x1A008EFF);
+  static const color_80008EFF = Color(0x80008EFF); //3%透明
   static const color_8F9BB2 = Color(0xFF8F9BB2);
   static const color_3B5078 = Color(0xFF3B5078);
   static const color_999999 = Color(0xFF999999);
@@ -160,6 +161,12 @@ class AppTheme {
   static const TextStyle text333333Size15 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 15,
+    color: color_333333,
+  );
+
+  static const TextStyle text333333Size16 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
     color: color_333333,
   );
 

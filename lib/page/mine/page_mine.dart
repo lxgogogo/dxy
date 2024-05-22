@@ -156,7 +156,7 @@ class _MinePageState extends State<MinePage>
   Widget _tabBar() {
     return Container(
         margin: EdgeInsets.only(top: 23.px),
-        padding: EdgeInsets.only(top: 10.px, bottom: 5.px),
+        padding: EdgeInsets.only(top: 15.px, bottom: 15.px),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(

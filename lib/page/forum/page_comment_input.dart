@@ -69,10 +69,10 @@ class _CommentInputPageState extends State<CommentInputPage>
               onPressed: () {
                 //提交评论
                 String commentContent = controller.text;
-                if (commentContent.isNotEmpty) {
+                if (commentContent.isNotEmpty &&  commentContent.length >= 5) {
                   _submitComment(commentContent);
                 } else {
-                  ToastUtils.showToast('评论内容不能为空');
+                  ToastUtils.showToast('评论内容不能低于5个字符');
                 }
               },
               icon: Image.asset(

@@ -60,8 +60,8 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  isForumList ? Colors.white : Color(0xFFEEF7FE),
-                  isForumList ? Colors.white : Color(0xFFEEF7FF),
+                  isForumList ? Colors.white : Color(0xFF008EFF).withOpacity(0.03),
+                  isForumList ? Colors.white :Color(0xFF008EFF).withOpacity(0.03),
                 ],
               ),
               boxShadow: const [

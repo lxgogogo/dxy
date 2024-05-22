@@ -145,7 +145,7 @@ class _PersonalPageState extends State<PersonalPage> {
                         _userProfile != null && _userProfile.nickname != null
                             ? _userProfile.nickname!
                             : '',
-                        style: AppTheme.text666666Size14,
+                        style: AppTheme.text666666Size15,
                       ),
                       ImageIcon(
                         AssetImage('assets/images/item_arrow.png'),
@@ -172,7 +172,7 @@ class _PersonalPageState extends State<PersonalPage> {
                         _userProfile != null && _userProfile.account != null
                             ? _userProfile.account!
                             : '',
-                        style: AppTheme.text666666Size14,
+                        style: AppTheme.text666666Size15,
                       ),
                       ImageIcon(
                         AssetImage('assets/images/item_arrow.png'),

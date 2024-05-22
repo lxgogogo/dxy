@@ -138,7 +138,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               margin: EdgeInsets.fromLTRB(20.px, 0, 10.px, 0),
               // height: 45.px,
               child: TextFormField(
-                  style: AppTheme.text000000Size16W500,
+                  style: AppTheme.text333333Size16,
                   maxLength: 30,
                   controller: controllerTitle,
                   decoration: const InputDecoration(
@@ -197,7 +197,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           height: 150.px,
           child: DetectableTextField(
               maxLines: 5,
-              style: AppTheme.text000000Size16,
+              style: AppTheme.text333333Size16,
               controller: _controller,
               onChanged: (text) {
                 _handleTextChange();

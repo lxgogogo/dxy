@@ -144,7 +144,7 @@ class _MineChildPageState extends State<MineChildPage>
           itemIndex: i,
           isForumList: false,
           boardBean:
-              tabIndex == 2 ? commentDataList[i].thread! : boardPostList[i],
+              tabIndex == 2 ? (commentDataList[i].thread != null ? commentDataList[i].thread! :BoardBean()) : boardPostList[i],
         ),
         // itemExtent: 160.0,
         itemCount:

@@ -102,7 +102,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     NetRequest().commentList({
       'pageNum': 1,
       'pageSize': 10,
-      'filters': {'relType': 'content', 'relId': currentPostId}
+      'filters': {'relType': 'Thread', 'relId': currentPostId}
     }, (data) {
       if (mounted) {
         List<CommentBean> dataList = List<CommentBean>.from(

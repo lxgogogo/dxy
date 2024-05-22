@@ -79,7 +79,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    boardBean.title! ?? '',
+                    boardBean.title !=null && boardBean.title!.isNotEmpty ? boardBean.title! : '',
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
@@ -140,7 +140,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
 
   ///显示内容
   Widget _showTextContentView() {
-    if (boardBean.content!.isNotEmpty) {
+    if (boardBean != null && boardBean.content != null && boardBean.content!.isNotEmpty) {
       if (boardBean.content!.contains('<p>')) {
         return SizedBox(
           height: 90.px,

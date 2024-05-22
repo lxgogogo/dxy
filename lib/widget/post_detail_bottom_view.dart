@@ -146,7 +146,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   Widget sharePopView() {
     return Container(
-      height: 180.px,
+      height: 190.px,
       width: MediaQuery.of(context).size.width,
       // color: AppTheme.white,
       decoration: BoxDecoration(

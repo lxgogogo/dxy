@@ -87,6 +87,7 @@ class NetRequest {
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
+      LogUtils.printAll("commentList===>$response");
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message!);

@@ -113,7 +113,8 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
                         width: 5.px,
                       ),
                       Text(
-                        boardBean.user != null ? boardBean.user!.nickname! : '',
+                        boardBean.user != null && boardBean.user!.nickname!.isNotEmpty
+                            ? boardBean.user!.nickname! : '德学院',
                         style: AppTheme.text666666Size13,
                       )
                     ],

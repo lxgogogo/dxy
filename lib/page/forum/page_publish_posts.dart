@@ -77,7 +77,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     // TODO: implement dispose
     super.dispose();
     _isMounted = false;
-    _playController.dispose();
+    if (_playController.value.isInitialized) {
+      _playController.dispose();
+    }
   }
 
   @override
@@ -142,8 +144,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   maxLength: 30,
                   controller: controllerTitle,
                   decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 3), // 调整文本位置
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 3),
+                    // 调整文本位置
                     hintText: '起个标题吧',
                     counterText: '',
                     hintStyle: AppTheme.text999999Size16W500,
@@ -228,23 +231,26 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
               child: _mediaShowView(),
             ),
-          )]),
-        Row(children: [
-          Expanded(
-              child: Padding(
-                  padding: EdgeInsets.fromLTRB(14.px, 6.px, 14.px, 0),
-                  child: LabelView(
-                    isEditLabel: true,
-                    labelData: customLabelList,
-                    onItemTap: (labelValue) {},
-                    onDelTap: (value) {
-                      setState(() {
-                        print('==========value=============${value}');
-                        customLabelList.remove(value);
-                      });
-                    },
-                  )))
-        ],),
+          )
+        ]),
+        Row(
+          children: [
+            Expanded(
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(14.px, 6.px, 14.px, 0),
+                    child: LabelView(
+                      isEditLabel: true,
+                      labelData: customLabelList,
+                      onItemTap: (labelValue) {},
+                      onDelTap: (value) {
+                        setState(() {
+                          print('==========value=============${value}');
+                          customLabelList.remove(value);
+                        });
+                      },
+                    )))
+          ],
+        ),
       ],
     );
   }
@@ -282,11 +288,13 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   fit: BoxFit.cover,
                 )),
       ],
-      children: imageData.map((e) => kIsWeb?buildWebItem(e):buildItem("$e")).toList(),
+      children: imageData
+          .map((e) => kIsWeb ? buildWebItem(e) : buildItem("$e"))
+          .toList(),
     );
   }
 
-  Widget buildWebItem(file){
+  Widget buildWebItem(file) {
     return Center(
         key: ValueKey(file.name),
         child: Stack(
@@ -577,7 +585,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         }
         if (files.length > 1) {
           for (var file in files) {
-            if (file.extension == 'mp4'||file.extension == 'mov') {
+            if (file.extension == 'mp4' || file.extension == 'mov') {
               ToastUtils.showToast('单个视频或者最多9张图片');
               return;
             }
@@ -589,14 +597,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         }
 
         setState(() {
-        if (imageData.isNotEmpty &&
-            imageData.length == 1 &&
-            imageData[0].extension == 'mp4') {
-          isShowVideoView = true;
-        } else {
-          isShowVideoView = false;
-        }
-      });
+          if (imageData.isNotEmpty &&
+              imageData.length == 1 &&
+              imageData[0].extension == 'mp4') {
+            isShowVideoView = true;
+          } else {
+            isShowVideoView = false;
+          }
+        });
         return;
       }
       List<String> files =
@@ -646,7 +654,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   ///板块id
   int _getBoardIdByName() {
-    if (selectedBoardValue!.isNotEmpty) {
+    if (selectedBoardValue != null && selectedBoardValue!.isNotEmpty) {
       for (BoardInfo boardInfo in boardInfoList) {
         if (boardInfo.name == selectedBoardValue) {
           return boardInfo.id!;
@@ -701,7 +709,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       imageUrlList.clear();
     }
 
-    if (_getBoardIdByName == -1) {
+    print('===================='+_getBoardIdByName().toString());
+    if (_getBoardIdByName() == -1) {
       ToastUtils.showToast('请选择发帖板块');
       return;
     }
@@ -716,9 +725,28 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       return;
     }
 
-    imageData.forEach((element) async {
-      if (kIsWeb){
-        NetRequest().uploadBytesFile(element, (data) {
+    if (imageData.isNotEmpty) {
+      imageData.forEach((element) async {
+        if (kIsWeb) {
+          NetRequest().uploadBytesFile(element, (data) {
+            UploadFile uploadFile = UploadFile.fromJson(data);
+            print('uploadFile url===' + uploadFile.url!);
+            imageUrlList.add(uploadFile);
+
+            print('uploadFile url===${imageUrlList.length}' +
+                'imageData|==>${imageData.length}');
+
+            if (imageUrlList.isNotEmpty &&
+                imageUrlList.length == imageData.length) {
+              NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                  customLabelList, imageUrlList, aitList, (data) {
+                Navigator.pop(context);
+              });
+            }
+          });
+          return;
+        }
+        NetRequest().uploadFile(element, (data) {
           UploadFile uploadFile = UploadFile.fromJson(data);
           print('uploadFile url===' + uploadFile.url!);
           imageUrlList.add(uploadFile);
@@ -734,35 +762,23 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             });
           }
         });
-        return;
-      }
-      NetRequest().uploadFile(element, (data) {
-        UploadFile uploadFile = UploadFile.fromJson(data);
-        print('uploadFile url===' + uploadFile.url!);
-        imageUrlList.add(uploadFile);
-
-        print('uploadFile url===${imageUrlList.length}' +
-            'imageData|==>${imageData.length}');
-
-        if (imageUrlList.isNotEmpty &&
-            imageUrlList.length == imageData.length) {
-          NetRequest().threadCreate(title, content, _getBoardIdByName(),
-              customLabelList, imageUrlList, aitList, (data) {
-            Navigator.pop(context);
-          });
-        }
       });
-    });
+    } else {
+      NetRequest().threadCreate(title, content, _getBoardIdByName(),
+          customLabelList, imageUrlList, aitList, (data) {
+        Navigator.pop(context);
+      });
+    }
   }
 
-  // Future<XFile?> compressAndGetFile(File file, String targetPath) async {
-  //   var result = await FlutterImageCompress.compressAndGetFile(
-  //     file.absolute.path, targetPath,
-  //     quality: 50,
-  //     rotate: 180,
-  //   );
-  //   return result;
-  // }
+// Future<XFile?> compressAndGetFile(File file, String targetPath) async {
+//   var result = await FlutterImageCompress.compressAndGetFile(
+//     file.absolute.path, targetPath,
+//     quality: 50,
+//     rotate: 180,
+//   );
+//   return result;
+// }
 
   void _handleTextChange() {
     String text = _controller.text.toString();

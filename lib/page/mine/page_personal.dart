@@ -111,7 +111,8 @@ class _PersonalPageState extends State<PersonalPage> {
                   onTap: () {
                     kIsWeb
                         ? _webSelectImage()
-                        : showUploadImageOnPopup(context);
+                        :_phoneSelectImage();
+                        // : showUploadImageOnPopup(context);
                   },
                   child: ListTile(
                     leading: null,
@@ -251,7 +252,7 @@ class _PersonalPageState extends State<PersonalPage> {
         var picked = await _picker.pickImage(
           source: ImageSource.gallery,
           maxWidth: 400,
-          imageQuality: 60,
+          imageQuality: 50,
         );
 
         if (picked != null) {
@@ -271,7 +272,7 @@ class _PersonalPageState extends State<PersonalPage> {
       var picked = await picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 400,
-        imageQuality: 60,
+        imageQuality: 40,
       );
 
       if (picked != null) {
@@ -308,7 +309,7 @@ class _PersonalPageState extends State<PersonalPage> {
     setState(() {
       if (image != null) {
         File? _image = File(image.path);
-        imageUrl = image.path;
+        imageUrl = _image.path;
         print("imageUrl===>$imageUrl");
       }
     });

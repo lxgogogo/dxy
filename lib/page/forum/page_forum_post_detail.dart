@@ -152,15 +152,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
           backgroundColor: Colors.white,
           title: const Text(''),
           centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  'assets/images/more.png',
-                  width: 22.px,
-                  height: 22.px,
-                ))
-          ],
+          // actions: [
+          //   IconButton(
+          //       onPressed: () {},
+          //       icon: Image.asset(
+          //         'assets/images/more.png',
+          //         width: 22.px,
+          //         height: 22.px,
+          //       ))
+          // ],
         ),
         body: SafeArea(child: contentView()),
         bottomSheet: isLoadOk ? PostDetailBottomView(
@@ -274,24 +274,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget _showContentView() {
     if (boardBean != null &&  boardBean!.content!.isNotEmpty) {
        if (boardBean!.content!.contains('<p>') || boardBean!.content!.contains('</p>')) {
-         return Html(
-         data:boardBean!.content!,
-           extensions: [
-             TagExtension(
-               tagsToExtend: {"flutter"},
-               child: const FlutterLogo(),
-             ),
-           ],
-           style: {
-             "p.fancy": Style(
-               textAlign: TextAlign.center,
-               backgroundColor: Colors.grey,
-               margin: Margins(left: Margin(20, Unit.px), right: Margin.auto()),
-               width: Width(300, Unit.px),
-               fontWeight: FontWeight.bold,
-             ),
-           },
-         );
+         return Html(data:boardBean!.content!);
        } else  {
          return Container(
            child: Text(boardBean != null ? boardBean!.content! : '',

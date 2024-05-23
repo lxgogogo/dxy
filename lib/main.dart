@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:holdem/page/index/page_article_detail.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/main_page.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() {
+  usePathUrlStrategy();
   runApp(const MyApp());
   initStore();
 }
@@ -53,6 +58,12 @@ class MyApp extends StatelessWidget {
       ),
       home: const MainScreen(),
       builder: EasyLoading.init(),
+      // routes: {
+      //   '/':(context)=>MainScreen(),
+      //   '/book_detail':(context)=>BookDetailPage(id:1),
+      //   '/article_detail':(context)=>ArticleDetailPage(id: 1),
+      //   '/video_detail':(context)=>VideoDetailPage(id: 1),
+      // },
     ));
   }
 }

@@ -16,6 +16,7 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:universal_html/html.dart' as html;  
 
 // import 'dart:html' as html show kIsWeb, AnchorElement;
 
@@ -194,8 +195,16 @@ class _BookDetailPageState extends State<BookDetailPage> {
                             HoldemHighlightBtn(
                                 onTap: () {
                                   print('点击了下载资源');
-                                  launchUrl(Uri.parse(
-                                      articleDetailBean.book!.downloadUrl!));
+                                  if (kIsWeb) {
+                                    var link = html.document.createElement('a');
+                                    link.setAttribute("download", true);
+                                    link.setAttribute("href", articleDetailBean.book!.downloadUrl!);
+                                    link.click();
+                                  } else {
+                                    launchUrl(Uri.parse(
+                                        articleDetailBean.book!.downloadUrl!));
+                                  }
+
                                   // String fileName = getFileNameFromUrl(
                                   //     articleDetailBean.book!.downloadUrl!);
                                   // downloadRemoteFile(

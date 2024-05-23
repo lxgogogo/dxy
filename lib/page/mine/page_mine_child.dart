@@ -8,6 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../model/thread_list.dart';
+import '../../model/user.dart';
 import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/PostListView.dart';
@@ -102,6 +103,7 @@ class _MineChildPageState extends State<MineChildPage>
                       id: element.content!.id!,
                       relType: element.relType!,
                       title: element.content!.title!,
+                      user: UserProfile(nickname: element.content!.author!, avatar: ''),
                       content: element.content!.description!,
                       files: [UploadFile(url: element.content!.cover!)],
                       favoriteCount: element.content!.favoriteCount,
@@ -147,6 +149,7 @@ class _MineChildPageState extends State<MineChildPage>
                 } else if (element.relType == 'content') {
                   BoardBean boardBean = BoardBean(
                     id: element.content!.id!,
+                    user: UserProfile(nickname: element.content!.author!, avatar: ''),
                     relType: element.relType!,
                     title: element.content!.title!,
                     content: element.content!.description!,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../../model/board_list.dart';
+import '../../page/forum/media_helper.dart';
 import '../../page/forum/page_forum_post_detail.dart';
 import '../../page/index/page_article_detail.dart';
 import '../../utils/app_theme.dart';
@@ -292,23 +294,33 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
   Widget singleImageView(String? imgUrl) {
     return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(
-          imgUrl!,
-          width: 130.px,
-          height: 90.px,
-          fit: BoxFit.cover,
-        ));
+        child:
+        MediaHelper().cacheLoadNetworkImage(
+            imgUrl!.isNotEmpty ? imgUrl : '',
+            130.px,
+            90.px));
+        // Image.network(
+        //   imgUrl!,
+        //   width: 130.px,
+        //   height: 90.px,
+        //   fit: BoxFit.cover,
+        // ));
   }
 
   Widget multipleImageView(double imageWidth, String? imgUrl) {
     return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
-          child: Image.network(
-            imgUrl!,
-            width: imageWidth,
-            height: 111.px,
-            fit: BoxFit.cover,
-          ));
+          child:
+          MediaHelper().cacheLoadNetworkImage(
+              imgUrl!.isNotEmpty ? imgUrl : '',
+              imageWidth,
+              111.px));
+  //         Image.network(
+  //           imgUrl!,
+  //           width: imageWidth,
+  //           height: 111.px,
+  //           fit: BoxFit.cover,
+  //         ));
   }
 
   String getFilesUrl(UploadFile uploadFile) {

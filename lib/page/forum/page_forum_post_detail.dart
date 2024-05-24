@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:holdem/model/upload_file.dart';
@@ -343,12 +344,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
               onTap: () {
                 MediaHelper().imagePerView(context, imageUrlList, index);
               },
-              child: Image.network(
-                imageUrlList[index],
-                width: widthNum,
-                height: 111.px,
-                fit: BoxFit.cover,
-              ),
+              child:
+              MediaHelper().cacheLoadNetworkImage(
+                  imageUrlList[index]!.isNotEmpty ? imageUrlList[index] : '',
+                  widthNum,
+                  111.px),
+              // Image.network(
+              //   imageUrlList[index],
+              //   width: widthNum,
+              //   height: 111.px,
+              //   fit: BoxFit.cover,
+              // ),
             ); // 替换image_$index.jpg为对应的图片路径
           });
     }

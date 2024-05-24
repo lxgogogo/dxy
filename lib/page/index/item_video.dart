@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
+import 'package:holdem/page/forum/media_helper.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
@@ -100,12 +102,16 @@ class _VideoItemState extends State<VideoItem> {
           clipBehavior: Clip.antiAlias,
           child: Stack(
             children: [
-              Image.network(
-                widget.article.cover ?? '',
-                width: 145.px,
-                height: 120.px,
-                fit: BoxFit.cover,
-              ),
+              MediaHelper().cacheLoadNetworkImage(
+                  widget.article.cover ?? '',
+                  145.px,
+                  120.px),
+              // Image.network(
+              //   widget.article.cover ?? '',
+              //   width: 145.px,
+              //   height: 120.px,
+              //   fit: BoxFit.cover,
+              // ),
               if (widget.article.type == 'videoList')
                 Positioned(
                   right: 0,

@@ -26,6 +26,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   late VideoPlayerController _playController;
   List<CommentBean> comments = [];
   bool loaded = false;
+  bool showVideo = false;
   var actionEventBus;
   int pageNum = 1;
 
@@ -155,7 +156,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 _playController.value.isPlaying
                     ? _playController.pause()
                     : _playController.play();
-                setState(() {});
+                setState(() {
+                  showVideo = true;
+                });
               },
               child: Container(
                 width: 375.px,
@@ -163,7 +166,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 color: Colors.white,
                 child: Stack(
                   children: [
-                    _playController.value.isInitialized
+                    _playController.value.isInitialized && showVideo
                         ? VideoPlayer(_playController)
                         : Image.network(
                             articleDetailBean.cover ??

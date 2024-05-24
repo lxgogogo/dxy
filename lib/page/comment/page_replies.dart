@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
@@ -8,15 +9,15 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class CommentListPage extends StatefulWidget {
+class RepliesPage extends StatefulWidget {
   int id;
-  CommentListPage({super.key, required this.id});
+  RepliesPage({super.key,required this.id});
 
   @override
-  State<CommentListPage> createState() => _CommentListPageState();
+  State<RepliesPage> createState() => _RepliesPageState();
 }
 
-class _CommentListPageState extends State<CommentListPage> {
+class _RepliesPageState extends State<RepliesPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<CommentBean> comments = [];
@@ -56,7 +57,7 @@ class _CommentListPageState extends State<CommentListPage> {
     NetRequest().commentList({
       'pageNum': pageNum,
       'pageSize': 10,
-      'filters': {'relType': 'content', 'relId': widget.id}
+      'filters': {'relType': 'comment', 'relId': widget.id}
     }, (data) {
       if (mounted) {
         List<CommentBean> dataList = List<CommentBean>.from(
@@ -89,7 +90,7 @@ class _CommentListPageState extends State<CommentListPage> {
     return Scaffold(
         appBar: AppBar(
           // elevation: 0, // 去除导航条的阴影
-          title: Text('全部评论'),
+          title: Text('全部回复'),
         ),
         // ignore: unnecessary_null_comparison
         body: content());

@@ -33,6 +33,8 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
       appBar: AppBar(
+        automaticallyImplyLeading:false,
+        titleSpacing: 0.0,
         leading: IconButton(
           icon: Image.asset(
             'assets/images/navi_back.png',

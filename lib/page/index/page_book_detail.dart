@@ -197,7 +197,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                                   print('点击了下载资源');
                                   if (kIsWeb) {
                                     var link = html.document.createElement('a');
-                                    link.setAttribute("download", true);
+                                    link.setAttribute("download", 'true');
                                     link.setAttribute("href", articleDetailBean.book!.downloadUrl!);
                                     link.click();
                                   } else {

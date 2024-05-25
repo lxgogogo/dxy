@@ -251,6 +251,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     )))
           ],
         ),
+        Visibility(visible: imageData.length >= 6 ? true : false , child: SizedBox(height: 120.px,))
       ],
     );
   }
@@ -274,10 +275,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           imageData.insert(newIndex, element);
         });
       },
-      footer: [
-        imageData.length == 9
-            ? Container()
-            : IconButton(
+      footer: imageData.length == 9 ? [] : [IconButton(
                 onPressed: () {
                   openFilePicker();
                 },

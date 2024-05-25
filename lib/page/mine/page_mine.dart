@@ -1,27 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/mine/page_mine_child.dart';
 import 'package:holdem/page/mine/page_mine_follow.dart';
 import 'package:holdem/page/mine/page_personal.dart';
 import 'package:holdem/page/mine/page_settings.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/constants.dart';
-import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/forum/PostListView.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
-import '../../model/thread_list.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/storage.dart';
 import 'login_helper.dart';
 
 class MinePage extends StatefulWidget {
@@ -31,8 +23,7 @@ class MinePage extends StatefulWidget {
   State<MinePage> createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage>
-    with SingleTickerProviderStateMixin {
+class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin   {
   int _currentTabIndex = 0;
   final List<String> tabs = ['帖子', '收藏', '评论'];
 
@@ -48,27 +39,6 @@ class _MinePageState extends State<MinePage>
 
   late TabController _tabController =
       TabController(length: 3, vsync: this); // 3 为选项卡数量
-
-  // RefreshController _refreshController1 =
-  //     RefreshController(initialRefresh: false);
-  // RefreshController _refreshController2 =
-  //     RefreshController(initialRefresh: false);
-  // RefreshController _refreshController3 =
-  //     RefreshController(initialRefresh: false);
-  //
-  // void _onRefresh() async {
-  //   setState(() {
-  //     pageNum = 1;
-  //   });
-  //   // reqListData();
-  // }
-  //
-  // void _onLoading() async {
-  //   setState(() {
-  //     pageNum++;
-  //   });
-  //   // reqListData();
-  // }
 
   @override
   void initState() {
@@ -236,10 +206,14 @@ class _MinePageState extends State<MinePage>
               ),
               child: Stack(children: <Widget>[
                 ClipOval(
-                    child: LoginHelper().getUserAvatar(
-                        userProfile.avatar != null ? userProfile.avatar! : '',
-                        60,
-                        60)),
+                    child: Image.network(
+              userProfile.avatar != null ? userProfile.avatar! : '',
+                  width: 60,
+                  height: 60)),
+                    // LoginHelper().getUserAvatar(
+                    //     userProfile.avatar != null ? userProfile.avatar! : '',
+                    //     60,
+                    //     60)),
               ]),
             )),
         Container(
@@ -307,4 +281,8 @@ class _MinePageState extends State<MinePage>
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with AutomaticKeepAliveClientMixin{
   int _currentIndex = 0;
   final List<Widget> _pages = [
     IndexPage(),
@@ -28,6 +28,10 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   var actionEventBus;
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -51,7 +55,10 @@ class _MainScreenState extends State<MainScreen> {
       // appBar: AppBar(
       //   title: Text('TabBar Demo'),
       // ),
-      body: _pages[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,

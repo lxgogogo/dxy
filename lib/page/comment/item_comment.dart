@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/page/comment/page_replies.dart';
 import 'package:holdem/page/forum/page_comment_input.dart';
 import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/utils/global.dart';
@@ -12,7 +13,8 @@ import '../mine/login_helper.dart';
 
 class CommentItem extends StatefulWidget {
   CommentBean commentBean;
-  CommentItem({super.key, required this.commentBean});
+  bool isReply;
+  CommentItem({super.key, required this.commentBean, this.isReply = false});
 
   @override
   State<CommentItem> createState() => _CommentItemState();
@@ -29,12 +31,13 @@ class _CommentItemState extends State<CommentItem> {
         SizedBox(
           width: 40.px,
           height: 40.px,
-          child:
-          ClipOval(
+          child: ClipOval(
             child: LoginHelper().getUserAvatar(
                 widget.commentBean.user != null
-                    ? widget.commentBean.user!.avatar! :'',
-                40.px, 40.px),
+                    ? widget.commentBean.user!.avatar!
+                    : '',
+                40.px,
+                40.px),
             // Image.network(
             //   widget.commentBean.user != null ? widget.commentBean.user!.avatar! :'',
             //   width: 40.px,
@@ -52,7 +55,9 @@ class _CommentItemState extends State<CommentItem> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              widget.commentBean.user!= null ? widget.commentBean.user!.nickname! : '',
+              widget.commentBean.user != null
+                  ? widget.commentBean.user!.nickname!
+                  : '',
               style: TextStyle(color: Color(0xff3B5078), fontSize: 13.px),
             ),
             SizedBox(height: 3.px),
@@ -93,7 +98,25 @@ class _CommentItemState extends State<CommentItem> {
                                   color: Color(0xff666666),
                                   fontSize: 14.px,
                                   height: 2.0));
-                        })
+                        }),
+                        widget.commentBean.replyCount! > 2
+                            ? GestureDetector(
+                                onTap: () {
+                                  Get.to(RepliesPage(
+                                      id: widget.commentBean.id!,
+                                      commentBean: widget.commentBean));
+                                  // Get.to(CommentInputPage(
+                                  //     relType: 'comment',
+                                  //     relId: widget.commentBean.id!));
+                                },
+                                child: Text(
+                                  '查看全部${widget.commentBean.replyCount}条回复',
+                                  style: TextStyle(
+                                      color: const Color(0xff3B5078),
+                                      fontSize: 14.px),
+                                ),
+                              )
+                            : Container()
                       ],
                     ),
                   )),
@@ -123,77 +146,78 @@ class _CommentItemState extends State<CommentItem> {
                   style: TextStyle(color: Color(0xff999999), fontSize: 14.px),
                 ),
                 const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    if (!Global().hasLogin) {
-                      Get.to(LoginPage());
-                      return;
-                    }
-                    //跳转评论输入页面
-                    Get.to(CommentInputPage(
-                        relType: 'comment', relId: widget.commentBean.id!));
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/reply.png',
-                        width: 20.px,
-                        height: 20.px,
-                      ),
-                      SizedBox(
-                        width: 5.px,
-                      ),
-                      Text(
-                        widget.commentBean.replyCount!.toString(),
-                        style: TextStyle(
-                          color: const Color(0xff999999),
-                          fontSize: 14.px,
+                if (!widget.isReply)
+                  GestureDetector(
+                    onTap: () {
+                      if (!Global().hasLogin) {
+                        Get.to(LoginPage());
+                        return;
+                      }
+                      //跳转评论输入页面
+                      Get.to(CommentInputPage(
+                          relType: 'comment', relId: widget.commentBean.id!));
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/reply.png',
+                          width: 20.px,
+                          height: 20.px,
                         ),
-                      )
-                    ],
+                        SizedBox(
+                          width: 5.px,
+                        ),
+                        Text(
+                          widget.commentBean.replyCount!.toString(),
+                          style: TextStyle(
+                            color: const Color(0xff999999),
+                            fontSize: 14.px,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
                 SizedBox(
                   width: 15.px,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    NetRequest().contentLike({
-                      'relType': 'comment',
-                      'relId': widget.commentBean.id!,
-                      'state': widget.commentBean.liked!?false:true
-                    }, (data) {
-                      setState(() {
-                        widget.commentBean.liked = !widget.commentBean.liked!;
-                        int count = widget.commentBean.likeCount!;
-                        widget.commentBean.likeCount = widget.commentBean.liked!
-                            ? count + 1
-                            : count - 1;
+                if (!widget.isReply)
+                  GestureDetector(
+                    onTap: () {
+                      NetRequest().contentLike({
+                        'relType': 'comment',
+                        'relId': widget.commentBean.id!,
+                        'state': widget.commentBean.liked! ? false : true
+                      }, (data) {
+                        setState(() {
+                          widget.commentBean.liked = !widget.commentBean.liked!;
+                          int count = widget.commentBean.likeCount!;
+                          widget.commentBean.likeCount =
+                              widget.commentBean.liked! ? count + 1 : count - 1;
+                        });
                       });
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        widget.commentBean.liked?? false
-                            ? 'assets/images/praised.png'
-                            : 'assets/images/praise.png',
-                        width: 18.px,
-                        height: 18.px,
-                      ),
-                      SizedBox(
-                        width: 5.px,
-                      ),
-                      Text(
-                        widget.commentBean.likeCount!.toString(),
-                        style: TextStyle(
-                          color: const Color(0xff999999),
-                          fontSize: 14.px,
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          widget.commentBean.liked ?? false
+                              ? 'assets/images/praised.png'
+                              : 'assets/images/praise.png',
+                          width: 18.px,
+                          height: 18.px,
                         ),
-                      )
-                    ],
-                  ),
-                )
+                        SizedBox(
+                          width: 5.px,
+                        ),
+                        Text(
+                          widget.commentBean.likeCount!.toString(),
+                          style: TextStyle(
+                            color: const Color(0xff999999),
+                            fontSize: 14.px,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
               ],
             ),
             Container(

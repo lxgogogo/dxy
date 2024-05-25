@@ -11,7 +11,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class RepliesPage extends StatefulWidget {
   int id;
-  RepliesPage({super.key,required this.id});
+  CommentBean commentBean;
+  RepliesPage({super.key,required this.id,required this.commentBean});
 
   @override
   State<RepliesPage> createState() => _RepliesPageState();
@@ -121,6 +122,7 @@ class _RepliesPageState extends State<RepliesPage> {
       padding: EdgeInsets.symmetric(horizontal: 15.px),
       child: CommentItem(
       commentBean: comments[i],
+      isReply: true,
     ),);
   }
 }

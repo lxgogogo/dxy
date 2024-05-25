@@ -7,6 +7,8 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
 import '../../widget/follow_btn.dart';
@@ -110,6 +112,9 @@ class _MineFollowPageState extends State<MineFollowPage> {
             height: 22.px,
           ),
           onPressed: () {
+            //通知我的页面刷新关注粉丝数量
+            EventBusManager.eventBus
+                .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
             Navigator.pop(context);
           },
         ),
@@ -193,7 +198,14 @@ class _MineFollowPageState extends State<MineFollowPage> {
               NetRequest().followerToggle(followOrFanUserList[index].id!,
                   !followOrFanUserList[index].followed!, (data) {
                 setState(() {
-                  followOrFanUserList.remove(followOrFanUserList[index]);
+                  if (isFollowPage) { //关注页面移除当前条目
+                    followOrFanUserList.remove(followOrFanUserList[index]);
+                  } else { //粉丝页面需要刷新状态
+                    setState(() {
+                      pageNum = 1;
+                    });
+                     reqListData();
+                  }
                 });
               });
             })

@@ -19,6 +19,8 @@ import 'package:video_player/video_player.dart';
 import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../widget/label_view.dart';
 
@@ -757,6 +759,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               imageUrlList.length == imageData.length) {
             NetRequest().threadCreate(title, content, _getBoardIdByName(),
                 customLabelList, imageUrlList, aitList, (data) {
+              //通知刷新论坛列表
+                  EventBusManager.eventBus
+                      .fire(EventBusAction.refreshForumList.eventBusTypeName);
               Navigator.pop(context);
             });
           }
@@ -765,6 +770,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     } else {
       NetRequest().threadCreate(title, content, _getBoardIdByName(),
           customLabelList, imageUrlList, aitList, (data) {
+            //通知刷新论坛列表
+            EventBusManager.eventBus
+                .fire(EventBusAction.refreshForumList.eventBusTypeName);
         Navigator.pop(context);
       });
     }

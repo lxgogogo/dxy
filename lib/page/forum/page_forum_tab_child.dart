@@ -13,6 +13,8 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/constants.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/log_utils.dart';
 import '../../view/forum/PostListView.dart';
 
@@ -35,7 +37,7 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKee
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
   bool _isMounted = false;
-
+  var actionEventBus;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -66,6 +68,24 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKee
     filterValue = filterMap[0].toString();
 
     reqListData();
+
+    //接受通知刷新页面
+    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() ==
+          EventBusAction.refreshForumList.eventBusTypeName) {
+        if (_isMounted) {
+          boardSort = NetRequest.BOARD_SORT_TIME;
+          pageNum = 1;
+          setState(() {
+            filterValue = filterMap[0].toString();
+            selectFilterIndex = getKeyByValue(filterMap[0].toString())!;
+            reqListData();
+            //由于tab设置了切换不重载，这个切换子类筛选的时候需要设置自动滚动到顶部
+            _scrollToTop();
+          });
+        }
+      }
+    });
   }
   reqListData () {
     //tabIdValue = 0全部板块,不传boardId

@@ -58,6 +58,9 @@ class _SearchPageState extends State<SearchPage> {
               onPressed: () {
                 if (key != null) {
                   setState(() {
+                    if (items.contains(key)) {
+                      items.remove(key);
+                    }
                     items.insert(0, key);
                     StorageUtil().prefs!.setStringList('search', items);
                     Get.to(SearchResultPage(keyword: key,));

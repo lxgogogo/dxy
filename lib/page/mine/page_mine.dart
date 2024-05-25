@@ -206,14 +206,16 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
               ),
               child: Stack(children: <Widget>[
                 ClipOval(
-                    child: Image.network(
-              userProfile.avatar != null ? userProfile.avatar! : '',
-                  width: 60,
-                  height: 60)),
-                    // LoginHelper().getUserAvatar(
-                    //     userProfile.avatar != null ? userProfile.avatar! : '',
-                    //     60,
-                    //     60)),
+                    child:
+                  LoginHelper().getUserAvatar(
+                      userProfile.avatar != null ? userProfile.avatar! : '',
+                      60,
+                      60)),
+              //       Image.network(
+              // userProfile.avatar != null ? userProfile.avatar! : '',
+              //     width: 60,
+              //     height: 60)),
+
               ]),
             )),
         Container(

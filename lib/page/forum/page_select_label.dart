@@ -237,6 +237,10 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                       SizedBox(width: 10),
                       GestureDetector(
                           onTap: () {
+                            if(controller.text.isEmpty) {
+                              ToastUtils.showToast('标签内容不能为空');
+                              return;
+                            }
                             if (_isMounted) {
                               setState(() {
                                 labelData.add(controller.text);

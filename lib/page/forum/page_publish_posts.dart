@@ -682,7 +682,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     }
 
     print('final input text:${content}');
-    removeAitContentInputText = content; //最终的帖子内容文本
+    // removeAitContentInputText = content; //最终的帖子内容文本
 
     //循环名称list获取所有@用户信息
     if (splitNameList.isNotEmpty && splitNameList.length > 0) {
@@ -701,7 +701,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     _aitUserData();
 
     String title = controllerTitle.text;
-    String content = removeAitContentInputText!;
+    // String content = removeAitContentInputText!;
+    String content = _controller.text;
 
     if (imageUrlList.isNotEmpty) {
       imageUrlList.clear();

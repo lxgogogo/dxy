@@ -8,9 +8,12 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../utils/app_theme.dart';
+
 class CommentListPage extends StatefulWidget {
   int id;
-  CommentListPage({super.key, required this.id});
+  String relType;
+  CommentListPage({super.key, required this.id, required this.relType});
 
   @override
   State<CommentListPage> createState() => _CommentListPageState();
@@ -22,6 +25,7 @@ class _CommentListPageState extends State<CommentListPage> {
   List<CommentBean> comments = [];
   bool loaded = false;
   int pageNum = 1;
+  String commentCountsText =  '';
 
   var actionEventBus;
 
@@ -37,7 +41,7 @@ class _CommentListPageState extends State<CommentListPage> {
         NetRequest().commentList({
           'pageNum': 1,
           'pageSize': comments.length + 1,
-          'filters': {'relType': 'content', 'relId': widget.id}
+          'filters': {'relType': widget.relType, 'relId': widget.id}
         }, (data) {
           if (mounted) {
             List<CommentBean> dataList = List<CommentBean>.from(
@@ -45,6 +49,7 @@ class _CommentListPageState extends State<CommentListPage> {
             setState(() {
               comments = dataList;
               loaded = true;
+              commentCountsText = '(${comments.length})';
             });
           }
         });
@@ -56,7 +61,7 @@ class _CommentListPageState extends State<CommentListPage> {
     NetRequest().commentList({
       'pageNum': pageNum,
       'pageSize': 10,
-      'filters': {'relType': 'content', 'relId': widget.id}
+      'filters': {'relType': widget.relType, 'relId': widget.id}
     }, (data) {
       if (mounted) {
         List<CommentBean> dataList = List<CommentBean>.from(
@@ -64,6 +69,7 @@ class _CommentListPageState extends State<CommentListPage> {
         setState(() {
           comments = dataList;
           loaded = true;
+          commentCountsText = '(${comments.length})';
         });
       }
     });
@@ -88,8 +94,29 @@ class _CommentListPageState extends State<CommentListPage> {
     SizeFit.initialize(context);
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Image.asset(
+              'assets/images/back.png',
+              width: 22.px,
+              height: 22.px,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Colors.white,
           // elevation: 0, // 去除导航条的阴影
-          title: Text('全部评论'),
+          title: Text('评论${commentCountsText}',
+            style: AppTheme.text333333Size17,
+          ),
+          centerTitle: true,
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(1.0),
+            child: Divider(
+              color: AppTheme.color_F3F3F3,
+              thickness: 1,
+            ),
+          ),
         ),
         // ignore: unnecessary_null_comparison
         body: content());

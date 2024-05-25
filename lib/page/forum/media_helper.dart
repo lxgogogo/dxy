@@ -50,7 +50,7 @@ class MediaHelper {
 
   Widget cacheLoadNetworkImage(
       String imgUrl, double imgWidth, double imgHeight) {
-    return CachedNetworkImage(
+    return RepaintBoundary(child: CachedNetworkImage(
       width: imgWidth,
       height: imgHeight,
       fit: BoxFit.cover,
@@ -59,6 +59,6 @@ class MediaHelper {
           Image.asset('assets/images/image_loading_def.png'),
       errorWidget: (context, url, error) =>
           Image.asset('assets/images/image_loading_def.png'),
-    );
+    ));
   }
 }

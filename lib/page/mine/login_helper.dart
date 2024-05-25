@@ -54,7 +54,7 @@ class LoginHelper {
 
   //获取图像
   Widget getUserAvatar(String avatarUrl, double width, double height) {
-    return CachedNetworkImage(
+    return RepaintBoundary(child: CachedNetworkImage(
       width: width,
       height: height,
       fit: BoxFit.cover,
@@ -63,7 +63,7 @@ class LoginHelper {
           Image.asset('assets/images/default_avatar.png'),
       errorWidget: (context, url, error) =>
           Image.asset('assets/images/default_avatar.png'),
-    );
+    ),);
   }
 
   ///清空本地用户相关信息，需要重新登录

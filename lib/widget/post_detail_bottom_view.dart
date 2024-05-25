@@ -107,7 +107,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       onPressed: () {
                         //跳转评论列表页面
                         // ToastUtils.showToast('跳转评论列表');
-                        Get.to(CommentListPage(id: viewParams.relId!));
+                        Get.to(CommentListPage(id: viewParams.relId!,relType: viewParams.relType!,));
                       },
                       icon: Image.asset(
                         'assets/images/small_comments.png',

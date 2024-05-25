@@ -141,6 +141,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                                 setState(() {
                                   categorySel = index;
                                   parentId = categorys[index].id ?? 0;
+                                  pageNum = 1;
                                 });
                                 reqListData();
                               })

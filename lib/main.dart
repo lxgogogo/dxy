@@ -5,6 +5,7 @@ import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/main_page.dart';
+import 'package:holdem/page/splash_page.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/storage.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
         useMaterial3: true,
       ),
-      home: const MainScreen(),
+      home: SplashScreen(),
       builder: EasyLoading.init(),
       // routes: {
       //   '/':(context)=>MainScreen(),

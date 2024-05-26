@@ -132,9 +132,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   IconButton(
                       onPressed: () {
                         var shareData = {
-                          "title": 'MDN',
-                          "text": 'Learn web development on MDN!',
-                          "url": 'https://bbs.api.robot-9.com/',
+                          "title": '德学院',
+                          "text": '欢迎来到德学院',
+                          "url": 'https://reptile-vue.dexin62.com/',
                         };
                         html.window.navigator.share(shareData);
                         // html.window.navigator.share(shareData);

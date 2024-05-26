@@ -1,7 +1,7 @@
 class Api{
-  static const String baseUrl = 'https://bbs.api.robot-9.com/api';
+  // static const String baseUrl = 'https://bbs.api.robot-9.com/api';
 
-  // static const String baseUrl = 'https://reptile-ja.ak12.cc/api';
+  static const String baseUrl = 'https://reptile-ja.ak12.cc/api';
 
   //首页
   static const String indexCategory = '$baseUrl/category/list';

@@ -36,6 +36,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       RefreshController(initialRefresh: false);
   int pageNum = 1;
   int parentId = 1;
+  final ScrollController _listController = ScrollController();
 
   @override
   void initState() {
@@ -144,6 +145,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                                   pageNum = 1;
                                 });
                                 reqListData();
+                                _scrollToTop();
                               })
                           : HoldemHighlightBtn(
                               child: Text(
@@ -239,6 +241,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
+        controller:_listController,
         itemBuilder: (c, i) => contentItem(i),
         // itemExtent: 160.0,
         itemCount: articles.length,
@@ -327,4 +330,19 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    _listController.dispose(); // 释放资源
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    // 滚动到顶部的逻辑
+    _listController.animateTo(
+      0.0, // 滚动到顶部的偏移量
+      duration: const Duration(milliseconds: 300), // 滚动动画的持续时间
+      curve: Curves.ease, // 滚动动画的曲线
+    );
+  }
 }

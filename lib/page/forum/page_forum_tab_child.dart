@@ -180,8 +180,10 @@ class _ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKee
                 : NetRequest.BOARD_SORT_LIKE;
         if (_isMounted) {
           setState(() {
+            pageNum = 1;
             filterValue = selected;
             selectFilterIndex = getKeyByValue(selected)!;
+            boardPostList.clear();
             reqListData();
             //由于tab设置了切换不重载，这个切换子类筛选的时候需要设置自动滚动到顶部
             _scrollToTop();

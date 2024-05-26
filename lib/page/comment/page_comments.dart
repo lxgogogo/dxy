@@ -106,7 +106,7 @@ class _CommentListPageState extends State<CommentListPage> {
           ),
           backgroundColor: Colors.white,
           // elevation: 0, // 去除导航条的阴影
-          title: Text('评论${commentCountsText}',
+          title: Text('评论',
             style: AppTheme.text333333Size17,
           ),
           centerTitle: true,

@@ -209,7 +209,7 @@ class NetRequest {
     }
   }
 
-  Future uploadBytesFile(var data, SuccessCallback onSuccess) async {
+  Future uploadBytesFile(var data, SuccessCallback onSuccess, FailureCallback onFail) async {
 
     Map<String, dynamic> response =
         await HttpUtils.postBytesFile(Api.uploadFile,data, params: {});
@@ -219,6 +219,7 @@ class NetRequest {
       LogUtils.printAll("uploadFile===>$response");
       onSuccess(response['data']);
     } else {
+      onFail(resp.message!);
       ToastUtils.showToast(resp.message!);
     }
   }

@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
@@ -15,10 +16,10 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/common_utils.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
@@ -58,6 +59,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   late VideoPlayerController _playController;
   late Future<void> _initializeVideoPlayerFuture;
   bool isShowVideoView = false;
+  // Uint8List? videoImageBytes;
 
   bool _isPlaying = false;
   String? removeAitContentInputText; // 输入框文本 去掉@用户的内容，剩余的正常输入的文本
@@ -115,7 +117,10 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         actions: [
           IconButton(
               onPressed: () {
-                publishPosts();
+                var debouncer = CommonUtils.getDebouncer('publishPosts');
+                debouncer.run(() {
+                  publishPosts();
+                });
               },
               icon: Image.asset(
                 'assets/images/release.png',
@@ -253,7 +258,11 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     )))
           ],
         ),
-        Visibility(visible: imageData.length >= 6 ? true : false , child: SizedBox(height: 120.px,))
+        Visibility(
+            visible: imageData.length >= 6 ? true : false,
+            child: SizedBox(
+              height: 120.px,
+            ))
       ],
     );
   }
@@ -277,17 +286,20 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           imageData.insert(newIndex, element);
         });
       },
-      footer: imageData.length == 9 ? [] : [IconButton(
-                onPressed: () {
-                  openFilePicker();
-                },
-                icon: Image.asset(
-                  'assets/images/image_add.png',
-                  width: 111,
-                  height: 111,
-                  fit: BoxFit.cover,
-                )),
-      ],
+      footer: imageData.length == 9
+          ? []
+          : [
+              IconButton(
+                  onPressed: () {
+                    openFilePicker();
+                  },
+                  icon: Image.asset(
+                    'assets/images/image_add.png',
+                    width: 111,
+                    height: 111,
+                    fit: BoxFit.cover,
+                  )),
+            ],
       children: imageData
           .map((e) => kIsWeb ? buildWebItem(e) : buildItem("$e"))
           .toList(),
@@ -362,7 +374,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   Future<void> _pickAndPlayVideo(videoPath) async {
     if (videoPath != null) {
-      _playController = VideoPlayerController.file(File(videoPath));
+      // _playController = VideoPlayerController.file(File(videoPath));
+      _playController = VideoPlayerController.networkUrl(Uri.parse(videoPath));
       await _playController.initialize();
       _playController.play();
       setState(() {
@@ -379,34 +392,41 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   Widget _mediaShowView() {
     if (isShowVideoView) {
-      _playController = VideoPlayerController.network('');
-      _initializeVideoPlayerFuture = _playController.initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized
-        setState(() {});
-      });
       return Container(
           padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
-          height: 300.px,
-          width: calculateVideoPlayerWidth(context),
+          width: 120,
+          height: 180,
           child: Stack(alignment: Alignment.center, children: [
-            _playController.value.isInitialized
-                ? FittedBox(
+            // if (videoImageBytes != null)
+            //   Image.memory(videoImageBytes!,
+            //       width: 120,
+            //       height: 180,
+            //       fit: BoxFit.cover),
+                  _playController.value.isInitialized
+                      ? FittedBox(
                     fit: BoxFit.fitHeight,
                     child: SizedBox(
                       width: _playController.value.size.width,
                       height: _playController.value.size.height,
                       child: VideoPlayer(_playController),
-                    ),
-                  )
-                : Container(),
-            _isPlaying
-                ? SizedBox.shrink()
-                : IconButton(
-                    icon: Icon(Icons.play_arrow),
-                    iconSize: 64,
-                    onPressed: () {
-                      _pickAndPlayVideo(imageData[0]);
-                    },
+                    ),) : Container(),
+                  _isPlaying
+                      ? SizedBox.shrink()
+                      : Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Image.network(
+                        imageUrlList[0].posterUrl!,
+                      ),
+                      IconButton(
+                        icon: Image.asset('assets/images/play_btn.png',
+                          width: 35.px,
+                          height: 35.px,),
+                        onPressed: () {
+                          _pickAndPlayVideo(imageUrlList[0].url);
+                        },
+                      ),
+                    ],
                   ),
             Positioned(
               right: -10,
@@ -415,6 +435,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   onPressed: () {
                     setState(() {
                       imageData.clear();
+                      imageUrlList.clear();
+                      _playController.dispose();
+                      _isPlaying = false;
                       isShowVideoView = false;
                     });
                   },
@@ -425,48 +448,57 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   )),
             )
           ]));
+
+
+      // _playController = VideoPlayerController.network('');
+      // _initializeVideoPlayerFuture = _playController.initialize().then((_) {
+      //   // Ensure the first frame is shown after the video is initialized
+      //   setState(() {});
+      // });
+      // return Container(
+      //     padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
+      //     height: 300.px,
+      //     width: calculateVideoPlayerWidth(context),
+      //     child: Stack(alignment: Alignment.center, children: [
+      //       _playController.value.isInitialized
+      //           ? FittedBox(
+      //               fit: BoxFit.fitHeight,
+      //               child: SizedBox(
+      //                 width: _playController.value.size.width,
+      //                 height: _playController.value.size.height,
+      //                 child: VideoPlayer(_playController),
+      //               ),
+      //             )
+      //           : Container(),
+      //       _isPlaying
+      //           ? SizedBox.shrink()
+      //           : IconButton(
+      //               icon: Icon(Icons.play_arrow),
+      //               iconSize: 64,
+      //               onPressed: () {
+      //                 _pickAndPlayVideo(imageData[0]);
+      //               },
+      //             ),
+      //       Positioned(
+      //         right: -10,
+      //         top: -10,
+      //         child: IconButton(
+      //             onPressed: () {
+      //               setState(() {
+      //                 imageData.clear();
+      //                 isShowVideoView = false;
+      //               });
+      //             },
+      //             icon: Image.asset(
+      //               'assets/images/close_black.png',
+      //               width: 25.px,
+      //               height: 25.px,
+      //             )),
+      //       )
+      //     ]));
     } else {
       return imageGridView();
     }
-
-    // if (path.isNotEmpty && path.endsWith('mp4')) {
-    //   // if (_isMounted) {
-    //   //   setState(() {
-    //   //     videoFileUrl = path;
-    //   //   });
-    //   // }
-    //   _playController = VideoPlayerController.file(
-    //     File(path), // 替换为您的视频 URL
-    //   );
-    //   _initializeVideoPlayerFuture = _playController.initialize();
-    //   return GestureDetector(
-    //     onTap: () {
-    //       _pickAndPlayVideo(path);
-    //     },
-    //     child: FutureBuilder(
-    //     future: _initializeVideoPlayerFuture,
-    //     builder: (context, snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.done) {
-    //         return AspectRatio(
-    //           aspectRatio: _playController.value.aspectRatio,
-    //           child: VideoPlayer(_playController),
-    //         );
-    //       } else {
-    //         return Center(child: CircularProgressIndicator());
-    //       }
-    //     },
-    //   ),);
-    // } else {
-    //   return GestureDetector(
-    //     child: Image.file(
-    //       File(path),
-    //       width: 98,
-    //       height: 98,
-    //       fit: BoxFit.cover,
-    //     ),
-    //     onTap: () {},
-    //   );
-    // }
   }
 
   Widget bottomView() {
@@ -574,11 +606,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4']);
+        allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4','mov']);
 
     if (result != null) {
       if (kIsWeb) {
         var files = result.files;
+        var filesBytes = result.files.first.bytes;
         if (files.length > 9 || files.length + imageData.length > 9) {
           ToastUtils.showToast('单个视频或者最多9张图片');
           return;
@@ -596,17 +629,48 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           imageData.add(file);
         }
 
-        setState(() {
-          if (imageData.isNotEmpty &&
-              imageData.length == 1 &&
-              imageData[0].extension == 'mp4') {
-            isShowVideoView = true;
-          } else {
+        if (imageData.isNotEmpty &&
+            imageData.length == 1 &&
+            (imageData[0].extension == 'mp4' || imageData[0].extension == 'mov')) {
+          //byte 处理目前不好用
+          // final blob = html.Blob([imageData[0].bytes]);
+          // final url = html.Url.createObjectUrlFromBlob(blob);
+          // final uint8list = await VideoThumbnail.thumbnailData(
+          //   video: '',
+          //   imageFormat: ImageFormat.JPEG,
+          //   maxWidth: 128,
+          //   // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+          //   quality: 25,
+          // );
+          // setState(() {
+          //   isShowVideoView = true;
+          //   videoImageBytes = uint8list;
+          // });
+
+          //
+          EasyLoading.show(status: '视频处理中...');
+          NetRequest().uploadBytesFile(imageData[0], (data) {
+            UploadFile uploadFile = UploadFile.fromJson(data);
+            EasyLoading.dismiss();
+            _playController = VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+            setState(() {
+              imageUrlList.add(uploadFile);
+              isShowVideoView = true;
+              // videoImageBytes = uint8list;
+            });
+          }, (errMsg) {
+            EasyLoading.dismiss();
+          });
+
+        } else {
+          setState(() {
             isShowVideoView = false;
-          }
-        });
+          });
+        }
         return;
       }
+
+      ///////////////////////////////////////app///////////////////////////////////////////
       List<String> files =
           result.paths.where((path) => path != null).cast<String>().toList();
       if (result.files.length > 9 ||
@@ -617,7 +681,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
       if (files.length > 1) {
         for (String path in files) {
-          if (path.endsWith('mp4')) {
+          if (path.endsWith('mp4') || path.endsWith('mov')) {
             ToastUtils.showToast('单个视频或者最多9张图片');
             return;
           }
@@ -628,15 +692,41 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         print('FilePickerResult: ' + path);
         imageData.add(path);
       }
-      setState(() {
-        if (imageData.isNotEmpty &&
-            imageData.length == 1 &&
-            imageData[0].endsWith('mp4')) {
-          isShowVideoView = true;
-        } else {
+
+      if (imageData.isNotEmpty &&
+          imageData.length == 1 &&
+          (imageData[0].endsWith('mp4') || imageData[0].endsWith('mov'))) {
+        //byte 处理目前不好用
+        // final uint8list = await VideoThumbnail.thumbnailData(
+        //   video: imageData[0],
+        //   imageFormat: ImageFormat.JPEG,
+        //   maxWidth: 128,
+        //   // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+        //   quality: 100,
+        // );
+        // setState(() {
+        //   isShowVideoView = true;
+        //   videoImageBytes = uint8list;
+        // });
+
+        EasyLoading.show(status: 'loading...');
+        NetRequest().uploadBytesFile(imageData[0], (data) {
+          UploadFile uploadFile = UploadFile.fromJson(data);
+          EasyLoading.dismiss();
+          _playController = VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+          setState(() {
+            imageUrlList.add(uploadFile);
+            isShowVideoView = true;
+          });
+        }, (errMsg) {
+          EasyLoading.dismiss();
+        });
+
+      } else {
+        setState(() {
           isShowVideoView = false;
-        }
-      });
+        });
+      }
     } else {
       // User canceled the picker
     }
@@ -706,11 +796,10 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     // String content = removeAitContentInputText!;
     String content = _controller.text;
 
-    if (imageUrlList.isNotEmpty) {
+    if (!isShowVideoView && imageUrlList.isNotEmpty) {
       imageUrlList.clear();
     }
 
-    print('===================='+_getBoardIdByName().toString());
     if (_getBoardIdByName() == -1) {
       ToastUtils.showToast('请选择发帖板块');
       return;
@@ -726,16 +815,25 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       return;
     }
 
+    //视频文件
+    if (isShowVideoView){
+      NetRequest().threadCreate(title, content, _getBoardIdByName(),
+          customLabelList, imageUrlList, aitList, (data) {
+            //通知刷新论坛列表
+            EventBusManager.eventBus
+                .fire(EventBusAction.refreshForumList.eventBusTypeName);
+            Navigator.pop(context);
+          });
+      return;
+    }
+
+    //图片文件
     if (imageData.isNotEmpty) {
       imageData.forEach((element) async {
         if (kIsWeb) {
           NetRequest().uploadBytesFile(element, (data) {
             UploadFile uploadFile = UploadFile.fromJson(data);
-            print('uploadFile url===' + uploadFile.url!);
             imageUrlList.add(uploadFile);
-
-            print('uploadFile url===${imageUrlList.length}' +
-                'imageData|==>${imageData.length}');
 
             if (imageUrlList.isNotEmpty &&
                 imageUrlList.length == imageData.length) {
@@ -744,24 +842,20 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                 Navigator.pop(context);
               });
             }
-          });
+          }, (errMsg) {});
           return;
         }
         NetRequest().uploadFile(element, (data) {
           UploadFile uploadFile = UploadFile.fromJson(data);
-          print('uploadFile url===' + uploadFile.url!);
           imageUrlList.add(uploadFile);
-
-          print('uploadFile url===${imageUrlList.length}' +
-              'imageData|==>${imageData.length}');
 
           if (imageUrlList.isNotEmpty &&
               imageUrlList.length == imageData.length) {
             NetRequest().threadCreate(title, content, _getBoardIdByName(),
                 customLabelList, imageUrlList, aitList, (data) {
               //通知刷新论坛列表
-                  EventBusManager.eventBus
-                      .fire(EventBusAction.refreshForumList.eventBusTypeName);
+              EventBusManager.eventBus
+                  .fire(EventBusAction.refreshForumList.eventBusTypeName);
               Navigator.pop(context);
             });
           }
@@ -770,22 +864,13 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     } else {
       NetRequest().threadCreate(title, content, _getBoardIdByName(),
           customLabelList, imageUrlList, aitList, (data) {
-            //通知刷新论坛列表
-            EventBusManager.eventBus
-                .fire(EventBusAction.refreshForumList.eventBusTypeName);
+        //通知刷新论坛列表
+        EventBusManager.eventBus
+            .fire(EventBusAction.refreshForumList.eventBusTypeName);
         Navigator.pop(context);
       });
     }
   }
-
-// Future<XFile?> compressAndGetFile(File file, String targetPath) async {
-//   var result = await FlutterImageCompress.compressAndGetFile(
-//     file.absolute.path, targetPath,
-//     quality: 50,
-//     rotate: 180,
-//   );
-//   return result;
-// }
 
   void _handleTextChange() {
     String text = _controller.text.toString();

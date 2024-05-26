@@ -175,7 +175,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ),
               _isCountingDown
                   ? Text(
-                '$_countdown秒后可重新发送',
+                '${_countdown}s',
                 style: AppTheme.text999999Size16,
               )
                   : GestureDetector(

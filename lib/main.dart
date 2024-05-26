@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
     // EasyLoading.init();
     return OKToast(
         child: GetMaterialApp(
-      title: '德州论坛',
+      title: '德学院',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.

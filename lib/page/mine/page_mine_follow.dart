@@ -12,6 +12,7 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
 import '../../widget/follow_btn.dart';
+import '../../widget/page_web_fit.dart';
 
 class MineFollowPage extends StatefulWidget {
   bool isFollowPage = true;
@@ -103,7 +104,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -134,7 +135,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
-    );
+    ));
   }
 
   Widget contentView() {

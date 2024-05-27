@@ -13,6 +13,7 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/global.dart';
 import '../../utils/size_fit.dart';
 import '../../utils/storage.dart';
+import '../../widget/page_web_fit.dart';
 
 class RegisterAccountPage extends StatefulWidget {
   static const PageType_RegisterAccount = 1; //注册
@@ -69,7 +70,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -87,7 +88,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: AppTheme.white,
-    );
+    ));
   }
 
   Widget contentView() {

@@ -12,6 +12,7 @@ import '../../utils/constants.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
+import '../../widget/page_web_fit.dart';
 
 class CommentInputPage extends StatefulWidget {
   String relType; //// 评论对象类型
@@ -39,7 +40,7 @@ class _CommentInputPageState extends State<CommentInputPage>
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -84,7 +85,7 @@ class _CommentInputPageState extends State<CommentInputPage>
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
-    );
+    ));
   }
 
   void _submitComment(String commentContent) {

@@ -8,6 +8,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
+import '../../widget/page_web_fit.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: AppTheme.white,
-    );
+    ));
   }
 
   Widget contentView() {

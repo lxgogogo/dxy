@@ -1,14 +1,9 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/comment/page_comments.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:universal_html/html.dart' as html;  
+import 'package:universal_html/html.dart' as html;
 
 import '../model/upload_file.dart';
 import '../page/forum/page_comment_input.dart';
@@ -105,12 +100,40 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   SizedBox(width: 10),
                   IconButton(
                       onPressed: () {
+                        if (!Global().hasLogin) {
+                          Get.to(LoginPage());
+                          return;
+                        }
                         //跳转评论列表页面
                         // ToastUtils.showToast('跳转评论列表');
                         Get.to(CommentListPage(id: viewParams.relId!,relType: viewParams.relType!,));
                       },
                       icon: Image.asset(
                         'assets/images/small_comments.png',
+                        width: 25.px,
+                        height: 25.px,
+                      )),
+                  IconButton(
+                      onPressed: () {
+                        if (!Global().hasLogin) {
+                          Get.to(LoginPage());
+                          return;
+                        }
+                        //点赞
+                        NetRequest().contentLike({
+                          'relType': viewParams.relType!,
+                          'relId': viewParams.relId!,
+                          'state': viewParams.liked! ? false : true
+                        }, (data) {
+                          setState(() {
+                            viewParams.liked = !viewParams.liked!;
+                          });
+                        });
+                      },
+                      icon: Image.asset(
+                        viewParams.liked ?? false
+                            ? 'assets/images/praised.png'
+                            : 'assets/images/praise.png',
                         width: 25.px,
                         height: 25.px,
                       )),
@@ -292,6 +315,7 @@ class PostBottomViewParams {
   int? relId; // 评论对象id
   String? relType; //  评论对象类型   // thread 帖子，content 内容，comment 评论
   bool? favoriteState; //收藏状态 true  false
+  bool? liked; //点赞状态 true  false
   String? title; //帖子标题
   String? content; //帖子内容
   List<UploadFile>? files; // 帖子的图片或者视频集合

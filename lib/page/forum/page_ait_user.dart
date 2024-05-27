@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/user.dart';
@@ -77,7 +78,7 @@ class _AitUserPageState extends State<AitUserPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -105,7 +106,7 @@ class _AitUserPageState extends State<AitUserPage> {
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
-    );
+    ));
   }
 
   Widget contentView() {

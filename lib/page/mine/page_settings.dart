@@ -11,6 +11,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
+import '../../widget/page_web_fit.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -50,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: AppTheme.color_F3F3F3,
-    );
+    ));
   }
 
   Widget contentView() {

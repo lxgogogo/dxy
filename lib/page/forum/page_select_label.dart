@@ -7,6 +7,7 @@ import 'package:holdem/widget/label_view.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
+import '../../widget/page_web_fit.dart';
 
 class SelectLabelPage extends StatefulWidget {
   List<String> selectedLabelList = []; //上个页面已经选择的标签集
@@ -51,7 +52,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -95,7 +96,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
       bottomSheet: bottomView(),
-    );
+    ));
   }
 
   Widget contentView() {

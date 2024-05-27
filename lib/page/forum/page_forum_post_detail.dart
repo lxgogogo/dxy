@@ -16,6 +16,7 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/CircleImageWithText.dart';
 import '../../widget/label_view.dart';
+import '../../widget/page_web_fit.dart';
 import '../../widget/post_detail_bottom_view.dart';
 import 'media_helper.dart';
 
@@ -138,7 +139,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: Image.asset(
@@ -166,7 +167,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         body: SafeArea(child: contentView()),
         bottomSheet: isLoadOk ? PostDetailBottomView(
             viewParams: postBottomViewParams) : Container(),
-        backgroundColor: Colors.white);
+        backgroundColor: Colors.white));
   }
 
   ///是自己的帖子 不显示关注

@@ -16,6 +16,7 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../utils/size_fit.dart';
+import '../../widget/page_web_fit.dart';
 import 'login_helper.dart';
 
 class PersonalPage extends StatefulWidget {
@@ -72,7 +73,7 @@ class _PersonalPageState extends State<PersonalPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -93,7 +94,7 @@ class _PersonalPageState extends State<PersonalPage> {
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: AppTheme.color_F3F3F3,
-    );
+    ));
   }
 
   Widget contentView() {

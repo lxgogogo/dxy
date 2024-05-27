@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/utils.dart';
 
 import '../utils/size_fit.dart';
+import '../widget/page_web_fit.dart';
 import 'main_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(builder: (context)=>new MainScreen()), (Route<dynamic> rout)=>false);
     });
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       body: SafeArea(
           child: Center(
         child: Image.asset(
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           fit: BoxFit.cover,
         ),
       )),
-    );
+    ));
   }
 
   @override

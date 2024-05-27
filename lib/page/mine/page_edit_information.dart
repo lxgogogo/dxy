@@ -6,6 +6,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
+import '../../widget/page_web_fit.dart';
 
 class InformationEditPage extends StatefulWidget {
   String editContent; //
@@ -32,7 +33,7 @@ class _InformationEditPageState extends State<InformationEditPage>
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -74,7 +75,7 @@ class _InformationEditPageState extends State<InformationEditPage>
       ),
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
-    );
+    ));
   }
 
   void _submitUpdate() {

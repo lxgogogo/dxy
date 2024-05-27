@@ -24,6 +24,7 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../widget/label_view.dart';
+import '../../widget/page_web_fit.dart';
 
 class PublishPostsPage extends StatefulWidget {
   List<BoardInfo> boardInfoList;
@@ -89,7 +90,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return  WebFitPage(child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -132,7 +133,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       body: SafeArea(child: contentView()),
       backgroundColor: Colors.white,
       bottomSheet: bottomView(),
-    );
+    ));
   }
 
   Widget contentView() {

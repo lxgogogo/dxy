@@ -51,6 +51,8 @@ PODS:
   - SDWebImage (5.19.1):
     - SDWebImage/Core (= 5.19.1)
   - SDWebImage/Core (5.19.1)
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -59,6 +61,8 @@ PODS:
     - FlutterMacOS
   - SwiftyGif (5.4.5)
   - Toast (4.1.1)
+  - url_launcher_ios (0.0.1):
+    - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -72,8 +76,10 @@ DEPENDENCIES:
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
 
 SPEC REPOS:
@@ -101,10 +107,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/darwin"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
   video_player_avfoundation:
     :path: ".symlinks/plugins/video_player_avfoundation/darwin"
 
@@ -120,12 +130,14 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
+  share_plus: 8875f4f2500512ea181eef553c3e27dba5135aad
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   video_player_avfoundation: 7c6c11d8470e1675df7397027218274b6d2360b3
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
 COCOAPODS: 1.15.2

@@ -21,7 +21,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
     Future.delayed(Duration(seconds: 2), () {
-      Get.to(MainScreen());
+      //跳转主页 且销毁当前页面
+      Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(builder: (context)=>new MainScreen()), (Route<dynamic> rout)=>false);
     });
     return Scaffold(
       body: SafeArea(

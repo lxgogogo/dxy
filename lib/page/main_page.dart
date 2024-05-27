@@ -5,6 +5,7 @@ import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
@@ -29,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
 
   var actionEventBus;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -48,7 +48,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       // appBar: AppBar(
       //   title: Text('TabBar Demo'),
       // ),
@@ -115,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
 

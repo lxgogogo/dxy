@@ -9,6 +9,7 @@ import 'package:holdem/page/splash_page.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
@@ -56,8 +57,11 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
         useMaterial3: true,
+        visualDensity: VisualDensity.compact,
+        // 设置最大宽度为 960px
+        // 可根据需求调整该值
       ),
-      home: SplashScreen(),
+      home: WebFitPage(child: SplashScreen()),
       builder: EasyLoading.init(),
       // routes: {
       //   '/':(context)=>MainScreen(),

@@ -6,6 +6,7 @@ import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../utils/app_theme.dart';
@@ -74,24 +75,25 @@ class _SearchResultPageState extends State<SearchResultPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
-      extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-      backgroundColor: kBgColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent, // 设置导航条背景透明
-        elevation: 0, // 去除导航条的阴影
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body:_contentView());
+    return WebFitPage(
+        child: Scaffold(
+            extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
+            backgroundColor: kBgColor,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent, // 设置导航条背景透明
+              elevation: 0, // 去除导航条的阴影
+              leading: IconButton(
+                icon: Image.asset(
+                  'assets/images/back.png',
+                  width: 22.px,
+                  height: 22.px,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            body: _contentView()));
   }
 
   Widget _contentView() {
@@ -103,7 +105,9 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
   Widget content() {
     if (loaded && articles.length == 0) {
-      return Center(child: NoDataView(),);
+      return Center(
+        child: NoDataView(),
+      );
     }
     return SmartRefresher(
       enablePullDown: true,

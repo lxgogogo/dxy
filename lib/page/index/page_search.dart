@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:holdem/page/index/page_search_result.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/search_bar.dart';
 
 class SearchPage extends StatefulWidget {
@@ -30,10 +31,11 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
       appBar: AppBar(
-        automaticallyImplyLeading:false,
+        automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         leading: IconButton(
           icon: Image.asset(
@@ -63,7 +65,9 @@ class _SearchPageState extends State<SearchPage> {
                     }
                     items.insert(0, key);
                     StorageUtil().prefs!.setStringList('search', items);
-                    Get.to(SearchResultPage(keyword: key,));
+                    Get.to(SearchResultPage(
+                      keyword: key,
+                    ));
                   });
 
                   // StorageUtil().prefs!.setString('token', data['token']);
@@ -117,7 +121,7 @@ class _SearchPageState extends State<SearchPage> {
           ))
         ],
       ),
-    );
+    ));
   }
 
   Widget listDataItem(int index) {
@@ -136,8 +140,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: (){
-                Get.to(SearchResultPage(keyword: items[index],));
+              onTap: () {
+                Get.to(SearchResultPage(
+                  keyword: items[index],
+                ));
               },
               child: Text(
                 items[index],

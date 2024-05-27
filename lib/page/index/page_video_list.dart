@@ -5,6 +5,7 @@ import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class VideoListPage extends StatefulWidget {
@@ -69,12 +70,13 @@ class _VideoListPageState extends State<VideoListPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
-        // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-        appBar: AppBar(
-          title: Text('视频合集列表'),
-        ),
-        body: content());
+    return WebFitPage(
+        child: Scaffold(
+            // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
+            appBar: AppBar(
+              title: Text('视频合集列表'),
+            ),
+            body: content()));
   }
 
   Widget content() {
@@ -98,15 +100,15 @@ class _VideoListPageState extends State<VideoListPage> {
     return GestureDetector(
       onTap: () {
         Get.to(VideoDetailPage(
-          id: article.id??0,
+          id: article.id ?? 0,
         ));
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.px),
         margin: EdgeInsets.symmetric(horizontal: 10.px),
         decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+            border:
+                Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -114,7 +116,7 @@ class _VideoListPageState extends State<VideoListPage> {
             ClipRRect(
                 borderRadius: BorderRadius.circular(5.px),
                 child: Image.network(
-                  article.cover??'',
+                  article.cover ?? '',
                   width: 160.px,
                   height: 90.px,
                   fit: BoxFit.cover,
@@ -128,7 +130,7 @@ class _VideoListPageState extends State<VideoListPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  article.title??'',
+                  article.title ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis, // 超出显示省略号
                   style: TextStyle(

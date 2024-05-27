@@ -13,10 +13,11 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:universal_html/html.dart' as html;  
+import 'package:universal_html/html.dart' as html;
 
 // import 'dart:html' as html show kIsWeb, AnchorElement;
 
@@ -110,7 +111,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
       backgroundColor: kBgColor,
       appBar: AppBar(
@@ -198,7 +200,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
                                   if (kIsWeb) {
                                     var link = html.document.createElement('a');
                                     link.setAttribute("download", 'true');
-                                    link.setAttribute("href", articleDetailBean.book!.downloadUrl!);
+                                    link.setAttribute("href",
+                                        articleDetailBean.book!.downloadUrl!);
                                     link.click();
                                   } else {
                                     launchUrl(Uri.parse(
@@ -321,6 +324,6 @@ class _BookDetailPageState extends State<BookDetailPage> {
               files: [],
             ))
           : Container(),
-    );
+    ));
   }
 }

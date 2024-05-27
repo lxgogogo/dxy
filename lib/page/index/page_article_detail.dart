@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:holdem/model/article_detail.dart';
@@ -11,6 +12,8 @@ import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:universal_html/html.dart' as html;
 
 class ArticleDetailPage extends StatefulWidget {
   int id;
@@ -95,7 +98,16 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     height: 15.px,
                   ),
                   if (loaded)
-                    Html(data: articleDetailBean.article?.content ?? ''),
+                    Html(data: articleDetailBean.article?.content ?? '',
+                    onLinkTap: (url, attributes, element) {
+                      if (kIsWeb) {
+                                    var link = html.document.createElement('a');
+                                    link.setAttribute("href", url as String);
+                                    link.click();
+                                  } else {
+                                    launchUrl(Uri.parse(url as String));
+                                  }
+                    },),
                   SizedBox(
                     height: 10.px,
                   ),

@@ -253,7 +253,7 @@ class _PostDetailBottomViewState extends State<PostListItemView> {
   }
 
   Widget multipleImageWrap(int imageCount, List<String> imgUrlList) {
-    double widthNum = (MediaQuery.of(context).size.width - 60) / imageCount;
+    double widthNum = (MediaQuery.of(context).size.width - 70) / imageCount;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center, // 水平居中
       children: List.generate(

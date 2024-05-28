@@ -3,7 +3,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
-import 'package:holdem/page/index/page_hello.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/main_page.dart';
 import 'package:holdem/page/splash_page.dart';
@@ -68,7 +67,6 @@ class MyApp extends StatelessWidget {
       routes: {
         // '/': (context) => MainScreen(),
         '/':(context)=>SplashScreen(),
-        '/hello':(context)=>HelloPage(),
         '/book_detail': (context) => BookDetailPage(
             id: int.parse(
                 ModalRoute.of(context)!.settings.arguments.toString())),

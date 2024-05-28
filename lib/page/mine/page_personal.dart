@@ -212,62 +212,62 @@ class _PersonalPageState extends State<PersonalPage> {
   }
 
   _phoneSelectImage() async {
-    late PermissionStatus status;
-    if (Platform.isIOS) {
-      status = await Permission.photos.request();
-      if (status == PermissionStatus.permanentlyDenied) {
-        showCupertinoDialog(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              content: const Text(
-                "请点击 跳转至设置界面, 打开照片权限, 设置权限成功后再次上传头像",
-                style: AppTheme.text333333Size15,
-              ),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  child: const Text(
-                    "取消",
-                    style: AppTheme.text333333Size15,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                CupertinoDialogAction(
-                  child: const Text(
-                    "跳转至设置界面",
-                    style: AppTheme.text333333Size15,
-                  ),
-                  onPressed: () {
-                    openAppSettings();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        final ImagePicker _picker = ImagePicker();
-        // Pick an image
-        var picked = await _picker.pickImage(
-          source: ImageSource.gallery,
-          maxWidth: 400,
-          imageQuality: 50,
-        );
-
-        if (picked != null) {
-          // setState(() {
-          imageUrl = picked.path;
-          // avatar = (kIsWeb
-          //     ? NetworkImage(picked.path)
-          //     : FileImage(File(
-          //   picked.path,
-          // ))) as ImageProvider;
-          // });
-        }
-      }
-    } else {
+    // late PermissionStatus status;
+    // if (Platform.isIOS) {
+    //   status = await Permission.photos.request();
+    //   if (status == PermissionStatus.permanentlyDenied) {
+    //     showCupertinoDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return CupertinoAlertDialog(
+    //           content: const Text(
+    //             "请点击 跳转至设置界面, 打开照片权限, 设置权限成功后再次上传头像",
+    //             style: AppTheme.text333333Size15,
+    //           ),
+    //           actions: <Widget>[
+    //             CupertinoDialogAction(
+    //               child: const Text(
+    //                 "取消",
+    //                 style: AppTheme.text333333Size15,
+    //               ),
+    //               onPressed: () {
+    //                 Navigator.pop(context);
+    //               },
+    //             ),
+    //             CupertinoDialogAction(
+    //               child: const Text(
+    //                 "跳转至设置界面",
+    //                 style: AppTheme.text333333Size15,
+    //               ),
+    //               onPressed: () {
+    //                 openAppSettings();
+    //               },
+    //             ),
+    //           ],
+    //         );
+    //       },
+    //     );
+    //   } else {
+    //     final ImagePicker _picker = ImagePicker();
+    //     // Pick an image
+    //     var picked = await _picker.pickImage(
+    //       source: ImageSource.gallery,
+    //       maxWidth: 400,
+    //       imageQuality: 50,
+    //     );
+    //
+    //     if (picked != null) {
+    //       // setState(() {
+    //       imageUrl = picked.path;
+    //       // avatar = (kIsWeb
+    //       //     ? NetworkImage(picked.path)
+    //       //     : FileImage(File(
+    //       //   picked.path,
+    //       // ))) as ImageProvider;
+    //       // });
+    //     }
+    //   }
+    // } else {
       final ImagePicker picker = ImagePicker();
       // Pick an image
       var picked = await picker.pickImage(
@@ -279,26 +279,12 @@ class _PersonalPageState extends State<PersonalPage> {
       if (picked != null) {
         imageUrl = picked.path;
       }
-    }
+    // }
 
     //
     print("imageUrl===>$imageUrl");
     if (imageUrl.isNotEmpty) {
       _updateAvatar(imageUrl);
-      // UserRequestManger.uploadFile(
-      //     UserRequestManger.UPLOAD_FILE_TYPE_IMAGE, imageUrl, (data) {
-      //   Navigator.of(context).pop(); //关闭弹窗
-      //   setState(() {
-      //     avatar = (kIsWeb
-      //         ? NetworkImage(imageUrl)
-      //         : FileImage(File(
-      //       imageUrl,
-      //     ))) as ImageProvider;
-      //   });
-      // }, (errorMsg) {
-      //   Navigator.of(context).pop(); //关闭弹窗
-      //   Fluttertoast.showToast(msg: errorMsg);
-      // });
     }
   }
 

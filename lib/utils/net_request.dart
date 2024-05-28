@@ -193,7 +193,7 @@ class NetRequest {
   }
 
   ///上传文件
-  Future uploadFile(String filePath, SuccessCallback onSuccess) async {
+  Future uploadFile(String filePath, SuccessCallback onSuccess , FailureCallback onFail) async {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
@@ -205,6 +205,7 @@ class NetRequest {
       LogUtils.printAll("uploadFile===>$response");
       onSuccess(response['data']);
     } else {
+      onFail(resp.message!);
       ToastUtils.showToast(resp.message!);
     }
   }

@@ -14,6 +14,7 @@ import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:video_player/video_player.dart';
 import '../../model/board_info.dart';
@@ -60,6 +61,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   late VideoPlayerController _playController;
   late Future<void> _initializeVideoPlayerFuture;
   bool isShowVideoView = false;
+
   // Uint8List? videoImageBytes;
 
   bool _isPlaying = false;
@@ -90,7 +92,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -403,26 +406,30 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             //       width: 120,
             //       height: 180,
             //       fit: BoxFit.cover),
-                  _playController.value.isInitialized
-                      ? FittedBox(
+            _playController.value.isInitialized
+                ? FittedBox(
                     fit: BoxFit.fitHeight,
                     child: SizedBox(
                       width: _playController.value.size.width,
                       height: _playController.value.size.height,
                       child: VideoPlayer(_playController),
-                    ),) : Container(),
-                  _isPlaying
-                      ? SizedBox.shrink()
-                      : Stack(
+                    ),
+                  )
+                : Container(),
+            _isPlaying
+                ? SizedBox.shrink()
+                : Stack(
                     alignment: Alignment.center,
                     children: [
                       Image.network(
                         imageUrlList[0].posterUrl!,
                       ),
                       IconButton(
-                        icon: Image.asset('assets/images/play_btn.png',
+                        icon: Image.asset(
+                          'assets/images/play_btn.png',
                           width: 35.px,
-                          height: 35.px,),
+                          height: 35.px,
+                        ),
                         onPressed: () {
                           _pickAndPlayVideo(imageUrlList[0].url);
                         },
@@ -449,7 +456,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   )),
             )
           ]));
-
 
       // _playController = VideoPlayerController.network('');
       // _initializeVideoPlayerFuture = _playController.initialize().then((_) {
@@ -604,13 +610,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   }
 
   openFilePicker() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.media,
-        allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4','mov']);
-
-    if (result != null) {
-      if (kIsWeb) {
+    if (kIsWeb) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.media,
+          allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4', 'mov']);
+      if (result != null) {
         var files = result.files;
         var filesBytes = result.files.first.bytes;
         if (files.length > 9 || files.length + imageData.length > 9) {
@@ -632,7 +637,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
         if (imageData.isNotEmpty &&
             imageData.length == 1 &&
-            (imageData[0].extension == 'mp4' || imageData[0].extension == 'mov')) {
+            (imageData[0].extension == 'mp4' ||
+                imageData[0].extension == 'mov')) {
           //byte 处理目前不好用
           // final blob = html.Blob([imageData[0].bytes]);
           // final url = html.Url.createObjectUrlFromBlob(blob);
@@ -653,7 +659,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           NetRequest().uploadBytesFile(imageData[0], (data) {
             UploadFile uploadFile = UploadFile.fromJson(data);
             EasyLoading.dismiss();
-            _playController = VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+            _playController =
+                VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
             setState(() {
               imageUrlList.add(uploadFile);
               isShowVideoView = true;
@@ -662,74 +669,116 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           }, (errMsg) {
             EasyLoading.dismiss();
           });
-
         } else {
           setState(() {
             isShowVideoView = false;
           });
         }
-        return;
       }
+      // ///////////////////////////////////////app///////////////////////////////////////////
+      // List<String> files =
+      //     result.paths.where((path) => path != null).cast<String>().toList();
+      // if (result.files.length > 9 ||
+      //     result.files.length + imageData.length > 9) {
+      //   ToastUtils.showToast('单个视频或者最多9张图片');
+      //   return;
+      // }
+      //
+      // if (files.length > 1) {
+      //   for (String path in files) {
+      //     if (path.endsWith('mp4') || path.endsWith('mov')) {
+      //       ToastUtils.showToast('单个视频或者最多9张图片');
+      //       return;
+      //     }
+      //   }
+      // }
+      //
+      // for (String path in files) {
+      //   print('FilePickerResult: ' + path);
+      //   imageData.add(path);
+      // }
+      //
+      // if (imageData.isNotEmpty &&
+      //     imageData.length == 1 &&
+      //     (imageData[0].endsWith('mp4') || imageData[0].endsWith('mov'))) {
+      //   //byte 处理目前不好用
+      //   // final uint8list = await VideoThumbnail.thumbnailData(
+      //   //   video: imageData[0],
+      //   //   imageFormat: ImageFormat.JPEG,
+      //   //   maxWidth: 128,
+      //   //   // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      //   //   quality: 100,
+      //   // );
+      //   // setState(() {
+      //   //   isShowVideoView = true;
+      //   //   videoImageBytes = uint8list;
+      //   // });
+      //
+      //   EasyLoading.show(status: 'loading...');
+      //   NetRequest().uploadBytesFile(imageData[0], (data) {
+      //     UploadFile uploadFile = UploadFile.fromJson(data);
+      //     EasyLoading.dismiss();
+      //     _playController = VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+      //     setState(() {
+      //       imageUrlList.add(uploadFile);
+      //       isShowVideoView = true;
+      //     });
+      //   }, (errMsg) {
+      //     EasyLoading.dismiss();
+      //   });
+      //
+      // } else {
+      //   setState(() {
+      //     isShowVideoView = false;
+      //   });
+      // }
+    } else { // ios or Android
 
-      ///////////////////////////////////////app///////////////////////////////////////////
-      List<String> files =
-          result.paths.where((path) => path != null).cast<String>().toList();
-      if (result.files.length > 9 ||
-          result.files.length + imageData.length > 9) {
+      final ImagePicker picker = ImagePicker();
+      final List<XFile> files = await picker.pickMultipleMedia(limit: 9);
+      // final XFile? media =  await picker.pickImage(source: ImageSource.gallery);
+      // List<XFile> files = [];
+      if (files.length > 9 || files.length + imageData.length > 9) {
         ToastUtils.showToast('单个视频或者最多9张图片');
         return;
       }
-
       if (files.length > 1) {
-        for (String path in files) {
-          if (path.endsWith('mp4') || path.endsWith('mov')) {
+        for (var file in files) {
+          if (file.path.endsWith('mp4') || file.path.endsWith('mov')) {
             ToastUtils.showToast('单个视频或者最多9张图片');
             return;
           }
         }
       }
 
-      for (String path in files) {
-        print('FilePickerResult: ' + path);
-        imageData.add(path);
+      //手机端都放文件 path
+      for (var file in files) {
+        print('===========ios or Android==============${file.path}');
+        imageData.add(file.path);
       }
 
       if (imageData.isNotEmpty &&
           imageData.length == 1 &&
           (imageData[0].endsWith('mp4') || imageData[0].endsWith('mov'))) {
-        //byte 处理目前不好用
-        // final uint8list = await VideoThumbnail.thumbnailData(
-        //   video: imageData[0],
-        //   imageFormat: ImageFormat.JPEG,
-        //   maxWidth: 128,
-        //   // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-        //   quality: 100,
-        // );
-        // setState(() {
-        //   isShowVideoView = true;
-        //   videoImageBytes = uint8list;
-        // });
-
-        EasyLoading.show(status: 'loading...');
-        NetRequest().uploadBytesFile(imageData[0], (data) {
+        EasyLoading.show(status: '视频处理中...');
+        NetRequest().uploadFile(imageData[0], (data) {
           UploadFile uploadFile = UploadFile.fromJson(data);
           EasyLoading.dismiss();
-          _playController = VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+          _playController =
+              VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
           setState(() {
             imageUrlList.add(uploadFile);
             isShowVideoView = true;
+            // videoImageBytes = uint8list;
           });
         }, (errMsg) {
           EasyLoading.dismiss();
         });
-
       } else {
         setState(() {
           isShowVideoView = false;
         });
       }
-    } else {
-      // User canceled the picker
     }
   }
 
@@ -817,14 +866,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     }
 
     //视频文件
-    if (isShowVideoView){
+    if (isShowVideoView) {
       NetRequest().threadCreate(title, content, _getBoardIdByName(),
           customLabelList, imageUrlList, aitList, (data) {
-            //通知刷新论坛列表
-            EventBusManager.eventBus
-                .fire(EventBusAction.refreshForumList.eventBusTypeName);
-            Navigator.pop(context);
-          });
+        //通知刷新论坛列表
+        EventBusManager.eventBus
+            .fire(EventBusAction.refreshForumList.eventBusTypeName);
+        Navigator.pop(context);
+      });
       return;
     }
 
@@ -860,9 +909,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               Navigator.pop(context);
             });
           }
-        });
+        }, (errMsg) {});
       });
-    } else {
+    } else { //没有图片视频直接上传
       NetRequest().threadCreate(title, content, _getBoardIdByName(),
           customLabelList, imageUrlList, aitList, (data) {
         //通知刷新论坛列表

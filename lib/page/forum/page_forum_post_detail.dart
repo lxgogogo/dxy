@@ -93,6 +93,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             relType: NetRequest.COMMENT_TYPE_THREAD,
             favoriteState: boardBean?.favorited!,
             title: boardBean?.title!,
+            liked: boardBean?.liked!,
             content: boardBean?.content!,
             files: boardBean?.files!,
           );

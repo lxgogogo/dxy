@@ -98,6 +98,31 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                     ),
                   )),
                   SizedBox(width: 10),
+                  viewParams.relType!.isNotEmpty && viewParams.relType! == 'thread' ?
+                  IconButton(
+                      onPressed: () {
+                        if (!Global().hasLogin) {
+                          Get.to(LoginPage());
+                          return;
+                        }
+                        //点赞
+                        NetRequest().contentLike({
+                          'relType': viewParams.relType!,
+                          'relId': viewParams.relId!,
+                          'state': viewParams.liked?? false ? false : true
+                        }, (data) {
+                          setState(() {
+                            viewParams.liked = !viewParams.liked!;
+                          });
+                        });
+                      },
+                      icon: Image.asset(
+                        viewParams.liked ?? false
+                            ? 'assets/images/small_like_selected.png'
+                            : 'assets/images/small_like_unselect.png',
+                        width: 25.px,
+                        height: 25.px,
+                      )) : Container(),
                   IconButton(
                       onPressed: () {
                         if (!Global().hasLogin) {
@@ -110,30 +135,6 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       },
                       icon: Image.asset(
                         'assets/images/small_comments.png',
-                        width: 25.px,
-                        height: 25.px,
-                      )),
-                  IconButton(
-                      onPressed: () {
-                        if (!Global().hasLogin) {
-                          Get.to(LoginPage());
-                          return;
-                        }
-                        //点赞
-                        NetRequest().contentLike({
-                          'relType': viewParams.relType!,
-                          'relId': viewParams.relId!,
-                          'state': viewParams.liked! ? false : true
-                        }, (data) {
-                          setState(() {
-                            viewParams.liked = !viewParams.liked!;
-                          });
-                        });
-                      },
-                      icon: Image.asset(
-                        viewParams.liked ?? false
-                            ? 'assets/images/praised.png'
-                            : 'assets/images/praise.png',
                         width: 25.px,
                         height: 25.px,
                       )),
@@ -328,5 +329,6 @@ class PostBottomViewParams {
     @required this.title,
     @required this.content,
     @required this.files,
+    this.liked = false
   });
 }

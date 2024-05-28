@@ -606,7 +606,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   openFilePicker() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
-        type: FileType.custom,
+        type: FileType.media,
         allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4','mov']);
 
     if (result != null) {

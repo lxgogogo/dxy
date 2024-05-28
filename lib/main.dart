@@ -61,14 +61,22 @@ class MyApp extends StatelessWidget {
         // 设置最大宽度为 960px
         // 可根据需求调整该值
       ),
-      home: WebFitPage(child: SplashScreen()),
+      // home: WebFitPage(child: SplashScreen()),
       builder: EasyLoading.init(),
-      // routes: {
-      //   '/':(context)=>MainScreen(),
-      //   '/book_detail':(context)=>BookDetailPage(id:1),
-      //   '/article_detail':(context)=>ArticleDetailPage(id: 1),
-      //   '/video_detail':(context)=>VideoDetailPage(id: 1),
-      // },
+      initialRoute: '/',
+      routes: {
+        // '/': (context) => MainScreen(),
+        '/':(context)=>SplashScreen(),
+        '/book_detail': (context) => BookDetailPage(
+            id: int.parse(
+                ModalRoute.of(context)!.settings.arguments.toString())),
+        '/article_detail': (context) => ArticleDetailPage(
+            id: int.parse(
+                ModalRoute.of(context)!.settings.arguments.toString())),
+        '/video_detail': (context) => VideoDetailPage(
+            id: int.parse(
+                ModalRoute.of(context)!.settings.arguments.toString())),
+      },
     ));
   }
 }

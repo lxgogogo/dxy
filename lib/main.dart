@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_splash_screen/flutter_splash_screen.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
@@ -7,13 +9,11 @@ import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/page/main_page.dart';
-import 'package:holdem/page/splash_page.dart';
 import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/storage.dart';
-import 'package:holdem/widget/page_web_fit.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() {
   usePathUrlStrategy();
@@ -30,12 +30,22 @@ Future<void> initStore() async {
   }
 }
 
+///hide your splash screen
+Future<void> hideScreen() async {
+  Future.delayed(const Duration(milliseconds: 2000), () {
+    FlutterSplashScreen.hide();
+  });
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    if (CommonUtils.isAndroid(context)) {
+      hideScreen();
+    }
     // EasyLoading.init();
     return OKToast(
         child: GetMaterialApp(

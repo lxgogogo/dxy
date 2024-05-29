@@ -893,7 +893,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       return;
     }
 
-    //视频文件
+    //视频类型：不需要上传文件，直接取视频的path数据上传
     if (isShowVideoView) {
       NetRequest().threadCreate(title, content, _getBoardIdByName(),
           customLabelList, imageUrlList, aitList, (data) {
@@ -905,7 +905,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       return;
     }
 
-    //图片文件
+    //图片类型：
     if (imageData.isNotEmpty) {
       imageData.forEach((element) async {
         if (kIsWeb) {
@@ -926,8 +926,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             (errMsg) {},
             (int sent, int total) {});
         } else {
-          var progress = 0;
-          var count = 0;
           NetRequest().uploadFile(
               element,
               (data) {
@@ -980,19 +978,5 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       // 否则正常处理文本变化
       // 这里不需要做任何操作，因为TextField会自动处理文本变化
     }
-  }
-
-  Widget buildProgressIndicatorWithNumber() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CircularProgressIndicator(),
-        SizedBox(height: 10),
-        Text(
-          '${uploadProgress}%',
-          style: TextStyle(fontSize: 13, color: Colors.white),
-        ),
-      ],
-    );
   }
 }

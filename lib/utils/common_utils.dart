@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 ///不带参数事件
 // onTap: CommonUtils.debounce(_showDevices)
 // 带参数事件
@@ -16,6 +19,10 @@ class CommonUtils{
       _debouncers[key] = debouncer;
     }
     return debouncer;
+  }
+
+  static bool isAndroid(BuildContext context) {
+    return Theme.of(context).platform == TargetPlatform.android;
   }
 }
 

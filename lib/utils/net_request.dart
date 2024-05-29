@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/api.dart';
@@ -193,12 +194,15 @@ class NetRequest {
   }
 
   ///上传文件
-  Future uploadFile(String filePath, SuccessCallback onSuccess , FailureCallback onFail) async {
+  Future uploadFile(String filePath, SuccessCallback onSuccess ,
+      FailureCallback onFail, ProgressCallback onSendProgress) async {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
     Map<String, dynamic> response =
-        await HttpUtils.postFile(Api.uploadFile, params: params);
+        await HttpUtils.postFile(Api.uploadFile, params: params ,
+            onSendProgress: onSendProgress, showLoading:false);
+
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
@@ -210,10 +214,12 @@ class NetRequest {
     }
   }
 
-  Future uploadBytesFile(var data, SuccessCallback onSuccess, FailureCallback onFail) async {
+  Future uploadBytesFile(var data, SuccessCallback onSuccess,
+      FailureCallback onFail, ProgressCallback onSendProgress) async {
 
     Map<String, dynamic> response =
-        await HttpUtils.postBytesFile(Api.uploadFile,data, params: {});
+        await HttpUtils.postBytesFile(Api.uploadFile,data, params: {},
+            onSendProgress: onSendProgress);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {

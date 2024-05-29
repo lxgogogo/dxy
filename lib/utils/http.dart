@@ -9,6 +9,7 @@ import 'log_utils.dart';
 
 class Http {
   static final Http _instance = Http._internal();
+
   // 单例模式使用Http类，
   factory Http() => _instance;
 
@@ -184,13 +185,12 @@ class Http {
     return response.data;
   }
 
-  Future postFile(
-    String path, {
-    Map<String, dynamic>? params,
-    // data,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
+  Future postFile(String path,
+      {Map<String, dynamic>? params,
+      // data,
+      Options? options,
+      CancelToken? cancelToken,
+      ProgressCallback? onSendProgress}) async {
     LogUtils.printAll("postFile params===>$params");
     String fileName = params?['file'].split('/').last; // 获取文件名
     var file =
@@ -208,6 +208,7 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
+
     var response = await dio.post(
       path,
       data: formData,
@@ -215,18 +216,20 @@ class Http {
       // queryParameter5s: params,
       options: requestOptions,
       cancelToken: cancelToken ?? _cancelToken,
+      onSendProgress: (int sent, int total) {
+        onSendProgress!(sent, total);
+      },
     );
     print('net url:$path \n data:${response.data}');
     return response.data;
   }
 
-  Future postBytesFile(
-    String path, {
-    Map<String, dynamic>? params,
-    file,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
+  Future postBytesFile(String path,
+      {Map<String, dynamic>? params,
+      file,
+      Options? options,
+      CancelToken? cancelToken,
+      ProgressCallback? onSendProgress}) async {
     Options requestOptions = options ?? Options();
     Map<String, dynamic>? _authorization = getAuthorizationHeader();
     // _authorization!['Content-Type'] = 'application/octet-stream';
@@ -236,12 +239,16 @@ class Http {
     FormData formData = FormData.fromMap({
       // 'file': file,
       // ignore: prefer_interpolation_to_compose_strings
-      'file':MultipartFile.fromBytes(file.bytes,filename: 'temp.'+file.extension)
+      'file': MultipartFile.fromBytes(file.bytes,
+          filename: 'temp.' + file.extension)
       // 'fileType': params?['fileType'],
       // 'timestamp': params?['timestamp'],
       //  'apiKey': params?['apiKey'],
       // 'sign': params?['sign'],
     });
+    var progress = 0;
+    var count = 0;
+
     var response = await dio.post(
       path,
       data: formData,
@@ -249,6 +256,9 @@ class Http {
       // queryParameter5s: params,
       options: requestOptions,
       cancelToken: cancelToken ?? _cancelToken,
+      onSendProgress: (int sent, int total) {
+        onSendProgress!(sent, total);
+      },
     );
     print('net url:$path \n data:${response.data}');
     return response.data;

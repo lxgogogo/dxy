@@ -57,6 +57,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   bool _isMounted = false;
   String _counter = 'video';
   String? selectedBoardValue;
+  int uploadProgress = 0;
 
   late VideoPlayerController _playController;
   late Future<void> _initializeVideoPlayerFuture;
@@ -447,6 +448,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                       _playController.dispose();
                       _isPlaying = false;
                       isShowVideoView = false;
+                      uploadProgress = 0;
                     });
                   },
                   icon: Image.asset(
@@ -655,20 +657,32 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           // });
 
           //
-          EasyLoading.show(status: '视频处理中...');
-          NetRequest().uploadBytesFile(imageData[0], (data) {
-            UploadFile uploadFile = UploadFile.fromJson(data);
-            EasyLoading.dismiss();
-            _playController =
-                VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
-            setState(() {
-              imageUrlList.add(uploadFile);
-              isShowVideoView = true;
-              // videoImageBytes = uint8list;
-            });
-          }, (errMsg) {
-            EasyLoading.dismiss();
-          });
+          EasyLoading.showProgress(uploadProgress.toDouble(),
+              status: '视频处理中...${uploadProgress}%');
+          NetRequest().uploadBytesFile(
+            imageData[0],
+            (data) {
+              UploadFile uploadFile = UploadFile.fromJson(data);
+              EasyLoading.dismiss();
+              _playController =
+                  VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+              setState(() {
+                imageUrlList.add(uploadFile);
+                isShowVideoView = true;
+                // videoImageBytes = uint8list;
+              });
+            },
+            (errMsg) {
+              EasyLoading.dismiss();
+            },
+            (int sent, int total) {
+              setState(() {
+                uploadProgress = ((sent / total) * 100).round();
+                EasyLoading.showProgress((uploadProgress / 100).toDouble(),
+                    status: '视频处理中...${uploadProgress}%');
+              });
+            },
+          );
         } else {
           setState(() {
             isShowVideoView = false;
@@ -732,7 +746,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       //     isShowVideoView = false;
       //   });
       // }
-    } else { // ios or Android
+    } else {
+      // ios or Android
 
       final ImagePicker picker = ImagePicker();
       final List<XFile> files = await picker.pickMultipleMedia(limit: 9);
@@ -760,20 +775,33 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       if (imageData.isNotEmpty &&
           imageData.length == 1 &&
           (imageData[0].endsWith('mp4') || imageData[0].endsWith('mov'))) {
-        EasyLoading.show(status: '视频处理中...');
-        NetRequest().uploadFile(imageData[0], (data) {
-          UploadFile uploadFile = UploadFile.fromJson(data);
-          EasyLoading.dismiss();
-          _playController =
-              VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
-          setState(() {
-            imageUrlList.add(uploadFile);
-            isShowVideoView = true;
-            // videoImageBytes = uint8list;
-          });
-        }, (errMsg) {
-          EasyLoading.dismiss();
-        });
+        EasyLoading.showProgress(uploadProgress.toDouble(),
+            status: '视频处理中...${uploadProgress}%');
+        var count = 0;
+        NetRequest().uploadFile(
+          imageData[0],
+          (data) {
+            UploadFile uploadFile = UploadFile.fromJson(data);
+            EasyLoading.dismiss();
+            _playController =
+                VideoPlayerController.networkUrl(Uri.parse(uploadFile.url!));
+            setState(() {
+              imageUrlList.add(uploadFile);
+              isShowVideoView = true;
+              // videoImageBytes = uint8list;
+            });
+          },
+          (errMsg) {
+            EasyLoading.dismiss();
+          },
+          (int sent, int total) {
+            setState(() {
+              uploadProgress = ((sent / total) * 100).round();
+              EasyLoading.showProgress((uploadProgress / 100).toDouble(),
+                  status: '视频处理中...${uploadProgress}%');
+            });
+          },
+        );
       } else {
         setState(() {
           isShowVideoView = false;
@@ -881,37 +909,48 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     if (imageData.isNotEmpty) {
       imageData.forEach((element) async {
         if (kIsWeb) {
-          NetRequest().uploadBytesFile(element, (data) {
-            UploadFile uploadFile = UploadFile.fromJson(data);
-            imageUrlList.add(uploadFile);
+          NetRequest().uploadBytesFile(
+            element,
+            (data) {
+              UploadFile uploadFile = UploadFile.fromJson(data);
+              imageUrlList.add(uploadFile);
 
-            if (imageUrlList.isNotEmpty &&
-                imageUrlList.length == imageData.length) {
-              NetRequest().threadCreate(title, content, _getBoardIdByName(),
-                  customLabelList, imageUrlList, aitList, (data) {
-                Navigator.pop(context);
-              });
-            }
-          }, (errMsg) {});
-          return;
+              if (imageUrlList.isNotEmpty &&
+                  imageUrlList.length == imageData.length) {
+                NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                    customLabelList, imageUrlList, aitList, (data) {
+                  Navigator.pop(context);
+                });
+              }
+            },
+            (errMsg) {},
+            (int sent, int total) {});
+        } else {
+          var progress = 0;
+          var count = 0;
+          NetRequest().uploadFile(
+              element,
+              (data) {
+                UploadFile uploadFile = UploadFile.fromJson(data);
+                imageUrlList.add(uploadFile);
+
+                if (imageUrlList.isNotEmpty &&
+                    imageUrlList.length == imageData.length) {
+                  NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                      customLabelList, imageUrlList, aitList, (data) {
+                    //通知刷新论坛列表
+                    EventBusManager.eventBus
+                        .fire(EventBusAction.refreshForumList.eventBusTypeName);
+                    Navigator.pop(context);
+                  });
+                }
+              },
+              (errMsg) {},
+              (int sent, int total) {});
         }
-        NetRequest().uploadFile(element, (data) {
-          UploadFile uploadFile = UploadFile.fromJson(data);
-          imageUrlList.add(uploadFile);
-
-          if (imageUrlList.isNotEmpty &&
-              imageUrlList.length == imageData.length) {
-            NetRequest().threadCreate(title, content, _getBoardIdByName(),
-                customLabelList, imageUrlList, aitList, (data) {
-              //通知刷新论坛列表
-              EventBusManager.eventBus
-                  .fire(EventBusAction.refreshForumList.eventBusTypeName);
-              Navigator.pop(context);
-            });
-          }
-        }, (errMsg) {});
       });
-    } else { //没有图片视频直接上传
+    } else {
+      //没有图片视频直接上传
       NetRequest().threadCreate(title, content, _getBoardIdByName(),
           customLabelList, imageUrlList, aitList, (data) {
         //通知刷新论坛列表
@@ -941,5 +980,19 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       // 否则正常处理文本变化
       // 这里不需要做任何操作，因为TextField会自动处理文本变化
     }
+  }
+
+  Widget buildProgressIndicatorWithNumber() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CircularProgressIndicator(),
+        SizedBox(height: 10),
+        Text(
+          '${uploadProgress}%',
+          style: TextStyle(fontSize: 13, color: Colors.white),
+        ),
+      ],
+    );
   }
 }

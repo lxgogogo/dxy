@@ -70,6 +70,7 @@ class HttpUtils {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
+        ProgressCallback? onSendProgress
   }) async {
     return await Http().postBytesFile(
       path,
@@ -77,6 +78,7 @@ class HttpUtils {
       params: params ?? {},
       options: options,
       cancelToken: cancelToken,
+        onSendProgress:onSendProgress
     );
   }
 
@@ -86,6 +88,7 @@ class HttpUtils {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
+        ProgressCallback? onSendProgress,
     bool showLoading = true,
   }) async {
     if (showLoading) {
@@ -97,6 +100,7 @@ class HttpUtils {
       params: params ?? {},
       options: options,
       cancelToken: cancelToken,
+      onSendProgress: onSendProgress
     );
     if (showLoading) {
       EasyLoading.dismiss();

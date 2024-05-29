@@ -96,6 +96,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             liked: boardBean?.liked!,
             content: boardBean?.content!,
             files: boardBean?.files!,
+            shareLink: '/post_detail?postId=${widget.postId}',
           );
 
           isLoadOk = true;

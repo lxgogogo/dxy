@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
@@ -80,6 +81,9 @@ class MyApp extends StatelessWidget {
         '/video_list': (context) => VideoListPage(
             id: int.parse(
                 ModalRoute.of(context)!.settings.arguments.toString())),
+        '/post_detail': (context) => PostDetailPage(
+            postId: int.parse(
+                ModalRoute.of(context)!.settings.arguments.toString())),
       },
       onGenerateRoute: (settings) {
         final Uri uri = Uri.parse(settings.name!);
@@ -106,6 +110,11 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) =>
                   VideoListPage(id: int.parse(parameters['id']!)),
+            );
+          case '/post_detail':
+            return MaterialPageRoute(
+              builder: (context) =>
+                  PostDetailPage(postId: int.parse(parameters['postId']!)),
             );
         }
       },

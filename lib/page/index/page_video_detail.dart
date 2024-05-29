@@ -111,6 +111,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
               favoriteState: articleDetailBean.favorited ?? false,
               title: '',
               content: '',
+              shareLink: '/video_detail?id=${widget.id}',
               files: [],
             ))
           : Container(),

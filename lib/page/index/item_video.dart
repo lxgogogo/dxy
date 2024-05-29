@@ -32,14 +32,22 @@ class _VideoItemState extends State<VideoItem> {
     return GestureDetector(
       onTap: () {
         if (widget.article.type == 'videoList') {
-          Get.to(VideoListPage(id: widget.article.id ?? 0));
+          // Get.to(VideoListPage(id: widget.article.id ?? 0));
+          Navigator.of(context).pushNamed(
+              "/video_list?id=${widget.article.id ?? 0}",
+              arguments: widget.article.id ?? 0);
           return;
         }
         if (widget.article.type == 'video') {
-          Get.to(VideoDetailPage(id: widget.article.id ?? 0));
+          // Get.to(VideoDetailPage(id: widget.article.id ?? 0));
+          Navigator.of(context).pushNamed(
+              "/video_detail?id=${widget.article.id ?? 0}",
+              arguments: widget.article.id ?? 0);
           return;
         }
-        Navigator.of(context).pushNamed("/article_detail", arguments: widget.article.id ?? 0);
+        Navigator.of(context).pushNamed(
+            "/article_detail?id=${widget.article.id ?? 0}",
+            arguments: widget.article.id ?? 0);
         // Get.to(ArticleDetailPage(id: widget.article.id ?? 0));
       },
       child: Container(
@@ -72,7 +80,6 @@ class _VideoItemState extends State<VideoItem> {
           ),
           child: Container(
               padding: EdgeInsets.all(12.px),
-              
               decoration: BoxDecoration(
                 //flutter 上下颜色渐变
                 //#F9CF3A, #FFD43E00
@@ -104,9 +111,7 @@ class _VideoItemState extends State<VideoItem> {
           child: Stack(
             children: [
               MediaHelper().cacheLoadNetworkImage(
-                  widget.article.cover ?? '',
-                  145.px,
-                  120.px),
+                  widget.article.cover ?? '', 145.px, 120.px),
               // Image.network(
               //   widget.article.cover ?? '',
               //   width: 145.px,

@@ -96,7 +96,7 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (c, i) => messageCommentItem(messages[i],i),
+        itemBuilder: (c, i) => messageCommentItem(messages[i], i),
         // itemExtent: 160.0,
         itemCount: messages.length,
       ),
@@ -109,19 +109,23 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
     }
     int id = bean.jumpId!;
     if (bean.jumpType == 'book') {
-      Get.to(BookDetailPage(id: id));
+      Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
+      // Get.to(BookDetailPage(id: id));
     } else if (bean.jumpType == 'article') {
-      Get.to(ArticleDetailPage(id: id));
+      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
+      // Get.to(ArticleDetailPage(id: id));
     } else if (bean.jumpType == 'videoList') {
-      Get.to(VideoListPage(id: id));
+      Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);
+      // Get.to(VideoListPage(id: id));
     } else if (bean.jumpType == 'video') {
-      Get.to(VideoDetailPage(id: id));
+      Navigator.of(context).pushNamed("/video_detail?id=${id}", arguments: id);
+      // Get.to(VideoDetailPage(id: id));
     } else if (bean.jumpType == 'thread') {
       Get.to(PostDetailPage(postId: id));
     }
   }
 
-  Widget messageCommentItem(MessageBean messageBean,int index) {
+  Widget messageCommentItem(MessageBean messageBean, int index) {
     String title = '@了我';
     String str = messageBean.description ?? '';
     if (widget.type == 'comment') {
@@ -136,7 +140,11 @@ class _MessageTabChildPageState extends State<MessageTabChildPage> {
       margin: EdgeInsets.only(left: 16.px, right: 16.px),
       decoration: BoxDecoration(
           border: Border(
-              bottom: BorderSide(color: index==messages.length-1?Colors.transparent:const Color(0xffE5E5E5), width: 1))),
+              bottom: BorderSide(
+                  color: index == messages.length - 1
+                      ? Colors.transparent
+                      : const Color(0xffE5E5E5),
+                  width: 1))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

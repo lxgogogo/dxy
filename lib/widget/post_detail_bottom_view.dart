@@ -98,31 +98,33 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                     ),
                   )),
                   SizedBox(width: 10),
-                  viewParams.relType!.isNotEmpty && viewParams.relType! == 'thread' ?
-                  IconButton(
-                      onPressed: () {
-                        if (!Global().hasLogin) {
-                          Get.to(LoginPage());
-                          return;
-                        }
-                        //点赞
-                        NetRequest().contentLike({
-                          'relType': viewParams.relType!,
-                          'relId': viewParams.relId!,
-                          'state': viewParams.liked?? false ? false : true
-                        }, (data) {
-                          setState(() {
-                            viewParams.liked = !viewParams.liked!;
-                          });
-                        });
-                      },
-                      icon: Image.asset(
-                        viewParams.liked ?? false
-                            ? 'assets/images/small_like_selected.png'
-                            : 'assets/images/small_like_unselect.png',
-                        width: 25.px,
-                        height: 25.px,
-                      )) : Container(),
+                  viewParams.relType!.isNotEmpty &&
+                          viewParams.relType! == 'thread'
+                      ? IconButton(
+                          onPressed: () {
+                            if (!Global().hasLogin) {
+                              Get.to(LoginPage());
+                              return;
+                            }
+                            //点赞
+                            NetRequest().contentLike({
+                              'relType': viewParams.relType!,
+                              'relId': viewParams.relId!,
+                              'state': viewParams.liked ?? false ? false : true
+                            }, (data) {
+                              setState(() {
+                                viewParams.liked = !viewParams.liked!;
+                              });
+                            });
+                          },
+                          icon: Image.asset(
+                            viewParams.liked ?? false
+                                ? 'assets/images/small_like_selected.png'
+                                : 'assets/images/small_like_unselect.png',
+                            width: 25.px,
+                            height: 25.px,
+                          ))
+                      : Container(),
                   IconButton(
                       onPressed: () {
                         if (!Global().hasLogin) {
@@ -131,7 +133,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         }
                         //跳转评论列表页面
                         // ToastUtils.showToast('跳转评论列表');
-                        Get.to(CommentListPage(id: viewParams.relId!,relType: viewParams.relType!,));
+                        Get.to(CommentListPage(
+                          id: viewParams.relId!,
+                          relType: viewParams.relType!,
+                        ));
                       },
                       icon: Image.asset(
                         'assets/images/small_comments.png',
@@ -156,9 +161,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   IconButton(
                       onPressed: () {
                         var shareData = {
-                          "title": '德学院',
-                          "text": '欢迎来到德学院',
-                          "url": 'https://reptile-vue.dexin62.com/',
+                          "title": widget.viewParams.title,
+                          "text": widget.viewParams.content,
+                          "url":
+                              'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
                         };
                         html.window.navigator.share(shareData);
                         // html.window.navigator.share(shareData);
@@ -319,16 +325,17 @@ class PostBottomViewParams {
   bool? liked; //点赞状态 true  false
   String? title; //帖子标题
   String? content; //帖子内容
+  String? shareLink; //分享
   List<UploadFile>? files; // 帖子的图片或者视频集合
 
-  PostBottomViewParams({
-    this.postId,
-    @required this.relId,
-    @required this.relType,
-    @required this.favoriteState,
-    @required this.title,
-    @required this.content,
-    @required this.files,
-    this.liked = false
-  });
+  PostBottomViewParams(
+      {this.postId,
+      @required this.relId,
+      @required this.relType,
+      @required this.favoriteState,
+      @required this.title,
+      @required this.content,
+      @required this.files,
+      @required this.shareLink,
+      this.liked = false});
 }

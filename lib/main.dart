@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/page/main_page.dart';
 import 'package:holdem/page/splash_page.dart';
 import 'package:holdem/utils/app_theme.dart';
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // '/': (context) => MainScreen(),
-        '/':(context)=>SplashScreen(),
+        '/': (context) => MainScreen(),
         '/book_detail': (context) => BookDetailPage(
             id: int.parse(
                 ModalRoute.of(context)!.settings.arguments.toString())),
@@ -76,6 +77,37 @@ class MyApp extends StatelessWidget {
         '/video_detail': (context) => VideoDetailPage(
             id: int.parse(
                 ModalRoute.of(context)!.settings.arguments.toString())),
+        '/video_list': (context) => VideoListPage(
+            id: int.parse(
+                ModalRoute.of(context)!.settings.arguments.toString())),
+      },
+      onGenerateRoute: (settings) {
+        final Uri uri = Uri.parse(settings.name!);
+        final String path = uri.path;
+        final Map<String, String> parameters = uri.queryParameters;
+
+        switch (path) {
+          case '/book_detail':
+            return MaterialPageRoute(
+              builder: (context) =>
+                  BookDetailPage(id: int.parse(parameters['id']!)),
+            );
+          case '/article_detail':
+            return MaterialPageRoute(
+              builder: (context) =>
+                  ArticleDetailPage(id: int.parse(parameters['id']!)),
+            );
+          case '/video_detail':
+            return MaterialPageRoute(
+              builder: (context) =>
+                  VideoDetailPage(id: int.parse(parameters['id']!)),
+            );
+          case '/video_list':
+            return MaterialPageRoute(
+              builder: (context) =>
+                  VideoListPage(id: int.parse(parameters['id']!)),
+            );
+        }
       },
     ));
   }

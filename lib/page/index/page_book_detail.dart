@@ -321,6 +321,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
               favoriteState: articleDetailBean.favorited ?? false,
               title: '',
               content: '',
+              shareLink: '/book_detail?id=${widget.id}',
               files: [],
             ))
           : Container(),

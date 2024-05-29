@@ -19,7 +19,10 @@ class _BookItemState extends State<BookItem> {
     SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
-        Get.to(BookDetailPage(id:widget.article.id ?? 0));
+        Navigator.of(context).pushNamed(
+              "/book_detail?id=${widget.article.id ?? 0}",
+              arguments: widget.article.id ?? 0);
+        // Get.to(BookDetailPage(id:widget.article.id ?? 0));
       },
       child: Container(
         clipBehavior: Clip.antiAlias,

@@ -241,7 +241,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        controller:_listController,
+        controller: _listController,
         itemBuilder: (c, i) => contentItem(i),
         // itemExtent: 160.0,
         itemCount: articles.length,
@@ -252,13 +252,17 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
   jumpPage(BannerBean bean) {
     var id = int.parse(bean.jumpValue!);
     if (bean.jumpType == 'book') {
-      Get.to(BookDetailPage(id: id));
+      Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
+      // Get.to(BookDetailPage(id: id));
     } else if (bean.jumpType == 'article') {
-      Get.to(ArticleDetailPage(id: id));
+      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
+      // Get.to(ArticleDetailPage(id: id));
     } else if (bean.jumpType == 'videoList') {
-      Get.to(VideoListPage(id: id));
+      Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);
+      // Get.to(VideoListPage(id: id));
     } else if (bean.jumpType == 'video') {
-      Get.to(VideoDetailPage(id: id));
+      Navigator.of(context).pushNamed("/video_detail?id=${id}", arguments: id);
+      // Get.to(VideoDetailPage(id: id));
     } else if (bean.jumpType == 'thread') {
       Get.to(PostDetailPage(postId: id));
     }
@@ -280,7 +284,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.px),
               ),
-              height: 160.px+20,
+              height: 160.px + 20,
               child: Swiper(
                 itemCount: banners.length,
                 itemBuilder: (BuildContext context, int index) {

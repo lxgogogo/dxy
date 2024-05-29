@@ -168,6 +168,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               favoriteState: articleDetailBean.favorited ?? false,
               title: '',
               content: '',
+              shareLink: '/article_detail?id=${widget.id}',
               files: [],
             ))
           : Container(),

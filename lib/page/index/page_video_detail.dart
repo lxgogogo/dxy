@@ -12,6 +12,7 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:video_player/video_player.dart';
+// import 'package:chewie/chewie.dart';
 
 // ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class VideoDetailPage extends StatefulWidget {
 class _VideoDetailPageState extends State<VideoDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
   late VideoPlayerController _playController;
+
   List<CommentBean> comments = [];
   bool loaded = false;
   bool showVideo = false;
@@ -50,6 +52,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     // TODO: implement dispose
     super.dispose();
     _playController.dispose();
+    // _chewieController.dispose();
   }
 
   requestDetail() {
@@ -63,6 +66,8 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             ..initialize().then((_) {
               setState(() {});
             });
+          // _chewieController =ChewieController(videoPlayerController: _playController,autoPlay: false);
+          loaded = true;
         });
       }
     });
@@ -77,7 +82,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             data['list'].map((comment) => CommentBean.fromJson(comment)));
         setState(() {
           comments = dataList;
-          loaded = true;
+          
         });
       }
     });

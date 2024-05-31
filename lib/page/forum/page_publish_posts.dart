@@ -615,7 +615,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     if (kIsWeb) {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           allowMultiple: true,
-          type: FileType.media,
+          type: FileType.custom,
           allowedExtensions: ['jpg', 'png', 'jpeg', 'mp4', 'mov']);
       if (result != null) {
         var files = result.files;

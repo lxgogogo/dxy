@@ -349,7 +349,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               },
               child:
               MediaHelper().cacheLoadNetworkImage(
-                  imageUrlList[index]!.isNotEmpty ? imageUrlList[index] : '',
+                  imageUrlList[index].isNotEmpty ? imageUrlList[index] : '',
                   widthNum,
                   111.px),
               // Image.network(

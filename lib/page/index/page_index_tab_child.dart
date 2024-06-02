@@ -20,6 +20,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 // ignore: must_be_immutable
 class IndexTabChildPage extends StatefulWidget {
   String type;
+
   IndexTabChildPage({super.key, required this.type});
 
   @override
@@ -119,66 +120,68 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       return Column(
         children: [
           Container(
-            height: 40.px,
-            // color: Colors.orange,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 6.px,
+              height: 40.px,
+              // color: Colors.orange,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 6.px,
+                    ),
+                    ...List<Widget>.generate(categorys.length, (index) {
+                      return Container(
+                          padding: EdgeInsets.only(left: 10.px),
+                          child: index != categorySel
+                              ? HoldemNormalBtn(
+                                  child: Text(
+                                    categorys[index].name ?? '',
+                                    style: TextStyle(
+                                        color: Color(0xff56748F),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      categorySel = index;
+                                      parentId = categorys[index].id ?? 0;
+                                      pageNum = 1;
+                                    });
+                                    reqListData();
+                                    _scrollToTop();
+                                  })
+                              : HoldemHighlightBtn(
+                                  child: Text(
+                                    categorys[index].name ?? '',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      pageNum = 1;
+                                      parentId = categorys[index].id ?? 0;
+                                    });
+                                    reqListData();
+                                  }));
+                    })
+                  ],
                 ),
-                ...List<Widget>.generate(categorys.length, (index) {
-                  return Container(
-                      padding: EdgeInsets.only(left: 10.px),
-                      child: index != categorySel
-                          ? HoldemNormalBtn(
-                              child: Text(
-                                categorys[index].name ?? '',
-                                style: TextStyle(
-                                    color: Color(0xff56748F),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  categorySel = index;
-                                  parentId = categorys[index].id ?? 0;
-                                  pageNum = 1;
-                                });
-                                reqListData();
-                                _scrollToTop();
-                              })
-                          : HoldemHighlightBtn(
-                              child: Text(
-                                categorys[index].name ?? '',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  pageNum = 1;
-                                  parentId = categorys[index].id ?? 0;
-                                });
-                                reqListData();
-                              }));
-                })
-              ],
-            ),
-            // child: ListView.builder(
-            //   scrollDirection: Axis.horizontal,
-            //   itemBuilder: (c, i) {
-            //     return Container(
-            //       padding: EdgeInsets.symmetric(horizontal: 10.px),
-            //       child: Text(
-            //         categorys[i].name ?? '',
-            //         style: TextStyle(color: Colors.red),
-            //       ),
-            //     );
-            //   },
-            //   itemCount: categorys.length,
-            // ),
-          ),
+                // child: ListView.builder(
+                //   scrollDirection: Axis.horizontal,
+                //   itemBuilder: (c, i) {
+                //     return Container(
+                //       padding: EdgeInsets.symmetric(horizontal: 10.px),
+                //       child: Text(
+                //         categorys[i].name ?? '',
+                //         style: TextStyle(color: Colors.red),
+                //       ),
+                //     );
+                //   },
+                //   itemCount: categorys.length,
+                // ),
+              )),
           Expanded(child: content())
         ],
       );
@@ -255,7 +258,8 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
       Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
       // Get.to(BookDetailPage(id: id));
     } else if (bean.jumpType == 'article') {
-      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
+      Navigator.of(context)
+          .pushNamed("/article_detail?id=${id}", arguments: id);
       // Get.to(ArticleDetailPage(id: id));
     } else if (bean.jumpType == 'videoList') {
       Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);

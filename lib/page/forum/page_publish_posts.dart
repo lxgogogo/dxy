@@ -191,9 +191,11 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     .toList(),
                 value: selectedBoardValue,
                 onChanged: (String? value) {
-                  setState(() {
-                    selectedBoardValue = value;
-                  });
+                  if (_isMounted) {
+                    setState(() {
+                      selectedBoardValue = value;
+                    });
+                  }
                 },
                 buttonStyleData: const ButtonStyleData(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -255,10 +257,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                       labelData: customLabelList,
                       onItemTap: (labelValue) {},
                       onDelTap: (value) {
-                        setState(() {
-                          print('==========value=============${value}');
-                          customLabelList.remove(value);
-                        });
+                        if (_isMounted) {
+                          setState(() {
+                            print('==========value=============${value}');
+                            customLabelList.remove(value);
+                          });
+                        }
                       },
                     )))
           ],
@@ -286,10 +290,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             return child;
           }),
       onReorder: (oldIndex, newIndex) {
-        setState(() {
-          final element = imageData.removeAt(oldIndex);
-          imageData.insert(newIndex, element);
-        });
+        if (_isMounted) {
+          setState(() {
+            final element = imageData.removeAt(oldIndex);
+            imageData.insert(newIndex, element);
+          });
+        }
       },
       footer: imageData.length == 9
           ? []
@@ -330,9 +336,11 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               top: -10,
               child: IconButton(
                   onPressed: () {
-                    setState(() {
-                      imageData.remove(file);
-                    });
+                    if (_isMounted) {
+                      setState(() {
+                        imageData.remove(file);
+                      });
+                    }
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
@@ -363,9 +371,11 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               top: -10,
               child: IconButton(
                   onPressed: () {
-                    setState(() {
-                      imageData.remove(text);
-                    });
+                    if (_isMounted) {
+                      setState(() {
+                        imageData.remove(text);
+                      });
+                    }
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
@@ -383,9 +393,11 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       _playController = VideoPlayerController.networkUrl(Uri.parse(videoPath));
       await _playController.initialize();
       _playController.play();
-      setState(() {
-        _isPlaying = true;
-      });
+      if (_isMounted) {
+        setState(() {
+          _isPlaying = true;
+        });
+      }
     }
   }
 
@@ -442,14 +454,16 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               top: -10,
               child: IconButton(
                   onPressed: () {
-                    setState(() {
-                      imageData.clear();
-                      imageUrlList.clear();
-                      _playController.dispose();
-                      _isPlaying = false;
-                      isShowVideoView = false;
-                      uploadProgress = 0;
-                    });
+                    if (_isMounted) {
+                      setState(() {
+                        imageData.clear();
+                        imageUrlList.clear();
+                        _playController.dispose();
+                        _isPlaying = false;
+                        isShowVideoView = false;
+                        uploadProgress = 0;
+                      });
+                    }
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
@@ -544,12 +558,15 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                               aitUserBeanList.add(result);
                               var nickname = result.nickname;
                               var userId = result.id;
+                              if (_isMounted) {
                               setState(() {
                                 String originalContent = _controller.text;
                                 _controller.text =
                                     '@${nickname} $originalContent';
                                 print('forumLog=====' + aitUserContent);
                               });
+
+                              }
                             }
                           },
                           icon: Image.asset(
@@ -809,9 +826,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           },
         );
       } else {
-        setState(() {
-          isShowVideoView = false;
-        });
+        if (_isMounted) {
+
+          setState(() {
+            isShowVideoView = false;
+          });
+        }
       }
     }
   }
@@ -964,17 +984,20 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
     // 检查前一个字符是否为'@'且当前字符位置之前是否存在以空格或者文本开头结束的人名
     final RegExp userAtMentionRegex = RegExp(r'(@\S+)\s*$');
-    final Match match = userAtMentionRegex
-        .firstMatch(text.substring(0, selectionIndex)) as Match;
+    if (userAtMentionRegex.firstMatch(text.substring(0, selectionIndex)) !=
+        null) {
+      final Match match = userAtMentionRegex
+          .firstMatch(text.substring(0, selectionIndex)) as Match;
 
-    if (match != null && match.start == selectionIndex - match[0]!.length) {
-      // 如果匹配到'@用户名'且光标正好在用户名之后，则删除整个'@用户名'
-      _controller.text = text.substring(0, selectionIndex - match[0]!.length);
-      _controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length));
-    } else {
-      // 否则正常处理文本变化
-      // 这里不需要做任何操作，因为TextField会自动处理文本变化
+      if (match != null && match.start == selectionIndex - match[0]!.length) {
+        // 如果匹配到'@用户名'且光标正好在用户名之后，则删除整个'@用户名'
+        _controller.text = text.substring(0, selectionIndex - match[0]!.length);
+        _controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: _controller.text.length));
+      } else {
+        // 否则正常处理文本变化
+        // 这里不需要做任何操作，因为TextField会自动处理文本变化
+      }
     }
   }
 }

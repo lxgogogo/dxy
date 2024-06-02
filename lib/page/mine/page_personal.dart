@@ -293,13 +293,15 @@ class _PersonalPageState extends State<PersonalPage> {
     final XFile? image =
         await imagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      if (image != null) {
-        File? _image = File(image.path);
-        imageUrl = _image.path;
-        print("imageUrl===>$imageUrl");
-      }
-    });
+    if (_isMounted) {
+      setState(() {
+        if (image != null) {
+          File? _image = File(image.path);
+          imageUrl = _image.path;
+          print("imageUrl===>$imageUrl");
+        }
+      });
+    }
   }
 
   //上传图片底部弹窗

@@ -101,13 +101,15 @@ class _InformationEditPageState extends State<InformationEditPage>
         minLines: 1,
         controller: controller,
         onChanged: (value) {
-          setState(() {
-            if (value.isEmpty) {
-              isTextFiledIsEmpty = true;
-            } else {
-              isTextFiledIsEmpty = false;
-            }
-          });
+          if (mounted) {
+            setState(() {
+              if (value.isEmpty) {
+                isTextFiledIsEmpty = true;
+              } else {
+                isTextFiledIsEmpty = false;
+              }
+            });
+          }
         },
         decoration: InputDecoration(
           hintText: '请输入昵称',

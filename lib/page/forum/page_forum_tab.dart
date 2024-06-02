@@ -45,19 +45,21 @@ class _ForumTabPageState extends State<ForumTabPage>
     NetRequest().getBoardData((data) {
       List<BoardInfo> dataList =
           List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
-      setState(() {
-        boardInfoList = dataList;
-        for (int i = 0; i < dataList.length; i++) {
-          BoardInfo boardInfo = dataList[i];
-          forumParentTabs.add(TabData(
-            index: i + 1,
-            title: Tab(
-              child: Text(boardInfo.name!),
-            ),
-            content: ForumTabChildPage(tabId: boardInfo.id!),
-          ));
-        }
-      });
+      if (mounted) {
+        setState(() {
+          boardInfoList = dataList;
+          for (int i = 0; i < dataList.length; i++) {
+            BoardInfo boardInfo = dataList[i];
+            forumParentTabs.add(TabData(
+              index: i + 1,
+              title: Tab(
+                child: Text(boardInfo.name!),
+              ),
+              content: ForumTabChildPage(tabId: boardInfo.id!),
+            ));
+          }
+        });
+      }
     });
   }
 

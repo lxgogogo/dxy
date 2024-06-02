@@ -216,9 +216,11 @@ class _AitUserPageState extends State<AitUserPage> {
                 isFollowed: followOrFanUserList[index].followed!, onTap: () {
               NetRequest().followerToggle(followOrFanUserList[index].id!,
                   !followOrFanUserList[index].followed!, (data) {
-                    setState(() {
-                      followOrFanUserList.remove(followOrFanUserList[index]);
-                    });
+                    if (mounted) {
+                      setState(() {
+                        followOrFanUserList.remove(followOrFanUserList[index]);
+                      });
+                    }
                   });
             })
           ]),

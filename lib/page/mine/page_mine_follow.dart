@@ -85,16 +85,16 @@ class _MineFollowPageState extends State<MineFollowPage> {
     } else {
       NetRequest().fansList(pageNum.toString(), pageSize.toString(), '',
           (data) {
-            UserDataList followOrFan = UserDataList.fromJson(data);
-            if (_isMounted) {
-              setState(() {
-                if (pageNum == 1) {
-                  followOrFanUserList = followOrFan.list!;
-                } else {
-                  followOrFanUserList.addAll(followOrFan.list!);
-                }
-              });
+        UserDataList followOrFan = UserDataList.fromJson(data);
+        if (_isMounted) {
+          setState(() {
+            if (pageNum == 1) {
+              followOrFanUserList = followOrFan.list!;
+            } else {
+              followOrFanUserList.addAll(followOrFan.list!);
             }
+          });
+        }
         _refreshController.loadComplete();
         _refreshController.refreshCompleted();
       });
@@ -104,7 +104,8 @@ class _MineFollowPageState extends State<MineFollowPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -140,13 +141,14 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   Widget contentView() {
     return Center(
-      child:Row(children: [
+        child: Row(
+      children: [
         Expanded(
             child: followOrFanUserList.isNotEmpty
                 ? listView()
                 : const NoDataView())
-      ],)
-    );
+      ],
+    ));
   }
 
   ///列表数据
@@ -198,16 +200,20 @@ class _MineFollowPageState extends State<MineFollowPage> {
             onTap: () {
               NetRequest().followerToggle(followOrFanUserList[index].id!,
                   !followOrFanUserList[index].followed!, (data) {
-                setState(() {
-                  if (isFollowPage) { //关注页面移除当前条目
-                    followOrFanUserList.remove(followOrFanUserList[index]);
-                  } else { //粉丝页面需要刷新状态
-                    setState(() {
-                      pageNum = 1;
-                    });
-                     reqListData();
-                  }
-                });
+                if (_isMounted) {
+                  setState(() {
+                    if (isFollowPage) {
+                      //关注页面移除当前条目
+                      followOrFanUserList.remove(followOrFanUserList[index]);
+                    } else {
+                      //粉丝页面需要刷新状态
+                      setState(() {
+                        pageNum = 1;
+                      });
+                      reqListData();
+                    }
+                  });
+                }
               });
             })
       ]),
@@ -240,9 +246,11 @@ class _MineFollowPageState extends State<MineFollowPage> {
                   height: 20,
                 ),
                 onPressed: () {
-                  setState(() {
-                    searchController.text = '';
-                  });
+                  if (_isMounted) {
+                    setState(() {
+                      searchController.text = '';
+                    });
+                  }
                 },
               ),
               filled: true,

@@ -112,9 +112,11 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                               'relId': viewParams.relId!,
                               'state': viewParams.liked ?? false ? false : true
                             }, (data) {
-                              setState(() {
-                                viewParams.liked = !viewParams.liked!;
-                              });
+                              if (_isMounted) {
+                                setState(() {
+                                  viewParams.liked = !viewParams.liked!;
+                                });
+                              }
                             });
                           },
                           icon: Image.asset(

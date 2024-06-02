@@ -23,7 +23,8 @@ class MinePage extends StatefulWidget {
   State<MinePage> createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin   {
+class _MinePageState extends State<MinePage>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   int _currentTabIndex = 0;
   final List<String> tabs = ['帖子', '收藏', '评论'];
 
@@ -64,10 +65,12 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
 
   void getUserInfo() {
     LoginHelper().getUserInfo((data) {
-      setState(() {
-        userProfile = data;
-        print('userProfile=======' + userProfile!.nickname!);
-      });
+      if (_isMounted) {
+        setState(() {
+          userProfile = data;
+          print('userProfile=======' + userProfile!.nickname!);
+        });
+      }
     });
   }
 
@@ -143,10 +146,12 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
             ...List<Widget>.generate(tabs.length, (index) {
               return GestureDetector(
                 onTap: () {
-                  setState(() {
-                    _currentTabIndex = index;
-                    _tabController.index = index;
-                  });
+                  if (_isMounted) {
+                    setState(() {
+                      _currentTabIndex = index;
+                      _tabController.index = index;
+                    });
+                  }
                 },
                 child: Container(
                   // margin: EdgeInsets.only(left:41.px,right: 51.px),
@@ -206,16 +211,14 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
               ),
               child: Stack(children: <Widget>[
                 ClipOval(
-                    child:
-                  LoginHelper().getUserAvatar(
-                      userProfile.avatar != null ? userProfile.avatar! : '',
-                      60,
-                      60)),
-              //       Image.network(
-              // userProfile.avatar != null ? userProfile.avatar! : '',
-              //     width: 60,
-              //     height: 60)),
-
+                    child: LoginHelper().getUserAvatar(
+                        userProfile.avatar != null ? userProfile.avatar! : '',
+                        60,
+                        60)),
+                //       Image.network(
+                // userProfile.avatar != null ? userProfile.avatar! : '',
+                //     width: 60,
+                //     height: 60)),
               ]),
             )),
         Container(

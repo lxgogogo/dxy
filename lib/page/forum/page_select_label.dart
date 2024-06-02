@@ -52,7 +52,8 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -80,9 +81,11 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
         actions: [
           GestureDetector(
               onTap: () {
-                setState(() {
-                  isShowCreateInputView = true;
-                });
+                if (_isMounted) {
+                  setState(() {
+                    isShowCreateInputView = true;
+                  });
+                }
               },
               child: Container(
                 margin: EdgeInsets.only(right: 16),
@@ -112,28 +115,30 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                   style: AppTheme.text333333Size15,
                 )),
             Container(
-              margin: EdgeInsets.only(right: 10.px),
+                margin: EdgeInsets.only(right: 10.px),
                 child: IconButton(
-              icon: Image.asset(
-                'assets/images/label_del.png',
-                width: 16.px,
-                height: 16.px,
-              ),
-              onPressed: () {
-                //清空
-                if (_isMounted) {
-                  setState(() {
-                    if (labelData != null) {
-                      labelData.clear();
-                      StorageUtil().prefs!.setStringList('userLabel', []);
+                  icon: Image.asset(
+                    'assets/images/label_del.png',
+                    width: 16.px,
+                    height: 16.px,
+                  ),
+                  onPressed: () {
+                    //清空
+                    if (_isMounted) {
+                      setState(() {
+                        if (labelData != null) {
+                          labelData.clear();
+                          StorageUtil().prefs!.setStringList('userLabel', []);
+                        }
+                      });
                     }
-                  });
-                }
-              },
-            ))
+                  },
+                ))
           ],
         ),
-        SizedBox(height: 5.px,),
+        SizedBox(
+          height: 5.px,
+        ),
         Expanded(
             child: Container(
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -149,13 +154,15 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                     Navigator.pop(context, labelValue);
                   },
                   onDelTap: (value) {
-                    setState(() {
-                      print('==========value=============${value}');
-                      labelData.remove(value);
-                      StorageUtil()
-                          .prefs!
-                          .setStringList('userLabel', labelData);
-                    });
+                    if (_isMounted) {
+                      setState(() {
+                        print('==========value=============${value}');
+                        labelData.remove(value);
+                        StorageUtil()
+                            .prefs!
+                            .setStringList('userLabel', labelData);
+                      });
+                    }
                   },
                 )))
       ],
@@ -238,7 +245,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                       SizedBox(width: 10),
                       GestureDetector(
                           onTap: () {
-                            if(controller.text.isEmpty) {
+                            if (controller.text.isEmpty) {
                               ToastUtils.showToast('标签内容不能为空');
                               return;
                             }

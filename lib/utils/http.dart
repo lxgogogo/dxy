@@ -217,6 +217,7 @@ class Http {
       options: requestOptions,
       cancelToken: cancelToken ?? _cancelToken,
       onSendProgress: (int sent, int total) {
+        print(sent.toString()+'/'+total.toString());
         onSendProgress!(sent, total);
       },
     );

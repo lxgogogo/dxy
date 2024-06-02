@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/comment/page_comments.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../model/upload_file.dart';
@@ -168,7 +170,14 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                           "url":
                               'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
                         };
-                        html.window.navigator.share(shareData);
+                        if (kIsWeb) {
+                          html.window.navigator.share(shareData);
+                        }
+                        else {
+                          Share.share('${widget.viewParams.title} '+'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                              subject: widget.viewParams.content);
+                        }
+
                         // html.window.navigator.share(shareData);
                         // Share.shareXFiles([XFile('https://bbs.api.robot-9.com/static/avatar.png')], text: 'Great picture');
                         //   showModalBottomSheet(

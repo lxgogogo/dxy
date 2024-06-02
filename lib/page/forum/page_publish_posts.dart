@@ -676,11 +676,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               EasyLoading.dismiss();
             },
             (int sent, int total) {
-              setState(() {
-                uploadProgress = ((sent / total) * 100).round();
-                EasyLoading.showProgress((uploadProgress / 100).toDouble(),
-                    status: '视频处理中...${uploadProgress}%');
-              });
+              // setState(() {
+              uploadProgress = ((sent / total) * 100).round();
+              if (uploadProgress == 100) {
+                uploadProgress = 99;
+              }
+              EasyLoading.showProgress((uploadProgress / 100).toDouble(),
+                  status: '视频处理中...${uploadProgress}%');
+              // });
             },
           );
         } else {
@@ -795,11 +798,14 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             EasyLoading.dismiss();
           },
           (int sent, int total) {
-            setState(() {
-              uploadProgress = ((sent / total) * 100).round();
-              EasyLoading.showProgress((uploadProgress / 100).toDouble(),
-                  status: '视频处理中...${uploadProgress}%');
-            });
+            // setState(() {
+            uploadProgress = ((sent / total) * 100).round();
+            if (uploadProgress == 100) {
+              uploadProgress = 99;
+            }
+            EasyLoading.showProgress((uploadProgress / 100).toDouble(),
+                status: '视频处理中...${uploadProgress}%');
+            // });
           },
         );
       } else {
@@ -909,42 +915,34 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     if (imageData.isNotEmpty) {
       imageData.forEach((element) async {
         if (kIsWeb) {
-          NetRequest().uploadBytesFile(
-            element,
-            (data) {
-              UploadFile uploadFile = UploadFile.fromJson(data);
-              imageUrlList.add(uploadFile);
+          NetRequest().uploadBytesFile(element, (data) {
+            UploadFile uploadFile = UploadFile.fromJson(data);
+            imageUrlList.add(uploadFile);
 
-              if (imageUrlList.isNotEmpty &&
-                  imageUrlList.length == imageData.length) {
-                NetRequest().threadCreate(title, content, _getBoardIdByName(),
-                    customLabelList, imageUrlList, aitList, (data) {
-                  Navigator.pop(context);
-                });
-              }
-            },
-            (errMsg) {},
-            (int sent, int total) {});
+            if (imageUrlList.isNotEmpty &&
+                imageUrlList.length == imageData.length) {
+              NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                  customLabelList, imageUrlList, aitList, (data) {
+                Navigator.pop(context);
+              });
+            }
+          }, (errMsg) {}, (int sent, int total) {});
         } else {
-          NetRequest().uploadFile(
-              element,
-              (data) {
-                UploadFile uploadFile = UploadFile.fromJson(data);
-                imageUrlList.add(uploadFile);
+          NetRequest().uploadFile(element, (data) {
+            UploadFile uploadFile = UploadFile.fromJson(data);
+            imageUrlList.add(uploadFile);
 
-                if (imageUrlList.isNotEmpty &&
-                    imageUrlList.length == imageData.length) {
-                  NetRequest().threadCreate(title, content, _getBoardIdByName(),
-                      customLabelList, imageUrlList, aitList, (data) {
-                    //通知刷新论坛列表
-                    EventBusManager.eventBus
-                        .fire(EventBusAction.refreshForumList.eventBusTypeName);
-                    Navigator.pop(context);
-                  });
-                }
-              },
-              (errMsg) {},
-              (int sent, int total) {});
+            if (imageUrlList.isNotEmpty &&
+                imageUrlList.length == imageData.length) {
+              NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                  customLabelList, imageUrlList, aitList, (data) {
+                //通知刷新论坛列表
+                EventBusManager.eventBus
+                    .fire(EventBusAction.refreshForumList.eventBusTypeName);
+                Navigator.pop(context);
+              });
+            }
+          }, (errMsg) {}, (int sent, int total) {});
         }
       });
     } else {

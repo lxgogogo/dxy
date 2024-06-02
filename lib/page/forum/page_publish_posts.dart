@@ -173,40 +173,44 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     fillColor: Colors.white,
                   )),
             )),
-            DropdownButtonHideUnderline(
-              child: DropdownButton2<String>(
-                isExpanded: true,
-                hint: Text(
-                  '选择板块',
-                  style: AppTheme.text666666Size15,
-                ),
-                items: items
-                    .map((String item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: AppTheme.text333333Size15,
-                          ),
-                        ))
-                    .toList(),
-                value: selectedBoardValue,
-                onChanged: (String? value) {
-                  if (_isMounted) {
-                    setState(() {
-                      selectedBoardValue = value;
-                    });
-                  }
-                },
-                buttonStyleData: const ButtonStyleData(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  height: 40,
-                  width: 120,
-                ),
-                menuItemStyleData: const MenuItemStyleData(
-                  height: 40,
+            Container(
+              width: 130.px,
+              alignment: Alignment.center,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton2<String>(
+                  isExpanded: true,
+                  hint: Text(
+                    '选择板块',
+                    style: AppTheme.text666666Size15,
+                  ),
+                  items: items
+                      .map((String item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: AppTheme.text333333Size15,
+                            ),
+                          ))
+                      .toList(),
+                  value: selectedBoardValue,
+                  onChanged: (String? value) {
+                    if (_isMounted) {
+                      setState(() {
+                        selectedBoardValue = value;
+                      });
+                    }
+                  },
+                  buttonStyleData: const ButtonStyleData(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    height: 40,
+                    width: 120,
+                  ),
+                  menuItemStyleData: const MenuItemStyleData(
+                    height: 40,
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         ),
         Container(
@@ -559,13 +563,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                               var nickname = result.nickname;
                               var userId = result.id;
                               if (_isMounted) {
-                              setState(() {
-                                String originalContent = _controller.text;
-                                _controller.text =
-                                    '@${nickname} $originalContent';
-                                print('forumLog=====' + aitUserContent);
-                              });
-
+                                setState(() {
+                                  String originalContent = _controller.text;
+                                  _controller.text =
+                                      '@${nickname} $originalContent';
+                                  print('forumLog=====' + aitUserContent);
+                                });
                               }
                             }
                           },
@@ -827,7 +830,6 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         );
       } else {
         if (_isMounted) {
-
           setState(() {
             isShowVideoView = false;
           });

@@ -183,7 +183,7 @@ class _SettingsPageState extends State<SettingsPage> {
     NetRequest().appVersion((data){
       AppVersion appVersion = AppVersion.fromJson(data);
       String latestVersion = appVersion.androidVersion!;
-      if (latestVersion.compareTo(currentVersion) >= 0) {
+      if (latestVersion.compareTo(currentVersion) > 0) {
         // 强制升级
         bool forceUpdate = appVersion.forced!;
         if (forceUpdate) {

@@ -1,11 +1,11 @@
 {
-    "name": "holdem",
-    "short_name": "holdem",
+    "name": "德学院",
+    "short_name": "德学院",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "一个学习德州技术的社区",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

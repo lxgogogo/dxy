@@ -89,7 +89,7 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
         backgroundColor: Colors.transparent, // 设置导航条背景透明
         // elevation: 0, // 去除导航条的阴影
         centerTitle: true,
-        title: Image.asset('assets/images/title_logo.png', width: 80, height: 25),
+        title:  Image.asset('assets/images/title_logo.png', width: 80, height: 25),
         actions: [
           IconButton(
             icon: Image.asset(

@@ -1,10 +1,14 @@
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
+import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
@@ -12,6 +16,7 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
 import '../../widget/page_web_fit.dart';
+import 'package:universal_html/html.dart' as html;
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -178,7 +183,7 @@ class _SettingsPageState extends State<SettingsPage> {
     NetRequest().appVersion((data){
       AppVersion appVersion = AppVersion.fromJson(data);
       String latestVersion = appVersion.androidVersion!;
-      if (latestVersion.compareTo(currentVersion) > 0) {
+      if (latestVersion.compareTo(currentVersion) >= 0) {
         // 强制升级
         bool forceUpdate = appVersion.forced!;
         if (forceUpdate) {
@@ -196,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Text('立即升级'),
                     onPressed: () {
                       // 跳转至应用商店等下载新版本
-                      ToastUtils.showToast('跳转至应用商店等下载新版本');
+                      _launchURL(appVersion);
                     },
                   ),
                 ],
@@ -222,7 +227,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Text('升级'),
                     onPressed: () {
                       // 跳转至应用商店等下载新版本
-                      ToastUtils.showToast('跳转至应用商店等下载新版本');
+                      _launchURL(appVersion);
                     },
                   ),
                 ],
@@ -234,6 +239,24 @@ class _SettingsPageState extends State<SettingsPage> {
         ToastUtils.showToast('当前已经是最新版本');
       }
     });
+  }
+
+  _launchURL(AppVersion appVersion) async {
+    var url = '';
+    if (CommonUtils.isAndroid(context)) {
+      url = appVersion.androidUrl!;
+    } else {
+      url = appVersion.iosUrl!;
+    }
+    // url = 'https://otcapp.cbex.com/cbex/OPTG/new_bjhl.apk';
+    if (kIsWeb) {
+      var link = html.document.createElement('a');
+      link.setAttribute("download", 'true');
+      link.setAttribute("href",url);
+      link.click();
+    } else {
+      launchUrl(Uri.parse(url));
+    }
   }
 
   void logout() {

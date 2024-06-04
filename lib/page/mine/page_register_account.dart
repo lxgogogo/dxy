@@ -392,7 +392,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
       });
     } else if (pageType == RegisterAccountPage.PageType_ForgotPassword) {
       //忘记密码
-      NetRequest().registerAccount(email, password, code, (data) {
+      NetRequest().resetPassword(email, password, code, (data) {
         ToastUtils.showToast('重置密码成功');
         //保存账号密码，获取本人信息接口需要
         StorageUtil().prefs!.setString('userAccount', email);

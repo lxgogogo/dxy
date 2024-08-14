@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/api.dart';
@@ -42,6 +43,19 @@ class NetRequest {
     }
   }
 
+  Future courseList(
+      Map<String, Object> params, SuccessCallback onSuccess) async {
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.courseList, params: params);
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   Future articleDetail(
       Map<String, Object> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
@@ -59,6 +73,19 @@ class NetRequest {
       Map<String, Object> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.indexBanner, params: params);
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  Future bookRecommend(
+      Map<String, Object> params, SuccessCallback onSuccess) async {
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.bookSuggest, params: params);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
@@ -95,7 +122,8 @@ class NetRequest {
     }
   }
 
-  Future contentLike(Map<String, Object> params, SuccessCallback onSuccess) async {
+  Future contentLike(
+      Map<String, Object> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
         await HttpUtils.post(Api.like, params: params);
     HttpUtilsResonse.Response resp =
@@ -123,6 +151,7 @@ class NetRequest {
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
+      LogUtils.printAll("getBoardData===>$response");
     } else {
       ToastUtils.showToast(resp.message!);
     }
@@ -194,14 +223,16 @@ class NetRequest {
   }
 
   ///上传文件
-  Future uploadFile(String filePath, SuccessCallback onSuccess ,
+  Future uploadFile(String filePath, SuccessCallback onSuccess,
       FailureCallback onFail, ProgressCallback onSendProgress) async {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
-    Map<String, dynamic> response =
-        await HttpUtils.postFile(Api.uploadFile, params: params ,
-            onSendProgress: onSendProgress, showLoading:false);
+    Map<String, dynamic> response = await HttpUtils.postFile(Api.uploadFile,
+        params: params,
+        onSendProgress: onSendProgress,
+        showLoading: false,
+        onFail: onFail);
 
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
@@ -210,16 +241,16 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       onFail(resp.message!);
-      ToastUtils.showToast(resp.message!);
+      print('uploadFile============fail=======');
+      // ToastUtils.showToast('上传文件失败，请重新上传');
     }
   }
 
   Future uploadBytesFile(var data, SuccessCallback onSuccess,
       FailureCallback onFail, ProgressCallback onSendProgress) async {
-
-    Map<String, dynamic> response =
-        await HttpUtils.postBytesFile(Api.uploadFile,data, params: {},
-            onSendProgress: onSendProgress);
+    Map<String, dynamic> response = await HttpUtils.postBytesFile(
+        Api.uploadFile, data,
+        params: {}, onSendProgress: onSendProgress, onFail: onFail);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
@@ -227,7 +258,6 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       onFail(resp.message!);
-      ToastUtils.showToast(resp.message!);
     }
   }
 
@@ -340,6 +370,18 @@ class NetRequest {
     }
   }
 
+  Future delFavorite(int id,SuccessCallback onSuccess) async {
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.delFavorite, params: {"id":id});
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///评论列表
   Future userCommentList(int pageNum, int pageSize, String relType,
       SuccessCallback onSuccess) async {
@@ -375,7 +417,8 @@ class NetRequest {
       List<String> tags,
       List<UploadFile> files,
       List<int> at,
-      SuccessCallback onSuccess) async {
+      SuccessCallback onSuccess,
+      FailureCallback onFail) async {
     Map<String, Object> params = {};
     params['title'] = title;
     params['content'] = content;
@@ -384,8 +427,8 @@ class NetRequest {
     params['files'] = files;
     params['at'] = at;
 
-    Map<String, dynamic> response =
-        await HttpUtils.post(Api.threadCreate, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate,
+        params: params, showLoading: false);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
@@ -398,6 +441,7 @@ class NetRequest {
         LoginHelper().clearGlobalUserInfo();
         Get.to(LoginPage());
       } else {
+        onFail(resp.message!);
         ToastUtils.showToast(resp.message!);
       }
     }
@@ -508,13 +552,13 @@ class NetRequest {
       }
     }
   }
+
   ///更新图像 FILE
   Future updateAvatarBytesFile(var data, SuccessCallback onSuccess) async {
-
     Map<String, dynamic> response =
-    await HttpUtils.postBytesFile(Api.updateAvatar,data, params: {});
+        await HttpUtils.postBytesFile(Api.updateAvatar, data, params: {});
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("updateAvatar===>$response");
       onSuccess(response['data']);
@@ -546,9 +590,9 @@ class NetRequest {
     params['nickname'] = nickname;
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.userUpdate, params: params);
+        await HttpUtils.post(Api.userUpdate, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userUpdate===>$response");
       onSuccess(response['data']);
@@ -562,9 +606,9 @@ class NetRequest {
     Map<String, Object> params = {};
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.appVersion, params: params);
+        await HttpUtils.post(Api.appVersion, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("appVersion===>$response");
       onSuccess(response['data']);
@@ -574,8 +618,8 @@ class NetRequest {
   }
 
   ///用户搜索
-  Future userSearch(int pageNum, int pageSize,
-      String q, SuccessCallback onSuccess) async {
+  Future userSearch(
+      int pageNum, int pageSize, String q, SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -587,9 +631,9 @@ class NetRequest {
     params['filters'] = filters;
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.userSearch, params: params);
+        await HttpUtils.post(Api.userSearch, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userSearch===>$response");
       onSuccess(response['data']);
@@ -602,19 +646,20 @@ class NetRequest {
   static const String COMMENT_TYPE_THREAD = "thread";
   static const String COMMENT_TYPE_CONTENT = "content";
   static const String COMMENT_TYPE_COMMENT = "comment";
-  Future commentCreate(String relType, int relId,
-      String content, SuccessCallback onSuccess) async {
+  Future commentCreate(String relType, int relId, String content,
+      SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
-    params['relType'] = relType; //// 评论对象类型   // thread 帖子，content 内容，comment 评论
+    params['relType'] =
+        relType; //// 评论对象类型   // thread 帖子，content 内容，comment 评论
     params['relId'] = relId; // 评论对象id
     params['content'] = content;
 
     LogUtils.printAll("commentCreate params===>$params");
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.commentCreate, params: params);
+        await HttpUtils.post(Api.commentCreate, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("commentCreate===>$response");
       onSuccess(response['data']);
@@ -635,9 +680,9 @@ class NetRequest {
     params['id'] = id; //// 收藏id
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.favoriteDelete, params: params);
+        await HttpUtils.post(Api.favoriteDelete, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("favoriteDelete===>$response");
       onSuccess(response['data']);
@@ -653,8 +698,8 @@ class NetRequest {
   }
 
   ///收藏操作 取消、收藏
-  Future favoriteToggle(String relType, int relId,
-      bool state, SuccessCallback onSuccess) async {
+  Future favoriteToggle(
+      String relType, int relId, bool state, SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
     params['relType'] = relType; //// 类型 thread 帖子，content 内容
     params['relId'] = relId; // 收藏对象id
@@ -663,26 +708,26 @@ class NetRequest {
     LogUtils.printAll("favoriteToggle params===>$params");
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.favoriteToggle, params: params);
+        await HttpUtils.post(Api.favoriteToggle, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("favoriteToggle===>$response");
       onSuccess(response['data']);
     } else {
-       if (_isNeedLoginResponse(resp)) {
-         //需要重新登录
-         LoginHelper().clearGlobalUserInfo();
-         Get.to(LoginPage());
-       } else {
-         ToastUtils.showToast(resp.message!);
-       }
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 
   ///修改密码
-  Future updatePassword(String oldPassword, String newPassword,
-       SuccessCallback onSuccess) async {
+  Future updatePassword(
+      String oldPassword, String newPassword, SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
     params['oldPassword'] = oldPassword;
     params['newPassword'] = newPassword;
@@ -690,9 +735,9 @@ class NetRequest {
     LogUtils.printAll("updatePassword params===>$params");
 
     Map<String, dynamic> response =
-    await HttpUtils.post(Api.updatePassword, params: params);
+        await HttpUtils.post(Api.updatePassword, params: params);
     HttpUtilsResonse.Response resp =
-    HttpUtilsResonse.Response.fromJson(response);
+        HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("updatePassword===>$response");
       onSuccess(response['data']);
@@ -700,33 +745,33 @@ class NetRequest {
       ToastUtils.showToast(resp.message!);
     }
   }
-    ///忘记密码 == 重置密码
-    Future resetPassword(String account, String password,
-        String code, SuccessCallback onSuccess) async {
-      Map<String, Object> params = {};
-      params['account'] = account;
-      params['password'] = password;
-      params['code'] = code;
 
-      LogUtils.printAll("resetPassword params===>$params");
+  ///忘记密码 == 重置密码
+  Future resetPassword(String account, String password, String code,
+      SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['account'] = account;
+    params['password'] = password;
+    params['code'] = code;
 
-      Map<String, dynamic> response =
-      await HttpUtils.post(Api.resetPassword, params: params);
-      HttpUtilsResonse.Response resp =
-      HttpUtilsResonse.Response.fromJson(response);
-      if (resp.code == 200) {
-        LogUtils.printAll("resetPassword===>$response");
-        onSuccess(response['data']);
-      } else {
-        ToastUtils.showToast(resp.message!);
-      }
+    LogUtils.printAll("resetPassword params===>$params");
+
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.resetPassword, params: params);
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("resetPassword===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
     }
+  }
 
-   bool _isNeedLoginResponse(HttpUtilsResonse.Response resp) {
-      if (resp.code == 401 && resp.message! == '需要登录') {
-        return true;
-      }
-      return false;
+  bool _isNeedLoginResponse(HttpUtilsResonse.Response resp) {
+    if (resp.code == 401 && resp.message! == '需要登录') {
+      return true;
     }
-
+    return false;
+  }
 }

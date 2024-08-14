@@ -54,16 +54,34 @@ class _MainScreenState extends State<MainScreen> {
       //   title: Text('TabBar Demo'),
       // ),
       body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child:BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
         selectedFontSize: 12,
         unselectedFontSize: 12,
         selectedItemColor: const Color(0xff008EFF),
-        unselectedItemColor: const Color(0xff3B5078),
+        unselectedItemColor: const Color(0xff9CACC9),
         showSelectedLabels: true, // 取消显示选中项的标签
         showUnselectedLabels: true, // 取消显示未选中项的标签
+        useLegacyColorScheme: false,
         onTap: (int index) {
           if ((index == 2 || index == 3) && !Global().hasLogin) {
             Get.to(LoginPage());
@@ -79,8 +97,8 @@ class _MainScreenState extends State<MainScreen> {
               _currentIndex == 0
                   ? 'assets/images/tab_index_sel.png'
                   : 'assets/images/tab_index.png',
-              width: 38.px,
-              height: 40.px,
+              width: 20.px,
+              height: 20.px,
             ),
             label: '首页',
           ),
@@ -89,8 +107,8 @@ class _MainScreenState extends State<MainScreen> {
               _currentIndex == 1
                   ? 'assets/images/tab_forum_sel.png'
                   : 'assets/images/tab_forum.png',
-              width: 38.px,
-              height: 40.px,
+              width: 20.px,
+              height: 20.px,
             ),
             label: '论坛',
           ),
@@ -99,8 +117,8 @@ class _MainScreenState extends State<MainScreen> {
               _currentIndex == 2
                   ? 'assets/images/tab_message_sel.png'
                   : 'assets/images/tab_message.png',
-              width: 38.px,
-              height: 40.px,
+              width: 20.px,
+              height: 20.px,
             ),
             label: '消息',
           ),
@@ -109,96 +127,13 @@ class _MainScreenState extends State<MainScreen> {
               _currentIndex == 3
                   ? 'assets/images/tab_me_sel.png'
                   : 'assets/images/tab_me.png',
-              width: 38.px,
-              height: 40.px,
+              width: 20.px,
+              height: 20.px,
             ),
             label: '我的',
           ),
         ],
-      ),
+      )),
     ));
-  }
-}
-
-class Page1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    print('a');
-    return Center(
-      child: Container(
-          width: 150.px,
-          height: 54.px,
-          padding: EdgeInsets.all(10.px),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            //flutter 上下颜色渐变
-            //#F9CF3A, #FFD43E00
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFEEF7FE),
-                Color(0xFFDDEDFA),
-                // Color.fromRGBO(140, 190, 233, 1),
-                // Color.fromRGBO(190, 214, 235, 1),
-                // Color.fromRGBO(140, 190, 233, 1),
-                // Color.fromRGBO(194, 216, 235, 1),
-                // Color.fromRGBO(140, 190, 233, 1),
-                // Color.fromRGBO(193, 215, 235, 1),
-                // Color.fromRGBO(140, 190, 233, 1),
-              ],
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.white,
-                blurRadius: 4.0,
-                spreadRadius: -4.0,
-                offset: Offset(0.0, 4.0),
-              ),
-              BoxShadow(
-                color: Color.fromRGBO(148, 197, 239, 0.74),
-                blurRadius: 9.4,
-                spreadRadius: -9.4,
-                offset: Offset(0.0, -4.0),
-              )
-            ],
-            borderRadius: BorderRadius.all(Radius.circular(26.px)),
-          ),
-          child: Text(
-            '进阶策略',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Color(0xFF56748F),
-                fontSize: 28.px,
-                fontWeight: FontWeight.bold),
-          )),
-    );
-  }
-}
-
-class Page2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 2'),
-    );
-  }
-}
-
-class Page3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 3'),
-    );
-  }
-}
-
-class Page4 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 4'),
-    );
   }
 }

@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
 
 import 'global.dart';
 import 'log_utils.dart';
+import 'net_request.dart';
 
 class Http {
   static final Http _instance = Http._internal();
@@ -185,12 +188,15 @@ class Http {
     return response.data;
   }
 
-  Future postFile(String path,
-      {Map<String, dynamic>? params,
-      // data,
-      Options? options,
-      CancelToken? cancelToken,
-      ProgressCallback? onSendProgress}) async {
+  Future postFile(
+    String path, {
+    Map<String, dynamic>? params,
+    // data,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    FailureCallback? onFail,
+  }) async {
     LogUtils.printAll("postFile params===>$params");
     String fileName = params?['file'].split('/').last; // 获取文件名
     var file =
@@ -208,29 +214,37 @@ class Http {
     if (_authorization != null) {
       requestOptions = requestOptions.copyWith(headers: _authorization);
     }
-
-    var response = await dio.post(
-      path,
-      data: formData,
-      // data: data,
-      // queryParameter5s: params,
-      options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
-      onSendProgress: (int sent, int total) {
-        print(sent.toString()+'/'+total.toString());
-        onSendProgress!(sent, total);
-      },
-    );
-    print('net url:$path \n data:${response.data}');
+    var response;
+    try {
+     response = await dio.post(
+        path,
+        data: formData,
+        // data: data,
+        // queryParameter5s: params,
+        options: requestOptions,
+        cancelToken: cancelToken ?? _cancelToken,
+        onSendProgress: (int sent, int total) {
+          print(sent.toString()+'/'+total.toString());
+          onSendProgress!(sent, total);
+        },
+      );
+      print('net url:$path \n data:${response.data}');
+    } catch (e) {
+      print('postFile请求发生错误：$e');
+      onFail!(e.toString());
+      return {};
+    }
     return response.data;
   }
 
-  Future postBytesFile(String path,
-      {Map<String, dynamic>? params,
-      file,
-      Options? options,
-      CancelToken? cancelToken,
-      ProgressCallback? onSendProgress}) async {
+  Future postBytesFile(String path, {
+    Map<String, dynamic>? params,
+    file,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    FailureCallback? onFail,
+  }) async {
     Options requestOptions = options ?? Options();
     Map<String, dynamic>? _authorization = getAuthorizationHeader();
     // _authorization!['Content-Type'] = 'application/octet-stream';
@@ -247,21 +261,25 @@ class Http {
       //  'apiKey': params?['apiKey'],
       // 'sign': params?['sign'],
     });
-    var progress = 0;
-    var count = 0;
-
-    var response = await dio.post(
-      path,
-      data: formData,
-      // data: data,
-      // queryParameter5s: params,
-      options: requestOptions,
-      cancelToken: cancelToken ?? _cancelToken,
-      onSendProgress: (int sent, int total) {
-        onSendProgress!(sent, total);
-      },
-    );
-    print('net url:$path \n data:${response.data}');
+    var response;
+    try {
+      response = await dio.post(
+        path,
+        data: formData,
+        // data: data,
+        // queryParameter5s: params,
+        options: requestOptions,
+        cancelToken: cancelToken ?? _cancelToken,
+        onSendProgress: (int sent, int total) {
+          onSendProgress!(sent, total);
+        },
+      );
+      print('net url:$path \n data:${response.data}');
+    } catch (e) {
+      print('postFile请求发生错误：$e');
+      onFail!(e.toString());
+      return {};
+    }
     return response.data;
   }
 

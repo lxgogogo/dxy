@@ -11,6 +11,8 @@ import '../model/upload_file.dart';
 import '../page/forum/page_comment_input.dart';
 import '../page/mine/page_login.dart';
 import '../utils/app_theme.dart';
+import '../utils/eventbus/EventBusAction.dart';
+import '../utils/eventbus/EventBusManager.dart';
 import '../utils/global.dart';
 import '../view/forum/ToastUtils.dart';
 
@@ -34,6 +36,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   bool _isFavorite = false;
   late PostBottomViewParams viewParams;
   bool _isMounted = false;
+  bool _canSend = false;
 
   @override
   void initState() {
@@ -57,6 +60,99 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
     return bottomInputView();
   }
 
+  void _submitComment(String commentContent, BuildContext context) {
+    NetRequest().commentCreate(
+        viewParams.relType!, viewParams.relId!, commentContent, (data) {
+      //通知刷新帖子详情
+      EventBusManager.eventBus
+          .fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
+      ToastUtils.showToast('发布成功');
+      Navigator.pop(context);
+    });
+  }
+
+  popDetail() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // 允许底部弹窗超出屏幕高度
+      builder: (BuildContext context) {
+        // 定义 TextEditingController 以跟踪输入内容
+        final _textEditingController = TextEditingController();
+
+        return StatefulBuilder(builder: (c, setState) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom, // 适配软键盘高度
+            ),
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _textEditingController,
+                      autofocus: true, // 自动获取焦点
+                      decoration: InputDecoration(
+                        hintText: '输入内容',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        // 监听输入框内容变化,更新按钮状态
+                        setState(() {
+                          _canSend = value.isNotEmpty;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  GestureDetector(
+                    onTap: () {
+                      String commentContent = _textEditingController.text;
+                      if (commentContent.isNotEmpty &&
+                          commentContent.length >= 5) {
+                        _submitComment(commentContent, context);
+
+                        // Navigator.of(context).pop();
+                      } else {
+                        ToastUtils.showToast('评论内容不能低于5个字符');
+                      }
+                    },
+                    child: Container(
+                      width: 50.px,
+                      height: 24.px,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.px),
+                          color:
+                              _canSend ? Color(0xFF249CFC) : Color(0x80249CFC)),
+                      child: Text(
+                        '发布',
+                        style: TextStyle(color: Colors.white, fontSize: 12.px),
+                      ),
+                    ),
+                  )
+                  // ElevatedButton(
+                  //   onPressed: _canSend
+                  //       ? () {
+                  //           // 处理发送逻辑
+                  //           print('发送内容: ${_textEditingController.text}');
+                  //           Navigator.of(context).pop(); // 关闭底部弹窗
+                  //         }
+                  //       : null, // 当 _canSend 为 false 时,按钮不可点击
+                  //   child: Text('发送'),
+                  // ),
+                ],
+              ),
+            ),
+          );
+        });
+
+        // 定义一个 bool 变量来跟踪按钮状态
+        // bool _canSend = false;
+      },
+    );
+  }
+
   Widget bottomInputView() {
     return Container(
         height: 70,
@@ -74,61 +170,91 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               child: Row(
                 children: <Widget>[
                   SizedBox(
-                    width: 16,
+                    width: 25.px,
                   ),
-                  Expanded(
-                      child: GestureDetector(
+                  GestureDetector(
                     onTap: () {
                       if (!Global().hasLogin) {
                         Get.to(LoginPage());
                         return;
                       }
-                      //跳转评论输入页面
-                      Get.to(CommentInputPage(
-                          relType: viewParams.relType!,
-                          relId: viewParams.relId!));
+                      popDetail();
+                      // //跳转评论输入页面
+                      // Get.to(CommentInputPage(
+                      //     relType: viewParams.relType!,
+                      //     relId: viewParams.relId!));
                     },
                     child: Container(
-                      height: 40.px,
+                      height: 30.px,
+                      alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
-                        color: AppTheme.color_EFEFEF,
-                        borderRadius: BorderRadius.circular(25),
+                        color: Color(0xff95A3C4).withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 10), // 设置内边距
-                      child: Text('我来说两句', style: AppTheme.text999999Size14),
+                      padding:
+                          EdgeInsets.only(left: 17.px, right: 23.px), // 设置内边距
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/input_e.png',
+                            width: 13.5.px,
+                            height: 12.px,
+                          ),
+                          SizedBox(
+                            width: 12.px,
+                          ),
+                          Text('说点什么...',
+                              style: TextStyle(
+                                  fontSize: 10.px, color: Color(0xff9CACC9)))
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
                   SizedBox(width: 10),
-                  viewParams.relType!.isNotEmpty &&
-                          viewParams.relType! == 'thread'
-                      ? IconButton(
-                          onPressed: () {
-                            if (!Global().hasLogin) {
-                              Get.to(LoginPage());
-                              return;
-                            }
-                            //点赞
-                            NetRequest().contentLike({
-                              'relType': viewParams.relType!,
-                              'relId': viewParams.relId!,
-                              'state': viewParams.liked ?? false ? false : true
-                            }, (data) {
-                              if (_isMounted) {
-                                setState(() {
-                                  viewParams.liked = !viewParams.liked!;
-                                });
-                              }
-                            });
-                          },
-                          icon: Image.asset(
-                            viewParams.liked ?? false
-                                ? 'assets/images/small_like_selected.png'
-                                : 'assets/images/small_like_unselect.png',
-                            width: 25.px,
-                            height: 25.px,
-                          ))
-                      : Container(),
+                  // viewParams.relType!.isNotEmpty &&
+                  //         viewParams.relType! == 'thread'
+                  //     ? IconButton(
+                  //         onPressed: () {
+                  //           if (!Global().hasLogin) {
+                  //             Get.to(LoginPage());
+                  //             return;
+                  //           }
+                  //           //点赞
+                  //           NetRequest().contentLike({
+                  //             'relType': viewParams.relType!,
+                  //             'relId': viewParams.relId!,
+                  //             'state': viewParams.liked ?? false ? false : true
+                  //           }, (data) {
+                  //             if (_isMounted) {
+                  //               setState(() {
+                  //                 viewParams.liked = !viewParams.liked!;
+                  //               });
+                  //             }
+                  //           });
+                  //         },
+                  //         icon: Image.asset(
+                  //           viewParams.liked ?? false
+                  //               ? 'assets/images/hearted.png'
+                  //               : 'assets/images/heart.png',
+                  //           width: 13.px,
+                  //           height: 13.px,
+                  //         ))
+                  //     : Container(),
+                  IconButton(
+                      onPressed: () {
+                        if (!Global().hasLogin) {
+                          Get.to(LoginPage());
+                          return;
+                        }
+                        _favoriteToggle();
+                      },
+                      icon: Image.asset(
+                        _isFavorite
+                            ? 'assets/images/hearted.png'
+                            : 'assets/images/heart.png',
+                        width: 13.px,
+                        height: 13.px,
+                      )),
                   IconButton(
                       onPressed: () {
                         if (!Global().hasLogin) {
@@ -143,25 +269,11 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         ));
                       },
                       icon: Image.asset(
-                        'assets/images/small_comments.png',
-                        width: 25.px,
-                        height: 25.px,
+                        'assets/images/comment.png',
+                        width: 13.px,
+                        height: 13.px,
                       )),
-                  IconButton(
-                      onPressed: () {
-                        if (!Global().hasLogin) {
-                          Get.to(LoginPage());
-                          return;
-                        }
-                        _favoriteToggle();
-                      },
-                      icon: Image.asset(
-                        _isFavorite
-                            ? 'assets/images/small_collect_selected.png'
-                            : 'assets/images/small_collect_unselect.png',
-                        width: 25.px,
-                        height: 25.px,
-                      )),
+
                   IconButton(
                       onPressed: () {
                         var shareData = {
@@ -172,9 +284,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         };
                         if (kIsWeb) {
                           html.window.navigator.share(shareData);
-                        }
-                        else {
-                          Share.share('${widget.viewParams.title} '+'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                        } else {
+                          Share.share(
+                              '${widget.viewParams.title} ' +
+                                  'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
                               subject: widget.viewParams.content);
                         }
 
@@ -188,9 +301,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         //       });
                       },
                       icon: Image.asset(
-                        'assets/images/small_share.png',
-                        width: 25.px,
-                        height: 25.px,
+                        'assets/images/share.png',
+                        width: 13.px,
+                        height: 13.px,
                       ))
                 ],
               ),
@@ -323,6 +436,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
         setState(() {
           _isFavorite = !_isFavorite;
         });
+
+        //通知我的页面刷新列表
+        EventBusManager.eventBus
+            .fire(EventBusAction.refreshMineFavoriteList.eventBusTypeName);
       }
     });
   }

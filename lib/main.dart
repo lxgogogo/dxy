@@ -14,7 +14,8 @@ import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:oktoast/oktoast.dart';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 void main() {
   usePathUrlStrategy();
   runApp(const MyApp());
@@ -51,6 +52,23 @@ class MyApp extends StatelessWidget {
         child: GetMaterialApp(
       title: '德学院',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        // 这行是关键
+        RefreshLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate
+        
+      ],
+      supportedLocales: const [
+        Locale('zh'),
+        Locale('en'),
+        
+      ],
+      localeResolutionCallback:
+          (locale, Iterable<Locale> supportedLocales) {
+        //print("change language");
+        return locale;
+      },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -70,6 +88,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
         useMaterial3: true,
         visualDensity: VisualDensity.compact,
+        focusColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hintColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        appBarTheme: AppBarTheme(scrolledUnderElevation: 0.0,
+          titleTextStyle: TextStyle(fontSize: 16,color: const Color(0xff2C2C2C))
+        )
         // 设置最大宽度为 960px
         // 可根据需求调整该值
       ),

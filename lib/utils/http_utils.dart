@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:holdem/utils/http.dart';
 
+import 'net_request.dart';
+
 class HttpUtils {
   static void init({
     required String baseUrl,
@@ -70,7 +72,8 @@ class HttpUtils {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
-        ProgressCallback? onSendProgress
+    ProgressCallback? onSendProgress,
+    FailureCallback? onFail,
   }) async {
     return await Http().postBytesFile(
       path,
@@ -78,7 +81,8 @@ class HttpUtils {
       params: params ?? {},
       options: options,
       cancelToken: cancelToken,
-        onSendProgress:onSendProgress
+      onSendProgress: onSendProgress,
+      onFail: onFail,
     );
   }
 
@@ -88,8 +92,9 @@ class HttpUtils {
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
+    ProgressCallback? onSendProgress,
     bool showLoading = true,
+    FailureCallback? onFail,
   }) async {
     if (showLoading) {
       EasyLoading.show(status: 'loading...');
@@ -100,7 +105,8 @@ class HttpUtils {
       params: params ?? {},
       options: options,
       cancelToken: cancelToken,
-      onSendProgress: onSendProgress
+      onSendProgress: onSendProgress,
+      onFail: onFail,
     );
     if (showLoading) {
       EasyLoading.dismiss();

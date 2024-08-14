@@ -125,10 +125,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '评论',
+                          '评论(${articleDetailBean.commentCount})',
                           style: TextStyle(
-                              color: Color(0xff3B5078),
-                              fontSize: 17.px,
+                              color: Color(0xff2a2a2a),
+                              fontSize: 12.px,
                               fontWeight: FontWeight.bold),
                         ),
                         SizedBox(

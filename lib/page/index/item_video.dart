@@ -12,7 +12,8 @@ import 'package:intl/intl.dart';
 // ignore: must_be_immutable
 class VideoItem extends StatefulWidget {
   ArticleBean article;
-  VideoItem({super.key, required this.article});
+  bool isBanner;
+  VideoItem({super.key, required this.article, required this.isBanner});
 
   @override
   State<VideoItem> createState() => _VideoItemState();
@@ -52,7 +53,11 @@ class _VideoItemState extends State<VideoItem> {
       },
       child: Container(
           padding: EdgeInsets.only(bottom: 2.px),
-          margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+          // margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+          margin: EdgeInsets.only(
+              left: widget.isBanner ? 12.px : 0,
+              right: widget.isBanner ? 12.px : 0,
+              top: widget.isBanner ? 12.px : 0),
           decoration: BoxDecoration(
             //flutter 上下颜色渐变
             //#F9CF3A, #FFD43E00
@@ -79,7 +84,7 @@ class _VideoItemState extends State<VideoItem> {
             ),
           ),
           child: Container(
-              padding: EdgeInsets.all(12.px),
+              // padding: EdgeInsets.all(12.px),
               decoration: BoxDecoration(
                 //flutter 上下颜色渐变
                 //#F9CF3A, #FFD43E00
@@ -98,26 +103,70 @@ class _VideoItemState extends State<VideoItem> {
   }
 
   Widget itemContent() {
-    return Row(
+    return Column(
       children: [
         Container(
-          width: 145.px,
-          height: 120.px,
-          margin: EdgeInsets.only(right: 15.px),
+          width: widget.isBanner ? 351.px : 180.px,
+          height: widget.isBanner ? 200.px : 120.px,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8.px)),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(13.px),
+              topRight: Radius.circular(13.px),
+            ),
           ),
           clipBehavior: Clip.antiAlias,
           child: Stack(
             children: [
               MediaHelper().cacheLoadNetworkImage(
-                  widget.article.cover ?? '', 145.px, 120.px),
-              // Image.network(
-              //   widget.article.cover ?? '',
-              //   width: 145.px,
-              //   height: 120.px,
-              //   fit: BoxFit.cover,
-              // ),
+                  widget.article.cover ?? '',
+                  widget.isBanner ? 351.px : 180.px,
+                  widget.isBanner ? 200.px : 120.px),
+              Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Container(
+                    color: Color(0x66000000),
+                    child: Center(
+                      child: Image.asset('assets/images/video.png',
+                          width: 26.px, height: 26.px),
+                    ),
+                  )),
+              Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 4.px,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 14.px,
+                      ),
+                      Text(
+                        widget.article.viewCount!.toString()+'次播放',
+                        style: TextStyle(color: Colors.white, fontSize: 10.px),
+                      ),
+                      const Spacer(),
+                      Container(
+                        height: 16.px,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal: 7.px),
+                        decoration: BoxDecoration(
+                            color: Color(0x66000000),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.px))),
+                        child: Text(
+                          formatDuration(
+                              Duration(seconds: widget.article.duration ?? 0)),
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 10.px),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 14.px,
+                      ),
+                    ],
+                  )),
               if (widget.article.type == 'videoList')
                 Positioned(
                   right: 0,
@@ -139,68 +188,18 @@ class _VideoItemState extends State<VideoItem> {
             ],
           ),
         ),
-        Expanded(
-            child: SizedBox(
-          height: 120.px,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                widget.article.title ?? '',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style: TextStyle(
-                  color: const Color(0xff3B5078),
-                  fontSize: 16.px,
-                ),
-              ),
-              // Spacer(),
-              if (widget.article.type != 'videoList')
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/time.png',
-                      width: 20.px,
-                      height: 20.px,
-                    ),
-                    SizedBox(
-                      width: 5.px,
-                    ),
-                    Text(
-                      DateFormat('M月d日')
-                          .format(widget.article.createdAt ?? DateTime.now()),
-                      // widget.article.duration != null
-                      //     ? formatDuration(Duration(seconds: widget.article.duration ?? 0))
-                      //     : '',
-                      style: TextStyle(
-                        color: const Color(0xff666666),
-                        fontSize: 14.px,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 30.px,
-                    ),
-                    Image.asset(
-                      'assets/images/comment.png',
-                      width: 20.px,
-                      height: 20.px,
-                    ),
-                    SizedBox(
-                      width: 5.px,
-                    ),
-                    Text(
-                      widget.article.commentCount.toString(),
-                      style: TextStyle(
-                        color: const Color(0xff666666),
-                        fontSize: 14.px,
-                      ),
-                    )
-                  ],
-                )
-            ],
+        Container(
+          margin: EdgeInsets.only(left: 12.px, right: 12.px, top: widget.isBanner ? 10.px:5.px,bottom: widget.isBanner ? 10.px : 0),
+          child: Text(
+            widget.article.title ?? '',
+            overflow: TextOverflow.ellipsis,
+            maxLines: widget.isBanner ? 1:2,
+            style: TextStyle(
+              color: const Color(0xff2c2c2c),
+              fontSize: widget.isBanner ? 14.px:12.px,
+            ),
           ),
-        ))
+        ),
       ],
     );
   }

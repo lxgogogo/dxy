@@ -127,6 +127,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   contentItem(int index) {
     return VideoItem(
       article: articles[index],
+      isBanner: false,
     );
   }
 }

@@ -66,6 +66,11 @@ class _CommentInputPageState extends State<CommentInputPage>
           ),
         ),
         actions: [
+          // GestureDetector(child: Container(
+          //   width: 50.px,
+          //   height: 24.px,
+          //   color: Colors.red,
+          //   child: Text('发布'),),),
           IconButton(
               onPressed: () {
                 //提交评论

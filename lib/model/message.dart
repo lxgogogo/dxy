@@ -1,4 +1,4 @@
-class MessageBean{
+class MessageBean {
   int? id;
   String? type;
   String? quote;
@@ -9,6 +9,8 @@ class MessageBean{
   String? description;
   DateTime? createdAt;
   MessageUser? fromUser;
+  MessageUser? contentUser;
+  MessageContent? content;
 
   MessageBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -41,6 +43,12 @@ class MessageBean{
     if (json["fromUser"] is Map) {
       fromUser = MessageUser.fromJson(json["fromUser"]);
     }
+    if (json["contentUser"] is Map) {
+      contentUser = MessageUser.fromJson(json["contentUser"]);
+    }
+    if (json["content"] is Map) {
+      content = MessageContent.fromJson(json["content"]);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -55,14 +63,12 @@ class MessageBean{
     _data["description"] = description;
     _data["createdAt"] = createdAt;
     _data["fromUser"] = fromUser?.toJson();
+    _data["content"] = content?.toJson();
     return _data;
   }
-
-
-
 }
 
-class MessageUser{
+class MessageUser {
   int? id;
   String? avatar;
   String? nickname;
@@ -84,6 +90,37 @@ class MessageUser{
     _data["id"] = id;
     _data["avatar"] = avatar;
     _data["nickname"] = nickname;
+    return _data;
+  }
+}
+
+class MessageContent {
+  int? commentCount;
+  int? favoriteCount;
+  int? likeCount;
+  String? title;
+
+  MessageContent.fromJson(Map<String, dynamic> json) {
+    if (json["commentCount"] is int) {
+      commentCount = json["commentCount"];
+    }
+    if (json["favoriteCount"] is int) {
+      favoriteCount = json["favoriteCount"];
+    }
+    if (json["likeCount"] is int) {
+      likeCount = json["likeCount"];
+    }
+    if (json["title"] is String) {
+      title = json["title"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["commentCount"] = commentCount;
+    _data["favoriteCount"] = favoriteCount;
+    _data["likeCount"] = likeCount;
+    _data["title"] = title;
     return _data;
   }
 }

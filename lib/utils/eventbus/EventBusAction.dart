@@ -10,6 +10,10 @@ enum EventBusAction {
   noticeMainTabSwitchHome,
   //发布帖子成功后刷新论坛列表数据
   refreshForumList,
+  //刷新我的收藏列表
+  refreshMineFavoriteList,
+  //更新板块tab数据
+  updateBoardTabData,
 }
 
 extension DioErrorTypeExtension on EventBusAction {
@@ -25,6 +29,10 @@ extension DioErrorTypeExtension on EventBusAction {
         return '首页tab通知切换到0位置';
       case EventBusAction.refreshForumList:
         return '发布帖子成功后刷新论坛列表数据';
+      case EventBusAction.refreshMineFavoriteList:
+        return '刷新我的收藏列表';
+      case EventBusAction.updateBoardTabData:
+        return '更新板块tab数据';
       default:
         return '未知';
     }

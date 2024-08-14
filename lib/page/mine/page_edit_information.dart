@@ -27,13 +27,15 @@ class _InformationEditPageState extends State<InformationEditPage>
   void initState() {
     super.initState();
     editContent = widget.editContent;
-    controller.text = editContent;
+    controller.text =
+        editContent.length > 10 ? editContent.substring(0, 10) : editContent;
   }
 
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -95,10 +97,12 @@ class _InformationEditPageState extends State<InformationEditPage>
   Widget contentView() {
     return Container(
       margin: EdgeInsets.fromLTRB(16, 5, 16, 0),
-      height: 45.px,
+      height: 60.px,
       child: TextFormField(
-        maxLines: 1, //
+        maxLines: 1,
+        //
         minLines: 1,
+        maxLength: 10,
         controller: controller,
         onChanged: (value) {
           if (mounted) {
@@ -116,7 +120,7 @@ class _InformationEditPageState extends State<InformationEditPage>
           hintStyle: AppTheme.text999999Size16,
           fillColor: AppTheme.color_50000000,
           filled: true,
-          contentPadding: EdgeInsets.all(10),
+          contentPadding: EdgeInsets.fromLTRB(10.px, 5.px, 10.px, 0),
           // 文本从左上角开始
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppTheme.color_1A000000, width: 1),

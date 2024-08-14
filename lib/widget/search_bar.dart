@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/size_fit.dart';
 
@@ -34,21 +35,31 @@ class _CSearchBarState extends State<CSearchBar> {
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.px),
-            height: 35.px,
-            decoration: BoxDecoration(
-                color: const Color(0xFFF1F1F1),
-                borderRadius: BorderRadius.circular(6.px)),
+              width: 279.px,
+              height: 32.px,
+              padding: EdgeInsets.only(left: 15.px),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.px),
+                boxShadow:  const [
+                  BoxShadow(
+                    color: Color(0x80BFD2E2),
+                    offset: Offset(0, 5),
+                    blurRadius: 10,
+                  ),
+                ],
+                image: DecorationImage(
+                      image: AssetImage('assets/images/input_bg.png'),
+                      fit: BoxFit.contain)),
             child: Row(
               children: [
-                Icon(
-                  Icons.search,
-                  size: 20.px,
-                  color: const Color(0xff999999),
-                ),
-                SizedBox(
-                  width: 5.px,
-                ),
+                // Icon(
+                //   Icons.search,
+                //   size: 20.px,
+                //   color: const Color(0xff999999),
+                // ),
+                // SizedBox(
+                //   width: 5.px,
+                // ),
                 Expanded(
                     child: TextField(
                   controller: searchController,
@@ -65,11 +76,14 @@ class _CSearchBarState extends State<CSearchBar> {
                   style: TextStyle(
                       height: 1, fontSize: 14.px, color: Color(0xff333333)),
                   decoration: InputDecoration(
-                      isDense: true,
+                      // isDense: true,
+                      // prefixIcon: Icon(Icons.search),
                       counterText: "",
-                      hintText: '搜索内容',
+                      hintText: '请输入搜索内容',
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: kIsWeb
+                          ? EdgeInsets.only(bottom: 12)
+                          : EdgeInsets.only(top: 8),
                       hintStyle: TextStyle(
                           color: const Color(0xFFBBBBBB),
                           fontSize: 14.px,

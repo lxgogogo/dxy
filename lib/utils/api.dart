@@ -8,6 +8,8 @@ class Api{
   static const String indexList = '$baseUrl/content/list';
   static const String contentShow = '$baseUrl/content/show';
   static const String indexBanner = '$baseUrl/sectionData/list';
+  static const String courseList = '$baseUrl/content/listCollect';
+  static const String bookSuggest = '$baseUrl/content/bookSuggest';
 
   //论坛
   static const String boardList = '$baseUrl/board/list';
@@ -34,6 +36,7 @@ class Api{
   static const String sendCode = '$baseUrl/passport/sendCode';
   static const String user = '$baseUrl/user';
   static const String userFavoriteList = '$baseUrl/user/favorite/list';
+  static const String delFavorite = '$baseUrl/favorite/delete';
   static const String userCommentList = '$baseUrl/user/comment/list';
   static const String userSearch = '$baseUrl/user/search';
   static const String updatePassword = '$baseUrl/user/updatePassword';

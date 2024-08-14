@@ -3,7 +3,6 @@ import 'package:holdem/utils/size_fit.dart';
 
 import '../utils/app_theme.dart';
 
-
 class FollowBtn extends StatelessWidget {
   bool isFollowed;
   var onTap;
@@ -13,17 +12,20 @@ class FollowBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
     return GestureDetector(
-        child: Container(
-          decoration: BoxDecoration(
-            color: isFollowed ? AppTheme.color_0D000000 : AppTheme.color_008EFF,
-            borderRadius: BorderRadius.circular(25),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
-          child: Text(isFollowed ? '已关注' : '关注',
-              style: isFollowed
-                  ? AppTheme.text999999Size14
-                  : AppTheme.textFFFFFFSize14),
+      onTap: onTap,
+      child: Container(
+        height: 24.px,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isFollowed ? AppTheme.color_0D000000 : AppTheme.color_008EFF,
+          borderRadius: BorderRadius.circular(12.px),
         ),
-        onTap: onTap);
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
+        child: Text(isFollowed ? '已关注' : '关注',
+            style: isFollowed
+                ? TextStyle(color: const Color(0xff95A3C4), fontSize: 10.px)
+                : TextStyle(color: const Color(0xffffffff), fontSize: 10.px)),
+      ),
+    );
   }
 }

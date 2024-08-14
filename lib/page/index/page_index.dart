@@ -20,7 +20,8 @@ class IndexPage extends StatefulWidget {
   State<IndexPage> createState() => _IndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixin {
+class _IndexPageState extends State<IndexPage>
+    with AutomaticKeepAliveClientMixin {
   int _currentTabIndex = 0;
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
   final List<String> types = ['news', 'video', 'book', 'course'];
@@ -38,8 +39,7 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
     for (int i = 0; i < tabs.length; i++) {
       parentTabs.add(TabData(
         index: i,
-        title: Tab(
-          child: Text(tabs[i]),
+        title: Tab(text:tabs[i]
         ),
         content: IndexTabChildPage(type: types[i]),
       ));
@@ -85,36 +85,37 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
       extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
       backgroundColor: kBgColor,
       // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-      appBar: AppBar(
-        backgroundColor: Colors.transparent, // 设置导航条背景透明
-        // elevation: 0, // 去除导航条的阴影
-        centerTitle: true,
-        title:  Image.asset('assets/images/title_logo.png', width: 80, height: 25),
-        actions: [
-          IconButton(
-            icon: Image.asset(
-              'assets/images/navi_search.png',
-              width: 35,
-              height: 38,
-            ),
-            onPressed: () {
-              // 登录按钮点击事件
-              Get.to(SearchPage());
-            },
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent, // 设置导航条背景透明
+      //   // elevation: 0, // 去除导航条的阴影
+      //   centerTitle: true,
+      //   title:
+      //       Image.asset('assets/images/title_logo.png', width: 80, height: 25),
+      //   actions: [
+      //     IconButton(
+      //       icon: Image.asset(
+      //         'assets/images/navi_search.png',
+      //         width: 35,
+      //         height: 38,
+      //       ),
+      //       onPressed: () {
+      //         // 登录按钮点击事件
+      //         Get.to(SearchPage());
+      //       },
+      //     ),
+      //   ],
+      // ),
       body: Stack(
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/images/home_top.png', // 替换为你的图片路径
-              fit: BoxFit.cover,
-            ),
-          ),
+          // Positioned(
+          //   top: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: Image.asset(
+          //     'assets/images/home_top.png', // 替换为你的图片路径
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           Container(
             color: Colors.transparent, // 设置背景颜色为灰色
             child: Column(
@@ -140,25 +141,57 @@ class _IndexPageState extends State<IndexPage> with AutomaticKeepAliveClientMixi
       showBackIcon: false,
       showNextIcon: false,
       labelPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-      indicatorColor: const Color(0xff008EFF),
+      indicatorPadding: const EdgeInsets.only(bottom: 5),
+      indicator: UnderlineTabIndicator(
+        borderSide: BorderSide(
+          color: const Color(0xff008EFF), // 选中线条颜色
+          width: 2.px, // 选中线条宽度
+        ),
+        insets: EdgeInsets.symmetric(horizontal: 6.px), // 选中线条左右间距
+        borderRadius: BorderRadius.circular(1.px)
+      ),
+      // indicatorColor: const Color(0xff008EFF),
+      // indicatorSize: Size(20.px,2.px),
+      // indicator: BoxDecoration(
+      //   color: Colors.red,
+      //   borderRadius: BorderRadius.all(Radius.circular(10.px))),
+      trailing: SizedBox(
+        width: 120.px,
+        child: Row(
+          children: [
+            const Spacer(),
+            IconButton(
+              icon: Image.asset(
+                'assets/images/navi_search.png',
+                width: 16.px,
+                height: 16.px,
+              ),
+              onPressed: () {
+                // 登录按钮点击事件
+                Get.to(SearchPage());
+              },
+            ),
+          ],
+        ),
+      ),
       //底部下标颜色
       enableFeedback: false,
       dividerHeight: 0,
       labelStyle: TextStyle(
           height: 1,
-          color: forumAppMainColor,
+          color: Color(0xff2c2c2c),
           fontSize: 16.px,
           fontWeight: FontWeight.w600),
       unselectedLabelStyle: TextStyle(
           height: 1,
           color: tabTitleUnselectColor,
-          fontSize: 16.px,
+          fontSize: 15.px,
           fontWeight: FontWeight.w400),
       onTabChanged: (index) {},
       onTabControllerUpdated: (TabController) {},
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

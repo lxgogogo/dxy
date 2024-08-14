@@ -65,19 +65,19 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: const Text(
           '选择标签',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Divider(
-            color: AppTheme.color_F3F3F3,
-            thickness: 1,
-          ),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: Size.fromHeight(1.0),
+        //   child: Divider(
+        //     color: AppTheme.color_F3F3F3,
+        //     thickness: 1,
+        //   ),
+        // ),
         actions: [
           GestureDetector(
               onTap: () {
@@ -88,16 +88,36 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                 }
               },
               child: Container(
-                margin: EdgeInsets.only(right: 16),
+                height: 24.px,
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 11.px),
+                margin: EdgeInsets.only(right: 16.px),
+                decoration: BoxDecoration(
+                    color: const Color(0xff249CFC),
+                    borderRadius: BorderRadius.circular(12.px)),
                 child: Text(
                   '创建标签',
-                  style: AppTheme.text3B5078Size15,
+                  style: TextStyle(color: Colors.white, fontSize: 12.px),
                 ),
               ))
         ],
       ),
-      body: SafeArea(child: contentView()),
-      backgroundColor: Colors.white,
+      body: SafeArea(
+          child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.px),
+                      topRight: Radius.circular(12.px)),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFFF6FBFF),
+                      Color(0xFFE8F3FF),
+                    ],
+                  )),
+              child: contentView())),
+      backgroundColor: const Color(0xffE8F3FF),
       bottomSheet: bottomView(),
     ));
   }
@@ -140,33 +160,60 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
           height: 5.px,
         ),
         Expanded(
-            child: Container(
-                margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: LabelView(
-                  key: ValueKey('label'),
-                  isEditLabel: true,
-                  labelData: labelData,
-                  onItemTap: (labelValue) {
-                    if (_isUserSelectedLabel(labelValue)) {
-                      ToastUtils.showToast('已选择当前标签');
-                      return;
-                    }
-                    Navigator.pop(context, labelValue);
-                  },
-                  onDelTap: (value) {
-                    if (_isMounted) {
-                      setState(() {
-                        print('==========value=============${value}');
-                        labelData.remove(value);
-                        StorageUtil()
-                            .prefs!
-                            .setStringList('userLabel', labelData);
-                      });
-                    }
-                  },
-                )))
+            child: ListView.builder(
+          itemBuilder: (c, i) => listDataItem(i),
+          // itemExtent: 160.0,
+          itemCount: labelData.length,
+        )
+
+            // Container(
+            //     margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+            //     child: LabelView(
+            //       key: ValueKey('label'),
+            //       isEditLabel: true,
+            //       labelData: labelData,
+            //       onItemTap: (labelValue) {
+            //         if (_isUserSelectedLabel(labelValue)) {
+            //           ToastUtils.showToast('已选择当前标签');
+            //           return;
+            //         }
+            //         Navigator.pop(context, labelValue);
+            //       },
+            //       onDelTap: (value) {
+            //         if (_isMounted) {
+            //           setState(() {
+            //             print('==========value=============${value}');
+            //             labelData.remove(value);
+            //             StorageUtil()
+            //                 .prefs!
+            //                 .setStringList('userLabel', labelData);
+            //           });
+            //         }
+            //       },
+            //     ))
+
+            )
       ],
     );
+  }
+
+  Widget listDataItem(int index) {
+    return GestureDetector(
+        onTap: () {
+          if (_isUserSelectedLabel(labelData[index])) {
+            ToastUtils.showToast('已选择当前标签');
+            return;
+          }
+          Navigator.pop(context, labelData[index]);
+        },
+        child: Container(
+            height: 37.px,
+            margin: EdgeInsets.symmetric(horizontal: 18.px),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '#' + labelData[index],
+              style: TextStyle(color: const Color(0xff3B5078), fontSize: 12.px),
+            )));
   }
 
   //判断是否用户已经选择过的标签

@@ -87,7 +87,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             }
           }
 
-          postBottomViewParams =  PostBottomViewParams(
+          postBottomViewParams = PostBottomViewParams(
             postId: currentPostId,
             relId: currentPostId,
             relType: NetRequest.COMMENT_TYPE_THREAD,
@@ -141,44 +141,46 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Image.asset(
-              'assets/images/back.png',
-              width: 22.px,
-              height: 22.px,
+    return WebFitPage(
+        child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Image.asset(
+                  'assets/images/back.png',
+                  width: 22.px,
+                  height: 22.px,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              backgroundColor: Colors.white,
+              title: const Text(''),
+              centerTitle: true,
+              // actions: [
+              //   IconButton(
+              //       onPressed: () {},
+              //       icon: Image.asset(
+              //         'assets/images/more.png',
+              //         width: 22.px,
+              //         height: 22.px,
+              //       ))
+              // ],
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: Colors.white,
-          title: const Text(''),
-          centerTitle: true,
-          // actions: [
-          //   IconButton(
-          //       onPressed: () {},
-          //       icon: Image.asset(
-          //         'assets/images/more.png',
-          //         width: 22.px,
-          //         height: 22.px,
-          //       ))
-          // ],
-        ),
-        body: SafeArea(child: contentView()),
-        bottomSheet: isLoadOk ? PostDetailBottomView(
-            viewParams: postBottomViewParams) : Container(),
-        backgroundColor: Colors.white));
+            body: SafeArea(child: contentView()),
+            bottomSheet: isLoadOk
+                ? PostDetailBottomView(viewParams: postBottomViewParams)
+                : Container(),
+            backgroundColor: Colors.white));
   }
 
   ///是自己的帖子 不显示关注
   bool isOwnerPost() {
-    if (boardBean != null ) {
+    if (boardBean != null) {
       var ownerId = StorageUtil().prefs!.getString('ownerId');
-       if (boardBean!.user!.id!.toString() == ownerId) {
-         return true;
-       }
+      if (boardBean!.user!.id!.toString() == ownerId) {
+        return true;
+      }
     }
     return false;
   }
@@ -204,38 +206,41 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleImageWithText(
-                          imageUrl:
-                              (boardBean != null && boardBean!.user != null)
-                                  ? boardBean!.user!.avatar!
-                                  : '',
-                          imageWidth: 40,
-                          imageHeight: 40,
-                          topText: boardBean != null
-                              ? boardBean!.user!.nickname!
-                              : '',
-                          topTextStyle: const TextStyle(),
-                          bottomText1: boardBean != null
-                              ? '发布于${DateFormat('MM-dd HH:mm').format(boardBean!.createdAt!)}'
-                              : '',
-                          bottomText1Style: AppTheme.text999999Size11,
-                          bottomText2: '',
-                          bottomText2Style: const TextStyle()),
+                      Expanded(
+                          child: Container(
+                        child: CircleImageWithText(
+                            imageUrl:
+                                (boardBean != null && boardBean!.user != null)
+                                    ? boardBean!.user!.avatar!
+                                    : '',
+                            imageWidth: 40,
+                            imageHeight: 40,
+                            topText: boardBean != null
+                                ? boardBean!.user!.nickname!
+                                : '',
+                            topTextStyle: const TextStyle(),
+                            bottomText1: boardBean != null
+                                ? '发布于${DateFormat('MM-dd HH:mm').format(boardBean!.createdAt!)}'
+                                : '',
+                            bottomText1Style: AppTheme.text999999Size11,
+                            bottomText2: '',
+                            bottomText2Style: const TextStyle()),
+                      )),
                       Visibility(
                           visible: isOwnerPost() ? false : true,
-                          child:
-                          (boardBean != null ? boardBean!.user!.followed! : false)
-                          ? followedStatusBtn()
-                          : IconButton(
-                          onPressed: () {
-                            _followToggle();
-                          },
-                          icon: Image.asset(
-                            'assets/images/follow_btn.png',
-                            width: 62,
-                            height: 28,
-                          )))
-
+                          child: (boardBean != null
+                                  ? boardBean!.user!.followed!
+                                  : false)
+                              ? followedStatusBtn()
+                              : IconButton(
+                                  onPressed: () {
+                                    _followToggle();
+                                  },
+                                  icon: Image.asset(
+                                    'assets/images/follow_btn.png',
+                                    width: 62,
+                                    height: 28,
+                                  )))
                     ]),
                 SizedBox(height: 16),
                 _showContentView(),
@@ -245,18 +250,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 _showMediaView(),
               ],
             )),
-        Row(children: [
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 10.px),
-              child: LabelView(
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 10.px),
+                child: LabelView(
                   isEditLabel: false,
                   labelData: boardBean != null ? boardBean!.tags! : [],
-                  onItemTap: (value) {}, onDelTap: (value) {},
+                  onItemTap: (value) {},
+                  onDelTap: (value) {},
+                ),
               ),
             ),
-          ),
-        ],),
+          ],
+        ),
         Container(height: 10.px, color: AppTheme.color_F3F3F3),
         Container(
             padding: EdgeInsets.fromLTRB(16, 15, 16, 0),
@@ -276,17 +284,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   ///显示内容
   Widget _showContentView() {
-    if (boardBean != null &&  boardBean!.content!.isNotEmpty) {
-       if (boardBean!.content!.contains('<p>') || boardBean!.content!.contains('</p>')) {
-         return Html(data:boardBean!.content!);
-       } else  {
-         return Container(
-           child: Text(boardBean != null ? boardBean!.content! : '',
-               style: AppTheme.text666666Size16),
-         );
-       }
+    if (boardBean != null && boardBean!.content!.isNotEmpty) {
+      if (boardBean!.content!.contains('<p>') ||
+          boardBean!.content!.contains('</p>')) {
+        return Html(data: boardBean!.content!);
+      } else {
+        return Container(
+          child: Text(boardBean != null ? boardBean!.content! : '',
+              style: AppTheme.text666666Size16),
+        );
+      }
     }
-    return  Container();
+    return Container();
   }
 
   ///显示媒体文件 图片或者视频
@@ -320,9 +329,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           imageUrlList[0],
                         ),
                         IconButton(
-                          icon: Image.asset('assets/images/play_btn.png',
+                          icon: Image.asset(
+                            'assets/images/play_btn.png',
                             width: 35.px,
-                            height: 35.px,),
+                            height: 35.px,
+                          ),
                           onPressed: () {
                             _pickAndPlayVideo(videoUrl);
                           },
@@ -347,8 +358,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               onTap: () {
                 MediaHelper().imagePerView(context, imageUrlList, index);
               },
-              child:
-              MediaHelper().cacheLoadNetworkImage(
+              child: MediaHelper().cacheLoadNetworkImage(
                   imageUrlList[index].isNotEmpty ? imageUrlList[index] : '',
                   widthNum,
                   111.px),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/page_web_fit.dart';
+import 'package:holdem/widget/search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/user.dart';
@@ -20,6 +21,7 @@ class AitUserPage extends StatefulWidget {
 class _AitUserPageState extends State<AitUserPage> {
   int pageNum = 1;
   int pageSize = 10;
+  late String key;
 
   List<UserProfile> followOrFanUserList = [];
   bool _isMounted = false;
@@ -78,57 +80,71 @@ class _AitUserPageState extends State<AitUserPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
+          leading: IconButton(
+            icon: Image.asset(
+              'assets/images/back.png',
+              width: 22.px,
+              height: 22.px,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          '想@谁',
-          style: AppTheme.text333333Size17,
-        ),
-        centerTitle: true,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Divider(
-            color: AppTheme.color_F3F3F3,
-            thickness: 1,
+          backgroundColor: Colors.transparent,
+          title: CSearchBar(
+            onChanged: (value) {
+              setState(() {
+                key = value;
+              });
+            },
           ),
-        ),
-      ),
+          // title: const Text(
+          //   '想@谁',
+          //   style: AppTheme.text333333Size17,
+          // ),
+          centerTitle: true,
+          actions: [
+            TextButton(
+                onPressed: () {
+                  if (key != null) {
+                    _userSearch(key);
+                    // StorageUtil().prefs!.setString('token', data['token']);
+                  }
+                },
+                child: Text('搜索',
+                    style: TextStyle(
+                        color: const Color(0xff249CFC), fontSize: 15.px)))
+            // GestureDetector(child: Text('搜索'),)
+          ]),
       body: SafeArea(child: contentView()),
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xffE8F3FF),
     ));
   }
 
   Widget contentView() {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: topSearchView()),
-            GestureDetector(
-              child: Container(
-                  margin: EdgeInsets.only(right: 16),
-                  child: Text(
-                    '搜索',
-                    style: AppTheme.text3B5078Size15,
-                  )),
-              onTap: () {
-                _userSearch();
-              },
-            )
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Expanded(child: topSearchView()),
+        //     GestureDetector(
+        //       child: Container(
+        //           margin: EdgeInsets.only(right: 16),
+        //           child: Text(
+        //             '搜索',
+        //             style: TextStyle(
+        //                 color: const Color(0xff249CFC), fontSize: 15.px),
+        //           )),
+        //       onTap: () {
+        //         _userSearch(key);
+        //       },
+        //     )
+        //   ],
+        // ),
         SizedBox(
           height: 10,
         ),
@@ -137,13 +153,9 @@ class _AitUserPageState extends State<AitUserPage> {
     );
   }
 
-  void _userSearch() {
-    print('search text==>${searchController.text}');
-    if (searchController.text.isEmpty) {
-      return;
-    }
+  void _userSearch(keyword) {
     //请求搜索关键字的用户列表   清空原有列表
-    NetRequest().userSearch(pageNum, pageSize, searchController.text, (data) {
+    NetRequest().userSearch(pageNum, pageSize, keyword, (data) {
       UserDataList userDataList = UserDataList.fromJson(data);
       if (_isMounted) {
         setState(() {
@@ -171,10 +183,24 @@ class _AitUserPageState extends State<AitUserPage> {
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      child: ListView.builder(
-        itemBuilder: (c, i) => listDataItem(i),
-        // itemExtent: 160.0,
-        itemCount: followOrFanUserList.length,
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.px),
+                topRight: Radius.circular(12.px)),
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFF6FBFF),
+                Color(0xFFE8F3FF),
+              ],
+            )),
+        child: ListView.builder(
+          itemBuilder: (c, i) => listDataItem(i),
+          // itemExtent: 160.0,
+          itemCount: followOrFanUserList.length,
+        ),
       ),
     );
   }
@@ -186,43 +212,51 @@ class _AitUserPageState extends State<AitUserPage> {
           Navigator.pop(context, followOrFanUserList[index]);
         },
         child: Container(
-          height: 45,
-          margin: EdgeInsets.only(top: 10, bottom: 10),
-          padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
+          height: 58.px,
+          margin: EdgeInsets.symmetric(horizontal: 18.px),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom:
+                      BorderSide(color: const Color(0xffE6E6E6), width: 1.px))),
           child: Row(children: [
             Container(
-                height: 45.px,
-                width: 45.px,
+                height: 34.px,
+                width: 34.px,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(17.px),
+                    color: Color(0xeeffffff)),
                 child: Center(
                     child: ClipOval(
                   child: LoginHelper().getUserAvatar(
                       followOrFanUserList[index].avatar!.isNotEmpty
                           ? followOrFanUserList[index].avatar!
                           : '',
-                      45,
-                      45),
+                      32.px,
+                      32.px),
                 ))),
             SizedBox(
-              width: 5,
+              width: 10.px,
             ),
             Text(
               followOrFanUserList[index].nickname!.isNotEmpty
                   ? followOrFanUserList[index].nickname!
                   : '',
-              style: AppTheme.text3B5078Size15,
+              style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.px),
             ),
-            Expanded(child: Text('')),
+            const Spacer(),
             FollowBtn(
-                isFollowed: followOrFanUserList[index].followed!, onTap: () {
-              NetRequest().followerToggle(followOrFanUserList[index].id!,
-                  !followOrFanUserList[index].followed!, (data) {
+                isFollowed: followOrFanUserList[index].followed!,
+                onTap: () {
+                  NetRequest().followerToggle(followOrFanUserList[index].id!,
+                      !followOrFanUserList[index].followed!, (data) {
                     if (mounted) {
                       setState(() {
                         followOrFanUserList.remove(followOrFanUserList[index]);
                       });
                     }
                   });
-            })
+                })
           ]),
         ));
   }

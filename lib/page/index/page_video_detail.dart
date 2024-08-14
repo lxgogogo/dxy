@@ -12,7 +12,7 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:video_player/video_player.dart';
-// import 'package:chewie/chewie.dart';
+import 'package:chewie/chewie.dart';
 
 // ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
@@ -26,6 +26,7 @@ class VideoDetailPage extends StatefulWidget {
 class _VideoDetailPageState extends State<VideoDetailPage> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
   late VideoPlayerController _playController;
+  late ChewieController _chewieController;
 
   List<CommentBean> comments = [];
   bool loaded = false;
@@ -52,7 +53,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     // TODO: implement dispose
     super.dispose();
     _playController.dispose();
-    // _chewieController.dispose();
+    _chewieController.dispose();
   }
 
   requestDetail() {
@@ -66,7 +67,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             ..initialize().then((_) {
               setState(() {});
             });
-          // _chewieController =ChewieController(videoPlayerController: _playController,autoPlay: false);
+          _chewieController =ChewieController(videoPlayerController: _playController,autoPlay: false);
           loaded = true;
         });
       }
@@ -88,12 +89,12 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     });
   }
 
-  Future<void> play() async {
-    _playController = VideoPlayerController.networkUrl(
-        Uri.parse(articleDetailBean.video!.sourceUrl!));
-    await _playController.initialize();
-    _playController.play();
-  }
+  // Future<void> play() async {
+  //   _playController = VideoPlayerController.networkUrl(
+  //       Uri.parse(articleDetailBean.video!.sourceUrl!));
+  //   await _playController.initialize();
+  //   _playController.play();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +142,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                     style: TextStyle(
                         color: Color(0xff3B5078),
                         fontSize: 22.px,
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.normal)),
                 SizedBox(
                   height: 15.px,
                 ),
@@ -149,7 +150,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                     style: TextStyle(
                         color: Color(0xff3B5078),
                         fontSize: 16.px,
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.normal)),
                 SizedBox(
                   height: 15.px,
                 ),
@@ -172,35 +173,36 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 width: 375.px,
                 height: 210.px,
                 color: Colors.white,
-                child: Stack(
-                  children: [
-                    _playController.value.isInitialized && showVideo
-                        ? VideoPlayer(_playController)
-                        : Image.network(
-                            articleDetailBean.cover ??
-                                'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
-                            width: 375.px,
-                            height: 210.px,
-                            fit: BoxFit.cover,
-                          ),
-                    Center(
-                      child: _playController.value.isPlaying
-                          ? Opacity(
-                              opacity: 0,
-                              child: Image.asset(
-                                'assets/images/play.png',
-                                width: 50.px,
-                                height: 50.px,
-                              ),
-                            )
-                          : Image.asset(
-                              'assets/images/play.png',
-                              width: 50.px,
-                              height: 50.px,
-                            ),
-                    )
-                  ],
-                ),
+                child: _chewieController!=null?Chewie(controller: _chewieController):CircularProgressIndicator(),
+                // child: Stack(
+                //   children: [
+                //     _playController.value.isInitialized && showVideo
+                //         ? VideoPlayer(_playController)
+                //         : Image.network(
+                //             articleDetailBean.cover ??
+                //                 'https://pic1.zhimg.com/80/v2-6545695ef3e3925dab264c68e54c23a0_1440w.webp',
+                //             width: 375.px,
+                //             height: 210.px,
+                //             fit: BoxFit.cover,
+                //           ),
+                //     Center(
+                //       child: _playController.value.isPlaying
+                //           ? Opacity(
+                //               opacity: 0,
+                //               child: Image.asset(
+                //                 'assets/images/play.png',
+                //                 width: 50.px,
+                //                 height: 50.px,
+                //               ),
+                //             )
+                //           : Image.asset(
+                //               'assets/images/play.png',
+                //               width: 50.px,
+                //               height: 50.px,
+                //             ),
+                //     )
+                //   ],
+                // ),
               )),
           Container(
             width: 375.px,

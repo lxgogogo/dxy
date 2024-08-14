@@ -1,7 +1,8 @@
-class ArticleBean{
+class ArticleBean {
   String? author;
   int? categoryId;
   int? commentCount;
+  int? viewCount;
   String? cover;
   DateTime? createdAt;
   String? description;
@@ -13,7 +14,20 @@ class ArticleBean{
   String? type;
   DateTime? updatedAt;
 
-  ArticleBean({this.author, this.categoryId, this.commentCount, this.cover, this.createdAt, this.description, this.favoriteCount, this.id, this.likeCount, this.title, this.type, this.updatedAt});
+  ArticleBean(
+      {this.author,
+      this.categoryId,
+      this.commentCount,
+      this.viewCount,
+      this.cover,
+      this.createdAt,
+      this.description,
+      this.favoriteCount,
+      this.id,
+      this.likeCount,
+      this.title,
+      this.type,
+      this.updatedAt});
 
   ArticleBean.fromJson(Map<String, dynamic> json) {
     if (json["author"] is String) {
@@ -25,6 +39,9 @@ class ArticleBean{
     if (json["commentCount"] is num) {
       commentCount = json["commentCount"];
     }
+    if (json["viewCount"] is num) {
+      viewCount = json["viewCount"];
+    } 
     if (json['duration'] is num) {
       duration = json['duration'];
     }
@@ -55,7 +72,6 @@ class ArticleBean{
     if (json["updatedAt"] is String) {
       updatedAt = DateTime.parse(json["updatedAt"]).toLocal();
     }
-
   }
 
   Map<String, dynamic> toJson() {

@@ -1,3 +1,4 @@
+import 'package:holdem/model/article.dart';
 import 'package:holdem/model/board_info.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/model/user.dart';
@@ -19,9 +20,7 @@ class BoardList {
     if (json["list"] is List) {
       list = json["list"] == null
           ? null
-          : (json["list"] as List)
-              .map((e) => BoardBean.fromJson(e))
-              .toList();
+          : (json["list"] as List).map((e) => BoardBean.fromJson(e)).toList();
     }
   }
 
@@ -37,10 +36,12 @@ class BoardList {
 
 class BoardBean {
   int? id;
+  int? orignalId;
   UserProfile? user;
   BoardInfo? board;
   String? title;
   String? content;
+  ArticleBean? contentBean;
   DateTime? createdAt;
   int? commentCount;
   int? favoriteCount;
@@ -51,9 +52,12 @@ class BoardBean {
   List<String>? pics;
   List<UploadFile>? files;
   String? relType;
+  String? cover;
+  String? comment;
 
   BoardBean(
       {this.id,
+      this.orignalId,
       this.user,
       this.board,
       this.title,
@@ -67,8 +71,10 @@ class BoardBean {
       this.tags,
       this.pics,
       this.files,
-      this.relType
-      });
+      this.relType,
+      this.contentBean,
+      this.cover,
+      this.comment});
 
   BoardBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -77,9 +83,16 @@ class BoardBean {
     if (json["title"] is String) {
       title = json["title"];
     }
+    if (json["comment"] is String) {
+      comment = json["comment"];
+    }
     if (json["content"] is String) {
       content = json["content"];
-    }if (json["relType"] is String) {
+    }
+    if (json["content"] != null && json["content"] is! String) {
+      contentBean = ArticleBean.fromJson(json);
+    }
+    if (json["relType"] is String) {
       relType = json["relType"];
     }
     if (json["createdAt"] is String) {
@@ -110,24 +123,18 @@ class BoardBean {
     if (json["tags"] is List) {
       tags = json["tags"] == null
           ? null
-          : (json["tags"] as List)
-          .map((e) => e.toString())
-          .toList();
+          : (json["tags"] as List).map((e) => e.toString()).toList();
     }
 
     if (json["files"] is List) {
       files = json["files"] == null
           ? null
-          : (json["files"] as List)
-          .map((e) =>  UploadFile.fromJson(e))
-          .toList();
+          : (json["files"] as List).map((e) => UploadFile.fromJson(e)).toList();
     }
     if (json["pics"] is List) {
       pics = json["pics"] == null
           ? null
-          : (json["pics"] as List)
-          .map((e) => e.toString())
-          .toList();
+          : (json["pics"] as List).map((e) => e.toString()).toList();
     }
   }
 
@@ -145,9 +152,25 @@ class BoardBean {
     _data["tags"] = tags;
     _data["files"] = files;
     _data["relType"] = relType;
+    _data["comment"] = comment;
+    _data["contentBean"] = contentBean;
     return _data;
   }
 }
+
+// class BoardContentBean{
+//   String? cover;
+//   String? title;
+
+//   BoardContentBean.fromJson(Map<String, dynamic> json) {
+//     if (json["cover"] is String) {
+//       cover = json["cover"];
+//     }
+//     if (json["createdAt"] is String) {
+//       title = json["title"];
+//     }
+//   }
+// }
 
 class Paper {
   int? total;

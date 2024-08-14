@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 ///不带参数事件
 // onTap: CommonUtils.debounce(_showDevices)
@@ -23,6 +24,26 @@ class CommonUtils{
 
   static bool isAndroid(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.android;
+  }
+
+  static String timeFromNow(DateTime dt){
+    final now = DateTime.now();
+    final difference = now.difference(dt);
+
+    String timeInterval;
+    if (difference.inMinutes < 1) {
+      timeInterval = '刚刚';
+    } else if (difference.inHours < 1) {
+      timeInterval = '${difference.inMinutes} 分钟前';
+    } else if (difference.inHours < 24) {
+      timeInterval = '${difference.inHours} 小时前';
+    } else if (difference.inDays < 5) {
+      timeInterval = '${difference.inDays} 天前';
+    } else {
+      final formatter = DateFormat('M月d日');
+      timeInterval = formatter.format(dt);
+    }
+    return timeInterval;
   }
 }
 

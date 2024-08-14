@@ -66,6 +66,9 @@ class CommentBean {
       id = json["id"];
     }
 
+    if (json["comment"] is String) {
+      comment = json["comment"];
+    }
     if (json["relId"] is int) {
       relId = json["relId"];
     }

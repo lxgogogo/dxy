@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +34,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -47,15 +47,28 @@ class _SettingsPageState extends State<SettingsPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: AppTheme.color_F3F3F3,
+        backgroundColor: Colors.transparent,
         title: const Text(
           '设置',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
       ),
-      body: SafeArea(child: contentView()),
-      backgroundColor: AppTheme.color_F3F3F3,
+      body: SafeArea(
+          child: Container(
+              // color: Colors.red,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFFF4F7FC),
+                  Color(0xFFE4EEF9),
+                  Color(0xFFE4EEF9)
+                ],
+              )),
+              child: contentView())),
+      backgroundColor: const Color(0xffF4F7FC),
     ));
   }
 
@@ -72,7 +85,9 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               GestureDetector(
                   onTap: () {
-                    Get.to(RegisterAccountPage(type: RegisterAccountPage.PageType_ModifyPassword,));
+                    Get.to(RegisterAccountPage(
+                      type: RegisterAccountPage.PageType_ModifyPassword,
+                    ));
                   },
                   child: const ListTile(
                     leading: ImageIcon(
@@ -174,13 +189,13 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void  _checkAppVersion()  async {
+  void _checkAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
 
     print('currentVersion========================' + currentVersion);
 
-    NetRequest().appVersion((data){
+    NetRequest().appVersion((data) {
       AppVersion appVersion = AppVersion.fromJson(data);
       String latestVersion = appVersion.androidVersion!;
       if (latestVersion.compareTo(currentVersion) > 0) {
@@ -194,8 +209,7 @@ class _SettingsPageState extends State<SettingsPage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('发现新版本'),
-                content: Text(
-                    '发现新版本，请立即升级至最新版本 $latestVersion'),
+                content: Text('发现新版本，请立即升级至最新版本 $latestVersion'),
                 actions: <Widget>[
                   ElevatedButton(
                     child: Text('立即升级'),
@@ -252,7 +266,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (kIsWeb) {
       var link = html.document.createElement('a');
       link.setAttribute("download", 'true');
-      link.setAttribute("href",url);
+      link.setAttribute("href", url);
       link.click();
     } else {
       launchUrl(Uri.parse(url));
@@ -267,7 +281,6 @@ class _SettingsPageState extends State<SettingsPage> {
       //通知首页tab回到主页
       EventBusManager.eventBus
           .fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
-
     });
   }
 }

@@ -42,7 +42,8 @@ class CircleImageWithText extends StatelessWidget {
               child: LoginHelper()
                   .getUserAvatar(imageUrl, imageWidth, imageHeight)),
         ),
-        Container(
+        Expanded(
+            child: Container(
           height: imageHeight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +52,7 @@ class CircleImageWithText extends StatelessWidget {
               Expanded(child: _buildBottomText()),
             ],
           ),
-        )
+        ))
       ],
     ));
   }
@@ -64,6 +65,7 @@ class CircleImageWithText extends StatelessWidget {
         child: Text(
           topText,
           style: topTextStyle,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

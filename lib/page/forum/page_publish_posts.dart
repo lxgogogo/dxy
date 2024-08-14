@@ -3,20 +3,21 @@ import 'dart:io';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/app_theme.dart';
@@ -24,6 +25,7 @@ import '../../utils/common_utils.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
+import '../../widget/MyDropdownButton.dart';
 import '../../widget/label_view.dart';
 import '../../widget/page_web_fit.dart';
 
@@ -68,6 +70,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
   bool _isPlaying = false;
   String? removeAitContentInputText; // 输入框文本 去掉@用户的内容，剩余的正常输入的文本
 
+  bool isClickPublish = false;
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +81,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     boardInfoList.forEach((element) {
       print("publish post board ==${element.name}");
       items.add(element.name!);
+      selectedBoardValue = items[0];
     });
   }
 
@@ -85,8 +90,10 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     // TODO: implement dispose
     super.dispose();
     _isMounted = false;
-    if (_playController.value.isInitialized) {
-      _playController.dispose();
+    if (isShowVideoView) {
+      if (_playController.value.isInitialized) {
+        _playController.dispose();
+      }
     }
   }
 
@@ -95,8 +102,13 @@ class _PublishPostsPageState extends State<PublishPostsPage>
     SizeFit.initialize(context);
     return WebFitPage(
         child: Scaffold(
+      backgroundColor: const Color(0xffF4F7FC),
       appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0.0,
         leading: IconButton(
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           icon: Image.asset(
             'assets/images/back.png',
             width: 22.px,
@@ -106,36 +118,78 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: const Text(
           '发帖',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Divider(
-            color: AppTheme.color_F3F3F3,
-            thickness: 1,
-          ),
-        ),
+        // bottom: const PreferredSize(
+        //   preferredSize: Size.fromHeight(1.0),
+        //   child: Divider(
+        //     color: AppTheme.color_F3F3F3,
+        //     thickness: 1,
+        //   ),
+        // ),
         actions: [
-          IconButton(
-              onPressed: () {
-                var debouncer = CommonUtils.getDebouncer('publishPosts');
-                debouncer.run(() {
-                  publishPosts();
-                });
-              },
-              icon: Image.asset(
-                'assets/images/release.png',
-                width: 50.px,
-                height: 29.px,
-              ))
+          GestureDetector(
+            onTap: () {
+              if (isClickPublish) {
+                return;
+              }
+              var debouncer = CommonUtils.getDebouncer('publishPosts');
+              debouncer.run(() {
+                publishPosts();
+              });
+            },
+            child: Container(
+              width: 50.px,
+              height: 24.px,
+              margin: EdgeInsets.only(right: 10.px),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/publish2.png'),
+                      fit: BoxFit.cover)),
+              child: Text(
+                '发布',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+          // IconButton(
+          //     hoverColor: Colors.transparent,
+          //     highlightColor: Colors.transparent,
+          //     onPressed: () {
+          //       if (isClickPublish) {
+          //         return;
+          //       }
+          //       var debouncer = CommonUtils.getDebouncer('publishPosts');
+          //       debouncer.run(() {
+          //         publishPosts();
+          //       });
+          //     },
+          //     icon: Image.asset(
+          //       'assets/images/release.png',
+          //       width: 50.px,
+          //       height: 29.px,
+          //     ))
         ],
       ),
-      body: SafeArea(child: contentView()),
-      backgroundColor: Colors.white,
+      body: SafeArea(
+          child: Container(
+              // color: Colors.red,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFFF4F7FC),
+                  Color(0xFFE4EEF9),
+                  Color(0xFFE4EEF9)
+                ],
+              )),
+              child: contentView())),
       bottomSheet: bottomView(),
     ));
   }
@@ -159,7 +213,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 0, horizontal: 3),
                     // 调整文本位置
-                    hintText: '起个标题吧',
+                    hintText: '请输入完整帖子标题（5-31个字）',
                     counterText: '',
                     hintStyle: AppTheme.text999999Size16W500,
                     border: InputBorder.none,
@@ -170,47 +224,17 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                       borderSide: BorderSide(color: AppTheme.color_F3F3F3),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: Colors.transparent,
                   )),
             )),
             Container(
-              width: 130.px,
-              alignment: Alignment.center,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2<String>(
-                  isExpanded: true,
-                  hint: Text(
-                    '选择板块',
-                    style: AppTheme.text666666Size15,
-                  ),
-                  items: items
-                      .map((String item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: AppTheme.text333333Size15,
-                            ),
-                          ))
-                      .toList(),
-                  value: selectedBoardValue,
-                  onChanged: (String? value) {
-                    if (_isMounted) {
-                      setState(() {
-                        selectedBoardValue = value;
-                      });
-                    }
-                  },
-                  buttonStyleData: const ButtonStyleData(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    height: 40,
-                    width: 120,
-                  ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    height: 40,
-                  ),
-                ),
-              ),
-            )
+                width: 110.px,
+                alignment: Alignment.center,
+                child: MyDropdownButton(
+                    items: items,
+                    onChanged: (value) {
+                      selectedBoardValue = value; //选择板块
+                    }))
           ],
         ),
         Container(
@@ -224,7 +248,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                 _handleTextChange();
               },
               decoration: const InputDecoration(
-                hintText: '请输入正文',
+                hintText: '请输入正文（建议200-2000字）',
                 hintStyle: AppTheme.text999999Size16,
                 border: InputBorder.none,
                 focusedBorder: UnderlineInputBorder(
@@ -234,7 +258,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: Colors.transparent,
               )),
         ),
         Container(
@@ -308,6 +332,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   onPressed: () {
                     openFilePicker();
                   },
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   icon: Image.asset(
                     'assets/images/image_add.png',
                     width: 111,
@@ -348,8 +374,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
-                    width: 25.px,
-                    height: 25.px,
+                    width: 12.px,
+                    height: 12.px,
                   )),
             )
           ],
@@ -383,8 +409,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
-                    width: 25.px,
-                    height: 25.px,
+                    width: 12.px,
+                    height: 12.px,
                   )),
             )
           ],
@@ -471,8 +497,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
-                    width: 25.px,
-                    height: 25.px,
+                    width: 12.px,
+                    height: 12.px,
                   )),
             )
           ]));
@@ -530,8 +556,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   Widget bottomView() {
     return Container(
-        height: 70,
-        color: Colors.white,
+        height: 46.px,
+        color: const Color(0xffE4EEF9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -540,8 +566,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
               color: AppTheme.color_F3F3F3,
             ),
             Container(
-              height: 69,
-              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+              height: 45.px,
               child: Row(
                 children: <Widget>[
                   SizedBox(
@@ -550,6 +575,25 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                   Expanded(
                       child: Row(
                     children: [
+                      SizedBox(
+                        width: 5.px,
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            if (!isCanOpenPicker()) {
+                              ToastUtils.showToast('单个视频或者最多9张图片');
+                              return;
+                            }
+                            openFilePicker();
+                          },
+                          icon: Image.asset(
+                            'assets/images/photo_album.png',
+                            width: 22.px,
+                            height: 22.px,
+                          )),
+                      SizedBox(
+                        width: 5.px,
+                      ),
                       IconButton(
                           onPressed: () async {
                             final result = await Navigator.push(
@@ -574,9 +618,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                           },
                           icon: Image.asset(
                             'assets/images/ait.png',
-                            width: 25.px,
-                            height: 25.px,
+                            width: 22.px,
+                            height: 22.px,
                           )),
+                      SizedBox(
+                        width: 5.px,
+                      ),
                       IconButton(
                           onPressed: () async {
                             if (customLabelList != null &&
@@ -605,25 +652,12 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                           },
                           icon: Image.asset(
                             'assets/images/label.png',
-                            width: 25.px,
-                            height: 25.px,
+                            width: 22.px,
+                            height: 22.px,
                           )),
                     ],
                   )),
                   SizedBox(width: 10),
-                  IconButton(
-                      onPressed: () async {
-                        if (!isCanOpenPicker()) {
-                          ToastUtils.showToast('单个视频或者最多9张图片');
-                          return;
-                        }
-                        openFilePicker();
-                      },
-                      icon: Image.asset(
-                        'assets/images/photo_album.png',
-                        width: 25.px,
-                        height: 25.px,
-                      ))
                 ],
               ),
             )
@@ -694,6 +728,7 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             },
             (errMsg) {
               EasyLoading.dismiss();
+              ToastUtils.showToast('上传文件失败，请重新上传');
             },
             (int sent, int total) {
               // setState(() {
@@ -816,6 +851,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
           },
           (errMsg) {
             EasyLoading.dismiss();
+            ToastUtils.showToast('上传文件失败，请重新上传');
+            _uploadMediaFail();
           },
           (int sent, int total) {
             // setState(() {
@@ -920,6 +957,8 @@ class _PublishPostsPageState extends State<PublishPostsPage>
       ToastUtils.showToast('帖子内容长度不能小于10个字符');
       return;
     }
+    isClickPublish = true; //发布按钮触发
+    EasyLoading.show(status: 'loading...');
 
     //视频类型：不需要上传文件，直接取视频的path数据上传
     if (isShowVideoView) {
@@ -928,53 +967,133 @@ class _PublishPostsPageState extends State<PublishPostsPage>
         //通知刷新论坛列表
         EventBusManager.eventBus
             .fire(EventBusAction.refreshForumList.eventBusTypeName);
+        EasyLoading.dismiss();
         Navigator.pop(context);
-      });
-      return;
-    }
-
-    //图片类型：
-    if (imageData.isNotEmpty) {
-      imageData.forEach((element) async {
-        if (kIsWeb) {
-          NetRequest().uploadBytesFile(element, (data) {
-            UploadFile uploadFile = UploadFile.fromJson(data);
-            imageUrlList.add(uploadFile);
-
-            if (imageUrlList.isNotEmpty &&
-                imageUrlList.length == imageData.length) {
-              NetRequest().threadCreate(title, content, _getBoardIdByName(),
-                  customLabelList, imageUrlList, aitList, (data) {
-                Navigator.pop(context);
-              });
-            }
-          }, (errMsg) {}, (int sent, int total) {});
-        } else {
-          NetRequest().uploadFile(element, (data) {
-            UploadFile uploadFile = UploadFile.fromJson(data);
-            imageUrlList.add(uploadFile);
-
-            if (imageUrlList.isNotEmpty &&
-                imageUrlList.length == imageData.length) {
-              NetRequest().threadCreate(title, content, _getBoardIdByName(),
-                  customLabelList, imageUrlList, aitList, (data) {
-                //通知刷新论坛列表
-                EventBusManager.eventBus
-                    .fire(EventBusAction.refreshForumList.eventBusTypeName);
-                Navigator.pop(context);
-              });
-            }
-          }, (errMsg) {}, (int sent, int total) {});
-        }
+      }, (errMsg) {
+        isClickPublish = false;
       });
     } else {
-      //没有图片视频直接上传
-      NetRequest().threadCreate(title, content, _getBoardIdByName(),
-          customLabelList, imageUrlList, aitList, (data) {
-        //通知刷新论坛列表
-        EventBusManager.eventBus
-            .fire(EventBusAction.refreshForumList.eventBusTypeName);
-        Navigator.pop(context);
+      //图片类型：
+      if (imageData.isNotEmpty) {
+        //有图
+        imageData.forEach((element) async {
+          if (kIsWeb) {
+            var fileData = element;
+            print(
+                '=======kIsWeb=======${element.size} // isDebugMode==${kDebugMode}');
+
+            try {
+              //对图片进行压缩处理
+              var result = await FlutterImageCompress.compressWithList(
+                Uint8List.fromList(element.bytes),
+                minHeight: 1920,
+                minWidth: 1080,
+                quality: 50,
+              );
+              print('=======kIsWeb=22222222222======${result.lengthInBytes}');
+              var pFile = PlatformFile(
+                  name: element.name, bytes: result, size: result.length);
+              fileData = pFile;
+            } catch (e) {
+              print('发布模式压缩图片发生错误：$e');
+              fileData = element;
+            }
+
+            //正式上传 web这里是个 PlatformFile
+            NetRequest().uploadBytesFile(fileData, (data) {
+              UploadFile uploadFile = UploadFile.fromJson(data);
+              imageUrlList.add(uploadFile);
+
+              if (imageUrlList.isNotEmpty &&
+                  imageUrlList.length == imageData.length) {
+                NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                    customLabelList, imageUrlList, aitList, (data) {
+                  //通知刷新论坛列表
+                  EventBusManager.eventBus
+                      .fire(EventBusAction.refreshForumList.eventBusTypeName);
+                  EasyLoading.dismiss();
+                  Navigator.pop(context);
+                }, (errMsg) {
+                  isClickPublish = false;
+                });
+              }
+            }, (errMsg) {
+              //上传文件失败
+              EasyLoading.dismiss();
+              ToastUtils.showToast('上传文件失败，请重新上传');
+              _uploadMediaFail();
+            }, (int sent, int total) {});
+          } else {
+            //手机端
+            // 获取应用的临时目录作为输出路径
+            final Directory tempDir = await getTemporaryDirectory();
+            String tempPath = '${tempDir.path}/image.jpg';
+            print('ios or android image tempPath=====>${tempPath}');
+            //对图片进行压缩处理
+            var result = await FlutterImageCompress.compressAndGetFile(
+              element, tempPath,
+              // format: _getCompressFormat(element),
+              quality: 50,
+            );
+            //正式上传 app这里是个 filePath
+            NetRequest().uploadFile(result!.path, (data) {
+              UploadFile uploadFile = UploadFile.fromJson(data);
+              imageUrlList.add(uploadFile);
+              if (imageUrlList.isNotEmpty &&
+                  imageUrlList.length == imageData.length) {
+                NetRequest().threadCreate(title, content, _getBoardIdByName(),
+                    customLabelList, imageUrlList, aitList, (data) {
+                  //通知刷新论坛列表
+                  EventBusManager.eventBus
+                      .fire(EventBusAction.refreshForumList.eventBusTypeName);
+                  EasyLoading.dismiss();
+                  Navigator.pop(context);
+                }, (errMsg) {
+                  isClickPublish = false;
+                });
+              }
+            }, (errMsg) {
+              //上传文件失败
+              EasyLoading.dismiss();
+              ToastUtils.showToast('上传文件失败，请重新上传');
+              _uploadMediaFail();
+            }, (int sent, int total) {});
+          }
+        });
+      } else {
+        //无图
+        //没有图片视频直接上传
+        NetRequest().threadCreate(title, content, _getBoardIdByName(),
+            customLabelList, imageUrlList, aitList, (data) {
+          //通知刷新论坛列表
+          EventBusManager.eventBus
+              .fire(EventBusAction.refreshForumList.eventBusTypeName);
+          EasyLoading.dismiss();
+          Navigator.pop(context);
+        }, (errMsg) {
+          isClickPublish = false;
+        });
+      }
+    }
+  }
+
+  _getCompressFormat(var path) {
+    if (path.endsWith('.jpg') || path.endsWith('.jpeg')) {
+      return CompressFormat.jpeg;
+    } else if (path.endsWith('.png')) {
+      return CompressFormat.png;
+    } else if (path.endsWith('.webp')) {
+      return CompressFormat.webp;
+    }
+  }
+
+  ///上传文件失败
+  _uploadMediaFail() {
+    if (_isMounted) {
+      setState(() {
+        imageUrlList.clear();
+        uploadProgress = 0;
+        isClickPublish = false;
       });
     }
   }

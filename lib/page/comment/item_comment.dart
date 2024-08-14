@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/page_replies.dart';
@@ -28,16 +29,19 @@ class _CommentItemState extends State<CommentItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 40.px,
-          height: 40.px,
+        Container(
+          width: 34.px,
+          height: 34.px,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(17.px)),
           child: ClipOval(
             child: LoginHelper().getUserAvatar(
                 widget.commentBean.user != null
                     ? widget.commentBean.user!.avatar!
                     : '',
-                40.px,
-                40.px),
+                32.px,
+                32.px),
             // Image.network(
             //   widget.commentBean.user != null ? widget.commentBean.user!.avatar! :'',
             //   width: 40.px,
@@ -58,13 +62,16 @@ class _CommentItemState extends State<CommentItem> {
               widget.commentBean.user != null
                   ? widget.commentBean.user!.nickname!
                   : '',
-              style: TextStyle(color: Color(0xff3B5078), fontSize: 13.px),
+              style: TextStyle(
+                  color: Color(0xff2a2a2a),
+                  fontSize: 12.px,
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 3.px),
             Text(
               widget.commentBean.contentStr ?? '',
               style: TextStyle(
-                  color: const Color(0xff333333), fontSize: 14.px, height: 1.5),
+                  color: const Color(0xff2a2a2a), fontSize: 12.px, height: 1.5),
             ),
             if (widget.commentBean.replies != null &&
                 widget.commentBean.replies!.length > 0)
@@ -74,52 +81,44 @@ class _CommentItemState extends State<CommentItem> {
             if (widget.commentBean.replies != null &&
                 widget.commentBean.replies!.length > 0)
               Container(
-                  padding: EdgeInsets.only(left: 9.px),
-                  decoration: BoxDecoration(
-                      border: Border(
-                          left: BorderSide(
-                              width: 3.px,
-                              color: Colors.black.withOpacity(0.05)))),
-                  child: Container(
-                    padding: EdgeInsets.all(10.px),
-                    decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.05),
-                        borderRadius: BorderRadius.all(Radius.circular(10.px))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ...List.generate(widget.commentBean.replies!.length,
-                            (index) {
-                          Reply reply = widget.commentBean.replies![index];
-                          return Text(
-                              '${reply.user!.nickname}：${reply.content}',
+                padding: EdgeInsets.all(10.px),
+                decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.05),
+                    borderRadius: BorderRadius.all(Radius.circular(10.px))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ...List.generate(widget.commentBean.replies!.length,
+                        (index) {
+                      Reply reply = widget.commentBean.replies![index];
+                      return Text('${reply.user!.nickname}：${reply.content}',
+                          style: TextStyle(
+                              color: Color(0xff666666),
+                              fontSize: 14.px,
+                              height: 2.0));
+                    }),
+                    widget.commentBean.replyCount! > 2
+                        ? GestureDetector(
+                            onTap: () {
+                              Get.to(RepliesPage(
+                                  id: widget.commentBean.id!,
+                                  commentBean: widget.commentBean));
+                              // Get.to(CommentInputPage(
+                              //     relType: 'comment',
+                              //     relId: widget.commentBean.id!));
+                            },
+                            child: Text(
+                              '查看全部${widget.commentBean.replyCount}条回复',
                               style: TextStyle(
-                                  color: Color(0xff666666),
-                                  fontSize: 14.px,
-                                  height: 2.0));
-                        }),
-                        widget.commentBean.replyCount! > 2
-                            ? GestureDetector(
-                                onTap: () {
-                                  Get.to(RepliesPage(
-                                      id: widget.commentBean.id!,
-                                      commentBean: widget.commentBean));
-                                  // Get.to(CommentInputPage(
-                                  //     relType: 'comment',
-                                  //     relId: widget.commentBean.id!));
-                                },
-                                child: Text(
-                                  '查看全部${widget.commentBean.replyCount}条回复',
-                                  style: TextStyle(
-                                      color: const Color(0xff3B5078),
-                                      fontSize: 14.px),
-                                ),
-                              )
-                            : Container()
-                      ],
-                    ),
-                  )),
+                                  color: const Color(0xff3B5078),
+                                  fontSize: 14.px),
+                            ),
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
             // Row(children: [
             //   Container(
             //     width: 3.px,
@@ -143,45 +142,11 @@ class _CommentItemState extends State<CommentItem> {
                       ? DateFormat('MM-dd HH:mm')
                           .format(widget.commentBean.createdAt!)
                       : '',
-                  style: TextStyle(color: Color(0xff999999), fontSize: 14.px),
+                  style: TextStyle(color: Color(0xff9CACC9), fontSize: 10.px),
                 ),
                 const Spacer(),
                 if (!widget.isReply)
-                  GestureDetector(
-                    onTap: () {
-                      if (!Global().hasLogin) {
-                        Get.to(LoginPage());
-                        return;
-                      }
-                      //跳转评论输入页面
-                      Get.to(CommentInputPage(
-                          relType: 'comment', relId: widget.commentBean.id!));
-                    },
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/reply.png',
-                          width: 20.px,
-                          height: 20.px,
-                        ),
-                        SizedBox(
-                          width: 5.px,
-                        ),
-                        Text(
-                          widget.commentBean.replyCount!.toString(),
-                          style: TextStyle(
-                            color: const Color(0xff999999),
-                            fontSize: 14.px,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                SizedBox(
-                  width: 15.px,
-                ),
-                if (!widget.isReply)
-                  GestureDetector(
+                GestureDetector(
                     onTap: () {
                       NetRequest().contentLike({
                         'relType': 'comment',
@@ -200,10 +165,10 @@ class _CommentItemState extends State<CommentItem> {
                       children: [
                         Image.asset(
                           widget.commentBean.liked ?? false
-                              ? 'assets/images/praised.png'
-                              : 'assets/images/praise.png',
-                          width: 18.px,
-                          height: 18.px,
+                              ? 'assets/images/hearted.png'
+                              : 'assets/images/heart.png',
+                          width: 14.px,
+                          height: 14.px,
                         ),
                         SizedBox(
                           width: 5.px,
@@ -211,19 +176,54 @@ class _CommentItemState extends State<CommentItem> {
                         Text(
                           widget.commentBean.likeCount!.toString(),
                           style: TextStyle(
-                            color: const Color(0xff999999),
-                            fontSize: 14.px,
+                            color: const Color(0xff9CACC9),
+                            fontSize: 10.px,
                           ),
                         )
                       ],
                     ),
-                  )
+                  ),
+                  
+                SizedBox(
+                  width: 15.px,
+                ),
+                if (!widget.isReply)
+                  GestureDetector(
+                    onTap: () {
+                      if (!Global().hasLogin) {
+                        Get.to(LoginPage());
+                        return;
+                      }
+                      //跳转评论输入页面
+                      Get.to(CommentInputPage(
+                          relType: 'comment', relId: widget.commentBean.id!));
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/comment.png',
+                          width: 14.px,
+                          height: 14.px,
+                        ),
+                        SizedBox(
+                          width: 5.px,
+                        ),
+                        Text(
+                          widget.commentBean.replyCount!.toString(),
+                          style: TextStyle(
+                            color: const Color(0xff9CACC9),
+                            fontSize: 10.px,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
               ],
             ),
             Container(
-              height: 1,
+              height: 1.px,
               margin: EdgeInsets.symmetric(vertical: 20.px),
-              color: Colors.black.withOpacity(0.1),
+              color: const Color(0xffe6e6e6),
             )
           ],
         ))

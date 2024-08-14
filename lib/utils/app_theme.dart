@@ -23,6 +23,7 @@ class AppTheme {
   static const color_80FFFFFF = Color(0x80FFFFFF); //50%透明
   static const color_333333 = Color(0xFF333333);
   static const color_476DB7 = Color(0xFF476DB7);
+  static const color_6A7790 = Color(0xFF6A7790);
 
   static const TextStyle text3B5078Size23 = TextStyle(
     fontWeight: FontWeight.w500,
@@ -41,6 +42,16 @@ class AppTheme {
     fontSize: 17,
     color: color_3B5078,
   );
+  static const TextStyle text3B5078Size20W700 = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 20,
+    color: color_3B5078,
+  );
+  static const TextStyle text3B5078Size17W700 = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 17,
+    color: color_3B5078,
+  );
   static const TextStyle text3B5078Size16 = TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 16,
@@ -49,7 +60,8 @@ class AppTheme {
   static const TextStyle text3B5078Size14 = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
-    color: color_3B5078,
+    color: Color(0xff249CFC)
+    // color: color_3B5078,
   );
   static const TextStyle text3B5078Size12 = TextStyle(
     fontWeight: FontWeight.w400,
@@ -174,6 +186,12 @@ class AppTheme {
     fontWeight: FontWeight.w400,
     fontSize: 16,
     color: color_008EFF,
+  );
+
+  static const TextStyle text6A7790Size12 = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: Color(0xff2c2c2c),
   );
 
 }

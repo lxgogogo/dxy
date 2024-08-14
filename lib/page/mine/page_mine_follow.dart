@@ -120,22 +120,35 @@ class _MineFollowPageState extends State<MineFollowPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: Text(
           isFollowPage ? '我的关注' : '我的粉丝',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Divider(
-            color: AppTheme.color_F3F3F3,
-            thickness: 1,
-          ),
-        ),
+        // bottom: const PreferredSize(
+        //   preferredSize: Size.fromHeight(1.0),
+        //   child: Divider(
+        //     color: AppTheme.color_F3F3F3,
+        //     thickness: 1,
+        //   ),
+        // ),
       ),
-      body: SafeArea(child: contentView()),
-      backgroundColor: Colors.white,
+      body: SafeArea(
+          child: Container(
+              // color: Colors.red,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFFF4F7FC),
+                  Color(0xFFE4EEF9),
+                  Color(0xFFE4EEF9)
+                ],
+              )),
+              child: contentView())),
+      backgroundColor: const Color(0xffF4F7FC),
     ));
   }
 
@@ -170,31 +183,35 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   Widget listDataItem(int index) {
     return Container(
-      height: 45,
-      margin: EdgeInsets.only(top: 10, bottom: 10),
-      padding: EdgeInsets.fromLTRB(16, 0, 6, 0),
+      margin: EdgeInsets.only(left: 18.px,right:18.px),
+      padding: EdgeInsets.only(top: 12.px,bottom: 12.px),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.px,color: const Color(0xffE6E6E6)))),
       child: Row(children: [
         Container(
-            height: 45,
+            height: 34.px,
+            width: 34.px,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22.px),
+                border: Border.all(color: Colors.white, width: 1)),
             child: Center(
                 child: ClipOval(
               child: LoginHelper().getUserAvatar(
                   followOrFanUserList[index].avatar!.isNotEmpty
                       ? followOrFanUserList[index].avatar!
                       : '',
-                  45.px,
-                  45.px),
+                  32.px,
+                  32.px),
             ))),
         SizedBox(
-          width: 10,
+          width: 7.px,
         ),
         Text(
           followOrFanUserList[index].nickname!.isNotEmpty
               ? followOrFanUserList[index].nickname!
               : '',
-          style: AppTheme.text3B5078Size15,
+          style: TextStyle(color: const Color(0xff2a2a2a),fontSize: 12.px),
         ),
-        Expanded(child: Text('')),
+        const Spacer(),
         FollowBtn(
             isFollowed: followOrFanUserList[index].followed!,
             onTap: () {

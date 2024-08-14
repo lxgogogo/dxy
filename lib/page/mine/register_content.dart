@@ -186,10 +186,10 @@ class _RegisterContentState extends State<RegisterContent> {
               IconButton(
                 icon: Image.asset(
                   _isVisible
-                      ? 'assets/images/eye_visible.png'
-                      : 'assets/images/eye_invisible.png',
-                  width: 22.px,
-                  height: 22.px,
+                      ? 'assets/images/eye_close.png'
+                      : 'assets/images/eye_open.png',
+                  width: 18.px,
+                  height: 18.px,
                 ),
                 onPressed: () {
                   setState(() {
@@ -229,10 +229,10 @@ class _RegisterContentState extends State<RegisterContent> {
               IconButton(
                 icon: Image.asset(
                   _isVisibleAgain
-                      ? 'assets/images/eye_visible.png'
-                      : 'assets/images/eye_invisible.png',
-                  width: 22.px,
-                  height: 22.px,
+                      ? 'assets/images/eye_close.png'
+                      : 'assets/images/eye_open.png',
+                  width: 18.px,
+                  height: 18.px,
                 ),
                 onPressed: () {
                   if (mounted) {

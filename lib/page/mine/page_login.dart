@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerAccount = TextEditingController();
   final TextEditingController _controllerPw = TextEditingController();
   bool isLogin = true;
+  bool isOpen = false;
   var actionEventBus;
 
   final FocusNode _focusNodeAccount = FocusNode();
@@ -150,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: _controllerPw,
                       focusNode: _focusPwd,
-                      obscureText: true, // 输入内容显示为密文
+                      obscureText: !isOpen, // 输入内容显示为密文
                       decoration: InputDecoration(
                         border: InputBorder.none, // 没有边框
                         hintText: '请输入密码',
@@ -159,6 +160,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     )),
               ),
+              GestureDetector(
+                onTap: (){
+                  setState(() {
+                    isOpen = !isOpen;
+                  });
+                },
+                child: Image.asset(
+                  isOpen?'assets/images/eye_open.png':'assets/images/eye_close.png',
+                  width: 18.px,
+                  height: 18.px,
+                ),
+              )
             ],
           ),
         ),

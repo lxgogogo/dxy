@@ -89,6 +89,29 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               child: Row(
                 children: [
                   Expanded(
+                    child: Container(
+                      height: 50.px,
+                      padding: EdgeInsets.only(left: 15.px,right:15.px,top:5.px,bottom: 5.px),
+                      decoration: BoxDecoration(color: Color(0xff95A3C4).withOpacity(0.1),borderRadius: BorderRadius.circular(4.px)),
+                      child: TextField(
+                        // maxLength: 100,
+                        maxLines: 100,
+                      controller: _textEditingController,
+                      autofocus: true, // 自动获取焦点
+                      decoration: InputDecoration(
+                        hintText: '说点什么...',
+                        hintStyle: AppTheme.text999999Size16,
+                        border: InputBorder.none,
+                        // border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        // 监听输入框内容变化,更新按钮状态
+                        setState(() {
+                          _canSend = value.isNotEmpty;
+                        });
+                      },
+                    ),),
+                    /*
                     child: TextField(
                       controller: _textEditingController,
                       autofocus: true, // 自动获取焦点
@@ -102,7 +125,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                           _canSend = value.isNotEmpty;
                         });
                       },
-                    ),
+                    ),*/
                   ),
                   SizedBox(width: 16.0),
                   GestureDetector(

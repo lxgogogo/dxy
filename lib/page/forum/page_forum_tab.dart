@@ -107,7 +107,8 @@ class _ForumTabPageState extends State<ForumTabPage>
               height: 20.px,
             ),
             onPressed: () {
-              _showPopupMenu(context);
+              _showMenuDialog(context);
+              // _showPopupMenu(context);
               // Get.to(SettingsPage());
             },
           ),
@@ -118,6 +119,109 @@ class _ForumTabPageState extends State<ForumTabPage>
       // body: Container(color: Colors.transparent,),
       backgroundColor: sortBtnBgtColor,
       floatingActionButton: bottomFloatingButton(),
+    );
+  }
+
+  void _showMenuDialog(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true, // 可以点击外部区域关闭弹窗
+      barrierLabel: '',
+      barrierColor: Colors.transparent, // 背景遮罩颜色
+      transitionDuration: Duration(milliseconds: 300),
+      pageBuilder: (context, anim1, anim2) {
+        return Align(
+          alignment: Alignment.topRight, // 弹窗位置
+          child: Container(
+            width: 90.px,
+            height: 133.px,
+            margin: EdgeInsets.only(top: 45.px, right: 5), // 自定义位置
+            padding: EdgeInsets.only(top:10.px,bottom: 13.px),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/pop_menu_bg.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      filterIndex = 0;
+                    });
+                    String order = 'time';
+                    _pageKey.currentState?.refreshData(0, order);
+                    Navigator.of(context).pop(); // 关闭弹窗
+                  },
+                  child: Center(
+                      child: Text(
+                    '时间最新',
+                    style: TextStyle(
+                        color: filterIndex == 0
+                            ? Color(0xff249CFC)
+                            : Color(0xff95A3C4)),
+                  )),
+                )),
+                Container(
+                  width: 90.px,
+                  height: 0.5.px,
+                  color: const Color(0xffE7F0FA),
+                ),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      filterIndex = 1;
+                    });
+                    String order = 'comment';
+                    _pageKey.currentState?.refreshData(0, order);
+                    Navigator.of(context).pop(); // 关闭弹窗
+                  },
+                  child: Center(
+                      child: Text(
+                    '回帖最多',
+                    style: TextStyle(
+                        color: filterIndex == 1
+                            ? Color(0xff249CFC)
+                            : Color(0xff95A3C4)),
+                  )),
+                )),
+                Container(
+                  width: 90.px,
+                  height: 0.5.px,
+                  color: const Color(0xffE7F0FA),
+                ),
+                Expanded(
+                    child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      filterIndex = 2;
+                    });
+                    String order = 'like';
+                    _pageKey.currentState?.refreshData(0, order);
+                    Navigator.of(context).pop(); // 关闭弹窗
+                  },
+                  child: Center(
+                      child: Text(
+                    '点赞最多',
+                    style: TextStyle(
+                        color: filterIndex == 2
+                            ? Color(0xff249CFC)
+                            : Color(0xff95A3C4)),
+                  )),
+                )),
+              ],
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return FadeTransition(
+          opacity: Tween(begin: 0.0, end: 1.0).animate(anim1),
+          child: child,
+        );
+      },
     );
   }
 
@@ -208,7 +312,6 @@ class _ForumTabPageState extends State<ForumTabPage>
       // },
     );
   }
-
 
   Widget detail() {
     int tabId = 0;

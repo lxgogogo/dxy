@@ -185,7 +185,7 @@ class _RegisterContentState extends State<RegisterContent> {
               ),
               IconButton(
                 icon: Image.asset(
-                  _isVisible
+                  !_isVisible
                       ? 'assets/images/eye_close.png'
                       : 'assets/images/eye_open.png',
                   width: 18.px,
@@ -228,7 +228,7 @@ class _RegisterContentState extends State<RegisterContent> {
               ),
               IconButton(
                 icon: Image.asset(
-                  _isVisibleAgain
+                  !_isVisibleAgain
                       ? 'assets/images/eye_close.png'
                       : 'assets/images/eye_open.png',
                   width: 18.px,

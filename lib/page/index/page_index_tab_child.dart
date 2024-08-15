@@ -255,6 +255,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
     SizeFit.initialize(context);
     if (widget.type == 'course') {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
               height: 40.px,
@@ -262,9 +263,10 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 6.px,
+                      width: 16.px,
                     ),
 
                     ...List.generate(categorys.length, (index) {
@@ -282,7 +284,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                           height: 30.px,
                           margin: EdgeInsets.only(right: 10.px),
                           padding: EdgeInsets.symmetric(horizontal: 15.px),
-                          alignment: Alignment.center,
+                          alignment: Alignment.centerLeft,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15.px),
                               boxShadow: [
@@ -597,6 +599,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                               width: 66.px,
                               margin: EdgeInsets.only(right: 13.px),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(bottom: 8.px),

@@ -87,12 +87,20 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: AppTheme.white,
+        backgroundColor: const Color(0xffF4F7FC),
         title: null,
         centerTitle: true,
       ),
-      body: SafeArea(child: contentView()),
-      backgroundColor: AppTheme.white,
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [const Color(0xffF4F7FC), const Color(0xffE4EEF9)])),
+        child: contentView(),
+      ),
+      // body: SafeArea(child: contentView()),
+      // backgroundColor: AppTheme.white,
     ));
   }
 
@@ -107,9 +115,13 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
             )),
         Visibility(
           child: Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 35.px),
-            padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+            height: 50.px,
+            margin: EdgeInsets.only(top: 35.px, left: 30.px, right: 30.px),
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(25.px),
+                border: Border.all(color: const Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -132,9 +144,13 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         ),
         Visibility(
           child: Container(
-            color: Colors.white,
-            margin: EdgeInsets.only(top: 35.px),
-            padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+            height: 50.px,
+            margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(25.px),
+                border: Border.all(color: const Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -162,9 +178,13 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         ),
         Visibility(
             child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.only(top: 3.px),
-              padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+              height: 50.px,
+              margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
+              padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+              decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(25.px),
+                  border: Border.all(color: const Color(0xffCCD7F0))),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -228,9 +248,13 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               : true,
         ),
         Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 3.px),
-          padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+          height: 50.px,
+          margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(25.px),
+              border: Border.all(color: const Color(0xffCCD7F0))),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -251,10 +275,10 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               IconButton(
                 icon: Image.asset(
                   _isVisible
-                      ? 'assets/images/eye_visible.png'
-                      : 'assets/images/eye_invisible.png',
-                  width: 22.px,
-                  height: 22.px,
+                      ? 'assets/images/eye_open.png'
+                      : 'assets/images/eye_close.png',
+                  width: 18.px,
+                  height: 18.px,
                 ),
                 onPressed: () {
                   setState(() {
@@ -266,14 +290,14 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
           ),
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
-          height: 0.5,
-          color: AppTheme.color_F3F3F3,
-        ),
-        Container(
-          color: Colors.white,
-          margin: EdgeInsets.only(top: 3.px),
-          padding: EdgeInsets.symmetric(horizontal: 40.0.px), // 水平内边距
+          height: 50.px,
+            margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(25.px),
+              border: Border.all(
+                  color: const Color(0xffCCD7F0))),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -294,10 +318,10 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               IconButton(
                 icon: Image.asset(
                   _isVisibleAgain
-                      ? 'assets/images/eye_visible.png'
-                      : 'assets/images/eye_invisible.png',
-                  width: 22.px,
-                  height: 22.px,
+                      ? 'assets/images/eye_open.png'
+                      : 'assets/images/eye_close.png',
+                  width: 18.px,
+                  height: 18.px,
                 ),
                 onPressed: () {
                   if (mounted) {

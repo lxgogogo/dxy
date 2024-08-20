@@ -81,11 +81,12 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
         actions: [
           GestureDetector(
               onTap: () {
-                if (_isMounted) {
-                  setState(() {
-                    isShowCreateInputView = true;
-                  });
-                }
+                // if (_isMounted) {
+                //   setState(() {
+                //     isShowCreateInputView = true;
+                //   });
+                // }
+                popDetail();
               },
               child: Container(
                 height: 24.px,
@@ -118,7 +119,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                   )),
               child: contentView())),
       backgroundColor: const Color(0xffE8F3FF),
-      bottomSheet: bottomView(),
+      // bottomSheet: bottomView(),
     ));
   }
 
@@ -206,6 +207,39 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
           }
           Navigator.pop(context, labelData[index]);
         },
+        onLongPress: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('确认操作'),
+                content: Text('您确定要删除此标签吗？'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 取消
+                    },
+                    child: Text('取消'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // 确认操作
+                      setState(() {
+                        labelData.removeAt(index);
+                        StorageUtil().prefs!.setStringList('userLabel', labelData);
+                      });
+                      
+                      Navigator.of(context).pop(); // 关闭对话框
+                      // 添加确认后的操作
+                      print('用户已确认操作');
+                    },
+                    child: Text('确认'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         child: Container(
             height: 37.px,
             margin: EdgeInsets.symmetric(horizontal: 18.px),
@@ -247,78 +281,95 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
     );
   }
 
-  Widget bottomView() {
-    return Visibility(
-        child: Container(
-            height: 70,
-            color: Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Divider(
-                  height: 0.5,
-                  color: AppTheme.color_F3F3F3,
+  popDetail() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true, // 允许底部弹窗超出屏幕高度
+        builder: (BuildContext context) {
+          // 定义 TextEditingController 以跟踪输入内容
+          // final _textEditingController = TextEditingController();
+          String aaa = '';
+
+          return StatefulBuilder(builder: (c, setState) {
+            return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom, // 适配软键盘高度
                 ),
-                Container(
-                  height: 69,
-                  padding: EdgeInsets.fromLTRB(16, 15, 16, 15),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.center,
-                          // 将文本垂直居中
-                          controller: controller,
-                          maxLength: 4,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.fromLTRB(10.px, 3, 10.px, 0),
-                            counterText: '',
-                            hintText: '标签内容（最多四个字）',
-                            filled: true,
-                            fillColor: AppTheme.color_EFEFEF,
-                            hintStyle: AppTheme.text999999Size14,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
+                child: bottomView());
+          });
+        });
+  }
+
+  Widget bottomView() {
+    return Container(
+        height: 70,
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Divider(
+              height: 0.5,
+              color: AppTheme.color_F3F3F3,
+            ),
+            Container(
+              height: 69,
+              padding: EdgeInsets.fromLTRB(16, 15, 16, 15),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.center,
+                      // 将文本垂直居中
+                      controller: controller,
+                      maxLength: 4,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(10.px, 3, 10.px, 0),
+                        counterText: '',
+                        hintText: '标签内容（最多四个字）',
+                        filled: true,
+                        fillColor: AppTheme.color_EFEFEF,
+                        hintStyle: AppTheme.text999999Size14,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                          onTap: () {
-                            if (controller.text.isEmpty) {
-                              ToastUtils.showToast('标签内容不能为空');
-                              return;
-                            }
-                            if (_isMounted) {
-                              setState(() {
-                                labelData.add(controller.text);
-                                StorageUtil()
-                                    .prefs!
-                                    .setStringList('userLabel', labelData);
-                                controller.text = ''; //清空输入框
-                              });
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppTheme.color_008EFF,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            padding: EdgeInsets.fromLTRB(16, 9, 16, 9),
-                            child: Text('创建', style: AppTheme.textFFFFFFSize16),
-                          ))
-                    ],
+                    ),
                   ),
-                )
-              ],
-            )),
-        visible: isShowCreateInputView ? true : false);
+                  SizedBox(width: 10),
+                  GestureDetector(
+                      onTap: () {
+                        if (controller.text.isEmpty) {
+                          ToastUtils.showToast('标签内容不能为空');
+                          return;
+                        }
+                        if (_isMounted) {
+                          setState(() {
+                            labelData.add(controller.text);
+                            StorageUtil()
+                                .prefs!
+                                .setStringList('userLabel', labelData);
+                            controller.text = ''; //清空输入框
+                          });
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppTheme.color_008EFF,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: EdgeInsets.fromLTRB(16, 9, 16, 9),
+                        child: Text('创建', style: AppTheme.textFFFFFFSize16),
+                      ))
+                ],
+              ),
+            )
+          ],
+        ));
   }
 }

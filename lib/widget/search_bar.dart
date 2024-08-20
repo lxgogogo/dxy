@@ -5,10 +5,11 @@ import 'package:holdem/utils/size_fit.dart';
 class CSearchBar extends StatefulWidget {
   ValueChanged<String>? onSubmitted;
   ValueChanged<String>? onChanged;
+  String? placeholder;
   bool hasPadding;
 
   CSearchBar(
-      {super.key, this.hasPadding = true, this.onSubmitted, this.onChanged});
+      {super.key, this.hasPadding = true,this.placeholder='', this.onSubmitted, this.onChanged});
 
   @override
   State<CSearchBar> createState() => _CSearchBarState();
@@ -37,7 +38,7 @@ class _CSearchBarState extends State<CSearchBar> {
           child: Container(
               width: 279.px,
               height: 32.px,
-              padding: EdgeInsets.only(left: 15.px),
+              padding: EdgeInsets.only(left: 15.px,right:12.px),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.px),
                 boxShadow:  const [
@@ -79,7 +80,7 @@ class _CSearchBarState extends State<CSearchBar> {
                       // isDense: true,
                       // prefixIcon: Icon(Icons.search),
                       counterText: "",
-                      hintText: '请输入搜索内容',
+                      hintText: widget.placeholder?.length==0?'请输入搜索内容':widget.placeholder,
                       border: InputBorder.none,
                       contentPadding: kIsWeb
                           ? EdgeInsets.only(bottom: 12)

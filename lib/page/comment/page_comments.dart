@@ -104,22 +104,29 @@ class _CommentListPageState extends State<CommentListPage> {
               Navigator.pop(context);
             },
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: const Color(0xffF4F7FC),
           // elevation: 0, // 去除导航条的阴影
           title: Text('评论',
             style: AppTheme.text333333Size17,
           ),
           centerTitle: true,
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(1.0),
-            child: Divider(
-              color: AppTheme.color_F3F3F3,
-              thickness: 1,
-            ),
-          ),
+          // bottom: const PreferredSize(
+          //   preferredSize: Size.fromHeight(1.0),
+          //   child: Divider(
+          //     color: AppTheme.color_F3F3F3,
+          //     thickness: 1,
+          //   ),
+          // ),
         ),
         // ignore: unnecessary_null_comparison
-        body: content());
+        body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [const Color(0xffF4F7FC), const Color(0xffE4EEF9)])),
+        child: content(),
+      ));
   }
 
   content() {

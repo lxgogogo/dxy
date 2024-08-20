@@ -63,32 +63,39 @@ class _SearchPageState extends State<SearchPage> {
         actions: [
           TextButton(
               onPressed: () {
-                if (key != null) {
-                  setState(() {
-                    if (items.contains(key)) {
-                      items.remove(key);
-                    }
-                    NetRequest().indexList({
-                      'pageNum': 1,
-                      'pageSize': 10,
-                      'filters': {
-                        'q': key,
-                      }
-                    }, (data) {
-                      if (data['list'].length == 0) {
-                        ToastUtils.showToast("暂无结果");
-                      } else {
-                        items.insert(0, key);
-                        StorageUtil().prefs!.setStringList('search', items);
-                        Get.to(SearchResultPage(
-                          keyword: key,
-                        ));
-                      }
-                    });
-                  });
-
-                  // StorageUtil().prefs!.setString('token', data['token']);
+                String keyword = key.trim();
+                if (keyword.length == 0) {
+                  ToastUtils.showToast("请输入搜索内容");
+                  return;
                 }
+
+                setState(() {
+                  if (items.contains(keyword)) {
+                    items.remove(keyword);
+                  }
+                  NetRequest().indexList({
+                    'pageNum': 1,
+                    'pageSize': 10,
+                    'filters': {
+                      'q': keyword,
+                    }
+                  }, (data) {
+                    if (data['list'].length == 0) {
+                      ToastUtils.showToast("暂无结果");
+                    } else {
+                      setState(() {
+                        items.insert(0, keyword);
+                        StorageUtil().prefs!.setStringList('search', items);
+                      });
+
+                      Get.to(SearchResultPage(
+                        keyword: keyword,
+                      ));
+                    }
+                  });
+                });
+
+                // StorageUtil().prefs!.setString('token', data['token']);
               },
               child: Text('搜索',
                   style: TextStyle(

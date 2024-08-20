@@ -77,10 +77,8 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Container(
           margin: EdgeInsets.fromLTRB(16.px, 0, 16.px, 0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
+          decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'),
+                      fit: BoxFit.fill)),
           child: Column(
             children: [
               GestureDetector(
@@ -90,10 +88,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     ));
                   },
                   child: const ListTile(
-                    leading: ImageIcon(
-                      AssetImage('assets/images/password.png'),
-                      size: 22,
-                    ),
                     title: Text(
                       '修改密码',
                       style: AppTheme.text333333Size15,
@@ -103,47 +97,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       AssetImage('assets/images/item_arrow.png'),
                       size: 22,
                     ),
-                    contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
+                    contentPadding: EdgeInsets.fromLTRB(16, 5, 10, 5),
                   )),
               Container(
                   color: AppTheme.color_1A000000,
-                  margin: EdgeInsets.only(left: 60.px),
+                  margin: EdgeInsets.only(left: 16.px,right: 4.px),
                   width: MediaQuery.of(context).size.width,
                   height: 0.5.px),
-              // GestureDetector(
-              //     onTap: () {
-              //       ToastUtils.showToast("关于我们");
-              //     },
-              //     child: const ListTile(
-              //       leading: ImageIcon(
-              //         AssetImage('assets/images/about_us.png'),
-              //         size: 22,
-              //       ),
-              //       title: Text(
-              //         '关于我们',
-              //         style: AppTheme.text333333Size15,
-              //       ),
-              //       // 中间文本
-              //       trailing: ImageIcon(
-              //         AssetImage('assets/images/item_arrow.png'),
-              //         size: 22,
-              //       ),
-              //       contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
-              //     )),
-              // Container(
-              //     color: AppTheme.color_1A000000,
-              //     margin: EdgeInsets.only(left: 60.px),
-              //     width: MediaQuery.of(context).size.width,
-              //     height: 0.5.px),
               GestureDetector(
                   onTap: () {
                     _checkAppVersion();
                   },
                   child: const ListTile(
-                    leading: ImageIcon(
-                      AssetImage('assets/images/version_update.png'),
-                      size: 22,
-                    ),
                     title: Text(
                       '检测新版本',
                       style: AppTheme.text333333Size15,
@@ -153,38 +118,51 @@ class _SettingsPageState extends State<SettingsPage> {
                       AssetImage('assets/images/item_arrow.png'),
                       size: 22,
                     ),
-                    contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
+                    contentPadding: EdgeInsets.fromLTRB(16, 5, 10, 5),
                   )),
             ],
           ),
         ),
         Container(
-            margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 0),
+            margin: EdgeInsets.fromLTRB(16.px, 20.px, 16.px, 0),
             decoration: BoxDecoration(
-              color: Colors.white, // 设置白色背景色
+              color: Colors.transparent, // 设置白色背景色
               borderRadius: BorderRadius.circular(10), // 添加圆角
             ),
             child: GestureDetector(
               onTap: () {
                 logout();
               },
-              child: const ListTile(
-                leading: ImageIcon(
-                  AssetImage('assets/images/logout.png'),
-                  size: 22,
-                ),
-                title: Text(
+              child: Container(
+                width: 350.px,
+                height: 45.px,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logout_btn.png'),
+                      fit: BoxFit.fill)),
+                child: Text(
                   '退出登录',
-                  style: AppTheme.text333333Size15,
+                  style: TextStyle(color: const Color(0xff249CFC),fontSize: 15.px),
                 ),
-                // 中间文本
-                trailing: ImageIcon(
-                  AssetImage('assets/images/item_arrow.png'),
-                  size: 22,
-                ),
-                contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
               ),
+              // child: const ListTile(
+              //   leading: ImageIcon(
+              //     AssetImage('assets/images/logout.png'),
+              //     size: 22,
+              //   ),
+              //   title: Text(
+              //     '退出登录',
+              //     style: AppTheme.text333333Size15,
+              //   ),
+              //   // 中间文本
+              //   trailing: ImageIcon(
+              //     AssetImage('assets/images/item_arrow.png'),
+              //     size: 22,
+              //   ),
+              //   contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
+              // ),
             )),
+            SizedBox(height: 30.px,),
+            Center(child: Text('版本号0820'),)
       ],
     );
   }

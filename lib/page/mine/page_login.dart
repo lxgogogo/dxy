@@ -75,7 +75,25 @@ class _LoginPageState extends State<LoginPage> {
             'assets/images/login_bg.png',
             width: 375.px,
           ),
-          contentView()
+          contentView(),
+          Positioned(
+              left: 10.px,
+              top: 50.px,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  width: 30.px,
+                  height: 30.px,
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/back_white.png',
+                    width: 10.px,
+                    height: 18.px,
+                  ),
+                ),
+              ))
         ],
       ),
       backgroundColor: Color(0xfff5f5f5),
@@ -161,13 +179,15 @@ class _LoginPageState extends State<LoginPage> {
                     )),
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     isOpen = !isOpen;
                   });
                 },
                 child: Image.asset(
-                  isOpen?'assets/images/eye_open.png':'assets/images/eye_close.png',
+                  isOpen
+                      ? 'assets/images/eye_open.png'
+                      : 'assets/images/eye_close.png',
                   width: 18.px,
                   height: 18.px,
                 ),

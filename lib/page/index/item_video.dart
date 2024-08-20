@@ -189,7 +189,7 @@ class _VideoItemState extends State<VideoItem> {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 12.px, right: 12.px, top: widget.isBanner ? 10.px:5.px,bottom: widget.isBanner ? 10.px : 0),
+          margin: EdgeInsets.only(left: 12.px, right: 12.px, top: widget.isBanner ? 10.px:7.px,bottom: widget.isBanner ? 10.px : 0),
           child: Text(
             widget.article.title ?? '',
             overflow: TextOverflow.ellipsis,

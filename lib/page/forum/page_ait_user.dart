@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -83,6 +84,7 @@ class _AitUserPageState extends State<AitUserPage> {
     return WebFitPage(
         child: Scaffold(
       appBar: AppBar(
+          titleSpacing: 0.0,
           leading: IconButton(
             icon: Image.asset(
               'assets/images/back.png',
@@ -95,6 +97,7 @@ class _AitUserPageState extends State<AitUserPage> {
           ),
           backgroundColor: Colors.transparent,
           title: CSearchBar(
+            placeholder: "搜索用户",
             onChanged: (value) {
               setState(() {
                 key = value;
@@ -165,6 +168,11 @@ class _AitUserPageState extends State<AitUserPage> {
               followOrFanUserList = userDataList.list!;
             } else {
               followOrFanUserList.addAll(userDataList.list!);
+            }
+          }
+          else {
+            if (userDataList.list!.length==0){
+              ToastUtils.showToast("未搜到相关用户，请重新输入");
             }
           }
         });

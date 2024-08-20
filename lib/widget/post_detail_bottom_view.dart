@@ -33,6 +33,7 @@ class PostDetailBottomView extends StatefulWidget {
 }
 
 class _PostDetailBottomViewState extends State<PostDetailBottomView> {
+  final _textEditingController = TextEditingController();
   bool _isFavorite = false;
   late PostBottomViewParams viewParams;
   bool _isMounted = false;
@@ -67,6 +68,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
       EventBusManager.eventBus
           .fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
       ToastUtils.showToast('发布成功');
+      _textEditingController.clear();
       Navigator.pop(context);
     });
   }
@@ -77,7 +79,8 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
       isScrollControlled: true, // 允许底部弹窗超出屏幕高度
       builder: (BuildContext context) {
         // 定义 TextEditingController 以跟踪输入内容
-        final _textEditingController = TextEditingController();
+        // final _textEditingController = TextEditingController();
+        String aaa = '';
 
         return StatefulBuilder(builder: (c, setState) {
           return Padding(
@@ -106,7 +109,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       ),
                       onChanged: (value) {
                         // 监听输入框内容变化,更新按钮状态
+                        
                         setState(() {
+                          aaa = value;
                           _canSend = value.isNotEmpty;
                         });
                       },
@@ -174,7 +179,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
         // bool _canSend = false;
       },
     );
-  }
+  } 
 
   Widget bottomInputView() {
     return Container(

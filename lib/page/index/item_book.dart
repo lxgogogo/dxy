@@ -57,7 +57,7 @@ class _BookItemState extends State<BookItem> {
                 SizedBox(
                   width: 115.px,
                   child: Text(
-                    '阅读 '+widget.article.viewCount.toString(),
+                    '下载 ' + widget.article.viewCount.toString(),
                     style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
                   ),
                 ),
@@ -65,10 +65,16 @@ class _BookItemState extends State<BookItem> {
                   width: 70.px,
                   child: Row(
                     children: [
-                      Image.asset('assets/images/comment.png',width: 11.px,height: 12.px,),
-                      SizedBox(width: 4.px,),
+                      Image.asset(
+                        'assets/images/praise.png',
+                        width: 13.px,
+                        height: 12.px,
+                      ),
+                      SizedBox(
+                        width: 4.px,
+                      ),
                       Text(
-                        widget.article.commentCount.toString(),
+                        widget.article.likeCount.toString(),
                         style: TextStyle(
                             color: Color(0xff9CACC9), fontSize: 12.px),
                       )
@@ -76,16 +82,22 @@ class _BookItemState extends State<BookItem> {
                   ),
                 ),
                 Row(
-                    children: [
-                      Image.asset('assets/images/praise.png',width: 13.px,height: 12.px,),
-                      SizedBox(width: 4.px,),
-                      Text(
-                        widget.article.likeCount.toString(),
-                        style: TextStyle(
-                            color: Color(0xff9CACC9), fontSize: 12.px),
-                      )
-                    ],
-                  )
+                  children: [
+                    Image.asset(
+                      'assets/images/comment.png',
+                      width: 11.px,
+                      height: 12.px,
+                    ),
+                    SizedBox(
+                      width: 4.px,
+                    ),
+                    Text(
+                      widget.article.commentCount.toString(),
+                      style:
+                          TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
+                    )
+                  ],
+                )
               ],
             )
           ],

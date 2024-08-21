@@ -278,8 +278,8 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       },
                       icon: Image.asset(
                         _isFavorite
-                            ? 'assets/images/hearted.png'
-                            : 'assets/images/heart.png',
+                            ? 'assets/images/stared.png'
+                            : 'assets/images/star.png',
                         width: 13.px,
                         height: 13.px,
                       )),

@@ -97,7 +97,7 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
           child: Container(
             width: 90.px,
             height: 133.px,
-            margin: EdgeInsets.only(top: 45.px, right: 5), // 自定义位置
+            margin: EdgeInsets.only(top: 75.px, right: 5), // 自定义位置
             padding: EdgeInsets.only(top: 10.px, bottom: 13.px),
             decoration: const BoxDecoration(
               image: DecorationImage(

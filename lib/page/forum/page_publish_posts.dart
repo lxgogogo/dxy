@@ -229,7 +229,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
             )),
             Container(
                 width: 110.px,
-                alignment: Alignment.center,
+                margin: EdgeInsets.only(right: 10.px, top: 5.px),
+                color: Colors.transparent,
+                alignment: Alignment.centerRight,
                 child: MyDropdownButton(
                     items: items,
                     onChanged: (value) {

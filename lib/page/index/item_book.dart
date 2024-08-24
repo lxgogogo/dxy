@@ -66,7 +66,7 @@ class _BookItemState extends State<BookItem> {
                   child: Row(
                     children: [
                       Image.asset(
-                        'assets/images/praise.png',
+                        'assets/images/star.png',
                         width: 13.px,
                         height: 12.px,
                       ),

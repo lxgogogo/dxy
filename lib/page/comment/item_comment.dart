@@ -165,8 +165,8 @@ class _CommentItemState extends State<CommentItem> {
                       children: [
                         Image.asset(
                           widget.commentBean.liked ?? false
-                              ? 'assets/images/hearted.png'
-                              : 'assets/images/heart.png',
+                              ? 'assets/images/praised.png'
+                              : 'assets/images/praise.png',
                           width: 14.px,
                           height: 14.px,
                         ),

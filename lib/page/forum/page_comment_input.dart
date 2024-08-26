@@ -26,7 +26,7 @@ class CommentInputPage extends StatefulWidget {
 
 class _CommentInputPageState extends State<CommentInputPage>
     with SingleTickerProviderStateMixin {
-  late  String relType;
+  late String relType;
   late int relId;
   final TextEditingController controller = TextEditingController();
 
@@ -40,7 +40,8 @@ class _CommentInputPageState extends State<CommentInputPage>
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return  WebFitPage(child: Scaffold(
+    return WebFitPage(
+        child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -71,21 +72,46 @@ class _CommentInputPageState extends State<CommentInputPage>
           //   height: 24.px,
           //   color: Colors.red,
           //   child: Text('发布'),),),
-          IconButton(
-              onPressed: () {
-                //提交评论
-                String commentContent = controller.text;
-                if (commentContent.isNotEmpty &&  commentContent.length >= 5) {
-                  _submitComment(commentContent);
-                } else {
-                  ToastUtils.showToast('评论内容不能低于5个字符');
-                }
-              },
-              icon: Image.asset(
-                'assets/images/publish.png',
-                width: 50.px,
-                height: 29.px,
-              ))
+          GestureDetector(
+            onTap: () {
+              String commentContent = controller.text;
+              if (commentContent.isNotEmpty && commentContent.length >= 5) {
+                _submitComment(commentContent);
+              } else {
+                ToastUtils.showToast('评论内容不能低于5个字符');
+              }
+            },
+            child: Container(
+              width: 50.px,
+              height: 24.px,
+              margin: EdgeInsets.only(right: 20.px),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.px),
+                  color: Color(0xFF249CFC)),
+                  // color: controller.text.length>0 ? Color(0xFF249CFC) : Color(0x80249CFC)),
+              child: Text(
+                '发布',
+                style: TextStyle(color: Colors.white, fontSize: 12.px),
+              ),
+            ),
+          ),
+          // IconButton(
+          //     onPressed: () {
+          //       //提交评论
+          //       String commentContent = controller.text;
+          //       if (commentContent.isNotEmpty &&  commentContent.length >= 5) {
+          //         _submitComment(commentContent);
+          //       } else {
+          //         ToastUtils.showToast('评论内容不能低于5个字符');
+          //       }
+          //     },
+
+          //     icon: Image.asset(
+          //       'assets/images/publish.png',
+          //       width: 50.px,
+          //       height: 29.px,
+          //     ))
         ],
       ),
       body: SafeArea(child: contentView()),
@@ -98,7 +124,7 @@ class _CommentInputPageState extends State<CommentInputPage>
       //通知刷新帖子详情
       EventBusManager.eventBus
           .fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
-      ToastUtils.showToast( '发布成功');
+      ToastUtils.showToast('发布成功');
       Navigator.pop(context);
     });
   }

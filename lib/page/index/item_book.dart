@@ -125,14 +125,14 @@ class _BookItemState extends State<BookItem> {
               decoration: BoxDecoration(
                 //flutter 上下颜色渐变
                 //#F9CF3A, #FFD43E00
-                gradient: const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFEEF7FE),
-                    Color(0xFFFFFFFF),
-                  ],
-                ),
+                // gradient: const LinearGradient(
+                //   begin: Alignment.topCenter,
+                //   end: Alignment.bottomCenter,
+                //   colors: [
+                //     Color(0xFFEEF7FE),
+                //     Color(0xFFFFFFFF),
+                //   ],
+                // ),
                 borderRadius: BorderRadius.all(Radius.circular(13.px)),
               ),
               child: itemContent())),

@@ -193,7 +193,7 @@ class Http {
         Get.Get.to(LoginPage());
       }
 
-      return {};
+      return <String, dynamic>{};
     }
     return response.data;
   }

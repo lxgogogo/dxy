@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+// import 'package:get/get.dart';
+import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/storage.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:get/get.dart' as Get;
 
-import 'global.dart';
+import '../page/mine/page_login.dart';
 import 'log_utils.dart';
 import 'net_request.dart';
 
@@ -179,11 +180,20 @@ class Http {
     }
 
     if (response.data['code'] == 401) {
-      print('未登录');
+      print('未登录${response.data['code']}');
       // Global().mainPage.logout();
       // Global().hasLogin = false;
       // Global().token = '';
       // StorageUtil().clear();
+      LoginHelper().clearGlobalUserInfo();
+
+      // LoginPage();
+
+      if (Get.Get.currentRoute != "/LoginPage") {
+        Get.Get.to(LoginPage());
+      }
+
+      return <String, dynamic>{};
     }
     return response.data;
   }

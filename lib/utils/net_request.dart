@@ -104,7 +104,9 @@ class NetRequest {
     if (resp.code == 200) {
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      if (resp.message != null && resp.message!.isNotEmpty) {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 

@@ -98,7 +98,7 @@ class _CommentItemState extends State<CommentItem> {
                               fontSize: 14.px,
                               height: 2.0));
                     }),
-                    widget.commentBean.replyCount! > 2
+                    widget.commentBean.replyCount! > 9
                         ? GestureDetector(
                             onTap: () {
                               Get.to(RepliesPage(

@@ -84,7 +84,7 @@ class _CSearchBarState extends State<CSearchBar> {
                       border: InputBorder.none,
                       contentPadding: kIsWeb
                           ? EdgeInsets.only(bottom: 12)
-                          : EdgeInsets.only(top: 8),
+                          : EdgeInsets.only(bottom: 12),
                       hintStyle: TextStyle(
                           color: const Color(0xFFBBBBBB),
                           fontSize: 14.px,

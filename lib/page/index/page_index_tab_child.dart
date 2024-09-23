@@ -16,6 +16,7 @@ import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/page/index/page_article_detail.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/index/page_game_calendar.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -231,9 +232,12 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                                           : Colors.transparent))),
                           child: Row(
                             children: [
-                              Expanded(child: Text(collectBean.title!,overflow: TextOverflow.ellipsis, 
-  maxLines: 1,)),
- 
+                              Expanded(
+                                  child: Text(
+                                collectBean.title!,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              )),
                               Image.asset(
                                 'assets/images/arrow.png',
                                 width: 6.px,
@@ -551,101 +555,108 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
           children: [
             if (bookSuggests.length > 0)
               LinearCard(
-                margin: EdgeInsets.only(left: 16.px,right: 16.px),
+                  margin: EdgeInsets.only(left: 16.px, right: 16.px),
                   child: Container(
-                padding: EdgeInsets.all(16.px),
-                child: Column(
-                  children: [
-                    Row(
+                    padding: EdgeInsets.all(16.px),
+                    child: Column(
                       children: [
-                        Text(
-                          '热门推荐',
-                          style: TextStyle(
-                              color: const Color(0xff2C2C2C), fontSize: 16.px),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            getBookSuggest();
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                '换一换',
-                                style: TextStyle(
-                                    color: const Color(0xff2A2C31),
-                                    fontSize: 12.px),
+                        Row(
+                          children: [
+                            Text(
+                              '热门推荐',
+                              style: TextStyle(
+                                  color: const Color(0xff2C2C2C),
+                                  fontSize: 16.px),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                getBookSuggest();
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '换一换',
+                                    style: TextStyle(
+                                        color: const Color(0xff2A2C31),
+                                        fontSize: 12.px),
+                                  ),
+                                  SizedBox(
+                                    width: 5.px,
+                                  ),
+                                  Image.asset(
+                                    'assets/images/refresh.png',
+                                    width: 12.px,
+                                  )
+                                ],
                               ),
-                              SizedBox(width: 5.px,),
-                              Image.asset('assets/images/refresh.png',width: 12.px,)
-                            ],
-                          ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 12.px,
+                        ),
+                        Row(
+                          children: [
+                            ...List.generate(bookSuggests.length, (i) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                      "/book_detail?id=${bookSuggests[i].id}",
+                                      arguments: bookSuggests[i].id);
+                                },
+                                child: Container(
+                                  width: 66.px,
+                                  margin: EdgeInsets.only(right: 13.px),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 8.px),
+                                        clipBehavior: Clip.antiAlias,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(3.px))),
+                                        child: Image.network(
+                                          bookSuggests[i].cover ?? '',
+                                          width: 66.px,
+                                          height: 88.px,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 40.px,
+                                        child: Text(
+                                          bookSuggests[i].title ?? '',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: const Color(0xff2A2A2A),
+                                              fontSize: 14.px),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.px,
+                                      ),
+                                      Text(
+                                        bookSuggests[i].author ?? '',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: const Color(0xff909FBB),
+                                            fontSize: 12.px),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            })
+                          ],
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 12.px,
-                    ),
-                    Row(
-                      children: [
-                        ...List.generate(bookSuggests.length, (i) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                  "/book_detail?id=${bookSuggests[i].id}",
-                                  arguments: bookSuggests[i].id);
-                            },
-                            child: Container(
-                              width: 66.px,
-                              margin: EdgeInsets.only(right: 13.px),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 8.px),
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(3.px))),
-                                    child: Image.network(
-                                      bookSuggests[i].cover ?? '',
-                                      width: 66.px,
-                                      height: 88.px,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 40.px,
-                                    child: Text(
-                                      bookSuggests[i].title ?? '',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: const Color(0xff2A2A2A),
-                                          fontSize: 14.px),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10.px,
-                                  ),
-                                  Text(
-                                    bookSuggests[i].author ?? '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: const Color(0xff909FBB),
-                                        fontSize: 12.px),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        })
-                      ],
-                    )
-                  ],
-                ),
-              )),
+                  )),
             BookItem(
               article: articles[index],
             )
@@ -728,6 +739,16 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                 autoplay: true,
               ),
             ),
+          GestureDetector(
+            onTap: (){
+              Get.to(GameCalendarPage());
+            },
+            child: Image.asset(
+              'assets/images/game.png',
+              width: 361.px,
+              height: 85.px,
+            ),
+          ),
           ArticleItem(
             article: articles[index],
           )

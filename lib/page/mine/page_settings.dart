@@ -162,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
               // ),
             )),
             SizedBox(height: 30.px,),
-            Center(child: Text('版本号0824'),)
+            Center(child: Text('版本号0901'),)
       ],
     );
   }

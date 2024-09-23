@@ -49,6 +49,7 @@ class BoardBean {
   bool? liked;
   bool? favorited;
   List<String>? tags;
+  List<String>? sign;
   List<String>? pics;
   List<UploadFile>? files;
   String? relType;
@@ -69,6 +70,7 @@ class BoardBean {
       this.liked,
       this.favorited,
       this.tags,
+      this.sign,
       this.pics,
       this.files,
       this.relType,
@@ -124,6 +126,11 @@ class BoardBean {
       tags = json["tags"] == null
           ? null
           : (json["tags"] as List).map((e) => e.toString()).toList();
+    }
+    if (json["sign"] is List) {
+      sign = json["sign"] == null
+          ? null
+          : (json["sign"] as List).map((e) => e.toString()).toList();
     }
 
     if (json["files"] is List) {

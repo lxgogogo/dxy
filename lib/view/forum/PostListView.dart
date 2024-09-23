@@ -17,6 +17,14 @@ import '../../utils/app_theme.dart';
 Widget PostListItemView(
     BuildContext context, int index, bool isForumList, BoardBean boardBean,
     {bool isShowMedia = true}) {
+
+      getName(){
+        return boardBean.user != null &&
+                                boardBean.user!.nickname!.isNotEmpty
+                            ? boardBean.user!.nickname!
+                            : '德学院';
+      }
+  
   detailContent() {
     return Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -42,20 +50,17 @@ Widget PostListItemView(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        boardBean.user != null &&
-                                boardBean.user!.nickname!.isNotEmpty
-                            ? boardBean.user!.nickname!
-                            : '德学院',
+                        boardBean.title??'',
                         style: TextStyle(
                             color: const Color(0xff2a2a2a),
                             fontSize: 12.px,
                             height: 1.3),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       if (boardBean.createdAt != null)
                         Text(
-                          CommonUtils.timeFromNow(boardBean.createdAt!),
+                          getName()+' '+CommonUtils.timeFromNow(boardBean.createdAt!),
                           style: TextStyle(
                               color: const Color(0xff9CACC9), fontSize: 10.px),
                         )
@@ -164,58 +169,38 @@ Widget PostListItemView(
           Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
         }
       },
-      child: LinearCard(
-          padding: EdgeInsets.only(bottom: 2.px),
-          margin: EdgeInsets.only(top: 10.px, left: 6.px, right: 6.px),
-          child: Container(
-              padding: EdgeInsets.only(
-                  left: 20.px, right: 12.px, top: 12.px, bottom: 12.px),
-              decoration: BoxDecoration(
-                //flutter 上下颜色渐变
-                //#F9CF3A, #FFD43E00
-                // gradient: const LinearGradient(
-                //   begin: Alignment.topCenter,
-                //   end: Alignment.bottomCenter,
-                //   colors: [
-                //     Color(0xFFEEF7FE),
-                //     Color(0xFFFFFFFF),
-                //   ],
-                // ),
-                borderRadius: BorderRadius.all(Radius.circular(13.px)),
-              ),
-              child: detailContent()))
-
-      // Container(
-      //     padding: EdgeInsets.all(12.px),
-      //     margin: EdgeInsets.only(top: 10.px, left: 0.px, right: 0.px),
-      //     decoration: BoxDecoration(
-      //       //flutter 上下颜色渐变
-      //       //#F9CF3A, #FFD43E00
-      //       gradient: LinearGradient(
-      //         begin: Alignment.topCenter,
-      //         end: Alignment.bottomCenter,
-      //         colors: [
-      //           isForumList
-      //               ? Colors.white
-      //               : Color(0xFF008EFF).withOpacity(0.03),
-      //           isForumList
-      //               ? Colors.white
-      //               : Color(0xFF008EFF).withOpacity(0.03),
-      //         ],
-      //       ),
-      //       boxShadow: const [
-      //         BoxShadow(
-      //           color: Colors.white,
-      //           blurRadius: 4.0,
-      //           spreadRadius: -4.0,
-      //           offset: Offset(0.0, 6.0),
-      //         ),
-      //       ],
-      //       borderRadius: BorderRadius.all(Radius.circular(13.px)),
-      //     ),
-      //     child: detailContent())
-
-      );
+      child: Stack(
+        children: [
+          LinearCard(
+              padding: EdgeInsets.only(bottom: 2.px),
+              margin: EdgeInsets.only(top: 10.px, left: 6.px, right: 6.px),
+              child: Container(
+                  padding: EdgeInsets.only(
+                      left: 20.px, right: 12.px, top: 12.px, bottom: 12.px),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(13.px)),
+                  ),
+                  child: detailContent())),
+          if (boardBean.sign != null && boardBean.sign!.isNotEmpty)
+            Positioned(
+                top: 0,
+                right: 40,
+                child: Container(
+                  width: 38.px,
+                  height: 21.px,
+                  margin: EdgeInsets.only(top: 10.px),
+                  alignment: Alignment.topCenter,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: boardBean.sign![0]=='newbie'?AssetImage('assets/images/post_newer.png'):AssetImage('assets/images/post_good.png'),
+                          fit: BoxFit.fill)),
+                  child: Text(
+                    boardBean.sign![0]=='newbie'?'新人贴':boardBean.sign![0]=='boutique'?'精华贴':'官方贴',
+                    style: TextStyle(color: Colors.white, fontSize: 10.px),
+                  ),
+                ))
+        ],
+      ));
 }
 
 ///显示内容
@@ -251,7 +236,7 @@ Widget _showTextContentView(BoardBean boardBean) {
     } else {
       return Text(
         boardBean.content != null ? boardBean.content! : '',
-        maxLines: 2,
+        maxLines: 3,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontSize: 12, color: const Color(0xff2a2a2a)),
         softWrap: true,

@@ -1,16 +1,62 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:holdem/model/article.dart';
+import 'package:holdem/model/board_list.dart';
+import 'package:holdem/page/index/item_article.dart';
+import 'package:holdem/page/index/item_video.dart';
+import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/forum/PostListView.dart';
+import 'package:holdem/widget/page_web_fit.dart';
 import 'package:intl/intl.dart';
 
 class GameCalendarPage extends StatefulWidget {
-  const GameCalendarPage({super.key});
+  int id;
+  GameCalendarPage({super.key, required this.id});
 
   @override
   State<GameCalendarPage> createState() => _GameCalendarPageState();
 }
 
 class _GameCalendarPageState extends State<GameCalendarPage> {
+  List<ArticleBean> articles = [];
+  List<ArticleBean> videos = [];
+  List<BoardBean> boardPostList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    reqData();
+  }
+
+  reqData() {
+    NetRequest().competitionRelated({"id": widget.id}, (data) {
+      List<ArticleBean> dataList = List<ArticleBean>.from(
+          data['articles'].map((article) => ArticleBean.fromJson(article)));
+      List<ArticleBean> videoList = List<ArticleBean>.from(
+          data['videos'].map((article) => ArticleBean.fromJson(article)));
+      List<BoardBean> boardList = List<BoardBean>.from(
+          data['threads'].map((article) => BoardBean.fromJson(article)));
+      if (mounted) {
+        setState(() {
+          articles = dataList;
+          videos = videoList;
+          boardPostList = boardList;
+        });
+      }
+    });
+
+    NetRequest().articleDetail({'id': widget.id}, (data) {
+      if (mounted) {
+        // setState(() {
+        //   articleDetailBean = ArticleDetailBean.fromJson(data);
+        //   loaded = true;
+        // });
+      }
+    });
+  }
+
   calendar() {
     final DateTime now = DateTime.now();
     int year = now.year;
@@ -65,19 +111,81 @@ class _GameCalendarPageState extends State<GameCalendarPage> {
     );
   }
 
+  contentItem(int index) {
+    return ArticleItem(
+      article: articles[index],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 14.px),
-          decoration: BoxDecoration(color: Colors.pink,
-          borderRadius: BorderRadius.circular(12.px)),
-          child: calendar(),
-        )
-      ],
-    );
+    return WebFitPage(
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: kBgColor,
+              // elevation: 0, // 去除导航条的阴影
+              title: Text('德州赛事'),
+            ),
+            backgroundColor: kBgColor,
+            // ignore: unnecessary_null_comparison
+            body: SingleChildScrollView(
+                child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 14.px),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.px)),
+                  child: calendar(),
+                ),
+                SizedBox(height: 6.px,),
+                Row(
+                  children: [
+                    SizedBox(width: 20.px,),
+                    Text(
+                      '相关资讯',
+                      style: TextStyle(
+                          color: const Color(0xff2A2A2A),
+                          fontSize: 14.px,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    )
+                  ],
+                ),
+
+                ...List.generate(articles.length, (index) {
+                  return contentItem(index);
+                }),
+                // ListView.builder(
+                //   itemBuilder: (c, i) => contentItem(i),
+                //   // itemExtent: 160.0,
+                //   itemCount: articles.length,
+                // ),
+                GridView.builder(
+                  padding:
+                      EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1.0,
+                    crossAxisSpacing: 8.px,
+                    mainAxisSpacing: 8.px,
+                  ),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: videos.length,
+                  itemBuilder: (contxt, indx) {
+                    return VideoItem(
+                      article: videos[indx],
+                      isBanner: false,
+                    );
+                  },
+                ),
+                // ...List.generate(boardPostList.length, (index){
+                //   return PostListItemView(context, index, true, boardPostList[index]);
+                // })
+              ],
+            ))));
   }
 }
 

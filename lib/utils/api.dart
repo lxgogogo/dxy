@@ -1,4 +1,4 @@
-class Api{
+class Api {
   // static const String baseUrl = 'https://bbs.api.robot-9.com/api';
 
   static const String baseUrl = 'https://reptile-ja.ak12.cc/api';
@@ -10,6 +10,11 @@ class Api{
   static const String indexBanner = '$baseUrl/sectionData/list';
   static const String courseList = '$baseUrl/content/listCollect';
   static const String bookSuggest = '$baseUrl/content/bookSuggest';
+
+  //赛事
+  static const String competitionRelated = '$baseUrl/content/competition/related';
+  static const String competitionLoop = '$baseUrl/content/competition/loop';
+
 
   //论坛
   static const String boardList = '$baseUrl/board/list';
@@ -48,9 +53,6 @@ class Api{
   static const String fansList = '$baseUrl/follower/fans/list';
   static const String followerToggle = '$baseUrl/follower/toggle'; //关注 - 添加/取消
 
-
   static const String favoriteToggle = '$baseUrl/favorite/toggle'; //收藏 - 添加/取消
-  static const String favoriteDelete = '$baseUrl/favorite/delete';  //收藏删除
-
-  
+  static const String favoriteDelete = '$baseUrl/favorite/delete'; //收藏删除
 }

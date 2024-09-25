@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_splash_screen/flutter_splash_screen.dart';
@@ -16,6 +18,7 @@ import 'package:holdem/utils/storage.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 void main() {
   usePathUrlStrategy();
   runApp(const MyApp());
@@ -44,6 +47,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    if (!kIsWeb) {
+      FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    }
+
     if (CommonUtils.isAndroid(context)) {
       hideScreen();
     }
@@ -57,48 +64,46 @@ class MyApp extends StatelessWidget {
         RefreshLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate
-        
       ],
       supportedLocales: const [
         Locale('zh'),
         Locale('en'),
-        
       ],
-      localeResolutionCallback:
-          (locale, Iterable<Locale> supportedLocales) {
+      localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
         //print("change language");
         return locale;
       },
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
-        useMaterial3: true,
-        visualDensity: VisualDensity.compact,
-        focusColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hintColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        appBarTheme: AppBarTheme(scrolledUnderElevation: 0.0,
-          titleTextStyle: TextStyle(fontSize: 16,color: const Color(0xff2C2C2C))
-        )
-        // 设置最大宽度为 960px
-        // 可根据需求调整该值
-      ),
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a blue toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
+          colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
+          useMaterial3: true,
+          visualDensity: VisualDensity.compact,
+          focusColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hintColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          appBarTheme: AppBarTheme(
+              scrolledUnderElevation: 0.0,
+              titleTextStyle:
+                  TextStyle(fontSize: 16, color: const Color(0xff2C2C2C)))
+          // 设置最大宽度为 960px
+          // 可根据需求调整该值
+          ),
       // home: WebFitPage(child: SplashScreen()),
       builder: EasyLoading.init(),
       initialRoute: '/',

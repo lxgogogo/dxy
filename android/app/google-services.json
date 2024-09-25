@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "603367516998",
+    "project_id": "dxy-august",
+    "storage_bucket": "dxy-august.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603367516998:android:46d3f375dc93a1beb31347",
+        "android_client_info": {
+          "package_name": "com.dxy.holdem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEDTFiDkQEGcfXDFxADH3V8tk-lNtTMj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

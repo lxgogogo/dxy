@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
+import 'package:holdem/model/competition_loop.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
@@ -44,6 +47,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
   List<ArticleBean> bookSuggests = [];
   List<IndexCategory> categorys = [];
   List<CourseBean> courses = [];
+  List<CompetionLoopBean> loops = [];
   int categorySel = 0;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -52,10 +56,35 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
 
   final ScrollController _listController = ScrollController();
 
+  final PageController _controller = PageController();
+  int _currentPage = 0;
+
   @override
   void initState() {
     super.initState();
     reqListData();
+    NetRequest().competitionLoop({}, (data) {
+      List<CompetionLoopBean> loopList = List<CompetionLoopBean>.from(
+          data.map((loop) => CompetionLoopBean.fromJson(loop)));
+      if (mounted) {
+        setState(() {
+          loops = loopList;
+        });
+      }
+
+      Timer.periodic(Duration(seconds: 3), (timer) {
+        _currentPage++;
+        if (_currentPage >= loopList.length) {
+          _currentPage = 0;
+        }
+        if (mounted)
+          _controller.animateToPage(
+            _currentPage,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+      });
+    });
   }
 
   reqListData() {
@@ -739,16 +768,37 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                 autoplay: true,
               ),
             ),
-          GestureDetector(
-            onTap: (){
-              Get.to(GameCalendarPage());
-            },
-            child: Image.asset(
-              'assets/images/game.png',
-              width: 361.px,
-              height: 85.px,
+          if (loops.length > 0)
+            GestureDetector(
+              onTap: () {
+                Get.to(GameCalendarPage(
+                  id: loops[_currentPage].id ?? 0,
+                ));
+              },
+              child: Container(
+                width: 361.px,
+                height: 85.px,
+                padding: EdgeInsets.only(
+                    left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/game.png'),
+                        fit: BoxFit.fill)),
+                child: PageView.builder(
+                  controller: _controller,
+                  itemCount: loops.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: Text(
+                        loops[index].title ?? '',
+                        style: TextStyle(
+                            fontSize: 12.px, color: const Color(0xff36B3F4)),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
           ArticleItem(
             article: articles[index],
           )

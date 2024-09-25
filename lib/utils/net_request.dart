@@ -43,6 +43,32 @@ class NetRequest {
     }
   }
 
+  Future competitionLoop(
+      Map<String, Object> params, SuccessCallback onSuccess) async {
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.competitionLoop, params: params);
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  Future competitionRelated(
+      Map<String, Object> params, SuccessCallback onSuccess) async {
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.competitionRelated, params: params);
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   Future courseList(
       Map<String, Object> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
@@ -372,9 +398,9 @@ class NetRequest {
     }
   }
 
-  Future delFavorite(int id,SuccessCallback onSuccess) async {
+  Future delFavorite(int id, SuccessCallback onSuccess) async {
     Map<String, dynamic> response =
-        await HttpUtils.post(Api.delFavorite, params: {"id":id});
+        await HttpUtils.post(Api.delFavorite, params: {"id": id});
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {

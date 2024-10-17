@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!kIsWeb) {
-      FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+      // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     }
 
     if (CommonUtils.isAndroid(context)) {

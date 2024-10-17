@@ -1,4 +1,4 @@
-package com.example.holdem
+package com.dxy.holdem
 
 import io.flutter.embedding.android.FlutterActivity
 import android.os.Bundle

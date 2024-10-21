@@ -425,7 +425,7 @@ class _MineChildPageState extends State<MineChildPage> {
                         ),
                         Expanded(
                             child: Text(
-                          boardBean.title!,
+                          boardBean.title??'',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.ellipsis,

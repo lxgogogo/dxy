@@ -130,7 +130,7 @@ class _RegisterContentState extends State<RegisterContent> {
               _isCountingDown
                   ? Text(
                       '${_countdown}s',
-                      style: AppTheme.text999999Size16,
+                      style: AppTheme.text008EFFSize16,
                     )
                   : GestureDetector(
                       onTap: () {

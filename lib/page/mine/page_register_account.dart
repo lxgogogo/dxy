@@ -203,7 +203,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                   _isCountingDown
                       ? Text(
                           '${_countdown}s',
-                          style: AppTheme.text999999Size16,
+                          style: AppTheme.text008EFFSize16,
                         )
                       : GestureDetector(
                           onTap: () {

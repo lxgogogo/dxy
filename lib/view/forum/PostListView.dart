@@ -195,7 +195,7 @@ Widget PostListItemView(
                           image: boardBean.sign![0]=='newbie'?AssetImage('assets/images/post_newer.png'):AssetImage('assets/images/post_good.png'),
                           fit: BoxFit.fill)),
                   child: Text(
-                    boardBean.sign![0]=='newbie'?'新人贴':boardBean.sign![0]=='boutique'?'精华贴':'官方贴',
+                    boardBean.sign![0]=='newbie'?'新人贴':boardBean.sign![0]=='boutique'?'精品贴':'官方贴',
                     style: TextStyle(color: Colors.white, fontSize: 10.px),
                   ),
                 ))

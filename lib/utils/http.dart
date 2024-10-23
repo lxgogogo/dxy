@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 // import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
@@ -44,15 +45,15 @@ class Http {
 
     // 在调试模式下需要抓包调试，所以我们使用代理，并禁用HTTPS证书校验
     // if (PROXY_ENABLE) {
-    //   (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-    //       (client) {
-    //     client.findProxy = (uri) {
-    //       return "PROXY $PROXY_IP:$PROXY_PORT";
-    //     };
-    //     //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
-    //     client.badCertificateCallback =
-    //         (X509Certificate cert, String host, int port) => true;
-    //   };
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.findProxy = (uri) {
+          return "PROXY 192.168.0.30:8888";
+        };
+        //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+      };
     // }
   }
 
@@ -68,6 +69,7 @@ class Http {
     Duration receiveTimeout = const Duration(seconds: 10),
     Map<String, String>? headers,
     List<Interceptor>? interceptors,
+    HttpClient Function()? proxyInterceptor,
   }) {
     dio.options = dio.options.copyWith(
       baseUrl: baseUrl,
@@ -75,6 +77,10 @@ class Http {
       receiveTimeout: receiveTimeout,
       headers: headers ?? const {},
     );
+    if (proxyInterceptor != null) {
+      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient =
+          proxyInterceptor;
+    }
     // 在初始化http类的时候，可以传入拦截器
     if (interceptors != null && interceptors.isNotEmpty) {
       dio.interceptors.addAll(interceptors);

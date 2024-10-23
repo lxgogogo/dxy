@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:holdem/utils/http.dart';
@@ -7,17 +9,17 @@ import 'net_request.dart';
 class HttpUtils {
   static void init({
     required String baseUrl,
-    // int connectTimeout = 15000,
-    // int receiveTimeout = 15000,
     Duration connectTimeout = const Duration(seconds: 20),
     Duration receiveTimeout = const Duration(seconds: 20),
     List<Interceptor>? interceptors,
+    HttpClient Function()? proxyInterceptor,
   }) {
     Http().init(
       baseUrl: baseUrl,
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
       interceptors: interceptors,
+      proxyInterceptor: proxyInterceptor,
     );
   }
 

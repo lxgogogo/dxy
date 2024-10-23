@@ -77,12 +77,13 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
         if (_currentPage >= loopList.length) {
           _currentPage = 0;
         }
-        if (mounted)
+        if(mounted && _controller.hasClients) {
           _controller.animateToPage(
             _currentPage,
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
+        }
       });
     });
   }

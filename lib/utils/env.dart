@@ -1,0 +1,38 @@
+import 'package:flutter/foundation.dart';
+
+enum ApiEnv {
+  dev,
+  test,
+  prod1,
+  prod2,
+}
+
+ApiEnv _kApiEnv = ApiEnv.dev;
+
+ApiEnv get kAPiEnv => _kApiEnv;
+
+class Env {
+  static bool get isDistribute =>
+      kReleaseMode && _kApiEnv == ApiEnv.prod1 || _kApiEnv == ApiEnv.prod2;
+
+  static bool isProxy = false;
+  static String httpProxyHost = '192.168.0.178';
+  static String httpProxyPort = '9090';
+
+  static bool get useBadCertificate => kDebugMode;
+
+  static String get host {
+    switch (_kApiEnv) {
+      case ApiEnv.dev:
+        return 'https://school-java-dev.dx252.com';
+      case ApiEnv.test:
+        return 'https://school-java-dev.dx252.com';
+      case ApiEnv.prod1:
+        return 'https://school-java.dx261.com';
+      case ApiEnv.prod2:
+        return 'https://school-java.dx262.com';
+      default:
+        return '';
+    }
+  }
+}

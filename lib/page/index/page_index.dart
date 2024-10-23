@@ -22,7 +22,6 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage>
     with AutomaticKeepAliveClientMixin {
-  int _currentTabIndex = 0;
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
   final List<String> types = ['news', 'video', 'book', 'course'];
   List<TabData> parentTabs = [];

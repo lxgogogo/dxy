@@ -1,5 +1,4 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
@@ -63,27 +62,7 @@ class _ForumTabPageState extends State<ForumTabPage>
           List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
       if (mounted) {
         setState(() {
-          // if (forumParentTabs.isNotEmpty) {
-          //   forumParentTabs.clear();
-          //   forumParentTabs.add(TabData(
-          //     index: 0,
-          //     title: Tab(
-          //       child: Text('全部板块'),
-          //     ),
-          //     content: ForumTabChildPage(tabId: 0),
-          //   ));
-          // }
           boardInfoList = dataList;
-          // for (int i = 0; i < dataList.length; i++) {
-          //   BoardInfo boardInfo = dataList[i];
-          //   forumParentTabs.add(TabData(
-          //     index: i + 1,
-          //     title: Tab(
-          //       child: Text(boardInfo.name!),
-          //     ),
-          //     content: ForumTabChildPage(tabId: boardInfo.id!),
-          //   ));
-          // }
         });
       }
     });
@@ -108,15 +87,11 @@ class _ForumTabPageState extends State<ForumTabPage>
             ),
             onPressed: () {
               _showMenuDialog(context);
-              // _showPopupMenu(context);
-              // Get.to(SettingsPage());
             },
           ),
         ],
       ),
-      // body: SafeArea(child: getTabView()),
       body: detail(),
-      // body: Container(color: Colors.transparent,),
       backgroundColor: sortBtnBgtColor,
       floatingActionButton: bottomFloatingButton(),
     );
@@ -356,56 +331,12 @@ class _ForumTabPageState extends State<ForumTabPage>
             ),
           ),
         ),
-        // ForumTabChildPage(
-        //   tabId: tabId,
-        //   key: _pageKey,
-        // )
         Expanded(
             child: ForumTabChildPage(
           tabId: tabId,
           key: _pageKey,
         ))
       ],
-    );
-  }
-
-  ///tabView
-  Widget getTabView() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-      child: DynamicTabBarWidget(
-        onAddTabMoveTo: MoveToTab.idol, //当添加新标签时，指示器将保持在当前0位置标签上。
-        dynamicTabs: forumParentTabs,
-        isScrollable: true,
-        padding: EdgeInsets.only(left: 5.px),
-        tabAlignment: TabAlignment.start,
-        showBackIcon: false,
-        showNextIcon: false,
-        labelPadding: EdgeInsets.fromLTRB(0, 0, 20.px, 0),
-        indicatorColor: Colors.transparent,
-        //底部下标颜色
-        enableFeedback: false,
-        dividerHeight: 0,
-        labelStyle: TextStyle(
-            height: 1,
-            color: forumAppMainColor,
-            fontSize: 17.px,
-            fontWeight: FontWeight.w400),
-        unselectedLabelStyle: TextStyle(
-            height: 1,
-            color: tabTitleUnselectColor,
-            fontSize: 17.px,
-            fontWeight: FontWeight.w400),
-        onTabChanged: (index) {
-          if (index == 0) {
-            currentBoardId = 0;
-          } else {
-            //默认增加了全部 下标-1
-            currentBoardId = boardInfoList[index! - 1].id!;
-          }
-        },
-        onTabControllerUpdated: (controller) {},
-      ),
     );
   }
 
@@ -440,9 +371,6 @@ class CustomDivider extends PopupMenuEntry<String> {
 
   @override
   double get height => 1.0;
-
-  // @override
-  // bool represents(String value) => this.value == value;
 
   @override
   State<CustomDivider> createState() => _CustomDividerState();

@@ -170,73 +170,11 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
         controller:_listController,
         itemBuilder: (c, i)  {
           return PostListItemView(context, i, true, boardPostList[i]);
-            // PostListItemView( itemIndex: i,
-            //   isForumList: true,
-            //   boardBean: boardPostList[i]);
         },
         itemCount: boardPostList.length,
       ),
     );
   }
-
-  ///筛选条件
-  // Widget groupRadio() {
-  //   return GroupButton(
-  //     isRadio: true,
-  //     buttons: ["时间最新", "回帖最多", "点赞最多"],
-  //     onSelected: (selected, date, context) {
-  //       print('[forumLog]ddddddddddddddddddddd===>$selected');
-  //       boardSort = selected == '时间最新'
-  //           ? NetRequest.BOARD_SORT_TIME
-  //             : selected == '回帖最多'
-  //               ? NetRequest.BOARD_SORT_COMMENT
-  //               : NetRequest.BOARD_SORT_LIKE;
-  //       if (_isMounted) {
-  //         setState(() {
-  //           pageNum = 1;
-  //           filterValue = selected;
-  //           selectFilterIndex = getKeyByValue(selected)!;
-  //           boardPostList.clear();
-  //           reqListData();
-  //           //由于tab设置了切换不重载，这个切换子类筛选的时候需要设置自动滚动到顶部
-  //           _scrollToTop();
-  //         });
-  //       }
-  //     },
-  //     controller: GroupButtonController(selectedIndex: selectFilterIndex),
-  //     //默认0位置选中
-  //     options: GroupButtonOptions(
-  //       selectedShadow: const [],
-  //       selectedTextStyle: TextStyle(
-  //         fontSize: 14.px,
-  //         color: forumAppMainColor,
-  //       ),
-  //       selectedColor: AppTheme.color_1A008EFF, //选择背景
-  //       unselectedShadow: const [],
-  //       unselectedColor: AppTheme.color_80FFFFFF, //未选择背景
-  //       unselectedTextStyle: TextStyle(
-  //         fontSize: 13.px,
-  //         color: tabTitleUnselectColor,
-  //       ),
-  //       selectedBorderColor: forumAppMainColor,
-  //       unselectedBorderColor: AppTheme.color_80FFFFFF,
-  //       borderRadius: BorderRadius.circular(100),
-  //       spacing: 10,
-  //       runSpacing: 10,
-  //       groupingType: GroupingType.wrap,
-  //       direction: Axis.horizontal,
-  //       buttonHeight: 30.px,
-  //       buttonWidth: 76.px,
-  //       mainGroupAlignment: MainGroupAlignment.start,
-  //       crossGroupAlignment: CrossGroupAlignment.start,
-  //       groupRunAlignment: GroupRunAlignment.start,
-  //       textAlign: TextAlign.center,
-  //       textPadding: EdgeInsets.zero,
-  //       alignment: Alignment.center,
-  //       elevation: 0,
-  //     ),
-  //   );
-  // }
 
   Widget groupRadio2() {
     return Container(

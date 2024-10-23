@@ -60,7 +60,7 @@ Widget PostListItemView(
                       ),
                       if (boardBean.createdAt != null)
                         Text(
-                          getName()+' '+CommonUtils.timeFromNow(boardBean.createdAt!),
+                          getName()+' 发布于'+CommonUtils.timeFromNow(boardBean.createdAt!),
                           style: TextStyle(
                               color: const Color(0xff9CACC9), fontSize: 10.px),
                         )

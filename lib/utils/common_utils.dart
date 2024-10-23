@@ -34,11 +34,11 @@ class CommonUtils{
     if (difference.inMinutes < 1) {
       timeInterval = '刚刚';
     } else if (difference.inHours < 1) {
-      timeInterval = '${difference.inMinutes} 分钟前';
+      timeInterval = '${difference.inMinutes}分钟前';
     } else if (difference.inHours < 24) {
-      timeInterval = '${difference.inHours} 小时前';
+      timeInterval = '${difference.inHours}小时前';
     } else if (difference.inDays < 5) {
-      timeInterval = '${difference.inDays} 天前';
+      timeInterval = '${difference.inDays}天前';
     } else {
       final formatter = DateFormat('M月d日');
       timeInterval = formatter.format(dt);

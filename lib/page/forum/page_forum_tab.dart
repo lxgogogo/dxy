@@ -411,14 +411,16 @@ class _ForumTabPageState extends State<ForumTabPage>
 
   ///底部FloatingButton
   Widget bottomFloatingButton() {
-    return FloatingActionButton(
-      child: Image.asset(
+    return IconButton(
+      padding: EdgeInsets.zero,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      icon: Image.asset(
         'assets/images/posting_btn.png',
-        width: 100.px,
-        height: 106.px,
-        fit: BoxFit.fill,
+        width: 58.px,
+        height: 58.px,
       ),
-      backgroundColor: Colors.transparent,
+      // backgroundColor: Colors.transparent,
       onPressed: () {
         if (!Global().hasLogin) {
           Get.to(LoginPage());
@@ -426,7 +428,7 @@ class _ForumTabPageState extends State<ForumTabPage>
         }
         Get.to(PublishPostsPage(boardInfoList: boardInfoList));
       },
-      shape: CircleBorder(),
+      // shape: CircleBorder(),
     );
   }
 }

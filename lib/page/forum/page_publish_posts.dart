@@ -623,40 +623,40 @@ class _PublishPostsPageState extends State<PublishPostsPage>
                             width: 22.px,
                             height: 22.px,
                           )),
-                      SizedBox(
-                        width: 5.px,
-                      ),
-                      IconButton(
-                          onPressed: () async {
-                            if (customLabelList != null &&
-                                customLabelList.length == 3) {
-                              ToastUtils.showToast('最多选择3个标签');
-                              return;
-                            }
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SelectLabelPage(
-                                        selectedLabelList: customLabelList,
-                                      )),
-                            );
-                            // 在这里处理从ResultPage返回的标签主体
-                            if (result != null) {
-                              if (_isMounted) {
-                                setState(() {
-                                  customLabelList.add(result);
-                                  customLabelList.forEach((element) {
-                                    print('object=====>$element');
-                                  });
-                                });
-                              }
-                            }
-                          },
-                          icon: Image.asset(
-                            'assets/images/label.png',
-                            width: 22.px,
-                            height: 22.px,
-                          )),
+                      // SizedBox(
+                      //   width: 5.px,
+                      // ),
+                      // IconButton(
+                      //     onPressed: () async {
+                      //       if (customLabelList != null &&
+                      //           customLabelList.length == 3) {
+                      //         ToastUtils.showToast('最多选择3个标签');
+                      //         return;
+                      //       }
+                      //       final result = await Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => SelectLabelPage(
+                      //                   selectedLabelList: customLabelList,
+                      //                 )),
+                      //       );
+                      //       // 在这里处理从ResultPage返回的标签主体
+                      //       if (result != null) {
+                      //         if (_isMounted) {
+                      //           setState(() {
+                      //             customLabelList.add(result);
+                      //             customLabelList.forEach((element) {
+                      //               print('object=====>$element');
+                      //             });
+                      //           });
+                      //         }
+                      //       }
+                      //     },
+                      //     icon: Image.asset(
+                      //       'assets/images/label.png',
+                      //       width: 22.px,
+                      //       height: 22.px,
+                      //     )),
                     ],
                   )),
                   SizedBox(width: 10),

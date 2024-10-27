@@ -166,7 +166,7 @@ Widget PostListItemView(
             Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
           } else if (boardBean.relType == 'comment') {}
         } else {
-          Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
+          Get.to(PostDetailPage(postId: boardBean.id ?? 0));
         }
       },
       child: Stack(

@@ -228,9 +228,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       )),
                       Visibility(
                           visible: isOwnerPost() ? false : true,
-                          child: (boardBean != null
-                                  ? boardBean!.user!.followed!
-                                  : false)
+                          child: boardBean?.user?.followed == true
                               ? followedStatusBtn()
                               : IconButton(
                                   onPressed: () {

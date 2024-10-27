@@ -190,13 +190,11 @@ class _CommentItemState extends State<CommentItem> {
                 if (!widget.isReply)
                   GestureDetector(
                     onTap: () {
-                      if (!Global().hasLogin) {
-                        Get.to(LoginPage());
-                        return;
-                      }
                       //跳转评论输入页面
-                      Get.to(CommentInputPage(
-                          relType: 'comment', relId: widget.commentBean.id!));
+                      Global().checkLogin(() {
+                        Get.to(CommentInputPage(
+                            relType: 'comment', relId: widget.commentBean.id!));
+                      });
                     },
                     child: Row(
                       children: [

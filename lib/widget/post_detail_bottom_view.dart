@@ -211,11 +211,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (!Global().hasLogin) {
-                        Get.to(LoginPage());
-                        return;
-                      }
-                      popDetail();
+                      Global().checkLogin(() {
+                        popDetail();
+                      });
                       // //跳转评论输入页面
                       // Get.to(CommentInputPage(
                       //     relType: viewParams.relType!,
@@ -251,21 +249,19 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                           viewParams.relType! == 'thread'
                       ? IconButton(
                           onPressed: () {
-                            if (!Global().hasLogin) {
-                              Get.to(LoginPage());
-                              return;
-                            }
                             //点赞
-                            NetRequest().contentLike({
-                              'relType': viewParams.relType!,
-                              'relId': viewParams.relId!,
-                              'state': viewParams.liked ?? false ? false : true
-                            }, (data) {
-                              if (_isMounted) {
-                                setState(() {
-                                  viewParams.liked = !viewParams.liked!;
-                                });
-                              }
+                            Global().checkLogin(() {
+                              NetRequest().contentLike({
+                                'relType': viewParams.relType!,
+                                'relId': viewParams.relId!,
+                                'state': viewParams.liked ?? false ? false : true
+                              }, (data) {
+                                if (_isMounted) {
+                                  setState(() {
+                                    viewParams.liked = !viewParams.liked!;
+                                  });
+                                }
+                              });
                             });
                           },
                           icon: Image.asset(
@@ -278,11 +274,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       : Container(),
                   IconButton(
                       onPressed: () {
-                        if (!Global().hasLogin) {
-                          Get.to(LoginPage());
-                          return;
-                        }
-                        _favoriteToggle();
+                        Global().checkLogin(() {
+                          _favoriteToggle();
+                        });
                       },
                       icon: Image.asset(
                         _isFavorite
@@ -293,16 +287,13 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       )),
                   IconButton(
                       onPressed: () {
-                        if (!Global().hasLogin) {
-                          Get.to(LoginPage());
-                          return;
-                        }
                         //跳转评论列表页面
-                        // ToastUtils.showToast('跳转评论列表');
-                        Get.to(CommentListPage(
-                          id: viewParams.relId!,
-                          relType: viewParams.relType!,
-                        ));
+                        Global().checkLogin(() {
+                          Get.to(CommentListPage(
+                            id: viewParams.relId!,
+                            relType: viewParams.relType!,
+                          ));
+                        });
                       },
                       icon: Image.asset(
                         'assets/images/comment.png',

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:holdem/page/mine/page_login.dart';
+import 'package:oktoast/oktoast.dart';
 
 class Global {
   static final Global _instance = Global._internal();
@@ -25,4 +28,14 @@ class Global {
   }
 
   void init() {}
+
+  void checkLogin(VoidCallback callback) async {
+    if(!hasLogin) {
+      showToast('请先登录',duration: const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
+      Get.to(LoginPage());
+      return;
+    }
+    callback.call();
+  }
 }

@@ -83,13 +83,15 @@ class _MainScreenState extends State<MainScreen> {
         showUnselectedLabels: true, // 取消显示未选中项的标签
         useLegacyColorScheme: false,
         onTap: (int index) {
-          if ((index == 2 || index == 3) && !Global().hasLogin) {
-            Get.to(LoginPage());
-            return;
-          }
-          setState(() {
+          if((index == 2 || index == 3)) {
+            Global().checkLogin(() {
+              _currentIndex = index;
+              setState(() {});
+            });
+          } else {
             _currentIndex = index;
-          });
+            setState(() {});
+          }
         },
         items: [
           BottomNavigationBarItem(

@@ -353,11 +353,9 @@ class _ForumTabPageState extends State<ForumTabPage>
       ),
       // backgroundColor: Colors.transparent,
       onPressed: () {
-        if (!Global().hasLogin) {
-          Get.to(LoginPage());
-          return;
-        }
-        Get.to(PublishPostsPage(boardInfoList: boardInfoList));
+        Global().checkLogin(() {
+          Get.to(PublishPostsPage(boardInfoList: boardInfoList));
+        });
       },
       // shape: CircleBorder(),
     );

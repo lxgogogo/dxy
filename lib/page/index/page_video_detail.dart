@@ -17,6 +17,7 @@ import 'package:chewie/chewie.dart';
 // ignore: must_be_immutable
 class VideoDetailPage extends StatefulWidget {
   int id;
+
   VideoDetailPage({super.key, required this.id});
 
   @override
@@ -24,7 +25,7 @@ class VideoDetailPage extends StatefulWidget {
 }
 
 class _VideoDetailPageState extends State<VideoDetailPage> {
-  ArticleDetailBean articleDetailBean = ArticleDetailBean();
+  ArticleDetailBean? articleDetailBean;
   late VideoPlayerController _playController;
   late ChewieController _chewieController;
 
@@ -57,19 +58,18 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   }
 
   requestDetail() {
-    NetRequest().articleDetail({'id': widget.id}, (data) {
+    NetRequest().articleDetail({'id': widget.id}, (data) async {
       if (mounted) {
-        setState(() {
-          articleDetailBean = ArticleDetailBean.fromJson(data);
-          print('视频详情数据：$data');
-          _playController = VideoPlayerController.networkUrl(
-              Uri.parse(articleDetailBean.video!.sourceUrl!))
-            ..initialize().then((_) {
-              setState(() {});
-            });
-          _chewieController =ChewieController(videoPlayerController: _playController,autoPlay: false);
-          loaded = true;
-        });
+        articleDetailBean = ArticleDetailBean.fromJson(data);
+        setState(() {});
+        _playController = VideoPlayerController.networkUrl(
+          Uri.parse(articleDetailBean?.video?.sourceUrl ?? ''),
+        );
+        await _playController.initialize();
+        _chewieController = ChewieController(
+            videoPlayerController: _playController, autoPlay: false);
+        loaded = true;
+        setState(() {});
       }
     });
 
@@ -83,7 +83,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             data['list'].map((comment) => CommentBean.fromJson(comment)));
         setState(() {
           comments = dataList;
-          
         });
       }
     });
@@ -108,13 +107,13 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
       ),
       // ignore: unnecessary_null_comparison
       body: detail(),
-      bottomSheet: loaded
+      bottomSheet: articleDetailBean != null
           ? PostDetailBottomView(
               viewParams: PostBottomViewParams(
               postId: widget.id,
               relId: widget.id,
               relType: 'content',
-              favoriteState: articleDetailBean.favorited ?? false,
+              favoriteState: articleDetailBean?.favorited ?? false,
               title: '',
               content: '',
               shareLink: '/video_detail?id=${widget.id}',
@@ -125,7 +124,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   }
 
   detail() {
-    if (!loaded) return Container();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -138,7 +136,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             color: Colors.white,
             child: Column(
               children: [
-                Text(articleDetailBean.title ?? '',
+                Text(articleDetailBean?.title ?? '',
                     style: TextStyle(
                         color: Color(0xff3B5078),
                         fontSize: 22.px,
@@ -146,7 +144,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 SizedBox(
                   height: 15.px,
                 ),
-                Text(articleDetailBean.description ?? '',
+                Text(articleDetailBean?.description ?? '',
                     style: TextStyle(
                         color: Color(0xff3B5078),
                         fontSize: 16.px,
@@ -162,6 +160,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           ),
           GestureDetector(
               onTap: () {
+                if(!loaded) return;
                 _playController.value.isPlaying
                     ? _playController.pause()
                     : _playController.play();
@@ -173,7 +172,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 width: 375.px,
                 height: 210.px,
                 color: Colors.white,
-                child: _chewieController!=null?Chewie(controller: _chewieController):CircularProgressIndicator(),
+                child: loaded
+                    ? Chewie(controller: _chewieController)
+                    : const Center(child: CircularProgressIndicator()),
                 // child: Stack(
                 //   children: [
                 //     _playController.value.isInitialized && showVideo

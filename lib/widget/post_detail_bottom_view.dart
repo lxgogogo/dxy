@@ -247,36 +247,35 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
-                  // viewParams.relType!.isNotEmpty &&
-                  //         viewParams.relType! == 'thread'
-                  //     ? IconButton(
-                  //         onPressed: () {
-                  //           if (!Global().hasLogin) {
-                  //             Get.to(LoginPage());
-                  //             return;
-                  //           }
-                  //           //点赞
-                  //           NetRequest().contentLike({
-                  //             'relType': viewParams.relType!,
-                  //             'relId': viewParams.relId!,
-                  //             'state': viewParams.liked ?? false ? false : true
-                  //           }, (data) {
-                  //             if (_isMounted) {
-                  //               setState(() {
-                  //                 viewParams.liked = !viewParams.liked!;
-                  //               });
-                  //             }
-                  //           });
-                  //         },
-                  //         icon: Image.asset(
-                  //           viewParams.liked ?? false
-                  //               ? 'assets/images/hearted.png'
-                  //               : 'assets/images/heart.png',
-                  //           width: 13.px,
-                  //           height: 13.px,
-                  //         ))
-                  //     : Container(),
+                  viewParams.relType!.isNotEmpty &&
+                          viewParams.relType! == 'thread'
+                      ? IconButton(
+                          onPressed: () {
+                            if (!Global().hasLogin) {
+                              Get.to(LoginPage());
+                              return;
+                            }
+                            //点赞
+                            NetRequest().contentLike({
+                              'relType': viewParams.relType!,
+                              'relId': viewParams.relId!,
+                              'state': viewParams.liked ?? false ? false : true
+                            }, (data) {
+                              if (_isMounted) {
+                                setState(() {
+                                  viewParams.liked = !viewParams.liked!;
+                                });
+                              }
+                            });
+                          },
+                          icon: Image.asset(
+                            viewParams.liked ?? false
+                                ? 'assets/images/hearted.png'
+                                : 'assets/images/heart.png',
+                            width: 13.px,
+                            height: 13.px,
+                          ))
+                      : Container(),
                   IconButton(
                       onPressed: () {
                         if (!Global().hasLogin) {

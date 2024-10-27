@@ -5,6 +5,7 @@ import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/page/mine/register_content.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/widget/close_image_button.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
@@ -77,23 +78,16 @@ class _LoginPageState extends State<LoginPage> {
           ),
           contentView(),
           Positioned(
-              left: 10.px,
-              top: 50.px,
+              top: MediaQuery.paddingOf(context).top + 9.px,
+              right: 15.px,
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Container(
-                  width: 30.px,
-                  height: 30.px,
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/images/back_white.png',
-                    width: 10.px,
-                    height: 18.px,
-                  ),
-                ),
-              ))
+                child: CloseImageButton(onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+              )),
         ],
       ),
       backgroundColor: Color(0xfff5f5f5),
@@ -106,7 +100,8 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           height: 50.px,
           margin: EdgeInsets.only(top: 35.px, left: 30.px, right: 30.px),
-          padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+          padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+          // 水平内边距
           decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(25.px),
@@ -128,7 +123,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       focusNode: _focusEmail,
                       keyboardType: TextInputType.text,
-                      autocorrect: false, //去除输入后自动选中更正功能
+                      autocorrect: false,
+                      //去除输入后自动选中更正功能
                       controller: _controllerAccount,
                       decoration: InputDecoration(
                         border: InputBorder.none, // 没有边框
@@ -147,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           height: 50.px,
           margin: EdgeInsets.only(left: 30.px, right: 30.px),
-          padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+          padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+          // 水平内边距
           decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(25.px),

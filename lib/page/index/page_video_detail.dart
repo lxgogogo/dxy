@@ -126,21 +126,22 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   detail() {
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            width: 375.px,
-            height: 15.px,
-          ),
-          Container(
+          SizedBox(height: 15.px),
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.px),
-            color: Colors.white,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(articleDetailBean?.title ?? '',
-                    style: TextStyle(
-                        color: Color(0xff3B5078),
-                        fontSize: 22.px,
-                        fontWeight: FontWeight.normal)),
+                Text(
+                  articleDetailBean?.title ?? '',
+                  style: TextStyle(
+                      color: Color(0xff3B5078),
+                      fontSize: 22.px,
+                      fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(
                   height: 15.px,
                 ),
@@ -160,7 +161,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           ),
           GestureDetector(
               onTap: () {
-                if(!loaded) return;
+                if (!loaded) return;
                 _playController.value.isPlaying
                     ? _playController.pause()
                     : _playController.play();
@@ -169,7 +170,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 });
               },
               child: Container(
-                width: 375.px,
                 height: 210.px,
                 color: Colors.white,
                 child: loaded
@@ -206,7 +206,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 // ),
               )),
           Container(
-            width: 375.px,
             padding: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
             decoration: BoxDecoration(
                 color: Colors.white,

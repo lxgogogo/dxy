@@ -161,11 +161,9 @@ class _BookDetailPageState extends State<BookDetailPage> {
 
   Widget bookDetail() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(
-          width: 375.px,
-          height: 30.px,
-        ),
+        SizedBox(height: 30.px),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

@@ -191,14 +191,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
         Container(
             padding: EdgeInsets.fromLTRB(16, 5, 16, 17),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   boardBean != null ? boardBean!.title! : '',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTheme.text3B5078Size22,
-                  softWrap: true,
+                    style: TextStyle(
+                        color: Color(0xff3B5078),
+                        fontSize: 22.px,
+                        fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 15.px,

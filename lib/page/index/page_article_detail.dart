@@ -80,20 +80,21 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
       // ignore: unnecessary_null_comparison
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              width: 375.px,
-              height: 15.px,
-            ),
+            SizedBox(height: 15.px),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.px),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(articleDetailBean.title ?? '',
-                      style: TextStyle(
-                          color: Color(0xff3B5078),
-                          fontSize: 22.px,
-                          fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                        color: Color(0xff3B5078),
+                        fontSize: 22.px,
+                        fontWeight: FontWeight.normal),
+                    textAlign: TextAlign.center,
+                  ),
                   SizedBox(
                     height: 15.px,
                   ),

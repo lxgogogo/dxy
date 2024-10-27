@@ -31,7 +31,7 @@ class _BookItemState extends State<BookItem> {
         ),
         Expanded(
             child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               widget.article.title ?? '',
@@ -54,19 +54,17 @@ class _BookItemState extends State<BookItem> {
             ),
             Row(
               children: [
-                SizedBox(
-                  width: 115.px,
+                Expanded(
                   child: Text(
                     '阅读数 ${widget.article.viewCount}',
                     style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
                   ),
                 ),
-                SizedBox(
-                  width: 70.px,
+                Expanded(
                   child: Row(
                     children: [
                       Image.asset(
-                        'assets/images/star.png',
+                        'assets/images/comment.png',
                         width: 13.px,
                         height: 12.px,
                       ),
@@ -74,29 +72,31 @@ class _BookItemState extends State<BookItem> {
                         width: 4.px,
                       ),
                       Text(
-                        widget.article.likeCount.toString(),
+                        widget.article.commentCount.toString(),
                         style: TextStyle(
                             color: Color(0xff9CACC9), fontSize: 12.px),
                       )
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/comment.png',
-                      width: 11.px,
-                      height: 12.px,
-                    ),
-                    SizedBox(
-                      width: 4.px,
-                    ),
-                    Text(
-                      widget.article.commentCount.toString(),
-                      style:
-                          TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
-                    )
-                  ],
+                Expanded(
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/star.png',
+                        width: 11.px,
+                        height: 12.px,
+                      ),
+                      SizedBox(
+                        width: 4.px,
+                      ),
+                      Text(
+                        widget.article.likeCount.toString(),
+                        style:
+                            TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
+                      )
+                    ],
+                  ),
                 )
               ],
             )

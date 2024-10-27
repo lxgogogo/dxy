@@ -57,7 +57,7 @@ class _BookItemState extends State<BookItem> {
                 SizedBox(
                   width: 115.px,
                   child: Text(
-                    '下载 ' + widget.article.viewCount.toString(),
+                    '阅读数 ${widget.article.viewCount}',
                     style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
                   ),
                 ),

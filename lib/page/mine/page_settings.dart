@@ -110,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                   child: const ListTile(
                     title: Text(
-                      '检测新版本',
+                      '检查更新',
                       style: AppTheme.text333333Size15,
                     ),
                     // 中间文本

@@ -346,9 +346,15 @@ class _MinePageState extends State<MinePage>
                                             ? userProfile!.followedCount
                                                 .toString()
                                             : '0',
-                                        style: AppTheme.text6A7790Size12),
+                                        style: TextStyle(
+                                            color: const Color(0xff2a2a2a),
+                                            fontSize: 13.px,
+                                            fontWeight: FontWeight.bold)),
                                     Text(' 关注',
-                                        style: AppTheme.text6A7790Size12),
+                                        style: TextStyle(
+                                            color: const Color(0xff2a2a2a),
+                                            fontSize: 13.px,
+                                            fontWeight: FontWeight.bold)),
                                   ],
                                 ),
                                 onTap: () {
@@ -365,8 +371,14 @@ class _MinePageState extends State<MinePage>
                                               userProfile.fansCount != null
                                           ? userProfile!.fansCount.toString()
                                           : '0',
-                                      style: AppTheme.text6A7790Size12),
-                                  Text(' 粉丝', style: AppTheme.text6A7790Size12)
+                                      style: TextStyle(
+                                          color: const Color(0xff2a2a2a),
+                                          fontSize: 13.px,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(' 粉丝', style: TextStyle(
+                                      color: const Color(0xff2a2a2a),
+                                      fontSize: 13.px,
+                                      fontWeight: FontWeight.bold))
                                 ]),
                                 onTap: () {
                                   Get.to(MineFollowPage(isFollowPage: false));

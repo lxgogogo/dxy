@@ -25,10 +25,28 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  String _currentVersion = '';
+  bool _canUpdate = false;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _requestAppInfo();
+  }
+
+  Future<void> init() async {
+    await _requestAppInfo();
+  }
+
+  Future<void> _requestAppInfo() async {
+    final res = await PackageInfo.fromPlatform();
+    _currentVersion = res.version;
+    NetRequest().appVersion((data) {
+      final appVersion = AppVersion.fromJson(data);
+      final latestVersion = appVersion.androidVersion ?? '';
+      _canUpdate = latestVersion.compareTo(_currentVersion) > 0;
+      setState(() {});
+    });
   }
 
   @override
@@ -77,8 +95,10 @@ class _SettingsPageState extends State<SettingsPage> {
       children: [
         Container(
           margin: EdgeInsets.fromLTRB(16.px, 0, 16.px, 0),
-          decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'),
-                      fit: BoxFit.fill)),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/setting_bg.png'),
+                  fit: BoxFit.fill)),
           child: Column(
             children: [
               GestureDetector(
@@ -87,38 +107,63 @@ class _SettingsPageState extends State<SettingsPage> {
                       type: RegisterAccountPage.PageType_ModifyPassword,
                     ));
                   },
-                  child: const ListTile(
-                    title: Text(
-                      '修改密码',
-                      style: AppTheme.text333333Size15,
+                  child: Container(
+                    height: 56.px,
+                    padding: EdgeInsets.symmetric(horizontal: 17.px),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '修改密码',
+                          style: AppTheme.text333333Size15,
+                        ),
+                        ImageIcon(
+                          AssetImage('assets/images/item_arrow.png'),
+                          size: 22,
+                        )
+                      ],
                     ),
-                    // 中间文本
-                    trailing: ImageIcon(
-                      AssetImage('assets/images/item_arrow.png'),
-                      size: 22,
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(16, 5, 10, 5),
                   )),
               Container(
-                  color: AppTheme.color_1A000000,
-                  margin: EdgeInsets.only(left: 16.px,right: 4.px),
-                  width: MediaQuery.of(context).size.width,
-                  height: 0.5.px),
+                color: AppTheme.color_1A000000,
+                height: 0.5.px,
+              ),
               GestureDetector(
                   onTap: () {
                     _checkAppVersion();
                   },
-                  child: const ListTile(
-                    title: Text(
-                      '检查更新',
-                      style: AppTheme.text333333Size15,
+                  child: Container(
+                    height: 56.px,
+                    padding: EdgeInsets.symmetric(horizontal: 17.px),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '检查更新',
+                          style: AppTheme.text333333Size15,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
+                              style: AppTheme.text333333Size15,
+                            ),
+                            if (_canUpdate)
+                              Container(
+                                width: 7.px,
+                                height: 7.px,
+                                decoration: const ShapeDecoration(
+                                    shape: CircleBorder(),
+                                    color: Color(0xffff4040)),
+                              ),
+                            const ImageIcon(
+                              AssetImage('assets/images/item_arrow.png'),
+                              size: 22,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    // 中间文本
-                    trailing: ImageIcon(
-                      AssetImage('assets/images/item_arrow.png'),
-                      size: 22,
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(16, 5, 10, 5),
                   )),
             ],
           ),
@@ -137,11 +182,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 350.px,
                 height: 45.px,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logout_btn.png'),
-                      fit: BoxFit.fill)),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/logout_btn.png'),
+                        fit: BoxFit.fill)),
                 child: Text(
                   '退出登录',
-                  style: TextStyle(color: const Color(0xff249CFC),fontSize: 15.px),
+                  style: TextStyle(
+                      color: const Color(0xff249CFC), fontSize: 15.px),
                 ),
               ),
               // child: const ListTile(
@@ -161,8 +209,12 @@ class _SettingsPageState extends State<SettingsPage> {
               //   contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
               // ),
             )),
-            SizedBox(height: 30.px,),
-            Center(child: Text('版本号0901'),)
+        SizedBox(
+          height: 30.px,
+        ),
+        Center(
+          child: Text('版本号0901'),
+        )
       ],
     );
   }

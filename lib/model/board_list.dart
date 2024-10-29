@@ -46,6 +46,7 @@ class BoardBean {
   int? commentCount;
   int? favoriteCount;
   int? likeCount;
+  int? shareCount;
   bool? liked;
   bool? favorited;
   List<String>? tags;
@@ -67,6 +68,7 @@ class BoardBean {
       this.commentCount,
       this.favoriteCount,
       this.likeCount,
+      this.shareCount,
       this.liked,
       this.favorited,
       this.tags,
@@ -116,6 +118,9 @@ class BoardBean {
     if (json["likeCount"] is int) {
       likeCount = json["likeCount"];
     }
+    if (json["shareCount"] is int) {
+      shareCount = json["shareCount"];
+    }
     if (json["liked"] is bool) {
       liked = json["liked"];
     }
@@ -155,6 +160,7 @@ class BoardBean {
     _data["commentCount"] = commentCount;
     _data["favoriteCount"] = favoriteCount;
     _data["likeCount"] = likeCount;
+    _data["shareCount"] = shareCount;
     _data["liked"] = liked;
     _data["tags"] = tags;
     _data["files"] = files;

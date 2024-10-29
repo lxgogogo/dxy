@@ -322,10 +322,7 @@ class _MinePageState extends State<MinePage>
                               children: [
                             Container(
                                 child: Text(
-                              userProfile != null &&
-                                      userProfile.nickname != null
-                                  ? userProfile.nickname!
-                                  : '',
+                              userProfile.nickname??'',
                               style: TextStyle(
                                   fontSize: 16.px,
                                   fontWeight: FontWeight.bold,
@@ -340,12 +337,7 @@ class _MinePageState extends State<MinePage>
                                 child: Row(
                                   children: [
                                     Text(
-                                        userProfile != null &&
-                                                userProfile.followedCount !=
-                                                    null
-                                            ? userProfile!.followedCount
-                                                .toString()
-                                            : '0',
+                                        '${userProfile!.followedCount ?? 0}',
                                         style: TextStyle(
                                             color: const Color(0xff2a2a2a),
                                             fontSize: 13.px,
@@ -367,10 +359,7 @@ class _MinePageState extends State<MinePage>
                               GestureDetector(
                                 child: Row(children: [
                                   Text(
-                                      userProfile != null &&
-                                              userProfile.fansCount != null
-                                          ? userProfile!.fansCount.toString()
-                                          : '0',
+                                      '${userProfile.fansCount ?? 0}',
                                       style: TextStyle(
                                           color: const Color(0xff2a2a2a),
                                           fontSize: 13.px,

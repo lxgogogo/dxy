@@ -97,6 +97,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
             content: boardBean?.content!,
             files: boardBean?.files!,
             shareLink: '/post_detail?postId=${widget.postId}',
+            likeCount: boardBean?.commentCount ?? 0,
+            favoriteCount: boardBean?.favoriteCount ?? 0,
+            commentCount: boardBean?.likeCount ?? 0,
+            shareCount: boardBean?.shareCount ?? 0,
           );
 
           isLoadOk = true;
@@ -157,15 +161,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
               backgroundColor: Colors.white,
               title: const Text(''),
               centerTitle: true,
-              // actions: [
-              //   IconButton(
-              //       onPressed: () {},
-              //       icon: Image.asset(
-              //         'assets/images/more.png',
-              //         width: 22.px,
-              //         height: 22.px,
-              //       ))
-              // ],
             ),
             body: SafeArea(child: contentView()),
             bottomSheet: isLoadOk
@@ -195,11 +190,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
               children: [
                 Text(
                   boardBean != null ? boardBean!.title! : '',
-                    style: TextStyle(
-                        color: Color(0xff3B5078),
-                        fontSize: 22.px,
-                        fontWeight: FontWeight.normal),
-                    textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Color(0xff3B5078),
+                      fontSize: 22.px,
+                      fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 15.px,

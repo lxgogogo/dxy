@@ -89,10 +89,12 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
             ),
             child: Container(
               padding: EdgeInsets.all(16.0),
-              decoration: BoxDecoration(color: const Color(0xffF2F8FD),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.px),topRight: Radius.circular(10.px))
-              ),
-              
+              decoration: BoxDecoration(
+                  color: const Color(0xffF2F8FD),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.px),
+                      topRight: Radius.circular(10.px))),
+
               // border: Border.all()),
               child: Row(
                 children: [
@@ -108,7 +110,8 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         // maxLength: 100,
                         maxLines: 100,
                         controller: _textEditingController,
-                        autofocus: true, // 自动获取焦点
+                        autofocus: true,
+                        // 自动获取焦点
                         decoration: InputDecoration(
                           hintText: '说点什么...',
                           hintStyle: AppTheme.text999999Size16,
@@ -192,149 +195,188 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   Widget bottomInputView() {
     return Container(
-        height: 70,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Divider(
-              height: 0.5,
-              color: AppTheme.color_F3F3F3,
+        height: 68.px,
+        padding: EdgeInsets.fromLTRB(25.px, 15.px, 0, 0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(18),
+          ),
+          border: Border(top: BorderSide(color: AppTheme.color_F3F3F3)),
+        ),
+        alignment: Alignment.topCenter,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Global().checkLogin(() {
+                    popDetail();
+                  });
+                },
+                child: Container(
+                  height: 30.px,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff95A3C4).withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 17.px),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/input_e.png',
+                        width: 13.5.px,
+                      ),
+                      SizedBox(
+                        width: 9.5.px,
+                      ),
+                      Expanded(
+                        child: Text(
+                          '说点什么',
+                          style: TextStyle(
+                              fontSize: 12.px, color: const Color(0xff9CACC9)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
-            Container(
-              height: 69,
-              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 25.px,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Global().checkLogin(() {
-                        popDetail();
+            //点赞
+            if (viewParams.relType == 'thread')
+              InkWell(
+                  onTap: () {
+                    Global().checkLogin(() {
+                      NetRequest().contentLike({
+                        'relType': viewParams.relType!,
+                        'relId': viewParams.relId!,
+                        'state': viewParams.liked ?? false ? false : true
+                      }, (data) {
+                        if (_isMounted) {
+                          setState(() {
+                            viewParams.liked = !viewParams.liked!;
+                          });
+                        }
                       });
-                      // //跳转评论输入页面
-                      // Get.to(CommentInputPage(
-                      //     relType: viewParams.relType!,
-                      //     relId: viewParams.relId!));
-                    },
-                    child: Container(
-                      height: 30.px,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        color: Color(0xff95A3C4).withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      padding:
-                          EdgeInsets.only(left: 17.px, right: 23.px), // 设置内边距
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/input_e.png',
-                            width: 13.5.px,
-                            height: 12.px,
+                    });
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.px),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          viewParams.liked ?? false
+                              ? 'assets/images/hearted.png'
+                              : 'assets/images/heart.png',
+                          width: 13.px,
+                          height: 13.px,
+                        ),
+                        SizedBox(width: 4.px),
+                        Text(
+                          '${viewParams.likeCount}',
+                          style: TextStyle(
+                            color: const Color(0xff9cacc9),
+                            fontSize: 12.px,
                           ),
-                          SizedBox(
-                            width: 12.px,
-                          ),
-                          Text('说点什么...',
-                              style: TextStyle(
-                                  fontSize: 10.px, color: Color(0xff9CACC9)))
-                        ],
-                      ),
+                        )
+                      ],
                     ),
-                  ),
-                  viewParams.relType!.isNotEmpty &&
-                          viewParams.relType! == 'thread'
-                      ? IconButton(
-                          onPressed: () {
-                            //点赞
-                            Global().checkLogin(() {
-                              NetRequest().contentLike({
-                                'relType': viewParams.relType!,
-                                'relId': viewParams.relId!,
-                                'state': viewParams.liked ?? false ? false : true
-                              }, (data) {
-                                if (_isMounted) {
-                                  setState(() {
-                                    viewParams.liked = !viewParams.liked!;
-                                  });
-                                }
-                              });
-                            });
-                          },
-                          icon: Image.asset(
-                            viewParams.liked ?? false
-                                ? 'assets/images/hearted.png'
-                                : 'assets/images/heart.png',
-                            width: 13.px,
-                            height: 13.px,
-                          ))
-                      : Container(),
-                  IconButton(
-                      onPressed: () {
-                        Global().checkLogin(() {
-                          _favoriteToggle();
-                        });
-                      },
-                      icon: Image.asset(
+                  )),
+            InkWell(
+                onTap: () {
+                  Global().checkLogin(() {
+                    _favoriteToggle();
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.px),
+                  child: Row(
+                    children: [
+                      Image.asset(
                         _isFavorite
                             ? 'assets/images/stared.png'
                             : 'assets/images/star.png',
                         width: 13.px,
                         height: 13.px,
-                      )),
-                  IconButton(
-                      onPressed: () {
-                        //跳转评论列表页面
-                        Global().checkLogin(() {
-                          Get.to(CommentListPage(
-                            id: viewParams.relId!,
-                            relType: viewParams.relType!,
-                          ));
-                        });
-                      },
-                      icon: Image.asset(
+                      ),
+                      SizedBox(width: 4.px),
+                      Text(
+                        '${viewParams.favoriteCount}',
+                        style: TextStyle(
+                          color: const Color(0xff9cacc9),
+                          fontSize: 12.px,
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+            InkWell(
+                onTap: () {
+                  Get.to(CommentListPage(
+                    id: viewParams.relId!,
+                    relType: viewParams.relType!,
+                  ));
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.px),
+                  child: Row(
+                    children: [
+                      Image.asset(
                         'assets/images/comment.png',
                         width: 13.px,
                         height: 13.px,
-                      )),
-
-                  IconButton(
-                      onPressed: () {
-                        var shareData = {
-                          "title": widget.viewParams.title,
-                          "text": widget.viewParams.content,
-                          "url":
-                              'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
-                        };
-                        if (kIsWeb) {
-                          html.window.navigator.share(shareData);
-                        } else {
-                          Share.share(
-                              '${widget.viewParams.title} ' +
-                                  'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
-                              subject: widget.viewParams.content);
-                        }
-
-                        // html.window.navigator.share(shareData);
-                        // Share.shareXFiles([XFile('https://bbs.api.robot-9.com/static/avatar.png')], text: 'Great picture');
-                        //   showModalBottomSheet(
-                        //       backgroundColor: AppTheme.white,
-                        //       context: context,
-                        //       builder: (BuildContext context) {
-                        //         return sharePopView();
-                        //       });
-                      },
-                      icon: Image.asset(
+                      ),
+                      SizedBox(width: 4.px),
+                      Text(
+                        '${viewParams.commentCount}',
+                        style: TextStyle(
+                          color: const Color(0xff9cacc9),
+                          fontSize: 12.px,
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+            InkWell(
+                onTap: () {
+                  var shareData = {
+                    "title": widget.viewParams.title,
+                    "text": widget.viewParams.content,
+                    "url":
+                        'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                  };
+                  if (kIsWeb) {
+                    html.window.navigator.share(shareData);
+                  } else {
+                    Share.share(
+                        '${widget.viewParams.title} ' +
+                            'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                        subject: widget.viewParams.content);
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.px),
+                  child: Row(
+                    children: [
+                      Image.asset(
                         'assets/images/share.png',
                         width: 13.px,
                         height: 13.px,
-                      ))
-                ],
-              ),
-            )
+                      ),
+                      SizedBox(width: 4.px),
+                      Text(
+                        '${viewParams.shareCount}',
+                        style: TextStyle(
+                          color: const Color(0xff9cacc9),
+                          fontSize: 12.px,
+                        ),
+                      )
+                    ],
+                  ),
+                )),
           ],
         ));
   }
@@ -482,15 +524,24 @@ class PostBottomViewParams {
   String? content; //帖子内容
   String? shareLink; //分享
   List<UploadFile>? files; // 帖子的图片或者视频集合
+  int likeCount;
+  int favoriteCount;
+  int commentCount;
+  int shareCount;
 
-  PostBottomViewParams(
-      {this.postId,
-      @required this.relId,
-      @required this.relType,
-      @required this.favoriteState,
-      @required this.title,
-      @required this.content,
-      @required this.files,
-      @required this.shareLink,
-      this.liked = false});
+  PostBottomViewParams({
+    this.postId,
+    required this.relId,
+    required this.relType,
+    this.liked = false,
+    this.likeCount = 0,
+    favoriteState = false,
+    this.favoriteCount = 0,
+    required this.shareLink,
+    this.commentCount = 0,
+    this.shareCount = 0,
+    required this.title,
+    required this.content,
+    required this.files,
+  });
 }

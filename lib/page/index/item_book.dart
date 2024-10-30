@@ -56,7 +56,7 @@ class _BookItemState extends State<BookItem> {
               children: [
                 Expanded(
                   child: Text(
-                    '阅读数 ${widget.article.viewCount}',
+                    '阅读 ${widget.article.viewCount}',
                     style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
                   ),
                 ),

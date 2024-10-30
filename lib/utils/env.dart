@@ -7,7 +7,7 @@ enum ApiEnv {
   prod2,
 }
 
-ApiEnv _kApiEnv = ApiEnv.dev;
+ApiEnv _kApiEnv = ApiEnv.test;
 
 ApiEnv get kAPiEnv => _kApiEnv;
 
@@ -26,7 +26,7 @@ class Env {
       case ApiEnv.dev:
         return 'https://school-java-dev.dx252.com';
       case ApiEnv.test:
-        return 'https://school-java-dev.dx252.com';
+        return 'https://school-java-fat.dx252.com';
       case ApiEnv.prod1:
         return 'https://school-java.dx261.com';
       case ApiEnv.prod2:

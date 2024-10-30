@@ -32,7 +32,6 @@ class Global {
   void checkLogin(VoidCallback callback) async {
     if(!hasLogin) {
       showToast('请先登录',duration: const Duration(seconds: 2));
-      await Future.delayed(const Duration(seconds: 2));
       Get.to(LoginPage());
       return;
     }

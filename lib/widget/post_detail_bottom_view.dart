@@ -34,7 +34,6 @@ class PostDetailBottomView extends StatefulWidget {
 
 class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   final _textEditingController = TextEditingController();
-  bool _isFavorite = false;
   late PostBottomViewParams viewParams;
   bool _isMounted = false;
   bool _canSend = false;
@@ -45,8 +44,6 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
     super.initState();
     _isMounted = true;
     viewParams = widget.viewParams;
-    _isFavorite =
-        viewParams.favoriteState != null ? viewParams.favoriteState! : false;
   }
 
   @override
@@ -256,9 +253,14 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         'state': viewParams.liked ?? false ? false : true
                       }, (data) {
                         if (_isMounted) {
-                          setState(() {
-                            viewParams.liked = !viewParams.liked!;
-                          });
+                          if (viewParams.liked == true) {
+                            viewParams.liked = false;
+                            viewParams.likeCount = viewParams.likeCount - 1;
+                          } else {
+                            viewParams.liked = true;
+                            viewParams.likeCount = viewParams.likeCount + 1;
+                          }
+                          setState(() {});
                         }
                       });
                     });
@@ -268,9 +270,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                     child: Row(
                       children: [
                         Image.asset(
-                          viewParams.liked ?? false
-                              ? 'assets/images/hearted.png'
-                              : 'assets/images/heart.png',
+                          viewParams.liked == true
+                              ? 'assets/images/praised.png'
+                              : 'assets/images/praise.png',
                           width: 13.px,
                           height: 13.px,
                         ),
@@ -296,7 +298,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   child: Row(
                     children: [
                       Image.asset(
-                        _isFavorite
+                        viewParams.favoriteState == true
                             ? 'assets/images/stared.png'
                             : 'assets/images/star.png',
                         width: 13.px,
@@ -499,13 +501,17 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   void _favoriteToggle() {
     NetRequest().favoriteToggle(
-        viewParams.relType!, viewParams.relId!, !_isFavorite, (data) {
+        viewParams.relType!, viewParams.relId!, !(viewParams.favoriteState ?? false), (data) {
       if (_isMounted) {
-        ToastUtils.showToast(_isFavorite ? '取消成功' : '收藏成功');
-        setState(() {
-          _isFavorite = !_isFavorite;
-        });
-
+        ToastUtils.showToast(viewParams.favoriteState == true ? '取消成功' : '收藏成功');
+        if (viewParams.favoriteState == true) {
+          viewParams.favoriteState = false;
+          viewParams.favoriteCount = viewParams.favoriteCount - 1;
+        } else {
+          viewParams.favoriteState = true;
+          viewParams.favoriteCount = viewParams.favoriteCount + 1;
+        }
+        setState(() {});
         //通知我的页面刷新列表
         EventBusManager.eventBus
             .fire(EventBusAction.refreshMineFavoriteList.eventBusTypeName);

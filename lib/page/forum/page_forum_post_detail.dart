@@ -97,9 +97,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
             content: boardBean?.content!,
             files: boardBean?.files!,
             shareLink: '/post_detail?postId=${widget.postId}',
-            likeCount: boardBean?.commentCount ?? 0,
+            likeCount: boardBean?.likeCount ?? 0,
             favoriteCount: boardBean?.favoriteCount ?? 0,
-            commentCount: boardBean?.likeCount ?? 0,
+            commentCount: boardBean?.commentCount ?? 0,
             shareCount: boardBean?.shareCount ?? 0,
           );
 

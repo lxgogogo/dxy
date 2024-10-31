@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/widget/close_image_button.dart';
 
 import '../../model/user.dart';
 import '../../utils/app_theme.dart';
@@ -73,31 +75,30 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/images/login_bg.png',
+            width: 375.px,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: const Color(0xffF4F7FC),
-        title: null,
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [const Color(0xffF4F7FC), const Color(0xffE4EEF9)])),
-        child: contentView(),
+          contentView(),
+          Positioned(
+              top: MediaQuery.paddingOf(context).top + 9.px,
+              left: 15.px,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: IconButton(
+                  icon: Image.asset(
+                    'assets/images/back_white.png',
+                    height: 16.px,
+                  ), onPressed: () {  },
+                ),
+              )),
+        ],
       ),
       // body: SafeArea(child: contentView()),
       // backgroundColor: AppTheme.white,
@@ -108,16 +109,26 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
     return ListView(
       children: [
         Container(
-            margin: EdgeInsets.fromLTRB(40.px, 40.px, 16.px, 0),
-            child: Text(
-              getPageTitle(),
-              style: AppTheme.text3B5078Size23,
+            margin: EdgeInsets.fromLTRB(20.px, 80.px, 16.px, 45.px),
+            alignment: Alignment.topLeft,
+            child: Image.asset(
+              'assets/images/logo.png',
+              width: 153.px,
+              height: 43.px,
             )),
+        Padding(
+          padding: EdgeInsets.only(top: 0, left: 30.px, right: 30.px),
+          child: Text(
+            '忘记密码',
+            style: TextStyle(fontSize: 18.px, fontWeight: FontWeight.w500, color: Color(0xff3B5078)),
+          ),
+        ),
         Visibility(
           child: Container(
             height: 50.px,
             margin: EdgeInsets.only(top: 35.px, left: 30.px, right: 30.px),
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(25.px),
@@ -138,15 +149,14 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ],
             ),
           ),
-          visible: pageType == RegisterAccountPage.PageType_ModifyPassword
-              ? false
-              : true,
+          visible: pageType == RegisterAccountPage.PageType_ModifyPassword ? false : true,
         ),
         Visibility(
           child: Container(
             height: 50.px,
             margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(25.px),
@@ -167,9 +177,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ],
             ),
           ),
-          visible: pageType == RegisterAccountPage.PageType_ModifyPassword
-              ? true
-              : false,
+          visible: pageType == RegisterAccountPage.PageType_ModifyPassword ? true : false,
         ),
         Container(
           margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
@@ -180,7 +188,8 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
             child: Container(
               height: 50.px,
               margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
-              padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+              padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+              // 水平内边距
               decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(25.px),
@@ -218,9 +227,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                             }
                             _startCountdown(); //启动倒计时
                             NetRequest().sendCode(
-                                pageType ==
-                                        RegisterAccountPage
-                                            .PageType_RegisterAccount
+                                pageType == RegisterAccountPage.PageType_RegisterAccount
                                     ? NetRequest.SEND_CODE_TYPE_REGISTER
                                     : NetRequest.SEND_CODE_TYPE_RESET_PW,
                                 email,
@@ -234,23 +241,20 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                 ],
               ),
             ),
-            visible: pageType == RegisterAccountPage.PageType_ModifyPassword
-                ? false
-                : true),
+            visible: pageType == RegisterAccountPage.PageType_ModifyPassword ? false : true),
         Visibility(
           child: Container(
             margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
             height: 0.5,
             color: AppTheme.color_F3F3F3,
           ),
-          visible: pageType == RegisterAccountPage.PageType_ModifyPassword
-              ? false
-              : true,
+          visible: pageType == RegisterAccountPage.PageType_ModifyPassword ? false : true,
         ),
         Container(
           height: 50.px,
           margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
-          padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+          padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+          // 水平内边距
           decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(25.px),
@@ -263,10 +267,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                   obscureText: !_isVisible, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
-                    hintText:
-                        pageType == RegisterAccountPage.PageType_RegisterAccount
-                            ? '密码'
-                            : '请设置新密码',
+                    hintText: pageType == RegisterAccountPage.PageType_RegisterAccount ? '密码' : '请设置新密码',
                     hintStyle: AppTheme.text999999Size14,
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                   ),
@@ -274,9 +275,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ),
               IconButton(
                 icon: Image.asset(
-                  _isVisible
-                      ? 'assets/images/eye_open.png'
-                      : 'assets/images/eye_close.png',
+                  _isVisible ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                   width: 18.px,
                   height: 18.px,
                 ),
@@ -291,13 +290,13 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         ),
         Container(
           height: 50.px,
-            margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
-            decoration: BoxDecoration(
+          margin: EdgeInsets.only(top: 30.px, left: 30.px, right: 30.px),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+          // 水平内边距
+          decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(25.px),
-              border: Border.all(
-                  color: const Color(0xffCCD7F0))),
+              border: Border.all(color: const Color(0xffCCD7F0))),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -306,10 +305,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
                   obscureText: !_isVisibleAgain, // 输入内容显示为密文
                   decoration: InputDecoration(
                     border: InputBorder.none, // 没有边框
-                    hintText:
-                        pageType == RegisterAccountPage.PageType_RegisterAccount
-                            ? '再次输入密码'
-                            : '再次输入新密码',
+                    hintText: pageType == RegisterAccountPage.PageType_RegisterAccount ? '再次输入密码' : '再次输入新密码',
                     hintStyle: AppTheme.text999999Size14,
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                   ),
@@ -317,9 +313,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
               ),
               IconButton(
                 icon: Image.asset(
-                  _isVisibleAgain
-                      ? 'assets/images/eye_open.png'
-                      : 'assets/images/eye_close.png',
+                  _isVisibleAgain ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                   width: 18.px,
                   height: 18.px,
                 ),
@@ -400,8 +394,7 @@ class _RegisterAccountPageState extends State<RegisterAccountPage> {
         ToastUtils.showToast('注册成功');
         //成功后直接登录 通知关闭登录页面
         LoginHelper().userLogin(email, password, (data) {
-          EventBusManager.eventBus
-              .fire(EventBusAction.closeLoginPage.eventBusTypeName);
+          EventBusManager.eventBus.fire(EventBusAction.closeLoginPage.eventBusTypeName);
           Navigator.of(context).pop();
         });
       });

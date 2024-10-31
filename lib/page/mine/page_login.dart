@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/page/mine/register_content.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/close_image_button.dart';
 
@@ -67,31 +68,30 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
-        child: Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(
-            'assets/images/login_bg.png',
-            width: 375.px,
-          ),
-          contentView(),
-          Positioned(
-              top: MediaQuery.paddingOf(context).top + 9.px,
-              right: 15.px,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: CloseImageButton(onPressed: () {
-                  Navigator.of(context).pop();
-                }),
-              )),
-        ],
+    return BackgroundContainer(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Image.asset(
+              'assets/images/login_bg.png',
+              width: 375.px,
+            ),
+            contentView(),
+            Positioned(
+                top: MediaQuery.paddingOf(context).top + 9.px,
+                right: 15.px,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: CloseImageButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+                )),
+          ],
+        ),
       ),
-      backgroundColor: Color(0xfff5f5f5),
-    ));
+    );
   }
 
   loginContent() {
@@ -105,10 +105,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(25.px),
-              border: Border.all(
-                  color: _focusedIndex == 0
-                      ? Color(0xff249CFC)
-                      : Color(0xffCCD7F0))),
+              border: Border.all(color: _focusedIndex == 0 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
           child: Row(
             children: <Widget>[
               Image.asset(
@@ -118,8 +115,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Expanded(
                 child: Listener(
-                    onPointerDown: (e) =>
-                        FocusScope.of(context).requestFocus(_focusNodeAccount),
+                    onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodeAccount),
                     child: TextField(
                       focusNode: _focusEmail,
                       keyboardType: TextInputType.text,
@@ -148,10 +144,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: BoxDecoration(
               color: Colors.transparent,
               borderRadius: BorderRadius.circular(25.px),
-              border: Border.all(
-                  color: _focusedIndex == 1
-                      ? Color(0xff249CFC)
-                      : Color(0xffCCD7F0))),
+              border: Border.all(color: _focusedIndex == 1 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
           child: Row(
             children: <Widget>[
               Image.asset(
@@ -161,8 +154,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Expanded(
                 child: Listener(
-                    onPointerDown: (e) =>
-                        FocusScope.of(context).requestFocus(_focusNodePwd),
+                    onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodePwd),
                     child: TextField(
                       controller: _controllerPw,
                       focusNode: _focusPwd,
@@ -182,9 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
                 child: Image.asset(
-                  isOpen
-                      ? 'assets/images/eye_open.png'
-                      : 'assets/images/eye_close.png',
+                  isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                   width: 18.px,
                   height: 18.px,
                 ),
@@ -233,9 +223,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(bottom: 7.px),
               alignment: Alignment.center,
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/login_btn.png'),
-                      fit: BoxFit.contain)),
+                  image: DecorationImage(image: AssetImage('assets/images/login_btn.png'), fit: BoxFit.contain)),
               child: Text(
                 '登录',
                 style: TextStyle(color: Colors.white, fontSize: 15.px),
@@ -255,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
     return ListView(
       children: [
         Container(
-            margin: EdgeInsets.fromLTRB(20.px, 110.px, 16.px, 45.px),
+            margin: EdgeInsets.fromLTRB(20.px, 80.px, 16.px, 45.px),
             alignment: Alignment.topLeft,
             child: Image.asset(
               'assets/images/logo.png',
@@ -279,8 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                     '登录',
                     style: TextStyle(
                         fontSize: 18.px,
-                        fontWeight:
-                            isLogin ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isLogin ? FontWeight.bold : FontWeight.normal,
                         color: isLogin ? Color(0xff249CFC) : Color(0xff3B5078)),
                   ),
                   Container(
@@ -289,8 +276,7 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsets.only(top: 10.px),
                     decoration: BoxDecoration(
                         color: isLogin ? Color(0xff249CFC) : Colors.transparent,
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(1.5.px))),
+                        borderRadius: BorderRadius.all(Radius.circular(1.5.px))),
                   )
                 ],
               ),
@@ -310,20 +296,16 @@ class _LoginPageState extends State<LoginPage> {
                     '注册',
                     style: TextStyle(
                         fontSize: 18.px,
-                        fontWeight:
-                            !isLogin ? FontWeight.bold : FontWeight.normal,
-                        color:
-                            !isLogin ? Color(0xff249CFC) : Color(0xff3B5078)),
+                        fontWeight: !isLogin ? FontWeight.bold : FontWeight.normal,
+                        color: !isLogin ? Color(0xff249CFC) : Color(0xff3B5078)),
                   ),
                   Container(
                     width: 21.px,
                     height: 3.px,
                     margin: EdgeInsets.only(top: 10.px),
                     decoration: BoxDecoration(
-                        color:
-                            !isLogin ? Color(0xff249CFC) : Colors.transparent,
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(1.5.px))),
+                        color: !isLogin ? Color(0xff249CFC) : Colors.transparent,
+                        borderRadius: BorderRadius.all(Radius.circular(1.5.px))),
                   )
                 ],
               ),

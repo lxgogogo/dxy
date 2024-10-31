@@ -247,7 +247,9 @@ class Http {
       print('net url:$path \n data:${response.data}');
     } catch (e) {
       print('postFile请求发生错误：$e');
-      onFail!(e.toString());
+      if (onFail != null ) {
+        onFail(e.toString());
+      }
       return {};
     }
     return response.data;

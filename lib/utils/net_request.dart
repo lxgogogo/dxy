@@ -600,7 +600,7 @@ class NetRequest {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
-    Map<String, dynamic> response =
+    Map<dynamic, dynamic> response =
         await HttpUtils.postFile(Api.updateAvatar, params: params);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);
@@ -608,7 +608,7 @@ class NetRequest {
       LogUtils.printAll("updateAvatar===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      ToastUtils.showToast(resp.message ?? '');
     }
   }
 

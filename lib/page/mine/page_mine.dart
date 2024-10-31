@@ -334,21 +334,13 @@ class _MinePageState extends State<MinePage>
                             ),
                             Row(children: [
                               GestureDetector(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                        '${userProfile!.followedCount ?? 0}',
-                                        style: TextStyle(
-                                            color: const Color(0xff2a2a2a),
-                                            fontSize: 13.px,
-                                            fontWeight: FontWeight.bold)),
-                                    Text(' 关注',
-                                        style: TextStyle(
-                                            color: const Color(0xff2a2a2a),
-                                            fontSize: 13.px,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
+                                child: Text('${userProfile.followedCount ?? 0} 关注',
+                                    style: TextStyle(
+                                        color: const Color(0xff2a2a2a),
+                                        fontSize: 12.px,
+                                        fontWeight: FontWeight.w500,
+                                      decoration: TextDecoration.underline,
+                                    )),
                                 onTap: () {
                                   Get.to(MineFollowPage(isFollowPage: true));
                                 },
@@ -357,18 +349,13 @@ class _MinePageState extends State<MinePage>
                                 width: 20.px,
                               ),
                               GestureDetector(
-                                child: Row(children: [
-                                  Text(
-                                      '${userProfile.fansCount ?? 0}',
-                                      style: TextStyle(
-                                          color: const Color(0xff2a2a2a),
-                                          fontSize: 13.px,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(' 粉丝', style: TextStyle(
-                                      color: const Color(0xff2a2a2a),
-                                      fontSize: 13.px,
-                                      fontWeight: FontWeight.bold))
-                                ]),
+                                child: Text('${userProfile.fansCount ?? 0} 粉丝', style: TextStyle(
+                                    color: const Color(0xff2a2a2a),
+                                    fontSize: 12.px,
+                                    fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                ),
                                 onTap: () {
                                   Get.to(MineFollowPage(isFollowPage: false));
                                 },

@@ -373,7 +373,7 @@ class Http {
 class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    if (err.response!.statusCode == 401) {
+    if (err.response?.statusCode == 401) {
       print('9527');
       // if (Global().showLogin) {
       //   return;
@@ -381,14 +381,14 @@ class ErrorInterceptor extends Interceptor {
       // Global().mainPage.logout();
       // Global().showLogin = true;
       return;
-    } else if (err.response!.statusCode == 500) {
+    } else if (err.response?.statusCode == 500) {
       return;
     }
     // if (err.response!.statusCode == 500) {
     //   print('9527');
     //   return;
     // }
-    if (err.response!.statusCode == 422) {
+    if (err.response?.statusCode == 422) {
       return;
     }
     // if (err.response!.statusCode != 200) {

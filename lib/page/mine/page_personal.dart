@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/mine/page_edit_information.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../model/user.dart';
@@ -42,8 +44,7 @@ class _PersonalPageState extends State<PersonalPage> {
     getUserInfo();
     //接受通知刷新页面
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshPersonalProfile.eventBusTypeName) {
+      if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
         getUserInfo();
       }
     });
@@ -100,11 +101,7 @@ class _PersonalPageState extends State<PersonalPage> {
                   gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFF4F7FC),
-                  Color(0xFFE4EEF9),
-                  Color(0xFFE4EEF9)
-                ],
+                colors: [Color(0xFFF4F7FC), Color(0xFFE4EEF9), Color(0xFFE4EEF9)],
               )),
               child: contentView())),
       backgroundColor: const Color(0xffF4F7FC),
@@ -122,19 +119,15 @@ class _PersonalPageState extends State<PersonalPage> {
             width: 70.px,
             height: 70.px,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(35.px),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffC3D9EC), // inset 0 1px 2px 1px #FFFFFF
-                    offset: Offset(0, 3),
-                    blurRadius: 6,
-                  ),
-                ]),
-            child: ClipOval(
-                child: LoginHelper().getUserAvatar(
-                    netImageUrl.isNotEmpty ? netImageUrl : '', 64.px, 64.px)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(35.px), color: Colors.white, boxShadow: [
+              BoxShadow(
+                color: Color(0xffC3D9EC), // inset 0 1px 2px 1px #FFFFFF
+                offset: Offset(0, 3),
+                blurRadius: 6,
+              ),
+            ]),
+            child:
+                ClipOval(child: LoginHelper().getUserAvatar(netImageUrl.isNotEmpty ? netImageUrl : '', 64.px, 64.px)),
           ),
         ),
         SizedBox(
@@ -143,8 +136,7 @@ class _PersonalPageState extends State<PersonalPage> {
         Center(
           child: GestureDetector(
             onTap: () {
-              kIsWeb ? _webSelectImage() : _phoneSelectImage();
-              // : showUploadImageOnPopup(context);
+              _phoneSelectImage();
             },
             child: Container(
               width: 80.px,
@@ -176,8 +168,7 @@ class _PersonalPageState extends State<PersonalPage> {
                 blurRadius: 2,
               ),
               BoxShadow(
-                color: Color.fromRGBO(185, 208, 229,
-                    0.64), // inset 0 -1px 2px 0 rgba(185,208,229,0.64)
+                color: Color.fromRGBO(185, 208, 229, 0.64), // inset 0 -1px 2px 0 rgba(185,208,229,0.64)
                 offset: Offset(0, -1),
                 blurRadius: 2,
               ),
@@ -226,11 +217,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           width: 10.px,
                         ),
                         Text(
-                          _userProfile != null && _userProfile.nickname != null
-                              ? _userProfile.nickname!
-                              : '',
-                          style: TextStyle(
-                              color: const Color(0xff9399A5), fontSize: 14.px),
+                          _userProfile != null && _userProfile.nickname != null ? _userProfile.nickname! : '',
+                          style: TextStyle(color: const Color(0xff9399A5), fontSize: 14.px),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.right,
                         ),
@@ -240,10 +228,7 @@ class _PersonalPageState extends State<PersonalPage> {
                           size: 22,
                         )
                       ]))),
-              Container(
-                  color: AppTheme.color_1A000000,
-                  width: MediaQuery.of(context).size.width,
-                  height: 0.5.px),
+              Container(color: AppTheme.color_1A000000, width: MediaQuery.of(context).size.width, height: 0.5.px),
               GestureDetector(
                   onTap: () {},
                   child: Container(
@@ -261,11 +246,8 @@ class _PersonalPageState extends State<PersonalPage> {
                           width: 10.px,
                         ),
                         Text(
-                          _userProfile != null && _userProfile.account != null
-                              ? _userProfile.account!
-                              : '',
-                          style: TextStyle(
-                              color: const Color(0xff9399A5), fontSize: 14.px),
+                          _userProfile != null && _userProfile.account != null ? _userProfile.account! : '',
+                          style: TextStyle(color: const Color(0xff9399A5), fontSize: 14.px),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.right,
                         ),
@@ -305,84 +287,8 @@ class _PersonalPageState extends State<PersonalPage> {
     );
   }
 
-  _webSelectImage() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(allowMultiple: false, type: FileType.image);
-    if (result != null) {
-      var files = result.files;
-      print('FilePickerResult=============:' + files.first.name);
-      NetRequest().updateAvatarBytesFile(files.first, (data) {
-        // UploadFile uploadFile = UploadFile.fromJson(data);
-        // setState(() {
-        //   netImageUrl = uploadFile.url!;
-        // });
-        // print('FilePickerResult url============' + uploadFile.url!);
-        //通知个人信息页面刷新
-        EventBusManager.eventBus
-            .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
-      });
-    }
-  }
-
   _phoneSelectImage() async {
-    // late PermissionStatus status;
-    // if (Platform.isIOS) {
-    //   status = await Permission.photos.request();
-    //   if (status == PermissionStatus.permanentlyDenied) {
-    //     showCupertinoDialog(
-    //       context: context,
-    //       builder: (context) {
-    //         return CupertinoAlertDialog(
-    //           content: const Text(
-    //             "请点击 跳转至设置界面, 打开照片权限, 设置权限成功后再次上传头像",
-    //             style: AppTheme.text333333Size15,
-    //           ),
-    //           actions: <Widget>[
-    //             CupertinoDialogAction(
-    //               child: const Text(
-    //                 "取消",
-    //                 style: AppTheme.text333333Size15,
-    //               ),
-    //               onPressed: () {
-    //                 Navigator.pop(context);
-    //               },
-    //             ),
-    //             CupertinoDialogAction(
-    //               child: const Text(
-    //                 "跳转至设置界面",
-    //                 style: AppTheme.text333333Size15,
-    //               ),
-    //               onPressed: () {
-    //                 openAppSettings();
-    //               },
-    //             ),
-    //           ],
-    //         );
-    //       },
-    //     );
-    //   } else {
-    //     final ImagePicker _picker = ImagePicker();
-    //     // Pick an image
-    //     var picked = await _picker.pickImage(
-    //       source: ImageSource.gallery,
-    //       maxWidth: 400,
-    //       imageQuality: 50,
-    //     );
-    //
-    //     if (picked != null) {
-    //       // setState(() {
-    //       imageUrl = picked.path;
-    //       // avatar = (kIsWeb
-    //       //     ? NetworkImage(picked.path)
-    //       //     : FileImage(File(
-    //       //   picked.path,
-    //       // ))) as ImageProvider;
-    //       // });
-    //     }
-    //   }
-    // } else {
     final ImagePicker picker = ImagePicker();
-    // Pick an image
     var picked = await picker.pickImage(
       source: ImageSource.gallery,
       maxWidth: 400,
@@ -392,19 +298,19 @@ class _PersonalPageState extends State<PersonalPage> {
     if (picked != null) {
       imageUrl = picked.path;
     }
-    // }
-
-    //
-    print("imageUrl===>$imageUrl");
     if (imageUrl.isNotEmpty) {
-      _updateAvatar(imageUrl);
+      NetRequest().updateAvatar(imageUrl, (data) {
+        ToastUtils.showToast('上传成功');
+        EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      }, (errMsg) {
+        ToastUtils.showToast('上传文件失败，请重新上传');
+      }, (int sent, int total) {});
     }
   }
 
   Future<void> _takePicture() async {
     final imagePicker = ImagePicker();
-    final XFile? image =
-        await imagePicker.pickImage(source: ImageSource.camera);
+    final XFile? image = await imagePicker.pickImage(source: ImageSource.camera);
 
     if (_isMounted) {
       setState(() {
@@ -494,14 +400,5 @@ class _PersonalPageState extends State<PersonalPage> {
             ),
           );
         });
-  }
-
-  void _updateAvatar(String filePath) {
-    NetRequest().updateAvatar(filePath, (data) {
-      // getUserInfo();
-      //通知个人信息页面刷新
-      EventBusManager.eventBus
-          .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
-    });
   }
 }

@@ -22,7 +22,9 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
   void initState() {
     super.initState();
     setState(() {
-      _selectedValue = widget.items[0];
+      if(widget.items.isNotEmpty) {
+        _selectedValue = widget.items.first;
+      }
     });
   }
 

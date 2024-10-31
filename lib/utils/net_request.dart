@@ -596,19 +596,25 @@ class NetRequest {
   }
 
   ///更新图像
-  Future updateAvatar(String filePath, SuccessCallback onSuccess) async {
+  Future updateAvatar(String filePath, SuccessCallback onSuccess, FailureCallback? onFail, ProgressCallback? onSendProgress) async {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
-    Map<dynamic, dynamic> response =
-        await HttpUtils.postFile(Api.updateAvatar, params: params);
+    Map<String, dynamic> response = await HttpUtils.postFile(Api.updateAvatar,
+        params: params,
+        showLoading: true,
+        onSendProgress: onSendProgress,
+        onFail: onFail);
+
     HttpUtilsResonse.Response resp =
-        HttpUtilsResonse.Response.fromJson(response);
+    HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
-      LogUtils.printAll("updateAvatar===>$response");
+      LogUtils.printAll("uploadFile===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message ?? '');
+      onFail?.call(resp.message ?? '');
+      print('uploadFile============fail=======');
+      // ToastUtils.showToast('上传文件失败，请重新上传');
     }
   }
 

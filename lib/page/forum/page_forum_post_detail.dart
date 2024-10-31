@@ -5,6 +5,7 @@ import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
@@ -145,7 +146,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -158,15 +159,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   Navigator.pop(context);
                 },
               ),
-              backgroundColor: Colors.white,
-              title: const Text(''),
-              centerTitle: true,
+              backgroundColor: Colors.transparent,
             ),
-            body: SafeArea(child: contentView()),
+            body: contentView(),
             bottomSheet: isLoadOk
                 ? PostDetailBottomView(viewParams: postBottomViewParams)
-                : Container(),
-            backgroundColor: Colors.white));
+                : Container(),));
   }
 
   ///是自己的帖子 不显示关注
@@ -183,18 +181,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget contentView() {
     return ListView(
       children: [
-        Container(
-            padding: EdgeInsets.fromLTRB(16, 5, 16, 17),
+        Padding(
+            padding: EdgeInsets.fromLTRB(18.px, 8.px, 18.px, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  boardBean != null ? boardBean!.title! : '',
+                  boardBean?.title ?? '',
                   style: TextStyle(
-                      color: Color(0xff3B5078),
-                      fontSize: 22.px,
-                      fontWeight: FontWeight.normal),
-                  textAlign: TextAlign.center,
+                      color: const Color(0xff2c2c2c),
+                      fontSize: 20.px,
+                      fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(
                   height: 15.px,
@@ -215,7 +213,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 ? boardBean!.user!.nickname!
                                 : '',
                             topTextStyle: const TextStyle(),
-                            bottomText1: boardBean != null
+                            bottomText1: boardBean?.createdAt != null
                                 ? '发布于${DateFormat('MM-dd HH:mm').format(boardBean!.createdAt!)}'
                                 : '',
                             bottomText1Style: AppTheme.text999999Size11,

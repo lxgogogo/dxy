@@ -8,6 +8,7 @@ import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
@@ -71,29 +72,36 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
-      appBar: AppBar(
-        // elevation: 0, // 去除导航条的阴影
-        title: Text('详情'),
-      ),
-      // ignore: unnecessary_null_comparison
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Image.asset(
+                'assets/images/back.png',
+                width: 22.px,
+                height: 22.px,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            backgroundColor: Colors.transparent,
+          ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 15.px),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.px),
+            Padding(
+              padding: EdgeInsets.fromLTRB(18.px, 8.px, 18.px, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(articleDetailBean.title ?? '',
                     style: TextStyle(
-                        color: Color(0xff3B5078),
-                        fontSize: 22.px,
-                        fontWeight: FontWeight.normal),
-                    textAlign: TextAlign.center,
+                      color: const Color(0xff2c2c2c),
+                      fontSize: 20.px,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   SizedBox(
                     height: 15.px,
@@ -113,7 +121,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     height: 10.px,
                   ),
                   Container(
-                    width: 375.px,
                     padding:
                         EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
                     decoration: BoxDecoration(

@@ -1,3 +1,5 @@
+import 'package:holdem/model/user.dart';
+
 class ArticleDetailBean {
   ArticleCategoryBean? category;
   ArticleContent? article;
@@ -17,6 +19,7 @@ class ArticleDetailBean {
   DateTime? updatedAt;
   VideoBean? video;
   BookBean? book;
+  UserProfile? user;
 
   ArticleDetailBean(
       {this.category,
@@ -36,7 +39,8 @@ class ArticleDetailBean {
       this.type,
       this.updatedAt,
       this.video,
-      this.book});
+      this.book,
+      this.user});
 
   ArticleDetailBean.fromJson(Map<String, dynamic> json) {
     if (json["category"] is Map) {
@@ -92,6 +96,9 @@ class ArticleDetailBean {
     }
     if (json["book"] is Map){
       book = BookBean.fromJson(json["book"]);
+    }
+    if (json['user'] != null) {
+      user = UserProfile.fromJson(json['user']);
     }
   }
 }

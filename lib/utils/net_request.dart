@@ -138,7 +138,7 @@ class NetRequest {
 
   Future commentList(
       Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response =
+    Map<dynamic, dynamic> response =
         await HttpUtils.post(Api.commentList, params: params);
     HttpUtilsResonse.Response resp =
         HttpUtilsResonse.Response.fromJson(response);

@@ -9,7 +9,7 @@ class Response {
 
   Response({this.code, this.message});
 
-  Response.fromJson(Map<String, dynamic> json) {
+  Response.fromJson(Map<dynamic, dynamic> json) {
 
     if(json["code"] is int) {
       code = json["code"];

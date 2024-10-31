@@ -12,28 +12,27 @@ class CircleImageWithText extends StatelessWidget {
   final double imageWidth;
   final double imageHeight;
   final String topText;
-  final TextStyle topTextStyle;
+  final TextStyle? topTextStyle;
   final String bottomText1;
   final String bottomText2;
-  final TextStyle bottomText1Style;
-  final TextStyle bottomText2Style;
+  final TextStyle? bottomText1Style;
+  final TextStyle? bottomText2Style;
 
   CircleImageWithText({
     required this.imageUrl,
     required this.imageWidth,
     required this.imageHeight,
-    required this.topText,
+    this.topText = '',
     required this.topTextStyle,
-    required this.bottomText1,
-    required this.bottomText2,
-    required this.bottomText1Style,
-    required this.bottomText2Style,
+    this.bottomText1 = '',
+    this.bottomText2 = '',
+    this.bottomText1Style,
+    this.bottomText2Style,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
@@ -43,18 +42,15 @@ class CircleImageWithText extends StatelessWidget {
                   .getUserAvatar(imageUrl, imageWidth, imageHeight)),
         ),
         Expanded(
-            child: Container(
-          height: imageHeight,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTopText(),
-              Expanded(child: _buildBottomText()),
-            ],
-          ),
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTopText(),
+            _buildBottomText(),
+          ],
         ))
       ],
-    ));
+    );
   }
 
   Widget _buildTopText() {

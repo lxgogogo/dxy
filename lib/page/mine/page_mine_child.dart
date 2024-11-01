@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/model/upload_file.dart';
+import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/MyPostListView.dart';
 import 'package:intl/intl.dart';
@@ -45,10 +46,8 @@ class _MineChildPageState extends State<MineChildPage> {
   List<BoardBean> boardPostList = [];
   List<BoardBean> commentDataList = [];
   final ScrollController _listController = ScrollController();
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-  RefreshController _refreshController2 =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController2 = RefreshController(initialRefresh: false);
 
   bool loaded = false;
 
@@ -78,8 +77,7 @@ class _MineChildPageState extends State<MineChildPage> {
 
     //接受通知刷新页面
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshMineFavoriteList.eventBusTypeName) {
+      if (event.toString() == EventBusAction.refreshMineFavoriteList.eventBusTypeName) {
         if (_isMounted) {
           if (tabIndex == 1) {
             //刷新收藏列表
@@ -109,9 +107,7 @@ class _MineChildPageState extends State<MineChildPage> {
     if (tabIndex == 0) {
       //帖子
       var ownerId = StorageUtil().prefs!.getString('ownerId');
-      NetRequest().getThreadListByBoard(
-          pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '',
-          (data) {
+      NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '', (data) {
         BoardList boardList = BoardList.fromJson(data);
         if (_isMounted) {
           setState(() {
@@ -136,16 +132,14 @@ class _MineChildPageState extends State<MineChildPage> {
             for (var element in followedFansList.list!) {
               if (element.relType != null) {
                 if (element.relType == 'thread') {
-                  currentBoardList.add(
-                      element.thread != null ? element.thread! : BoardBean());
+                  currentBoardList.add(element.thread != null ? element.thread! : BoardBean());
                 } else if (element.relType == 'content') {
                   BoardBean boardBean = BoardBean(
                     id: element.content!.id!,
                     orignalId: element.id!,
                     relType: element.relType!,
                     title: element.content!.title!,
-                    user: UserProfile(
-                        nickname: element.content!.author!, avatar: ''),
+                    user: UserProfile(nickname: element.content!.author!, avatar: ''),
                     content: element.content!.description!,
                     files: [UploadFile(url: element.content!.cover!)],
                     favoriteCount: element.content!.favoriteCount,
@@ -164,8 +158,7 @@ class _MineChildPageState extends State<MineChildPage> {
                     commentCount: element.content!.commentCount,
                     likeCount: element.content!.likeCount,
                   );
-                  currentBoardList.add(
-                      element.comment != null ? element.comment! : BoardBean());
+                  currentBoardList.add(element.comment != null ? element.comment! : BoardBean());
                 }
               }
             }
@@ -191,16 +184,14 @@ class _MineChildPageState extends State<MineChildPage> {
               if (element.relType != null) {
                 if (element.relType == 'thread') {
                   BoardBean boardBean = BoardBean();
-                  boardBean =
-                      element.thread != null ? element.thread! : BoardBean();
+                  boardBean = element.thread != null ? element.thread! : BoardBean();
                   boardBean.comment = element.comment;
                   boardBean.createdAt = element.createdAt;
                   currentBoardList.add(boardBean);
                 } else if (element.relType == 'content') {
                   BoardBean boardBean = BoardBean(
                     id: element.content!.id!,
-                    user: UserProfile(
-                        nickname: element.content!.author!, avatar: ''),
+                    user: UserProfile(nickname: element.content!.author!, avatar: ''),
                     relType: element.relType!,
                     title: element.content!.title!,
                     content: element.content!.description!,
@@ -238,11 +229,8 @@ class _MineChildPageState extends State<MineChildPage> {
 
   ///列表数据
   Widget listView() {
-    if (loaded &&
-        (tabIndex == 2
-            ? commentDataList.length == 0
-            : boardPostList.length == 0)) {
-      return Center(
+    if (loaded && (tabIndex == 2 ? commentDataList.length == 0 : boardPostList.length == 0)) {
+      return const Center(
         child: NoDataView(),
       );
     }
@@ -257,53 +245,57 @@ class _MineChildPageState extends State<MineChildPage> {
         padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
         itemBuilder: (c, i) => tabIndex == 2
             ? commentItem(commentDataList[i], i)
-            : MyPostListItemView(context, i, false, boardPostList[i], tabIndex,
-                (index) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('删除'),
-                      content: Text('确认删除此收藏？'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('取消'),
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
-                        ),
-                        TextButton(
-                          child: Text('删除'),
-                          onPressed: () {
-                            Navigator.of(context).pop(true);
-                            if (boardPostList[i].orignalId != null) {
-                              NetRequest().delFavorite(
-                                  boardPostList[i].orignalId!, (data) {
-                                if (mounted) {
-                                  setState(() {
-                                    boardPostList.remove(index);
-                                  });
-                                }
-                                reqListData();
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ).then((value) {
-                  if (value != null && value) {
-                    // User confirmed, do something
-                    print('User confirmed');
-                  } else {
-                    // User canceled or dismissed the dialog
-                    print('User canceled');
-                  }
-                });
-              }),
-        itemCount:
-            tabIndex == 2 ? commentDataList.length : boardPostList.length,
+            : MyPostListItemView(
+                context,
+                i,
+                false,
+                boardPostList[i],
+                tabIndex,
+                // (index) {
+                //   showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return AlertDialog(
+                //         title: Text('删除'),
+                //         content: Text('确认删除此收藏？'),
+                //         actions: <Widget>[
+                //           TextButton(
+                //             child: Text('取消'),
+                //             onPressed: () {
+                //               Navigator.of(context).pop(false);
+                //             },
+                //           ),
+                //           TextButton(
+                //             child: Text('删除'),
+                //             onPressed: () {
+                //               Navigator.of(context).pop(true);
+                //               if (boardPostList[i].orignalId != null) {
+                //                 NetRequest().delFavorite(boardPostList[i].orignalId!, (data) {
+                //                   if (mounted) {
+                //                     setState(() {
+                //                       boardPostList.remove(index);
+                //                     });
+                //                   }
+                //                   reqListData();
+                //                 });
+                //               }
+                //             },
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   ).then((value) {
+                //     if (value != null && value) {
+                //       // User confirmed, do something
+                //       print('User confirmed');
+                //     } else {
+                //       // User canceled or dismissed the dialog
+                //       print('User canceled');
+                //     }
+                //   });
+                // },
+              ),
+        itemCount: tabIndex == 2 ? commentDataList.length : boardPostList.length,
       ),
     );
   }
@@ -330,65 +322,65 @@ class _MineChildPageState extends State<MineChildPage> {
 
   Widget commentItem(BoardBean boardBean, int index) {
     return Container(
-      // padding: EdgeInsets.only(top: 13.px, bottom: 20.px),
-      margin: EdgeInsets.only(left: 18.px, right: 18.px, bottom: 10.px),
-      padding: EdgeInsets.only(bottom: 9.px),
+      padding: EdgeInsets.fromLTRB(10.px, 10.px, 10.px, 12.px),
+      margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  width: 1.px, color: Colors.black.withOpacity(0.05)))),
+        color: Colors.white.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(12.rpx),
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
               Container(
-                width: 34.px,
-                height: 34.px,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(17.px)),
-                child: ClipOval(
-                  child: Image.network(
-                    userProfileInfo.avatar ?? '',
-                    width: 32.px,
-                    height: 32.px,
-                    fit: BoxFit.cover,
-                  ),
+                decoration: const ShapeDecoration(
+                  color: Colors.white,
+                  shape: CircleBorder(),
                 ),
+                child: ClipOval(
+                    child: LoginHelper().getUserAvatar(
+                  userProfileInfo.avatar ?? '',
+                  42.px,
+                  42.px,
+                )),
               ),
               SizedBox(
-                width: 8.px,
+                width: 7.px,
               ),
               Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
                       userProfileInfo.nickname ?? '',
                       style: TextStyle(
-                          color: const Color(0xff2a2a2a),
-                          fontSize: 13.px,
-                          fontWeight: FontWeight.bold),
+                        color: const Color(0xff2a2a2a),
+                        fontSize: 14.px,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(
-                      height: 3.px,
-                    ),
-                    Text(DateFormat('MM-dd HH:mm').format(boardBean.createdAt!),
+                    if (boardBean.createdAt != null)
+                      Text(
+                        CommonUtils.timeFromNow(boardBean.createdAt!),
                         style: TextStyle(
-                            color: Color(0xff9CACC9), fontSize: 10.px)),
-                  ]))
+                          color: const Color(0xff9CACC9),
+                          fontSize: 10.px,
+                        ),
+                      ),
+                  ],
+                ),
+              )
             ],
           ),
           SizedBox(
-            height: 5.px,
+            height: 10.px,
           ),
           GestureDetector(
               onTap: () {
-                if (boardBean.relType != null &&
-                    boardBean.relType!.isNotEmpty) {
+                if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
                   if (boardBean.relType == 'content') {
                     Get.to(ArticleDetailPage(id: boardBean.id ?? 0));
                   } else if (boardBean.relType == 'comment') {}
@@ -406,12 +398,13 @@ class _MineChildPageState extends State<MineChildPage> {
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.px),
+                    style: TextStyle(fontSize: 12.px, color: const Color(0xff2a2a2a)),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 9.px),
+                    margin: EdgeInsets.only(top: 10.px),
                     padding: EdgeInsets.all(8.px),
-                    decoration: BoxDecoration(color: const Color(0x1a95A3C4)),
+                    constraints: BoxConstraints(minHeight: 52.px),
+                    decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
                     child: Row(
                       children: [
                         if (boardBean.cover != null)
@@ -429,8 +422,7 @@ class _MineChildPageState extends State<MineChildPage> {
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Color(0xff2a2a2a), fontSize: 12.px),
+                          style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.px),
                         )),
                       ],
                     ),

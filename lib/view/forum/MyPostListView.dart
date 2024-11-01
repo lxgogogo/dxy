@@ -7,6 +7,7 @@ import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
+import 'package:intl/intl.dart';
 
 import '../../model/board_list.dart';
 import '../../page/forum/media_helper.dart';
@@ -14,100 +15,95 @@ import '../../page/forum/page_forum_post_detail.dart';
 import '../../page/index/page_article_detail.dart';
 import '../../utils/app_theme.dart';
 
-Widget MyPostListItemView(BuildContext context, int index, bool isForumList,
-    BoardBean boardBean, int type,Function del,
-    {bool isShowMedia = true}) {
+Widget MyPostListItemView(
+  BuildContext context,
+  int index,
+  bool isForumList,
+  BoardBean boardBean,
+  int type, {
+  bool isShowMedia = true,
+}) {
   footer() {
-    return Row(
-      children: [
-        if (boardBean.createdAt != null)
-          Text(
-            CommonUtils.timeFromNow(boardBean.createdAt!),
-            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-          ),
-        const Spacer(),
-        SizedBox(
-          width: 55.px,
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/heart.png',
-                width: 11.px,
-                height: 12.px,
-              ),
-              SizedBox(
-                width: 4.px,
-              ),
-              Text(
-                '${boardBean.likeCount}',
-                style:
-                    TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                maxLines: 1,
-              )
-            ],
-          ),
-        ),
-
-        SizedBox(
+    return Padding(
+      padding: EdgeInsets.only(top: 12.px),
+      child: Row(
+        children: [
+          if (boardBean.createdAt != null)
+            Text(
+              DateFormat('M/d').format(boardBean.createdAt!),
+              style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+            ),
+          const Spacer(),
+          SizedBox(
             width: 55.px,
             child: Row(
               children: [
                 Image.asset(
-                  'assets/images/comment.png',
-                  width: 11.px,
-                  height: 12.px,
+                  'assets/images/praise.png',
+                  width: 12.px,
                 ),
                 SizedBox(
-                  width: 4.px,
+                  width: 6.px,
                 ),
-                Text(
-                  '${boardBean.commentCount}',
-                  style: TextStyle(
-                      color: const Color(0xff9CACC9), fontSize: 10.px),
-                  maxLines: 1,
+                Expanded(
+                  child: Text(
+                    '${boardBean.likeCount}',
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 10.px,
+                    ),
+                    maxLines: 1,
+                  ),
                 )
               ],
-            )),
-        SizedBox(
-            width: 35.px,
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/images/star.png',
-                  width: 11.px,
-                  height: 12.px,
-                ),
-                SizedBox(
-                  width: 4.px,
-                ),
-                Text(
-                  '${boardBean.favoriteCount}',
-                  style: TextStyle(
-                      color: const Color(0xff9CACC9), fontSize: 10.px),
-                  maxLines: 1,
-                )
-              ],
-            )),
-        if (type == 1)
-          GestureDetector(
-            onTap: (){
-              del(index);
-            },
-            child: Container(
-              width: 30.px,
-              height: 30.px,
-              alignment: Alignment.center,
-              child: Image.asset(
-                'assets/images/delete2.png',
-                width: 6.px,
-                height: 6.px,
-              ),
             ),
-          )
-        // SizedBox(
-        //   width: 15.px,
-        // ),
-      ],
+          ),
+          SizedBox(
+              width: 55.px,
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/star.png',
+                    width: 13.px,
+                  ),
+                  SizedBox(
+                    width: 6.px,
+                  ),
+                  Expanded(
+                    child: Text(
+                      '${boardBean.favoriteCount}',
+                      style: TextStyle(
+                        color: const Color(0xff9CACC9),
+                        fontSize: 10.px,
+                      ),
+                      maxLines: 1,
+                    ),
+                  )
+                ],
+              )),
+          SizedBox(
+              width: 55.px,
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/comment.png',
+                    width: 13.px,
+                  ),
+                  SizedBox(
+                    width: 6.px,
+                  ),
+                  Text(
+                    '${boardBean.commentCount}',
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 10.px,
+                    ),
+                    maxLines: 1,
+                  )
+                ],
+              )),
+        ],
+      ),
     );
   }
 
@@ -116,59 +112,51 @@ Widget MyPostListItemView(BuildContext context, int index, bool isForumList,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 32,
-          height: 32,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(16)),
-          margin: EdgeInsets.only(right: 10.px),
-          child: ClipOval(
-            child: LoginHelper().getUserAvatar(
-                boardBean.user != null ? boardBean.user!.avatar! : '', 30, 30),
+          decoration: const ShapeDecoration(
+            color: Colors.white,
+            shape: CircleBorder(),
           ),
+          child: ClipOval(
+              child: LoginHelper().getUserAvatar(
+            boardBean.user != null ? boardBean.user!.avatar! : '',
+            42.px,
+            42.px,
+          )),
         ),
         SizedBox(
-          width: 5.px,
+          width: 7.px,
         ),
         Expanded(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              boardBean.user != null && boardBean.user!.nickname!.isNotEmpty
-                  ? boardBean.user!.nickname!
-                  : '德学院',
+              boardBean.user != null && boardBean.user!.nickname!.isNotEmpty ? boardBean.user!.nickname! : '德学院',
               style: TextStyle(
-                  color: const Color(0xff2a2a2a), fontSize: 12.px, height: 1.3),
+                color: const Color(0xff2a2a2a),
+                fontSize: 14.px,
+                fontWeight: FontWeight.w500,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(
-              height: 5.px,
+              height: 4.px,
             ),
             _showTextContentView(boardBean),
             Visibility(
-                visible: boardBean.files != null && boardBean.files!.isEmpty
-                    ? false
-                    : true,
+                visible: boardBean.files != null && boardBean.files!.isEmpty ? false : true,
                 child: Column(
                   children: [
                     SizedBox(
                       height: 5.px,
                     ),
                     isShowMedia
-                        ? mediaContent(context, index,
-                            boardBean.files != null ? boardBean.files! : [])
+                        ? mediaContent(context, index, boardBean.files != null ? boardBean.files! : [])
                         : Container(),
                   ],
                 )),
-            SizedBox(
-              height: 12.px,
-            ),
-            Container(width: 298.px, child: footer()),
-            SizedBox(
-              height: 12.px,
-            )
+            footer(),
           ],
         )),
       ],
@@ -176,62 +164,30 @@ Widget MyPostListItemView(BuildContext context, int index, bool isForumList,
   }
 
   return GestureDetector(
-      onTap: () {
-        if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
-          if (boardBean.relType == 'content') {
-            Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
-          } else if (boardBean.relType == 'comment') {}
-        } else {
-          Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
-        }
-      },
-      child: Container(
-          padding: EdgeInsets.only(bottom: 2.px),
-          margin: EdgeInsets.only(top: 10.px, left: 6.px, right: 6.px),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom:
-                      BorderSide(color: const Color(0xffe6e6e6), width: 1.px))),
-          child: detailContent())
-
-      // Container(
-      //     padding: EdgeInsets.all(12.px),
-      //     margin: EdgeInsets.only(top: 10.px, left: 0.px, right: 0.px),
-      //     decoration: BoxDecoration(
-      //       //flutter 上下颜色渐变
-      //       //#F9CF3A, #FFD43E00
-      //       gradient: LinearGradient(
-      //         begin: Alignment.topCenter,
-      //         end: Alignment.bottomCenter,
-      //         colors: [
-      //           isForumList
-      //               ? Colors.white
-      //               : Color(0xFF008EFF).withOpacity(0.03),
-      //           isForumList
-      //               ? Colors.white
-      //               : Color(0xFF008EFF).withOpacity(0.03),
-      //         ],
-      //       ),
-      //       boxShadow: const [
-      //         BoxShadow(
-      //           color: Colors.white,
-      //           blurRadius: 4.0,
-      //           spreadRadius: -4.0,
-      //           offset: Offset(0.0, 6.0),
-      //         ),
-      //       ],
-      //       borderRadius: BorderRadius.all(Radius.circular(13.px)),
-      //     ),
-      //     child: detailContent())
-
-      );
+    onTap: () {
+      if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
+        if (boardBean.relType == 'content') {
+          Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
+        } else if (boardBean.relType == 'comment') {}
+      } else {
+        Get.to(PostDetailPage(postId: boardBean.id! ?? 0));
+      }
+    },
+    child: Container(
+      padding: EdgeInsets.fromLTRB(10.px, 10.px, 10.px, 12.px),
+      margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(12.rpx),
+      ),
+      child: detailContent(),
+    ),
+  );
 }
 
 ///显示内容
 Widget _showTextContentView(BoardBean boardBean) {
-  if (boardBean != null &&
-      boardBean.content != null &&
-      boardBean.content!.isNotEmpty) {
+  if (boardBean.content?.isNotEmpty == true) {
     if (boardBean.content!.contains('<p>')) {
       return SizedBox(
         height: 90.px,
@@ -262,7 +218,7 @@ Widget _showTextContentView(BoardBean boardBean) {
         boardBean.content != null ? boardBean.content! : '',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 12, color: const Color(0xff2a2a2a)),
+        style: TextStyle(fontSize: 12.px, color: const Color(0xff2a2a2a)),
         softWrap: true,
       );
     }
@@ -330,8 +286,7 @@ Widget mediaContent(BuildContext context, int index, List<UploadFile> files) {
   }
 }
 
-Widget multipleImageWrap(
-    BuildContext context, int imageCount, List<String> imgUrlList) {
+Widget multipleImageWrap(BuildContext context, int imageCount, List<String> imgUrlList) {
   double widthNum = (MediaQuery.of(context).size.width - 70) / imageCount;
   return Row(
     // mainAxisAlignment: MainAxisAlignment.center, // 水平居中
@@ -355,15 +310,13 @@ Widget multipleImageWrap(
 Widget singleImageView(String? imgUrl) {
   return ClipRRect(
       borderRadius: BorderRadius.circular(4.0),
-      child: MediaHelper().cacheLoadNetworkImage(
-          imgUrl!.isNotEmpty ? imgUrl : '', 82.px, 82.px));
+      child: MediaHelper().cacheLoadNetworkImage(imgUrl!.isNotEmpty ? imgUrl : '', 82.px, 82.px));
 }
 
 Widget multipleImageView(double imageWidth, String? imgUrl) {
   return ClipRRect(
       borderRadius: BorderRadius.circular(4.0),
-      child: MediaHelper().cacheLoadNetworkImage(
-          imgUrl!.isNotEmpty ? imgUrl : '', 82.px, 82.px));
+      child: MediaHelper().cacheLoadNetworkImage(imgUrl!.isNotEmpty ? imgUrl : '', 82.px, 82.px));
 }
 
 String getFilesUrl(UploadFile uploadFile) {

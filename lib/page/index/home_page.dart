@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             indicator: UnderlineTabIndicator(
               borderSide: BorderSide(
                 color: const Color(0xff6198f7),
-                width: 4.px, // 选中线条宽度
+                width: 2.px, // 选中线条宽度
               ),
               insets: EdgeInsets.symmetric(horizontal: 8.px),
               borderRadius: BorderRadius.circular(2.px),

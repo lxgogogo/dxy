@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/page/mine/register_content.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/close_image_button.dart';
 
 import '../../utils/app_theme.dart';
@@ -35,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
   final FocusNode _focusPwd = FocusNode();
 
   int _focusedIndex = -1;
+
+  bool _isLoginDisable = true;
 
   @override
   void initState() {
@@ -96,6 +100,7 @@ class _LoginPageState extends State<LoginPage> {
 
   loginContent() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           height: 50.px,
@@ -122,12 +127,20 @@ class _LoginPageState extends State<LoginPage> {
                       autocorrect: false,
                       //去除输入后自动选中更正功能
                       controller: _controllerAccount,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(
+                          RegExp('[\\s]'),
+                        )
+                      ],
                       decoration: InputDecoration(
                         border: InputBorder.none, // 没有边框
                         hintText: '请输入邮箱地址',
                         hintStyle: AppTheme.text999999Size16,
                         contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
                       ),
+                      onChanged: (_) {
+                        checkValid();
+                      },
                     )),
               ),
             ],
@@ -158,13 +171,17 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       controller: _controllerPw,
                       focusNode: _focusPwd,
-                      obscureText: !isOpen, // 输入内容显示为密文
+                      obscureText: !isOpen,
+                      // 输入内容显示为密文
                       decoration: InputDecoration(
                         border: InputBorder.none, // 没有边框
                         hintText: '请输入密码',
                         hintStyle: AppTheme.text999999Size16,
                         contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
                       ),
+                      onChanged: (_) {
+                        checkValid();
+                      },
                     )),
               ),
               GestureDetector(
@@ -212,25 +229,15 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 60.px,
         ),
-        Center(
-          child: GestureDetector(
-            onTap: () {
-              login();
-            },
-            child: Container(
-              width: 315.px,
-              height: 48.px,
-              padding: EdgeInsets.only(bottom: 7.px),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/images/login_btn.png'), fit: BoxFit.contain)),
-              child: Text(
-                '登录',
-                style: TextStyle(color: Colors.white, fontSize: 15.px),
-              ),
-            ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 28.5.px),
+          child: CustomButton(
+            onPressed: login,
+            disable: _isLoginDisable,
+            height: 45.px,
+            title: '登录',
           ),
-        )
+        ),
       ],
     );
   }
@@ -345,5 +352,13 @@ class _LoginPageState extends State<LoginPage> {
     _focusEmail.dispose();
     _focusPwd.dispose();
     super.dispose();
+  }
+
+  void checkValid() {
+    final account = _controllerAccount.text;
+    final isEmail = GetUtils.isEmail(account);
+    final password = _controllerPw.text;
+    _isLoginDisable = account.isEmpty || password.isEmpty || !isEmail;
+    setState(() {});
   }
 }

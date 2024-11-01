@@ -30,26 +30,25 @@ import 'package:holdem/widget/linear_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
-// ignore: must_be_immutable
-class IndexTabChildPage extends StatefulWidget {
-  String type;
+class HomeChildView extends StatefulWidget {
+  final String type;
 
-  IndexTabChildPage({super.key, required this.type});
+  const HomeChildView({super.key, required this.type});
 
   @override
-  State<IndexTabChildPage> createState() => _IndexTabChildPageState();
+  State<HomeChildView> createState() => _HomeChildViewState();
 }
 
-class _IndexTabChildPageState extends State<IndexTabChildPage>
+class _HomeChildViewState extends State<HomeChildView>
     with AutomaticKeepAliveClientMixin {
   List<ArticleBean> articles = [];
   List<BannerBean> banners = [];
   List<ArticleBean> bookSuggests = [];
-  List<IndexCategory> categorys = [];
+  List<IndexCategory> categories = [];
   List<CourseBean> courses = [];
   List<CompetionLoopBean> loops = [];
   int categorySel = 0;
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   int pageNum = 1;
   int parentId = 1;
@@ -111,7 +110,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
             data.map((category) => IndexCategory.fromJson(category)));
         if (mounted) {
           setState(() {
-            categorys = categoryList;
+            categories = categoryList;
           });
         }
       });
@@ -286,7 +285,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
+    super.build(context);
     if (widget.type == 'course') {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,12 +302,12 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                       width: 16.px,
                     ),
 
-                    ...List.generate(categorys.length, (index) {
+                    ...List.generate(categories.length, (index) {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
                             categorySel = index;
-                            parentId = categorys[index].id ?? 0;
+                            parentId = categories[index].id ?? 0;
                             pageNum = 1;
                           });
                           reqListData();
@@ -348,7 +347,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                                       ],
                               )),
                           child: Text(
-                            categorys[index].name ?? '',
+                            categories[index].name ?? '',
                             style: TextStyle(
                                 color: categorySel == index
                                     ? Colors.white
@@ -414,24 +413,6 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
           Expanded(child: content())
         ],
       );
-      // return Column(
-      //   children: [
-      //     Container(
-      //       height: 50.px,
-      //       child: ListView.builder(
-      //         scrollDirection: Axis.horizontal,
-      //         itemBuilder: (c, i) {
-      //           return Container(
-      //             padding: EdgeInsets.symmetric(horizontal: 10.px),
-      //             child: Text(categorys[i].name ?? '',style: TextStyle(color: Colors.red),),
-      //           );
-      //         },
-      //         itemCount: categorys.length,
-      //       ),
-      //     ),
-      //     content()
-      //   ],
-      // );
     }
     return content();
   }
@@ -454,20 +435,8 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
           child: ListView.builder(
             controller: _listController,
             itemBuilder: (c, i) => contentItem(i),
-            // itemExtent: 160.0,
             itemCount: articles.length,
           ));
-      // child: GridView.builder(
-      //   padding: EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
-      //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      //     crossAxisCount: 2,
-      //     childAspectRatio: 0.57,
-      //     crossAxisSpacing: 8.px,
-      //     mainAxisSpacing: 8.px,
-      //   ),
-      //   itemBuilder: (c, i) => contentItem(i),
-      //   itemCount: articles.length,
-      // ));
     } else if (widget.type == 'video') {
       return SmartRefresher(
           enablePullDown: true,
@@ -478,7 +447,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
-          child: articles.length == 0 ? Container() : videoList());
+          child: articles.isEmpty ? Container() : videoList());
     } else if (widget.type == 'course') {
       return SmartRefresher(
           enablePullDown: true,
@@ -492,7 +461,6 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
           child: ListView.builder(
             controller: _listController,
             itemBuilder: (c, i) => courseItem(i),
-            // itemExtent: 160.0,
             itemCount: courses.length,
           ));
     }
@@ -524,19 +492,6 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
               isBanner: true,
             );
           }
-          /*
-          child: GridView.builder(
-            padding: EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.57,
-              crossAxisSpacing: 8.px,
-              mainAxisSpacing: 8.px,
-            ),
-            itemBuilder: (c, i) => contentItem(i),
-            itemCount: articles.length,
-          ));
-          */
           return GridView.builder(
             padding: EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -700,7 +655,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
     if (widget.type == 'news' && index == 0) {
       return Column(
         children: [
-          if (banners.length > 0)
+          if (banners.isNotEmpty)
             Container(
               margin: EdgeInsets.only(left: 16.px, right: 16.px, top: 10.px),
               clipBehavior: Clip.antiAlias,
@@ -769,7 +724,7 @@ class _IndexTabChildPageState extends State<IndexTabChildPage>
                 autoplay: true,
               ),
             ),
-          if (loops.length > 0)
+          if (loops.isNotEmpty)
             GestureDetector(
               onTap: () {
                 Get.to(GameCalendarPage(

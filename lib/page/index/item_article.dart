@@ -56,44 +56,6 @@ class _ArticleItemState extends State<ArticleItem> {
         padding: EdgeInsets.only(
               left: 20.px, right: 12.px, top: 5.px, bottom: 5.px),
         child: itemContent()),
-
-      // child: Container(
-      //     padding: EdgeInsets.only(bottom: 2.px),
-      //     margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-      //     decoration: BoxDecoration(
-      //       //flutter 上下颜色渐变
-      //       //#F9CF3A, #FFD43E00
-      //       borderRadius: BorderRadius.all(Radius.circular(13.px)),
-      //       gradient: const LinearGradient(
-      //         begin: Alignment.centerLeft,
-      //         end: Alignment.centerRight,
-      //         colors: [
-      //           Color(0xFF7FA3C1),
-      //           Color(0xFFBED6EB),
-      //           Color(0xFF80A3C1),
-      //           Color(0xFFC2D8EB),
-      //           Color(0xFF80A3C1),
-      //           Color(0xFFC1D7EB),
-      //           Color(0xFF87A9C5)
-      //         ],
-      //       ),
-      //     ),
-      //     child: Container(
-      //         padding: EdgeInsets.only(left: 20.px,right: 12.px,top:5.px,bottom: 5.px),
-      //         decoration: BoxDecoration(
-      //           //flutter 上下颜色渐变
-      //           //#F9CF3A, #FFD43E00
-      //           gradient: const LinearGradient(
-      //             begin: Alignment.topCenter,
-      //             end: Alignment.bottomCenter,
-      //             colors: [
-      //               Color(0xFFEEF7FE),
-      //               Color(0xFFFFFFFF),
-      //             ],
-      //           ),
-      //           borderRadius: BorderRadius.all(Radius.circular(13.px)),
-      //         ),
-      //         child: itemContent())),
     );
   }
 
@@ -121,20 +83,8 @@ class _ArticleItemState extends State<ArticleItem> {
               if (widget.article.type != 'videoList')
                 Row(
                   children: [
-                    // Image.asset(
-                    //   'assets/images/time.png',
-                    //   width: 20.px,
-                    //   height: 20.px,
-                    // ),
-                    // SizedBox(
-                    //   width: 5.px,
-                    // ),
                     Text(
-                      DateFormat('M月d日')
-                          .format(widget.article.createdAt ?? DateTime.now()),
-                      // widget.article.duration != null
-                      //     ? formatDuration(Duration(seconds: widget.article.duration ?? 0))
-                      //     : '',
+                      widget.article.createdAt != null ? DateFormat('yyyy-M-d').format(widget.article.createdAt!): '',
                       style: TextStyle(
                         color: const Color(0xff9CACC9),
                         fontSize: 12.px,

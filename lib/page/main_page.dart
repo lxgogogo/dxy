@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:holdem/page/index/page_index.dart';
+import 'package:holdem/page/index/home_page.dart';
 import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/utils/global.dart';
@@ -22,7 +22,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    IndexPage(),
+    HomePage(),
     ForumTabPage(),
     MessagePage(),
     MinePage()

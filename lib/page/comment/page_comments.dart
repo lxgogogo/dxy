@@ -5,6 +5,7 @@ import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -91,42 +92,43 @@ class _CommentListPageState extends State<CommentListPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Image.asset(
-              'assets/images/back.png',
-              width: 22.px,
-              height: 22.px,
+    return BackgroundContainer(
+      child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Image.asset(
+                'assets/images/back.png',
+                width: 22.px,
+                height: 22.px,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            backgroundColor: Colors.transparent,
+            // elevation: 0, // 去除导航条的阴影
+            title: Text('评论',
+              style: AppTheme.text333333Size17,
+            ),
+            centerTitle: true,
+            // bottom: const PreferredSize(
+            //   preferredSize: Size.fromHeight(1.0),
+            //   child: Divider(
+            //     color: AppTheme.color_F3F3F3,
+            //     thickness: 1,
+            //   ),
+            // ),
           ),
-          backgroundColor: const Color(0xffF4F7FC),
-          // elevation: 0, // 去除导航条的阴影
-          title: Text('评论',
-            style: AppTheme.text333333Size17,
-          ),
-          centerTitle: true,
-          // bottom: const PreferredSize(
-          //   preferredSize: Size.fromHeight(1.0),
-          //   child: Divider(
-          //     color: AppTheme.color_F3F3F3,
-          //     thickness: 1,
-          //   ),
-          // ),
-        ),
-        // ignore: unnecessary_null_comparison
-        body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [const Color(0xffF4F7FC), const Color(0xffE4EEF9)])),
-        child: content(),
-      ));
+          backgroundColor: Colors.transparent,
+          body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [const Color(0xffF4F7FC), const Color(0xffE4EEF9)])),
+          child: content(),
+        )),
+    );
   }
 
   content() {

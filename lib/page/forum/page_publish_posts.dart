@@ -12,6 +12,7 @@ import 'package:holdem/model/user.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -99,10 +100,9 @@ class _PublishPostsPageState extends State<PublishPostsPage>
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
-      backgroundColor: const Color(0xffF4F7FC),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0.0,

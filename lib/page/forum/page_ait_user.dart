@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/search_bar.dart';
@@ -80,8 +81,7 @@ class _AitUserPageState extends State<AitUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
           titleSpacing: 0.0,
@@ -122,8 +122,8 @@ class _AitUserPageState extends State<AitUserPage> {
                         color: const Color(0xff249CFC), fontSize: 15.px)))
             // GestureDetector(child: Text('搜索'),)
           ]),
+      backgroundColor: Colors.transparent,
       body: SafeArea(child: contentView()),
-      backgroundColor: const Color(0xffE8F3FF),
     ));
   }
 

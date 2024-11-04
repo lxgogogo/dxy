@@ -12,6 +12,7 @@ import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
@@ -112,12 +113,12 @@ class _BookDetailPageState extends State<BookDetailPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       extendBodyBehindAppBar: false, // 将导航条扩展到背景图片后面
-      backgroundColor: const Color(0xffE4EEF9),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: const Color(0xffE4EEF9), // 设置导航条背景透明
+        backgroundColor: Colors.transparent, // 设置导航条背景透明
         elevation: 0, // 去除导航条的阴影
         title: Text('书籍详情'),
       ),
@@ -171,14 +172,20 @@ class _BookDetailPageState extends State<BookDetailPage> {
             SizedBox(
               width: 16.px,
             ),
-            ClipRRect(
-                borderRadius: BorderRadius.circular(5.px), // 设置圆角半径
-                child: Image.network(
-                  articleDetailBean.cover ?? '',
-                  fit: BoxFit.cover,
-                  width: 66.px,
-                  height: 88.px,
-                )),
+            AnimatedOpacity(
+              opacity: articleDetailBean.cover?.isNotEmpty == true ? 1 : 0,
+              duration: const Duration(milliseconds: 150),
+              child: SizedBox(
+                width: 66.px,
+                height: 88.px,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.px), // 设置圆角半径
+                    child: Image.network(
+                      articleDetailBean.cover ?? '',
+                      fit: BoxFit.cover,
+                    )),
+              ),
+            ),
             SizedBox(
               width: 12.px,
             ),
@@ -276,8 +283,6 @@ class _BookDetailPageState extends State<BookDetailPage> {
         Container(
           margin: EdgeInsets.symmetric(horizontal: 18.px),
           padding: EdgeInsets.only(top: 30.px),
-          decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: const Color(0xffE6E6E6)))),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,

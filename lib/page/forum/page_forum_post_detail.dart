@@ -145,7 +145,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
     return BackgroundContainer(
         child: Scaffold(
             appBar: AppBar(
@@ -161,6 +160,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               ),
               backgroundColor: Colors.transparent,
             ),
+            backgroundColor: Colors.transparent,
             body: contentView(),
             bottomSheet: isLoadOk
                 ? PostDetailBottomView(viewParams: postBottomViewParams)
@@ -257,7 +257,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ),
           ],
         ),
-        Container(height: 10.px, color: AppTheme.color_F3F3F3),
         Container(
             padding: EdgeInsets.fromLTRB(16, 15, 16, 0),
             child:

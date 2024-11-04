@@ -5,6 +5,7 @@ import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -74,11 +75,10 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
             extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-            backgroundColor: kBgColor,
+            backgroundColor: Colors.transparent,
             appBar: AppBar(
               backgroundColor: Colors.transparent, // 设置导航条背景透明
               elevation: 0, // 去除导航条的阴影

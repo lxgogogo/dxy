@@ -5,6 +5,7 @@ import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/page/forum/page_publish_posts.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 
 import '../../model/board_info.dart';
 import '../../utils/constants.dart';
@@ -70,30 +71,31 @@ class _ForumTabPageState extends State<ForumTabPage>
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: Colors.transparent, // 设置导航条背景透明
-        // elevation: 0, // 去除导航条的阴影
-        title: Text('论坛'),
-        backgroundColor: Colors.transparent, // 设置导航条背景透明
-        elevation: 0, // 去除导航条的阴影
-        actions: [
-          IconButton(
-            icon: Image.asset(
-              'assets/images/order.png',
-              width: 20.px,
-              height: 20.px,
+    return BackgroundContainer(
+      child: Scaffold(
+        appBar: AppBar(
+          // backgroundColor: Colors.transparent, // 设置导航条背景透明
+          // elevation: 0, // 去除导航条的阴影
+          title: Text('论坛'),
+          backgroundColor: Colors.transparent, // 设置导航条背景透明
+          elevation: 0, // 去除导航条的阴影
+          actions: [
+            IconButton(
+              icon: Image.asset(
+                'assets/images/order.png',
+                width: 20.px,
+                height: 20.px,
+              ),
+              onPressed: () {
+                _showMenuDialog(context);
+              },
             ),
-            onPressed: () {
-              _showMenuDialog(context);
-            },
-          ),
-        ],
+          ],
+        ),
+        body: detail(),
+        backgroundColor: Colors.transparent,
+        floatingActionButton: bottomFloatingButton(),
       ),
-      body: detail(),
-      backgroundColor: sortBtnBgtColor,
-      floatingActionButton: bottomFloatingButton(),
     );
   }
 
@@ -206,9 +208,9 @@ class _ForumTabPageState extends State<ForumTabPage>
       tabId = boardInfoList[selIndex - 1].id!;
     }
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
-          height: 30.px,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -229,12 +231,12 @@ class _ForumTabPageState extends State<ForumTabPage>
                     _pageKey.currentState?.refreshData(0, order);
                   },
                   child: Container(
-                    height: 30.px,
-                    margin: EdgeInsets.only(right: 10.px),
+                    margin: EdgeInsets.only(right: 12.px,top: 12.px, bottom: 12.px),
                     padding: EdgeInsets.symmetric(horizontal: 15.px),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.px),
+                        border: selIndex == 0 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
                         boxShadow: [
                           BoxShadow(
                             color: selIndex == 0
@@ -285,12 +287,12 @@ class _ForumTabPageState extends State<ForumTabPage>
                           ?.refreshData(boardInfoList[selIndex - 1].id!, order);
                     },
                     child: Container(
-                      height: 30.px,
-                      margin: EdgeInsets.only(right: 10.px),
+                      margin: EdgeInsets.only(right: 10.px,top: 12.px, bottom: 12.px),
                       padding: EdgeInsets.symmetric(horizontal: 15.px),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.px),
+                          border: selIndex == index + 1 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
                           boxShadow: [
                             BoxShadow(
                               color: selIndex == index + 1

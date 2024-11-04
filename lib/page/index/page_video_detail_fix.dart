@@ -106,6 +106,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
         ),
         backgroundColor: Colors.transparent,
       ),
+      backgroundColor: Colors.transparent,
       body: detail(),
       bottomSheet: articleDetailBean != null
           ? PostDetailBottomView(
@@ -215,11 +216,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
               )),
           Container(
             padding: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.px),
-                    topRight: Radius.circular(15.px))),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,

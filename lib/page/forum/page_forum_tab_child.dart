@@ -127,16 +127,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      SizedBox(
-        height: 3.px,
-      ),
-      // getFilterConditionView(),
-      SizedBox(
-        height: 10.px,
-      ),
-      Expanded(child: boardPostList.isNotEmpty ? listView() : NoDataView())
-    ]);
+    return boardPostList.isNotEmpty ? listView() : const Center(child: NoDataView());
   }
 
   Widget getFilterConditionView() {

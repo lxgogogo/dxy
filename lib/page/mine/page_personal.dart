@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/mine/page_edit_information.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -74,7 +75,7 @@ class _PersonalPageState extends State<PersonalPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -87,13 +88,14 @@ class _PersonalPageState extends State<PersonalPage> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: const Color(0xffF4F7FC),
+        backgroundColor: Colors.transparent,
         title: const Text(
           '个人资料',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
       ),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
           child: Container(
               // color: Colors.red,
@@ -104,7 +106,6 @@ class _PersonalPageState extends State<PersonalPage> {
                 colors: [Color(0xFFF4F7FC), Color(0xFFE4EEF9), Color(0xFFE4EEF9)],
               )),
               child: contentView())),
-      backgroundColor: const Color(0xffF4F7FC),
     ));
   }
 

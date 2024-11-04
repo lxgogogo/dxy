@@ -3,6 +3,7 @@ import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -104,7 +105,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -134,6 +135,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
         //   ),
         // ),
       ),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
           child: Container(
               // color: Colors.red,
@@ -148,7 +150,6 @@ class _MineFollowPageState extends State<MineFollowPage> {
                 ],
               )),
               child: contentView())),
-      backgroundColor: const Color(0xffF4F7FC),
     ));
   }
 

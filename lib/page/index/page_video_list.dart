@@ -5,6 +5,7 @@ import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -69,13 +70,14 @@ class _VideoListPageState extends State<VideoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
             // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
             appBar: AppBar(
               title: Text('视频合集列表'),
+              backgroundColor: Colors.transparent,
             ),
+            backgroundColor: Colors.transparent,
             body: content()));
   }
 

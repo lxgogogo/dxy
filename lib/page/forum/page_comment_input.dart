@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
@@ -39,8 +40,7 @@ class _CommentInputPageState extends State<CommentInputPage>
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -53,7 +53,7 @@ class _CommentInputPageState extends State<CommentInputPage>
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         title: const Text(
           '评论',
           style: AppTheme.text333333Size17,
@@ -114,8 +114,8 @@ class _CommentInputPageState extends State<CommentInputPage>
           //     ))
         ],
       ),
+      backgroundColor: Colors.transparent,
       body: SafeArea(child: contentView()),
-      backgroundColor: Colors.white,
     ));
   }
 

@@ -5,6 +5,7 @@ import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -51,8 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -72,21 +72,9 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         centerTitle: true,
       ),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
-          child: Container(
-              // color: Colors.red,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFF4F7FC),
-                  Color(0xFFE4EEF9),
-                  Color(0xFFE4EEF9)
-                ],
-              )),
-              child: contentView())),
-      backgroundColor: const Color(0xffF4F7FC),
+          child: contentView()),
     ));
   }
 

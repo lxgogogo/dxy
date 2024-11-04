@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:holdem/page/message/page_message_tab_child.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -76,17 +77,18 @@ class _MessagePageState extends State<MessagePage>
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return Scaffold(
-      // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-      appBar: AppBar(
-        backgroundColor: Colors.transparent, // 设置导航条背景透明
-        // elevation: 0, // 去除导航条的阴影
-        title: Text('消息'),
+    super.build(context);
+    return BackgroundContainer(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent, // 设置导航条背景透明
+          // elevation: 0, // 去除导航条的阴影
+          title: Text('消息'),
+        ),
+        backgroundColor: Colors.transparent,
+        // body: getTabView(),
+        body: detail(),
       ),
-      backgroundColor: const Color(0xfff4f7fc),
-      // body: getTabView(),
-      body: detail(),
     );
   }
 

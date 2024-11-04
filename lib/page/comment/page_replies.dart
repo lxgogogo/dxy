@@ -6,6 +6,7 @@ import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -88,13 +89,16 @@ class _RepliesPageState extends State<RepliesPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return Scaffold(
-        appBar: AppBar(
-          // elevation: 0, // 去除导航条的阴影
-          title: Text('全部回复'),
-        ),
-        // ignore: unnecessary_null_comparison
-        body: content());
+    return BackgroundContainer(
+      child: Scaffold(
+          appBar: AppBar(
+            // elevation: 0, // 去除导航条的阴影
+            title: Text('全部回复'),
+            backgroundColor: Colors.transparent,
+          ),
+          backgroundColor: Colors.transparent,
+          body: content()),
+    );
   }
 
   content() {

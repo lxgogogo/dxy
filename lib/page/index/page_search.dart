@@ -5,6 +5,7 @@ import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/search_bar.dart';
@@ -34,9 +35,9 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
-      backgroundColor: const Color(0xffF4F7FC),
+      backgroundColor: Colors.transparent,
       // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -103,164 +104,155 @@ class _SearchPageState extends State<SearchPage> {
           // GestureDetector(child: Text('搜索'),)
         ],
       ),
-      body: Container(
-        // color: Colors.red,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFF4F7FC), Color(0xFFE4EEF9), Color(0xFFE4EEF9)],
-        )),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 8.px,
+      body: Column(
+        children: [
+          SizedBox(
+            height: 8.px,
+          ),
+          // Container(
+          //   width: 351.px,
+          //   height: 45.px,
+          //   margin: EdgeInsets.only(bottom: 20),
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(22.5.px),
+          //     boxShadow:  const [
+          //       BoxShadow(
+          //         color: Color(0x80BFD2E2),
+          //         offset: Offset(0, 4),
+          //         blurRadius: 8,
+          //       ),
+          //     ],
+          //     image: DecorationImage(
+          //           image: AssetImage('assets/images/logout_btn.png'),
+          //           fit: BoxFit.contain)),
+          // ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.px),
+            padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFF5F8FF),
+                  Color(0xFFECF3FF),
+                ],
+              ),
+              border: Border.all(
+                color: Color.fromRGBO(255, 255, 255, 0.7),
+                width: 0.6,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFFD6E2F0),
+                  offset: Offset(0, 3),
+                  blurRadius: 10,
+                ),
+              ],
+              borderRadius: BorderRadius.circular(12),
             ),
-            // Container(
-            //   width: 351.px,
-            //   height: 45.px,
-            //   margin: EdgeInsets.only(bottom: 20),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(22.5.px),
-            //     boxShadow:  const [
-            //       BoxShadow(
-            //         color: Color(0x80BFD2E2),
-            //         offset: Offset(0, 4),
-            //         blurRadius: 8,
-            //       ),
-            //     ],
-            //     image: DecorationImage(
-            //           image: AssetImage('assets/images/logout_btn.png'),
-            //           fit: BoxFit.contain)),
-            // ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 10.px),
-              padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFF5F8FF),
-                    Color(0xFFECF3FF),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      '搜索历史',
+                      style: TextStyle(
+                          color: const Color(0xff95A3C4), fontSize: 12.px),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          items = [];
+                          StorageUtil().prefs!.setStringList('search', items);
+                        });
+                      },
+                      child: Image.asset('assets/images/label_del.png',
+                          width: 16.px, height: 16.px),
+                    ),
                   ],
                 ),
-                border: Border.all(
-                  color: Color.fromRGBO(255, 255, 255, 0.7),
-                  width: 0.6,
+                SizedBox(
+                  height: 8.px,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFFD6E2F0),
-                    offset: Offset(0, 3),
-                    blurRadius: 10,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        '搜索历史',
-                        style: TextStyle(
-                            color: const Color(0xff95A3C4), fontSize: 12.px),
-                      ),
-                      Spacer(),
-                      GestureDetector(
+                Wrap(
+                  spacing: 8.px,
+                  runSpacing: 8.px,
+                  alignment: WrapAlignment.start,
+                  children: [
+                    ...List.generate(items.length, (index) {
+                      // return Text(items[index],style: TextStyle(color: const Color(0xff7282A0)));
+                      return GestureDetector(
                         onTap: () {
-                          setState(() {
-                            items = [];
-                            StorageUtil().prefs!.setStringList('search', items);
-                          });
+                          Get.to(SearchResultPage(
+                            keyword: items[index],
+                          ));
                         },
-                        child: Image.asset('assets/images/label_del.png',
-                            width: 16.px, height: 16.px),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8.px,
-                  ),
-                  Wrap(
-                    spacing: 8.px,
-                    runSpacing: 8.px,
-                    alignment: WrapAlignment.start,
-                    children: [
-                      ...List.generate(items.length, (index) {
-                        // return Text(items[index],style: TextStyle(color: const Color(0xff7282A0)));
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(SearchResultPage(
-                              keyword: items[index],
-                            ));
-                          },
-                          onLongPress: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('删除'),
-                                    content: const SingleChildScrollView(
-                                      child: ListBody(
-                                        children: <Widget>[
-                                          Text('确认删除当前搜索记录?'),
-                                          // Text('你可以在这里添加更多的内容.')
-                                        ],
-                                      ),
+                        onLongPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('删除'),
+                                  content: const SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        Text('确认删除当前搜索记录?'),
+                                        // Text('你可以在这里添加更多的内容.')
+                                      ],
                                     ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: const Text('取消'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: const Text('确认'),
-                                        onPressed: () {
-                                          // 在这里添加确认操作的代码
-                                          setState(() {
-                                            items.removeAt(index);
-                                            StorageUtil()
-                                                .prefs!
-                                                .setStringList('search', items);
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.px, vertical: 5.px),
-                            decoration: BoxDecoration(
-                                color: Color(0xffF8FCFF),
-                                borderRadius: BorderRadius.circular(13.px)),
-                            child: Text(
-                              items[index],
-                              style: TextStyle(color: const Color(0xff7282A0)),
-                            ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('取消'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('确认'),
+                                      onPressed: () {
+                                        // 在这里添加确认操作的代码
+                                        setState(() {
+                                          items.removeAt(index);
+                                          StorageUtil()
+                                              .prefs!
+                                              .setStringList('search', items);
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10.px, vertical: 5.px),
+                          decoration: BoxDecoration(
+                              color: Color(0xffF8FCFF),
+                              borderRadius: BorderRadius.circular(13.px)),
+                          child: Text(
+                            items[index],
+                            style: TextStyle(color: const Color(0xff7282A0)),
                           ),
-                        );
-                      })
-                    ],
-                  )
-                ],
-              ),
+                        ),
+                      );
+                    })
+                  ],
+                )
+              ],
             ),
-            // Expanded(
-            //     child: ListView.builder(
-            //   itemBuilder: (c, i) => listDataItem(i),
-            //   // itemExtent: 160.0,
-            //   itemCount: items.length,
-            // ))
-          ],
-        ),
+          ),
+          // Expanded(
+          //     child: ListView.builder(
+          //   itemBuilder: (c, i) => listDataItem(i),
+          //   // itemExtent: 160.0,
+          //   itemCount: items.length,
+          // ))
+        ],
       ),
     ));
   }

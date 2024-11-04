@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/label_view.dart';
 
@@ -51,8 +52,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -103,6 +103,7 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
               ))
         ],
       ),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
           child: Container(
               decoration: BoxDecoration(
@@ -118,7 +119,6 @@ class _SelectLabelPageState extends State<SelectLabelPage> {
                     ],
                   )),
               child: contentView())),
-      backgroundColor: const Color(0xffE8F3FF),
       // bottomSheet: bottomView(),
     ));
   }

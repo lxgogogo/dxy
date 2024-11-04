@@ -7,6 +7,7 @@ import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/PostListView.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:intl/intl.dart';
@@ -120,14 +121,14 @@ class _GameCalendarPageState extends State<GameCalendarPage> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return WebFitPage(
+    return BackgroundContainer(
         child: Scaffold(
             appBar: AppBar(
-              backgroundColor: kBgColor,
+              backgroundColor: Colors.transparent,
               // elevation: 0, // 去除导航条的阴影
               title: Text('德州赛事'),
             ),
-            backgroundColor: kBgColor,
+            backgroundColor: Colors.transparent,
             // ignore: unnecessary_null_comparison
             body: SingleChildScrollView(
                 child: Column(

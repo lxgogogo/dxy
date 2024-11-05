@@ -122,27 +122,8 @@ class _BookDetailPageState extends State<BookDetailPage> {
         elevation: 0, // 去除导航条的阴影
         title: Text('书籍详情'),
       ),
-      body: Container(
-        // padding: EdgeInsets.only(top: 30.px),
-        decoration: BoxDecoration(
-            color: const Color(0xffF6FBFF),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.px),
-                topRight: Radius.circular(12.px))),
-
-        // decoration: BoxDecoration(
-        //     gradient: LinearGradient(
-        //         begin: Alignment.topCenter,
-        //         end: Alignment.bottomCenter,
-        //         colors: [
-        //       Color(0xFFF4F7FC),
-        //       Color(0xFFE4EEF9),
-        //       Color(0xFFE4EEF9),
-        //     ])
-        //     ),
-        child: SingleChildScrollView(
-          child: bookDetail(),
-        ),
+      body: SingleChildScrollView(
+        child: bookDetail(),
       ),
       bottomSheet: loaded
           ? PostDetailBottomView(

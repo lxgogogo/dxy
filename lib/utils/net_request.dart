@@ -635,6 +635,24 @@ class NetRequest {
     }
   }
 
+  ///更新资料
+  Future updateEmail(String email, String code, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['email'] = email;
+    params['code'] = code;
+
+    Map<String, dynamic> response =
+        await HttpUtils.post(Api.updateEmail, params: params);
+    HttpUtilsResonse.Response resp =
+        HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("userUpdate===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
   ///版本检测
   Future appVersion(SuccessCallback onSuccess) async {
     Map<String, Object> params = {};

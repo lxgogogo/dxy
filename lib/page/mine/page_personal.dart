@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
-import 'package:holdem/page/mine/page_edit_information.dart';
+import 'package:holdem/page/mine/dialog_edit_email.dart';
+import 'package:holdem/page/mine/dialog_edit_nickname.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/widget/linear_card.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../model/user.dart';
@@ -28,7 +30,6 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage> {
-  var userName;
   String imageUrl = ""; //本地图片地址
   var netImageUrl = ""; //服务器接口获取到的图片地址
   ImageProvider? avatar = const AssetImage("assets/images/default_avatar.png");
@@ -66,7 +67,6 @@ class _PersonalPageState extends State<PersonalPage> {
         setState(() {
           _userProfile = data;
           netImageUrl = _userProfile.avatar!;
-          userName = _userProfile.nickname;
         });
       }
     });
@@ -96,43 +96,44 @@ class _PersonalPageState extends State<PersonalPage> {
         centerTitle: true,
       ),
       backgroundColor: Colors.transparent,
-      body: SafeArea(
-          child: Container(
-              // color: Colors.red,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFFF4F7FC), Color(0xFFE4EEF9), Color(0xFFE4EEF9)],
-              )),
-              child: contentView())),
+      body: contentView(),
     ));
   }
 
   Widget contentView() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
-          height: 30.px,
+          height: 23.5.px,
         ),
         Center(
           child: Container(
-            width: 70.px,
-            height: 70.px,
+            width: 69.px,
+            height: 69.px,
             alignment: Alignment.center,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(35.px), color: Colors.white, boxShadow: [
-              BoxShadow(
-                color: Color(0xffC3D9EC), // inset 0 1px 2px 1px #FFFFFF
-                offset: Offset(0, 3),
-                blurRadius: 6,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(69.px),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xff6d85b5).withOpacity(0.16), // inset 0 1px 2px 1px #FFFFFF
+                  offset: Offset(0, 3.px),
+                  blurRadius: 4.px,
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: LoginHelper().getUserAvatar(
+                netImageUrl.isNotEmpty ? netImageUrl : '',
+                63.px,
+                63.px,
               ),
-            ]),
-            child:
-                ClipOval(child: LoginHelper().getUserAvatar(netImageUrl.isNotEmpty ? netImageUrl : '', 64.px, 64.px)),
+            ),
           ),
         ),
         SizedBox(
-          height: 15.px,
+          height: 12.px,
         ),
         Center(
           child: GestureDetector(
@@ -140,147 +141,117 @@ class _PersonalPageState extends State<PersonalPage> {
               _phoneSelectImage();
             },
             child: Container(
-              width: 80.px,
-              height: 33.px,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(bottom: 5.px),
+              width: 72.px,
+              padding: EdgeInsets.only(top: 4.4.px, bottom: 6.2.px),
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/change_avatar.png',
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/change_avatar.png',
+                  ),
+                  fit: BoxFit.fill,
                 ),
-                fit: BoxFit.cover,
-              )),
+              ),
+              alignment: Alignment.center,
               child: Text(
                 '更换头像',
-                style: TextStyle(color: Colors.white, fontSize: 12.px),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.px,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
         ),
-        Container(
+        LinearCard(
           margin: EdgeInsets.fromLTRB(16.px, 24.px, 16.px, 0),
-          decoration: BoxDecoration(
-            color: Color(0xFFF8FBFF), // background: #F8FBFF
-            boxShadow: [
-              BoxShadow(
-                color: Colors.white, // inset 0 1px 2px 1px #FFFFFF
-                offset: Offset(0, 1),
-                blurRadius: 2,
-              ),
-              BoxShadow(
-                color: Color.fromRGBO(185, 208, 229, 0.64), // inset 0 -1px 2px 0 rgba(185,208,229,0.64)
-                offset: Offset(0, -1),
-                blurRadius: 2,
-              ),
-            ],
-            borderRadius: BorderRadius.circular(12.0), // border-radius: 12px
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 19.px),
           child: Column(
             children: [
-              // GestureDetector(
-              //     onTap: () {
-              //       kIsWeb ? _webSelectImage() : _phoneSelectImage();
-              //       // : showUploadImageOnPopup(context);
-              //     },
-              //     child: ListTile(
-              //       leading: null,
-              //       title: Text(
-              //         '头像',
-              //         style: AppTheme.text333333Size15,
-              //       ),
-              //       // 中间文本
-              //       trailing: ClipOval(
-              //           child: LoginHelper().getUserAvatar(
-              //               netImageUrl.isNotEmpty ? netImageUrl : '', 45, 45)),
-              //       contentPadding: EdgeInsets.fromLTRB(16, 10, 10, 10),
-              //     )),
-              // Container(
-              //     color: AppTheme.color_1A000000,
-              //     width: MediaQuery.of(context).size.width,
-              //     height: 0.5.px),
               GestureDetector(
-                  onTap: () {
-                    Get.to(InformationEditPage(editContent: userName));
-                  },
-                  child: Container(
-                      padding: EdgeInsets.only(right: 10.px),
-                      margin: EdgeInsets.fromLTRB(0, 16.px, 0, 16.px),
-                      child: Row(children: [
-                        SizedBox(
-                          width: 16.px,
+                onTap: () {
+                  showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (context) => DialogEditNickname(
+                      editContent: _userProfile.nickname ?? '',
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 48.5.px,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Text(
+                        '昵称',
+                        style: TextStyle(
+                          fontSize: 14.px,
+                          color: const Color(0xff2a2a2a),
                         ),
-                        Text(
-                          '昵称',
-                          style: AppTheme.text333333Size15,
-                        ),
-                        SizedBox(
-                          width: 10.px,
-                        ),
-                        Text(
-                          _userProfile != null && _userProfile.nickname != null ? _userProfile.nickname! : '',
-                          style: TextStyle(color: const Color(0xff9399A5), fontSize: 14.px),
+                      ),
+                      SizedBox(width: 14.px),
+                      Expanded(
+                        child: Text(
+                          _userProfile.nickname ?? '',
+                          style: TextStyle(
+                            color: const Color(0xff9399A5),
+                            fontSize: 14.px,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.right,
                         ),
-                        const Spacer(),
-                        ImageIcon(
-                          AssetImage('assets/images/item_arrow.png'),
-                          size: 22,
-                        )
-                      ]))),
-              Container(color: AppTheme.color_1A000000, width: MediaQuery.of(context).size.width, height: 0.5.px),
-              GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                      padding: EdgeInsets.only(right: 10.px),
-                      margin: EdgeInsets.fromLTRB(0, 16.px, 0, 16.px),
-                      child: Row(children: [
-                        SizedBox(
-                          width: 16.px,
-                        ),
-                        Text(
-                          '邮箱',
-                          style: AppTheme.text333333Size15,
-                        ),
-                        SizedBox(
-                          width: 10.px,
-                        ),
-                        Text(
-                          _userProfile != null && _userProfile.account != null ? _userProfile.account! : '',
-                          style: TextStyle(color: const Color(0xff9399A5), fontSize: 14.px),
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.right,
-                        ),
-                        const Spacer(),
-                        ImageIcon(
-                          AssetImage('assets/images/item_arrow.png'),
-                          size: 22,
-                        )
-                      ]))
-                  // ListTile(
-                  //   leading: null,
-                  //   title: Text(
-                  //     '邮箱',
-                  //     style: AppTheme.text333333Size15,
-                  //   ),
-                  //   // 中间文本
-                  //   trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                  //     Text(
-                  //       _userProfile != null && _userProfile.account != null
-                  //           ? _userProfile.account!
-                  //           : '',
-                  //       style: AppTheme.text666666Size15,
-                  //       textAlign: TextAlign.right,
-                  //     ),
-                  //     ImageIcon(
-                  //       AssetImage('assets/images/item_arrow.png'),
-                  //       size: 22,
-                  //     )
-                  //   ]),
-                  //   contentPadding: EdgeInsets.fromLTRB(16, 8, 10, 8),
-                  // )
+                      ),
+                      Image.asset('assets/images/item_arrow.png', width: 24.px),
+                    ],
                   ),
+                ),
+              ),
+              Container(
+                color: const Color(0xffe6e6e6),
+                height: 0.5.px,
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (context) => DialogEditEmail(
+                      editContent: _userProfile.account ?? '',
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 48.5.px,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Text(
+                        '邮箱',
+                        style: TextStyle(
+                          fontSize: 14.px,
+                          color: const Color(0xff2a2a2a),
+                        ),
+                      ),
+                      SizedBox(width: 14.px),
+                      Expanded(
+                        child: Text(
+                          _userProfile.account ?? '',
+                          style: TextStyle(
+                            color: const Color(0xff9399A5),
+                            fontSize: 14.px,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Image.asset('assets/images/item_arrow.png', width: 24.px),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

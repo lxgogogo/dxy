@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/comment/page_comments.dart';
+import 'package:holdem/page/comment/page_publish_comment.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:share_plus/share_plus.dart';
@@ -59,11 +60,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   }
 
   void _submitComment(String commentContent, BuildContext context) {
-    NetRequest().commentCreate(
-        viewParams.relType!, viewParams.relId!, commentContent, (data) {
+    NetRequest().commentCreate(viewParams.relType!, viewParams.relId!, commentContent, (data) {
       //通知刷新帖子详情
-      EventBusManager.eventBus
-          .fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
+      EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
       ToastUtils.showToast('发布成功');
       _textEditingController.clear();
       Navigator.pop(context);
@@ -88,9 +87,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                   color: const Color(0xffF2F8FD),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.px),
-                      topRight: Radius.circular(10.px))),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10.px), topRight: Radius.circular(10.px))),
 
               // border: Border.all()),
               child: Row(
@@ -98,11 +95,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   Expanded(
                     child: Container(
                       height: 50.px,
-                      padding: EdgeInsets.only(
-                          left: 15.px, right: 15.px, top: 5.px, bottom: 5.px),
+                      padding: EdgeInsets.only(left: 15.px, right: 15.px, top: 5.px, bottom: 5.px),
                       decoration: BoxDecoration(
-                          color: Color(0xff95A3C4).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(4.px)),
+                          color: Color(0xff95A3C4).withOpacity(0.1), borderRadius: BorderRadius.circular(4.px)),
                       child: TextField(
                         // maxLength: 100,
                         maxLines: 100,
@@ -125,28 +120,12 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                         },
                       ),
                     ),
-                    /*
-                    child: TextField(
-                      controller: _textEditingController,
-                      autofocus: true, // 自动获取焦点
-                      decoration: InputDecoration(
-                        hintText: '输入内容',
-                        border: OutlineInputBorder(),
-                      ),
-                      onChanged: (value) {
-                        // 监听输入框内容变化,更新按钮状态
-                        setState(() {
-                          _canSend = value.isNotEmpty;
-                        });
-                      },
-                    ),*/
                   ),
                   SizedBox(width: 16.0),
                   GestureDetector(
                     onTap: () {
                       String commentContent = _textEditingController.text;
-                      if (commentContent.isNotEmpty &&
-                          commentContent.length >= 5) {
+                      if (commentContent.isNotEmpty && commentContent.length >= 5) {
                         _submitComment(commentContent, context);
 
                         // Navigator.of(context).pop();
@@ -160,8 +139,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.px),
-                          color:
-                              _canSend ? Color(0xFF249CFC) : Color(0x80249CFC)),
+                          color: _canSend ? Color(0xFF249CFC) : Color(0x80249CFC)),
                       child: Text(
                         '发布',
                         style: TextStyle(color: Colors.white, fontSize: 12.px),
@@ -208,7 +186,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               child: GestureDetector(
                 onTap: () {
                   Global().checkLogin(() {
-                    popDetail();
+                    Get.to(PublishCommentPage(relType: viewParams.relType!, relId: viewParams.relId!));
                   });
                 },
                 child: Container(
@@ -231,8 +209,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                       Expanded(
                         child: Text(
                           '说点什么',
-                          style: TextStyle(
-                              fontSize: 12.px, color: const Color(0xff9CACC9)),
+                          style: TextStyle(fontSize: 12.px, color: const Color(0xff9CACC9)),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -270,9 +247,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                     child: Row(
                       children: [
                         Image.asset(
-                          viewParams.liked == true
-                              ? 'assets/images/praised.png'
-                              : 'assets/images/praise.png',
+                          viewParams.liked == true ? 'assets/images/praised.png' : 'assets/images/praise.png',
                           width: 13.px,
                           height: 13.px,
                         ),
@@ -298,9 +273,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   child: Row(
                     children: [
                       Image.asset(
-                        viewParams.favoriteState == true
-                            ? 'assets/images/stared.png'
-                            : 'assets/images/star.png',
+                        viewParams.favoriteState == true ? 'assets/images/stared.png' : 'assets/images/star.png',
                         width: 13.px,
                         height: 13.px,
                       ),
@@ -347,15 +320,13 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   var shareData = {
                     "title": widget.viewParams.title,
                     "text": widget.viewParams.content,
-                    "url":
-                        'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                    "url": 'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
                   };
                   if (kIsWeb) {
                     html.window.navigator.share(shareData);
                   } else {
                     Share.share(
-                        '${widget.viewParams.title} ' +
-                            'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                        '${widget.viewParams.title} ' + 'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
                         subject: widget.viewParams.content);
                   }
                 },
@@ -500,8 +471,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   }
 
   void _favoriteToggle() {
-    NetRequest().favoriteToggle(
-        viewParams.relType!, viewParams.relId!, !(viewParams.favoriteState ?? false), (data) {
+    NetRequest().favoriteToggle(viewParams.relType!, viewParams.relId!, !(viewParams.favoriteState ?? false), (data) {
       if (_isMounted) {
         ToastUtils.showToast(viewParams.favoriteState == true ? '取消成功' : '收藏成功');
         if (viewParams.favoriteState == true) {
@@ -513,8 +483,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
         }
         setState(() {});
         //通知我的页面刷新列表
-        EventBusManager.eventBus
-            .fire(EventBusAction.refreshMineFavoriteList.eventBusTypeName);
+        EventBusManager.eventBus.fire(EventBusAction.refreshMineFavoriteList.eventBusTypeName);
       }
     });
   }

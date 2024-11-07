@@ -15,6 +15,11 @@ class BackgroundContainer extends StatelessWidget {
             Color.fromRGBO(228, 238, 249, 1),
             Color.fromRGBO(228, 238, 249, 1),
           ],
+          stops: [
+            0.0,
+            0.2,
+            1.0,
+          ]
         ),
       ),
       child: child,

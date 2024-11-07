@@ -1,12 +1,7 @@
 import 'dart:async';
 
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
@@ -17,18 +12,11 @@ import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_game_calendar.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/card.dart';
-import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class HomeChildView extends StatefulWidget {
   final String type;

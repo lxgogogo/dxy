@@ -21,8 +21,7 @@ class ForumTabPage extends StatefulWidget {
   State<ForumTabPage> createState() => _ForumTabPageState();
 }
 
-class _ForumTabPageState extends State<ForumTabPage>
-    with SingleTickerProviderStateMixin {
+class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderStateMixin {
   late int currentBoardId = 0;
   late List<BoardInfo> boardInfoList;
   int selIndex = 0;
@@ -30,6 +29,7 @@ class _ForumTabPageState extends State<ForumTabPage>
   final _pageKey = GlobalKey<ForumTabChildPageState>();
 
   var actionEventBus;
+
   //默认全部板块
   List<TabData> forumParentTabs = [
     TabData(
@@ -48,8 +48,7 @@ class _ForumTabPageState extends State<ForumTabPage>
     getPlateData();
     //接受通知刷新页面
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.updateBoardTabData.eventBusTypeName) {
+      if (event.toString() == EventBusAction.updateBoardTabData.eventBusTypeName) {
         if (mounted) {
           getPlateData();
         }
@@ -59,8 +58,7 @@ class _ForumTabPageState extends State<ForumTabPage>
 
   void getPlateData() {
     NetRequest().getBoardData((data) {
-      List<BoardInfo> dataList =
-          List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
+      List<BoardInfo> dataList = List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
       if (mounted) {
         setState(() {
           boardInfoList = dataList;
@@ -74,11 +72,18 @@ class _ForumTabPageState extends State<ForumTabPage>
     return BackgroundContainer(
       child: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Colors.transparent, // 设置导航条背景透明
-          // elevation: 0, // 去除导航条的阴影
-          title: Text('论坛'),
-          backgroundColor: Colors.transparent, // 设置导航条背景透明
-          elevation: 0, // 去除导航条的阴影
+          title: Text(
+            '论坛',
+            style: TextStyle(
+              color: const Color(0xff2c2c2c),
+              fontSize: 16.px,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          // 设置导航条背景透明
+          elevation: 0,
           actions: [
             IconButton(
               icon: Image.asset(
@@ -92,8 +97,8 @@ class _ForumTabPageState extends State<ForumTabPage>
             ),
           ],
         ),
-        body: detail(),
         backgroundColor: Colors.transparent,
+        body: detail(),
         floatingActionButton: bottomFloatingButton(),
       ),
     );
@@ -102,9 +107,11 @@ class _ForumTabPageState extends State<ForumTabPage>
   void _showMenuDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
-      barrierDismissible: true, // 可以点击外部区域关闭弹窗
+      barrierDismissible: true,
+      // 可以点击外部区域关闭弹窗
       barrierLabel: '',
-      barrierColor: Colors.transparent, // 背景遮罩颜色
+      barrierColor: Colors.transparent,
+      // 背景遮罩颜色
       transitionDuration: Duration(milliseconds: 300),
       pageBuilder: (context, anim1, anim2) {
         return Align(
@@ -112,12 +119,11 @@ class _ForumTabPageState extends State<ForumTabPage>
           child: Container(
             width: 90.px,
             height: 133.px,
-            margin: EdgeInsets.only(top: 45.px, right: 5), // 自定义位置
-            padding: EdgeInsets.only(top:10.px,bottom: 13.px),
+            margin: EdgeInsets.only(top: 45.px, right: 5),
+            // 自定义位置
+            padding: EdgeInsets.only(top: 10.px, bottom: 13.px),
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/pop_menu_bg.png'),
-                  fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage('assets/images/pop_menu_bg.png'), fit: BoxFit.cover),
             ),
             child: Column(
               children: [
@@ -134,10 +140,7 @@ class _ForumTabPageState extends State<ForumTabPage>
                   child: Center(
                       child: Text(
                     '时间最新',
-                    style: TextStyle(
-                        color: filterIndex == 0
-                            ? Color(0xff249CFC)
-                            : Color(0xff95A3C4)),
+                    style: TextStyle(color: filterIndex == 0 ? Color(0xff249CFC) : Color(0xff95A3C4)),
                   )),
                 )),
                 Container(
@@ -158,10 +161,7 @@ class _ForumTabPageState extends State<ForumTabPage>
                   child: Center(
                       child: Text(
                     '回帖最多',
-                    style: TextStyle(
-                        color: filterIndex == 1
-                            ? Color(0xff249CFC)
-                            : Color(0xff95A3C4)),
+                    style: TextStyle(color: filterIndex == 1 ? Color(0xff249CFC) : Color(0xff95A3C4)),
                   )),
                 )),
                 Container(
@@ -182,10 +182,7 @@ class _ForumTabPageState extends State<ForumTabPage>
                   child: Center(
                       child: Text(
                     '点赞最多',
-                    style: TextStyle(
-                        color: filterIndex == 2
-                            ? Color(0xff249CFC)
-                            : Color(0xff95A3C4)),
+                    style: TextStyle(color: filterIndex == 2 ? Color(0xff249CFC) : Color(0xff95A3C4)),
                   )),
                 )),
               ],
@@ -210,38 +207,87 @@ class _ForumTabPageState extends State<ForumTabPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 18.px,
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 18.px,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selIndex = 0;
+                  });
+                  String order = filterIndex == 0
+                      ? 'time'
+                      : filterIndex == 1
+                          ? 'comment'
+                          : 'like';
+                  _pageKey.currentState?.refreshData(0, order);
+                },
+                child: Container(
+                  height: 30.px,
+                  padding: EdgeInsets.symmetric(horizontal: 17.px),
+                  margin: EdgeInsets.only(right: 12.px, bottom: 12.px),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.px),
+                      border: selIndex == 0 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: selIndex == 0 ? const Color(0xFFC8D4EE) : const Color(0xFFd6e2f0),
+                          spreadRadius: 0,
+                          blurRadius: 10,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: selIndex == 0
+                            ? const [
+                                Color(0xFF75BFFF),
+                                Color(0xFF48AAFF),
+                                Color(0xFF479DFF),
+                                Color(0xFF3B91F1),
+                              ]
+                            : const [
+                                Color(0xFFF5F8FF),
+                                Color(0xFFECF3FF),
+                              ],
+                      )),
+                  child: Text(
+                    '全部',
+                    style: TextStyle(color: selIndex == 0 ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                  ),
                 ),
-                GestureDetector(
+              ),
+              ...List.generate(boardInfoList.length, (index) {
+                return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selIndex = 0;
+                      selIndex = index + 1;
                     });
                     String order = filterIndex == 0
                         ? 'time'
                         : filterIndex == 1
                             ? 'comment'
                             : 'like';
-                    _pageKey.currentState?.refreshData(0, order);
+                    _pageKey.currentState?.refreshData(boardInfoList[selIndex - 1].id!, order);
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 12.px,top: 12.px, bottom: 12.px),
-                    padding: EdgeInsets.symmetric(horizontal: 15.px),
+                    height: 30.px,
+                    padding: EdgeInsets.symmetric(horizontal: 17.px),
+                    margin: EdgeInsets.only(right: 12.px, bottom: 12.px),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.px),
-                        border: selIndex == 0 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
+                        border:
+                            selIndex == index + 1 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
                         boxShadow: [
                           BoxShadow(
-                            color: selIndex == 0
-                                ? const Color(0xFFC8D4EE)
-                                : const Color(0xFFd6e2f0),
+                            color: selIndex == index + 1 ? const Color(0xFFC8D4EE) : const Color(0xFFd6e2f0),
                             spreadRadius: 0,
                             blurRadius: 10,
                             offset: Offset(0, 3), // changes position of shadow
@@ -250,7 +296,7 @@ class _ForumTabPageState extends State<ForumTabPage>
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: selIndex == 0
+                          colors: selIndex == index + 1
                               ? const [
                                   Color(0xFF75BFFF),
                                   Color(0xFF48AAFF),
@@ -263,74 +309,14 @@ class _ForumTabPageState extends State<ForumTabPage>
                                 ],
                         )),
                     child: Text(
-                      '全部',
+                      boardInfoList[index].name!,
                       style: TextStyle(
-                          color: selIndex == 0
-                              ? Colors.white
-                              : const Color(0xff95A3C4),
-                          fontSize: 14.px),
+                          color: selIndex == index + 1 ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
                     ),
                   ),
-                ),
-                ...List.generate(boardInfoList.length, (index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selIndex = index + 1;
-                      });
-                      String order = filterIndex == 0
-                          ? 'time'
-                          : filterIndex == 1
-                              ? 'comment'
-                              : 'like';
-                      _pageKey.currentState
-                          ?.refreshData(boardInfoList[selIndex - 1].id!, order);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 10.px,top: 12.px, bottom: 12.px),
-                      padding: EdgeInsets.symmetric(horizontal: 15.px),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.px),
-                          border: selIndex == index + 1 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: selIndex == index + 1
-                                  ? const Color(0xFFC8D4EE)
-                                  : const Color(0xFFd6e2f0),
-                              spreadRadius: 0,
-                              blurRadius: 10,
-                              offset: Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: selIndex == index + 1
-                                ? const [
-                                    Color(0xFF75BFFF),
-                                    Color(0xFF48AAFF),
-                                    Color(0xFF479DFF),
-                                    Color(0xFF3B91F1),
-                                  ]
-                                : const [
-                                    Color(0xFFF5F8FF),
-                                    Color(0xFFECF3FF),
-                                  ],
-                          )),
-                      child: Text(
-                        boardInfoList[index].name!,
-                        style: TextStyle(
-                            color: selIndex == index + 1
-                                ? Colors.white
-                                : const Color(0xff95A3C4),
-                            fontSize: 14.px),
-                      ),
-                    ),
-                  );
-                })
-              ],
-            ),
+                );
+              })
+            ],
           ),
         ),
         Expanded(

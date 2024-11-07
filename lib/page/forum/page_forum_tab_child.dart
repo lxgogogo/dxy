@@ -37,9 +37,8 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   int pageId = 0;
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
-  var actionEventBus;
 
-  RefreshController _refreshController =
+  final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
@@ -82,7 +81,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     reqListData();
 
     //接受通知刷新页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+    EventBusManager.eventBus.on().listen((event) {
       if (event.toString() ==
           EventBusAction.refreshForumList.eventBusTypeName) {
         print('========refreshForumList=====refreshForumList=============');
@@ -153,7 +152,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(),
+      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
+import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -14,200 +16,199 @@ import '../../page/forum/page_forum_post_detail.dart';
 import '../../page/index/article_detail_page.dart';
 import '../../utils/app_theme.dart';
 
-Widget PostListItemView(
-    BuildContext context, int index, bool isForumList, BoardBean boardBean,
+Widget PostListItemView(BuildContext context, int index, bool isForumList, BoardBean boardBean,
     {bool isShowMedia = true}) {
-
-      getName(){
-        return boardBean.user != null &&
-                                boardBean.user!.nickname!.isNotEmpty
-                            ? boardBean.user!.nickname!
-                            : '德学院';
-      }
-  
-  detailContent() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              padding: EdgeInsets.only(right: 10.px),
-              child: Row(
-                children: [
-                  Container(
-                    child: ClipOval(
-                      child: LoginHelper().getUserAvatar(
-                          boardBean.user != null ? boardBean.user!.avatar! : '',
-                          30,
-                          30),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.px,
-                  ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        boardBean.title??'',
-                        style: TextStyle(
-                            color: const Color(0xff2a2a2a),
-                            fontSize: 12.px,
-                            height: 1.3),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (boardBean.createdAt != null)
-                        Text(
-                          getName()+' 发布于'+CommonUtils.timeFromNow(boardBean.createdAt!),
-                          style: TextStyle(
-                              color: const Color(0xff9CACC9), fontSize: 10.px),
-                        )
-                    ],
-                  ))
-                ],
-              )),
-          SizedBox(
-            height: 5.px,
-          ),
-          _showTextContentView(boardBean),
-          Visibility(
-              visible: boardBean.files != null && boardBean.files!.isEmpty
-                  ? false
-                  : true,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5.px,
-                  ),
-                  isShowMedia
-                      ? mediaContent(context, index,
-                          boardBean.files != null ? boardBean.files! : [])
-                      : Container(),
-                ],
-              )),
-          SizedBox(
-            height: 5.px,
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 15.px,
-              ),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/praise.png',
-                    width: 11.px,
-                    height: 12.px,
-                  ),
-                  SizedBox(
-                    width: 4.px,
-                  ),
-                  Text(
-                    '${boardBean.likeCount}',
-                    style: TextStyle(
-                        color: const Color(0xff9CACC9), fontSize: 10.px),
-                    maxLines: 1,
-                  )
-                ],
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/comment.png',
-                    width: 11.px,
-                    height: 12.px,
-                  ),
-                  SizedBox(
-                    width: 4.px,
-                  ),
-                  Text(
-                    '${boardBean.commentCount}',
-                    style: TextStyle(
-                        color: const Color(0xff9CACC9), fontSize: 10.px),
-                    maxLines: 1,
-                  )
-                ],
-              ),
-              const Spacer(),
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/star.png',
-                    width: 11.px,
-                    height: 12.px,
-                  ),
-                  SizedBox(
-                    width: 4.px,
-                  ),
-                  Text(
-                    '${boardBean.favoriteCount}',
-                    style: TextStyle(
-                        color: const Color(0xff9CACC9), fontSize: 10.px),
-                    maxLines: 1,
-                  )
-                ],
-              ),
-              SizedBox(
-                width: 15.px,
-              ),
-            ],
-          ),
-        ]);
+  getName() {
+    return boardBean.user != null && boardBean.user!.nickname!.isNotEmpty ? boardBean.user!.nickname! : '德学院';
   }
 
   return GestureDetector(
-      onTap: () {
-        if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
-          if (boardBean.relType == 'content') {
-            Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
-          } else if (boardBean.relType == 'comment') {}
-        } else {
-          Get.to(PostDetailPage(postId: boardBean.id ?? 0));
-        }
-      },
-      child: Stack(
-        children: [
-          LinearCard(
-              padding: EdgeInsets.only(bottom: 2.px),
-              margin: EdgeInsets.only(top: 10.px, left: 6.px, right: 6.px),
-              child: Container(
-                  padding: EdgeInsets.only(
-                      left: 20.px, right: 12.px, top: 12.px, bottom: 12.px),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(13.px)),
+    onTap: () {
+      if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
+        if (boardBean.relType == 'content') {
+          Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
+        } else if (boardBean.relType == 'comment') {}
+      } else {
+        Get.to(PostDetailPage(postId: boardBean.id ?? 0));
+      }
+    },
+    child: LinearCard(
+      padding: EdgeInsets.only(bottom: 2.px),
+      margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+      child: Padding(
+        padding: EdgeInsets.all(12.px),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                BorderAvatar(avatar: boardBean.user?.avatar ?? ''),
+                SizedBox(width: 8.px),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            boardBean.user?.nickname ?? '',
+                            style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, height: 1.3),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (boardBean.sign?.isNotEmpty == true) tagWidget(boardBean.sign!),
+                        ],
+                      ),
+                      if (boardBean.createdAt != null)
+                        Text(
+                          CommonUtils.timeFromNow(boardBean.createdAt!),
+                          style: TextStyle(
+                            color: const Color(0xff9CACC9),
+                            fontSize: 10.px,
+                          ),
+                        ),
+                    ],
                   ),
-                  child: detailContent())),
-          if (boardBean.sign != null && boardBean.sign!.isNotEmpty)
-            Positioned(
-                top: 0,
-                right: 40,
-                child: Container(
-                  width: 38.px,
-                  height: 21.px,
-                  margin: EdgeInsets.only(top: 10.px),
-                  alignment: Alignment.topCenter,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: boardBean.sign![0]=='newbie'?AssetImage('assets/images/post_newer.png'):AssetImage('assets/images/post_good.png'),
-                          fit: BoxFit.fill)),
-                  child: Text(
-                    boardBean.sign![0]=='newbie'?'新人贴':boardBean.sign![0]=='boutique'?'精品贴':'官方贴',
-                    style: TextStyle(color: Colors.white, fontSize: 10.px),
-                  ),
-                ))
-        ],
-      ));
+                )
+              ],
+            ),
+            SizedBox(height: 6.px),
+            Text(
+              boardBean.title ?? '',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xff2c2c2c),
+                fontWeight: FontWeight.w500,
+              ),
+              softWrap: true,
+            ),
+            SizedBox(height: 6.px),
+            _showTextContentView(boardBean),
+            Visibility(
+                visible: boardBean.files != null && boardBean.files!.isEmpty ? false : true,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 5.px,
+                    ),
+                    isShowMedia
+                        ? mediaContent(context, index, boardBean.files != null ? boardBean.files! : [])
+                        : Container(),
+                  ],
+                )),
+            SizedBox(height: 6.px),
+            Row(
+              children: [
+                SizedBox(
+                  width: 15.px,
+                ),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/praise.png',
+                      width: 11.px,
+                      height: 12.px,
+                    ),
+                    SizedBox(
+                      width: 4.px,
+                    ),
+                    Text(
+                      '${boardBean.likeCount}',
+                      style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/comment.png',
+                      width: 11.px,
+                      height: 12.px,
+                    ),
+                    SizedBox(
+                      width: 4.px,
+                    ),
+                    Text(
+                      '${boardBean.commentCount}',
+                      style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/star.png',
+                      width: 11.px,
+                      height: 12.px,
+                    ),
+                    SizedBox(
+                      width: 4.px,
+                    ),
+                    Text(
+                      '${boardBean.favoriteCount}',
+                      style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  width: 15.px,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget tagWidget(List<String> sign) {
+  var asset = 'assets/svg/post_office.svg';
+  var text = '';
+  if (sign.contains('office')) {
+    asset = 'assets/svg/post_office.svg';
+    text = '官方贴';
+  } else if (sign.contains('boutique')) {
+    asset = 'assets/svg/post_good.svg';
+    text = '精品贴';
+  } else if (sign.contains('newbie')) {
+    asset = 'assets/svg/post_newer.svg';
+    text = '新人贴';
+  } else {
+    return const SizedBox();
+  }
+  return Padding(
+    padding: EdgeInsets.only(left: 8.px),
+    child: Stack(
+      children: [
+        Positioned.fill(
+          child: SvgPicture.asset(asset),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(2.px, 1.px, 2.px, 2.5.px),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 8.px,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 ///显示内容
 Widget _showTextContentView(BoardBean boardBean) {
-  if (boardBean != null &&
-      boardBean.content != null &&
-      boardBean.content!.isNotEmpty) {
+  if (boardBean.content != null && boardBean.content!.isNotEmpty) {
     if (boardBean.content!.contains('<p>')) {
       return SizedBox(
         height: 90.px,
@@ -248,128 +249,78 @@ Widget _showTextContentView(BoardBean boardBean) {
 }
 
 Widget mediaContent(BuildContext context, int index, List<UploadFile> files) {
-  // print('files======length==${files.length}');
   int picCount = files.length;
   if (picCount == 1 && files[0].type == 'image') {
-    return singleImageView(getFilesUrl(files[0]));
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: CachedNetworkImage(
+        imageUrl: getFilesUrl(files[0]),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: 179.px,
+        placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+        errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+      ),
+    );
   } else if (picCount == 1 && files[0].type == 'video') {
     //视频
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0), // 设置圆角半径
-      child: Center(
-          child: Stack(
+      child: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            width: 335,
-            height: 188,
-            child: Image.network(
-              getFilesUrl(files[0]),
-              width: 335,
-              height: 188,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: CachedNetworkImage(
+              imageUrl: getFilesUrl(files[0]),
               fit: BoxFit.cover,
+              width: double.infinity,
+              height: 179.px,
+              placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+              errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
             ),
           ),
-          Container(
-            width: 35,
-            height: 35,
-            decoration: const BoxDecoration(
-              color: Colors.transparent,
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/play_btn.png',
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
+          Image.asset(
+            'assets/images/play_btn.png',
+            width: 32.px,
+            height: 32.px,
           ),
         ],
-      )),
+      ),
     );
-  } else if (picCount == 0) {
-    //不显示
-    return Container();
   } else if (picCount == 2) {
-    List<String> imageUrlList = [];
-    imageUrlList.add(getFilesUrl(files[0]));
-    imageUrlList.add(getFilesUrl(files[1]));
-    return multipleImageWrap(context, 2, imageUrlList);
+    return multipleImageWrap(context, 2, files.map((e) => getFilesUrl(e)).toList());
   } else if (picCount >= 3) {
-    //大于等于3张
-    List<String> imageUrlList = [];
-    imageUrlList.add(getFilesUrl(files[0]));
-    imageUrlList.add(getFilesUrl(files[1]));
-    imageUrlList.add(getFilesUrl(files[2]));
-    return multipleImageWrap(context, 3, imageUrlList);
-  } else {
-    return singleImageView(getFilesUrl(files[0]));
+    return multipleImageWrap(context, 3, files.map((e) => getFilesUrl(e)).toList());
   }
+  return const SizedBox();
 }
 
-Widget multipleImageWrap(
-    BuildContext context, int imageCount, List<String> imgUrlList) {
-  double widthNum = (MediaQuery.of(context).size.width - 70) / imageCount;
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center, // 水平居中
-    children: List.generate(
-      imgUrlList.length, // 生成指定数量的图片Widget
-      (index) {
-        // 确保图片URL索引在列表范围内
-        String imageUrl = imgUrlList.length > index ? imgUrlList[index] : '';
-        return multipleImageView(widthNum, imageUrl);
-      },
-    ).map((image) {
-      // 在每个图片Widget之间添加5个单位的间距
-      return Padding(
-        padding: const EdgeInsets.only(right: 5.0),
-        child: image,
-      );
-    }).toList(),
-  );
-
-  // return GridView.builder(
-  //         shrinkWrap: true,
-  //         physics: NeverScrollableScrollPhysics(),
-  //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //           childAspectRatio:
-  //               ((MediaQuery.of(context).size.width - 25) / imageCount) / 111,
-  //           crossAxisCount: imageCount,
-  //           crossAxisSpacing: 5.0,
-  //           mainAxisSpacing: 5.0,
-  //         ),
-  //         itemCount: imageCount,
-  //         // total number of images (you can change this according to your requirement)
-  //         itemBuilder: (BuildContext context, int index) {
-  //           return multipleImageView(
-  //               (MediaQuery.of(context).size.width - 25) / imageCount,
-  //               imgUrlList[index]);
-  //         });
-}
-
-Widget singleImageView(String? imgUrl) {
-  return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: MediaHelper().cacheLoadNetworkImage(
-          imgUrl!.isNotEmpty ? imgUrl : '', 130.px, 90.px));
-  // Image.network(
-  //   imgUrl!,
-  //   width: 130.px,
-  //   height: 90.px,
-  //   fit: BoxFit.cover,
-  // ));
-}
-
-Widget multipleImageView(double imageWidth, String? imgUrl) {
-  return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: MediaHelper().cacheLoadNetworkImage(
-          imgUrl!.isNotEmpty ? imgUrl : '', imageWidth, 111.px));
-  //         Image.network(
-  //           imgUrl!,
-  //           width: imageWidth,
-  //           height: 111.px,
-  //           fit: BoxFit.cover,
-  //         ));
+Widget multipleImageWrap(BuildContext context, int imageCount, List<String> imgUrlList) {
+  return LayoutBuilder(builder: (context, constraints) {
+    final itemWidth = (constraints.maxWidth - 2 * 6.px) / imageCount;
+    return Wrap(
+      spacing: 6.px,
+      runSpacing: 6.px,
+      children: List.generate(
+        imgUrlList.length,
+        (index) {
+          String imageUrl = imgUrlList.length > index ? imgUrlList[index] : '';
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.cover,
+              width: itemWidth,
+              height: itemWidth,
+              placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+              errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+            ),
+          );
+        },
+      ).toList(),
+    );
+  });
 }
 
 String getFilesUrl(UploadFile uploadFile) {

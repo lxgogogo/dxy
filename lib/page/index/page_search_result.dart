@@ -112,7 +112,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(),
+      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,

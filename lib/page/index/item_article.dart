@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/forum/media_helper.dart';
-import 'package:holdem/page/index/page_article_detail.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/size_fit.dart';

@@ -22,7 +22,7 @@ import '../../utils/storage.dart';
 import '../../view/forum/PostListView.dart';
 import '../../widget/no_data.dart';
 import '../forum/page_forum_post_detail.dart';
-import '../index/page_article_detail.dart';
+import '../index/article_detail_page.dart';
 import 'login_helper.dart';
 
 class MineChildPage extends StatefulWidget {

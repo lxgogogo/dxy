@@ -1,3 +1,5 @@
+import 'package:holdem/model/upload_file.dart';
+
 import 'board_list.dart';
 
 class CommentList {
@@ -34,7 +36,8 @@ class CommentBean {
   String? relType;
   BoardBean? thread;
   List<String>? at;
-  List<Reply>? replies;
+  List<UploadFile>? files;
+  List<CommentBean>? replies;
   String? comment;
   DateTime? createdAt;
   int? replyCount;
@@ -109,7 +112,11 @@ class CommentBean {
           : (json["at"] as List).map((e) => e.toString()).toList();
     }
     if (json["replies"] is List) {
-      replies = (json["replies"] as List).map((e) => Reply.fromJson(e)).toList();
+      replies = (json["replies"] as List).map((e) => CommentBean.fromJson(e)).toList();
+    }
+
+    if (json["files"] is List) {
+      files = (json["files"] as List).map((e) => UploadFile.fromJson(e)).toList();
     }
 
     if (json['thread'] != null) {

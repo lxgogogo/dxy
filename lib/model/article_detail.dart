@@ -7,9 +7,11 @@ class ArticleDetailBean {
   int? categoryId;
   String? cover;
   int? commentCount;
+  int? shareCount;
   DateTime? createdAt;
   int? favoriteCount;
   bool? favorited;
+  bool? liked;
   int? id;
   int? likeCount;
   int? listId;
@@ -28,9 +30,11 @@ class ArticleDetailBean {
       this.categoryId,
       this.cover,
       this.commentCount,
+      this.shareCount,
       this.createdAt,
       this.favoriteCount,
       this.favorited,
+      this.liked,
       this.id,
       this.likeCount,
       this.listId,
@@ -61,6 +65,9 @@ class ArticleDetailBean {
     if (json["commentCount"] is int) {
       commentCount = json["commentCount"];
     }
+    if (json["shareCount"] is int) {
+      shareCount = json["shareCount"];
+    }
     if (json["createdAt"] is String) {
       createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
@@ -69,6 +76,9 @@ class ArticleDetailBean {
     }
     if (json["favorited"] is bool) {
       favorited = json["favorited"];
+    }
+    if (json["liked"] is bool) {
+      liked = json["liked"];
     }
     if (json["id"] is int) {
       id = json["id"];

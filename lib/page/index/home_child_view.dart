@@ -17,7 +17,7 @@ import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/index/page_article_detail.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_game_calendar.dart';
 import 'package:holdem/page/index/page_video_detail.dart';

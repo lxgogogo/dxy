@@ -90,6 +90,15 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     return BackgroundContainer(
         child: Scaffold(
       appBar: AppBar(
+        title: Text(
+          '书籍详情',
+          style: TextStyle(
+            color: const Color(0xff2c2c2c),
+            fontSize: 16.px,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
         leading: IconButton(
           icon: Image.asset(
             'assets/images/back.png',

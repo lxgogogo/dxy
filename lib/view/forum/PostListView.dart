@@ -11,7 +11,7 @@ import 'package:holdem/widget/linear_card.dart';
 import '../../model/board_list.dart';
 import '../../page/forum/media_helper.dart';
 import '../../page/forum/page_forum_post_detail.dart';
-import '../../page/index/page_article_detail.dart';
+import '../../page/index/article_detail_page.dart';
 import '../../utils/app_theme.dart';
 
 Widget PostListItemView(

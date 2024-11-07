@@ -5,7 +5,7 @@ import 'package:flutter_splash_screen/flutter_splash_screen.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
-import 'package:holdem/page/index/page_article_detail.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';

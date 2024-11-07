@@ -42,6 +42,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeFit.initialize(context);
     return BackgroundContainer(
       child: Scaffold(
         body: _pages[_currentIndex],

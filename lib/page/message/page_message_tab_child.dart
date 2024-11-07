@@ -5,7 +5,7 @@ import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
-import 'package:holdem/page/index/page_article_detail.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';

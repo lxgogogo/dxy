@@ -99,54 +99,43 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              articleDetailBean.title ?? '',
+              style: TextStyle(
+                color: const Color(0xff2c2c2c),
+                fontSize: 20.px,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            if (loaded)
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.px),
+                child: Html(
+                  data: articleDetailBean.article?.content ?? '',
+                  onLinkTap: (url, attributes, element) {
+                    launchUrl(Uri.parse(url as String));
+                  },
+                ),
+              ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  articleDetailBean.title ?? '',
-                  style: TextStyle(
-                    color: const Color(0xff2c2c2c),
-                    fontSize: 20.px,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  '评论(${articleDetailBean.commentCount})',
+                  style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, fontWeight: FontWeight.w500),
                 ),
+                SizedBox(height: 10.px),
                 if (loaded)
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.px),
-                    child: Html(
-                      data: articleDetailBean.article?.content ?? '',
-                      onLinkTap: (url, attributes, element) {
-                        if (kIsWeb) {
-                          var link = html.document.createElement('a');
-                          link.setAttribute("href", url as String);
-                          link.click();
-                        } else {
-                          launchUrl(Uri.parse(url as String));
-                        }
-                      },
+                  if (comments.isNotEmpty)
+                    ...List.generate(comments.length, (index) {
+                      return CommentItem(
+                        commentBean: comments[index],
+                      );
+                    })
+                  else
+                    const Center(
+                      child: NoDataView(),
                     ),
-                  ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      '评论(${articleDetailBean.commentCount})',
-                      style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(height: 10.px),
-                    if (loaded)
-                      if (comments.isNotEmpty)
-                        ...List.generate(comments.length, (index) {
-                          return CommentItem(
-                            commentBean: comments[index],
-                          );
-                        })
-                      else
-                        const Center(
-                          child: NoDataView(),
-                        ),
-                  ],
-                )
               ],
             ),
           ],

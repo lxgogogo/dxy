@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:holdem/model/upload_file.dart';
@@ -6,7 +7,9 @@ import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/no_data.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../model/board_list.dart';
@@ -22,9 +25,9 @@ import '../../widget/post_detail_bottom_view.dart';
 import 'media_helper.dart';
 
 class PostDetailPage extends StatefulWidget {
-  int postId; //帖子id
+  final int postId; //帖子id
 
-  PostDetailPage({super.key, required this.postId});
+  const PostDetailPage({super.key, required this.postId});
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -34,12 +37,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
   late int currentPostId;
   bool _isMounted = false;
   BoardBean? boardBean;
-  var actionEventBus;
   List<String> imageUrlList = [];
   List<CommentBean> comments = [];
 
   late VideoPlayerController _playController;
-  late Future<void> _initializeVideoPlayerFuture;
+  late ChewieController _chewieController;
+
   bool _isPlaying = false;
   late String videoUrl;
   late PostBottomViewParams postBottomViewParams;
@@ -51,19 +54,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
     currentPostId = widget.postId;
     _isMounted = true;
     reqPostDetail();
-    //接受通知刷新页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
+    EventBusManager.eventBus.on().listen((event) {
+      if (event.toString() == EventBusAction.refreshForumPostDetail.eventBusTypeName) {
         reqPostDetail();
       }
     });
 
     _playController = VideoPlayerController.network('');
-    _initializeVideoPlayerFuture = _playController.initialize().then((_) {
-      // Ensure the first frame is shown after the video is initialized
-      setState(() {});
-    });
   }
 
   reqPostDetail() {
@@ -74,8 +71,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           //所有图片集合
           if (boardBean!.files!.isNotEmpty) {
             for (var element in boardBean!.files!) {
-              if (boardBean!.files!.isNotEmpty &&
-                  boardBean!.files!.length == 1) {
+              if (boardBean!.files!.isNotEmpty && boardBean!.files!.length == 1) {
                 if (element.type == 'video') {
                   videoUrl = element.url!;
                   imageUrlList.add(_getImageUrl(element));
@@ -115,8 +111,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       'filters': {'relType': 'Thread', 'relId': currentPostId}
     }, (data) {
       if (mounted) {
-        List<CommentBean> dataList = List<CommentBean>.from(
-            data['list'].map((comment) => CommentBean.fromJson(comment)));
+        List<CommentBean> dataList =
+            List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
         setState(() {
           comments = dataList;
         });
@@ -128,43 +124,53 @@ class _PostDetailPageState extends State<PostDetailPage> {
     if (videoUrl != null) {
       _playController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
       await _playController.initialize();
-      _playController.play();
-      setState(() {
-        _isPlaying = true;
-      });
+      _chewieController = ChewieController(
+        videoPlayerController: _playController,
+        autoPlay: true,
+      );
+      _isPlaying = true;
+      setState(() {});
     }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _isMounted = false;
     _playController.dispose();
+    _chewieController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BackgroundContainer(
         child: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Image.asset(
-                  'assets/images/back.png',
-                  width: 22.px,
-                  height: 22.px,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              backgroundColor: Colors.transparent,
-            ),
-            backgroundColor: Colors.transparent,
-            body: contentView(),
-            bottomSheet: isLoadOk
-                ? PostDetailBottomView(viewParams: postBottomViewParams)
-                : Container(),));
+      appBar: AppBar(
+        title: Text(
+          '详情',
+          style: TextStyle(
+            color: const Color(0xff2c2c2c),
+            fontSize: 16.px,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/images/back.png',
+            width: 22.px,
+            height: 22.px,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: Colors.transparent,
+      body: contentView(),
+      bottomSheet: isLoadOk ? PostDetailBottomView(viewParams: postBottomViewParams) : Container(),
+    ));
   }
 
   ///是自己的帖子 不显示关注
@@ -179,114 +185,102 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   Widget contentView() {
-    return ListView(
-      children: [
-        Padding(
-            padding: EdgeInsets.fromLTRB(18.px, 8.px, 18.px, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  boardBean?.title ?? '',
-                  style: TextStyle(
-                      color: const Color(0xff2c2c2c),
-                      fontSize: 20.px,
-                      fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(
-                  height: 15.px,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          child: Container(
-                        child: CircleImageWithText(
-                            imageUrl:
-                                (boardBean != null && boardBean!.user != null)
-                                    ? boardBean!.user!.avatar!
-                                    : '',
-                            imageWidth: 40,
-                            imageHeight: 40,
-                            topText: boardBean != null
-                                ? boardBean!.user!.nickname!
-                                : '',
-                            topTextStyle: const TextStyle(),
-                            bottomText1: boardBean?.createdAt != null
-                                ? '发布于${DateFormat('MM-dd HH:mm').format(boardBean!.createdAt!)}'
-                                : '',
-                            bottomText1Style: AppTheme.text999999Size11,
-                            bottomText2: '',
-                            bottomText2Style: const TextStyle()),
-                      )),
-                      Visibility(
-                          visible: isOwnerPost() ? false : true,
-                          child: boardBean?.user?.followed == true
-                              ? followedStatusBtn()
-                              : IconButton(
-                                  onPressed: () {
-                                    _followToggle();
-                                  },
-                                  icon: Image.asset(
-                                    'assets/images/follow_btn.png',
-                                    width: 62,
-                                    height: 28,
-                                  )))
-                    ]),
-                SizedBox(height: 16),
-                _showContentView(),
-                SizedBox(
-                  height: 15.px,
-                ),
-                _showMediaView(),
-              ],
-            )),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(16.px, 10.px, 16.px, 10.px),
-                child: LabelView(
-                  isEditLabel: false,
-                  labelData: boardBean != null ? boardBean!.tags! : [],
-                  onItemTap: (value) {},
-                  onDelTap: (value) {},
-                ),
-              ),
+    return SingleChildScrollView(
+      padding: EdgeInsets.fromLTRB(18.px, 8.px, 18.px, 124.px),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            boardBean?.title ?? '',
+            style: TextStyle(
+              color: const Color(0xff2c2c2c),
+              fontSize: 20.px,
+              fontWeight: FontWeight.w500,
             ),
-          ],
-        ),
-        Container(
-            padding: EdgeInsets.fromLTRB(16, 15, 16, 0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.px),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: CircleImageWithText(
+                      imageUrl: (boardBean != null && boardBean!.user != null) ? boardBean!.user!.avatar! : '',
+                      imageWidth: 40,
+                      imageHeight: 40,
+                      topText: boardBean != null ? boardBean!.user!.nickname! : '',
+                      topTextStyle: const TextStyle(),
+                      bottomText1: boardBean?.createdAt != null
+                          ? '发布于${DateFormat('MM-dd HH:mm').format(boardBean!.createdAt!)}'
+                          : '',
+                      bottomText1Style: AppTheme.text999999Size11,
+                      bottomText2: '',
+                      bottomText2Style: const TextStyle()),
+                ),
+                Visibility(
+                  visible: isOwnerPost() ? false : true,
+                  child: boardBean?.user?.followed == true
+                      ? followedStatusBtn()
+                      : IconButton(
+                          onPressed: _followToggle,
+                          icon: Image.asset(
+                            'assets/images/follow_btn.png',
+                            width: 62,
+                            height: 28,
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          ),
+          _showContentView(),
+          _showMediaView(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               Text(
-                '评论',
-                style: AppTheme.text3B5078Size17,
+                '评论(${comments.length})',
+                style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, fontWeight: FontWeight.w500),
               ),
-              SizedBox(height: 19),
-              commentsContent(),
-              SizedBox(height: 100)
-            ]))
-      ],
+              SizedBox(height: 10.px),
+              if (comments.isNotEmpty)
+                ...List.generate(comments.length, (index) {
+                  return CommentItem(
+                    commentBean: comments[index],
+                  );
+                })
+              else
+                const Center(
+                  child: NoDataView(),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   ///显示内容
   Widget _showContentView() {
-    if (boardBean != null && boardBean!.content!.isNotEmpty) {
-      if (boardBean!.content!.contains('<p>') ||
-          boardBean!.content!.contains('</p>')) {
-        return Html(data: boardBean!.content!);
+    if (boardBean?.content?.isNotEmpty == true) {
+      if (boardBean!.content!.contains('<p>') || boardBean!.content!.contains('</p>')) {
+        return Html(
+          data: boardBean!.content!,
+          onLinkTap: (url, attributes, element) {
+            launchUrl(Uri.parse(url as String));
+          },
+        );
       } else {
-        return Container(
-          child: Text(boardBean != null ? boardBean!.content! : '',
-              style: AppTheme.text666666Size16),
+        return Text(
+          boardBean != null ? boardBean!.content! : '',
+          style: TextStyle(
+            color: const Color(0xff2A2A2A),
+            fontSize: 14.px,
+          ),
         );
       }
     }
-    return Container();
+    return const SizedBox();
   }
 
   ///显示媒体文件 图片或者视频
@@ -296,73 +290,79 @@ class _PostDetailPageState extends State<PostDetailPage> {
         boardBean!.files!.length == 1 &&
         boardBean!.files![0].type == 'video') {
       return Container(
-          padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
-          height: 300.px,
-          // width: calculateVideoPlayerWidth(context),
-          child: Center(
-            child: Stack(alignment: Alignment.center, children: [
-              _playController.value.isInitialized
-                  ? FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: SizedBox(
-                        width: _playController.value.size.width,
-                        height: _playController.value.size.height,
-                        child: VideoPlayer(_playController),
-                      ),
-                    )
-                  : Container(),
-              _isPlaying
-                  ? SizedBox.shrink()
-                  : Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.network(
-                          imageUrlList[0],
-                        ),
-                        IconButton(
-                          icon: Image.asset(
-                            'assets/images/play_btn.png',
-                            width: 35.px,
-                            height: 35.px,
-                          ),
-                          onPressed: () {
-                            _pickAndPlayVideo(videoUrl);
-                          },
-                        ),
-                      ],
-                    )
-            ]),
-          ));
+        height: 180.px,
+        margin: EdgeInsets.symmetric(vertical: 16.px),
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xffa2b9d0).withOpacity(0.64),
+              offset: Offset(0, 1.px),
+              blurRadius: 2.rpx,
+              spreadRadius: -1.px,
+            ),
+            BoxShadow(
+              color: const Color(0xffffffff),
+              offset: Offset(0, -1.px),
+              blurRadius: 2.rpx,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: _isPlaying
+            ? Chewie(
+                controller: _chewieController,
+              )
+            : Stack(
+                fit: StackFit.expand,
+                children: [
+                  CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: boardBean?.cover ?? '',
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                  ),
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              ),
+      );
     } else {
-      double widthNum = (MediaQuery.of(context).size.width - 60) / 3;
       return GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: boardBean != null ? boardBean!.files!.length : 0,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-          ),
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                MediaHelper().imagePerView(context, imageUrlList, index);
-              },
-              child: MediaHelper().cacheLoadNetworkImage(
-                  imageUrlList[index].isNotEmpty ? imageUrlList[index] : '',
-                  widthNum,
-                  111.px),
-              // Image.network(
-              //   imageUrlList[index],
-              //   width: widthNum,
-              //   height: 111.px,
-              //   fit: BoxFit.cover,
-              // ),
-            ); // 替换image_$index.jpg为对应的图片路径
-          });
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(vertical: 16.px),
+        itemCount: boardBean?.files?.length ?? 0,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              MediaHelper().imagePerView(
+                context,
+                boardBean!.files!.map((e) => e.url ?? '').toList(),
+                index,
+              );
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: boardBean?.files?[index].url ?? '',
+                placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+              ),
+            ),
+          );
+        },
+      );
     }
-    return Text('');
   }
 
   String _getImageUrl(UploadFile uploadFile) {
@@ -400,8 +400,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void _followToggle() {
-    NetRequest().followerToggle(
-        boardBean!.user!.id!, !boardBean!.user!.followed!, (data) {
+    NetRequest().followerToggle(boardBean!.user!.id!, !boardBean!.user!.followed!, (data) {
       if (_isMounted) {
         setState(() {
           reqPostDetail();

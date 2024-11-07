@@ -309,7 +309,7 @@ class _CommentItemState extends State<CommentItem> {
                 height: 1.px,
                 margin: EdgeInsets.symmetric(vertical: 16.5.px),
                 color: const Color(0xffe6e6e6),
-              )
+              ),
             ],
           ),
         )

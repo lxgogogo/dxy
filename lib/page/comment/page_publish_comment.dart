@@ -44,7 +44,6 @@ class PublishCommentPage extends StatefulWidget {
 }
 
 class _PublishCommentPageState extends State<PublishCommentPage> with SingleTickerProviderStateMixin {
-
   final _controller = DetectableTextEditingController(
     regExp: detectionRegExp(),
   );
@@ -74,61 +73,59 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
   Widget build(BuildContext context) {
     return BackgroundContainer(
         child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            elevation: 0,
-            scrolledUnderElevation: 0.0,
-            leading: IconButton(
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              icon: Image.asset(
-                'assets/images/back.png',
-                width: 22.px,
-                height: 22.px,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            backgroundColor: Colors.transparent,
-            title: const Text(
-              '评论',
-              style: AppTheme.text333333Size17,
-            ),
-            centerTitle: true,
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  var debouncer = CommonUtils.getDebouncer('publishComment');
-                  debouncer.run(() {
-                    publishPosts();
-                  });
-                },
-                child: Container(
-                  width: 50.px,
-                  height: 24.px,
-                  margin: EdgeInsets.only(right: 10.px),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage('assets/images/publish2.png'), fit: BoxFit.cover)),
-                  child: Text(
-                    '发送',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              )
-            ],
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0.0,
+        leading: IconButton(
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          icon: Image.asset(
+            'assets/images/back.png',
+            width: 22.px,
+            height: 22.px,
           ),
-          body: contentView(),
-        ));
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          '评论',
+          style: AppTheme.text333333Size17,
+        ),
+        centerTitle: true,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              var debouncer = CommonUtils.getDebouncer('publishComment');
+              debouncer.run(() {
+                publishPosts();
+              });
+            },
+            child: Container(
+              width: 50.px,
+              height: 24.px,
+              margin: EdgeInsets.only(right: 10.px),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/images/publish2.png'), fit: BoxFit.cover)),
+              child: Text(
+                '发送',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: contentView(),
+    ));
   }
 
   Widget contentView() {
     return Container(
       margin: EdgeInsets.only(top: 12.px),
-      padding: EdgeInsets.only(
-        bottom: window.viewPadding.bottom / window.devicePixelRatio,
-      ),
       decoration: const BoxDecoration(
           color: Color(0xfff2f9ff),
           borderRadius: BorderRadius.vertical(
@@ -142,51 +139,60 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
               Color(0xFFE8F3FF),
             ],
           )),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.px),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: 150.px,
-              child: DetectableTextField(
-                  maxLines: null,
+      child: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 18.px),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 150.px,
+                  child: DetectableTextField(
+                      maxLines: null,
+                      style: TextStyle(
+                        fontSize: 14.px,
+                        color: const Color(0xff2a2a2a),
+                      ),
+                      controller: _controller,
+                      onChanged: (text) {
+                        _handleTextChange();
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 15.5.px),
+                        hintText: '请输入正文（建议200-2000字）',
+                        hintStyle: TextStyle(
+                          fontSize: 14.px,
+                          color: const Color(0xff2a2a2a).withOpacity(0.5),
+                        ),
+                        border: InputBorder.none,
+                        filled: false,
+                      )),
+                ),
+                Text(
+                  '最多9张图片',
                   style: TextStyle(
-                    fontSize: 14.px,
-                    color: const Color(0xff2a2a2a),
+                    fontSize: 12.px,
+                    color: const Color(0xff2a2a2a).withOpacity(0.5),
                   ),
-                  controller: _controller,
-                  onChanged: (text) {
-                    _handleTextChange();
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 15.5.px),
-                    hintText: '请输入正文（建议200-2000字）',
-                    hintStyle: TextStyle(
-                      fontSize: 14.px,
-                      color: const Color(0xff2a2a2a).withOpacity(0.5),
-                    ),
-                    border: InputBorder.none,
-                    filled: false,
-                  )),
+                ),
+                _mediaShowView(),
+                Visibility(
+                    visible: imageData.length >= 6 ? true : false,
+                    child: SizedBox(
+                      height: 120.px,
+                    )),
+                const Spacer(),
+              ],
             ),
-            Text(
-              '最多9张图片',
-              style: TextStyle(
-                fontSize: 12.px,
-                color: const Color(0xff2a2a2a).withOpacity(0.5),
-              ),
-            ),
-            _mediaShowView(),
-            Visibility(
-                visible: imageData.length >= 6 ? true : false,
-                child: SizedBox(
-                  height: 120.px,
-                )),
-            const Spacer(),
-            bottomView(),
-          ],
-        ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: MediaQuery.viewInsetsOf(context).bottom,
+            child: bottomView(),
+          )
+        ],
       ),
     );
   }
@@ -250,19 +256,19 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
       footer: imageData.length == 9
           ? []
           : [
-        IconButton(
-            onPressed: () {
-              openFilePicker();
-            },
-            hoverColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: Image.asset(
-              'assets/images/image_add.png',
-              width: 111,
-              height: 111,
-              fit: BoxFit.cover,
-            )),
-      ],
+              IconButton(
+                  onPressed: () {
+                    openFilePicker();
+                  },
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  icon: Image.asset(
+                    'assets/images/image_add.png',
+                    width: 111,
+                    height: 111,
+                    fit: BoxFit.cover,
+                  )),
+            ],
       children: imageData.map((e) => buildItem("$e")).toList(),
     );
   }
@@ -270,53 +276,58 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
   Widget bottomView() {
     return Container(
       height: 41.5.px,
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: Color(0xffe6e6e6))),
-      ),
-      child: Row(
-        children: [
-          IconButton(
-              onPressed: () async {
-                if (!isCanOpenPicker()) {
-                  ToastUtils.showToast('单个视频或者最多9张图片');
-                  return;
-                }
-                openFilePicker();
-              },
-              icon: Image.asset(
-                'assets/images/photo_album.png',
-                width: 22.px,
-                height: 22.px,
-              )),
-          SizedBox(
-            width: 5.px,
-          ),
-          IconButton(
-              onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AitUserPage()),
-                );
-                // 在这里处理从ResultPage返回的结果
-                if (result != null) {
-                  aitUserBeanList.add(result);
-                  var nickname = result.nickname;
-                  var userId = result.id;
-                  if (_isMounted) {
-                    setState(() {
-                      String originalContent = _controller.text;
-                      _controller.text = '@${nickname} $originalContent';
-                      print('forumLog=====' + aitUserContent);
-                    });
+      color: const Color(0xFFE8F3FF),
+      padding: EdgeInsets.symmetric(horizontal: 18.px),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 18.px),
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: Color(0xffe6e6e6))),
+        ),
+        child: Row(
+          children: [
+            IconButton(
+                onPressed: () async {
+                  if (!isCanOpenPicker()) {
+                    ToastUtils.showToast('单个视频或者最多9张图片');
+                    return;
                   }
-                }
-              },
-              icon: Image.asset(
-                'assets/images/ait.png',
-                width: 22.px,
-                height: 22.px,
-              )),
-        ],
+                  openFilePicker();
+                },
+                icon: Image.asset(
+                  'assets/images/photo_album.png',
+                  width: 22.px,
+                  height: 22.px,
+                )),
+            SizedBox(
+              width: 5.px,
+            ),
+            IconButton(
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AitUserPage()),
+                  );
+                  // 在这里处理从ResultPage返回的结果
+                  if (result != null) {
+                    aitUserBeanList.add(result);
+                    var nickname = result.nickname;
+                    var userId = result.id;
+                    if (_isMounted) {
+                      setState(() {
+                        String originalContent = _controller.text;
+                        _controller.text = '@${nickname} $originalContent';
+                        print('forumLog=====' + aitUserContent);
+                      });
+                    }
+                  }
+                },
+                icon: Image.asset(
+                  'assets/images/ait.png',
+                  width: 22.px,
+                  height: 22.px,
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -411,7 +422,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
           UploadFile uploadFile = UploadFile.fromJson(data);
           imageUrlList.add(uploadFile);
           if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
-            NetRequest().commentCreate(widget.relType, widget.relId, content,at: aitList,files: imageUrlList, (data) {
+            NetRequest().commentCreate(widget.relType, widget.relId, content, at: aitList, files: imageUrlList, (data) {
               //通知刷新帖子详情
               EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
               EasyLoading.dismiss();

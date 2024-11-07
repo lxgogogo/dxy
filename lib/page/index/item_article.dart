@@ -84,7 +84,7 @@ class _ArticleItemState extends State<ArticleItem> {
                 Row(
                   children: [
                     Text(
-                      widget.article.createdAt != null ? DateFormat('yyyy-M-d').format(widget.article.createdAt!): '',
+                      widget.article.createdAt != null ? DateFormat('M月d日').format(widget.article.createdAt!): '',
                       style: TextStyle(
                         color: const Color(0xff9CACC9),
                         fontSize: 12.px,

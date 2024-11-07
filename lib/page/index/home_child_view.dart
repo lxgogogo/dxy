@@ -39,8 +39,7 @@ class HomeChildView extends StatefulWidget {
   State<HomeChildView> createState() => _HomeChildViewState();
 }
 
-class _HomeChildViewState extends State<HomeChildView>
-    with AutomaticKeepAliveClientMixin {
+class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveClientMixin {
   List<ArticleBean> articles = [];
   List<BannerBean> banners = [];
   List<ArticleBean> bookSuggests = [];
@@ -48,8 +47,7 @@ class _HomeChildViewState extends State<HomeChildView>
   List<CourseBean> courses = [];
   List<CompetionLoopBean> loops = [];
   int categorySel = 0;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
   int parentId = 1;
 
@@ -63,8 +61,8 @@ class _HomeChildViewState extends State<HomeChildView>
     super.initState();
     reqListData();
     NetRequest().competitionLoop({}, (data) {
-      List<CompetionLoopBean> loopList = List<CompetionLoopBean>.from(
-          data.map((loop) => CompetionLoopBean.fromJson(loop)));
+      List<CompetionLoopBean> loopList =
+          List<CompetionLoopBean>.from(data.map((loop) => CompetionLoopBean.fromJson(loop)));
       if (mounted) {
         setState(() {
           loops = loopList;
@@ -76,7 +74,7 @@ class _HomeChildViewState extends State<HomeChildView>
         if (_currentPage >= loopList.length) {
           _currentPage = 0;
         }
-        if(mounted && _controller.hasClients) {
+        if (mounted && _controller.hasClients) {
           _controller.animateToPage(
             _currentPage,
             duration: const Duration(milliseconds: 300),
@@ -92,8 +90,7 @@ class _HomeChildViewState extends State<HomeChildView>
       NetRequest().indexBanner({
         'pos': 'index.banner',
       }, (data) {
-        List<BannerBean> bannerList = List<BannerBean>.from(
-            data.map((banner) => BannerBean.fromJson(banner)));
+        List<BannerBean> bannerList = List<BannerBean>.from(data.map((banner) => BannerBean.fromJson(banner)));
         if (mounted) {
           setState(() {
             banners = bannerList;
@@ -103,11 +100,10 @@ class _HomeChildViewState extends State<HomeChildView>
     } else if (widget.type == 'book') {
       getBookSuggest();
     } else if (widget.type == 'course') {
-      NetRequest().courseCategory({"parentAlias": "course", "parentId": 1},
-          (data) {
+      NetRequest().courseCategory({"parentAlias": "course", "parentId": 1}, (data) {
         data.insert(0, {"id": 0, "name": "全部"});
-        List<IndexCategory> categoryList = List<IndexCategory>.from(
-            data.map((category) => IndexCategory.fromJson(category)));
+        List<IndexCategory> categoryList =
+            List<IndexCategory>.from(data.map((category) => IndexCategory.fromJson(category)));
         if (mounted) {
           setState(() {
             categories = categoryList;
@@ -121,9 +117,7 @@ class _HomeChildViewState extends State<HomeChildView>
         'pageNum': pageNum,
         'pageSize': 10,
         'filters': {
-          'categoryAlias': widget.type == 'course' && parentId != 1
-              ? null
-              : widget.type, //'article'
+          'categoryAlias': widget.type == 'course' && parentId != 1 ? null : widget.type, //'article'
           'categoryId': widget.type == 'course' ? parentId : null,
         }
       }, (data) {
@@ -132,15 +126,11 @@ class _HomeChildViewState extends State<HomeChildView>
         List array = [];
         for (var item in data['list']) {
           for (var collect in item['collects']) {
-            array.add({
-              "heading": collect['heading'],
-              "collects": collect['sublist']
-            });
+            array.add({"heading": collect['heading'], "collects": collect['sublist']});
           }
         }
 
-        List<CourseBean> dataList = List<CourseBean>.from(
-            array.map((course) => CourseBean.fromJson(course)));
+        List<CourseBean> dataList = List<CourseBean>.from(array.map((course) => CourseBean.fromJson(course)));
 
         if (mounted) {
           setState(() {
@@ -159,14 +149,12 @@ class _HomeChildViewState extends State<HomeChildView>
         'pageNum': pageNum,
         'pageSize': 10,
         'filters': {
-          'categoryAlias': widget.type == 'course' && parentId != 1
-              ? null
-              : widget.type, //'article'
+          'categoryAlias': widget.type == 'course' && parentId != 1 ? null : widget.type, //'article'
           'categoryId': widget.type == 'course' ? parentId : null,
         }
       }, (data) {
-        List<ArticleBean> dataList = List<ArticleBean>.from(
-            data['list'].map((article) => ArticleBean.fromJson(article)));
+        List<ArticleBean> dataList =
+            List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
 
         if (mounted) {
           setState(() {
@@ -185,8 +173,7 @@ class _HomeChildViewState extends State<HomeChildView>
 
   void getBookSuggest() {
     NetRequest().bookRecommend({"pageSize": 4}, (data) {
-      List<ArticleBean> dataList = List<ArticleBean>.from(
-          data.map((article) => ArticleBean.fromJson(article)));
+      List<ArticleBean> dataList = List<ArticleBean>.from(data.map((article) => ArticleBean.fromJson(article)));
 
       if (mounted) {
         setState(() {
@@ -220,9 +207,7 @@ class _HomeChildViewState extends State<HomeChildView>
               width: 3.px,
               height: 11.px,
               margin: EdgeInsets.only(right: 5.px, left: 18.px),
-              decoration: BoxDecoration(
-                  color: const Color(0xff249CFC),
-                  borderRadius: BorderRadius.circular(1.5.px)),
+              decoration: BoxDecoration(color: const Color(0xff249CFC), borderRadius: BorderRadius.circular(1.5.px)),
             ),
             Text(
               bean.heading!,
@@ -232,8 +217,7 @@ class _HomeChildViewState extends State<HomeChildView>
         ),
         LinearCard(
           padding: EdgeInsets.only(bottom: 2.px),
-          margin: EdgeInsets.only(
-              top: 10.px, left: 18.px, right: 18.px, bottom: 10.px),
+          margin: EdgeInsets.only(top: 10.px, left: 18.px, right: 18.px, bottom: 10.px),
           child: Container(
               // padding: EdgeInsets.only(left: 20.px,right: 12.px,top:5.px,bottom: 5.px),
               decoration: BoxDecoration(
@@ -246,8 +230,7 @@ class _HomeChildViewState extends State<HomeChildView>
                     CollectBean collectBean = bean.collects![i];
                     return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed(
-                              "/article_detail?id=${collectBean.targetId ?? 0}",
+                          Navigator.of(context).pushNamed("/article_detail?id=${collectBean.targetId ?? 0}",
                               arguments: collectBean.targetId ?? 0);
                         },
                         child: Container(
@@ -289,132 +272,75 @@ class _HomeChildViewState extends State<HomeChildView>
     if (widget.type == 'course') {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-              height: 40.px,
-              // color: Colors.orange,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 16.px,
-                    ),
-
-                    ...List.generate(categories.length, (index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            categorySel = index;
-                            parentId = categories[index].id ?? 0;
-                            pageNum = 1;
-                          });
-                          reqListData();
-                          _scrollToTop();
-                        },
-                        child: Container(
-                          height: 30.px,
-                          margin: EdgeInsets.only(right: 10.px),
-                          padding: EdgeInsets.symmetric(horizontal: 15.px),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.px),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: categorySel == index
-                                      ? const Color(0xFFC8D4EE)
-                                      : const Color(0xFFd6e2f0),
-                                  spreadRadius: 0,
-                                  blurRadius: 10,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: categorySel == index
-                                    ? const [
-                                        Color(0xFF75BFFF),
-                                        Color(0xFF48AAFF),
-                                        Color(0xFF479DFF),
-                                        Color(0xFF3B91F1),
-                                      ]
-                                    : const [
-                                        Color(0xFFF5F8FF),
-                                        Color(0xFFECF3FF),
-                                      ],
-                              )),
-                          child: Text(
-                            categories[index].name ?? '',
-                            style: TextStyle(
-                                color: categorySel == index
-                                    ? Colors.white
-                                    : const Color(0xff95A3C4),
-                                fontSize: 14.px),
-                          ),
-                        ),
-                      );
-                    }),
-                    // ...List<Widget>.generate(categorys.length, (index) {
-                    //   return Container(
-                    //       padding: EdgeInsets.only(left: 10.px),
-                    //       child: index != categorySel
-                    //           ? HoldemNormalBtn(
-                    //               child: Text(
-                    //                 categorys[index].name ?? '',
-                    //                 style: TextStyle(
-                    //                     color: Color(0xff56748F),
-                    //                     fontWeight: FontWeight.bold,
-                    //                     fontSize: 14),
-                    //               ),
-                    //               onTap: () {
-                    //                 setState(() {
-                    //                   categorySel = index;
-                    //                   parentId = categorys[index].id ?? 0;
-                    //                   pageNum = 1;
-                    //                 });
-                    //                 reqListData();
-                    //                 _scrollToTop();
-                    //               })
-                    //           : HoldemHighlightBtn(
-                    //               child: Text(
-                    //                 categorys[index].name ?? '',
-                    //                 style: TextStyle(
-                    //                     color: Colors.white,
-                    //                     fontWeight: FontWeight.bold,
-                    //                     fontSize: 14),
-                    //               ),
-                    //               onTap: () {
-                    //                 setState(() {
-                    //                   pageNum = 1;
-                    //                   parentId = categorys[index].id ?? 0;
-                    //                 });
-                    //                 reqListData();
-                    //               }));
-                    // })
-                  ],
-                ),
-                // child: ListView.builder(
-                //   scrollDirection: Axis.horizontal,
-                //   itemBuilder: (c, i) {
-                //     return Container(
-                //       padding: EdgeInsets.symmetric(horizontal: 10.px),
-                //       child: Text(
-                //         categorys[i].name ?? '',
-                //         style: TextStyle(color: Colors.red),
-                //       ),
-                //     );
-                //   },
-                //   itemCount: categorys.length,
-                // ),
-              )),
-          Expanded(child: content())
-        ],
+        children: [buildHomeTabs(), Expanded(child: content())],
       );
     }
     return content();
+  }
+
+  Widget buildHomeTabs() {
+    return SizedBox(
+        height: 40.px,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 16.px,
+              ),
+              ...List.generate(categories.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      categorySel = index;
+                      parentId = categories[index].id ?? 0;
+                      pageNum = 1;
+                    });
+                    reqListData();
+                    _scrollToTop();
+                  },
+                  child: Container(
+                    height: 30.px,
+                    margin: EdgeInsets.only(right: 10.px),
+                    padding: EdgeInsets.symmetric(horizontal: 15.px),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.px),
+                        boxShadow: [
+                          BoxShadow(
+                            color: categorySel == index ? const Color(0xFFC8D4EE) : const Color(0xFFd6e2f0),
+                            spreadRadius: 0,
+                            blurRadius: 10,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: categorySel == index
+                              ? const [
+                                  Color(0xFF75BFFF),
+                                  Color(0xFF48AAFF),
+                                  Color(0xFF479DFF),
+                                  Color(0xFF3B91F1),
+                                ]
+                              : const [
+                                  Color(0xFFF5F8FF),
+                                  Color(0xFFECF3FF),
+                                ],
+                        )),
+                    child: Text(
+                      categories[index].name ?? '',
+                      style: TextStyle(
+                          color: categorySel == index ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ));
   }
 
   Widget content() {
@@ -424,10 +350,6 @@ class _HomeChildViewState extends State<HomeChildView>
           enablePullUp: true,
           header: const WaterDropHeader(
             waterDropColor: Color(0xff008EFF),
-            complete: Text(
-              '加载完成',
-              style: TextStyle(color: Color(0xff647A9C)),
-            ),
           ),
           controller: _refreshController,
           onRefresh: _onRefresh,
@@ -519,8 +441,7 @@ class _HomeChildViewState extends State<HomeChildView>
       Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
       // Get.to(BookDetailPage(id: id));
     } else if (bean.jumpType == 'article') {
-      Navigator.of(context)
-          .pushNamed("/article_detail?id=${id}", arguments: id);
+      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
       // Get.to(ArticleDetailPage(id: id));
     } else if (bean.jumpType == 'videoList') {
       Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);
@@ -533,246 +454,219 @@ class _HomeChildViewState extends State<HomeChildView>
     }
   }
 
-  contentItem(int index) {
-    if (widget.type == 'book') {
+  Widget contentItem(int index) {
+    if (widget.type == 'news') {
       if (index == 0) {
-        return Column(
-          children: [
-            if (bookSuggests.length > 0)
-              LinearCard(
-                  margin: EdgeInsets.only(left: 16.px, right: 16.px),
-                  child: Container(
-                    padding: EdgeInsets.all(16.px),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '热门推荐',
-                              style: TextStyle(
-                                  color: const Color(0xff2C2C2C),
-                                  fontSize: 16.px),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                getBookSuggest();
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '换一换',
-                                    style: TextStyle(
-                                        color: const Color(0xff2A2C31),
-                                        fontSize: 12.px),
-                                  ),
-                                  SizedBox(
-                                    width: 5.px,
-                                  ),
-                                  Image.asset(
-                                    'assets/images/refresh.png',
-                                    width: 12.px,
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 12.px,
-                        ),
-                        Row(
-                          children: [
-                            ...List.generate(bookSuggests.length, (i) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                      "/book_detail?id=${bookSuggests[i].id}",
-                                      arguments: bookSuggests[i].id);
-                                },
-                                child: Container(
-                                  width: 66.px,
-                                  margin: EdgeInsets.only(right: 13.px),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 8.px),
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(3.px))),
-                                        child: Image.network(
-                                          bookSuggests[i].cover ?? '',
-                                          width: 66.px,
-                                          height: 88.px,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 40.px,
-                                        child: Text(
-                                          bookSuggests[i].title ?? '',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: const Color(0xff2A2A2A),
-                                              fontSize: 14.px),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.px,
-                                      ),
-                                      Text(
-                                        bookSuggests[i].author ?? '',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: const Color(0xff909FBB),
-                                            fontSize: 12.px),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            })
-                          ],
-                        )
-                      ],
-                    ),
-                  )),
-            BookItem(
-              article: articles[index],
-            )
-          ],
-        );
+        return buildNewsTopArea(index);
       }
-      return BookItem(
-        article: articles[index],
-      );
-    }
-    if (widget.type == 'news' && index == 0) {
-      return Column(
-        children: [
-          if (banners.isNotEmpty)
-            Container(
-              margin: EdgeInsets.only(left: 16.px, right: 16.px, top: 10.px),
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.px),
-              ),
-              height: 140.px + 20,
-              child: Swiper(
-                itemCount: banners.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.px),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        jumpPage(banners[index]);
-                      },
-                      child: Image.network(
-                        banners[index].img ?? '',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-                pagination: SwiperPagination(
-                    alignment: Alignment.bottomCenter,
-                    margin: EdgeInsets.only(bottom: 0.px),
-                    builder: SwiperCustomPagination(builder:
-                        (BuildContext context, SwiperPluginConfig config) {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                              config.itemCount,
-                              (index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      width: config.activeIndex == index
-                                          ? 20.0
-                                          : 6.0,
-                                      height: 6.0,
-                                      decoration: BoxDecoration(
-                                        color: config.activeIndex == index
-                                            ? const Color(0xff008EFF)
-                                            : const Color(0xffADCCE8),
-                                        borderRadius:
-                                            config.activeIndex == index
-                                                ? BorderRadius.circular(3.0)
-                                                : BorderRadius.circular(3.0),
-                                      ),
-                                    ),
-                                  )));
-                    })
-                    // builder: const RectSwiperPaginationBuilder(
-                    //     color: Color(0xffADCCE8),
-                    //     activeColor: Color(0xff008EFF),
-                    //     size: Size(10, 10),
-                    //     activeSize: Size(20, 10)),
-
-                    ),
-                autoplay: true,
-              ),
-            ),
-          if (loops.isNotEmpty)
-            GestureDetector(
-              onTap: () {
-                Get.to(GameCalendarPage(
-                  id: loops[_currentPage].id ?? 0,
-                ));
-              },
-              child: Container(
-                width: 361.px,
-                height: 85.px,
-                padding: EdgeInsets.only(
-                    left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/game.png'),
-                        fit: BoxFit.fill)),
-                child: PageView.builder(
-                  controller: _controller,
-                  itemCount: loops.length,
-                  itemBuilder: (context, index) {
-                    return Center(
-                      child: Text(
-                        loops[index].title ?? '',
-                        style: TextStyle(
-                            fontSize: 12.px, color: const Color(0xff36B3F4)),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ArticleItem(
-            article: articles[index],
-          )
-        ],
-      );
-    }
-    if (widget.type == 'news')
       return ArticleItem(
         article: articles[index],
       );
-    return VideoItem(
-      article: articles[index],
-      isBanner: false,
+    } else if (widget.type == 'video') {
+      return VideoItem(
+        article: articles[index],
+        isBanner: false,
+      );
+    }
+    if (widget.type == 'book') {
+      if (index == 0) {
+        return buildBookTopArea(index);
+      }
+      return BookItem(article: articles[index]);
+    }
+    return const SizedBox();
+  }
+
+  Column buildNewsTopArea(int index) {
+    return Column(
+      children: [
+        if (banners.isNotEmpty)
+          Container(
+            margin: EdgeInsets.only(left: 16.px, right: 16.px, top: 10.px),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.px),
+            ),
+            height: 140.px + 20,
+            child: Swiper(
+              itemCount: banners.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 20),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.px),
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      jumpPage(banners[index]);
+                    },
+                    child: Image.network(
+                      banners[index].img ?? '',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+              pagination: SwiperPagination(
+                alignment: Alignment.bottomCenter,
+                margin: EdgeInsets.only(bottom: 0.px),
+                builder: SwiperCustomPagination(builder: (BuildContext context, SwiperPluginConfig config) {
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                          config.itemCount,
+                          (index) => Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  width: config.activeIndex == index ? 20.0 : 6.0,
+                                  height: 6.0,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        config.activeIndex == index ? const Color(0xff008EFF) : const Color(0xffADCCE8),
+                                    borderRadius: config.activeIndex == index
+                                        ? BorderRadius.circular(3.0)
+                                        : BorderRadius.circular(3.0),
+                                  ),
+                                ),
+                              )));
+                }),
+              ),
+              autoplay: true,
+            ),
+          ),
+        if (loops.isNotEmpty)
+          GestureDetector(
+            onTap: () {
+              Get.to(GameCalendarPage(
+                id: loops[_currentPage].id ?? 0,
+              ));
+            },
+            child: Container(
+              width: 361.px,
+              height: 85.px,
+              padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
+              decoration:
+                  BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
+              child: PageView.builder(
+                controller: _controller,
+                itemCount: loops.length,
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: Text(
+                      loops[index].title ?? '',
+                      style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ArticleItem(article: articles[index]),
+      ],
+    );
+  }
+
+  Widget buildBookTopArea(int index) {
+    return Column(
+      children: [
+        if (bookSuggests.isNotEmpty)
+          LinearCard(
+              margin: EdgeInsets.all(16.px).copyWith(bottom: 0),
+              child: Container(
+                padding: EdgeInsets.all(16.px),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '热门推荐',
+                          style: TextStyle(color: const Color(0xff2C2C2C), fontSize: 16.px),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            getBookSuggest();
+                          },
+                          child: Row(
+                            children: [
+                              Text(
+                                '换一换',
+                                style: TextStyle(color: const Color(0xff2A2C31), fontSize: 12.px),
+                              ),
+                              SizedBox(width: 5.px),
+                              Image.asset(
+                                'assets/images/refresh.png',
+                                width: 12.px,
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 8.px),
+                    LayoutBuilder(builder: (context, constraints) {
+                      final maxWidth = constraints.maxWidth;
+                      final itemWidth = (maxWidth - 16.px * 3) / 4;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ...List.generate(bookSuggests.length, (i) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed("/book_detail?id=${bookSuggests[i].id}", arguments: bookSuggests[i].id);
+                              },
+                              child: SizedBox(
+                                width: itemWidth,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    AspectRatio(
+                                      aspectRatio: 3 / 4,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.all(Radius.circular(4.px)),
+                                        child: Image.network(
+                                          bookSuggests[i].cover ?? '',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.px),
+                                    Text(
+                                      bookSuggests[i].title ?? '',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 14.px),
+                                    ),
+                                    SizedBox(
+                                      height: 10.px,
+                                    ),
+                                    Text(
+                                      bookSuggests[i].author ?? '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: const Color(0xff909FBB), fontSize: 12.px),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                        ],
+                      );
+                    })
+                  ],
+                ),
+              )),
+        BookItem(article: articles[index])
+      ],
     );
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override

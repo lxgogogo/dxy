@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -364,10 +365,11 @@ class _MineChildPageState extends State<MineChildPage> {
                     child: Row(
                       children: [
                         if (boardBean.cover != null)
-                          Image.network(
-                            boardBean.cover ?? '',
-                            width: 36.px,
-                            height: 36.px,
+                          CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: boardBean.cover ?? '',
+                            placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                            errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
                           ),
                         SizedBox(
                           width: 10.px,

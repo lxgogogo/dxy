@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -489,9 +490,11 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                     onTap: () {
                       jumpPage(banners[index]);
                     },
-                    child: Image.network(
-                      banners[index].img ?? '',
+                    child: CachedNetworkImage(
                       fit: BoxFit.cover,
+                      imageUrl: banners[index].img ?? '',
+                      placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                      errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
                     ),
                   ),
                 );
@@ -534,9 +537,9 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
             child: Container(
               width: 361.px,
               height: 85.px,
-              padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
+              padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 16.px),
               decoration:
-                  BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
+                  const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
               child: PageView.builder(
                 controller: _controller,
                 itemCount: loops.length,

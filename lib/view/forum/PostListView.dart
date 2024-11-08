@@ -78,9 +78,9 @@ Widget PostListItemView(BuildContext context, int index, bool isForumList, Board
             child: Column(
               children: [
                 SizedBox(
-                  height: 5.px,
+                  height: 6.px,
                 ),
-                mediaContent(context, index, boardBean.files != null ? boardBean.files! : [])
+                mediaContent(boardBean.files != null ? boardBean.files! : [])
               ],
             )),
         SizedBox(height: 6.px),
@@ -256,7 +256,7 @@ Widget _showTextContentView(BoardBean boardBean) {
   }
 }
 
-Widget mediaContent(BuildContext context, int index, List<UploadFile> files) {
+Widget mediaContent(List<UploadFile> files) {
   int picCount = files.length;
   if (picCount == 1 && files[0].type == 'image') {
     return ClipRRect(
@@ -297,14 +297,14 @@ Widget mediaContent(BuildContext context, int index, List<UploadFile> files) {
       ),
     );
   } else if (picCount == 2) {
-    return multipleImageWrap(context, 2, files.map((e) => getFilesUrl(e)).toList());
+    return multipleImageWrap(2, files.map((e) => getFilesUrl(e)).toList());
   } else if (picCount >= 3) {
-    return multipleImageWrap(context, 3, files.map((e) => getFilesUrl(e)).toList());
+    return multipleImageWrap(3, files.map((e) => getFilesUrl(e)).toList());
   }
   return const SizedBox();
 }
 
-Widget multipleImageWrap(BuildContext context, int imageCount, List<String> imgUrlList) {
+Widget multipleImageWrap(int imageCount, List<String> imgUrlList) {
   return LayoutBuilder(builder: (context, constraints) {
     final itemWidth = (constraints.maxWidth - 2 * 6.px) / imageCount;
     return Wrap(

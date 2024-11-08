@@ -368,6 +368,8 @@ class _MineChildPageState extends State<MineChildPage> {
                           CachedNetworkImage(
                             fit: BoxFit.cover,
                             imageUrl: boardBean.cover ?? '',
+                            width: 36.px,
+                            height: 36.px,
                             placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
                             errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
                           ),

@@ -112,16 +112,15 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              height: 93.px,
-              padding: EdgeInsets.all(6.px),
               margin: EdgeInsets.symmetric(horizontal: 8.px),
+              padding: EdgeInsets.all(6.px),
               alignment: Alignment.center,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
                     'assets/images/profile_header.png',
                   ),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
               child: userInfoView(),

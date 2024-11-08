@@ -242,58 +242,14 @@ class _MineChildPageState extends State<MineChildPage> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        padding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
         itemBuilder: (c, i) => tabIndex == 2
             ? commentItem(commentDataList[i], i)
-            : MyPostListItemView(
+            : PostListItemView(
                 context,
                 i,
                 false,
                 boardPostList[i],
-                tabIndex,
-                // (index) {
-                //   showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) {
-                //       return AlertDialog(
-                //         title: Text('删除'),
-                //         content: Text('确认删除此收藏？'),
-                //         actions: <Widget>[
-                //           TextButton(
-                //             child: Text('取消'),
-                //             onPressed: () {
-                //               Navigator.of(context).pop(false);
-                //             },
-                //           ),
-                //           TextButton(
-                //             child: Text('删除'),
-                //             onPressed: () {
-                //               Navigator.of(context).pop(true);
-                //               if (boardPostList[i].orignalId != null) {
-                //                 NetRequest().delFavorite(boardPostList[i].orignalId!, (data) {
-                //                   if (mounted) {
-                //                     setState(() {
-                //                       boardPostList.remove(index);
-                //                     });
-                //                   }
-                //                   reqListData();
-                //                 });
-                //               }
-                //             },
-                //           ),
-                //         ],
-                //       );
-                //     },
-                //   ).then((value) {
-                //     if (value != null && value) {
-                //       // User confirmed, do something
-                //       print('User confirmed');
-                //     } else {
-                //       // User canceled or dismissed the dialog
-                //       print('User canceled');
-                //     }
-                //   });
-                // },
+                isMyPost:true,
               ),
         itemCount: tabIndex == 2 ? commentDataList.length : boardPostList.length,
       ),

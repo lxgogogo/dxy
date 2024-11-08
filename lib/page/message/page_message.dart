@@ -12,8 +12,7 @@ class MessagePage extends StatefulWidget {
   State<MessagePage> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage>
-    with AutomaticKeepAliveClientMixin {
+class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin {
   List<TabData> parentTabs = [];
   int selIndex = 0;
 
@@ -56,16 +55,9 @@ class _MessagePageState extends State<MessagePage>
       //底部下标颜色
       enableFeedback: false,
       dividerHeight: 0,
-      labelStyle: TextStyle(
-          height: 1,
-          color: forumAppMainColor,
-          fontSize: 16.px,
-          fontWeight: FontWeight.w600),
-      unselectedLabelStyle: TextStyle(
-          height: 1,
-          color: tabTitleUnselectColor,
-          fontSize: 16.px,
-          fontWeight: FontWeight.w400),
+      labelStyle: TextStyle(height: 1, color: forumAppMainColor, fontSize: 16.px, fontWeight: FontWeight.w600),
+      unselectedLabelStyle:
+          TextStyle(height: 1, color: tabTitleUnselectColor, fontSize: 16.px, fontWeight: FontWeight.w400),
       onTabChanged: (index) {
         setState(() {
           selIndex = index!;
@@ -81,81 +73,90 @@ class _MessagePageState extends State<MessagePage>
     return BackgroundContainer(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent, // 设置导航条背景透明
-          // elevation: 0, // 去除导航条的阴影
-          title: Text('消息'),
+          title: Text(
+            '消息',
+            style: TextStyle(
+              color: const Color(0xff2c2c2c),
+              fontSize: 16.px,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         backgroundColor: Colors.transparent,
-        // body: getTabView(),
         body: detail(),
       ),
     );
   }
 
   Widget detail() {
-    return Column(children: [
-      Row(children: [
-        SizedBox(
-          width: 18.px,
-        ),
-        ...List.generate(tabs.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selIndex = index;
-              });
-              _pageKey.currentState?.refreshData(types[selIndex]);
-            },
-            child: Container(
-              height: 30.px,
-              margin: EdgeInsets.only(right: 10.px),
-              padding: EdgeInsets.symmetric(horizontal: 15.px),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.px),
-                  boxShadow: [
-                    BoxShadow(
-                      color: selIndex == index
-                          ? const Color(0xFFC8D4EE)
-                          : const Color(0xFFd6e2f0),
-                      spreadRadius: 0,
-                      blurRadius: 10,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: selIndex == index
-                        ? const [
-                            Color(0xFF75BFFF),
-                            Color(0xFF48AAFF),
-                            Color(0xFF479DFF),
-                            Color(0xFF3B91F1),
-                          ]
-                        : const [
-                            Color(0xFFF5F8FF),
-                            Color(0xFFECF3FF),
-                          ],
-                  )),
-              child: Text(
-                tabs[index],
-                style: TextStyle(
-                    color: selIndex == index
-                        ? Colors.white
-                        : const Color(0xff95A3C4),
-                    fontSize: 14.px),
+    return Column(
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 18.px,
               ),
-            ),
-          );
-        })
-      ]),
-      Expanded(
-          child: MessageTabChildPage(
-        type: types[selIndex],
-        key: _pageKey,
-      ))
-    ]);
+              ...List.generate(tabs.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selIndex = index;
+                    });
+                    _pageKey.currentState?.refreshData(types[selIndex]);
+                  },
+                  child: Container(
+                    height: 30.px,
+                    padding: EdgeInsets.symmetric(horizontal: 17.px),
+                    margin: EdgeInsets.only(right: 12.px, bottom: 12.px),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.px),
+                        boxShadow: [
+                          BoxShadow(
+                            color: selIndex == index ? const Color(0xFFC8D4EE) : const Color(0xFFd6e2f0),
+                            spreadRadius: 0,
+                            blurRadius: 10,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: selIndex == index
+                              ? const [
+                                  Color(0xFF75BFFF),
+                                  Color(0xFF48AAFF),
+                                  Color(0xFF479DFF),
+                                  Color(0xFF3B91F1),
+                                ]
+                              : const [
+                                  Color(0xFFF5F8FF),
+                                  Color(0xFFECF3FF),
+                                ],
+                        )),
+                    child: Text(
+                      tabs[index],
+                      style:
+                          TextStyle(color: selIndex == index ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                    ),
+                  ),
+                );
+              })
+            ],
+          ),
+        ),
+        Expanded(
+            child: MessageTabChildPage(
+          type: types[selIndex],
+          key: _pageKey,
+        ))
+      ],
+    );
   }
 
   @override

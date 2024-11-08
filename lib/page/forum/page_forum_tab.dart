@@ -15,7 +15,7 @@ import '../../utils/global.dart';
 import '../mine/page_login.dart';
 
 class ForumTabPage extends StatefulWidget {
-  ForumTabPage({super.key});
+  const ForumTabPage({super.key});
 
   @override
   State<ForumTabPage> createState() => _ForumTabPageState();

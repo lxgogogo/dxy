@@ -18,6 +18,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 // ignore: must_be_immutable
 class MessageTabChildPage extends StatefulWidget {
   String type;
+
   MessageTabChildPage({super.key, required this.type});
 
   @override
@@ -26,8 +27,7 @@ class MessageTabChildPage extends StatefulWidget {
 
 class MessageTabChildPageState extends State<MessageTabChildPage> {
   List<MessageBean> messages = [];
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
   bool loaded = false;
   int pageNum = 1;
   String strType = '';
@@ -45,8 +45,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
       'pageSize': 10,
       'filters': {'type': strType}
     }, (data) {
-      List<MessageBean> dataList = List<MessageBean>.from(
-          data['list'].map((comment) => MessageBean.fromJson(comment)));
+      List<MessageBean> dataList = List<MessageBean>.from(data['list'].map((comment) => MessageBean.fromJson(comment)));
 
       if (mounted) {
         setState(() {
@@ -90,23 +89,31 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    if (loaded && messages.length == 0) {
-      return const Center(
-        child: NoDataView(),
-      );
-    }
     return Container(
-      margin: EdgeInsets.only(top: 20.px),
+      margin: EdgeInsets.only(top: 12.px),
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.sizeOf(context).height,
+      ),
       decoration: BoxDecoration(
-          color: const Color(0xffF2F9FF),
-      ),
-      // child: content(),
-      child: Stack(
-        children: [
-          Image.asset('assets/images/message_top.png',width: 375.px,),
-          content()],
-      ),
+          color: const Color(0xfff8fbff),
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(12),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xffa2b9d0).withOpacity(0.64),
+              offset: Offset(0, 1.px),
+              blurRadius: 2.rpx,
+              spreadRadius: -1.px,
+            ),
+            BoxShadow(
+              color: const Color(0xffffffff),
+              offset: Offset(0, -1.px),
+              blurRadius: 2.rpx,
+              spreadRadius: 0,
+            ),
+          ]),
+      child: content(),
     );
   }
 
@@ -118,11 +125,15 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      child: ListView.builder(
-        itemBuilder: (c, i) => messageCommentItem(messages[i], i),
-        // itemExtent: 160.0,
-        itemCount: messages.length,
-      ),
+      child: loaded && messages.isEmpty
+          ? const Center(
+              child: NoDataView(),
+            )
+          : ListView.builder(
+              itemBuilder: (c, i) => messageCommentItem(messages[i], i),
+              // itemExtent: 160.0,
+              itemCount: messages.length,
+            ),
     );
   }
 
@@ -135,8 +146,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
       Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
       // Get.to(BookDetailPage(id: id));
     } else if (bean.jumpType == 'article') {
-      Navigator.of(context)
-          .pushNamed("/article_detail?id=${id}", arguments: id);
+      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
       // Get.to(ArticleDetailPage(id: id));
     } else if (bean.jumpType == 'videoList') {
       Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);
@@ -180,9 +190,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
           Container(
             width: 34.px,
             height: 34.px,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(17.px),
-                color: Colors.white),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(17.px), color: Colors.white),
             child: Stack(
               children: [
                 Positioned(
@@ -219,19 +227,13 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                   children: [
                     Text(
                       messageBean.fromUser!.nickname ?? '',
-                      style: TextStyle(
-                          color: const Color(0xff2a2a2a),
-                          fontSize: 12.px,
-                          fontWeight: FontWeight.normal),
+                      style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
                       width: 6.px,
                     ),
-                    Text(
-                        DateFormat('MM-dd HH:mm')
-                            .format(messageBean.createdAt!),
-                        style: TextStyle(
-                            color: Color(0xff9CACC9), fontSize: 10.px)),
+                    Text(DateFormat('MM-dd HH:mm').format(messageBean.createdAt!),
+                        style: TextStyle(color: Color(0xff9CACC9), fontSize: 10.px)),
                   ],
                 ),
                 SizedBox(
@@ -241,8 +243,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                   children: [
                     Text(
                       title,
-                      style:
-                          TextStyle(color: Color(0xff666666), fontSize: 11.px),
+                      style: TextStyle(color: Color(0xff666666), fontSize: 11.px),
                     ),
                     SizedBox(
                       width: 8.px,
@@ -259,10 +260,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                   child: Container(
                       padding: EdgeInsets.only(bottom: 10.px),
                       decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  width: 1.px,
-                                  color: const Color(0xffE7EDEE)))),
+                          border: Border(bottom: BorderSide(width: 1.px, color: const Color(0xffE7EDEE)))),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -270,8 +268,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                           if (str.isNotEmpty)
                             Text(
                               str,
-                              style: TextStyle(
-                                  color: Color(0xff333333), fontSize: 14.px),
+                              style: TextStyle(color: Color(0xff333333), fontSize: 14.px),
                             ),
                           if (str.isNotEmpty)
                             SizedBox(
@@ -281,15 +278,12 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                             padding: EdgeInsets.all(10.px),
                             width: 300.px,
                             decoration: BoxDecoration(
-                                color: const Color(0x1A95A3C4),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.px))),
+                                color: const Color(0x1A95A3C4), borderRadius: BorderRadius.all(Radius.circular(4.px))),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                if (messageBean.contentUser != null &&
-                                    messageBean.contentUser!.nickname != null)
+                                if (messageBean.contentUser != null && messageBean.contentUser!.nickname != null)
                                   Text(messageBean.contentUser!.nickname!,
                                       style: TextStyle(
                                           color: Color(0xff2a2a2a),
@@ -297,10 +291,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                           fontWeight: FontWeight.bold,
                                           height: 2.0)),
                                 Text(messageBean.content!.title ?? '',
-                                    style: TextStyle(
-                                        color: Color(0xff2a2a2a),
-                                        fontSize: 12.px,
-                                        height: 2.0)),
+                                    style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.px, height: 2.0)),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -316,11 +307,8 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                             width: 6.px,
                                           ),
                                           Text(
-                                            messageBean.content!.likeCount
-                                                .toString(),
-                                            style: TextStyle(
-                                                color: const Color(0xff9CACC9),
-                                                fontSize: 10.px),
+                                            messageBean.content!.likeCount.toString(),
+                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
                                           )
                                         ],
                                       ),
@@ -338,11 +326,8 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                             width: 6.px,
                                           ),
                                           Text(
-                                            messageBean.content!.favoriteCount
-                                                .toString(),
-                                            style: TextStyle(
-                                                color: const Color(0xff9CACC9),
-                                                fontSize: 10.px),
+                                            messageBean.content!.favoriteCount.toString(),
+                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
                                           )
                                         ],
                                       ),
@@ -360,11 +345,8 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                             width: 6.px,
                                           ),
                                           Text(
-                                            messageBean.content!.commentCount
-                                                .toString(),
-                                            style: TextStyle(
-                                                color: const Color(0xff9CACC9),
-                                                fontSize: 10.px),
+                                            messageBean.content!.commentCount.toString(),
+                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
                                           )
                                         ],
                                       ),

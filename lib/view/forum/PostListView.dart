@@ -17,11 +17,139 @@ import '../../page/index/article_detail_page.dart';
 import '../../utils/app_theme.dart';
 
 Widget PostListItemView(BuildContext context, int index, bool isForumList, BoardBean boardBean,
-    {bool isShowMedia = true}) {
+    {bool isMyPost = false}) {
   getName() {
     return boardBean.user != null && boardBean.user!.nickname!.isNotEmpty ? boardBean.user!.nickname! : '德学院';
   }
 
+  Widget child = Padding(
+    padding: EdgeInsets.all(12.px),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            BorderAvatar(avatar: boardBean.user?.avatar ?? ''),
+            SizedBox(width: 8.px),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        boardBean.user?.nickname ?? '',
+                        style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, height: 1.3),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (boardBean.sign?.isNotEmpty == true) tagWidget(boardBean.sign!),
+                    ],
+                  ),
+                  if (boardBean.createdAt != null)
+                    Text(
+                      CommonUtils.timeFromNow(boardBean.createdAt!),
+                      style: TextStyle(
+                        color: const Color(0xff9CACC9),
+                        fontSize: 10.px,
+                      ),
+                    ),
+                ],
+              ),
+            )
+          ],
+        ),
+        SizedBox(height: 6.px),
+        Text(
+          boardBean.title ?? '',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Color(0xff2c2c2c),
+            fontWeight: FontWeight.w500,
+          ),
+          softWrap: true,
+        ),
+        SizedBox(height: 6.px),
+        _showTextContentView(boardBean),
+        Visibility(
+            visible: boardBean.files != null && boardBean.files!.isEmpty ? false : true,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 5.px,
+                ),
+                mediaContent(context, index, boardBean.files != null ? boardBean.files! : [])
+              ],
+            )),
+        SizedBox(height: 6.px),
+        Row(
+          children: [
+            SizedBox(
+              width: 15.px,
+            ),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/praise.png',
+                  width: 11.px,
+                  height: 12.px,
+                ),
+                SizedBox(
+                  width: 4.px,
+                ),
+                Text(
+                  '${boardBean.likeCount}',
+                  style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                  maxLines: 1,
+                )
+              ],
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/comment.png',
+                  width: 11.px,
+                  height: 12.px,
+                ),
+                SizedBox(
+                  width: 4.px,
+                ),
+                Text(
+                  '${boardBean.commentCount}',
+                  style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                  maxLines: 1,
+                )
+              ],
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/star.png',
+                  width: 11.px,
+                  height: 12.px,
+                ),
+                SizedBox(
+                  width: 4.px,
+                ),
+                Text(
+                  '${boardBean.favoriteCount}',
+                  style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                  maxLines: 1,
+                )
+              ],
+            ),
+            SizedBox(
+              width: 15.px,
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
   return GestureDetector(
     onTap: () {
       if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
@@ -32,140 +160,20 @@ Widget PostListItemView(BuildContext context, int index, bool isForumList, Board
         Get.to(PostDetailPage(postId: boardBean.id ?? 0));
       }
     },
-    child: LinearCard(
-      padding: EdgeInsets.only(bottom: 2.px),
-      margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-      child: Padding(
-        padding: EdgeInsets.all(12.px),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                BorderAvatar(avatar: boardBean.user?.avatar ?? ''),
-                SizedBox(width: 8.px),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            boardBean.user?.nickname ?? '',
-                            style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, height: 1.3),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          if (boardBean.sign?.isNotEmpty == true) tagWidget(boardBean.sign!),
-                        ],
-                      ),
-                      if (boardBean.createdAt != null)
-                        Text(
-                          CommonUtils.timeFromNow(boardBean.createdAt!),
-                          style: TextStyle(
-                            color: const Color(0xff9CACC9),
-                            fontSize: 10.px,
-                          ),
-                        ),
-                    ],
-                  ),
-                )
-              ],
+    child: isMyPost
+        ? Container(
+            margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(12.rpx),
             ),
-            SizedBox(height: 6.px),
-            Text(
-              boardBean.title ?? '',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xff2c2c2c),
-                fontWeight: FontWeight.w500,
-              ),
-              softWrap: true,
-            ),
-            SizedBox(height: 6.px),
-            _showTextContentView(boardBean),
-            Visibility(
-                visible: boardBean.files != null && boardBean.files!.isEmpty ? false : true,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 5.px,
-                    ),
-                    isShowMedia
-                        ? mediaContent(context, index, boardBean.files != null ? boardBean.files! : [])
-                        : Container(),
-                  ],
-                )),
-            SizedBox(height: 6.px),
-            Row(
-              children: [
-                SizedBox(
-                  width: 15.px,
-                ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/praise.png',
-                      width: 11.px,
-                      height: 12.px,
-                    ),
-                    SizedBox(
-                      width: 4.px,
-                    ),
-                    Text(
-                      '${boardBean.likeCount}',
-                      style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                      maxLines: 1,
-                    )
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/comment.png',
-                      width: 11.px,
-                      height: 12.px,
-                    ),
-                    SizedBox(
-                      width: 4.px,
-                    ),
-                    Text(
-                      '${boardBean.commentCount}',
-                      style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                      maxLines: 1,
-                    )
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/star.png',
-                      width: 11.px,
-                      height: 12.px,
-                    ),
-                    SizedBox(
-                      width: 4.px,
-                    ),
-                    Text(
-                      '${boardBean.favoriteCount}',
-                      style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                      maxLines: 1,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  width: 15.px,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ),
+            child: child,
+          )
+        : LinearCard(
+            padding: EdgeInsets.only(bottom: 2.px),
+            margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+            child: child,
+          ),
   );
 }
 

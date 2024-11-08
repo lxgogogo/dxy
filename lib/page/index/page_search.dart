@@ -1,14 +1,31 @@
+import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:holdem/page/index/page_search_result.dart';
-import 'package:holdem/utils/constants.dart';
+import 'package:holdem/model/article.dart';
+import 'package:holdem/page/index/search_child_view.dart';
+import 'package:holdem/utils/eventbus/EventBusAction.dart';
+import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
-import 'package:holdem/widget/page_web_fit.dart';
-import 'package:holdem/widget/search_bar.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+enum SearchType {
+  news('资讯', categoryAlias: 'article'),
+  video('视频', categoryAlias: 'video'),
+  book('书籍', categoryAlias: 'book'),
+  course('教程', categoryAlias: 'course'),
+  user('用户', categoryAlias: ''),
+  match('赛事', categoryAlias: 'competition');
+
+  final String title;
+
+  final String categoryAlias;
+
+  const SearchType(this.title, {required this.categoryAlias});
+}
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -17,289 +34,338 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
-  List<String> items = [];
-  late String key;
+class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
+  List<TabData> parentTabs = [];
+  List<GlobalKey> tabKeys = [];
+
+  final TextEditingController controller = TextEditingController();
+  List<String> historyItems = [];
+  List<ArticleBean> articles = [];
+  late TabController _tabController;
 
   @override
   void initState() {
-    // TODO: implement initState
+    _tabController = TabController(length: SearchType.values.length, vsync: this);
+    historyItems = StorageUtil().prefs!.getStringList('search') ?? [];
+    parentTabs = List.generate(SearchType.values.length, (index) {
+      final type = SearchType.values[index];
+      return TabData(
+        index: index,
+        title: Tab(text: type.title),
+        content: SearchChildView(type: type, controller: controller),
+      );
+    }).toList();
     super.initState();
-
-    List<String>? list = StorageUtil().prefs!.getStringList('search');
-    setState(() {
-      items = list ?? [];
-    });
   }
+
+  bool showResult = false;
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
     return BackgroundContainer(
-        child: Scaffold(
-      backgroundColor: Colors.transparent,
-      // extendBodyBehindAppBar: true, // 将导航条扩展到背景图片后面
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/navi_back.png',
-            width: 22.px,
-            height: 22.px,
-          ),
-          onPressed: () {
-            // 登录按钮点击事件
-            Get.back();
-          },
-        ),
-        title: CSearchBar(
-          onChanged: (value) {
-            setState(() {
-              key = value;
-            });
-          },
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                String keyword = key.trim();
-                if (keyword.length == 0) {
-                  ToastUtils.showToast("请输入搜索内容");
-                  return;
-                }
-
-                setState(() {
-                  if (items.contains(keyword)) {
-                    items.remove(keyword);
-                  }
-                  NetRequest().indexList({
-                    'pageNum': 1,
-                    'pageSize': 10,
-                    'filters': {
-                      'q': keyword,
-                    }
-                  }, (data) {
-                    if (data['list'].length == 0) {
-                      ToastUtils.showToast("暂无结果");
-                    } else {
-                      setState(() {
-                        items.insert(0, keyword);
-                        StorageUtil().prefs!.setStringList('search', items);
-                      });
-
-                      Get.to(SearchResultPage(
-                        keyword: keyword,
-                      ));
-                    }
-                  });
-                });
-
-                // StorageUtil().prefs!.setString('token', data['token']);
-              },
-              child: Text('搜索',
-                  style: TextStyle(
-                      color: const Color(0xff249CFC), fontSize: 15.px)))
-          // GestureDetector(child: Text('搜索'),)
-        ],
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 8.px,
-          ),
-          // Container(
-          //   width: 351.px,
-          //   height: 45.px,
-          //   margin: EdgeInsets.only(bottom: 20),
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(22.5.px),
-          //     boxShadow:  const [
-          //       BoxShadow(
-          //         color: Color(0x80BFD2E2),
-          //         offset: Offset(0, 4),
-          //         blurRadius: 8,
-          //       ),
-          //     ],
-          //     image: DecorationImage(
-          //           image: AssetImage('assets/images/logout_btn.png'),
-          //           fit: BoxFit.contain)),
-          // ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10.px),
-            padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.px),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFFF5F8FF),
-                  Color(0xFFECF3FF),
-                ],
-              ),
-              border: Border.all(
-                color: Color.fromRGBO(255, 255, 255, 0.7),
-                width: 0.6,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFFD6E2F0),
-                  offset: Offset(0, 3),
-                  blurRadius: 10,
-                ),
-              ],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      '搜索历史',
-                      style: TextStyle(
-                          color: const Color(0xff95A3C4), fontSize: 12.px),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          items = [];
-                          StorageUtil().prefs!.setStringList('search', items);
-                        });
-                      },
-                      child: Image.asset('assets/images/label_del.png',
-                          width: 16.px, height: 16.px),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 8.px,
-                ),
-                Wrap(
-                  spacing: 8.px,
-                  runSpacing: 8.px,
-                  alignment: WrapAlignment.start,
-                  children: [
-                    ...List.generate(items.length, (index) {
-                      // return Text(items[index],style: TextStyle(color: const Color(0xff7282A0)));
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(SearchResultPage(
-                            keyword: items[index],
-                          ));
-                        },
-                        onLongPress: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('删除'),
-                                  content: const SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text('确认删除当前搜索记录?'),
-                                        // Text('你可以在这里添加更多的内容.')
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text('取消'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: const Text('确认'),
-                                      onPressed: () {
-                                        // 在这里添加确认操作的代码
-                                        setState(() {
-                                          items.removeAt(index);
-                                          StorageUtil()
-                                              .prefs!
-                                              .setStringList('search', items);
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.px, vertical: 5.px),
-                          decoration: BoxDecoration(
-                              color: Color(0xffF8FCFF),
-                              borderRadius: BorderRadius.circular(13.px)),
-                          child: Text(
-                            items[index],
-                            style: TextStyle(color: const Color(0xff7282A0)),
-                          ),
-                        ),
-                      );
-                    })
-                  ],
-                )
-              ],
-            ),
-          ),
-          // Expanded(
-          //     child: ListView.builder(
-          //   itemBuilder: (c, i) => listDataItem(i),
-          //   // itemExtent: 160.0,
-          //   itemCount: items.length,
-          // ))
-        ],
-      ),
-    ));
-  }
-
-  Widget listDataItem(int index) {
-    return Container(
-      height: 36.px,
-      padding: EdgeInsets.symmetric(horizontal: 16.px),
-      child: Row(
-        children: [
-          Image.asset(
-            'assets/images/clock.png',
-            width: 16.px,
-            height: 16.px,
-          ),
-          SizedBox(
-            width: 4.px,
-          ),
-          Expanded(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          titleSpacing: 0.0,
+          leading: UnconstrainedBox(
             child: GestureDetector(
               onTap: () {
-                Get.to(SearchResultPage(
-                  keyword: items[index],
-                ));
+                Get.back();
               },
-              child: Text(
-                items[index],
-                style:
-                    TextStyle(color: const Color(0xff666666), fontSize: 15.px),
+              child: Padding(
+                padding: EdgeInsets.only(left: 8.px, right: 4.px),
+                child: Image.asset(
+                  'assets/images/navi_back.png',
+                  width: 24.px,
+                ),
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                items.removeAt(index);
-                StorageUtil().prefs!.setStringList('search', items);
-              });
-            },
-            child: Image.asset(
-              'assets/images/delete.png',
-              width: 16.px,
-              height: 16.px,
+          title: buildSearchInput(),
+          actions: [
+            GestureDetector(
+              onTap: _onSearch,
+              child: Padding(
+                padding: EdgeInsets.only(left: 12.px, right: 16.px),
+                child: Text(
+                  '搜索',
+                  style: TextStyle(
+                    color: const Color(0xff249CFC),
+                    fontSize: 15.px,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+        backgroundColor: Colors.transparent,
+        body: showResult
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    tabs: SearchType.values
+                        .map((e) => Tab(
+                              text: e.title,
+                            ))
+                        .toList(),
+                    isScrollable: false,
+                    labelPadding: EdgeInsets.fromLTRB(6.px, 0, 6.px, 0),
+                    indicatorPadding: EdgeInsets.only(bottom: 4.px),
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        color: const Color(0xff6198f7),
+                        width: 2.px, // 选中线条宽度
+                      ),
+                      insets: EdgeInsets.symmetric(horizontal: 8.px),
+                      borderRadius: BorderRadius.circular(2.px),
+                    ),
+                    enableFeedback: false,
+                    overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                      return Colors.transparent;
+                    }),
+                    dividerHeight: 0,
+                    labelStyle: TextStyle(
+                      color: const Color(0xff2c2c2c),
+                      fontSize: 16.px,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      color: const Color(0xff666666),
+                      fontSize: 16.px,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: SearchType.values
+                          .map((e) => SearchChildView(
+                                type: e,
+                                controller: controller,
+                              ))
+                          .toList(),
+                    ),
+                  )
+                ],
+              )
+            : buildSearchHistory(context),
+      ),
+    );
+  }
+
+  Widget buildSearchInput() {
+    return Container(
+      height: 32.px,
+      padding: EdgeInsets.only(left: 15.px, right: 12.px),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.px),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x80BFD2E2),
+            offset: Offset(0, 5),
+            blurRadius: 10,
+          ),
+        ],
+        image: const DecorationImage(
+          image: AssetImage('assets/images/input_bg.png'),
+          fit: BoxFit.contain,
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: (value) {
+                if (mounted) {
+                  setState(() {});
+                }
+              },
+              cursorHeight: 14.px,
+              style: TextStyle(height: 1, fontSize: 14.px, color: Color(0xff333333)),
+              decoration: InputDecoration(
+                // isDense: true,
+                // prefixIcon: Icon(Icons.search),
+                counterText: "",
+                hintText: '请输入搜索内容',
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.only(bottom: 12),
+                hintStyle: TextStyle(
+                  color: const Color(0xFFBBBBBB),
+                  fontSize: 14.px,
+                ),
+              ),
             ),
           ),
+          if (controller.text.isNotEmpty)
+            GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                controller.clear();
+                showResult = false;
+                if (mounted) {
+                  setState(() {});
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.px),
+                child: Image.asset(
+                  'assets/images/clear.png',
+                  width: 20.px,
+                  height: 20.px,
+                ),
+              ),
+            ),
         ],
       ),
     );
+  }
+
+  Widget buildSearchHistory(BuildContext context) {
+    return Container(
+      height: 200.px,
+      margin: EdgeInsets.symmetric(horizontal: 9.px).copyWith(top: 8.px),
+      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.5.px),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFF5F8FF),
+            Color(0xFFECF3FF),
+          ],
+        ),
+        border: Border.all(
+          color: const Color.fromRGBO(255, 255, 255, 0.7),
+          width: 0.6,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0xFFD6E2F0),
+            offset: Offset(0, 3),
+            blurRadius: 10,
+          ),
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '搜索历史',
+                style: TextStyle(
+                  color: const Color(0xff95A3C4),
+                  fontSize: 12.px,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    historyItems = [];
+                    StorageUtil().prefs!.setStringList('search', historyItems);
+                  });
+                },
+                child: Image.asset(
+                  'assets/images/label_del.png',
+                  width: 12.px,
+                  height: 12.px,
+                  color: const Color(0xff95A3C4),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12.px),
+          Wrap(
+            spacing: 8.px,
+            runSpacing: 8.px,
+            alignment: WrapAlignment.start,
+            children: [
+              ...List.generate(historyItems.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    controller.text = historyItems[index];
+                    _onSearch();
+                  },
+                  onLongPress: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('删除'),
+                          content: const SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                Text('确认删除当前搜索记录?'),
+                                // Text('你可以在这里添加更多的内容.')
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('取消'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('确认'),
+                              onPressed: () {
+                                // 在这里添加确认操作的代码
+                                setState(() {
+                                  historyItems.removeAt(index);
+                                  StorageUtil().prefs!.setStringList('search', historyItems);
+                                });
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.px, vertical: 4.px),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffF8FCFF),
+                      borderRadius: BorderRadius.circular(13.5.px),
+                    ),
+                    child: Text(
+                      historyItems[index],
+                      style: TextStyle(
+                        color: const Color(0xff7282A0),
+                        fontSize: 14.px,
+                      ),
+                    ),
+                  ),
+                );
+              })
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void _onSearch() {
+    String keyword = controller.text;
+    if (keyword.isEmpty) {
+      ToastUtils.showToast("请输入搜索内容");
+      return;
+    }
+    if (!historyItems.contains(keyword)) {
+      historyItems.insert(0, keyword);
+    }
+    StorageUtil().prefs?.setStringList('search', historyItems);
+
+    showResult = true;
+    setState(() {});
+
+    EventBusManager.eventBus.fire(EventBusAction.refreshSearchChildView.eventBusTypeName);
   }
 }

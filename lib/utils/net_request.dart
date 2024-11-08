@@ -58,7 +58,7 @@ class NetRequest {
   }
 
   Future courseList(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.courseList, params: params);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.courseList, params: params);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -404,6 +404,8 @@ class NetRequest {
 
   //resetPassword 重置密码
   static const String SEND_CODE_TYPE_RESET_PW = "resetPassword";
+
+  static const String SEND_CODE_TYPE_CHANGE_EMAIL = "changeEmail";
 
   Future sendCode(String type, String account, SuccessCallback onSuccess) async {
     Map<String, Object> params = {};

@@ -5,6 +5,7 @@ enum EventBusAction {
   closeLoginPage,
   //刷新论坛帖子详情
   refreshForumPostDetail,
+  refreshSearchChildView,
 
   //退出登录之后首页tab通知切换到0位置
   noticeMainTabSwitchHome,
@@ -33,6 +34,8 @@ extension DioErrorTypeExtension on EventBusAction {
         return '刷新我的收藏列表';
       case EventBusAction.updateBoardTabData:
         return '更新板块tab数据';
+      case EventBusAction.refreshSearchChildView:
+        return 'refreshSearchChildView';
       default:
         return '未知';
     }

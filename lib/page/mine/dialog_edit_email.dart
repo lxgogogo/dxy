@@ -315,10 +315,11 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
 
   void _submitUpdate() {
     String email = controller.text;
+    String code = codeController.text;
     if (_isDisable) {
       return;
     }
-    NetRequest().updateEmail(email, '', (data) {
+    NetRequest().updateEmail(email, code, (data) {
       ToastUtils.showToast('修改成功');
       EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
       Navigator.pop(context);
@@ -337,7 +338,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     }
     _startCountdown();
     NetRequest().sendCode(
-      NetRequest.SEND_CODE_TYPE_REGISTER,
+      NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL,
       email,
       (data) {},
     );

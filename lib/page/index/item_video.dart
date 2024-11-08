@@ -9,7 +9,7 @@ import '../../widget/linear_card.dart';
 class VideoItem extends StatefulWidget {
   ArticleBean article;
   bool isBanner;
-  VideoItem({super.key, required this.article, required this.isBanner});
+  VideoItem({super.key, required this.article, this.isBanner = false});
 
   @override
   State<VideoItem> createState() => _VideoItemState();

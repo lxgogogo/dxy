@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -65,44 +66,53 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   reqPostDetail() {
-    NetRequest().threadShow(currentPostId.toString(), (data) {
+    NetRequest().threadShow(currentPostId.toString(), (data) async {
       if (_isMounted) {
-        setState(() {
-          boardBean = BoardBean.fromJson(data);
-          //所有图片集合
-          if (boardBean!.files!.isNotEmpty) {
-            for (var element in boardBean!.files!) {
-              if (boardBean!.files!.isNotEmpty && boardBean!.files!.length == 1) {
-                if (element.type == 'video') {
-                  videoUrl = element.url!;
-                  imageUrlList.add(_getImageUrl(element));
-                } else {
-                  imageUrlList.add(_getImageUrl(element));
-                }
+        boardBean = BoardBean.fromJson(data);
+        //所有图片集合
+        if (boardBean!.files!.isNotEmpty) {
+          for (var element in boardBean!.files!) {
+            if (boardBean!.files!.isNotEmpty && boardBean!.files!.length == 1) {
+              if (element.type == 'video') {
+                videoUrl = element.url ?? '';
+                imageUrlList.add(_getImageUrl(element));
               } else {
                 imageUrlList.add(_getImageUrl(element));
               }
+            } else {
+              imageUrlList.add(_getImageUrl(element));
             }
           }
+        }
 
-          postBottomViewParams = PostBottomViewParams(
-            postId: currentPostId,
-            relId: currentPostId,
-            relType: NetRequest.COMMENT_TYPE_THREAD,
-            favoriteState: boardBean?.favorited!,
-            title: boardBean?.title!,
-            liked: boardBean?.liked!,
-            content: boardBean?.content!,
-            files: boardBean?.files!,
-            shareLink: '/post_detail?postId=${widget.postId}',
-            likeCount: boardBean?.likeCount ?? 0,
-            favoriteCount: boardBean?.favoriteCount ?? 0,
-            commentCount: boardBean?.commentCount ?? 0,
-            shareCount: boardBean?.shareCount ?? 0,
+        postBottomViewParams = PostBottomViewParams(
+          postId: currentPostId,
+          relId: currentPostId,
+          relType: NetRequest.COMMENT_TYPE_THREAD,
+          favoriteState: boardBean?.favorited!,
+          title: boardBean?.title!,
+          liked: boardBean?.liked!,
+          content: boardBean?.content!,
+          files: boardBean?.files!,
+          shareLink: '/post_detail?postId=${widget.postId}',
+          likeCount: boardBean?.likeCount ?? 0,
+          favoriteCount: boardBean?.favoriteCount ?? 0,
+          commentCount: boardBean?.commentCount ?? 0,
+          shareCount: boardBean?.shareCount ?? 0,
+        );
+
+        isLoadOk = true;
+        setState(() {});
+        if (videoUrl.isNotEmpty) {
+          _playController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+          await _playController.initialize();
+          _chewieController = ChewieController(
+            videoPlayerController: _playController,
+            autoPlay: true,
           );
-
-          isLoadOk = true;
-        });
+          _isPlaying = true;
+          setState(() {});
+        }
       }
     });
 
@@ -119,19 +129,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
         });
       }
     });
-  }
-
-  Future<void> _pickAndPlayVideo(videoUrl) async {
-    if (videoUrl != null) {
-      _playController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-      await _playController.initialize();
-      _chewieController = ChewieController(
-        videoPlayerController: _playController,
-        autoPlay: true,
-      );
-      _isPlaying = true;
-      setState(() {});
-    }
   }
 
   @override
@@ -235,8 +232,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ),
           ),
           _showContentView(),
-          // _showMediaView(),
-          mediaContent(boardBean?.files  ?? []),
+          _showMediaView(),
+          // mediaContent(boardBean?.files  ?? []),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

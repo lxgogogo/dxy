@@ -49,7 +49,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
   }
 
   requestDetail() {
-    NetRequest().articleDetail({'id': widget.id}, (data) {
+    NetRequest().contentShow({'id': widget.id}, (data) {
       setState(() {
         articleDetailBean = ArticleDetailBean.fromJson(data);
         loaded = true;

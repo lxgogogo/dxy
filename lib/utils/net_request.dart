@@ -67,7 +67,7 @@ class NetRequest {
     }
   }
 
-  Future articleDetail(Map<String, Object> params, SuccessCallback onSuccess) async {
+  Future contentShow(Map<String, dynamic> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.contentShow, params: params);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {

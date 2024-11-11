@@ -10,10 +10,11 @@ import 'package:holdem/model/competition_loop.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
+import 'package:holdem/page/index/competition_detail_page.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/index/page_game_calendar.dart';
+import 'package:holdem/page/index/competition_calendar_page.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
@@ -530,24 +531,28 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         if (loops.isNotEmpty)
           GestureDetector(
             onTap: () {
-              Get.to(GameCalendarPage(
-                id: loops[_currentPage].id ?? 0,
-              ));
+              Get.to(const CompetitionCalendarPage());
             },
             child: Container(
               width: 361.px,
               height: 85.px,
-              padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 16.px),
-              decoration:
-                  const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
+              padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
+              decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
               child: PageView.builder(
                 controller: _controller,
                 itemCount: loops.length,
                 itemBuilder: (context, index) {
-                  return Center(
-                    child: Text(
-                      loops[index].title ?? '',
-                      style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(CompetitionDetailPage(id: loops[index].id));
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: Center(
+                      child: Text(
+                        loops[index].title ?? '',
+                        style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                      ),
                     ),
                   );
                 },

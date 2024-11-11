@@ -43,7 +43,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
 
   requestDetail() {
-    NetRequest().articleDetail({'id': widget.id}, (data) {
+    NetRequest().contentShow({'id': widget.id}, (data) {
       if (mounted) {
         setState(() {
           articleDetailBean = ArticleDetailBean.fromJson(data);

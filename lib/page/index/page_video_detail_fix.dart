@@ -59,7 +59,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   }
 
   requestDetail() {
-    NetRequest().articleDetail({'id': widget.id}, (data) async {
+    NetRequest().contentShow({'id': widget.id}, (data) async {
       if (mounted) {
         articleDetailBean = ArticleDetailBean.fromJson(data);
         setState(() {});

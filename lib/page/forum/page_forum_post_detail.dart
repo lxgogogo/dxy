@@ -5,6 +5,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
@@ -46,7 +48,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   late ChewieController _chewieController;
 
   bool _isPlaying = false;
-  late String videoUrl;
+  String videoUrl = '';
   late PostBottomViewParams postBottomViewParams;
   bool isLoadOk = false;
 
@@ -175,7 +177,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   bool isOwnerPost() {
     if (boardBean != null) {
       var ownerId = StorageUtil().prefs!.getString('ownerId');
-      if (boardBean!.user!.id!.toString() == ownerId) {
+      if (boardBean!.user?.id.toString() == ownerId) {
         return true;
       }
     }
@@ -215,19 +217,48 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       bottomText2: '',
                       bottomText2Style: const TextStyle()),
                 ),
-                Visibility(
-                  visible: isOwnerPost() ? false : true,
-                  child: boardBean?.user?.followed == true
-                      ? followedStatusBtn()
-                      : IconButton(
-                          onPressed: _followToggle,
-                          icon: Image.asset(
-                            'assets/images/follow_btn.png',
-                            width: 62,
-                            height: 28,
-                          ),
-                        ),
-                ),
+                if ((boardBean?.user?.id ?? 0) != 0)
+                  Visibility(
+                    visible: isOwnerPost() ? false : true,
+                    child: GestureDetector(
+                      onTap: _followToggle,
+                      child: boardBean?.user?.followed == true
+                          ? Container(
+                              height: 28.px,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffd8d8d8),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 10.px),
+                              child: const Text(
+                                '已关注',
+                                style: TextStyle(
+                                  color: Color(0xff95a3c4),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 28.px,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xff249cfc),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 10.px),
+                              child: const Text(
+                                '+关注',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -400,23 +431,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void _followToggle() {
-    NetRequest().followerToggle(boardBean!.user!.id!, !boardBean!.user!.followed!, (data) {
-      if (_isMounted) {
-        setState(() {
-          reqPostDetail();
-        });
-      }
+    Global().checkLogin(() {
+      if (boardBean?.user?.id == null) return;
+      final followed = boardBean?.user?.followed ?? false;
+      NetRequest().followerToggle(boardBean!.user!.id!, !followed, (data) {
+        if (_isMounted) {
+          boardBean?.user?.followed = !followed;
+          setState(() {});
+        }
+      });
     });
-  }
-
-  Widget followedStatusBtn() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.color_0D000000,
-        borderRadius: BorderRadius.circular(25),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 设置内边距
-      child: Text('已关注', style: AppTheme.text999999Size13),
-    );
   }
 }

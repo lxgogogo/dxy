@@ -212,8 +212,8 @@ class _LoginPageState extends State<LoginPage> {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Get.to(RegisterAccountPage(
-                  type: RegisterAccountPage.PageType_ForgotPassword,
+                Get.to(const RegisterAccountPage(
+                  type: forgotPassword,
                 ));
               },
               child: const Text(

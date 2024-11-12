@@ -34,12 +34,12 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
   List<BannerBean> banners = [];
   List<ArticleBean> bookSuggests = [];
   List<IndexCategory> categories = [];
+  int? categoryId;
   List<CourseBean> courses = [];
   List<CompetionLoopBean> loops = [];
   int categorySel = 0;
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
-  int parentId = 1;
 
   final ScrollController _listController = ScrollController();
 
@@ -91,9 +91,9 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       getBookSuggest();
     } else if (widget.type == 'course') {
       NetRequest().courseCategory({"parentAlias": "course", "parentId": 1}, (data) {
-        data.insert(0, {"id": 0, "name": "全部"});
         List<IndexCategory> categoryList =
             List<IndexCategory>.from(data.map((category) => IndexCategory.fromJson(category)));
+        categoryList.insert(0, IndexCategory(name: '全部'));
         if (mounted) {
           setState(() {
             categories = categoryList;
@@ -107,20 +107,11 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         'pageNum': pageNum,
         'pageSize': 10,
         'filters': {
-          'categoryAlias': widget.type == 'course' && parentId != 1 ? null : widget.type, //'article'
-          'categoryId': widget.type == 'course' ? parentId : null,
+          'categoryAlias': 'course',
+          if (categoryId != null) 'categoryId': categoryId,
         }
       }, (data) {
-        // List<ArticleBean> dataList = List<ArticleBean>.from(
-        //     data['list'].map((article) => ArticleBean.fromJson(article)));
-        List array = [];
-        for (var item in data['list']) {
-          for (var collect in item['collects']) {
-            array.add({"heading": collect['heading'], "collects": collect['sublist']});
-          }
-        }
-
-        List<CourseBean> dataList = List<CourseBean>.from(array.map((course) => CourseBean.fromJson(course)));
+        List<CourseBean> dataList = List<CourseBean>.from(data['list'].map((course) => CourseBean.fromJson(course)));
 
         if (mounted) {
           setState(() {
@@ -139,8 +130,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         'pageNum': pageNum,
         'pageSize': 10,
         'filters': {
-          'categoryAlias': widget.type == 'course' && parentId != 1 ? null : widget.type, //'article'
-          'categoryId': widget.type == 'course' ? parentId : null,
+          'categoryAlias': widget.type, //'article'
         }
       }, (data) {
         List<ArticleBean> dataList =
@@ -216,8 +206,8 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
               ),
               child: Column(
                 children: [
-                  ...List.generate(bean.collects!.length, (i) {
-                    CollectBean collectBean = bean.collects![i];
+                  ...List.generate(bean.sublist!.length, (i) {
+                    CollectBean collectBean = bean.sublist![i];
                     return GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed("/article_detail?id=${collectBean.targetId ?? 0}",
@@ -229,7 +219,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                           decoration: BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(
-                                      color: i < bean.collects!.length - 1
+                                      color: i < bean.sublist!.length - 1
                                           ? const Color(0xffe6e6e6)
                                           : Colors.transparent))),
                           child: Row(
@@ -284,7 +274,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                   onTap: () {
                     setState(() {
                       categorySel = index;
-                      parentId = categories[index].id ?? 0;
+                      categoryId = categories[index].id;
                       pageNum = 1;
                     });
                     reqListData();

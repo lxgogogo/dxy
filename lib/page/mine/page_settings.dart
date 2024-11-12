@@ -91,8 +91,8 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               GestureDetector(
                   onTap: () {
-                    Get.to(RegisterAccountPage(
-                      type: RegisterAccountPage.PageType_ModifyPassword,
+                    Get.to(const RegisterAccountPage(
+                      type: modifyPassword,
                     ));
                   },
                   child: Container(

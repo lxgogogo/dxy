@@ -4,7 +4,7 @@ class Api {
   static const String indexList = '/api/content/list';
   static const String contentShow = '/api/content/show';
   static const String indexBanner = '/api/sectionData/list';
-  static const String courseList = '/api/content/listCollect';
+  static const String courseList = '/api/content/listCollectNew';
   static const String bookSuggest = '/api/content/bookSuggest';
 
   //赛事

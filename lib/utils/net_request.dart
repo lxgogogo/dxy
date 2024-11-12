@@ -306,7 +306,7 @@ class NetRequest {
         LoginHelper().clearGlobalUserInfo();
         Get.to(LoginPage());
       } else {
-        ToastUtils.showToast(resp.message!);
+        ToastUtils.showToast(resp.message ?? '未知错误');
       }
     }
   }

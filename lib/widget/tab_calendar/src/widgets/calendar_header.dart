@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 import '../customization/header_style.dart';
@@ -43,7 +44,19 @@ class CalendarHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 5),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          InkWell(
+            onTap: onLeftChevronTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SvgPicture.asset(
+                'assets/svg/arrow_left.svg',
+                width: 13,
+                height: 13,
+              ),
+            ),
+          ),
           Text(
             text,
             style: const TextStyle(
@@ -51,21 +64,15 @@ class CalendarHeader extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          const SizedBox(width: 5),
-          InkWell(
-            onTap: onLeftChevronTap,
-            borderRadius: BorderRadius.circular(100.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: headerStyle.leftChevronIcon,
-            ),
-          ),
           InkWell(
             onTap: onRightChevronTap,
-            borderRadius: BorderRadius.circular(100.0),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: headerStyle.rightChevronIcon,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: SvgPicture.asset(
+                'assets/svg/arrow_right.svg',
+                width: 13,
+                height: 13,
+              ),
             ),
           ),
         ],

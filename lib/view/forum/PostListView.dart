@@ -154,7 +154,7 @@ Widget PostListItemView(BuildContext context, int index, bool isForumList, Board
     onTap: () {
       if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
         if (boardBean.relType == 'content') {
-          Get.to(ArticleDetailPage(id: boardBean.id! ?? 0));
+          Get.to(ArticleDetailPage(id: boardBean.id ?? 0));
         } else if (boardBean.relType == 'comment') {}
       } else {
         Get.to(PostDetailPage(postId: boardBean.id ?? 0));

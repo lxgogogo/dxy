@@ -40,7 +40,7 @@ class CommonUtils{
     } else if (difference.inDays < 5) {
       timeInterval = '${difference.inDays}天前';
     } else {
-      final formatter = DateFormat('M月d日');
+      final formatter = DateFormat('yyyy-MM-dd HH:mm');
       timeInterval = formatter.format(dt);
     }
     return timeInterval;

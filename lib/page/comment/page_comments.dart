@@ -14,6 +14,7 @@ import '../../utils/app_theme.dart';
 class CommentListPage extends StatefulWidget {
   int id;
   String relType;
+
   CommentListPage({super.key, required this.id, required this.relType});
 
   @override
@@ -21,12 +22,11 @@ class CommentListPage extends StatefulWidget {
 }
 
 class _CommentListPageState extends State<CommentListPage> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  int pageNum = 1;
   List<CommentBean> comments = [];
   bool loaded = false;
-  int pageNum = 1;
-  String commentCountsText =  '';
+  String commentCountsText = '';
 
   var actionEventBus;
 
@@ -37,23 +37,8 @@ class _CommentListPageState extends State<CommentListPage> {
 
     reqListData();
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
-        NetRequest().commentList({
-          'pageNum': 1,
-          'pageSize': comments.length + 1,
-          'filters': {'relType': widget.relType, 'relId': widget.id}
-        }, (data) {
-          if (mounted) {
-            List<CommentBean> dataList = List<CommentBean>.from(
-                data['list'].map((comment) => CommentBean.fromJson(comment)));
-            setState(() {
-              comments = dataList;
-              loaded = true;
-              commentCountsText = '(${comments.length})';
-            });
-          }
-        });
+      if (event.toString() == EventBusAction.refreshForumPostDetail.eventBusTypeName) {
+        reqListData();
       }
     });
   }
@@ -65,14 +50,19 @@ class _CommentListPageState extends State<CommentListPage> {
       'filters': {'relType': widget.relType, 'relId': widget.id}
     }, (data) {
       if (mounted) {
-        List<CommentBean> dataList = List<CommentBean>.from(
-            data['list'].map((comment) => CommentBean.fromJson(comment)));
-        setState(() {
+        List<CommentBean> dataList =
+            List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
+        if (pageNum == 1) {
           comments = dataList;
-          loaded = true;
-          commentCountsText = '(${comments.length})';
-        });
+        } else {
+          comments.addAll(dataList);
+        }
+        commentCountsText = '(${comments.length})';
+        loaded = true;
+        setState(() {});
       }
+      _refreshController.loadComplete();
+      _refreshController.refreshCompleted();
     });
   }
 
@@ -95,6 +85,15 @@ class _CommentListPageState extends State<CommentListPage> {
     return BackgroundContainer(
       child: Scaffold(
           appBar: AppBar(
+            title: Text(
+              '评论',
+              style: TextStyle(
+                color: const Color(0xff2c2c2c),
+                fontSize: 16.px,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            centerTitle: true,
             leading: IconButton(
               icon: Image.asset(
                 'assets/images/back.png',
@@ -106,36 +105,13 @@ class _CommentListPageState extends State<CommentListPage> {
               },
             ),
             backgroundColor: Colors.transparent,
-            // elevation: 0, // 去除导航条的阴影
-            title: Text('评论',
-              style: AppTheme.text333333Size17,
-            ),
-            centerTitle: true,
-            // bottom: const PreferredSize(
-            //   preferredSize: Size.fromHeight(1.0),
-            //   child: Divider(
-            //     color: AppTheme.color_F3F3F3,
-            //     thickness: 1,
-            //   ),
-            // ),
           ),
           backgroundColor: Colors.transparent,
-          body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [const Color(0xffF4F7FC), const Color(0xffE4EEF9)])),
-          child: content(),
-        )),
+          body: content()),
     );
   }
 
   content() {
-    if (comments.length == 0)
-      return Center(
-        child: NoDataView(),
-      );
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -143,11 +119,13 @@ class _CommentListPageState extends State<CommentListPage> {
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      child: ListView.builder(
-        itemBuilder: (c, i) => contentItem(i),
-        // itemExtent: 160.0,
-        itemCount: comments.length,
-      ),
+      child: comments.isNotEmpty
+          ? ListView.builder(
+              itemBuilder: (c, i) => contentItem(i),
+              // itemExtent: 160.0,
+              itemCount: comments.length,
+            )
+          : const NoDataView(),
     );
   }
 
@@ -155,7 +133,8 @@ class _CommentListPageState extends State<CommentListPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.px),
       child: CommentItem(
-      commentBean: comments[i],
-    ),);
+        commentBean: comments[i],
+      ),
+    );
   }
 }

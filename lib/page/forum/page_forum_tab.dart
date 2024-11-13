@@ -6,6 +6,7 @@ import 'package:holdem/page/forum/page_publish_posts.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../model/board_info.dart';
 import '../../utils/constants.dart';
@@ -25,16 +26,24 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
   late int currentBoardId = 0;
   late List<BoardInfo> boardInfoList;
   int selIndex = 0;
-  int filterIndex = 0;
-  final _pageKey = GlobalKey<ForumTabChildPageState>();
 
-  var actionEventBus;
+  SuperTooltipController _tipController = SuperTooltipController();
+  List<String> filters = [
+    '时间最新',
+    '回帖最多',
+    '点赞最多',
+  ];
+  int filterIndex = 0;
+
+  String get filterValue => filters[selIndex];
+
+  final _pageKey = GlobalKey<ForumTabChildPageState>();
 
   //默认全部板块
   List<TabData> forumParentTabs = [
     TabData(
       index: 0,
-      title: Tab(
+      title: const Tab(
         child: Text('全部板块'),
       ),
       content: ForumTabChildPage(tabId: 0),
@@ -46,8 +55,7 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
     super.initState();
     boardInfoList = [];
     getPlateData();
-    //接受通知刷新页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+    EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.updateBoardTabData.eventBusTypeName) {
         if (mounted) {
           getPlateData();
@@ -85,15 +93,77 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
           // 设置导航条背景透明
           elevation: 0,
           actions: [
-            IconButton(
-              icon: Image.asset(
-                'assets/images/order.png',
-                width: 20.px,
-                height: 20.px,
+            SuperTooltip(
+              showBarrier: true,
+              controller: _tipController,
+              popupDirection: TooltipDirection.down,
+              backgroundColor: Colors.transparent,
+              hasShadow: false,
+              borderColor: Colors.transparent,
+              arrowLength: 0,
+              arrowTipDistance: 21.25.px,
+              bubbleDimensions: EdgeInsets.zero,
+              touchThroughAreaShape: ClipAreaShape.rectangle,
+              touchThroughAreaCornerRadius: 10,
+              minimumOutsideMargin: 0,
+              barrierColor: Colors.transparent,
+              right: 16.px,
+              content: Container(
+                width: 90.px,
+                decoration: const BoxDecoration(
+                  color: Color(0xfffafcff),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: filters.length,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (BuildContext context, int index) {
+                    final item = filters[index];
+                    return GestureDetector(
+                      onTap: () {
+                        _tipController.hideTooltip();
+                        if (filterIndex != index) {
+                          filterIndex = index;
+                          String order = filterIndex == 0
+                              ? 'time'
+                              : filterIndex == 1
+                                  ? 'comment'
+                                  : 'like';
+                          _pageKey.currentState?.refreshData(0, order);
+                        }
+                      },
+                      child: Container(
+                        height: 41.5.px,
+                        alignment: Alignment.center,
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                            color: filterIndex == index ? const Color(0xff249cfc) : const Color(0xff95a3c4),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (_, __) => Container(
+                    color: const Color(0xffe7f0fa),
+                    height: 0.5,
+                  ),
+                ),
               ),
-              onPressed: () {
-                _showMenuDialog(context);
-              },
+              child: UnconstrainedBox(
+                child: IconButton(
+                  icon: Image.asset(
+                    'assets/images/order.png',
+                    width: 20.px,
+                    height: 20.px,
+                  ),
+                  onPressed: () {
+                    _tipController.showTooltip();
+                  },
+                ),
+              ),
             ),
           ],
         ),
@@ -101,101 +171,6 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
         body: detail(),
         floatingActionButton: bottomFloatingButton(),
       ),
-    );
-  }
-
-  void _showMenuDialog(BuildContext context) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      // 可以点击外部区域关闭弹窗
-      barrierLabel: '',
-      barrierColor: Colors.transparent,
-      // 背景遮罩颜色
-      transitionDuration: Duration(milliseconds: 300),
-      pageBuilder: (context, anim1, anim2) {
-        return Align(
-          alignment: Alignment.topRight, // 弹窗位置
-          child: Container(
-            width: 90.px,
-            height: 133.px,
-            margin: EdgeInsets.only(top: 45.px, right: 5),
-            // 自定义位置
-            padding: EdgeInsets.only(top: 10.px, bottom: 13.px),
-            decoration: const BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/images/pop_menu_bg.png'), fit: BoxFit.cover),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                    child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      filterIndex = 0;
-                    });
-                    String order = 'time';
-                    _pageKey.currentState?.refreshData(0, order);
-                    Navigator.of(context).pop(); // 关闭弹窗
-                  },
-                  child: Center(
-                      child: Text(
-                    '时间最新',
-                    style: TextStyle(color: filterIndex == 0 ? Color(0xff249CFC) : Color(0xff95A3C4)),
-                  )),
-                )),
-                Container(
-                  width: 90.px,
-                  height: 0.5.px,
-                  color: const Color(0xffE7F0FA),
-                ),
-                Expanded(
-                    child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      filterIndex = 1;
-                    });
-                    String order = 'comment';
-                    _pageKey.currentState?.refreshData(0, order);
-                    Navigator.of(context).pop(); // 关闭弹窗
-                  },
-                  child: Center(
-                      child: Text(
-                    '回帖最多',
-                    style: TextStyle(color: filterIndex == 1 ? Color(0xff249CFC) : Color(0xff95A3C4)),
-                  )),
-                )),
-                Container(
-                  width: 90.px,
-                  height: 0.5.px,
-                  color: const Color(0xffE7F0FA),
-                ),
-                Expanded(
-                    child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      filterIndex = 2;
-                    });
-                    String order = 'like';
-                    _pageKey.currentState?.refreshData(0, order);
-                    Navigator.of(context).pop(); // 关闭弹窗
-                  },
-                  child: Center(
-                      child: Text(
-                    '点赞最多',
-                    style: TextStyle(color: filterIndex == 2 ? Color(0xff249CFC) : Color(0xff95A3C4)),
-                  )),
-                )),
-              ],
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return FadeTransition(
-          opacity: Tween(begin: 0.0, end: 1.0).animate(anim1),
-          child: child,
-        );
-      },
     );
   }
 
@@ -346,34 +321,6 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
         });
       },
       // shape: CircleBorder(),
-    );
-  }
-}
-
-class CustomDivider extends PopupMenuEntry<String> {
-  final String value;
-
-  CustomDivider(this.value);
-
-  @override
-  double get height => 1.0;
-
-  @override
-  State<CustomDivider> createState() => _CustomDividerState();
-
-  @override
-  bool represents(String? value) {
-    // TODO: implement represents
-    throw UnimplementedError();
-  }
-}
-
-class _CustomDividerState extends State<CustomDivider> {
-  @override
-  Widget build(BuildContext context) {
-    return const Divider(
-      height: 1,
-      color: Color(0xffE7F0FA),
     );
   }
 }

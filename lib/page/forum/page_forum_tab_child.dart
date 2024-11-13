@@ -29,17 +29,14 @@ class ForumTabChildPage extends StatefulWidget {
 
 class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeepAliveClientMixin {
   late int tabIdValue;
-  late String filterValue = '';
-  late int selectFilterIndex = 0;
-  late Map<int, dynamic> filterMap = {};
+
   int pageNum = 1;
   int pageSize = 10;
   int pageId = 0;
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
 
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
   void _onRefresh() async {
@@ -47,8 +44,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
       pageNum = 1;
     });
     //通知外层板块tab拉取最新数据
-    EventBusManager.eventBus
-        .fire(EventBusAction.updateBoardTabData.eventBusTypeName);
+    EventBusManager.eventBus.fire(EventBusAction.updateBoardTabData.eventBusTypeName);
     //当前列表刷新
     reqListData();
   }
@@ -60,7 +56,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     reqListData();
   }
 
-  void refreshData(int id,String order){
+  void refreshData(int id, String order) {
     setState(() {
       pageId = id;
       tabIdValue = id;
@@ -71,50 +67,42 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
 
   @override
   void initState() {
-    tabIdValue = pageId;//widget.tabId;
+    tabIdValue = pageId; //widget.tabId;
     super.initState();
-    filterMap[0] = '时间最新';
-    filterMap[1] = '回帖最多';
-    filterMap[2] = '点赞最多';
-    filterValue = filterMap[0].toString();
 
     reqListData();
 
     //接受通知刷新页面
     EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshForumList.eventBusTypeName) {
-        print('========refreshForumList=====refreshForumList=============');
+      if (event.toString() == EventBusAction.refreshForumList.eventBusTypeName) {
         if (mounted) {
           boardSort = NetRequest.BOARD_SORT_TIME;
           pageNum = 1;
           setState(() {
-            filterValue = filterMap[0].toString();
-            selectFilterIndex = getKeyByValue(filterMap[0].toString())!;
             reqListData();
-            //由于tab设置了切换不重载，这个切换子类筛选的时候需要设置自动滚动到顶部
             _scrollToTop();
           });
         }
       }
     });
   }
-  reqListData () {
+
+  reqListData() {
     //tabIdValue = 0全部板块,不传boardId
-    NetRequest().getThreadListByBoard(pageNum, pageSize,
-        boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
-          BoardList boardList = BoardList.fromJson(data);
-          if (mounted) {
-            setState(() {
-              if (pageNum == 1) {
-                boardPostList = boardList.list!;
-              } else {
-                boardPostList.addAll(boardList.list!);
-              }
-            });
+    NetRequest().getThreadListByBoard(
+        pageNum, pageSize, boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
+      BoardList boardList = BoardList.fromJson(data);
+      if (mounted) {
+        setState(() {
+          if (pageNum == 1) {
+            boardPostList = boardList.list!;
+          } else {
+            boardPostList.addAll(boardList.list!);
           }
-          _refreshController.loadComplete();
-          _refreshController.refreshCompleted();
+        });
+      }
+      _refreshController.loadComplete();
+      _refreshController.refreshCompleted();
     });
   }
 
@@ -126,29 +114,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
 
   @override
   Widget build(BuildContext context) {
-    return boardPostList.isNotEmpty ? listView() : const Center(child: NoDataView());
-  }
-
-  Widget getFilterConditionView() {
-    return Row(
-      children: [
-        SizedBox(
-          width: 5.px,
-        ),
-        Text('排序',
-            style: TextStyle(
-                color: sortTitleColor,
-                fontSize: 14.px,
-                fontWeight: FontWeight.w500)),
-        SizedBox(
-          width: 10.px,
-        ),
-        Expanded(child: groupRadio2()),
-      ]);
-  }
-
-  ///列表数据
-  Widget listView() {
+    super.build(context);
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -156,125 +122,22 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      child: ListView.builder(
-        controller:_listController,
-        itemBuilder: (c, i)  {
-          return PostListItemView(context, i, true, boardPostList[i]);
-        },
-        itemCount: boardPostList.length,
-      ),
-    );
-  }
-
-  Widget groupRadio2() {
-    return Container(
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              filterValue = filterMap[0].toString();
-              _selectFilter(filterValue);
-            },
-            child: selectFilterIndex == 0
-                ? selectRadioStyleView('时间最新')
-                : unselectRadioStyleView('时间最新')
-          ),
-          SizedBox(width: 10.px,),
-          GestureDetector(
-              onTap: () {
-                filterValue = filterMap[1].toString();
-                _selectFilter(filterValue);
+      child: boardPostList.isNotEmpty
+          ? ListView.builder(
+              controller: _listController,
+              itemBuilder: (c, i) {
+                return PostListItemView(context, i, true, boardPostList[i]);
               },
-              child: selectFilterIndex == 1
-                  ? selectRadioStyleView('回帖最多')
-                  : unselectRadioStyleView('回帖最多')
-          ),
-          SizedBox(width: 10.px,),
-          GestureDetector(
-              onTap: () {
-                filterValue = filterMap[2].toString();
-                _selectFilter(filterValue);
-              },
-              child: selectFilterIndex == 2
-                  ? selectRadioStyleView('点赞最多')
-                  : unselectRadioStyleView('点赞最多')
-          )
-        ],
-      ),
+              itemCount: boardPostList.length,
+            )
+          : const NoDataView(),
     );
-  }
-
-  _selectFilter(String selected) {
-    print('[forumLog]ddddddddddddddddddddd===>$selected');
-    boardSort = selected == '时间最新'
-        ? NetRequest.BOARD_SORT_TIME
-        : selected == '回帖最多'
-        ? NetRequest.BOARD_SORT_COMMENT
-        : NetRequest.BOARD_SORT_LIKE;
-    if (mounted) {
-      setState(() {
-        pageNum = 1;
-        filterValue = selected;
-        selectFilterIndex = getKeyByValue(selected)!;
-        boardPostList.clear();
-        reqListData();
-        //由于tab设置了切换不重载，这个切换子类筛选的时候需要设置自动滚动到顶部
-        _scrollToTop();
-      });
-    }
-  }
-
-  Widget selectRadioStyleView (String text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
-      decoration: BoxDecoration(
-        color:  AppTheme.color_1A008EFF, //选择背景
-        border: Border.all(
-          color: forumAppMainColor,
-          width: 1.0, // 边框宽度为1像素
-        ),
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Center(child: Text(text,style: TextStyle(
-        fontSize: 14.px,
-        color: forumAppMainColor,
-      ),)),
-    );
-  }
-
-  Widget unselectRadioStyleView (String text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(12, 6, 12, 6),
-      decoration: BoxDecoration(
-        color:  AppTheme.color_80FFFFFF, //未选择背景
-        border: Border.all(
-          color: AppTheme.color_80FFFFFF,
-          width: 1.0, // 边框宽度为1像素
-        ),
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: Center(child: Text(text,style: TextStyle(
-        fontSize: 13.px,
-        color: tabTitleUnselectColor,
-      ),)),
-    );
-  }
-
-  int? getKeyByValue(String selected) {
-    for (var entry in filterMap.entries) {
-      if (entry.value == selected) {
-        return entry.key;
-      }
-    }
-    return 0;
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   void _scrollToTop() {
-    // 滚动到顶部的逻辑
     _listController.animateTo(
       0.0, // 滚动到顶部的偏移量
       duration: const Duration(milliseconds: 300), // 滚动动画的持续时间

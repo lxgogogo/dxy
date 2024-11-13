@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:get/get.dart';
-import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/mine/dialog_edit_email.dart';
 import 'package:holdem/page/mine/dialog_edit_nickname.dart';
 import 'package:holdem/view/background_container.dart';
@@ -19,7 +16,6 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../utils/size_fit.dart';
-import '../../widget/page_web_fit.dart';
 import 'login_helper.dart';
 
 class PersonalPage extends StatefulWidget {
@@ -31,21 +27,15 @@ class PersonalPage extends StatefulWidget {
 
 class _PersonalPageState extends State<PersonalPage> {
   String imageUrl = ""; //本地图片地址
-  var netImageUrl = ""; //服务器接口获取到的图片地址
-  ImageProvider? avatar = const AssetImage("assets/images/default_avatar.png");
-  late UserProfile _userProfile;
+  UserProfile? _userProfile;
   bool _isMounted = false;
-  var actionEventBus;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isMounted = true;
-    _userProfile = UserProfile();
     getUserInfo();
-    //接受通知刷新页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+    EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
         getUserInfo();
       }
@@ -54,7 +44,6 @@ class _PersonalPageState extends State<PersonalPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _isMounted = false;
   }
@@ -64,10 +53,8 @@ class _PersonalPageState extends State<PersonalPage> {
     LoginHelper().getUserInfo((data) {
       EasyLoading.dismiss();
       if (_isMounted) {
-        setState(() {
-          _userProfile = data;
-          netImageUrl = _userProfile.avatar!;
-        });
+        _userProfile = data;
+        setState(() {});
       }
     });
   }
@@ -124,10 +111,13 @@ class _PersonalPageState extends State<PersonalPage> {
               ],
             ),
             child: ClipOval(
-              child: LoginHelper().getUserAvatar(
-                netImageUrl.isNotEmpty ? netImageUrl : '',
-                63.px,
-                63.px,
+              child: CachedNetworkImage(
+                imageUrl: _userProfile?.avatar ?? '',
+                fit: BoxFit.cover,
+                width: 63.px,
+                height: 63.px,
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
+                errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
               ),
             ),
           ),
@@ -174,7 +164,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     barrierDismissible: true,
                     context: context,
                     builder: (context) => DialogEditNickname(
-                      editContent: _userProfile.nickname ?? '',
+                      editContent: _userProfile?.nickname ?? '',
                     ),
                   );
                 },
@@ -193,7 +183,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       SizedBox(width: 14.px),
                       Expanded(
                         child: Text(
-                          _userProfile.nickname ?? '',
+                          _userProfile?.nickname ?? '',
                           style: TextStyle(
                             color: const Color(0xff9399A5),
                             fontSize: 14.px,
@@ -218,7 +208,7 @@ class _PersonalPageState extends State<PersonalPage> {
                     barrierDismissible: true,
                     context: context,
                     builder: (context) => DialogEditEmail(
-                      editContent: _userProfile.account ?? '',
+                      editContent: _userProfile?.account ?? '',
                     ),
                   );
                 },
@@ -237,7 +227,7 @@ class _PersonalPageState extends State<PersonalPage> {
                       SizedBox(width: 14.px),
                       Expanded(
                         child: Text(
-                          _userProfile.account ?? '',
+                          _userProfile?.account ?? '',
                           style: TextStyle(
                             color: const Color(0xff9399A5),
                             fontSize: 14.px,

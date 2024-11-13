@@ -510,7 +510,7 @@ class PostBottomViewParams {
     required this.relType,
     this.liked = false,
     this.likeCount = 0,
-    favoriteState = false,
+    this.favoriteState = false,
     this.favoriteCount = 0,
     required this.shareLink,
     this.commentCount = 0,

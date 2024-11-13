@@ -160,7 +160,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
                       },
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 15.5.px),
-                        hintText: '请输入正文（建议200-2000字）',
+                        hintText: '请输入正文（建议10-2000字）',
                         hintStyle: TextStyle(
                           fontSize: 14.px,
                           color: const Color(0xff2a2a2a).withOpacity(0.5),

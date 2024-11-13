@@ -73,8 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
         centerTitle: true,
       ),
       backgroundColor: Colors.transparent,
-      body: SafeArea(
-          child: contentView()),
+      body: SafeArea(child: contentView()),
     ));
   }
 
@@ -84,9 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
         Container(
           margin: EdgeInsets.fromLTRB(16.px, 0, 16.px, 0),
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/setting_bg.png'),
-                  fit: BoxFit.fill)),
+              image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'), fit: BoxFit.fill)),
           child: Column(
             children: [
               GestureDetector(
@@ -140,15 +137,58 @@ class _SettingsPageState extends State<SettingsPage> {
                               Container(
                                 width: 7.px,
                                 height: 7.px,
-                                decoration: const ShapeDecoration(
-                                    shape: CircleBorder(),
-                                    color: Color(0xffff4040)),
+                                decoration: const ShapeDecoration(shape: CircleBorder(), color: Color(0xffff4040)),
                               ),
                             const ImageIcon(
                               AssetImage('assets/images/item_arrow.png'),
                               size: 22,
                             ),
                           ],
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(16.px, 0, 16.px, 0),
+          decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'), fit: BoxFit.fill)),
+          child: Column(
+            children: [
+              GestureDetector(
+                  onTap: () {
+                    Get.to(const RegisterAccountPage(
+                      type: modifyPassword,
+                    ));
+                  },
+                  child: Container(
+                    height: 56.px,
+                    padding: EdgeInsets.symmetric(horizontal: 17.px),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '社群',
+                          style: AppTheme.text333333Size15,
+                        ),
+                        const Spacer(),
+                        buildSocialIcon(
+                          'assets/images/ic_facebook.png',
+                          url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
+                        ),
+                        buildSocialIcon(
+                          'assets/images/ic_twitter.png',
+                          url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
+                        ),
+                        buildSocialIcon(
+                          'assets/images/ic_tiktok.png',
+                          url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
+                        ),
+                        buildSocialIcon(
+                          'assets/images/ic_telegram.png',
+                          url: 'https://t.me/dpoker',
                         ),
                       ],
                     ),
@@ -171,13 +211,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 45.px,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/logout_btn.png'),
-                        fit: BoxFit.fill)),
+                    image: DecorationImage(image: AssetImage('assets/images/logout_btn.png'), fit: BoxFit.fill)),
                 child: Text(
                   '退出登录',
-                  style: TextStyle(
-                      color: const Color(0xff249CFC), fontSize: 15.px),
+                  style: TextStyle(color: const Color(0xff249CFC), fontSize: 15.px),
                 ),
               ),
               // child: const ListTile(
@@ -204,6 +241,26 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Text('版本号0901'),
         )
       ],
+    );
+  }
+
+  Widget buildSocialIcon(
+    String asset, {
+    required String url,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        launchUrl(Uri.parse(url));
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Padding(
+        padding: EdgeInsets.all(10.px),
+        child: Image.asset(
+          asset,
+          width: 24.px,
+          height: 24.px,
+        ),
+      ),
     );
   }
 
@@ -297,8 +354,7 @@ class _SettingsPageState extends State<SettingsPage> {
       //回到首页
       Navigator.of(context).pop();
       //通知首页tab回到主页
-      EventBusManager.eventBus
-          .fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
+      EventBusManager.eventBus.fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
     });
   }
 }

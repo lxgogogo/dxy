@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/page/mine/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
 import 'package:holdem/utils/common_utils.dart';
@@ -88,9 +89,11 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               GestureDetector(
                   onTap: () {
-                    Get.to(const RegisterAccountPage(
-                      type: modifyPassword,
-                    ));
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) => const DialogEditPassword(),
+                    );
                   },
                   child: Container(
                     height: 56.px,
@@ -157,42 +160,36 @@ class _SettingsPageState extends State<SettingsPage> {
               image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'), fit: BoxFit.fill)),
           child: Column(
             children: [
-              GestureDetector(
-                  onTap: () {
-                    Get.to(const RegisterAccountPage(
-                      type: modifyPassword,
-                    ));
-                  },
-                  child: Container(
-                    height: 56.px,
-                    padding: EdgeInsets.symmetric(horizontal: 17.px),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          '社群',
-                          style: AppTheme.text333333Size15,
-                        ),
-                        const Spacer(),
-                        buildSocialIcon(
-                          'assets/images/ic_facebook.png',
-                          url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
-                        ),
-                        buildSocialIcon(
-                          'assets/images/ic_twitter.png',
-                          url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
-                        ),
-                        buildSocialIcon(
-                          'assets/images/ic_tiktok.png',
-                          url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
-                        ),
-                        buildSocialIcon(
-                          'assets/images/ic_telegram.png',
-                          url: 'https://t.me/dpoker',
-                        ),
-                      ],
+              Container(
+                height: 56.px,
+                padding: EdgeInsets.symmetric(horizontal: 17.px),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '社群',
+                      style: AppTheme.text333333Size15,
                     ),
-                  )),
+                    const Spacer(),
+                    buildSocialIcon(
+                      'assets/images/ic_facebook.png',
+                      url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
+                    ),
+                    buildSocialIcon(
+                      'assets/images/ic_twitter.png',
+                      url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
+                    ),
+                    buildSocialIcon(
+                      'assets/images/ic_tiktok.png',
+                      url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
+                    ),
+                    buildSocialIcon(
+                      'assets/images/ic_telegram.png',
+                      url: 'https://t.me/dpoker',
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

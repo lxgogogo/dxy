@@ -623,7 +623,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                                     SizedBox(height: 8.px),
                                     Text(
                                       bookSuggests[i].title ?? '',
-                                      maxLines: 2,
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 14.px),
                                     ),

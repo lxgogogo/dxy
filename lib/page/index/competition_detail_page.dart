@@ -68,7 +68,7 @@ class _CompetitionDetailPageState extends State<CompetitionDetailPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            '详情',
+            '赛事详情',
             style: TextStyle(
               color: const Color(0xff2c2c2c),
               fontSize: 16.px,

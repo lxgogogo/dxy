@@ -231,12 +231,6 @@ class _SettingsPageState extends State<SettingsPage> {
               //   contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
               // ),
             )),
-        SizedBox(
-          height: 30.px,
-        ),
-        Center(
-          child: Text('版本号0901'),
-        )
       ],
     );
   }

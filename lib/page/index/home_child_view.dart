@@ -11,6 +11,7 @@ import 'package:holdem/model/course.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/competition_detail_page.dart';
+import 'package:holdem/page/index/home_marquee_widget.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
@@ -43,35 +44,21 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
 
   final ScrollController _listController = ScrollController();
 
-  final PageController _controller = PageController();
-  int _currentPage = 0;
-
   @override
   void initState() {
     super.initState();
     reqListData();
+    getCompetitionLoop();
+  }
+
+  void getCompetitionLoop() {
     NetRequest().competitionLoop({}, (data) {
       List<CompetionLoopBean> loopList =
           List<CompetionLoopBean>.from(data.map((loop) => CompetionLoopBean.fromJson(loop)));
       if (mounted) {
-        setState(() {
-          loops = loopList;
-        });
+        loops = loopList;
+        setState(() {});
       }
-
-      Timer.periodic(Duration(seconds: 3), (timer) {
-        _currentPage++;
-        if (_currentPage >= loopList.length) {
-          _currentPage = 0;
-        }
-        if (mounted && _controller.hasClients) {
-          _controller.animateToPage(
-            _currentPage,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      });
     });
   }
 
@@ -529,24 +516,46 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
               padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
               decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: loops.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(CompetitionDetailPage(id: loops[index].id));
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Center(
-                      child: Text(
-                        loops[index].title ?? '',
-                        style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 24,
+                child: MarqueeWidget(
+                  count: loops.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(CompetitionDetailPage(id: loops[index].id));
+                        },
+                        behavior: HitTestBehavior.translucent,
+                        child: Text(
+                          loops[index].title ?? '',
+                          style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
+              // child: PageView.builder(
+              //   controller: _controller,
+              //   itemCount: loops.length,
+              //   scrollDirection: Axis.vertical,
+              //   itemBuilder: (context, index) {
+              //     return GestureDetector(
+              //       onTap: () {
+              //         Get.to(CompetitionDetailPage(id: loops[index].id));
+              //       },
+              //       behavior: HitTestBehavior.translucent,
+              //       child: Center(
+              //         child: Text(
+              //           loops[index].title ?? '',
+              //           style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
             ),
           ),
         ArticleItem(article: articles[index]),

@@ -3,12 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/model/upload_file.dart';
+import 'package:holdem/page/mine/dialog_confirm.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/MyPostListView.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -27,20 +31,18 @@ import '../index/article_detail_page.dart';
 import 'login_helper.dart';
 
 class MineChildPage extends StatefulWidget {
-  int tabIndex;
+  final int tabIndex;
 
-  MineChildPage({Key? key, required this.tabIndex}) : super(key: key);
+  const MineChildPage({Key? key, required this.tabIndex}) : super(key: key);
 
   @override
   _MineChildPageState createState() => _MineChildPageState();
 }
 
-class _MineChildPageState extends State<MineChildPage> {
-  int tabIndex = 0;
+class _MineChildPageState extends State<MineChildPage> with TickerProviderStateMixin {
   int pageNum = 1;
   int pageSize = 10;
 
-  var actionEventBus;
   bool _isMounted = false;
   UserProfile userProfileInfo = UserProfile(); //
 
@@ -48,7 +50,6 @@ class _MineChildPageState extends State<MineChildPage> {
   List<BoardBean> commentDataList = [];
   final ScrollController _listController = ScrollController();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-  RefreshController _refreshController2 = RefreshController(initialRefresh: false);
 
   bool loaded = false;
 
@@ -68,25 +69,18 @@ class _MineChildPageState extends State<MineChildPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isMounted = true;
-    tabIndex = widget.tabIndex;
     getUserInfo();
     reqListData();
-    print('==========================tabIndex:' + tabIndex.toString());
 
-    //接受通知刷新页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+    EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.refreshMineFavoriteList.eventBusTypeName) {
         if (_isMounted) {
-          if (tabIndex == 1) {
-            //刷新收藏列表
+          if (widget.tabIndex == 1) {
             pageNum = 1;
-            setState(() {
-              reqListData();
-              _scrollToTop();
-            });
+            _listController.animateTo(0.0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+            reqListData();
           }
         }
       }
@@ -105,176 +99,222 @@ class _MineChildPageState extends State<MineChildPage> {
   }
 
   reqListData() {
-    if (tabIndex == 0) {
+    if (widget.tabIndex == 0) {
       //帖子
       var ownerId = StorageUtil().prefs!.getString('ownerId');
       NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '', (data) {
         BoardList boardList = BoardList.fromJson(data);
         if (_isMounted) {
-          setState(() {
-            if (pageNum == 1) {
-              boardPostList = boardList.list!;
-            } else {
-              boardPostList.addAll(boardList.list!);
-            }
-            loaded = true;
-          });
+          if (pageNum == 1) {
+            boardPostList = boardList.list!;
+          } else {
+            boardPostList.addAll(boardList.list!);
+          }
+          _refreshController.refreshCompleted();
+          _refreshController.loadComplete();
+          loaded = true;
+          setState(() {});
         }
       });
-      _refreshController.refreshCompleted();
-      _refreshController.loadComplete();
-    } else if (tabIndex == 1) {
+    } else if (widget.tabIndex == 1) {
       //收藏
       NetRequest().userFavoriteList(pageNum, pageSize, '', (data) {
         ThreadList followedFansList = ThreadList.fromJson(data);
         if (_isMounted) {
-          setState(() {
-            List<BoardBean> currentBoardList = [];
-            for (var element in followedFansList.list!) {
-              if (element.relType != null) {
-                if (element.relType == 'thread') {
-                  currentBoardList.add(element.thread != null ? element.thread! : BoardBean());
-                } else if (element.relType == 'content') {
-                  BoardBean boardBean = BoardBean(
-                    id: element.content!.id!,
-                    orignalId: element.id!,
-                    relType: element.relType!,
-                    title: element.content!.title!,
-                    user: UserProfile(nickname: element.content!.author!, avatar: ''),
-                    content: element.content!.description!,
-                    files: [UploadFile(url: element.content!.cover!)],
-                    favoriteCount: element.content!.favoriteCount,
-                    commentCount: element.content!.commentCount,
-                    likeCount: element.content!.likeCount,
-                  );
-                  currentBoardList.add(boardBean);
-                } else if (element.relType == 'comment') {
-                  BoardBean boardBean = BoardBean(
-                    title: element.content!.title!,
-                    orignalId: element.id!,
-                    content: element.content!.description!,
-                    // contentBean: element.content!,
-                    files: [UploadFile(url: element.content!.cover!)],
-                    favoriteCount: element.content!.favoriteCount,
-                    commentCount: element.content!.commentCount,
-                    likeCount: element.content!.likeCount,
-                  );
-                  currentBoardList.add(element.comment != null ? element.comment! : BoardBean());
-                }
+          List<BoardBean> currentBoardList = [];
+          for (var element in followedFansList.list!) {
+            if (element.relType != null) {
+              if (element.relType == 'thread') {
+                currentBoardList.add(element.thread != null ? element.thread! : BoardBean());
+              } else if (element.relType == 'content') {
+                BoardBean boardBean = BoardBean(
+                  id: element.id,
+                  orignalId: element.id,
+                  relType: element.relType,
+                  title: element.content!.title,
+                  user: UserProfile(nickname: element.content!.author, avatar: ''),
+                  content: element.content!.description,
+                  files: [UploadFile(url: element.content!.cover!)],
+                  favoriteCount: element.content!.favoriteCount,
+                  commentCount: element.content!.commentCount,
+                  likeCount: element.content!.likeCount,
+                );
+                currentBoardList.add(boardBean);
+              } else if (element.relType == 'comment') {
+                BoardBean boardBean = BoardBean(
+                  id: element.id,
+                  title: element.content!.title,
+                  orignalId: element.id,
+                  content: element.content!.description,
+                  // contentBean: element.content,
+                  files: [UploadFile(url: element.content!.cover!)],
+                  favoriteCount: element.content!.favoriteCount,
+                  commentCount: element.content!.commentCount,
+                  likeCount: element.content!.likeCount,
+                );
+                currentBoardList.add(element.comment != null ? element.comment! : boardBean);
               }
             }
-            if (pageNum == 1) {
-              boardPostList = currentBoardList;
-            } else {
-              boardPostList.addAll(currentBoardList);
-            }
-            loaded = true;
-          });
+          }
+          if (pageNum == 1) {
+            boardPostList = currentBoardList;
+          } else {
+            boardPostList.addAll(currentBoardList);
+          }
+          _refreshController.refreshCompleted();
+          _refreshController.loadComplete();
+          loaded = true;
+          setState(() {});
         }
       });
-      _refreshController.refreshCompleted();
-      _refreshController.loadComplete();
-    } else if (tabIndex == 2) {
+
+    } else if (widget.tabIndex == 2) {
       //评论
       NetRequest().userCommentList(pageNum, pageSize, '', (data) {
         CommentList commentList = CommentList.fromJson(data);
         if (_isMounted) {
-          setState(() {
-            List<BoardBean> currentBoardList = [];
-            for (var element in commentList.list!) {
-              if (element.relType != null) {
-                if (element.relType == 'thread') {
-                  BoardBean boardBean = BoardBean();
-                  boardBean = element.thread != null ? element.thread! : BoardBean();
-                  boardBean.comment = element.comment;
-                  boardBean.createdAt = element.createdAt;
-                  currentBoardList.add(boardBean);
-                } else if (element.relType == 'content') {
-                  BoardBean boardBean = BoardBean(
-                    id: element.content!.id!,
-                    user: UserProfile(nickname: element.content!.author!, avatar: ''),
-                    relType: element.relType!,
-                    title: element.content!.title!,
-                    content: element.content!.description!,
-                    cover: element.content!.cover,
-                    files: [UploadFile(url: element.content!.cover!)],
-                    favoriteCount: element.content!.favoriteCount,
-                    commentCount: element.content!.commentCount,
-                    likeCount: element.content!.likeCount,
-                    createdAt: element.createdAt!,
-                    comment: element.comment!,
-                  );
-                  currentBoardList.add(boardBean);
-                } else if (element.relType == 'comment') {}
-              }
+          List<BoardBean> currentBoardList = [];
+          for (var element in commentList.list!) {
+            if (element.relType != null) {
+              if (element.relType == 'thread') {
+                BoardBean boardBean = BoardBean();
+                boardBean.id = element.id;
+                boardBean = element.thread != null ? element.thread! : BoardBean();
+                boardBean.comment = element.comment;
+                boardBean.createdAt = element.createdAt;
+                currentBoardList.add(boardBean);
+              } else if (element.relType == 'content') {
+                BoardBean boardBean = BoardBean(
+                  id: element.id,
+                  user: UserProfile(nickname: element.content!.author, avatar: ''),
+                  relType: element.relType,
+                  title: element.content!.title,
+                  content: element.content!.description,
+                  cover: element.content!.cover,
+                  files: [UploadFile(url: element.content!.cover!)],
+                  favoriteCount: element.content!.favoriteCount,
+                  commentCount: element.content!.commentCount,
+                  likeCount: element.content!.likeCount,
+                  createdAt: element.createdAt,
+                  comment: element.comment,
+                );
+                currentBoardList.add(boardBean);
+              } else if (element.relType == 'comment') {}
             }
-            if (pageNum == 1) {
-              commentDataList = currentBoardList;
-            } else {
-              commentDataList.addAll(currentBoardList);
-            }
-            loaded = true;
-          });
+          }
+          if (pageNum == 1) {
+            commentDataList = currentBoardList;
+          } else {
+            commentDataList.addAll(currentBoardList);
+          }
+          _refreshController.refreshCompleted();
+          _refreshController.loadComplete();
+          loaded = true;
+          setState(() {});
         }
       });
-      _refreshController2.refreshCompleted();
-      _refreshController2.loadComplete();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     // super.build(context);
-    return Container(color: Colors.transparent, child: listView());
+    return listView();
   }
 
   ///列表数据
   Widget listView() {
-    if (loaded && (tabIndex == 2 ? commentDataList.length == 0 : boardPostList.length == 0)) {
+    if (loaded && (widget.tabIndex == 2 ? commentDataList.isEmpty : boardPostList.isEmpty)) {
       return const Center(
         child: NoDataView(),
       );
     }
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      header: WaterDropHeader(),
-      controller: tabIndex == 2 ? _refreshController2 : _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: ListView.builder(
-        itemBuilder: (c, i) => tabIndex == 2
-            ? commentItem(commentDataList[i], i)
-            : PostListItemView(
-                context,
-                i,
-                false,
-                boardPostList[i],
-                isMyPost:true,
-              ),
-        itemCount: tabIndex == 2 ? commentDataList.length : boardPostList.length,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        return SlidableAutoCloseBehavior(
+          child: SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: true,
+            header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            onLoading: _onLoading,
+            child: ListView.builder(
+              itemBuilder: (c, i) {
+                return Slidable(
+                  groupTag: '${widget.tabIndex}-list',
+                  key: ValueKey(
+                    '${widget.tabIndex}-${widget.tabIndex == 2 ? commentDataList[i].id : boardPostList[i].id}',
+                  ),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    extentRatio: 42 / maxWidth,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          final isConfirm = await showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (context) => DialogConfirm(
+                              title: widget.tabIndex == 0
+                                  ? '确定要删除这个帖子吗？'
+                                  : widget.tabIndex == 1
+                                      ? '确定要删除这个收藏吗？'
+                                      : '确定要删除这个评论吗？',
+                            ),
+                          );
+                          if (isConfirm == true) {
+                            if (widget.tabIndex == 0) {
+                              NetRequest().threadDelete(boardPostList[i].id, (data) {
+                                if (_isMounted) {
+                                  ToastUtils.showToast('删除成功');
+                                  reqListData();
+                                }
+                              });
+                            } else if (widget.tabIndex == 1) {
+                              NetRequest().favoriteDelete(boardPostList[i].id, (data) {
+                                if (_isMounted) {
+                                  ToastUtils.showToast('删除成功');
+                                  reqListData();
+                                }
+                              });
+                            } else if (widget.tabIndex == 2) {
+                              NetRequest().commentDelete(commentDataList[i].id, (data) {
+                                if (_isMounted) {
+                                  ToastUtils.showToast('删除成功');
+                                  reqListData();
+                                }
+                              });
+                            }
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          'assets/svg/icon_delete.svg',
+                          width: 22.px,
+                          height: 22.px,
+                        ),
+                      ),
+                    ],
+                  ),
+                  child: widget.tabIndex == 2
+                      ? commentItem(commentDataList[i], i)
+                      : PostListItemView(context, i, false, boardPostList[i], isMyPost: true),
+                );
+              },
+              itemCount: widget.tabIndex == 2 ? commentDataList.length : boardPostList.length,
+            ),
+          ),
+        );
+      },
     );
   }
-
-  // @override
-  // // TODO: implement wantKeepAlive
-  // bool get wantKeepAlive => true;
 
   @override
   void dispose() {
     _isMounted = false;
     _listController.dispose(); // 释放资源
     super.dispose();
-  }
-
-  void _scrollToTop() {
-    // 滚动到顶部的逻辑
-    _listController.animateTo(
-      0.0, // 滚动到顶部的偏移量
-      duration: const Duration(milliseconds: 300), // 滚动动画的持续时间
-      curve: Curves.ease, // 滚动动画的曲线
-    );
   }
 
   Widget commentItem(BoardBean boardBean, int index) {
@@ -336,86 +376,61 @@ class _MineChildPageState extends State<MineChildPage> {
             height: 10.px,
           ),
           GestureDetector(
-              onTap: () {
-                if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
-                  if (boardBean.relType == 'content') {
-                    Get.to(ArticleDetailPage(id: boardBean.id ?? 0));
-                  } else if (boardBean.relType == 'comment') {}
-                } else {
-                  Get.to(PostDetailPage(postId: boardBean.id ?? 0));
-                }
-              },
-              child: Container(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    boardBean.comment ?? '',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 12.px, color: const Color(0xff2a2a2a)),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10.px),
-                    padding: EdgeInsets.all(8.px),
-                    constraints: BoxConstraints(minHeight: 52.px),
-                    decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
-                    child: Row(
-                      children: [
-                        if (boardBean.cover != null)
-                          CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: boardBean.cover ?? '',
-                            width: 36.px,
-                            height: 36.px,
-                            placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                            errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-                          ),
-                        SizedBox(
-                          width: 10.px,
+            onTap: () {
+              if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
+                if (boardBean.relType == 'content') {
+                  Get.to(ArticleDetailPage(id: boardBean.id ?? 0));
+                } else if (boardBean.relType == 'comment') {}
+              } else {
+                Get.to(PostDetailPage(postId: boardBean.id ?? 0));
+              }
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  boardBean.comment ?? '',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 12.px, color: const Color(0xff2a2a2a)),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 10.px),
+                  padding: EdgeInsets.all(8.px),
+                  constraints: BoxConstraints(minHeight: 52.px),
+                  decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
+                  child: Row(
+                    children: [
+                      if (boardBean.cover != null)
+                        CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: boardBean.cover ?? '',
+                          width: 36.px,
+                          height: 36.px,
+                          placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                          errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
                         ),
-                        Expanded(
-                            child: Text(
-                          boardBean.title ?? '',
-                          maxLines: 2,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.px),
-                        )),
-                      ],
-                    ),
+                      SizedBox(
+                        width: 10.px,
+                      ),
+                      Expanded(
+                          child: Text(
+                        boardBean.title ?? '',
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px),
+                      )),
+                    ],
                   ),
-                  // Container(
-                  //   // padding: EdgeInsets.all(10.px),
-                  //   width: 300.px,
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  //     children: [
-                  //       PostListItemView(context, index, false, boardBean,
-                  //           isShowMedia: false)
-                  //     ],
-                  //   ),
-                  // )
-                ],
-              )))
+                ),
+              ],
+            ),
+          ),
         ],
       ),
-      // child: Row(
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   children: [
-
-      //           SizedBox(
-      //             height: 10.px,
-      //           ),
-      // ,
-      //           )
-      //         ]))
-      //   ],
-      // ),
     );
   }
 }

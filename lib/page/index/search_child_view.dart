@@ -46,15 +46,16 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
     super.initState();
     EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.refreshSearchChildView.eventBusTypeName) {
-        reqListData();
-        print('xxx ${widget.type}');
+        reqListData(showLoading: true);
       }
     });
     reqListData();
   }
 
-  reqListData() {
-    isLoaded = false;
+  reqListData({bool showLoading = false}) {
+    if (showLoading) {
+      isLoaded = false;
+    }
     Map<String, Object> params = {
       'pageNum': pageNum,
       'pageSize': 10,

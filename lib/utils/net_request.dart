@@ -27,8 +27,8 @@ class NetRequest {
     }
   }
 
-  Future indexList(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.indexList, params: params);
+  Future indexList(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.indexList, params: params, showLoading: showLoading);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -632,14 +632,52 @@ class NetRequest {
   }
 
   ///删除收藏
-  Future favoriteDelete(int id, SuccessCallback onSuccess) async {
-    Map<String, Object> params = {};
+  Future favoriteDelete(int? id, SuccessCallback onSuccess) async {
+    Map<String, dynamic> params = {};
     params['id'] = id; //// 收藏id
 
     Map<String, dynamic> response = await HttpUtils.post(Api.favoriteDelete, params: params);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("favoriteDelete===>$response");
+      onSuccess(response['data']);
+    } else {
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
+    }
+  }
+
+  Future threadDelete(int? id, SuccessCallback onSuccess) async {
+    Map<String, dynamic> params = {};
+    params['id'] = id;
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadDelete, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("deleteThread===>$response");
+      onSuccess(response['data']);
+    } else {
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
+    }
+  }
+
+  Future commentDelete(int? id, SuccessCallback onSuccess) async {
+    Map<String, dynamic> params = {};
+    params['id'] = id;
+    Map<String, dynamic> response = await HttpUtils.post(Api.commentDelete, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("commentDelete===>$response");
       onSuccess(response['data']);
     } else {
       if (_isNeedLoginResponse(resp)) {
@@ -720,4 +758,5 @@ class NetRequest {
     }
     return false;
   }
+
 }

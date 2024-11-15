@@ -52,4 +52,6 @@ class Api {
 
   static const String favoriteToggle = '/api/favorite/toggle'; //收藏 - 添加/取消
   static const String favoriteDelete = '/api/favorite/delete'; //收藏删除
+  static const String threadDelete = '/api/thread/delete'; //收藏删除
+  static const String commentDelete = '/api/comment/delete'; //收藏删除
 }

@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
   final FontWeight fontWeight;
   final bool disable;
   final bool showOpacityAnimation;
+  final bool isCancel;
 
   const CustomButton({
     super.key,
@@ -24,6 +25,7 @@ class CustomButton extends StatelessWidget {
     this.textColor = const Color(0xffdff3ff),
     this.disable = false,
     this.showOpacityAnimation = true,
+    this.isCancel = false,
   });
 
   @override
@@ -46,8 +48,8 @@ class CustomButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(height / 2),
-          image: const DecorationImage(
-            image: AssetImage('assets/images/login_btn.png'),
+          image: DecorationImage(
+            image: AssetImage(isCancel ? 'assets/images/logout_btn.png' : 'assets/images/login_btn.png'),
             fit: BoxFit.fill,
           ),
         ),

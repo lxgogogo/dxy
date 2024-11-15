@@ -6,6 +6,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/utils.dart';
 import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/tab_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -188,7 +189,11 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                             border: eventCount > 0
                                 ? Border(
                                     bottom: BorderSide(
-                                      color: isPastDay ? const Color(0xffb0afa7) : const Color(0xffd9001b),
+                                      color: isSingleDayAvailable != null
+                                          ? Colors.transparent
+                                          : isPastDay
+                                              ? const Color(0xffb0afa7)
+                                              : const Color(0xffd9001b),
                                       width: 3,
                                     ),
                                   )
@@ -256,130 +261,139 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                     ),
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final item = _selectedEvents[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(CompetitionDetailPage(id: item.id));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 10.px),
-                          padding: EdgeInsets.symmetric(horizontal: 14.px, vertical: 12.px),
-                          decoration: BoxDecoration(
-                            color: const Color(0xfff4f9ff),
-                            borderRadius: BorderRadius.circular(12.0),
+                if (_selectedEvents.isNotEmpty)
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        final item = _selectedEvents[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(CompetitionDetailPage(id: item.id));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 10.px),
+                            padding: EdgeInsets.symmetric(horizontal: 14.px, vertical: 12.px),
+                            decoration: BoxDecoration(
+                              color: const Color(0xfff4f9ff),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  item.title ?? '',
+                                  style: const TextStyle(
+                                    color: Color(0xff2a2a2a),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 10.px),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 5.px,
+                                      height: 14.px,
+                                      margin: EdgeInsets.only(right: 5.5.px),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: const Color(0xff249cfc),
+                                      ),
+                                    ),
+                                    const Text(
+                                      '赛事期间',
+                                      style: TextStyle(
+                                        color: Color(0xff2a2a2a),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4.px),
+                                Text(
+                                  '${item.competition?.dayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayBegin!) : ''}-${item.competition?.dayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayEnd!) : ''}',
+                                  style: const TextStyle(
+                                    color: Color(0xff2a2a2a),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                SizedBox(height: 10.px),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 5.px,
+                                      height: 14.px,
+                                      margin: EdgeInsets.only(right: 5.5.px),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: const Color(0xff249cfc),
+                                      ),
+                                    ),
+                                    const Text(
+                                      '主赛事期间',
+                                      style: TextStyle(
+                                        color: Color(0xff2a2a2a),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4.px),
+                                Text(
+                                  '${item.competition?.mainDayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.mainDayBegin!) : ''}-${item.competition?.mainDayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.mainDayEnd!) : ''}',
+                                  style: const TextStyle(
+                                    color: Color(0xff2a2a2a),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                SizedBox(height: 10.px),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 5.px,
+                                      height: 14.px,
+                                      margin: EdgeInsets.only(right: 5.5.px),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: const Color(0xff249cfc),
+                                      ),
+                                    ),
+                                    const Text(
+                                      '地点',
+                                      style: TextStyle(
+                                        color: Color(0xff2a2a2a),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4.px),
+                                Text(
+                                  item.competition?.place ?? '',
+                                  style: const TextStyle(
+                                    color: Color(0xff2a2a2a),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                item.title ?? '',
-                                style: const TextStyle(
-                                  color: Color(0xff2a2a2a),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              SizedBox(height: 10.px),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 5.px,
-                                    height: 14.px,
-                                    margin: EdgeInsets.only(right: 5.5.px),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
-                                      color: const Color(0xff249cfc),
-                                    ),
-                                  ),
-                                  const Text(
-                                    '赛事期间',
-                                    style: TextStyle(
-                                      color: Color(0xff2a2a2a),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4.px),
-                              Text(
-                                '${item.competition?.dayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayBegin!) : ''}-${item.competition?.dayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayEnd!) : ''}',
-                                style: const TextStyle(
-                                  color: Color(0xff2a2a2a),
-                                  fontSize: 12,
-                                ),
-                              ),
-                              SizedBox(height: 10.px),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 5.px,
-                                    height: 14.px,
-                                    margin: EdgeInsets.only(right: 5.5.px),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
-                                      color: const Color(0xff249cfc),
-                                    ),
-                                  ),
-                                  const Text(
-                                    '主赛事期间',
-                                    style: TextStyle(
-                                      color: Color(0xff2a2a2a),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4.px),
-                              Text(
-                                '${item.competition?.mainDayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.mainDayBegin!) : ''}-${item.competition?.mainDayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.mainDayEnd!) : ''}',
-                                style: const TextStyle(
-                                  color: Color(0xff2a2a2a),
-                                  fontSize: 12,
-                                ),
-                              ),
-                              SizedBox(height: 10.px),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 5.px,
-                                    height: 14.px,
-                                    margin: EdgeInsets.only(right: 5.5.px),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
-                                      color: const Color(0xff249cfc),
-                                    ),
-                                  ),
-                                  const Text(
-                                    '地点',
-                                    style: TextStyle(
-                                      color: Color(0xff2a2a2a),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4.px),
-                              Text(
-                                item.competition?.place ?? '',
-                                style: const TextStyle(
-                                  color: Color(0xff2a2a2a),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: _selectedEvents.length,
-                  ),
-                ),
+                        );
+                      },
+                      childCount: _selectedEvents.length,
+                    ),
+                  )
+                else
+                  SliverFillViewport(
+                    viewportFraction : 0.375,
+                    padEnds : false,
+                    delegate: SliverChildListDelegate([
+                      const NoDataView(text: '暂无赛事'),
+                    ]),
+                  )
               ],
             ),
           ),

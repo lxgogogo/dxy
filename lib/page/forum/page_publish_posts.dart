@@ -296,7 +296,7 @@ class _PublishPostsPageState extends State<PublishPostsPage> with SingleTickerPr
                   ),
                   controller: _controller,
                   onChanged: (text) {
-                    _handleTextChange();
+                    // _handleTextChange();
                   },
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 15.5.px),

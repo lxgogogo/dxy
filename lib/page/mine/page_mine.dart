@@ -134,7 +134,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
 
   Widget _tabBarView() {
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.px).copyWith(top: 12.px),
+        margin: EdgeInsets.only(top: 12.px),
         decoration: BoxDecoration(
           color: const Color(0xfff2f9ff),
           borderRadius: const BorderRadius.vertical(

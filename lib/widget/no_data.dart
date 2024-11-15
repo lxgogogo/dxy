@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:holdem/utils/size_fit.dart';
 
-class NoDataView extends StatefulWidget {
-  const NoDataView({super.key});
+class NoDataView extends StatelessWidget {
+  final String text;
 
-  @override
-  State<NoDataView> createState() => _NoDataViewState();
-}
+  const NoDataView({super.key, this.text = '暂无数据'});
 
-class _NoDataViewState extends State<NoDataView> {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('assets/images/no_data.png', width: 90, height: 90),
-        const SizedBox(height: 15,),
-        const Text('暂无数据',style: TextStyle(color: Color(0xff333333),fontSize: 15),)
+        Image.asset('assets/images/no_result.png',  height: 102.px),
+        SizedBox(
+          height: 10.px,
+        ),
+        Text(
+          text,
+          style: const TextStyle(
+            color: Color(0xff5d6e8e),
+            fontSize: 12,
+          ),
+        )
       ],
     );
   }

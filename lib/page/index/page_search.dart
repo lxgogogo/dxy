@@ -13,7 +13,7 @@ import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 enum SearchType {
-  news('资讯', categoryAlias: 'article'),
+  news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),

@@ -317,18 +317,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                 )),
             InkWell(
                 onTap: () {
-                  var shareData = {
-                    "title": widget.viewParams.title,
-                    "text": widget.viewParams.content,
-                    "url": 'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
-                  };
-                  if (kIsWeb) {
-                    html.window.navigator.share(shareData);
-                  } else {
-                    Share.share(
-                        '${widget.viewParams.title} ' + 'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
-                        subject: widget.viewParams.content);
-                  }
+                  Share.share(
+                    'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                    subject: widget.viewParams.title,
+                  );
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.px),

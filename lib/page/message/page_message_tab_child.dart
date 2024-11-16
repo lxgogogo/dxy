@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/message.dart';
-import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
@@ -198,7 +191,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                     top: 1.px,
                     child: ClipOval(
                         child: Image.network(
-                      messageBean.fromUser!.avatar ?? '',
+                      messageBean.fromUser?.avatar ?? '',
                       width: 32.px,
                       height: 32.px,
                       fit: BoxFit.cover,
@@ -226,7 +219,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      messageBean.fromUser!.nickname ?? '',
+                      messageBean.fromUser?.nickname ?? '',
                       style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
@@ -283,14 +276,14 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                if (messageBean.contentUser != null && messageBean.contentUser!.nickname != null)
+                                if (messageBean.contentUser?.nickname?.isNotEmpty == true)
                                   Text(messageBean.contentUser!.nickname!,
                                       style: TextStyle(
                                           color: Color(0xff2a2a2a),
                                           fontSize: 12.px,
                                           fontWeight: FontWeight.bold,
                                           height: 2.0)),
-                                Text(messageBean.content!.title ?? '',
+                                Text(messageBean.content?.title ?? '',
                                     style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.px, height: 2.0)),
                                 Row(
                                   children: [
@@ -307,7 +300,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                             width: 6.px,
                                           ),
                                           Text(
-                                            messageBean.content!.likeCount.toString(),
+                                            '${messageBean.content?.likeCount ?? 0}',
                                             style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
                                           )
                                         ],
@@ -326,7 +319,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                             width: 6.px,
                                           ),
                                           Text(
-                                            messageBean.content!.favoriteCount.toString(),
+                                            '${messageBean.content?.favoriteCount ?? 0}',
                                             style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
                                           )
                                         ],
@@ -345,7 +338,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                                             width: 6.px,
                                           ),
                                           Text(
-                                            messageBean.content!.commentCount.toString(),
+                                            '${messageBean.content?.commentCount ?? 0}',
                                             style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
                                           )
                                         ],

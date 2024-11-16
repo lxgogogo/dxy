@@ -44,8 +44,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   List<String> imageUrlList = [];
   List<CommentBean> comments = [];
 
-  late VideoPlayerController _playController;
-  late ChewieController _chewieController;
+  VideoPlayerController? _playController;
+  ChewieController? _chewieController;
 
   bool _isPlaying = false;
   String videoUrl = '';
@@ -107,9 +107,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
         setState(() {});
         if (videoUrl.isNotEmpty) {
           _playController = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-          await _playController.initialize();
+          await _playController!.initialize();
           _chewieController = ChewieController(
-            videoPlayerController: _playController,
+            videoPlayerController: _playController!,
             autoPlay: true,
           );
           _isPlaying = true;
@@ -135,10 +135,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   void dispose() {
+    _playController?.dispose();
+    _chewieController?.dispose();
     super.dispose();
     _isMounted = false;
-    _playController.dispose();
-    _chewieController.dispose();
   }
 
   @override
@@ -342,9 +342,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ),
           ],
         ),
-        child: _isPlaying
+        child: _isPlaying && _chewieController != null
             ? Chewie(
-                controller: _chewieController,
+                controller: _chewieController!,
               )
             : Stack(
                 fit: StackFit.expand,

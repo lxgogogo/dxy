@@ -42,7 +42,7 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
         final dayBegin = item.competition?.dayBegin;
         final dayEnd = item.competition?.dayEnd;
         if (dayBegin != null && dayEnd != null) {
-          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd) || isSameDay(day, dayEnd))) {
+          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd))) {
             events.add(item);
           }
         }
@@ -59,7 +59,7 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
         final dayBegin = item.competition?.dayBegin;
         final dayEnd = item.competition?.dayEnd;
         if (dayBegin != null && dayEnd != null) {
-          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd) || isSameDay(day, dayEnd))) {
+          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd))) {
             count++;
           }
         }

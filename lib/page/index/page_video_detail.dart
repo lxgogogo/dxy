@@ -26,7 +26,7 @@ class VideoDetailPage extends StatefulWidget {
 class _VideoDetailPageState extends State<VideoDetailPage> {
   ArticleDetailBean? articleDetailBean;
   late VideoPlayerController _playController;
-  late ChewieController _chewieController;
+  ChewieController? _chewieController;
 
   List<CommentBean> comments = [];
   bool loaded = false;
@@ -48,7 +48,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   void dispose() {
     super.dispose();
     _playController.dispose();
-    _chewieController.dispose();
+    _chewieController?.dispose();
   }
 
   requestDetail() {
@@ -182,9 +182,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                   ),
                 ],
               ),
-              child: loaded
+              child: loaded && _chewieController != null
                   ? Chewie(
-                      controller: _chewieController,
+                      controller: _chewieController!,
                     )
                   : Stack(
                       fit: StackFit.expand,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/search_child_view.dart';
+import 'package:holdem/page/mine/dialog_confirm.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -265,11 +266,19 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    historyItems = [];
-                    StorageUtil().prefs!.setStringList('search', historyItems);
-                  });
+                onTap: () async {
+                  final isConfirm = await showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (context) => const DialogConfirm(
+                      title: '确定要删除全部历史吗？',
+                    ),
+                  );
+                  if (isConfirm == true) {
+                    StorageUtil().prefs?.remove('search');
+                    historyItems.clear();
+                    setState(() {});
+                  }
                 },
                 child: Image.asset(
                   'assets/images/label_del.png',

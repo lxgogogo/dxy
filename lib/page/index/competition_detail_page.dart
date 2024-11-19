@@ -278,7 +278,7 @@ class _CompetitionDetailPageState extends State<CompetitionDetailPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     final item = competitionBean!.refThreadList![index];
-                    return PostListItemView(context, index, true, item);
+                    return PostListItemView(item);
                   },
                   childCount: competitionBean!.refArticleList!.length,
                 ),

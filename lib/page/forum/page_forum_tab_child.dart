@@ -126,7 +126,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
           ? ListView.builder(
               controller: _listController,
               itemBuilder: (c, i) {
-                return PostListItemView(context, i, true, boardPostList[i]);
+                return PostListItemView(boardPostList[i]);
               },
               itemCount: boardPostList.length,
             )

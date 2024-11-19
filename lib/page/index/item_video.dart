@@ -39,7 +39,10 @@ class _VideoItemState extends State<VideoItem> {
           // Get.to(VideoDetailPage(id: widget.article.id ?? 0));
           Navigator.of(context).pushNamed(
               "/video_detail?id=${widget.article.id ?? 0}",
-              arguments: widget.article.id ?? 0);
+              arguments: widget.article.id ?? 0).whenComplete(() {
+            widget.article.viewCount = (widget.article.viewCount ?? 0) + 1;
+            setState(() {});
+          });
           return;
         }
         Navigator.of(context).pushNamed(

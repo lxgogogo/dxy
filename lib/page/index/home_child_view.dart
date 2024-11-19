@@ -14,6 +14,7 @@ import 'package:holdem/page/index/competition_detail_page.dart';
 import 'package:holdem/page/index/home_marquee_widget.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
+import 'package:holdem/page/index/item_course.dart';
 import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/page/index/competition_calendar_page.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -182,53 +183,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
             )
           ],
         ),
-        LinearCard(
-          padding: EdgeInsets.only(bottom: 2.px),
-          margin: EdgeInsets.only(top: 10.px, left: 18.px, right: 18.px, bottom: 10.px),
-          child: Container(
-              // padding: EdgeInsets.only(left: 20.px,right: 12.px,top:5.px,bottom: 5.px),
-              decoration: BoxDecoration(
-                color: const Color(0xffF8FBFF),
-                borderRadius: BorderRadius.all(Radius.circular(13.px)),
-              ),
-              child: Column(
-                children: [
-                  ...List.generate(bean.sublist!.length, (i) {
-                    CollectBean collectBean = bean.sublist![i];
-                    return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed("/article_detail?id=${collectBean.targetId ?? 0}",
-                              arguments: collectBean.targetId ?? 0);
-                        },
-                        child: Container(
-                          height: 48.px,
-                          padding: EdgeInsets.symmetric(horizontal: 20.px),
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: i < bean.sublist!.length - 1
-                                          ? const Color(0xffe6e6e6)
-                                          : Colors.transparent))),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Text(
-                                collectBean.title!,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              )),
-                              Image.asset(
-                                'assets/images/arrow.png',
-                                width: 6.px,
-                                height: 10.px,
-                              )
-                            ],
-                          ),
-                        ));
-                  }),
-                ],
-              )),
-        )
+        CourseItem(article: bean)
       ],
     );
   }
@@ -426,14 +381,9 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       if (index == 0) {
         return buildNewsTopArea(index);
       }
-      return ArticleItem(
-        article: articles[index],
-      );
+      return ArticleItem(article: articles[index]);
     } else if (widget.type == 'video') {
-      return VideoItem(
-        article: articles[index],
-        isBanner: false,
-      );
+      return VideoItem(article: articles[index]);
     }
     if (widget.type == 'book') {
       if (index == 0) {

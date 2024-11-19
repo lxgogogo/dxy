@@ -10,8 +10,8 @@ class UserDataList {
   UserDataList({this.pager, this.list});
 
   UserDataList.fromJson(Map<String, dynamic> json) {
-    if (json["pager"] is Paper) {
-      pager = json["pager"];
+    if (json['pager'] != null) {
+      pager = Paper.fromJson(json['pager']);
     }
 
     if (json["list"] is List) {

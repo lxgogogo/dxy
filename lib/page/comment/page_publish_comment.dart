@@ -13,6 +13,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
@@ -112,7 +113,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
               decoration: BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/publish2.png'), fit: BoxFit.cover)),
               child: Text(
-                '发送',
+                '发布',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -396,8 +397,8 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
       imageUrlList.clear();
     }
 
-    if (content.isEmpty || content.length < 10) {
-      ToastUtils.showToast('帖子内容长度不能小于10个字符');
+    if (content.isEmpty) {
+      ToastUtils.showToast('评论内容不能为空');
       return;
     }
     EasyLoading.show(status: 'loading...');
@@ -423,7 +424,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
           imageUrlList.add(uploadFile);
           if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
             NetRequest().commentCreate(widget.relType, widget.relId, content, at: aitList, files: imageUrlList, (data) {
-              //通知刷新帖子详情
+              EventBusUtil.of.fire(EventRefreshComments(widget.relType));
               EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
               EasyLoading.dismiss();
               ToastUtils.showToast('发布成功');
@@ -454,7 +455,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
       });
     } else {
       NetRequest().commentCreate(widget.relType, widget.relId, content, (data) {
-        //通知刷新帖子详情
+        EventBusUtil.of.fire(EventRefreshComments(widget.relType));
         EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
         EasyLoading.dismiss();
         ToastUtils.showToast('发布成功');
@@ -492,4 +493,5 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
       }
     }
   }
+
 }

@@ -27,46 +27,23 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  int _currentTabIndex = 0;
   final List<String> tabs = ['帖子', '收藏', '评论'];
+  late final TabController tabController;
 
-  int pageNum = 1;
-  int pageSize = 10;
-
-  late UserProfile userProfile = UserProfile();
-  var actionEventBus;
   bool _isMounted = false;
-
-  List<BoardBean> boardPostList = [];
-  List<CommentBean> commentDataList = [];
-  List<TabData> parentTabs = [];
-
-  // late TabController _tabController =
-  //     TabController(length: 3, vsync: this); // 3 为选项卡数量
+  UserProfile? userProfile;
 
   @override
   void initState() {
-    // TODO: implement initState
+    tabController = TabController(length: tabs.length, vsync: this);
     super.initState();
     getUserInfo();
-    // reqListData();
     _isMounted = true;
-    //接受通知刷新页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
+    EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
         getUserInfo();
       }
     });
-
-    for (int i = 0; i < tabs.length; i++) {
-      parentTabs.add(TabData(
-        index: i,
-        title: Tab(
-          child: Text(tabs[i]),
-        ),
-        content: MineChildPage(tabIndex: i),
-      ));
-    }
   }
 
   @override
@@ -78,10 +55,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
   void getUserInfo() {
     LoginHelper().getUserInfo((data) {
       if (_isMounted) {
-        setState(() {
-          userProfile = data;
-          print('userProfile=======' + userProfile!.nickname!);
-        });
+        userProfile = data;
+        setState(() {});
       }
     });
   }
@@ -125,70 +100,80 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
               ),
               child: userInfoView(),
             ),
-            Expanded(child: _tabBarView())
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(top: 12.px),
+                decoration: BoxDecoration(
+                    color: const Color(0xfff2f9ff),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xffb9d0e5).withOpacity(0.64),
+                        offset: Offset(0, -1.px),
+                        blurRadius: 2.rpx,
+                        spreadRadius: 0,
+                      ),
+                      BoxShadow(
+                        color: const Color(0xffffffff),
+                        offset: Offset(0, 1.px),
+                        blurRadius: 2.rpx,
+                        spreadRadius: 1.px,
+                      )
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TabBar(
+                      controller: tabController,
+                      tabs: tabs.map((e) => Tab(text: e)).toList(),
+                      isScrollable: false,
+                      labelPadding: EdgeInsets.fromLTRB(6.px, 6.px, 6.px, 0),
+                      indicatorPadding: EdgeInsets.only(bottom: 4.px),
+                      indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(
+                          color: const Color(0xff6198f7),
+                          width: 2.px, // 选中线条宽度
+                        ),
+                        insets: EdgeInsets.symmetric(horizontal: 8.px),
+                        borderRadius: BorderRadius.circular(2.px),
+                      ),
+                      //底部下标颜色
+                      enableFeedback: false,
+                      overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                        return Colors.transparent;
+                      }),
+                      dividerHeight: 0,
+                      labelStyle: TextStyle(
+                        color: const Color(0xff2c2c2c),
+                        fontSize: 16.px,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        color: const Color(0xff666666),
+                        fontSize: 16.px,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: tabController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: List.generate(
+                          tabs.length,
+                          (index) => MineChildPage(tabIndex: index),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
-  }
-
-  Widget _tabBarView() {
-    return Container(
-        margin: EdgeInsets.only(top: 12.px),
-        decoration: BoxDecoration(
-          color: const Color(0xfff2f9ff),
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(12),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xffb9d0e5).withOpacity(0.64),
-              offset: Offset(0, -1.px),
-              blurRadius: 2.rpx,
-              spreadRadius: 0,
-            ),
-            BoxShadow(
-              color: const Color(0xffffffff),
-              offset: Offset(0, 1.px),
-              blurRadius: 2.rpx,
-              spreadRadius: 1.px,
-            )
-          ]
-        ),
-        child: DynamicTabBarWidget(
-          dynamicTabs: parentTabs,
-          isScrollable: false,
-          showBackIcon: false,
-          showNextIcon: false,
-          labelPadding: EdgeInsets.fromLTRB(6.px, 6.px, 6.px, 0),
-          indicatorPadding: EdgeInsets.only(bottom: 4.px),
-          indicator: UnderlineTabIndicator(
-            borderSide: BorderSide(
-              color: const Color(0xff6198f7),
-              width: 2.px, // 选中线条宽度
-            ),
-            insets: EdgeInsets.symmetric(horizontal: 8.px),
-            borderRadius: BorderRadius.circular(2.px),
-          ),
-          //底部下标颜色
-          enableFeedback: false,
-          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-            return Colors.transparent;
-          }),
-          dividerHeight: 0,
-          labelStyle: TextStyle(
-            color: const Color(0xff2c2c2c),
-            fontSize: 16.px,
-            fontWeight: FontWeight.w600,
-          ),
-          unselectedLabelStyle: TextStyle(
-            color: const Color(0xff666666),
-            fontSize: 16.px,
-            fontWeight: FontWeight.w400,
-          ),
-          onTabChanged: (index) {},
-          onTabControllerUpdated: (TabController) {},
-        ));
   }
 
   Widget userInfoView() {
@@ -210,7 +195,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                 child: Stack(children: <Widget>[
                   ClipOval(
                     child: LoginHelper().getUserAvatar(
-                      userProfile.avatar != null ? userProfile.avatar! : '',
+                      userProfile?.avatar ?? '',
                       56.px,
                       56.px,
                     ),
@@ -228,7 +213,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                               Text(
-                                userProfile.nickname ?? '',
+                                userProfile?.nickname ?? '',
                                 style: TextStyle(
                                     fontSize: 16.px, fontWeight: FontWeight.bold, color: const Color(0xff2C2C2C)),
                                 overflow: TextOverflow.ellipsis,
@@ -238,7 +223,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                               ),
                               Row(children: [
                                 GestureDetector(
-                                  child: Text('${userProfile.followedCount ?? 0} 关注',
+                                  child: Text('${userProfile?.followedCount ?? 0} 关注',
                                       style: TextStyle(
                                         color: const Color(0xff2a2a2a),
                                         fontSize: 12.px,
@@ -254,7 +239,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                                 ),
                                 GestureDetector(
                                   child: Text(
-                                    '${userProfile.fansCount ?? 0} 粉丝',
+                                    '${userProfile?.fansCount ?? 0} 粉丝',
                                     style: TextStyle(
                                       color: const Color(0xff2a2a2a),
                                       fontSize: 12.px,
@@ -286,6 +271,5 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

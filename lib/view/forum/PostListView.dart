@@ -16,8 +16,7 @@ import '../../page/forum/page_forum_post_detail.dart';
 import '../../page/index/article_detail_page.dart';
 import '../../utils/app_theme.dart';
 
-Widget PostListItemView(BuildContext context, int index, bool isForumList, BoardBean boardBean,
-    {bool isMyPost = false}) {
+Widget PostListItemView(BoardBean boardBean, {bool isMyPost = false}) {
   getName() {
     return boardBean.user != null && boardBean.user!.nickname!.isNotEmpty ? boardBean.user!.nickname! : '德学院';
   }

@@ -5,23 +5,18 @@ import 'article.dart';
 /// pager : {"total":1,"pageNum":0,"pageSize":10}
 /// list : [{"id":2,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"titletitletitletitle 你好","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false},{"id":1,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"title","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false}]
 
-class ThreadList {
+class CollectPageModel {
   Paper? pager;
-  List<ThreadListBean>? list;
+  List<CollectModel>? list;
 
-  ThreadList({this.pager, this.list});
+  CollectPageModel({this.pager, this.list});
 
-  ThreadList.fromJson(Map<String, dynamic> json) {
-    if (json["pager"] is Paper) {
-      pager = json["pager"];
+  CollectPageModel.fromJson(Map<String, dynamic> json) {
+    if (json['pager'] != null) {
+      pager = Paper.fromJson(json['pager']);
     }
-
     if (json["list"] is List) {
-      list = json["list"] == null
-          ? null
-          : (json["list"] as List)
-              .map((e) => ThreadListBean.fromJson(e))
-              .toList();
+      list = json["list"] == null ? null : (json["list"] as List).map((e) => CollectModel.fromJson(e)).toList();
     }
   }
 
@@ -35,22 +30,29 @@ class ThreadList {
   }
 }
 
-class ThreadListBean {
+class CollectModel {
   int? id;
   String? createdAt;
   String? relType;
   BoardBean? thread;
   ArticleBean? content;
-  BoardBean? comment;
-  ThreadListBean({this.id, this.createdAt,  this.relType, this.thread , this.content, this.comment});
 
-  ThreadListBean.fromJson(Map<String, dynamic> json) {
+  CollectModel({
+    this.id,
+    this.createdAt,
+    this.relType,
+    this.thread,
+    this.content,
+  });
+
+  CollectModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
       id = json["id"];
     }
     if (json["createdAt"] is String) {
       createdAt = json["createdAt"];
-    }if (json["relType"] is String) {
+    }
+    if (json["relType"] is String) {
       relType = json["relType"];
     }
     if (json['thread'] != null) {
@@ -60,9 +62,6 @@ class ThreadListBean {
     if (json['content'] != null) {
       content = ArticleBean.fromJson(json['content']);
     }
-    // if (json['comment'] != null) {
-    //   comment = BoardBean.fromJson(json['comment']);
-    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -71,7 +70,6 @@ class ThreadListBean {
     _data["createdAt"] = createdAt;
     _data["thread"] = thread;
     _data["content"] = content;
-    _data["comment"] = comment;
     _data["relType"] = relType;
 
     return _data;

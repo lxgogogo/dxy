@@ -9,8 +9,8 @@ class CommentList {
   CommentList({this.pager, this.list});
 
   CommentList.fromJson(Map<String, dynamic> json) {
-    if (json["pager"] is Paper) {
-      pager = json["pager"];
+    if (json['pager'] != null) {
+      pager = Paper.fromJson(json['pager']);
     }
 
     if (json["list"] is List) {
@@ -32,8 +32,10 @@ class CommentList {
 
 class CommentBean {
   int? id;
+  int? resourceId;
   int? relId;
   String? relType;
+  String? resourceType;
   BoardBean? thread;
   List<String>? at;
   List<UploadFile>? files;
@@ -46,6 +48,7 @@ class CommentBean {
   String? contentStr;
   User? user;
   bool? liked;
+  CommentBean? parentComment;
 
   CommentBean({
     this.id,
@@ -62,11 +65,16 @@ class CommentBean {
     this.user,
     this.liked,
     this.replies,
+    this.parentComment,
   });
 
   CommentBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
       id = json["id"];
+    }
+
+    if (json["resourceId"] is int) {
+      resourceId = json["resourceId"];
     }
 
     if (json["comment"] is String) {
@@ -77,6 +85,9 @@ class CommentBean {
     }
     if (json["relType"] is String) {
       relType = json["relType"];
+    }
+    if (json["resourceType"] is String) {
+      resourceType = json["resourceType"];
     }
     // if (json["content"] is String) {
     //   content = json["content"];
@@ -121,6 +132,9 @@ class CommentBean {
 
     if (json['thread'] != null) {
       thread = BoardBean.fromJson(json['thread']);
+    }
+    if (json['parentComment'] != null) {
+      parentComment = CommentBean.fromJson(json['parentComment']);
     }
   }
 

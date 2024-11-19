@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/comment/page_comments.dart';
 import 'package:holdem/page/comment/page_publish_comment.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:share_plus/share_plus.dart';
@@ -44,6 +45,12 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
     // TODO: implement initState
     super.initState();
     _isMounted = true;
+    viewParams = widget.viewParams;
+  }
+
+  @override
+  void didUpdateWidget(covariant PostDetailBottomView oldWidget) {
+    super.didUpdateWidget(oldWidget);
     viewParams = widget.viewParams;
   }
 
@@ -224,22 +231,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               InkWell(
                   onTap: () {
                     Global().checkLogin(() {
-                      NetRequest().contentLike({
-                        'relType': viewParams.relType!,
-                        'relId': viewParams.relId!,
-                        'state': viewParams.liked ?? false ? false : true
-                      }, (data) {
-                        if (_isMounted) {
-                          if (viewParams.liked == true) {
-                            viewParams.liked = false;
-                            viewParams.likeCount = viewParams.likeCount - 1;
-                          } else {
-                            viewParams.liked = true;
-                            viewParams.likeCount = viewParams.likeCount + 1;
-                          }
-                          setState(() {});
-                        }
-                      });
+                      _likeToggle();
                     });
                   },
                   child: Padding(
@@ -346,120 +338,24 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
         ));
   }
 
-  Widget sharePopView() {
-    return Container(
-      height: 190.px,
-      width: MediaQuery.of(context).size.width,
-      // color: AppTheme.white,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0), // 顶部左侧设置圆角
-          topRight: Radius.circular(20.0), // 顶部右侧设置圆角
-        ),
-        color: AppTheme.white,
-      ),
-      padding: EdgeInsets.fromLTRB(6, 5, 6, 15),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                child: Container(
-                  width: 35.px,
-                ), // 占位用于调整间距
-              ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    '分享',
-                    style: AppTheme.text000000Size16W500,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: Image.asset(
-                  'assets/images/pop_close.png',
-                  width: 23.px,
-                  height: 23.px,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: 14,
-              ),
-              Expanded(
-                  child: Column(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        ToastUtils.showToast('分享到Facebook');
-                      },
-                      icon: Image.asset(
-                        'assets/images/share_facebook.png',
-                        width: 50.px,
-                        height: 50.px,
-                      )),
-                  Text(
-                    'Facebook',
-                    style: AppTheme.text666666Size13,
-                  )
-                ],
-              )),
-              Expanded(
-                  child: Column(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        ToastUtils.showToast('分享到Twitter');
-                      },
-                      icon: Image.asset(
-                        'assets/images/share_twitter.png',
-                        width: 50.px,
-                        height: 50.px,
-                      )),
-                  Text(
-                    'Twitter',
-                    style: AppTheme.text666666Size13,
-                  )
-                ],
-              )),
-              Expanded(
-                  child: Column(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        ToastUtils.showToast('复制链接');
-                      },
-                      icon: Image.asset(
-                        'assets/images/share_link.png',
-                        width: 50.px,
-                        height: 50.px,
-                      )),
-                  Text(
-                    '复制链接',
-                    style: AppTheme.text666666Size13,
-                  )
-                ],
-              )),
-              SizedBox(
-                width: 14,
-              )
-            ],
-          )
-        ],
-      ),
-    );
+  void _likeToggle() {
+    NetRequest().contentLike({
+      'relType': viewParams.relType!,
+      'relId': viewParams.relId!,
+      'state': viewParams.liked ?? false ? false : true
+    }, (data) {
+      if (_isMounted) {
+        if (viewParams.liked == true) {
+          viewParams.liked = false;
+          viewParams.likeCount = viewParams.likeCount - 1;
+        } else {
+          viewParams.liked = true;
+          viewParams.likeCount = viewParams.likeCount + 1;
+        }
+        setState(() {});
+        EventBusUtil.of.fire(EventRefreshMyPageList());
+      }
+    });
   }
 
   void _favoriteToggle() {
@@ -474,8 +370,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
           viewParams.favoriteCount = viewParams.favoriteCount + 1;
         }
         setState(() {});
-        //通知我的页面刷新列表
-        EventBusManager.eventBus.fire(EventBusAction.refreshMineFavoriteList.eventBusTypeName);
+        EventBusUtil.of.fire(EventRefreshMyPageList());
       }
     });
   }

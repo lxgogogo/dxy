@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_splash_screen/flutter_splash_screen.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
@@ -40,98 +41,129 @@ class MyApp extends StatelessWidget {
     if (CommonUtils.isAndroid(context)) {
       hideScreen();
     }
-    // EasyLoading.init();
-    return OKToast(
-        child: GetMaterialApp(
-      title: '德学院',
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        RefreshLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('zh', 'CN'),
-      ],
-      localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
-        return locale;
-      },
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
-        useMaterial3: true,
-        visualDensity: VisualDensity.compact,
-        focusColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hintColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(
-          scrolledUnderElevation: 0.0,
-          titleTextStyle: TextStyle(
-            fontSize: 16,
-            color: Color(0xff2C2C2C),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      useInheritedMediaQuery: true,
+      builder: (context, child) {
+        return RefreshConfiguration(
+          headerBuilder: () => const WaterDropHeader(
+            waterDropColor: Color(0xff008EFF),
           ),
-        ),
-        // 设置最大宽度为 960px
-        // 可根据需求调整该值
-      ),
-      // home: WebFitPage(child: SplashScreen()),
-      builder: EasyLoading.init(),
-      initialRoute: '/',
-      routes: {
-        // '/': (context) => MainScreen(),
-        '/': (context) => MainScreen(),
-        '/book_detail': (context) => BookDetailPage(
-            id: int.parse(
-                ModalRoute.of(context)!.settings.arguments.toString())),
-        '/article_detail': (context) => ArticleDetailPage(
-            id: int.parse(
-                ModalRoute.of(context)!.settings.arguments.toString())),
-        '/video_detail': (context) => VideoDetailPage(
-            id: int.parse(
-                ModalRoute.of(context)!.settings.arguments.toString())),
-        '/video_list': (context) => VideoListPage(
-            id: int.parse(
-                ModalRoute.of(context)!.settings.arguments.toString())),
-        '/post_detail': (context) => PostDetailPage(
-            postId: int.parse(
-                ModalRoute.of(context)!.settings.arguments.toString())),
-      },
-      onGenerateRoute: (settings) {
-        final Uri uri = Uri.parse(settings.name!);
-        final String path = uri.path;
-        final Map<String, String> parameters = uri.queryParameters;
+          footerBuilder: () => CustomFooter(
+            height: 60.w,
+            builder: (BuildContext context, LoadStatus? mode) {
+              return Container(
+                padding: EdgeInsets.only(top: 12.w, bottom: 24.w),
+                height: 60.w,
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(width: 32.w, height: 1.w, color: const Color(0xff9cacc9)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      child: Text(
+                        '已经到底啦',
+                        style: TextStyle(
+                          color: const Color(0xff9cacc9),
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                    ),
+                    Container(width: 32.w, height: 1.w, color: const Color(0xff9cacc9)),
+                  ],
+                ),
+              );
+            },
+          ),
+          shouldFooterFollowWhenNotFull: (state) {
+            return state == LoadStatus.noMore;
+          },
+          child: OKToast(
+            child: GetMaterialApp(
+              title: '德学院',
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                RefreshLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('en', 'US'),
+                Locale('zh', 'CN'),
+              ],
+              localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
+                return locale;
+              },
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
+                useMaterial3: true,
+                visualDensity: VisualDensity.compact,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hintColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                appBarTheme: const AppBarTheme(
+                  scrolledUnderElevation: 0.0,
+                  titleTextStyle: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff2C2C2C),
+                  ),
+                ),
+                // 设置最大宽度为 960px
+                // 可根据需求调整该值
+              ),
+              // home: WebFitPage(child: SplashScreen()),
+              builder: EasyLoading.init(),
+              initialRoute: '/',
+              routes: {
+                // '/': (context) => MainScreen(),
+                '/': (context) => MainScreen(),
+                '/book_detail': (context) =>
+                    BookDetailPage(id: int.parse(ModalRoute.of(context)!.settings.arguments.toString())),
+                '/article_detail': (context) =>
+                    ArticleDetailPage(id: int.parse(ModalRoute.of(context)!.settings.arguments.toString())),
+                '/video_detail': (context) =>
+                    VideoDetailPage(id: int.parse(ModalRoute.of(context)!.settings.arguments.toString())),
+                '/video_list': (context) =>
+                    VideoListPage(id: int.parse(ModalRoute.of(context)!.settings.arguments.toString())),
+                '/post_detail': (context) =>
+                    PostDetailPage(postId: int.parse(ModalRoute.of(context)!.settings.arguments.toString())),
+              },
+              onGenerateRoute: (settings) {
+                final Uri uri = Uri.parse(settings.name!);
+                final String path = uri.path;
+                final Map<String, String> parameters = uri.queryParameters;
 
-        switch (path) {
-          case '/book_detail':
-            return MaterialPageRoute(
-              builder: (context) =>
-                  BookDetailPage(id: int.parse(parameters['id']!)),
-            );
-          case '/article_detail':
-            return MaterialPageRoute(
-              builder: (context) =>
-                  ArticleDetailPage(id: int.parse(parameters['id']!)),
-            );
-          case '/video_detail':
-            return MaterialPageRoute(
-              builder: (context) =>
-                  VideoDetailPage(id: int.parse(parameters['id']!)),
-            );
-          case '/video_list':
-            return MaterialPageRoute(
-              builder: (context) =>
-                  VideoListPage(id: int.parse(parameters['id']!)),
-            );
-          case '/post_detail':
-            return MaterialPageRoute(
-              builder: (context) =>
-                  PostDetailPage(postId: int.parse(parameters['postId']!)),
-            );
-        }
+                switch (path) {
+                  case '/book_detail':
+                    return MaterialPageRoute(
+                      builder: (context) => BookDetailPage(id: int.parse(parameters['id']!)),
+                    );
+                  case '/article_detail':
+                    return MaterialPageRoute(
+                      builder: (context) => ArticleDetailPage(id: int.parse(parameters['id']!)),
+                    );
+                  case '/video_detail':
+                    return MaterialPageRoute(
+                      builder: (context) => VideoDetailPage(id: int.parse(parameters['id']!)),
+                    );
+                  case '/video_list':
+                    return MaterialPageRoute(
+                      builder: (context) => VideoListPage(id: int.parse(parameters['id']!)),
+                    );
+                  case '/post_detail':
+                    return MaterialPageRoute(
+                      builder: (context) => PostDetailPage(postId: int.parse(parameters['postId']!)),
+                    );
+                }
+              },
+            ),
+          ),
+        );
       },
-    ));
+    );
   }
 }

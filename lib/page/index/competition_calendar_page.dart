@@ -59,7 +59,7 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
         final dayBegin = item.competition?.dayBegin;
         final dayEnd = item.competition?.dayEnd;
         if (dayBegin != null && dayEnd != null) {
-          if (day.isAfter(dayBegin) && day.isBefore(dayEnd)) {
+          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd) || isSameDay(day, dayEnd))) {
             count++;
           }
         }
@@ -312,7 +312,7 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                                 ),
                                 SizedBox(height: 4.px),
                                 Text(
-                                  '${item.competition?.dayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayBegin!) : ''}-${item.competition?.dayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayEnd!) : ''}',
+                                  '${item.competition?.dayBegin != null ? DateFormat('yyyy-MM-dd HH:mm').format(item.competition!.dayBegin!) : ''}-${item.competition?.dayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(item.competition!.dayEnd!) : ''}',
                                   style: const TextStyle(
                                     color: Color(0xff2a2a2a),
                                     fontSize: 12,
@@ -388,8 +388,8 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                   )
                 else
                   SliverFillViewport(
-                    viewportFraction : 0.375,
-                    padEnds : false,
+                    viewportFraction: 0.375,
+                    padEnds: false,
                     delegate: SliverChildListDelegate([
                       const NoDataView(text: '暂无赛事'),
                     ]),

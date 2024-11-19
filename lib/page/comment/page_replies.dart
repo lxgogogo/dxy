@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/utils/eventbus/EventBusAction.dart';
-import 'package:holdem/utils/eventbus/EventBusManager.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
@@ -26,33 +26,21 @@ class _RepliesPageState extends State<RepliesPage> {
   bool loaded = false;
   int pageNum = 1;
 
-  var actionEventBus;
+  StreamSubscription? eventSubscription;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     reqListData();
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshForumPostDetail.eventBusTypeName) {
-        NetRequest().commentList({
-          'pageNum': 1,
-          'pageSize': comments.length + 1,
-          'filters': {'relType': 'content', 'relId': widget.id}
-        }, (data) {
-          if (mounted) {
-            List<CommentBean> dataList = List<CommentBean>.from(
-                data['list'].map((comment) => CommentBean.fromJson(comment)));
-            setState(() {
-              comments = dataList;
-              loaded = true;
-            });
-          }
-        });
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+      reqListData();
     });
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   reqListData() {

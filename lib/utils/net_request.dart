@@ -73,7 +73,7 @@ class NetRequest {
     if (resp.code == 200) {
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      onSuccess(null);
     }
   }
 
@@ -201,7 +201,7 @@ class NetRequest {
       LogUtils.printAll("threadShow===>$response");
       onSuccess(response['data']);
     } else {
-      ToastUtils.showToast(resp.message!);
+      onSuccess(null);
     }
   }
 
@@ -749,6 +749,26 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  Future upCount(int? id, SuccessCallback onSuccess) async {
+    Map<String, dynamic> params = {};
+    params['id'] = id;
+    params['type'] = 'share';
+    Map<String, dynamic> response = await HttpUtils.post(Api.upCount, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("upCount===>$response");
+      onSuccess(response['data']);
+    } else {
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -5,10 +6,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/constants.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -19,6 +22,7 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_web_fit.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -37,23 +41,33 @@ class _BookDetailPageState extends State<BookDetailPage> {
   bool loaded = false;
   int pageNum = 1;
 
+  StreamSubscription? eventSubscription;
+
   @override
   void initState() {
     super.initState();
     requestDetail();
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshForumPostDetail.eventBusTypeName) {
-        requestDetail();
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+      requestDetail();
     });
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   requestDetail() {
     NetRequest().contentShow({'id': widget.id}, (data) {
-      setState(() {
-        articleDetailBean = ArticleDetailBean.fromJson(data);
-        loaded = true;
-      });
+      if (data == null) {
+        showToast('该书籍已删除');
+        Get.back();
+        return;
+      }
+      articleDetailBean = ArticleDetailBean.fromJson(data);
+      loaded = true;
+      setState(() {});
     });
 
     NetRequest().commentList({

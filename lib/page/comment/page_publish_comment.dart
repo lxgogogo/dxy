@@ -425,7 +425,6 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
           if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
             NetRequest().commentCreate(widget.relType, widget.relId, content, at: aitList, files: imageUrlList, (data) {
               EventBusUtil.of.fire(EventRefreshComments(widget.relType));
-              EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
               EasyLoading.dismiss();
               ToastUtils.showToast('发布成功');
               Navigator.pop(context);
@@ -456,7 +455,6 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
     } else {
       NetRequest().commentCreate(widget.relType, widget.relId, content, (data) {
         EventBusUtil.of.fire(EventRefreshComments(widget.relType));
-        EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
         EasyLoading.dismiss();
         ToastUtils.showToast('发布成功');
         Navigator.pop(context);

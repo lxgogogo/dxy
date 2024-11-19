@@ -17,6 +17,7 @@ import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_course.dart';
 import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/page/index/competition_calendar_page.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
@@ -45,11 +46,22 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
 
   final ScrollController _listController = ScrollController();
 
+  StreamSubscription? eventSubscription;
+
   @override
   void initState() {
     super.initState();
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+      reqListData();
+    });
     reqListData();
     getCompetitionLoop();
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   void getCompetitionLoop() {
@@ -270,9 +282,6 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       return SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
-          header: const WaterDropHeader(
-            waterDropColor: Color(0xff008EFF),
-          ),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
@@ -285,9 +294,6 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       return SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
-          header: const WaterDropHeader(
-            waterDropColor: Color(0xff008EFF),
-          ),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
@@ -296,9 +302,6 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       return SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
-          header: const WaterDropHeader(
-            waterDropColor: Color(0xff008EFF),
-          ),
           controller: _refreshController,
           onRefresh: _onRefresh,
           onLoading: _onLoading,
@@ -311,9 +314,6 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(
-          waterDropColor: Color(0xff008EFF),
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -613,12 +613,6 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void dispose() {
-    _listController.dispose(); // 释放资源
-    super.dispose();
-  }
 
   void _scrollToTop() {
     // 滚动到顶部的逻辑

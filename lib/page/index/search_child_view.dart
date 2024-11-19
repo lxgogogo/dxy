@@ -141,9 +141,6 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(
-          waterDropColor: Color(0xff008EFF),
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -161,9 +158,6 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(
-          waterDropColor: Color(0xff008EFF),
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -186,9 +180,6 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(
-          waterDropColor: Color(0xff008EFF),
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -206,9 +197,6 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(
-          waterDropColor: Color(0xff008EFF),
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -226,9 +214,6 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       return SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
-        header: const WaterDropHeader(
-          waterDropColor: Color(0xff008EFF),
-        ),
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -279,9 +264,6 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(
-        waterDropColor: Color(0xff008EFF),
-      ),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,

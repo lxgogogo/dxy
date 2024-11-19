@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/competition_bean.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_video.dart';
@@ -11,6 +12,7 @@ import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/PostListView.dart';
 import 'package:holdem/widget/tab_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 
 class CompetitionDetailPage extends StatefulWidget {
@@ -45,6 +47,11 @@ class _CompetitionDetailPageState extends State<CompetitionDetailPage> {
 
   reqData() {
     NetRequest().contentShow({'id': widget.id}, (data) async {
+      if (data == null) {
+        showToast('该帖子已删除');
+        Get.back();
+        return;
+      }
       competitionBean = CompetitionBean.fromJson(data);
       setState(() {});
       if (competitionBean?.competition?.sourceUrl?.isNotEmpty == true) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -13,6 +16,7 @@ import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/PostListView.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
@@ -52,24 +56,38 @@ class _PostDetailPageState extends State<PostDetailPage> {
   late PostBottomViewParams postBottomViewParams;
   bool isLoadOk = false;
 
+  StreamSubscription? eventSubscription;
+
   @override
   void initState() {
     super.initState();
     currentPostId = widget.postId;
     _isMounted = true;
     reqPostDetail();
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshForumPostDetail.eventBusTypeName) {
-        reqPostDetail();
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+      reqPostDetail();
     });
 
     _playController = VideoPlayerController.network('');
   }
 
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    _playController?.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+    _isMounted = false;
+  }
+
   reqPostDetail() {
     NetRequest().threadShow(currentPostId.toString(), (data) async {
       if (_isMounted) {
+        if (data == null) {
+          showToast('该帖子已删除');
+          Get.back();
+          return;
+        }
         boardBean = BoardBean.fromJson(data);
         //所有图片集合
         if (boardBean!.files!.isNotEmpty) {
@@ -131,14 +149,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
         });
       }
     });
-  }
-
-  @override
-  void dispose() {
-    _playController?.dispose();
-    _chewieController?.dispose();
-    super.dispose();
-    _isMounted = false;
   }
 
   @override

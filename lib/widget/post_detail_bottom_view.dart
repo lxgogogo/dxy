@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/comment/page_comments.dart';
 import 'package:holdem/page/comment/page_publish_comment.dart';
+import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -68,8 +70,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   void _submitComment(String commentContent, BuildContext context) {
     NetRequest().commentCreate(viewParams.relType!, viewParams.relId!, commentContent, (data) {
-      //通知刷新帖子详情
-      EventBusManager.eventBus.fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
+      EventBusUtil.of.fire(EventRefreshComments(viewParams.relType!));
       ToastUtils.showToast('发布成功');
       _textEditingController.clear();
       Navigator.pop(context);
@@ -308,12 +309,13 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   ),
                 )),
             InkWell(
-                onTap: () {
-                  Share.share(
-                    'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
-                    subject: widget.viewParams.title,
-                  );
-                },
+                // onTap: () {
+                // Share.share(
+                //   'https://reptile-vue.dexin62.com${widget.viewParams.shareLink}',
+                //   subject: widget.viewParams.title,
+                // );
+                // },
+                onTap: _onShare,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.px),
                   child: Row(
@@ -339,11 +341,9 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   }
 
   void _likeToggle() {
-    NetRequest().contentLike({
-      'relType': viewParams.relType!,
-      'relId': viewParams.relId!,
-      'state': viewParams.liked ?? false ? false : true
-    }, (data) {
+    NetRequest().contentLike(
+        {'relType': viewParams.relType!, 'relId': viewParams.relId!, 'state': viewParams.liked ?? false ? false : true},
+        (data) {
       if (_isMounted) {
         if (viewParams.liked == true) {
           viewParams.liked = false;
@@ -371,6 +371,18 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
         }
         setState(() {});
         EventBusUtil.of.fire(EventRefreshMyPageList());
+      }
+    });
+  }
+
+  void _onShare() {
+    NetRequest().upCount(viewParams.relId!, (data) async {
+      if (_isMounted) {
+        await Clipboard.setData(ClipboardData(text: '${Env.host}/${viewParams.shareLink}'));
+        ToastUtils.showToast('分享成功，链接已复制');
+
+        viewParams.shareCount = viewParams.shareCount + 1;
+        setState(() {});
       }
     });
   }

@@ -29,7 +29,6 @@ class _ArticleItemState extends State<ArticleItem> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
         if (widget.article.type == 'videoList') {

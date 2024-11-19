@@ -1,15 +1,20 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../view/background_container.dart';
@@ -33,27 +38,33 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   bool showVideo = false;
   int pageNum = 1;
 
+  StreamSubscription? eventSubscription;
+
   @override
   void initState() {
     super.initState();
     requestDetail();
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshForumPostDetail.eventBusTypeName) {
-        requestDetail();
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+      requestDetail();
     });
   }
 
   @override
   void dispose() {
-    super.dispose();
+    eventSubscription?.cancel();
     _playController.dispose();
     _chewieController?.dispose();
+    super.dispose();
   }
 
   requestDetail() {
     NetRequest().contentShow({'id': widget.id}, (data) async {
       if (mounted) {
+        if (data == null) {
+          showToast('该视频已删除');
+          Get.back();
+          return;
+        }
         articleDetailBean = ArticleDetailBean.fromJson(data);
         setState(() {});
         _playController = VideoPlayerController.networkUrl(

@@ -46,39 +46,10 @@ class MyApp extends StatelessWidget {
       useInheritedMediaQuery: true,
       builder: (context, child) {
         return RefreshConfiguration(
-          headerBuilder: () => const WaterDropHeader(
-            waterDropColor: Color(0xff008EFF),
+          headerBuilder: () => const ClassicHeader(),
+          footerBuilder: () => const ClassicFooter(
+            noDataText: '—— 已经到底啦 ——',
           ),
-          footerBuilder: () => CustomFooter(
-            height: 60.w,
-            builder: (BuildContext context, LoadStatus? mode) {
-              return Container(
-                padding: EdgeInsets.only(top: 12.w, bottom: 24.w),
-                height: 60.w,
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(width: 32.w, height: 1.w, color: const Color(0xff9cacc9)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4.w),
-                      child: Text(
-                        '已经到底啦',
-                        style: TextStyle(
-                          color: const Color(0xff9cacc9),
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                    Container(width: 32.w, height: 1.w, color: const Color(0xff9cacc9)),
-                  ],
-                ),
-              );
-            },
-          ),
-          shouldFooterFollowWhenNotFull: (state) {
-            return state == LoadStatus.noMore;
-          },
           child: OKToast(
             child: GetMaterialApp(
               title: '德学院',

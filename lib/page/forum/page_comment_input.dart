@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:holdem/page/forum/page_forum_tab_child.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
@@ -121,9 +122,7 @@ class _CommentInputPageState extends State<CommentInputPage>
 
   void _submitComment(String commentContent) {
     NetRequest().commentCreate(relType, relId, commentContent, (data) {
-      //通知刷新帖子详情
-      EventBusManager.eventBus
-          .fire(EventBusAction.refreshForumPostDetail.eventBusTypeName);
+      EventBusUtil.of.fire(EventRefreshComments(relType));
       ToastUtils.showToast('发布成功');
       Navigator.pop(context);
     });

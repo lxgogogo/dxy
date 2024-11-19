@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/model/article.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_course.dart';
 import 'package:holdem/page/index/item_video.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/page/mine/dialog_confirm.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
@@ -255,7 +260,7 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
                         child: widget.tabIndex == 0
                             ? PostListItemView(boardPostList[i], isMyPost: true)
                             : widget.tabIndex == 1
-                                ? _buildCollectItem(collectList[i])
+                                ? MyCollectItem(item: collectList[i])
                                 : MyCommentItem(
                                     item: commentDataList[i],
                                     userProfileInfo: userProfileInfo,
@@ -277,9 +282,17 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
   Widget _buildCollectItem(CollectModel collectModel) {
     if (collectModel.relType == 'thread') {
       if (collectModel.thread != null) {
-        return PostListItemView(
-          collectModel.thread!,
+        return ArticleItem(
+          article: ArticleBean(
+            title: collectModel.thread!.title,
+            createdAt: collectModel.thread!.createdAt,
+            commentCount: collectModel.thread!.commentCount,
+            cover: collectModel.thread!.files?.firstOrNull?.url,
+          ),
         );
+        // return PostListItemView(
+        //   collectModel.thread!,
+        // );
       }
     } else if (collectModel.relType == 'content') {
       if (collectModel.content == null) return const SizedBox();
@@ -414,6 +427,133 @@ class MyCommentItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MyCollectItem extends StatelessWidget {
+  final CollectModel? item;
+
+  const MyCollectItem({
+    super.key,
+    this.item,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String? title;
+    DateTime? createdAt;
+    int? commentCount;
+    String? imageUrl;
+    if (item?.relType == 'thread') {
+      title = item?.thread?.title;
+      createdAt = item?.thread?.createdAt;
+      commentCount = item?.thread?.commentCount;
+      imageUrl = item?.thread?.files?.firstOrNull?.url;
+    } else if (item?.relType == 'content') {
+      title = item?.content?.title;
+      createdAt = item?.content?.createdAt;
+      commentCount = item?.content?.commentCount;
+      imageUrl = item?.content?.cover;
+    }
+    return GestureDetector(
+      onTap: () {
+        if (item?.id == null) return;
+        if (item?.relType == 'thread') {
+          Get.to(PostDetailPage(postId: item!.id!));
+        } else if (item?.relType == 'content') {
+          final type = item?.content?.type;
+          final id = item?.content?.id;
+          if (id == null) return;
+          if (type == 'article') {
+            Get.to(ArticleDetailPage(id: id));
+          } else if (type == 'book') {
+            Get.to(BookDetailPage(id: id));
+          } else if (type == 'videoList') {
+            Get.to(VideoListPage(id: id));
+          } else if (type == 'video') {
+            Get.to(VideoDetailPage(id: id));
+          }
+        }
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(10.px, 10.px, 10.px, 12.px),
+        margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(12.rpx),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+                child: SizedBox(
+              height: 80.px,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    title ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(
+                      color: const Color(0xff2a2a2a),
+                      fontSize: 14.px,
+                    ),
+                  ),
+                  // Spacer(),
+                  Row(
+                    children: [
+                      Text(
+                        createdAt != null ? DateFormat('M月d日').format(createdAt!) : '',
+                        style: TextStyle(
+                          color: const Color(0xff9CACC9),
+                          fontSize: 12.px,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30.px,
+                      ),
+                      Image.asset(
+                        'assets/images/comment.png',
+                        width: 13.px,
+                        height: 12.px,
+                      ),
+                      SizedBox(
+                        width: 5.px,
+                      ),
+                      Text(
+                        '${commentCount ?? 0}',
+                        style: TextStyle(
+                          color: const Color(0xff9CACC9),
+                          fontSize: 12.px,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )),
+            if (imageUrl?.isNotEmpty == true)
+              Container(
+                width: 92.px,
+                height: 66.px,
+                margin: EdgeInsets.only(left: 15.px),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.px)),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl!,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Image.asset(
+                    'assets/images/image_loading_def.png',
+                  ),
+                ),
+              )
+          ],
+        ),
       ),
     );
   }

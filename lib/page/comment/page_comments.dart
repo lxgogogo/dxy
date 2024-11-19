@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -28,19 +31,21 @@ class _CommentListPageState extends State<CommentListPage> {
   bool loaded = false;
   String commentCountsText = '';
 
-  var actionEventBus;
+  StreamSubscription? eventSubscription;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     reqListData();
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshForumPostDetail.eventBusTypeName) {
-        reqListData();
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+      reqListData();
     });
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   reqListData() {

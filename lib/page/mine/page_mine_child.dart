@@ -19,6 +19,7 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/board_list.dart';
@@ -168,7 +169,7 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
     getUserInfo();
     reqListData();
 
-    EventBusUtil.of.on<EventRefreshMyPageList>().listen((event) {
+    EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       _onRefresh();
     });
   }
@@ -189,7 +190,6 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
           child: SmartRefresher(
             enablePullDown: true,
             enablePullUp: true,
-            header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
             controller: _refreshController,
             onRefresh: _onRefresh,
             onLoading: _onLoading,
@@ -320,6 +320,51 @@ class MyCommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //当前数据是内容的评论的回复 -> 内容的评论的回复
+    //1.回复没删, 评论删了, 资源删了或者禁用 -> 回复保留, 评论显示 该评论已经删除, 不做资源跳转; -> 显示html其中的内容是 资源已被删除
+    //2.回复没删, 评论删了, 资源没删 -> 回复保留, 评论显示 该评论已经删除,不做资源跳转; -> 显示?????
+    //3.回复没删, 评论没删, 资源没删 -> 回复保留, 评论显示, 资源跳转;
+    //4.回复没删 评论没删,资源删了或者禁用; -> 回复保留, 评论显示, 资源不跳转;  -> 显示html其中的内容是 资源已被删除;
+    //
+    //当前数据是内容的评论
+    //5.评论没删, 资源删了或者禁用 -> 显示html其中的内容是 资源已被删除 ->  resourceId=17815(内容id或者帖子id) resourceType="video" delType=5
+    //6.评论没删, 资源没删 -> 评论保留, 资源跳转;  ->  resourceId=17815(内容id或者帖子id) resourceType="video" delType=6
+
+    DateTime? createdAt = item.createdAt;
+    String? comment = item.comment;
+    String? imageUrl;
+    String? content;
+    String typeName = '资源';
+    if (item.relType == 'thread') {
+      typeName = '帖子';
+      imageUrl = item.thread?.files?.firstOrNull?.url;
+      content = item.delType == 6 ? item.thread?.content : '该$typeName已被删除';
+    } else if (item.relType == 'content') {
+      if (item.content?.type == 'article') {
+        typeName = '文章';
+      } else if (item.content?.type == 'video') {
+        typeName = '视频';
+      } else if (item.content?.type == 'book') {
+        typeName = '书籍';
+      }
+      imageUrl = item.content?.cover;
+      content = item.delType == 6 ? item.content?.description : '该$typeName已被删除';
+    } else if (item.relType == 'comment') {
+      imageUrl = item.parentComment?.files?.firstOrNull?.url;
+      content = item.parentComment?.contentStr;
+      if (item.delType == 1) {
+        //1.回复没删, 评论删了, 资源删了或者禁用 -> 回复保留, 评论显示 该评论已经删除, 不做资源跳转; -> 显示html其中的内容是 资源已被删除
+        content = '该评论已经删除';
+      } else if (item.delType == 2) {
+        //2.回复没删, 评论删了, 资源没删 -> 回复保留, 评论显示 该评论已经删除,不做资源跳转; -> 显示?????
+        content = '该评论已经删除';
+      } else if (item.delType == 3) {
+        //3.回复没删, 评论没删, 资源没删 -> 回复保留, 评论显示, 资源跳转;
+      } else if (item.delType == 4) {
+        //4.回复没删 评论没删,资源删了或者禁用; -> 回复保留, 评论显示, 资源不跳转;  -> 显示html其中的内容是 资源已被删除;
+        content = '资源已被删除';
+      }
+    }
     return Container(
       padding: EdgeInsets.fromLTRB(10.px, 10.px, 10.px, 12.px),
       margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
@@ -353,9 +398,9 @@ class MyCommentItem extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (item.createdAt != null)
+                    if (createdAt != null)
                       Text(
-                        CommonUtils.timeFromNow(item.createdAt!),
+                        CommonUtils.timeFromNow(createdAt),
                         style: TextStyle(
                           color: const Color(0xff9CACC9),
                           fontSize: 10.px,
@@ -371,10 +416,21 @@ class MyCommentItem extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+              if (item.id == null) return;
+              if (item.delType != 6) {
+                showToast('该$typeName已被删除');
+                return;
+              }
+              final id = item.resourceId;
+              if (id == null) return;
               if (item.resourceType == 'thread') {
-                Get.to(PostDetailPage(postId: item.resourceId ?? 0));
-              } else {
-                Get.to(ArticleDetailPage(id: item.resourceId ?? 0));
+                Get.to(PostDetailPage(id: id));
+              } else if (item.resourceType == 'article') {
+                Get.to(ArticleDetailPage(id: id));
+              } else if (item.resourceType == 'book') {
+                Get.to(BookDetailPage(id: id));
+              } else if (item.resourceType == 'video') {
+                Get.to(VideoDetailPage(id: id));
               }
             },
             child: Column(
@@ -382,7 +438,7 @@ class MyCommentItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  item.comment ?? '',
+                  comment ?? '',
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.ellipsis,
@@ -395,10 +451,10 @@ class MyCommentItem extends StatelessWidget {
                   decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
                   child: Row(
                     children: [
-                      if (item.files?.isNotEmpty == true)
+                      if (imageUrl?.isNotEmpty == true)
                         CachedNetworkImage(
                           fit: BoxFit.cover,
-                          imageUrl: item.files?.firstOrNull?.url ?? '',
+                          imageUrl: imageUrl ?? '',
                           width: 36.px,
                           height: 36.px,
                           placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
@@ -407,14 +463,8 @@ class MyCommentItem extends StatelessWidget {
                       SizedBox(width: 10.px),
                       Expanded(
                         child: Text(
-                          item.relType == 'thread'
-                              ? item.thread?.title ?? ''
-                              : item.relType == 'content'
-                                  ? item.content?.title ?? ''
-                                  : item.relType == 'comment'
-                                      ? item.parentComment?.contentStr ?? ''
-                                      : '',
-                          maxLines: 2,
+                          content ?? '',
+                          maxLines: 1,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px),
@@ -461,7 +511,9 @@ class MyCollectItem extends StatelessWidget {
       onTap: () {
         if (item?.id == null) return;
         if (item?.relType == 'thread') {
-          Get.to(PostDetailPage(postId: item!.id!));
+          final id = item?.thread?.id;
+          if (id == null) return;
+          Get.to(PostDetailPage(id: id));
         } else if (item?.relType == 'content') {
           final type = item?.content?.type;
           final id = item?.content?.id;

@@ -7,13 +7,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
-import 'package:holdem/view/forum/PostListView.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
@@ -23,19 +21,15 @@ import 'package:video_player/video_player.dart';
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/CircleImageWithText.dart';
-import '../../widget/label_view.dart';
-import '../../widget/page_web_fit.dart';
 import '../../widget/post_detail_bottom_view.dart';
 import 'media_helper.dart';
 
 class PostDetailPage extends StatefulWidget {
-  final int postId; //帖子id
+  final int id; //帖子id
 
-  const PostDetailPage({super.key, required this.postId});
+  const PostDetailPage({super.key, required this.id});
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -61,10 +55,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   void initState() {
     super.initState();
-    currentPostId = widget.postId;
+    currentPostId = widget.id;
     _isMounted = true;
     reqPostDetail();
-    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       reqPostDetail();
     });
 
@@ -114,7 +108,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           liked: boardBean?.liked!,
           content: boardBean?.content!,
           files: boardBean?.files!,
-          shareLink: '/post_detail?postId=${widget.postId}',
+          shareLink: 'details/thread-${widget.id}',
           likeCount: boardBean?.likeCount ?? 0,
           favoriteCount: boardBean?.favoriteCount ?? 0,
           commentCount: boardBean?.commentCount ?? 0,

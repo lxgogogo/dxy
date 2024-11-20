@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/forum/media_helper.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/size_fit.dart';
 
 import '../../widget/linear_card.dart';
@@ -9,6 +13,7 @@ import '../../widget/linear_card.dart';
 class VideoItem extends StatefulWidget {
   ArticleBean article;
   bool isBanner;
+
   VideoItem({super.key, required this.article, this.isBanner = false});
 
   @override
@@ -29,33 +34,18 @@ class _VideoItemState extends State<VideoItem> {
     return GestureDetector(
       onTap: () {
         if (widget.article.type == 'videoList') {
-          // Get.to(VideoListPage(id: widget.article.id ?? 0));
-          Navigator.of(context).pushNamed(
-              "/video_list?id=${widget.article.id ?? 0}",
-              arguments: widget.article.id ?? 0);
+          Get.to(VideoListPage(id: widget.article.id ?? 0));
           return;
         }
-        if (widget.article.type == 'video') {
-          // Get.to(VideoDetailPage(id: widget.article.id ?? 0));
-          Navigator.of(context).pushNamed(
-              "/video_detail?id=${widget.article.id ?? 0}",
-              arguments: widget.article.id ?? 0).whenComplete(() {
-            widget.article.viewCount = (widget.article.viewCount ?? 0) + 1;
-            setState(() {});
-          });
-          return;
-        }
-        Navigator.of(context).pushNamed(
-            "/article_detail?id=${widget.article.id ?? 0}",
-            arguments: widget.article.id ?? 0);
-        // Get.to(ArticleDetailPage(id: widget.article.id ?? 0));
+        Get.to(VideoDetailPage(id: widget.article.id ?? 0))?.whenComplete(() {
+          widget.article.viewCount = (widget.article.viewCount ?? 0) + 1;
+          setState(() {});
+        });
       },
       child: LinearCard(
           padding: EdgeInsets.only(bottom: 2.px),
           margin: EdgeInsets.only(
-              left: widget.isBanner ? 12.px : 0,
-              right: widget.isBanner ? 12.px : 0,
-              top: widget.isBanner ? 12.px : 0),
+              left: widget.isBanner ? 12.px : 0, right: widget.isBanner ? 12.px : 0, top: widget.isBanner ? 12.px : 0),
           child: itemContent()),
     );
   }
@@ -76,9 +66,7 @@ class _VideoItemState extends State<VideoItem> {
           child: Stack(
             children: [
               MediaHelper().cacheLoadNetworkImage(
-                  widget.article.cover ?? '',
-                  widget.isBanner ? 351.px : 180.px,
-                  widget.isBanner ? 200.px : 120.px),
+                  widget.article.cover ?? '', widget.isBanner ? 351.px : 180.px, widget.isBanner ? 200.px : 120.px),
               Positioned(
                   left: 0,
                   right: 0,
@@ -87,8 +75,7 @@ class _VideoItemState extends State<VideoItem> {
                   child: Container(
                     color: Color(0x66000000),
                     child: Center(
-                      child: Image.asset('assets/images/video.png',
-                          width: 26.px, height: 26.px),
+                      child: Image.asset('assets/images/video.png', width: 26.px, height: 26.px),
                     ),
                   )),
               Positioned(
@@ -101,7 +88,7 @@ class _VideoItemState extends State<VideoItem> {
                         width: 14.px,
                       ),
                       Text(
-                        widget.article.viewCount!.toString()+'次播放',
+                        widget.article.viewCount!.toString() + '次播放',
                         style: TextStyle(color: Colors.white, fontSize: 10.px),
                       ),
                       const Spacer(),
@@ -110,14 +97,10 @@ class _VideoItemState extends State<VideoItem> {
                         alignment: Alignment.center,
                         padding: EdgeInsets.symmetric(horizontal: 7.px),
                         decoration: BoxDecoration(
-                            color: Color(0x66000000),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.px))),
+                            color: Color(0x66000000), borderRadius: BorderRadius.all(Radius.circular(8.px))),
                         child: Text(
-                          formatDuration(
-                              Duration(seconds: widget.article.duration ?? 0)),
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 10.px),
+                          formatDuration(Duration(seconds: widget.article.duration ?? 0)),
+                          style: TextStyle(color: Colors.white, fontSize: 10.px),
                         ),
                       ),
                       SizedBox(
@@ -130,8 +113,7 @@ class _VideoItemState extends State<VideoItem> {
                   right: 0,
                   bottom: 0,
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.px, vertical: 8.px),
+                    padding: EdgeInsets.symmetric(horizontal: 10.px, vertical: 8.px),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.only(
@@ -139,22 +121,22 @@ class _VideoItemState extends State<VideoItem> {
                         bottomRight: Radius.circular(8.px),
                       ),
                     ),
-                    child: Image.asset('assets/images/collection.png',
-                        width: 13.px, height: 13.px),
+                    child: Image.asset('assets/images/collection.png', width: 13.px, height: 13.px),
                   ),
                 ),
             ],
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 12.px, right: 12.px, top: widget.isBanner ? 10.px:7.px,bottom: widget.isBanner ? 10.px : 0),
+          margin: EdgeInsets.only(
+              left: 12.px, right: 12.px, top: widget.isBanner ? 10.px : 7.px, bottom: widget.isBanner ? 10.px : 0),
           child: Text(
             widget.article.title ?? '',
             overflow: TextOverflow.ellipsis,
-            maxLines: widget.isBanner ? 1:2,
+            maxLines: widget.isBanner ? 1 : 2,
             style: TextStyle(
               color: const Color(0xff2c2c2c),
-              fontSize: widget.isBanner ? 14.px:12.px,
+              fontSize: widget.isBanner ? 14.px : 12.px,
             ),
           ),
         ),

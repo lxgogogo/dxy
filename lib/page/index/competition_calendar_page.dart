@@ -179,7 +179,7 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                             : isWeekend
                                 ? const Color(0xffaab2c0)
                                 : const Color(0xff2c2c2c);
-                        final isPastDay = _toDay.isAfter(day);
+                        final isNotPastDay = _toDay.isBefore(day) || isSameDay(_toDay, day);
                         final isSelectedDay = isSameDay(_selectedDay, day);
                         final eventCount = _getEventCountForDay(day);
                         final isSingleDayAvailable = _getSingleDayAvailable(day);
@@ -191,9 +191,9 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                                     bottom: BorderSide(
                                       color: isSingleDayAvailable != null
                                           ? Colors.transparent
-                                          : isPastDay
-                                              ? const Color(0xffb0afa7)
-                                              : const Color(0xffd9001b),
+                                          : isNotPastDay
+                                              ? const Color(0xffd9001b)
+                                              : const Color(0xffb0afa7),
                                       width: 3,
                                     ),
                                   )

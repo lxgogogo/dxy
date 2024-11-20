@@ -49,6 +49,7 @@ class CommentBean {
   User? user;
   bool? liked;
   CommentBean? parentComment;
+  int? delType;
 
   CommentBean({
     this.id,
@@ -66,6 +67,7 @@ class CommentBean {
     this.liked,
     this.replies,
     this.parentComment,
+    this.delType,
   });
 
   CommentBean.fromJson(Map<String, dynamic> json) {
@@ -85,6 +87,9 @@ class CommentBean {
     }
     if (json["relType"] is String) {
       relType = json["relType"];
+    }
+    if (json["delType"] is int) {
+      delType = json["delType"];
     }
     if (json["resourceType"] is String) {
       resourceType = json["resourceType"];
@@ -228,7 +233,7 @@ class Content {
   String? type;
   String? title;
   String? description;
-  String? createdAt;
+  DateTime? createdAt;
   String? updatedAt;
   String? cover;
   String? author;
@@ -287,7 +292,7 @@ class Content {
       title = json["title"];
     }
     if (json["createdAt"] is String) {
-      createdAt = json["createdAt"];
+      createdAt = DateTime.parse(json["createdAt"]).toLocal();
     }
     if (json["updatedAt"] is String) {
       updatedAt = json["updatedAt"];

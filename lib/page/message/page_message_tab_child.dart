@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
@@ -38,45 +44,43 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
       'pageSize': 10,
       'filters': {'type': strType}
     }, (data) {
-      List<MessageBean> dataList = List<MessageBean>.from(data['list'].map((comment) => MessageBean.fromJson(comment)));
-
+      MessageList boardList = MessageList.fromJson(data);
       if (mounted) {
-        setState(() {
-          if (pageNum == 1) {
-            messages = dataList;
-            loaded = true;
+        final total = boardList.pager?.total ?? 0;
+        if (pageNum == 1) {
+          messages = boardList.list!;
+          _refreshController.refreshCompleted();
+          if (messages.length >= total) {
+            _refreshController.loadNoData();
           } else {
-            messages.addAll(dataList);
+            _refreshController.resetNoData();
           }
-        });
+        } else {
+          messages.addAll(boardList.list!);
+          if (messages.length >= total) {
+            _refreshController.loadNoData();
+          } else {
+            _refreshController.loadComplete();
+          }
+        }
+        loaded = true;
+        setState(() {});
       }
-      _refreshController.loadComplete();
-      _refreshController.refreshCompleted();
     });
   }
 
   void refreshData(String type) {
-    setState(() {
-      strType = type;
-      // pageId = id;
-      // tabIdValue = id;
-    });
+    strType = type;
     _onRefresh();
   }
 
   void _onRefresh() async {
-    // monitor network fetch
-    setState(() {
-      pageNum = 1;
-    });
+    pageNum = 1;
     reqListData();
   }
 
   void _onLoading() async {
-    // monitor network fetch
-    setState(() {
-      pageNum++;
-    });
+    pageNum++;
     reqListData();
   }
 
@@ -135,20 +139,16 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
       return;
     }
     int id = bean.jumpId!;
-    if (bean.jumpType == 'book') {
-      Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
-      // Get.to(BookDetailPage(id: id));
-    } else if (bean.jumpType == 'article') {
-      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
-      // Get.to(ArticleDetailPage(id: id));
-    } else if (bean.jumpType == 'videoList') {
-      Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);
-      // Get.to(VideoListPage(id: id));
-    } else if (bean.jumpType == 'video') {
-      Navigator.of(context).pushNamed("/video_detail?id=${id}", arguments: id);
-      // Get.to(VideoDetailPage(id: id));
-    } else if (bean.jumpType == 'thread') {
-      Get.to(PostDetailPage(postId: id));
+    if (bean.resourceType == 'book') {
+      Get.to(BookDetailPage(id: id));
+    } else if (bean.resourceType == 'article') {
+      Get.to(ArticleDetailPage(id: id));
+    } else if (bean.resourceType == 'videoList') {
+      Get.to(VideoListPage(id: id));
+    } else if (bean.resourceType == 'video') {
+      Get.to(VideoDetailPage(id: id));
+    } else if (bean.resourceType == 'thread') {
+      Get.to(PostDetailPage(id: id));
     }
   }
 
@@ -243,9 +243,6 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10.px,
-                ),
                 GestureDetector(
                   onTap: () {
                     jumpPage(messageBean);
@@ -258,15 +255,7 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          if (str.isNotEmpty)
-                            Text(
-                              str,
-                              style: TextStyle(color: Color(0xff333333), fontSize: 14.px),
-                            ),
-                          if (str.isNotEmpty)
-                            SizedBox(
-                              height: 8.px,
-                            ),
+                          if (str.isNotEmpty) Html(data: str) else SizedBox(height: 10.w),
                           Container(
                             padding: EdgeInsets.all(10.px),
                             width: 300.px,

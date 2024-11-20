@@ -32,23 +32,14 @@ class _ArticleItemState extends State<ArticleItem> {
     return GestureDetector(
       onTap: () {
         if (widget.article.type == 'videoList') {
-          // Get.to(VideoListPage(id: widget.article.id ?? 0));
-          Navigator.of(context).pushNamed(
-              "/video_list?id=${widget.article.id ?? 0}",
-              arguments: widget.article.id ?? 0);
+          Get.to(VideoListPage(id: widget.article.id ?? 0));
           return;
         }
         if (widget.article.type == 'video') {
-          // Get.to(VideoDetailPage(id: widget.article.id ?? 0));
-          Navigator.of(context).pushNamed(
-              "/video_detail?id=${widget.article.id ?? 0}",
-              arguments: widget.article.id ?? 0);
+          Get.to(VideoDetailPage(id: widget.article.id ?? 0));
           return;
         }
-        Navigator.of(context).pushNamed(
-            "/article_detail?id=${widget.article.id ?? 0}",
-            arguments: widget.article.id ?? 0);
-        // Get.to(ArticleDetailPage(id: widget.article.id ?? 0));
+        Get.to(ArticleDetailPage(id: widget.article.id ?? 0));
       },
       child: LinearCard(
         margin:EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),

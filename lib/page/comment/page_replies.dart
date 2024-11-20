@@ -32,7 +32,7 @@ class _RepliesPageState extends State<RepliesPage> {
   void initState() {
     super.initState();
     reqListData();
-    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       reqListData();
     });
   }

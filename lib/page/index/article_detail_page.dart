@@ -42,7 +42,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   void initState() {
     super.initState();
     requestDetail();
-    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       requestDetail();
     });
   }
@@ -167,7 +167,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                 liked: articleDetailBean.liked ?? false,
                 content: '',
                 files: [],
-                shareLink: '/article_detail?id=${widget.id}',
+                shareLink: 'details/article-${widget.id}',
                 likeCount: articleDetailBean.likeCount ?? 0,
                 favoriteCount: articleDetailBean.favoriteCount ?? 0,
                 commentCount: articleDetailBean.commentCount ?? 0,

@@ -7,12 +7,17 @@ import 'package:holdem/model/user.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
+import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_search.dart';
+import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
+import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/follow_btn.dart';
@@ -218,7 +223,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
         onRefresh: _onRefresh,
         onLoading: _onLoading,
         child: isLoaded
-            ? courses.isNotEmpty
+            ? userItems.isNotEmpty
                 ? ListView.builder(
                     controller: _listController,
                     itemBuilder: (context, index) => GestureDetector(
@@ -241,18 +246,55 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
                               style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.px),
                             ),
                             const Spacer(),
-                            FollowBtn(
-                                isFollowed: userItems[index].followed!,
-                                onTap: () {
-                                  NetRequest().followerToggle(userItems[index].id!, !userItems[index].followed!,
-                                      (data) {
+                            GestureDetector(
+                              onTap: () {
+                                Global().checkLogin(() {
+                                  if (userItems[index].id == null) return;
+                                  final followed = userItems[index].followed ?? false;
+                                  NetRequest().followerToggle(userItems[index].id!, !followed, (data) {
                                     if (mounted) {
-                                      setState(() {
-                                        userItems.remove(userItems[index]);
-                                      });
+                                      userItems[index].followed = !followed;
+                                      setState(() {});
                                     }
                                   });
-                                })
+                                });
+                              },
+                              child: userItems[index].followed == true
+                                  ? Container(
+                                      height: 28.px,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xffd8d8d8),
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 10.px),
+                                      child: const Text(
+                                        '已关注',
+                                        style: TextStyle(
+                                          color: Color(0xff95a3c4),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 28.px,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xff249cfc),
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 10.px),
+                                      child: const Text(
+                                        '+关注',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                            ),
                           ]),
                         )),
                     itemCount: userItems.length,
@@ -291,8 +333,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
                 CollectBean collectBean = courses[i];
                 return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed("/article_detail?id=${collectBean.targetId ?? 0}",
-                          arguments: collectBean.targetId ?? 0);
+                      Get.to(ArticleDetailPage(id: collectBean.targetId ?? 0));
                     },
                     child: Container(
                       height: 48.px,
@@ -326,19 +367,15 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
   jumpPage(BannerBean bean) {
     var id = int.parse(bean.jumpValue!);
     if (bean.jumpType == 'book') {
-      Navigator.of(context).pushNamed("/book_detail?id=${id}", arguments: id);
-      // Get.to(BookDetailPage(id: id));
+      Get.to(BookDetailPage(id: id));
     } else if (bean.jumpType == 'article') {
-      Navigator.of(context).pushNamed("/article_detail?id=${id}", arguments: id);
-      // Get.to(ArticleDetailPage(id: id));
+      Get.to(ArticleDetailPage(id: id));
     } else if (bean.jumpType == 'videoList') {
-      Navigator.of(context).pushNamed("/video_list?id=${id}", arguments: id);
-      // Get.to(VideoListPage(id: id));
+      Get.to(VideoListPage(id: id));
     } else if (bean.jumpType == 'video') {
-      Navigator.of(context).pushNamed("/video_detail?id=${id}", arguments: id);
-      // Get.to(VideoDetailPage(id: id));
+      Get.to(VideoDetailPage(id: id));
     } else if (bean.jumpType == 'thread') {
-      Get.to(PostDetailPage(postId: id));
+      Get.to(PostDetailPage(id: id));
     }
   }
 

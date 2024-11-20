@@ -44,7 +44,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   void initState() {
     super.initState();
     requestDetail();
-    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       requestDetail();
     });
   }
@@ -134,7 +134,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 liked: articleDetailBean?.liked ?? false,
                 content: '',
                 files: [],
-                shareLink: '/video_detail?id=${widget.id}',
+                shareLink: 'details/video-${widget.id}',
                 likeCount: articleDetailBean?.likeCount ?? 0,
                 favoriteCount: articleDetailBean?.favoriteCount ?? 0,
                 commentCount: articleDetailBean?.commentCount ?? 0,

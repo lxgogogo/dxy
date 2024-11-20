@@ -47,7 +47,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
   void initState() {
     super.initState();
     requestDetail();
-    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       requestDetail();
     });
   }
@@ -167,7 +167,7 @@ class _BookDetailPageState extends State<BookDetailPage> {
                 liked: articleDetailBean.liked ?? false,
                 content: '',
                 files: [],
-                shareLink: '/book_detail?id=${widget.id}',
+                shareLink: 'details/book-${widget.id}',
                 likeCount: articleDetailBean.likeCount ?? 0,
                 favoriteCount: articleDetailBean.favoriteCount ?? 0,
                 commentCount: articleDetailBean.commentCount ?? 0,

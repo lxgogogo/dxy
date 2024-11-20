@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
+import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 
@@ -19,12 +22,7 @@ class _BookItemState extends State<BookItem> {
     SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(
-          "/book_detail?id=${widget.article.id ?? 0}",
-          arguments: widget.article.id ?? 0,
-        )
-            .whenComplete(() {
+        Get.to(BookDetailPage(id: widget.article.id ?? 0))?.whenComplete(() {
           widget.article.viewCount = (widget.article.viewCount ?? 0) + 1;
           setState(() {});
         });
@@ -39,8 +37,8 @@ class _BookItemState extends State<BookItem> {
               clipBehavior: Clip.antiAlias,
               margin: EdgeInsets.only(right: 18.px),
               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(3.px))),
-              child: Image.network(
-                widget.article.cover ?? '',
+              child: CachedNetworkImage(
+                imageUrl: widget.article.cover ?? '',
                 width: 51.px,
                 height: 68.px,
                 fit: BoxFit.cover,
@@ -105,7 +103,7 @@ class _BookItemState extends State<BookItem> {
                               width: 4.px,
                             ),
                             Text(
-                              widget.article.likeCount.toString(),
+                              widget.article.favoriteCount.toString(),
                               style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
                             )
                           ],

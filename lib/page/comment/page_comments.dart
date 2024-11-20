@@ -37,7 +37,7 @@ class _CommentListPageState extends State<CommentListPage> {
   void initState() {
     super.initState();
     reqListData();
-    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((relType) {
+    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       reqListData();
     });
   }

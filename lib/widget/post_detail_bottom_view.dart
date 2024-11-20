@@ -70,7 +70,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
 
   void _submitComment(String commentContent, BuildContext context) {
     NetRequest().commentCreate(viewParams.relType!, viewParams.relId!, commentContent, (data) {
-      EventBusUtil.of.fire(EventRefreshComments(viewParams.relType!));
+      EventBusUtil.of.fire(EventRefreshPage(viewParams.relType!));
       ToastUtils.showToast('发布成功');
       _textEditingController.clear();
       Navigator.pop(context);
@@ -353,7 +353,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
           viewParams.likeCount = viewParams.likeCount + 1;
         }
         setState(() {});
-        EventBusUtil.of.fire(EventRefreshMyPageList());
+        EventBusUtil.of.fire(EventRefreshPage(viewParams.relType!));
       }
     });
   }
@@ -370,7 +370,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
           viewParams.favoriteCount = viewParams.favoriteCount + 1;
         }
         setState(() {});
-        EventBusUtil.of.fire(EventRefreshMyPageList());
+        EventBusUtil.of.fire(EventRefreshPage(viewParams.relType!));
       }
     });
   }
@@ -378,7 +378,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   void _onShare() {
     NetRequest().upCount(viewParams.relId!, (data) async {
       if (_isMounted) {
-        await Clipboard.setData(ClipboardData(text: '${Env.host}/${viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
 
         viewParams.shareCount = viewParams.shareCount + 1;

@@ -122,7 +122,7 @@ class _CommentInputPageState extends State<CommentInputPage>
 
   void _submitComment(String commentContent) {
     NetRequest().commentCreate(relType, relId, commentContent, (data) {
-      EventBusUtil.of.fire(EventRefreshComments(relType));
+      EventBusUtil.of.fire(EventRefreshPage(relType));
       ToastUtils.showToast('发布成功');
       Navigator.pop(context);
     });

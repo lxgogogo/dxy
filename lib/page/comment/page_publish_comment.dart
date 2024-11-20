@@ -424,7 +424,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
           imageUrlList.add(uploadFile);
           if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
             NetRequest().commentCreate(widget.relType, widget.relId, content, at: aitList, files: imageUrlList, (data) {
-              EventBusUtil.of.fire(EventRefreshComments(widget.relType));
+              EventBusUtil.of.fire(EventRefreshPage(widget.relType));
               EasyLoading.dismiss();
               ToastUtils.showToast('发布成功');
               Navigator.pop(context);
@@ -454,7 +454,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
       });
     } else {
       NetRequest().commentCreate(widget.relType, widget.relId, content, (data) {
-        EventBusUtil.of.fire(EventRefreshComments(widget.relType));
+        EventBusUtil.of.fire(EventRefreshPage(widget.relType));
         EasyLoading.dismiss();
         ToastUtils.showToast('发布成功');
         Navigator.pop(context);

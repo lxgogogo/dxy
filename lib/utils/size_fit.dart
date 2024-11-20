@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:holdem/main.dart';
 
 extension IntFit on int{
   double get px {
-    return SizeFit.setPx(toDouble());
+    return this.w;
   }
 
   double get rpx {

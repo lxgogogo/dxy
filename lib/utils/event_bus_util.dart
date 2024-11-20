@@ -25,10 +25,7 @@ class EventBusUtil {
 
 
 /// event
-class EventRefreshComments {
+class EventRefreshPage {
   final String relType;
-  EventRefreshComments(this.relType);
+  EventRefreshPage(this.relType);
 }
-
-/// event
-class EventRefreshMyPageList {}

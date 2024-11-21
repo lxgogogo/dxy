@@ -1,6 +1,7 @@
 class BannerBean {
   String? title;
   String? img;
+  String? imgMobile;
   String? jumpValue;
   String? jumpType;
   int? sort;
@@ -10,6 +11,7 @@ class BannerBean {
   BannerBean(
       {this.title,
       this.img,
+      this.imgMobile,
       this.jumpValue,
       this.jumpType,
       this.sort,
@@ -22,6 +24,9 @@ class BannerBean {
     }
     if (json["img"] is String) {
       img = json["img"];
+    }
+    if (json["imgMobile"] is String) {
+      imgMobile = json["imgMobile"];
     }
     if (json["jumpValue"] is String) {
       jumpValue = json["jumpValue"];

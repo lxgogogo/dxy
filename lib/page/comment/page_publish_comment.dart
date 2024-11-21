@@ -8,6 +8,7 @@ import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:holdem/model/user.dart';
@@ -159,6 +160,9 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
                       onChanged: (text) {
                         // _handleTextChange();
                       },
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(2000),
+                      ],
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 15.5.px),
                         hintText: '请输入正文（建议10-2000字）',

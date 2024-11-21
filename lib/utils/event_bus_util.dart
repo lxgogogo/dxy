@@ -29,3 +29,6 @@ class EventRefreshPage {
   final String relType;
   EventRefreshPage(this.relType);
 }
+
+/// event
+class EventRefreshSearchResult {}

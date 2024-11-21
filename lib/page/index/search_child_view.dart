@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
+import 'package:holdem/model/competition_bean.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/article_detail_page.dart';
+import 'package:holdem/page/index/competition_calendar_page.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
@@ -15,6 +19,7 @@ import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_search.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/global.dart';
@@ -39,6 +44,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
   List<ArticleBean> articles = [];
   List<CollectBean> courses = [];
   List<UserProfile> userItems = [];
+  List<CompetitionBean> competitionItems = [];
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
 
@@ -46,15 +52,21 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
 
   bool isLoaded = false;
 
+  StreamSubscription? eventSubscription;
+
   @override
   void initState() {
     super.initState();
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshSearchChildView.eventBusTypeName) {
-        reqListData(showLoading: true);
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshSearchResult>().listen((event) {
+      reqListData(showLoading: true);
     });
     reqListData();
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   reqListData({bool showLoading = false}) {
@@ -98,6 +110,26 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
               userItems = userDataList.list ?? [];
             } else {
               userItems.addAll(userDataList.list ?? []);
+            }
+          });
+        }
+        _refreshController.loadComplete();
+        _refreshController.refreshCompleted();
+      });
+    } else if (widget.type == SearchType.competition) {
+      NetRequest().indexList(params, (data) {
+        isLoaded = true;
+        final dataList = List<CompetitionBean>.from(
+          (data?['list'] as List? ?? []).map(
+            (e) => CompetitionBean.fromJson(e),
+          ),
+        );
+        if (mounted) {
+          setState(() {
+            if (pageNum == 1) {
+              competitionItems = dataList;
+            } else {
+              competitionItems.addAll(dataList);
             }
           });
         }
@@ -226,78 +258,92 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
             ? userItems.isNotEmpty
                 ? ListView.builder(
                     controller: _listController,
-                    itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context, userItems[index]);
-                        },
-                        child: Container(
-                          height: 58.px,
-                          margin: EdgeInsets.symmetric(horizontal: 18.px),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(color: const Color(0xffE6E6E6), width: 1.px))),
-                          child: Row(children: [
-                            BorderAvatar(avatar: userItems[index].avatar ?? ''),
-                            SizedBox(
-                              width: 10.px,
-                            ),
-                            Text(
-                              userItems[index].nickname!.isNotEmpty ? userItems[index].nickname! : '',
-                              style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.px),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                Global().checkLogin(() {
-                                  if (userItems[index].id == null) return;
-                                  final followed = userItems[index].followed ?? false;
-                                  NetRequest().followerToggle(userItems[index].id!, !followed, (data) {
-                                    if (mounted) {
-                                      userItems[index].followed = !followed;
-                                      setState(() {});
-                                    }
-                                  });
-                                });
-                              },
-                              child: userItems[index].followed == true
-                                  ? Container(
-                                      height: 28.px,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffd8d8d8),
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 10.px),
-                                      child: const Text(
-                                        '已关注',
-                                        style: TextStyle(
-                                          color: Color(0xff95a3c4),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 28.px,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xff249cfc),
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 10.px),
-                                      child: const Text(
-                                        '+关注',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
+                    itemBuilder: (context, index) => Container(
+                      height: 58.px,
+                      margin: EdgeInsets.symmetric(horizontal: 18.px),
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: const Color(0xffE6E6E6), width: 1.px))),
+                      child: Row(children: [
+                        BorderAvatar(avatar: userItems[index].avatar ?? ''),
+                        SizedBox(
+                          width: 10.px,
+                        ),
+                        Text(
+                          userItems[index].nickname!.isNotEmpty ? userItems[index].nickname! : '',
+                          style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.px),
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Global().checkLogin(() {
+                              if (userItems[index].id == null) return;
+                              final followed = userItems[index].followed ?? false;
+                              NetRequest().followerToggle(userItems[index].id!, !followed, (data) {
+                                if (mounted) {
+                                  userItems[index].followed = !followed;
+                                  setState(() {});
+                                }
+                              });
+                            });
+                          },
+                          child: userItems[index].followed == true
+                              ? Container(
+                                  height: 28.px,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xffd8d8d8),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.px),
+                                  child: const Text(
+                                    '已关注',
+                                    style: TextStyle(
+                                      color: Color(0xff95a3c4),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                            ),
-                          ]),
-                        )),
+                                  ),
+                                )
+                              : Container(
+                                  height: 28.px,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff249cfc),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.px),
+                                  child: const Text(
+                                    '+关注',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ]),
+                    ),
                     itemCount: userItems.length,
+                  )
+                : const NoDataView()
+            : const SizedBox(),
+      );
+    } else if (widget.type == SearchType.competition) {
+      return SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: isLoaded
+            ? competitionItems.isNotEmpty
+                ? ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 14.px),
+                    controller: _listController,
+                    itemBuilder: (context, index) => CompetitionItem(item: competitionItems[index]),
+                    itemCount: competitionItems.length,
                   )
                 : const NoDataView()
             : const SizedBox(),
@@ -382,9 +428,4 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void dispose() {
-    _listController.dispose(); // 释放资源
-    super.dispose();
-  }
 }

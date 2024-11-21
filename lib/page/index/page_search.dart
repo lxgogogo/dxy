@@ -1,9 +1,11 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/index/search_child_view.dart';
 import 'package:holdem/page/mine/dialog_confirm.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -19,7 +21,7 @@ enum SearchType {
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
   user('用户', categoryAlias: ''),
-  match('赛事', categoryAlias: 'competition');
+  competition('赛事', categoryAlias: 'competition');
 
   final String title;
 
@@ -227,9 +229,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   Widget buildSearchHistory(BuildContext context) {
     return Container(
-      height: 200.px,
-      margin: EdgeInsets.symmetric(horizontal: 9.px).copyWith(top: 8.px),
-      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 16.5.px),
+      constraints: BoxConstraints(minHeight: 200.w),
+      margin: EdgeInsets.symmetric(horizontal: 9.w).copyWith(top: 8.w, bottom: 8.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.5.w),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -253,7 +255,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -290,71 +293,75 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             ],
           ),
           SizedBox(height: 12.px),
-          Wrap(
-            spacing: 8.px,
-            runSpacing: 8.px,
-            alignment: WrapAlignment.start,
-            children: [
-              ...List.generate(historyItems.length, (index) {
-                return GestureDetector(
-                  onTap: () {
-                    controller.text = historyItems[index];
-                    _onSearch();
-                  },
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('删除'),
-                          content: const SingleChildScrollView(
-                            child: ListBody(
-                              children: <Widget>[
-                                Text('确认删除当前搜索记录?'),
-                                // Text('你可以在这里添加更多的内容.')
+          Flexible(
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: 8.px,
+                runSpacing: 8.px,
+                alignment: WrapAlignment.start,
+                children: [
+                  ...List.generate(historyItems.length, (index) {
+                    return GestureDetector(
+                      onTap: () {
+                        controller.text = historyItems[index];
+                        _onSearch();
+                      },
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('删除'),
+                              content: const SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Text('确认删除当前搜索记录?'),
+                                    // Text('你可以在这里添加更多的内容.')
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('取消'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text('确认'),
+                                  onPressed: () {
+                                    // 在这里添加确认操作的代码
+                                    setState(() {
+                                      historyItems.removeAt(index);
+                                      StorageUtil().prefs!.setStringList('search', historyItems);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
                               ],
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('取消'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('确认'),
-                              onPressed: () {
-                                // 在这里添加确认操作的代码
-                                setState(() {
-                                  historyItems.removeAt(index);
-                                  StorageUtil().prefs!.setStringList('search', historyItems);
-                                });
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.px, vertical: 4.px),
-                    decoration: BoxDecoration(
-                      color: const Color(0xffF8FCFF),
-                      borderRadius: BorderRadius.circular(13.5.px),
-                    ),
-                    child: Text(
-                      historyItems[index],
-                      style: TextStyle(
-                        color: const Color(0xff7282A0),
-                        fontSize: 14.px,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10.px, vertical: 4.px),
+                        decoration: BoxDecoration(
+                          color: const Color(0xffF8FCFF),
+                          borderRadius: BorderRadius.circular(13.5.px),
+                        ),
+                        child: Text(
+                          historyItems[index],
+                          style: TextStyle(
+                            color: const Color(0xff7282A0),
+                            fontSize: 14.px,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              })
-            ],
+                    );
+                  })
+                ],
+              ),
+            ),
           )
         ],
       ),
@@ -375,6 +382,6 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
     showResult = true;
     setState(() {});
 
-    EventBusManager.eventBus.fire(EventBusAction.refreshSearchChildView.eventBusTypeName);
+    EventBusUtil.of.fire(EventRefreshSearchResult());
   }
 }

@@ -6,6 +6,7 @@ class SplashController extends GetxController {
     super.onReady();
     Future.wait([
       ThirdSDKConfig.init(),
+      Future.delayed(const Duration(seconds: 1)),
     ]).whenComplete(() {
       Get.offAllNamed(Routes.main);
     });

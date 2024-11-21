@@ -29,6 +29,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 
+import '../../model/board_list.dart';
+
 class HomeChildView extends StatefulWidget {
   final String type;
 
@@ -127,18 +129,27 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         }
       }, (data) {
         List<CourseBean> dataList = List<CourseBean>.from(data['list'].map((course) => CourseBean.fromJson(course)));
-
         if (mounted) {
-          setState(() {
-            if (pageNum == 1) {
-              courses = dataList;
+          final pager = Paper.fromJson(data['pager']);
+          final total = pager.total ?? 0;
+          if (pageNum == 1) {
+            courses = dataList;
+            _refreshController.refreshCompleted();
+            if (courses.length >= total) {
+              _refreshController.loadNoData();
             } else {
-              courses.addAll(dataList);
+              _refreshController.resetNoData();
             }
-          });
+          } else {
+            courses.addAll(dataList);
+            if (courses.length >= total) {
+              _refreshController.loadNoData();
+            } else {
+              _refreshController.loadComplete();
+            }
+          }
+          setState(() {});
         }
-        _refreshController.loadComplete();
-        _refreshController.refreshCompleted();
       });
     } else {
       NetRequest().indexList({
@@ -431,7 +442,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                     },
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
-                      imageUrl: banners[index].img ?? '',
+                      imageUrl: banners[index].imgMobile ?? '',
                       placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
                       errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
                     ),

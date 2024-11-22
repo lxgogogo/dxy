@@ -73,12 +73,13 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
     if (showLoading) {
       isLoaded = false;
     }
+    final keyword = widget.controller.text;
     Map<String, Object> params = {
       'pageNum': pageNum,
       'pageSize': 10,
       'filters': {
         'categoryAlias': widget.type.categoryAlias,
-        'q': widget.controller.text,
+        'q': keyword.length > 200 ? keyword.substring(0, 200) : keyword,
       }
     };
     if (widget.type == SearchType.course) {
@@ -427,5 +428,4 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
 
   @override
   bool get wantKeepAlive => true;
-
 }

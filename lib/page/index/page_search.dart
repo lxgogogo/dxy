@@ -1,5 +1,6 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
@@ -182,6 +183,8 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
           Expanded(
             child: TextField(
               controller: controller,
+              keyboardType: TextInputType.text,
+              autocorrect: false,
               onChanged: (value) {
                 if (mounted) {
                   setState(() {});
@@ -189,6 +192,9 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
               },
               cursorHeight: 14.px,
               style: TextStyle(height: 1, fontSize: 14.px, color: Color(0xff333333)),
+              // inputFormatters: [
+              //   LengthLimitingTextInputFormatter(10),
+              // ],
               decoration: InputDecoration(
                 // isDense: true,
                 // prefixIcon: Icon(Icons.search),

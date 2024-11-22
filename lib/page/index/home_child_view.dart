@@ -64,15 +64,13 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       List<ConnectivityResult> events,
     ) {
       if (!events.contains(ConnectivityResult.none)) {
-        reqOtherData();
-        reqListData();
+        _onRefresh();
       }
     });
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      reqListData();
+      _onRefresh();
     });
-    reqOtherData();
-    reqListData();
+    _onRefresh();
   }
 
   @override
@@ -96,7 +94,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       });
       NetRequest().competitionLoop({}, (data) {
         List<CompetionLoopBean> loopList =
-        List<CompetionLoopBean>.from(data.map((loop) => CompetionLoopBean.fromJson(loop)));
+            List<CompetionLoopBean>.from(data.map((loop) => CompetionLoopBean.fromJson(loop)));
         if (mounted) {
           loops = loopList;
           setState(() {});
@@ -190,17 +188,15 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
   }
 
   void _onRefresh() async {
-    setState(() {
-      pageNum = 1;
-    });
+    pageNum = 1;
     reqListData();
+    reqOtherData();
   }
 
   void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
+    pageNum++;
     reqListData();
+    reqOtherData();
   }
 
   Widget courseItem(int index) {
@@ -489,25 +485,36 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
               decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
               alignment: Alignment.center,
-              child: SizedBox(
-                height: 24,
-                child: MarqueeWidget(
-                  count: loops.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(CompetitionDetailPage(id: loops[index].id));
-                        },
-                        behavior: HitTestBehavior.translucent,
-                        child: Text(
-                          loops[index].title ?? '',
-                          style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Opacity(
+                    opacity: 0,
+                    child: Text(
+                      loops[index].title ?? '',
+                      style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: MarqueeWidget(
+                      count: loops.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(CompetitionDetailPage(id: loops[index].id));
+                            },
+                            behavior: HitTestBehavior.translucent,
+                            child: Text(
+                              loops[index].title ?? '',
+                              style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
               // child: PageView.builder(
               //   controller: _controller,

@@ -85,11 +85,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
           }
-        } else {
-          ToastUtils.showToast('当前已经是最新版本');
         }
-      } else {
-        ToastUtils.showToast('当前已经是最新版本');
       }
     });
   }

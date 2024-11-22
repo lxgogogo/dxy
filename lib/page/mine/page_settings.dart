@@ -95,6 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       builder: (context) => const DialogEditPassword(),
                     );
                   },
+                  behavior: HitTestBehavior.translucent,
                   child: Container(
                     height: 56.px,
                     padding: EdgeInsets.symmetric(horizontal: 17.px),
@@ -120,6 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onTap: () {
                     _checkAppVersion();
                   },
+                  behavior: HitTestBehavior.translucent,
                   child: Container(
                     height: 56.px,
                     padding: EdgeInsets.symmetric(horizontal: 17.px),

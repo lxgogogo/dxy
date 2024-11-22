@@ -338,7 +338,7 @@ class MyCommentItem extends StatelessWidget {
     if (item.relType == 'thread') {
       typeName = '帖子';
       imageUrl = item.thread?.files?.firstOrNull?.url;
-      content = item.delType == 6 ? item.thread?.content : '该$typeName已被删除';
+      content = item.delType == 6 ? item.thread?.title : '该$typeName已被删除';
     } else if (item.relType == 'content') {
       if (item.content?.type == 'article') {
         typeName = '文章';
@@ -348,7 +348,7 @@ class MyCommentItem extends StatelessWidget {
         typeName = '书籍';
       }
       imageUrl = item.content?.cover;
-      content = item.delType == 6 ? item.content?.description : '该$typeName已被删除';
+      content = item.delType == 6 ? item.content?.title : '该$typeName已被删除';
     } else if (item.relType == 'comment') {
       imageUrl = item.parentComment?.files?.firstOrNull?.url;
       content = item.parentComment?.contentStr;
@@ -417,7 +417,7 @@ class MyCommentItem extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (item.id == null) return;
-              if (item.delType != 6) {
+              if (item.delType != 6 && item.delType != 3) {
                 showToast('该$typeName已被删除');
                 return;
               }

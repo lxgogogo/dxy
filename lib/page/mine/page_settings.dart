@@ -263,7 +263,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     NetRequest().appVersion((data) {
       AppVersion appVersion = AppVersion.fromJson(data);
-      String latestVersion = appVersion.androidVersion ?? '';
+      String latestVersion = (CommonUtils.isAndroid(context) ? appVersion.androidVersion : appVersion.iosVersion) ?? '';
       if (latestVersion.isNotEmpty == true) {
         if (latestVersion.compareTo(currentVersion) > 0) {
           // 强制升级

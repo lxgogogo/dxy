@@ -90,7 +90,6 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
   }
 
   reqData() {
-    if (_selectedDay == null) return;
     NetRequest().indexList({
       'pageNum': 1,
       'pageSize': 10,
@@ -104,9 +103,11 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
           (e) => CompetitionBean.fromJson(e),
         ),
       );
-      _items = dataList;
-      _selectedEvents = _getEventsForDay(_selectedDay!);
-      setState(() {});
+      if (_selectedDay == null) {
+        _items = dataList;
+        _selectedEvents = _getEventsForDay(_selectedDay!);
+        setState(() {});
+      }
     });
   }
 

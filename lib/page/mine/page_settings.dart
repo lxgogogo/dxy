@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/main.dart';
+import 'package:holdem/page/mine/dialog_common.dart';
 import 'package:holdem/page/mine/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
@@ -8,6 +11,7 @@ import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/widget/button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,10 +38,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _requestAppInfo();
-  }
-
-  Future<void> init() async {
-    await _requestAppInfo();
   }
 
   Future<void> _requestAppInfo() async {
@@ -259,61 +259,44 @@ class _SettingsPageState extends State<SettingsPage> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
 
-    print('currentVersion========================' + currentVersion);
-
     NetRequest().appVersion((data) {
       AppVersion appVersion = AppVersion.fromJson(data);
-      String latestVersion = appVersion.androidVersion!;
-      if (latestVersion.compareTo(currentVersion) > 0) {
-        // 强制升级
-        bool forceUpdate = appVersion.forced!;
-        if (forceUpdate) {
-          // 这里可以弹出不可取消的弹窗提示用户升级
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('发现新版本'),
-                content: Text('发现新版本，请立即升级至最新版本 $latestVersion'),
-                actions: <Widget>[
-                  ElevatedButton(
-                    child: Text('立即升级'),
-                    onPressed: () {
-                      // 跳转至应用商店等下载新版本
-                      _launchURL(appVersion);
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+      String latestVersion = appVersion.androidVersion ?? '';
+      if (latestVersion.isNotEmpty == true) {
+        if (latestVersion.compareTo(currentVersion) > 0) {
+          // 强制升级
+          bool forceUpdate = appVersion.forced ?? false;
+          if (forceUpdate) {
+            // 这里可以弹出不可取消的弹窗提示用户升级
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => CommonDialog(
+                title: '更新以获得最佳体验',
+                onConfirm: () {
+                  _launchURL(appVersion);
+                },
+                onlyConfirm: true,
+              ),
+            );
+          } else {
+            // 普通升级
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => CommonDialog(
+                title: '有新版本可以更新',
+                confirmText: '立即更新',
+                onConfirm: () {
+                  Navigator.of(context).pop();
+                  _launchURL(appVersion);
+                },
+                cancelText: '下次再说',
+              ),
+            );
+          }
         } else {
-          // 普通升级
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('升级提示'),
-                content: Text('发现新版本 $latestVersion，是否立即升级？'),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('取消'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text('升级'),
-                    onPressed: () {
-                      // 跳转至应用商店等下载新版本
-                      _launchURL(appVersion);
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+          ToastUtils.showToast('当前已经是最新版本');
         }
       } else {
         ToastUtils.showToast('当前已经是最新版本');
@@ -328,15 +311,7 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       url = appVersion.iosUrl!;
     }
-    // url = 'https://otcapp.cbex.com/cbex/OPTG/new_bjhl.apk';
-    if (kIsWeb) {
-      var link = html.document.createElement('a');
-      link.setAttribute("download", 'true');
-      link.setAttribute("href", url);
-      link.click();
-    } else {
-      launchUrl(Uri.parse(url));
-    }
+    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
   }
 
   void logout() {

@@ -56,4 +56,5 @@ class Api {
   static const String commentDelete = '/api/comment/delete'; //收藏删除
 
   static const String upCount = '/api/content/upCount';
+  static const String threadUpCount = '/api/thread/upCount';
 }

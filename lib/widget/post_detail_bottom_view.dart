@@ -376,15 +376,27 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
   }
 
   void _onShare() {
-    NetRequest().upCount(viewParams.relId!, (data) async {
-      if (_isMounted) {
-        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${viewParams.shareLink}'));
-        ToastUtils.showToast('分享成功，链接已复制');
+    if (viewParams.relType == 'thread') {
+      NetRequest().threadUpCount(viewParams.relId!, (data) async {
+        if (_isMounted) {
+          await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${viewParams.shareLink}'));
+          ToastUtils.showToast('分享成功，链接已复制');
 
-        viewParams.shareCount = viewParams.shareCount + 1;
-        setState(() {});
-      }
-    });
+          viewParams.shareCount = viewParams.shareCount + 1;
+          setState(() {});
+        }
+      });
+    } else {
+      NetRequest().upCount(viewParams.relId!, (data) async {
+        if (_isMounted) {
+          await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${viewParams.shareLink}'));
+          ToastUtils.showToast('分享成功，链接已复制');
+
+          viewParams.shareCount = viewParams.shareCount + 1;
+          setState(() {});
+        }
+      });
+    }
   }
 }
 

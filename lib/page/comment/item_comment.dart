@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/forum/media_helper.dart';
@@ -47,13 +48,14 @@ class _CommentItemState extends State<CommentItem> {
                 ),
               ),
               SizedBox(height: 3.px),
-              Text(
-                widget.commentBean.contentStr ?? '',
-                style: TextStyle(
-                  color: const Color(0xff2a2a2a),
-                  fontSize: 12.px,
-                ),
-              ),
+              Html(data: widget.commentBean.contentStr ?? ''),
+              // Text(
+              //   widget.commentBean.contentStr ?? '',
+              //   style: TextStyle(
+              //     color: const Color(0xff2a2a2a),
+              //     fontSize: 12.px,
+              //   ),
+              // ),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -192,13 +194,14 @@ class _CommentItemState extends State<CommentItem> {
                                         ),
                                       ),
                                       SizedBox(height: 3.px),
-                                      Text(
-                                        reply.contentStr ?? '',
-                                        style: TextStyle(
-                                          color: const Color(0xff2a2a2a),
-                                          fontSize: 12.px,
-                                        ),
-                                      ),
+                                      Html(data: reply.contentStr ?? ''),
+                                      // Text(
+                                      //   reply.contentStr ?? '',
+                                      //   style: TextStyle(
+                                      //     color: const Color(0xff2a2a2a),
+                                      //     fontSize: 12.px,
+                                      //   ),
+                                      // ),
                                       SizedBox(height: 10.px),
                                       Row(
                                         children: [

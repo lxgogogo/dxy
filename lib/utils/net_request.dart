@@ -772,6 +772,26 @@ class NetRequest {
     }
   }
 
+  Future threadUpCount(int? id, SuccessCallback onSuccess) async {
+    Map<String, dynamic> params = {};
+    params['id'] = id;
+    params['type'] = 'share';
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadUpCount, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("threadUpCount===>$response");
+      onSuccess(response['data']);
+    } else {
+      if (_isNeedLoginResponse(resp)) {
+        //需要重新登录
+        LoginHelper().clearGlobalUserInfo();
+        Get.to(LoginPage());
+      } else {
+        ToastUtils.showToast(resp.message!);
+      }
+    }
+  }
+
   bool _isNeedLoginResponse(HttpUtilsResonse.Response resp) {
     if (resp.code == 401 && resp.message! == '需要登录') {
       return true;

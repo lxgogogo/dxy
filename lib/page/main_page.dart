@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/index/home_page.dart';
 import 'package:holdem/page/message/page_message.dart';
-import 'package:holdem/page/mine/page_login.dart';
+import 'package:holdem/page/mine/dialog_common.dart';
+import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/global.dart';
+import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
-import 'package:holdem/widget/page_web_fit.dart';
+import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
@@ -30,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _checkAppVersion();
     //接受退出登录之后首页tab通知切换到0位置
     actionEventBus = EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.noticeMainTabSwitchHome.eventBusTypeName) {
@@ -38,6 +43,65 @@ class _MainScreenState extends State<MainScreen> {
         });
       }
     });
+  }
+
+  void _checkAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String currentVersion = packageInfo.version;
+
+    NetRequest().appVersion((data) {
+      AppVersion appVersion = AppVersion.fromJson(data);
+      String latestVersion = appVersion.androidVersion ?? '';
+      if (latestVersion.isNotEmpty == true) {
+        if (latestVersion.compareTo(currentVersion) > 0) {
+          // 强制升级
+          bool forceUpdate = appVersion.forced ?? false;
+          if (forceUpdate) {
+            // 这里可以弹出不可取消的弹窗提示用户升级
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => CommonDialog(
+                title: '更新以获得最佳体验',
+                onConfirm: () {
+                  _launchURL(appVersion);
+                },
+                onlyConfirm: true,
+              ),
+            );
+          } else {
+            // 普通升级
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => CommonDialog(
+                title: '有新版本可以更新',
+                confirmText: '立即更新',
+                onConfirm: () {
+                  Navigator.of(context).pop();
+                  _launchURL(appVersion);
+                },
+                cancelText: '下次再说',
+              ),
+            );
+          }
+        } else {
+          ToastUtils.showToast('当前已经是最新版本');
+        }
+      } else {
+        ToastUtils.showToast('当前已经是最新版本');
+      }
+    });
+  }
+
+  _launchURL(AppVersion appVersion) async {
+    var url = '';
+    if (CommonUtils.isAndroid(context)) {
+      url = appVersion.androidUrl!;
+    } else {
+      url = appVersion.iosUrl!;
+    }
+    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
   }
 
   @override

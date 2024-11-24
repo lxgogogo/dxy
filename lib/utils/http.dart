@@ -23,37 +23,7 @@ class Http {
   final CancelToken _cancelToken = CancelToken();
 
   Http._internal() {
-    // BaseOptions、Options、RequestOptions 都可以配置参数，优先级别依次递增，且可以根据优先级别覆盖参数
-    BaseOptions options = BaseOptions();
-
-    dio = Dio(options);
-
-    // // 添加request拦截器
-    // dio.interceptors.add(RequestInterceptor());
-    // // 添加error拦截器
-    dio.interceptors.add(ErrorInterceptor());
-    // // // 添加cache拦截器
-    // dio.interceptors.add(NetCacheInterceptor());
-    // // // 添加retry拦截器
-    // dio.interceptors.add(
-    //   RetryOnConnectionChangeInterceptor(
-    //     requestRetrier: DioConnectivityRequestRetrier(
-    //       dio: dio,
-    //       connectivity: Connectivity(),
-    //     ),
-    //   ),
-    // );
-
-    // 在调试模式下需要抓包调试，所以我们使用代理，并禁用HTTPS证书校验
-    // if (PROXY_ENABLE) {
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
-      client.findProxy = (uri) {
-        return "PROXY 192.168.0.30:8888";
-      };
-      //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-    };
-    // }
+    dio = Dio();
   }
 
   ///初始化公共属性
@@ -98,16 +68,9 @@ class Http {
     Map<String, dynamic> headers = {
       'system': Platform.isAndroid ? "android" : "ios",
       'lang': 'zh_TW',
-      // 'deviceid': Global().deviceId,
       "vcode": "1.0.0",
       "X-Auth-Token": token,
     };
-    // 从getx或者sputils中获取
-    // String accessToken = Global.accessToken;
-    String accessToken = ''; //Global().token;
-    if (accessToken.isNotEmpty) {
-      headers['center-token'] = accessToken;
-    }
     return headers;
   }
 
@@ -358,46 +321,5 @@ class Http {
       cancelToken: cancelToken ?? _cancelToken,
     );
     return response.data;
-  }
-}
-
-class ErrorInterceptor extends Interceptor {
-  @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
-    if (err.response?.statusCode == 401) {
-      print('9527');
-      // if (Global().showLogin) {
-      //   return;
-      // }
-      // Global().mainPage.logout();
-      // Global().showLogin = true;
-      return;
-    } else if (err.response?.statusCode == 500) {
-      return;
-    }
-    // if (err.response!.statusCode == 500) {
-    //   print('9527');
-    //   return;
-    // }
-    if (err.response?.statusCode == 422) {
-      return;
-    }
-    // if (err.response!.statusCode != 200) {
-    //   // ignore: void_checks
-    //   return err.response!.data;
-    // }
-    super.onError(err, handler);
-  }
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // TODO: implement onRequest
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // TODO: implement onResponse
-    super.onResponse(response, handler);
   }
 }

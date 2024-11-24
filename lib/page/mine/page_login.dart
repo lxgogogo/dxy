@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_register_account.dart';
@@ -25,7 +26,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerAccount = TextEditingController();
+  bool isShowAccountTips = false;
   final TextEditingController _controllerPw = TextEditingController();
+  bool isShowPwTips = false;
   bool isLogin = true;
   bool isOpen = false;
   var actionEventBus;
@@ -40,22 +43,20 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoginDisable = true;
 
+  RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,12}$');
+
+  void checkValid() {
+    final account = _controllerAccount.text;
+    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final password = _controllerPw.text;
+    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
+    setState(() {});
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //接受注册成功的通知，主动关闭当前页面
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.closeLoginPage.eventBusTypeName) {
-        Navigator.of(context).pop();
-      }
-    });
-    // _focusNode.addListener(() {
-    //   if (!_focusNode.hasFocus) {
-    //     FocusScope.of(context).requestFocus(_focusNode);
-    //   }
-    // });
-
     _focusEmail.addListener(_handleFocusChange);
     _focusPwd.addListener(_handleFocusChange);
   }
@@ -99,144 +100,152 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          height: 50.px,
-          margin: EdgeInsets.only(top: 35.px, left: 30.px, right: 30.px),
-          padding: EdgeInsets.symmetric(horizontal: 20.0.px),
-          // 水平内边距
-          decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(25.px),
-              border: Border.all(color: _focusedIndex == 0 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
-          child: Row(
-            children: <Widget>[
-              Image.asset(
-                'assets/images/email.png',
-                width: 14.px,
-                height: 14.px,
-              ),
-              Expanded(
-                child: Listener(
-                    onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodeAccount),
-                    child: TextField(
-                      focusNode: _focusEmail,
-                      keyboardType: TextInputType.text,
-                      autocorrect: false,
-                      //去除输入后自动选中更正功能
-                      controller: _controllerAccount,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.deny(
-                          RegExp('[\\s]'),
-                        )
-                      ],
-                      decoration: InputDecoration(
-                        border: InputBorder.none, // 没有边框
-                        hintText: '请输入邮箱地址',
-                        hintStyle: AppTheme.text999999Size16,
-                        contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-                      ),
-                      onChanged: (_) {
-                        checkValid();
-                      },
-                    )),
-              ),
-            ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 30.px,
           ),
-        ),
-        SizedBox(
-          height: 30.px,
-        ),
-        Container(
-          height: 50.px,
-          margin: EdgeInsets.only(left: 30.px, right: 30.px),
-          padding: EdgeInsets.symmetric(horizontal: 20.0.px),
-          // 水平内边距
-          decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(25.px),
-              border: Border.all(color: _focusedIndex == 1 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
-          child: Row(
-            children: <Widget>[
-              Image.asset(
-                'assets/images/password.png',
-                width: 14.px,
-                height: 14.px,
+          Container(
+            height: 50.px,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            // 水平内边距
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(25.px),
+                border: Border.all(color: _focusedIndex == 0 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  'assets/images/email.png',
+                  width: 14.px,
+                  height: 14.px,
+                ),
+                Expanded(
+                  child: Listener(
+                      onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodeAccount),
+                      child: TextField(
+                        focusNode: _focusEmail,
+                        keyboardType: TextInputType.text,
+                        controller: _controllerAccount,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(
+                            RegExp('[\\s]'),
+                          )
+                        ],
+                        decoration: InputDecoration(
+                          border: InputBorder.none, // 没有边框
+                          hintText: '请输入邮箱地址',
+                          hintStyle: AppTheme.text999999Size16,
+                          contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                        ),
+                        onChanged: (_) {
+                          checkValid();
+                        },
+                      )),
+                ),
+              ],
+            ),
+          ),
+          if (isShowAccountTips)
+            Padding(
+              padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
+              child: Text(
+                '请输入正确的邮箱地址',
+                style: TextStyle(fontSize: 12.sp, color: Colors.red),
               ),
-              Expanded(
-                child: Listener(
-                    onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodePwd),
-                    child: TextField(
-                      controller: _controllerPw,
-                      focusNode: _focusPwd,
-                      obscureText: !isOpen,
-                      // 输入内容显示为密文
-                      decoration: InputDecoration(
-                        border: InputBorder.none, // 没有边框
-                        hintText: '请输入密码',
-                        hintStyle: AppTheme.text999999Size16,
-                        contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-                      ),
-                      onChanged: (_) {
-                        checkValid();
-                      },
-                    )),
+            )
+          else
+            SizedBox(height: 30.w),
+          Container(
+            height: 50.px,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            // 水平内边距
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(25.px),
+                border: Border.all(color: _focusedIndex == 1 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  'assets/images/password.png',
+                  width: 14.px,
+                  height: 14.px,
+                ),
+                Expanded(
+                  child: Listener(
+                      onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodePwd),
+                      child: TextField(
+                        controller: _controllerPw,
+                        focusNode: _focusPwd,
+                        obscureText: !isOpen,
+                        // 输入内容显示为密文
+                        decoration: InputDecoration(
+                          border: InputBorder.none, // 没有边框
+                          hintText: '请输入密码',
+                          hintStyle: AppTheme.text999999Size16,
+                          contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                        ),
+                        onChanged: (_) {
+                          checkValid();
+                        },
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isOpen = !isOpen;
+                    });
+                  },
+                  child: Image.asset(
+                    isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+                    width: 18.px,
+                    height: 18.px,
+                  ),
+                )
+              ],
+            ),
+          ),
+          if (isShowPwTips)
+            Padding(
+              padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
+              child: Text(
+                '限制8～12位，必须为英文或和数字组合。密码区分大小写。不能为纯数字或字母。',
+                style: TextStyle(fontSize: 12.sp, color: Colors.red),
               ),
+            )
+          else
+            SizedBox(height: 30.w),
+          Row(
+            children: [
+              const Spacer(),
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    isOpen = !isOpen;
-                  });
+                  Get.to(const ForgetPasswordPage());
                 },
-                child: Image.asset(
-                  isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
-                  width: 18.px,
-                  height: 18.px,
+                child: const Text(
+                  '忘记密码?',
+                  style: AppTheme.text3B5078Size14,
                 ),
+              ),
+              SizedBox(
+                width: 30.px,
               )
             ],
           ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(40.px, 0, 40.px, 0),
-          height: 0.5,
-          color: AppTheme.color_F3F3F3,
-        ),
-        SizedBox(
-          height: 30.px,
-        ),
-        Row(
-          children: [
-            const Spacer(),
-            GestureDetector(
-              onTap: () {
-                Get.to(const RegisterAccountPage());
-              },
-              child: const Text(
-                '忘记密码?',
-                style: AppTheme.text3B5078Size14,
-              ),
-            ),
-            SizedBox(
-              width: 30.px,
-            )
-          ],
-        ),
-        SizedBox(
-          height: 60.px,
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 28.5.px),
-          child: CustomButton(
+          SizedBox(
+            height: 60.px,
+          ),
+          CustomButton(
             onPressed: login,
             disable: _isLoginDisable,
-            height: 45.px,
+            height: 50.w,
             title: '登录',
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -345,18 +354,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _focusNodeAccount.dispose();
-    _focusNodePwd.dispose();
-    _focusEmail.dispose();
-    _focusPwd.dispose();
     super.dispose();
-  }
-
-  void checkValid() {
-    final account = _controllerAccount.text;
-    final isEmail = GetUtils.isEmail(account);
-    final password = _controllerPw.text;
-    _isLoginDisable = account.isEmpty || password.isEmpty || !isEmail;
-    setState(() {});
   }
 }

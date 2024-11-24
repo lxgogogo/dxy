@@ -103,7 +103,7 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
           (e) => CompetitionBean.fromJson(e),
         ),
       );
-      if (_selectedDay == null) {
+      if (_selectedDay != null) {
         _items = dataList;
         _selectedEvents = _getEventsForDay(_selectedDay!);
         setState(() {});

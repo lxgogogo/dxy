@@ -1,5 +1,7 @@
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:holdem/utils/app_util.dart';
+import 'package:holdem/utils/devices_util.dart';
 
 class ThirdSDKConfig {
   static Future<void> init() async {
@@ -23,7 +25,7 @@ class ThirdSDKConfig {
     //   );
     //   //  SentryUtil.of.initialize();
     // }
-    // await DevicesUtil.of.init();
-    // await AppUtil.of.init();
+    await DevicesUtil.of.init();
+    await AppUtil.of.init();
   }
 }

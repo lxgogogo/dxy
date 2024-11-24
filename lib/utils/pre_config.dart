@@ -16,6 +16,10 @@ class PreConfig {
       HttpUtils.init(
         baseUrl: Env.host,
         proxyInterceptor: ProxyInterceptor.interceptor,
+        interceptors: [
+          HttpHeaderInterceptors(),
+          LogsInterceptors(),
+        ],
       );
       StorageUtil().init().then((_) {
         if (StorageUtil().prefs!.getString("token") != null) {

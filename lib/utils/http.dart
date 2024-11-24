@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
+
 // import 'package:get/get.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/storage.dart';
@@ -45,15 +46,13 @@ class Http {
 
     // 在调试模式下需要抓包调试，所以我们使用代理，并禁用HTTPS证书校验
     // if (PROXY_ENABLE) {
-      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-          (client) {
-        client.findProxy = (uri) {
-          return "PROXY 192.168.0.30:8888";
-        };
-        //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+      client.findProxy = (uri) {
+        return "PROXY 192.168.0.30:8888";
       };
+      //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    };
     // }
   }
 
@@ -78,8 +77,7 @@ class Http {
       headers: headers ?? const {},
     );
     if (proxyInterceptor != null) {
-      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient =
-          proxyInterceptor;
+      (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = proxyInterceptor;
     }
     // 在初始化http类的时候，可以传入拦截器
     if (interceptors != null && interceptors.isNotEmpty) {
@@ -95,16 +93,10 @@ class Http {
   // 添加认证
   // 读取本地配置
   Map<String, dynamic>? getAuthorizationHeader() {
-    String? token = StorageUtil().prefs != null
-        ? StorageUtil().prefs!.getString('token')
-        : '';
+    String? token = StorageUtil().prefs != null ? StorageUtil().prefs!.getString('token') : '';
     // print('header token=======${token!}');
     Map<String, dynamic> headers = {
-      'system': kIsWeb
-          ? "web"
-          : Platform.isAndroid
-              ? "android"
-              : "ios",
+      'system': Platform.isAndroid ? "android" : "ios",
       'lang': 'zh_TW',
       // 'deviceid': Global().deviceId,
       "vcode": "1.0.0",
@@ -215,8 +207,7 @@ class Http {
   }) async {
     LogUtils.printAll("postFile params===>$params");
     String fileName = params?['file'].split('/').last; // 获取文件名
-    var file =
-        await MultipartFile.fromFile(params?['file'], filename: fileName);
+    var file = await MultipartFile.fromFile(params?['file'], filename: fileName);
     FormData formData = FormData.fromMap({
       'file': file,
       // 'fileType': params?['fileType'],
@@ -232,7 +223,7 @@ class Http {
     }
     var response;
     try {
-     response = await dio.post(
+      response = await dio.post(
         path,
         data: formData,
         // data: data,
@@ -240,14 +231,14 @@ class Http {
         options: requestOptions,
         cancelToken: cancelToken ?? _cancelToken,
         onSendProgress: (int sent, int total) {
-          print(sent.toString()+'/'+total.toString());
+          print(sent.toString() + '/' + total.toString());
           onSendProgress!(sent, total);
         },
       );
       print('net url:$path \n data:${response.data}');
     } catch (e) {
       print('postFile请求发生错误：$e');
-      if (onFail != null ) {
+      if (onFail != null) {
         onFail(e.toString());
       }
       return {};
@@ -255,7 +246,8 @@ class Http {
     return response.data;
   }
 
-  Future postBytesFile(String path, {
+  Future postBytesFile(
+    String path, {
     Map<String, dynamic>? params,
     file,
     Options? options,
@@ -272,8 +264,7 @@ class Http {
     FormData formData = FormData.fromMap({
       // 'file': file,
       // ignore: prefer_interpolation_to_compose_strings
-      'file': MultipartFile.fromBytes(file.bytes,
-          filename: 'temp.' + file.extension)
+      'file': MultipartFile.fromBytes(file.bytes, filename: 'temp.' + file.extension)
       // 'fileType': params?['fileType'],
       // 'timestamp': params?['timestamp'],
       //  'apiKey': params?['apiKey'],

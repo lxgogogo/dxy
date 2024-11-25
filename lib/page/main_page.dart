@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/index/home_page.dart';
 import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
+import 'package:holdem/page/mine/page_login.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -137,15 +140,13 @@ class _MainScreenState extends State<MainScreen> {
               // 取消显示未选中项的标签
               useLegacyColorScheme: false,
               onTap: (int index) {
-                if ((index == 2 || index == 3)) {
-                  Global().checkLogin(() {
-                    _currentIndex = index;
-                    setState(() {});
-                  });
-                } else {
-                  _currentIndex = index;
-                  setState(() {});
+                if (!Global().hasLogin) {
+                  showToast('请先登录', duration: const Duration(seconds: 2));
+                  Get.to(LoginPage());
+                  return;
                 }
+                _currentIndex = index;
+                setState(() {});
               },
               items: [
                 BottomNavigationBarItem(

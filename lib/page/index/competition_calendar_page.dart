@@ -5,7 +5,7 @@ import 'package:holdem/page/index/competition_detail_page.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/utils.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/tab_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';

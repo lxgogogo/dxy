@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
-import 'package:holdem/widget/page_web_fit.dart';
+
 import 'package:holdem/widget/search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

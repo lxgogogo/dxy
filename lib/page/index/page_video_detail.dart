@@ -17,7 +17,7 @@ import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../view/background_container.dart';
+import '../../widget/background_container.dart';
 
 class VideoDetailPage extends StatefulWidget {
   final int id;

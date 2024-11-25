@@ -6,10 +6,10 @@ import 'package:holdem/main.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
 import 'package:holdem/page/mine/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/mine/page_forget_password.dart';
+import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -20,7 +20,6 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
-import '../../widget/page_web_fit.dart';
 import 'package:universal_html/html.dart' as html;
 
 class SettingsPage extends StatefulWidget {

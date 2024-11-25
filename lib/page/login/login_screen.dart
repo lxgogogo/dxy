@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/login/widgets/register_content.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/close_image_button.dart';
 
 import 'widgets/login_content.dart';

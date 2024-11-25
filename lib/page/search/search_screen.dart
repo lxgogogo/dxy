@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
-import 'package:holdem/page/index/search_child_view.dart';
+import 'package:holdem/page/search/widgets/search_child_view.dart';
 import 'package:holdem/page/mine/dialog_confirm.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/eventbus/EventBusAction.dart';
@@ -12,9 +12,11 @@ import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+part 'search_controller.dart';
 
 enum SearchType {
   news('资讯', categoryAlias: 'news'),
@@ -31,14 +33,14 @@ enum SearchType {
   const SearchType(this.title, {required this.categoryAlias});
 }
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
+class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMixin {
   List<TabData> parentTabs = [];
   List<GlobalKey> tabKeys = [];
 

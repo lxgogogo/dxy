@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/button.dart';
 
@@ -14,14 +14,16 @@ import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
 import '../../utils/storage.dart';
 
-class ForgetPasswordPage extends StatefulWidget {
-  const ForgetPasswordPage({Key? key}) : super(key: key);
+part 'forget_password_controller.dart';
+
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   int _countdown = 60;
   bool _isCountingDown = false;
   bool _isVisible = false;

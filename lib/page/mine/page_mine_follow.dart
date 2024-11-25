@@ -3,7 +3,7 @@ import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -13,7 +13,6 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
 import '../../widget/follow_btn.dart';
-import '../../widget/page_web_fit.dart';
 
 class MineFollowPage extends StatefulWidget {
   bool isFollowPage = true;

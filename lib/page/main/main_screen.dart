@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/app_version.dart';
-import 'package:holdem/page/index/home_page.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
 import 'package:holdem/page/login/login_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../utils/eventbus/EventBusAction.dart';
-import '../utils/eventbus/EventBusManager.dart';
-import 'forum/page_forum_tab.dart';
-import 'mine/page_mine.dart';
+import '../../utils/eventbus/EventBusAction.dart';
+import '../../utils/eventbus/EventBusManager.dart';
+import '../forum/page_forum_tab.dart';
+import '../mine/page_mine.dart';
+
+part 'main_controller.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -29,7 +32,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [HomePage(), ForumTabPage(), MessagePage(), MinePage()];
+  final List<Widget> _pages = [HomeScreen(), ForumTabPage(), MessagePage(), MinePage()];
 
   var actionEventBus;
 
@@ -140,10 +143,12 @@ class _MainScreenState extends State<MainScreen> {
               // 取消显示未选中项的标签
               useLegacyColorScheme: false,
               onTap: (int index) {
-                if (!Global().hasLogin) {
-                  showToast('请先登录', duration: const Duration(seconds: 2));
-                  Get.to(LoginScreen());
-                  return;
+                if (index == 2 || index == 3) {
+                  if (!Global().hasLogin) {
+                    showToast('请先登录', duration: const Duration(seconds: 2));
+                    Get.toNamed(Routes.login);
+                    return;
+                  }
                 }
                 _currentIndex = index;
                 setState(() {});

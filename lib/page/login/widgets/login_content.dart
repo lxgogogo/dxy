@@ -4,7 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/mine/page_forget_password.dart';
+import 'package:holdem/page/forget_password/forget_password_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/button.dart';
 
@@ -172,7 +173,7 @@ class _LoginContentState extends State<LoginContent> {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  Get.to(const ForgetPasswordPage());
+                  Get.toNamed(Routes.forgetPassword);
                 },
                 child: const Text(
                   '忘记密码?',

@@ -12,7 +12,6 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
-import '../../widget/page_web_fit.dart';
 
 class DialogEditPassword extends StatefulWidget {
   const DialogEditPassword({super.key});

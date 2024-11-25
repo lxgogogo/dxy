@@ -16,7 +16,7 @@ import 'package:holdem/page/forum/page_ait_user.dart';
 import 'package:holdem/page/forum/page_select_label.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,9 +31,7 @@ import '../../utils/common_utils.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
-import '../../widget/MyDropdownButton.dart';
 import '../../widget/label_view.dart';
-import '../../widget/page_web_fit.dart';
 
 class PublishCommentPage extends StatefulWidget {
   final String relType;

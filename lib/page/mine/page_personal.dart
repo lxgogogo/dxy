@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:holdem/page/mine/dialog_edit_email.dart';
 import 'package:holdem/page/mine/dialog_edit_nickname.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:image_picker/image_picker.dart';

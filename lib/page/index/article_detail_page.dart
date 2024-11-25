@@ -12,10 +12,10 @@ import 'package:holdem/utils/eventbus/EventBusAction.dart';
 import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
-import 'package:holdem/widget/page_web_fit.dart';
+
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';

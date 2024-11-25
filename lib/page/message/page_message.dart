@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:holdem/page/message/page_message_tab_child.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});

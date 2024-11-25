@@ -7,14 +7,13 @@ import 'package:holdem/page/forum/page_forum_tab_child.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
-import '../../widget/page_web_fit.dart';
 
 class CommentInputPage extends StatefulWidget {
   String relType; //// 评论对象类型

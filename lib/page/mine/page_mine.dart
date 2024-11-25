@@ -12,7 +12,7 @@ import 'package:holdem/page/mine/page_settings.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 
 import '../../model/board_list.dart';
 import '../../utils/eventbus/EventBusAction.dart';

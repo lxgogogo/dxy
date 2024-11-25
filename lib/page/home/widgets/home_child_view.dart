@@ -12,7 +12,7 @@ import 'package:holdem/model/index_category.dart';
 import 'package:holdem/page/forum/page_forum_post_detail.dart';
 import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/competition_detail_page.dart';
-import 'package:holdem/page/index/home_marquee_widget.dart';
+import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_course.dart';
@@ -29,7 +29,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import '../../model/board_list.dart';
+import '../../../model/board_list.dart';
 
 class HomeChildView extends StatefulWidget {
   final String type;

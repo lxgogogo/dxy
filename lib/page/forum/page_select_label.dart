@@ -2,13 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/storage.dart';
-import 'package:holdem/view/background_container.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/label_view.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/size_fit.dart';
-import '../../widget/page_web_fit.dart';
 
 class SelectLabelPage extends StatefulWidget {
   List<String> selectedLabelList = []; //上个页面已经选择的标签集

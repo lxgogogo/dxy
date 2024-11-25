@@ -9,7 +9,7 @@ import 'package:holdem/page/index/article_detail_page.dart';
 import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
-import 'package:holdem/page/main_page.dart';
+import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:oktoast/oktoast.dart';

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/background_container.dart';
@@ -28,12 +29,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   final TextEditingController _controllerEmail = TextEditingController();
   bool isShowAccountTips = false;
+  final FocusNode _focusEmail = FocusNode();
   final TextEditingController _controllerCode = TextEditingController();
   bool isShowCodeTips = false;
+  final FocusNode _focusCode = FocusNode();
   final TextEditingController _controllerPw = TextEditingController();
   bool isShowPwTips = false;
+  final FocusNode _focusPw = FocusNode();
   final TextEditingController _controllerAgainPw = TextEditingController();
   bool isShowAgainTips = false;
+  final FocusNode _focusAgainPw = FocusNode();
 
   bool _isLoginDisable = true;
   RegExp codeRegExp = RegExp(r'^\d{6}$');
@@ -41,13 +46,13 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   void checkValid() {
     final account = _controllerEmail.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty && !_focusEmail.hasFocus;
     final code = _controllerCode.text;
-    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty && !_focusCode.hasFocus;
     final password = _controllerPw.text;
-    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty && !_focusPw.hasFocus;
     final againPw = _controllerAgainPw.text;
-    isShowAgainTips = password != againPw && againPw.isNotEmpty;
+    isShowAgainTips = password != againPw && againPw.isNotEmpty && !_focusAgainPw.hasFocus;
 
     _isLoginDisable = account.isEmpty ||
         isShowAccountTips ||
@@ -68,7 +73,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       });
     }
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
           if (_countdown > 0) {
@@ -80,6 +85,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         });
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _focusEmail.addListener(checkValid);
+    _focusCode.addListener(checkValid);
+    _focusPw.addListener(checkValid);
+    _focusAgainPw.addListener(checkValid);
   }
 
   @override
@@ -141,12 +155,13 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(25.px),
-                      border: Border.all(color: const Color(0xffCCD7F0))),
+                      border: Border.all(color: _focusEmail.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
                   child: Row(
                     children: <Widget>[
                       Expanded(
                         child: TextField(
                           controller: _controllerEmail,
+                          focusNode: _focusEmail,
                           decoration: InputDecoration(
                             border: InputBorder.none, // 没有边框
                             hintText: '请输入邮箱地址',
@@ -161,15 +176,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ],
                   ),
                 ),
-                if (isShowAccountTips)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
-                    child: Text(
-                      '请输入正确的邮箱地址',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.red),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.w),
+                  child: Text(
+                    isShowAccountTips ? '请输入邮箱地址，必须包含@和.，其余为英数字与_' : '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
                     ),
-                  )else
-                  SizedBox(height: 30.w),
+                  ),
+                ),
                 Container(
                   height: 50.px,
 
@@ -177,12 +193,13 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(25.px),
-                      border: Border.all(color: const Color(0xffCCD7F0))),
+                      border: Border.all(color: _focusCode.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
                   child: Row(
                     children: <Widget>[
                       Expanded(
                         child: TextField(
                           controller: _controllerCode,
+                          focusNode: _focusCode,
                           keyboardType: TextInputType.number,
                           // maxLength: 8,
                           decoration: InputDecoration(
@@ -198,41 +215,41 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                       _isCountingDown
                           ? Text(
-                        '${_countdown}s',
-                        style: AppTheme.text008EFFSize16,
-                      )
+                              '${_countdown}s',
+                              style: AppTheme.text008EFFSize16,
+                            )
                           : GestureDetector(
-                        onTap: () {
-                          var email = _controllerEmail.text;
-                          if (email.isEmpty) {
-                            ToastUtils.showToast('邮箱不能为空');
-                            return;
-                          }
-                          if (!LoginHelper().isValidEmail(email)) {
-                            ToastUtils.showToast('请输入正确格式邮箱');
-                            return;
-                          }
-                          _startCountdown(); //启动倒计时
-                          NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_REGISTER, email, (data) {});
-                        },
-                        child: Text(
-                          '发送验证码',
-                          style: AppTheme.text008EFFSize16,
-                        ),
-                      )
+                              onTap: () {
+                                var email = _controllerEmail.text;
+                                if (email.isEmpty) {
+                                  ToastUtils.showToast('邮箱不能为空');
+                                  return;
+                                }
+                                if (!LoginHelper().isValidEmail(email)) {
+                                  ToastUtils.showToast('请输入正确格式邮箱');
+                                  return;
+                                }
+                                _startCountdown(); //启动倒计时
+                                NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_REGISTER, email, (data) {});
+                              },
+                              child: Text(
+                                '发送验证码',
+                                style: AppTheme.text008EFFSize16,
+                              ),
+                            )
                     ],
                   ),
                 ),
-                if (isShowCodeTips)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
-                    child: Text(
-                      '验证码错误',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.red),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.w),
+                  child: Text(
+                    isShowCodeTips ? '请输入6位数字验证码' : '',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: isShowCodeTips ? Colors.red : '95A3C4'.hexColor,
                     ),
-                  )
-                else
-                  SizedBox(height: 30.w),
+                  ),
+                ),
                 Container(
                   height: 50.px,
                   padding: EdgeInsets.symmetric(horizontal: 20.0.px),
@@ -240,13 +257,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(25.px),
-                      border: Border.all(color: const Color(0xffCCD7F0))),
+                      border: Border.all(color: _focusPw.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
                   child: Row(
                     children: <Widget>[
                       Expanded(
                         child: TextField(
                           controller: _controllerPw,
-                          obscureText: !_isVisible, // 输入内容显示为密文
+                          focusNode: _focusPw,
+                          obscureText: !_isVisible,
+                          // 输入内容显示为密文
                           decoration: InputDecoration(
                             border: InputBorder.none, // 没有边框
                             hintText: '请设置新密码',
@@ -273,16 +292,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ],
                   ),
                 ),
-                if (isShowPwTips)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
-                    child: Text(
-                      '限制8～12位，必须为英文或和数字组合。密码区分大小写。不能为纯数字或字母。',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.red),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.w),
+                  child: Text(
+                    isShowPwTips ? '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写' : '请输入8-12位，须包含大小写字母+数字',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
                     ),
-                  )
-                else
-                  SizedBox(height: 30.w),
+                  ),
+                ),
                 Container(
                   height: 50.px,
                   padding: EdgeInsets.symmetric(horizontal: 20.0.px),
@@ -290,13 +309,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(25.px),
-                      border: Border.all(color: const Color(0xffCCD7F0))),
+                      border: Border.all(color: _focusAgainPw.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
                   child: Row(
                     children: <Widget>[
                       Expanded(
                         child: TextField(
                           controller: _controllerAgainPw,
-                          obscureText: !_isVisibleAgain, // 输入内容显示为密文
+                          focusNode: _focusAgainPw,
+                          obscureText: !_isVisibleAgain,
+                          // 输入内容显示为密文
                           decoration: InputDecoration(
                             border: InputBorder.none, // 没有边框
                             hintText: '再次输入新密码',
@@ -325,16 +346,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ],
                   ),
                 ),
-                if (isShowAgainTips)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
-                    child: Text(
-                      '两次输入密码不一致。',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.red),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.w),
+                  child: Text(
+                    isShowAgainTips ? '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写' : '两次输入的密码不一致',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: isShowAgainTips ? Colors.red : '95A3C4'.hexColor,
                     ),
-                  )
-                else
-                  SizedBox(height: 30.w),
+                  ),
+                ),
+                SizedBox(height: 10.w),
                 CustomButton(
                   onPressed: registerOrConfirm,
                   disable: _isLoginDisable,

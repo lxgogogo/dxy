@@ -6,7 +6,7 @@ import 'package:holdem/main.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
 import 'package:holdem/page/mine/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/mine/page_register_account.dart';
+import 'package:holdem/page/mine/page_forget_password.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/background_container.dart';

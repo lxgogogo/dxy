@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/mine/page_register_account.dart';
+import 'package:holdem/page/mine/page_forget_password.dart';
 import 'package:holdem/page/mine/register_content.dart';
 import 'package:holdem/view/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
@@ -33,13 +34,8 @@ class _LoginPageState extends State<LoginPage> {
   bool isOpen = false;
   var actionEventBus;
 
-  final FocusNode _focusNodeAccount = FocusNode();
-  final FocusNode _focusNodePwd = FocusNode();
-
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPwd = FocusNode();
-
-  int _focusedIndex = -1;
 
   bool _isLoginDisable = true;
 
@@ -47,9 +43,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void checkValid() {
     final account = _controllerAccount.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty && !_focusEmail.hasFocus;
     final password = _controllerPw.text;
-    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty && !_focusPwd.hasFocus;
     _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
     setState(() {});
   }
@@ -57,18 +53,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(_handleFocusChange);
-    _focusPwd.addListener(_handleFocusChange);
-  }
-
-  void _handleFocusChange() {
-    setState(() {
-      if (_focusEmail.hasFocus) {
-        _focusedIndex = 0;
-      } else if (_focusPwd.hasFocus) {
-        _focusedIndex = 1;
-      }
-    });
+    _focusEmail.addListener(checkValid);
+    _focusPwd.addListener(checkValid);
   }
 
   @override
@@ -115,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(25.px),
-                border: Border.all(color: _focusedIndex == 0 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+                border: Border.all(color: _focusEmail.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
                 Image.asset(
@@ -124,41 +110,39 @@ class _LoginPageState extends State<LoginPage> {
                   height: 14.px,
                 ),
                 Expanded(
-                  child: Listener(
-                      onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodeAccount),
-                      child: TextField(
-                        focusNode: _focusEmail,
-                        keyboardType: TextInputType.text,
-                        controller: _controllerAccount,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(
-                            RegExp('[\\s]'),
-                          )
-                        ],
-                        decoration: InputDecoration(
-                          border: InputBorder.none, // 没有边框
-                          hintText: '请输入邮箱地址',
-                          hintStyle: AppTheme.text999999Size16,
-                          contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-                        ),
-                        onChanged: (_) {
-                          checkValid();
-                        },
-                      )),
+                  child: TextField(
+                    focusNode: _focusEmail,
+                    keyboardType: TextInputType.text,
+                    controller: _controllerAccount,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(
+                        RegExp('[\\s]'),
+                      )
+                    ],
+                    decoration: InputDecoration(
+                      border: InputBorder.none, // 没有边框
+                      hintText: '请输入邮箱地址',
+                      hintStyle: AppTheme.text999999Size16,
+                      contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                    ),
+                    onChanged: (_) {
+                      checkValid();
+                    },
+                  ),
                 ),
               ],
             ),
           ),
-          if (isShowAccountTips)
-            Padding(
-              padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
-              child: Text(
-                '请输入正确的邮箱地址',
-                style: TextStyle(fontSize: 12.sp, color: Colors.red),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.w),
+            child: Text(
+              isShowAccountTips ? '请输入邮箱地址，必须包含@和.，其余为英数字与_' : '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
               ),
-            )
-          else
-            SizedBox(height: 30.w),
+            ),
+          ),
           Container(
             height: 50.px,
             padding: EdgeInsets.symmetric(horizontal: 20.0.px),
@@ -166,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(25.px),
-                border: Border.all(color: _focusedIndex == 1 ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+                border: Border.all(color: _focusPwd.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
                 Image.asset(
@@ -175,23 +159,21 @@ class _LoginPageState extends State<LoginPage> {
                   height: 14.px,
                 ),
                 Expanded(
-                  child: Listener(
-                      onPointerDown: (e) => FocusScope.of(context).requestFocus(_focusNodePwd),
-                      child: TextField(
-                        controller: _controllerPw,
-                        focusNode: _focusPwd,
-                        obscureText: !isOpen,
-                        // 输入内容显示为密文
-                        decoration: InputDecoration(
-                          border: InputBorder.none, // 没有边框
-                          hintText: '请输入密码',
-                          hintStyle: AppTheme.text999999Size16,
-                          contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
-                        ),
-                        onChanged: (_) {
-                          checkValid();
-                        },
-                      )),
+                  child: TextField(
+                    controller: _controllerPw,
+                    focusNode: _focusPwd,
+                    obscureText: !isOpen,
+                    // 输入内容显示为密文
+                    decoration: InputDecoration(
+                      border: InputBorder.none, // 没有边框
+                      hintText: '请输入密码',
+                      hintStyle: AppTheme.text999999Size16,
+                      contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                    ),
+                    onChanged: (_) {
+                      checkValid();
+                    },
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -208,16 +190,16 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          if (isShowPwTips)
-            Padding(
-              padding: EdgeInsets.fromLTRB(12.w, 8.w, 12.w, 8.w),
-              child: Text(
-                '限制8～12位，必须为英文或和数字组合。密码区分大小写。不能为纯数字或字母。',
-                style: TextStyle(fontSize: 12.sp, color: Colors.red),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.w),
+            child: Text(
+              isShowPwTips ? '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写' : '请输入8-12位，须包含大小写字母+数字',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
               ),
-            )
-          else
-            SizedBox(height: 30.w),
+            ),
+          ),
           Row(
             children: [
               const Spacer(),
@@ -230,9 +212,6 @@ class _LoginPageState extends State<LoginPage> {
                   style: AppTheme.text3B5078Size14,
                 ),
               ),
-              SizedBox(
-                width: 30.px,
-              )
             ],
           ),
           SizedBox(

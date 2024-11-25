@@ -9,13 +9,13 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
 import 'package:holdem/widget/button.dart';
 
-import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/size_fit.dart';
+import '../../../utils/app_theme.dart';
+import '../../../utils/eventbus/EventBusAction.dart';
+import '../../../utils/eventbus/EventBusManager.dart';
+import '../../../utils/size_fit.dart';
 
 class RegisterContent extends StatefulWidget {
-  RegisterContent({Key? key}) : super(key: key);
+  const RegisterContent({Key? key}) : super(key: key);
 
   @override
   State<RegisterContent> createState() => _RegisterContentState();

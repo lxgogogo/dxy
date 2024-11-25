@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,33 +5,23 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/mine/page_forget_password.dart';
-import 'package:holdem/page/mine/register_content.dart';
-import 'package:holdem/view/background_container.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/button.dart';
-import 'package:holdem/widget/close_image_button.dart';
 
-import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/size_fit.dart';
-import '../../widget/page_web_fit.dart';
-
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginContent extends StatefulWidget {
+  const LoginContent({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginContent> createState() => _LoginContentState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginContentState extends State<LoginContent> {
   final TextEditingController _controllerAccount = TextEditingController();
   bool isShowAccountTips = false;
   final TextEditingController _controllerPw = TextEditingController();
   bool isShowPwTips = false;
   bool isLogin = true;
   bool isOpen = false;
-  var actionEventBus;
 
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPwd = FocusNode();
@@ -58,56 +47,34 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BackgroundContainer(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Image.asset(
-              'assets/images/login_bg.png',
-              width: 375.px,
-            ),
-            contentView(),
-            Positioned(
-                top: MediaQuery.paddingOf(context).top + 9.px,
-                right: 15.px,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: CloseImageButton(onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-                )),
-          ],
-        ),
-      ),
-    );
+  void dispose() {
+    super.dispose();
   }
 
-  loginContent() {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 30.px,
+            height: 30.w,
           ),
           Container(
-            height: 50.px,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            height: 50.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
             // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.px),
+                borderRadius: BorderRadius.circular(25.w),
                 border: Border.all(color: _focusEmail.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
                 Image.asset(
                   'assets/images/email.png',
-                  width: 14.px,
-                  height: 14.px,
+                  width: 14.w,
+                  height: 14.w,
                 ),
                 Expanded(
                   child: TextField(
@@ -123,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                       border: InputBorder.none, // 没有边框
                       hintText: '请输入邮箱地址',
                       hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       checkValid();
@@ -144,19 +111,19 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            height: 50.px,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            height: 50.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
             // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.px),
+                borderRadius: BorderRadius.circular(25.w),
                 border: Border.all(color: _focusPwd.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
                 Image.asset(
                   'assets/images/password.png',
-                  width: 14.px,
-                  height: 14.px,
+                  width: 14.w,
+                  height: 14.w,
                 ),
                 Expanded(
                   child: TextField(
@@ -168,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                       border: InputBorder.none, // 没有边框
                       hintText: '请输入密码',
                       hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.px, 0, 10.px, 0),
+                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       checkValid();
@@ -183,8 +150,8 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   child: Image.asset(
                     isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
-                    width: 18.px,
-                    height: 18.px,
+                    width: 18.w,
+                    height: 18.w,
                   ),
                 )
               ],
@@ -215,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           SizedBox(
-            height: 60.px,
+            height: 60.w,
           ),
           CustomButton(
             onPressed: login,
@@ -228,111 +195,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  registerContent() {
-    return RegisterContent();
-  }
-
-  Widget contentView() {
-    return ListView(
-      children: [
-        Container(
-            margin: EdgeInsets.fromLTRB(20.px, 80.px, 16.px, 45.px),
-            alignment: Alignment.topLeft,
-            child: Image.asset(
-              'assets/images/logo.png',
-              width: 153.px,
-              height: 43.px,
-            )),
-        Row(
-          children: [
-            SizedBox(
-              width: 50.px,
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isLogin = true;
-                });
-              },
-              child: Column(
-                children: [
-                  Text(
-                    '登录',
-                    style: TextStyle(
-                        fontSize: 18.px,
-                        fontWeight: isLogin ? FontWeight.bold : FontWeight.normal,
-                        color: isLogin ? Color(0xff249CFC) : Color(0xff3B5078)),
-                  ),
-                  Container(
-                    width: 21.px,
-                    height: 3.px,
-                    margin: EdgeInsets.only(top: 10.px),
-                    decoration: BoxDecoration(
-                        color: isLogin ? Color(0xff249CFC) : Colors.transparent,
-                        borderRadius: BorderRadius.all(Radius.circular(1.5.px))),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 25.px,
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isLogin = false;
-                });
-              },
-              child: Column(
-                children: [
-                  Text(
-                    '注册',
-                    style: TextStyle(
-                        fontSize: 18.px,
-                        fontWeight: !isLogin ? FontWeight.bold : FontWeight.normal,
-                        color: !isLogin ? Color(0xff249CFC) : Color(0xff3B5078)),
-                  ),
-                  Container(
-                    width: 21.px,
-                    height: 3.px,
-                    margin: EdgeInsets.only(top: 10.px),
-                    decoration: BoxDecoration(
-                        color: !isLogin ? Color(0xff249CFC) : Colors.transparent,
-                        borderRadius: BorderRadius.all(Radius.circular(1.5.px))),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-        if (isLogin) loginContent(),
-        if (!isLogin) registerContent()
-      ],
-    );
-  }
-
   void login() {
-    // if (_focusNode.hasFocus) {
-    //   FocusScope.of(context).unfocus();
-    // }
     var account = _controllerAccount.text;
     var password = _controllerPw.text;
-    if (account.isEmpty) {
-      ToastUtils.showToast('邮箱不能为空');
-      return;
-    }
-    if (password.isEmpty) {
-      ToastUtils.showToast('密码不能为空');
-      return;
-    }
-    //登录
     LoginHelper().userLogin(account, password, (data) {
       Navigator.of(context).pop();
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

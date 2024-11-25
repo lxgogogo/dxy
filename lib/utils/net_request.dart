@@ -10,7 +10,7 @@ import 'package:holdem/utils/response.dart' as HttpUtilsResonse;
 import 'package:holdem/view/forum/ToastUtils.dart';
 
 import '../model/upload_file.dart';
-import '../page/mine/page_login.dart';
+import '../page/login/login_screen.dart';
 import 'log_utils.dart';
 
 typedef SuccessCallback = void Function(dynamic data);
@@ -259,7 +259,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -304,7 +304,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message ?? '未知错误');
       }
@@ -390,7 +390,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         onFail(resp.message!);
         ToastUtils.showToast(resp.message!);
@@ -487,7 +487,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -624,7 +624,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -645,7 +645,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -664,7 +664,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -683,7 +683,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -708,7 +708,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -765,7 +765,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }
@@ -785,7 +785,7 @@ class NetRequest {
       if (_isNeedLoginResponse(resp)) {
         //需要重新登录
         LoginHelper().clearGlobalUserInfo();
-        Get.to(LoginPage());
+        Get.to(LoginScreen());
       } else {
         ToastUtils.showToast(resp.message!);
       }

@@ -9,7 +9,7 @@ import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:get/get.dart' as Get;
 
-import '../page/mine/page_login.dart';
+import '../page/login/login_screen.dart';
 import 'log_utils.dart';
 import 'net_request.dart';
 
@@ -151,7 +151,7 @@ class Http {
       // LoginPage();
 
       if (Get.Get.currentRoute != "/LoginPage") {
-        Get.Get.to(LoginPage());
+        Get.Get.to(LoginScreen());
       }
 
       return <String, dynamic>{};

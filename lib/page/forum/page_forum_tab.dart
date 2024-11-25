@@ -13,7 +13,7 @@ import '../../utils/constants.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/global.dart';
-import '../mine/page_login.dart';
+import '../login/login_screen.dart';
 
 class ForumTabPage extends StatefulWidget {
   const ForumTabPage({super.key});

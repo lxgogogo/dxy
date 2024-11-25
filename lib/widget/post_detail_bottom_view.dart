@@ -13,7 +13,7 @@ import 'package:universal_html/html.dart' as html;
 
 import '../model/upload_file.dart';
 import '../page/forum/page_comment_input.dart';
-import '../page/mine/page_login.dart';
+import '../page/login/login_screen.dart';
 import '../utils/app_theme.dart';
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';

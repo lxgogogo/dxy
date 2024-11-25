@@ -7,6 +7,7 @@ import 'package:holdem/page/index/page_book_detail.dart';
 import 'package:holdem/page/index/page_video_detail.dart';
 import 'package:holdem/page/index/page_video_list.dart';
 import 'package:holdem/page/main_page.dart';
+import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/splash/splash_screen.dart';
 
 part 'app_routes.dart';
@@ -22,6 +23,10 @@ class AppPages {
     GetPage(
       name: Routes.splash,
       page: () => const SplashScreen(),
+    ),
+    GetPage(
+      name: Routes.login,
+      page: () => const LoginScreen(),
     ),
     GetPage(
       name: Routes.main,

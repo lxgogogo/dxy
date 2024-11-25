@@ -4,7 +4,7 @@ import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/index/home_page.dart';
 import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
-import 'package:holdem/page/mine/page_login.dart';
+import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -142,7 +142,7 @@ class _MainScreenState extends State<MainScreen> {
               onTap: (int index) {
                 if (!Global().hasLogin) {
                   showToast('请先登录', duration: const Duration(seconds: 2));
-                  Get.to(LoginPage());
+                  Get.to(LoginScreen());
                   return;
                 }
                 _currentIndex = index;

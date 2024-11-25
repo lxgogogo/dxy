@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:holdem/page/mine/page_login.dart';
+import 'package:holdem/page/login/login_screen.dart';
 
 import '../../model/user.dart';
 import '../../utils/eventbus/EventBusAction.dart';

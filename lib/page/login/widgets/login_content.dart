@@ -33,9 +33,18 @@ class _LoginContentState extends State<LoginContent> {
 
   void checkValid() {
     final account = _controllerAccount.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty && !_focusEmail.hasFocus;
+    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final password = _controllerPw.text;
-    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty && !_focusPwd.hasFocus;
+    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
+    setState(() {});
+  }
+
+  void onChangeCheckValid() {
+    final account = _controllerAccount.text;
+    final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final password = _controllerPw.text;
+    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
     setState(() {});
   }
@@ -43,8 +52,16 @@ class _LoginContentState extends State<LoginContent> {
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(checkValid);
-    _focusPwd.addListener(checkValid);
+    _focusEmail.addListener(() {
+      if(!_focusEmail.hasFocus) {
+        checkValid();
+      }
+    });
+    _focusPwd.addListener(() {
+      if(!_focusPwd.hasFocus) {
+        checkValid();
+      }
+    });
   }
 
   @override
@@ -94,7 +111,7 @@ class _LoginContentState extends State<LoginContent> {
                       contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
-                      checkValid();
+                      onChangeCheckValid();
                     },
                   ),
                 ),
@@ -104,7 +121,7 @@ class _LoginContentState extends State<LoginContent> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8.w),
             child: Text(
-              isShowAccountTips ? '请输入邮箱地址，必须包含@和.，其余为英数字与_' : '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_',
+              isShowAccountTips ? '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_' : '请输入邮箱地址，必须包含@和.，其余为英数字与_',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
@@ -139,7 +156,7 @@ class _LoginContentState extends State<LoginContent> {
                       contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
-                      checkValid();
+                      onChangeCheckValid();
                     },
                   ),
                 ),
@@ -161,7 +178,7 @@ class _LoginContentState extends State<LoginContent> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8.w),
             child: Text(
-              isShowPwTips ? '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写' : '请输入8-12位，须包含大小写字母+数字',
+              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,

@@ -48,13 +48,34 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   void checkValid() {
     final account = _controllerEmail.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty && !_focusEmail.hasFocus;
+    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final code = _controllerCode.text;
-    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty && !_focusCode.hasFocus;
+    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty && !_focusPw.hasFocus;
+    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
-    isShowAgainTips = password != againPw && againPw.isNotEmpty && !_focusAgainPw.hasFocus;
+    isShowAgainTips = password != againPw && againPw.isNotEmpty;
+
+    _isLoginDisable = account.isEmpty ||
+        isShowAccountTips ||
+        code.isEmpty ||
+        isShowCodeTips ||
+        password.isEmpty ||
+        isShowPwTips ||
+        againPw.isEmpty ||
+        isShowAgainTips;
+    setState(() {});
+  }
+
+  void onChangeCheckValid() {
+    final account = _controllerEmail.text;
+    final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final code = _controllerCode.text;
+    final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    final password = _controllerPw.text;
+    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final againPw = _controllerAgainPw.text;
+    final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
     _isLoginDisable = account.isEmpty ||
         isShowAccountTips ||
@@ -92,10 +113,26 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(checkValid);
-    _focusCode.addListener(checkValid);
-    _focusPw.addListener(checkValid);
-    _focusAgainPw.addListener(checkValid);
+    _focusEmail.addListener(() {
+      if(!_focusEmail.hasFocus) {
+        checkValid();
+      }
+    });
+    _focusCode.addListener(() {
+      if(!_focusCode.hasFocus) {
+        checkValid();
+      }
+    });
+    _focusPw.addListener(() {
+      if(!_focusPw.hasFocus) {
+        checkValid();
+      }
+    });
+    _focusAgainPw.addListener(() {
+      if(!_focusAgainPw.hasFocus) {
+        checkValid();
+      }
+    });
   }
 
   @override
@@ -171,7 +208,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                           ),
                           onChanged: (_) {
-                            checkValid();
+                            onChangeCheckValid();
                           },
                         ),
                       ),
@@ -181,7 +218,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.w),
                   child: Text(
-                    isShowAccountTips ? '请输入邮箱地址，必须包含@和.，其余为英数字与_' : '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_',
+                    isShowAccountTips ? '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_' : '请输入邮箱地址，必须包含@和.，其余为英数字与_',
                     style: TextStyle(
                       fontSize: 12.sp,
                       color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
@@ -211,7 +248,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                           ),
                           onChanged: (_) {
-                            checkValid();
+                            onChangeCheckValid();
                           },
                         ),
                       ),
@@ -275,7 +312,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                           ),
                           onChanged: (_) {
-                            checkValid();
+                            onChangeCheckValid();
                           },
                         ),
                       ),
@@ -297,7 +334,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.w),
                   child: Text(
-                    isShowPwTips ? '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写' : '请输入8-12位，须包含大小写字母+数字',
+                    isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写',
                     style: TextStyle(
                       fontSize: 12.sp,
                       color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
@@ -327,7 +364,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
                           ),
                           onChanged: (_) {
-                            checkValid();
+                            onChangeCheckValid();
                           },
                         ),
                       ),
@@ -351,7 +388,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.w),
                   child: Text(
-                    isShowAgainTips ? '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写' : '两次输入的密码不一致',
+                    isShowAgainTips ? '两次输入的密码不一致' : '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写',
                     style: TextStyle(
                       fontSize: 12.sp,
                       color: isShowAgainTips ? Colors.red : '95A3C4'.hexColor,

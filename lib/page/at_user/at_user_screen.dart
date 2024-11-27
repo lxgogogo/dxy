@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
@@ -13,14 +14,16 @@ import '../../utils/size_fit.dart';
 import '../../widget/follow_btn.dart';
 import '../mine/login_helper.dart';
 
-class AitUserPage extends StatefulWidget {
-  AitUserPage({Key? key}) : super(key: key);
+part 'at_user_controller.dart';
+
+class AtUserScreen extends StatefulWidget {
+  const AtUserScreen({Key? key}) : super(key: key);
 
   @override
-  _AitUserPageState createState() => _AitUserPageState();
+  _AtUserScreenState createState() => _AtUserScreenState();
 }
 
-class _AitUserPageState extends State<AitUserPage> {
+class _AtUserScreenState extends State<AtUserScreen> {
   int pageNum = 1;
   int pageSize = 10;
   late String key;
@@ -92,7 +95,7 @@ class _AitUserPageState extends State<AitUserPage> {
               height: 22.px,
             ),
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
           ),
           backgroundColor: Colors.transparent,
@@ -217,7 +220,7 @@ class _AitUserPageState extends State<AitUserPage> {
     return GestureDetector(
         onTap: () {
           print('===================' + followOrFanUserList[index].nickname!);
-          Navigator.pop(context, followOrFanUserList[index]);
+          Get.back(result: followOrFanUserList[index]);
         },
         child: Container(
           height: 58.px,

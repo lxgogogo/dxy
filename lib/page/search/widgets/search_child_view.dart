@@ -9,16 +9,17 @@ import 'package:holdem/model/course.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/page/forum/page_forum_post_detail.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
+import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/index/competition_calendar_page.dart';
 import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -377,7 +378,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
                 CollectBean collectBean = courses[i];
                 return GestureDetector(
                     onTap: () {
-                      Get.to(ArticleDetailPage(id: collectBean.targetId ?? 0));
+                      Get.toNamed(Routes.articleDetail, arguments: collectBean.targetId ?? 0);
                     },
                     child: Container(
                       height: 48.px,
@@ -411,15 +412,15 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
   jumpPage(BannerBean bean) {
     var id = int.parse(bean.jumpValue!);
     if (bean.jumpType == 'book') {
-      Get.to(BookDetailPage(id: id));
+      Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {
-      Get.to(ArticleDetailPage(id: id));
+      Get.toNamed(Routes.articleDetail, arguments: id);
     } else if (bean.jumpType == 'videoList') {
-      Get.to(VideoListPage(id: id));
+      Get.toNamed(Routes.videoList, arguments: id);
     } else if (bean.jumpType == 'video') {
-      Get.to(VideoDetailPage(id: id));
+      Get.toNamed(Routes.videoDetail, arguments: id);
     } else if (bean.jumpType == 'thread') {
-      Get.to(PostDetailPage(id: id));
+      Get.toNamed(Routes.feedDetail, arguments: id);
     }
   }
 

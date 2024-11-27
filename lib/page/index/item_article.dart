@@ -2,10 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
-import 'package:holdem/page/forum/media_helper.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/media_helper.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:intl/intl.dart';
@@ -32,14 +33,14 @@ class _ArticleItemState extends State<ArticleItem> {
     return GestureDetector(
       onTap: () {
         if (widget.article.type == 'videoList') {
-          Get.to(VideoListPage(id: widget.article.id ?? 0));
+          Get.toNamed(Routes.videoList, arguments: widget.article.id ?? 0);
           return;
         }
         if (widget.article.type == 'video') {
-          Get.to(VideoDetailPage(id: widget.article.id ?? 0));
+          Get.toNamed(Routes.videoDetail, arguments: widget.article.id ?? 0);
           return;
         }
-        Get.to(ArticleDetailPage(id: widget.article.id ?? 0));
+        Get.toNamed(Routes.articleDetail, arguments: widget.article.id ?? 0);
       },
       child: LinearCard(
         margin:EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),

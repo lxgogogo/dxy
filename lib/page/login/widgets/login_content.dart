@@ -53,12 +53,12 @@ class _LoginContentState extends State<LoginContent> {
   void initState() {
     super.initState();
     _focusEmail.addListener(() {
-      if(!_focusEmail.hasFocus) {
+      if (!_focusEmail.hasFocus) {
         checkValid();
       }
     });
     _focusPwd.addListener(() {
-      if(!_focusPwd.hasFocus) {
+      if (!_focusPwd.hasFocus) {
         checkValid();
       }
     });
@@ -119,9 +119,9 @@ class _LoginContentState extends State<LoginContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
             child: Text(
-              isShowAccountTips ? '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_' : '请输入邮箱地址，必须包含@和.，其余为英数字与_',
+              isShowAccountTips ? '请输入正确邮箱地址' : '范例：dxy@example.com',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
@@ -176,9 +176,9 @@ class _LoginContentState extends State<LoginContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
             child: Text(
-              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写',
+              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '8-12位，须包含大小写字母+数字',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
@@ -220,5 +220,4 @@ class _LoginContentState extends State<LoginContent> {
       Navigator.of(context).pop();
     });
   }
-
 }

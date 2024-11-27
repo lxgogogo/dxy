@@ -13,9 +13,18 @@ abstract class Routes {
   static const main = '/main';
   static const search = '/search';
   static const home = '/home';
-  static const bookDetail = '/book_detail';
-  static const articleDetail = '/article_detail';
-  static const videoDetail = '/video_detail';
-  static const videoList = '/video_list';
-  static const postDetail = '/post_detail';
+  static const feedList = '/feedList';
+  static const setting = '/setting';
+  static const atUser = '/atUser';
+  static const publishComment = '/publishComment';
+  static const inputComment = '/inputComment';
+  static const commentList = '/commentList';
+  static const replyList = '/replyList';
+  static const following = '/following';
+  static const bookDetail = '/bookDetail';
+  static const articleDetail = '/articleDetail';
+  static const videoDetail = '/videoDetail';
+  static const videoList = '/videoList';
+  static const feedDetail = '/feedDetail';
+  static const feedPost = '/feedPost';
 }

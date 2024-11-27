@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+part 'video_list_controller.dart';
+
 class VideoListPage extends StatefulWidget {
-  int id;
-  VideoListPage({super.key, required this.id});
+  final int id;
+
+  const VideoListPage({super.key, required this.id});
 
   @override
   State<VideoListPage> createState() => _VideoListPageState();
@@ -20,8 +24,7 @@ class VideoListPage extends StatefulWidget {
 class _VideoListPageState extends State<VideoListPage> {
   List<ArticleBean> articles = [];
   List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
 
   @override
@@ -41,8 +44,7 @@ class _VideoListPageState extends State<VideoListPage> {
       if (pageNum == 1) {
       } else {}
 
-      List<ArticleBean> dataList = List<ArticleBean>.from(
-          data['list'].map((article) => ArticleBean.fromJson(article)));
+      List<ArticleBean> dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
 
       if (mounted) {
         setState(() {
@@ -101,16 +103,12 @@ class _VideoListPageState extends State<VideoListPage> {
     ArticleBean article = articles[index];
     return GestureDetector(
       onTap: () {
-        Get.to(VideoDetailPage(
-          id: article.id ?? 0,
-        ));
+        Get.toNamed(Routes.videoDetail, arguments: article.id ?? 0);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.px),
         margin: EdgeInsets.symmetric(horizontal: 10.px),
-        decoration: const BoxDecoration(
-            border:
-                Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -135,10 +133,7 @@ class _VideoListPageState extends State<VideoListPage> {
                   article.title ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis, // 超出显示省略号
-                  style: TextStyle(
-                      color: Color(0xff3B5078),
-                      fontSize: 15.px,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Color(0xff3B5078), fontSize: 15.px, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: 6.px,

@@ -1,31 +1,25 @@
-import 'package:dynamic_tabbar/dynamic_tabbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:holdem/page/forum/page_forum_tab_child.dart';
+import 'package:get/get.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 
 import '../../utils/app_theme.dart';
-import '../../utils/constants.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
 
-class CommentInputPage extends StatefulWidget {
-  String relType; //// 评论对象类型
-  int relId; //// 评论对象id
+part 'comment_input_controller.dart';
+class CommentInputScreen extends StatefulWidget {
+  final String relType; //// 评论对象类型
+  final int relId; //// 评论对象id
 
-  CommentInputPage({super.key, required this.relType, required this.relId});
+  const CommentInputScreen({super.key, required this.relType, required this.relId});
 
   @override
-  State<CommentInputPage> createState() => _CommentInputPageState();
+  State<CommentInputScreen> createState() => _CommentInputScreenState();
 }
 
-class _CommentInputPageState extends State<CommentInputPage>
+class _CommentInputScreenState extends State<CommentInputScreen>
     with SingleTickerProviderStateMixin {
   late String relType;
   late int relId;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/course.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 
@@ -30,7 +31,7 @@ class CourseItem extends StatelessWidget {
                 CollectBean collectBean = article.sublist![i];
                 return GestureDetector(
                     onTap: () {
-                      Get.to(ArticleDetailPage(id: collectBean.targetId ?? 0));
+                      Get.toNamed(Routes.articleDetail, arguments: collectBean.targetId ?? 0);
                     },
                     child: Container(
                       height: 48.px,

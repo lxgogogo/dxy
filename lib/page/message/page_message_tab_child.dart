@@ -3,11 +3,12 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/message.dart';
-import 'package:holdem/page/forum/page_forum_post_detail.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
+import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/page/video_list/video_list_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
@@ -140,15 +141,15 @@ class MessageTabChildPageState extends State<MessageTabChildPage> {
     }
     int id = bean.jumpId!;
     if (bean.resourceType == 'book') {
-      Get.to(BookDetailPage(id: id));
+      Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.resourceType == 'article') {
-      Get.to(ArticleDetailPage(id: id));
+      Get.toNamed(Routes.articleDetail, arguments: id);
     } else if (bean.resourceType == 'videoList') {
-      Get.to(VideoListPage(id: id));
+      Get.toNamed(Routes.videoList, arguments: id);
     } else if (bean.resourceType == 'video') {
-      Get.to(VideoDetailPage(id: id));
+      Get.toNamed(Routes.videoDetail, arguments: id);
     } else if (bean.resourceType == 'thread') {
-      Get.to(PostDetailPage(id: id));
+      Get.toNamed(Routes.feedDetail, arguments: id);
     }
   }
 

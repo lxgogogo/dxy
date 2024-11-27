@@ -9,8 +9,8 @@ import 'package:holdem/model/banner.dart';
 import 'package:holdem/model/competition_loop.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/index_category.dart';
-import 'package:holdem/page/forum/page_forum_post_detail.dart';
-import 'package:holdem/page/index/article_detail_page.dart';
+import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/index/competition_detail_page.dart';
 import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
 import 'package:holdem/page/index/item_article.dart';
@@ -18,9 +18,10 @@ import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_course.dart';
 import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/page/index/competition_calendar_page.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/page/video_list/video_list_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -382,15 +383,15 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
   jumpPage(BannerBean bean) {
     var id = int.parse(bean.jumpValue!);
     if (bean.jumpType == 'book') {
-      Get.to(BookDetailPage(id: id));
+      Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {
-      Get.to(ArticleDetailPage(id: id));
+      Get.toNamed(Routes.articleDetail, arguments: id);
     } else if (bean.jumpType == 'videoList') {
-      Get.to(VideoListPage(id: id));
+      Get.toNamed(Routes.videoList, arguments: id);
     } else if (bean.jumpType == 'video') {
-      Get.to(VideoDetailPage(id: id));
+      Get.toNamed(Routes.videoDetail, arguments: id);
     } else if (bean.jumpType == 'thread') {
-      Get.to(PostDetailPage(id: id));
+      Get.toNamed(Routes.feedDetail, arguments: id);
     }
   }
 
@@ -591,7 +592,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                             return GestureDetector(
                               onTap: () {
                                 if (bookSuggests[i].id != null) {
-                                  Get.to(BookDetailPage(id: bookSuggests[i].id!));
+                                  Get.toNamed(Routes.bookDetail, arguments: bookSuggests[i].id!);
                                 }
                               },
                               child: SizedBox(

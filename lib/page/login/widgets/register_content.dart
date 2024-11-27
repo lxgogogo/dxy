@@ -170,9 +170,9 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
             child: Text(
-              isShowAccountTips ? '请输入正确的邮箱地址，必须包含@和.，其余为英数字与_' : '请输入邮箱地址，必须包含@和.，其余为英数字与_',
+              isShowAccountTips ? '请输入正确邮箱地址' : '范例：dxy@example.com',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
@@ -234,7 +234,7 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
             child: Text(
               isShowCodeTips ? '请输入6位数字验证码' : '',
               style: TextStyle(
@@ -286,9 +286,9 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
             child: Text(
-              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写',
+              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '8-12位，须包含大小写字母+数字',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
@@ -340,9 +340,9 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w),
+            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
             child: Text(
-              isShowAgainTips ? '两次输入的密码不一致' : '限制8～12位的字符，必须包含英数字，且有1个以上的英文大小写',
+              isShowAgainTips ? '两次输入的密码不一致' : '8-12位，须包含大小写字母+数字',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isShowAgainTips ? Colors.red : '95A3C4'.hexColor,

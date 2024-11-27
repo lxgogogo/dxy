@@ -1,41 +1,33 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/eventbus/EventBusAction.dart';
-import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
-
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:universal_html/html.dart' as html;
 
-class BookDetailPage extends StatefulWidget {
+part 'book_detail_controller.dart';
+
+class BookDetailScreen extends StatefulWidget {
   final int id;
 
-  const BookDetailPage({super.key, required this.id});
+  const BookDetailScreen({super.key, required this.id});
 
   @override
-  State<BookDetailPage> createState() => _BookDetailPageState();
+  State<BookDetailScreen> createState() => _BookDetailScreenState();
 }
 
-class _BookDetailPageState extends State<BookDetailPage> {
+class _BookDetailScreenState extends State<BookDetailScreen> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
   List<CommentBean> comments = [];
   bool loaded = false;

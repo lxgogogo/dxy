@@ -5,18 +5,18 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:group_button/group_button.dart';
 import 'package:holdem/model/board_list.dart';
-import 'package:holdem/page/forum/page_forum_post_detail.dart';
+import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../utils/constants.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/log_utils.dart';
-import '../../view/forum/PostListView.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/eventbus/EventBusAction.dart';
+import '../../../utils/eventbus/EventBusManager.dart';
+import '../../../utils/log_utils.dart';
+import '../../../view/forum/PostListView.dart';
 
 class ForumTabChildPage extends StatefulWidget {
   int tabId;

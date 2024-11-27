@@ -1,17 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:holdem/main.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
 import 'package:holdem/page/mine/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
-import 'package:holdem/widget/button.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,16 +15,17 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
-import 'package:universal_html/html.dart' as html;
 
-class SettingsPage extends StatefulWidget {
-  SettingsPage({Key? key}) : super(key: key);
+part 'setting_controller.dart';
+
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({Key? key}) : super(key: key);
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingScreenState extends State<SettingScreen> {
   String _currentVersion = '';
   bool _canUpdate = false;
 
@@ -215,22 +211,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: TextStyle(color: const Color(0xff249CFC), fontSize: 15.px),
                 ),
               ),
-              // child: const ListTile(
-              //   leading: ImageIcon(
-              //     AssetImage('assets/images/logout.png'),
-              //     size: 22,
-              //   ),
-              //   title: Text(
-              //     '退出登录',
-              //     style: AppTheme.text333333Size15,
-              //   ),
-              //   // 中间文本
-              //   trailing: ImageIcon(
-              //     AssetImage('assets/images/item_arrow.png'),
-              //     size: 22,
-              //   ),
-              //   contentPadding: EdgeInsets.fromLTRB(16, 0, 10, 0),
-              // ),
             )),
       ],
     );

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/event_bus_util.dart';
@@ -10,16 +11,18 @@ import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class RepliesPage extends StatefulWidget {
-  int id;
-  CommentBean commentBean;
-  RepliesPage({super.key,required this.id,required this.commentBean});
+part 'reply_list_controller.dart';
+
+class ReplyListScreen extends StatefulWidget {
+  final int id;
+  final CommentBean commentBean;
+  const ReplyListScreen({super.key,required this.id,required this.commentBean});
 
   @override
-  State<RepliesPage> createState() => _RepliesPageState();
+  State<ReplyListScreen> createState() => _ReplyListScreenState();
 }
 
-class _RepliesPageState extends State<RepliesPage> {
+class _ReplyListScreenState extends State<ReplyListScreen> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<CommentBean> comments = [];

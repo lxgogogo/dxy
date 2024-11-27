@@ -1,8 +1,9 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:holdem/page/forum/page_forum_tab_child.dart';
-import 'package:holdem/page/forum/page_publish_posts.dart';
+import 'package:holdem/page/feed_list/widgets/feed_list_child.dart';
+import 'package:holdem/page/feed_post/feed_post_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
@@ -15,14 +16,16 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/global.dart';
 import '../login/login_screen.dart';
 
-class ForumTabPage extends StatefulWidget {
-  const ForumTabPage({super.key});
+part 'feed_list_controller.dart';
+
+class FeedListScreen extends StatefulWidget {
+  const FeedListScreen({super.key});
 
   @override
-  State<ForumTabPage> createState() => _ForumTabPageState();
+  State<FeedListScreen> createState() => _FeedListScreenState();
 }
 
-class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderStateMixin {
+class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProviderStateMixin {
   late int currentBoardId = 0;
   late List<BoardInfo> boardInfoList;
   int selIndex = 0;
@@ -317,7 +320,7 @@ class _ForumTabPageState extends State<ForumTabPage> with SingleTickerProviderSt
       // backgroundColor: Colors.transparent,
       onPressed: () {
         Global().checkLogin(() {
-          Get.to(PublishPostsPage(boardInfoList: boardInfoList));
+          Get.toNamed(Routes.feedPost, arguments: boardInfoList);
         });
       },
       // shape: CircleBorder(),

@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 
@@ -22,7 +23,7 @@ class _BookItemState extends State<BookItem> {
     SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
-        Get.to(BookDetailPage(id: widget.article.id ?? 0))?.whenComplete(() {
+        Get.toNamed(Routes.bookDetail, arguments: widget.article.id ?? 0)?.whenComplete(() {
           widget.article.viewCount = (widget.article.viewCount ?? 0) + 1;
           setState(() {});
         });

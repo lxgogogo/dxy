@@ -1,30 +1,29 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/eventbus/EventBusAction.dart';
-import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../utils/app_theme.dart';
+part 'comment_list_controller.dart';
 
-class CommentListPage extends StatefulWidget {
-  int id;
-  String relType;
+class CommentListScreen extends StatefulWidget {
+ final int relId;
+ final String relType;
 
-  CommentListPage({super.key, required this.id, required this.relType});
+  const CommentListScreen({super.key, required this.relId, required this.relType});
 
   @override
-  State<CommentListPage> createState() => _CommentListPageState();
+  State<CommentListScreen> createState() => _CommentListScreenState();
 }
 
-class _CommentListPageState extends State<CommentListPage> {
+class _CommentListScreenState extends State<CommentListScreen> {
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
   List<CommentBean> comments = [];
@@ -52,7 +51,7 @@ class _CommentListPageState extends State<CommentListPage> {
     NetRequest().commentList({
       'pageNum': pageNum,
       'pageSize': 10,
-      'filters': {'relType': widget.relType, 'relId': widget.id}
+      'filters': {'relType': widget.relType, 'relId': widget.relId}
     }, (data) {
       if (mounted) {
         List<CommentBean> dataList =

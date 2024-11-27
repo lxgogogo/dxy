@@ -6,9 +6,10 @@ import 'package:get/route_manager.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/page_mine_child.dart';
-import 'package:holdem/page/mine/page_mine_follow.dart';
+import 'package:holdem/page/following/following_screen.dart';
 import 'package:holdem/page/mine/page_personal.dart';
-import 'package:holdem/page/mine/page_settings.dart';
+import 'package:holdem/page/setting/setting_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -78,7 +79,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                 height: 20.px,
               ),
               onPressed: () {
-                Get.to(SettingsPage());
+                Get.toNamed(Routes.setting);
               },
             ),
           ],
@@ -231,7 +232,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                                         decoration: TextDecoration.underline,
                                       )),
                                   onTap: () {
-                                    Get.to(MineFollowPage(isFollowPage: true));
+                                    Get.toNamed(Routes.following, arguments: true);
                                   },
                                 ),
                                 SizedBox(
@@ -248,7 +249,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                                     ),
                                   ),
                                   onTap: () {
-                                    Get.to(MineFollowPage(isFollowPage: false));
+                                    Get.toNamed(Routes.following, arguments: true);
                                   },
                                 )
                               ]),

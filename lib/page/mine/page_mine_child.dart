@@ -10,10 +10,11 @@ import 'package:holdem/page/index/item_article.dart';
 import 'package:holdem/page/index/item_book.dart';
 import 'package:holdem/page/index/item_course.dart';
 import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/index/page_book_detail.dart';
-import 'package:holdem/page/index/page_video_detail.dart';
-import 'package:holdem/page/index/page_video_list.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/page/mine/dialog_confirm.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -32,8 +33,8 @@ import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/PostListView.dart';
 import '../../widget/no_data.dart';
-import '../forum/page_forum_post_detail.dart';
-import '../index/article_detail_page.dart';
+import '../feed_detail/feed_detail_screen.dart';
+import '../article_detail/article_detail_screen.dart';
 import 'login_helper.dart';
 
 class MineChildPage extends StatefulWidget {
@@ -278,34 +279,6 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
       },
     );
   }
-
-  Widget _buildCollectItem(CollectModel collectModel) {
-    if (collectModel.relType == 'thread') {
-      if (collectModel.thread != null) {
-        return ArticleItem(
-          article: ArticleBean(
-            title: collectModel.thread!.title,
-            createdAt: collectModel.thread!.createdAt,
-            commentCount: collectModel.thread!.commentCount,
-            cover: collectModel.thread!.files?.firstOrNull?.url,
-          ),
-        );
-        // return PostListItemView(
-        //   collectModel.thread!,
-        // );
-      }
-    } else if (collectModel.relType == 'content') {
-      if (collectModel.content == null) return const SizedBox();
-      if (['article', 'video', 'book', 'course'].contains(
-        collectModel.content?.type,
-      )) {
-        return ArticleItem(
-          article: collectModel.content!,
-        );
-      }
-    }
-    return const SizedBox();
-  }
 }
 
 class MyCommentItem extends StatelessWidget {
@@ -424,13 +397,13 @@ class MyCommentItem extends StatelessWidget {
               final id = item.resourceId;
               if (id == null) return;
               if (item.resourceType == 'thread') {
-                Get.to(PostDetailPage(id: id));
+                Get.toNamed(Routes.feedDetail, arguments: id);
               } else if (item.resourceType == 'article') {
-                Get.to(ArticleDetailPage(id: id));
+                Get.toNamed(Routes.articleDetail, arguments: id);
               } else if (item.resourceType == 'book') {
-                Get.to(BookDetailPage(id: id));
+                Get.toNamed(Routes.bookDetail, arguments: id);
               } else if (item.resourceType == 'video') {
-                Get.to(VideoDetailPage(id: id));
+                Get.toNamed(Routes.videoDetail, arguments: id);
               }
             },
             child: Column(
@@ -513,19 +486,19 @@ class MyCollectItem extends StatelessWidget {
         if (item?.relType == 'thread') {
           final id = item?.thread?.id;
           if (id == null) return;
-          Get.to(PostDetailPage(id: id));
+          Get.toNamed(Routes.feedDetail, arguments: id);
         } else if (item?.relType == 'content') {
           final type = item?.content?.type;
           final id = item?.content?.id;
           if (id == null) return;
           if (type == 'article') {
-            Get.to(ArticleDetailPage(id: id));
+            Get.toNamed(Routes.articleDetail, arguments: id);
           } else if (type == 'book') {
-            Get.to(BookDetailPage(id: id));
+            Get.toNamed(Routes.bookDetail, arguments: id);
           } else if (type == 'videoList') {
-            Get.to(VideoListPage(id: id));
+            Get.toNamed(Routes.videoList, arguments: id);
           } else if (type == 'video') {
-            Get.to(VideoDetailPage(id: id));
+            Get.toNamed(Routes.videoDetail, arguments: id);
           }
         }
       },

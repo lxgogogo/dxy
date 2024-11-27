@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/login_helper.dart';
@@ -14,16 +15,18 @@ import '../../utils/size_fit.dart';
 import '../../view/forum/ToastUtils.dart';
 import '../../widget/follow_btn.dart';
 
-class MineFollowPage extends StatefulWidget {
-  bool isFollowPage = true;
+part 'following_controller.dart';
 
-  MineFollowPage({Key? key, required this.isFollowPage}) : super(key: key);
+class FollowingScreen extends StatefulWidget {
+  final bool isFollowPage;
+
+  const FollowingScreen({Key? key, required this.isFollowPage}) : super(key: key);
 
   @override
-  _MineFollowPageState createState() => _MineFollowPageState();
+  _FollowingScreenState createState() => _FollowingScreenState();
 }
 
-class _MineFollowPageState extends State<MineFollowPage> {
+class _FollowingScreenState extends State<FollowingScreen> {
   int pageNum = 1;
   int pageSize = 10;
   bool isFollowPage = true;
@@ -31,8 +34,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
   List<UserProfile> followOrFanUserList = [];
   bool _isMounted = false;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   final TextEditingController searchController = TextEditingController();
 
@@ -67,8 +69,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   reqListData() {
     if (isFollowPage) {
-      NetRequest().followedList(pageNum.toString(), pageSize.toString(), '',
-          (data) {
+      NetRequest().followedList(pageNum.toString(), pageSize.toString(), '', (data) {
         UserDataList followOrFan = UserDataList.fromJson(data);
         if (_isMounted) {
           setState(() {
@@ -83,8 +84,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
         _refreshController.refreshCompleted();
       });
     } else {
-      NetRequest().fansList(pageNum.toString(), pageSize.toString(), '',
-          (data) {
+      NetRequest().fansList(pageNum.toString(), pageSize.toString(), '', (data) {
         UserDataList followOrFan = UserDataList.fromJson(data);
         if (_isMounted) {
           setState(() {
@@ -115,8 +115,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
           ),
           onPressed: () {
             //通知我的页面刷新关注粉丝数量
-            EventBusManager.eventBus
-                .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+            EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
             Navigator.pop(context);
           },
         ),
@@ -142,11 +141,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
                   gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFF4F7FC),
-                  Color(0xFFE4EEF9),
-                  Color(0xFFE4EEF9)
-                ],
+                colors: [Color(0xFFF4F7FC), Color(0xFFE4EEF9), Color(0xFFE4EEF9)],
               )),
               child: contentView())),
     ));
@@ -155,12 +150,7 @@ class _MineFollowPageState extends State<MineFollowPage> {
   Widget contentView() {
     return Center(
         child: Row(
-      children: [
-        Expanded(
-            child: followOrFanUserList.isNotEmpty
-                ? listView()
-                : const NoDataView())
-      ],
+      children: [Expanded(child: followOrFanUserList.isNotEmpty ? listView() : const NoDataView())],
     ));
   }
 
@@ -183,22 +173,19 @@ class _MineFollowPageState extends State<MineFollowPage> {
 
   Widget listDataItem(int index) {
     return Container(
-      margin: EdgeInsets.only(left: 18.px,right:18.px),
-      padding: EdgeInsets.only(top: 12.px,bottom: 12.px),
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.px,color: const Color(0xffE6E6E6)))),
+      margin: EdgeInsets.only(left: 18.px, right: 18.px),
+      padding: EdgeInsets.only(top: 12.px, bottom: 12.px),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.px, color: const Color(0xffE6E6E6)))),
       child: Row(children: [
         Container(
             height: 34.px,
             width: 34.px,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22.px),
-                border: Border.all(color: Colors.white, width: 1)),
+                borderRadius: BorderRadius.circular(22.px), border: Border.all(color: Colors.white, width: 1)),
             child: Center(
                 child: ClipOval(
               child: LoginHelper().getUserAvatar(
-                  followOrFanUserList[index].avatar!.isNotEmpty
-                      ? followOrFanUserList[index].avatar!
-                      : '',
+                  followOrFanUserList[index].avatar!.isNotEmpty ? followOrFanUserList[index].avatar! : '',
                   32.px,
                   32.px),
             ))),
@@ -206,17 +193,15 @@ class _MineFollowPageState extends State<MineFollowPage> {
           width: 7.px,
         ),
         Text(
-          followOrFanUserList[index].nickname!.isNotEmpty
-              ? followOrFanUserList[index].nickname!
-              : '',
-          style: TextStyle(color: const Color(0xff2a2a2a),fontSize: 12.px),
+          followOrFanUserList[index].nickname!.isNotEmpty ? followOrFanUserList[index].nickname! : '',
+          style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px),
         ),
         const Spacer(),
         FollowBtn(
             isFollowed: followOrFanUserList[index].followed!,
             onTap: () {
-              NetRequest().followerToggle(followOrFanUserList[index].id!,
-                  !followOrFanUserList[index].followed!, (data) {
+              NetRequest().followerToggle(followOrFanUserList[index].id!, !followOrFanUserList[index].followed!,
+                  (data) {
                 if (_isMounted) {
                   setState(() {
                     if (isFollowPage) {

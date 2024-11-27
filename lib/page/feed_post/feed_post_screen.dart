@@ -10,9 +10,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/forum/page_ait_user.dart';
-import 'package:holdem/page/forum/page_select_label.dart';
+import 'package:holdem/page/at_user/at_user_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
@@ -31,16 +32,18 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../widget/label_view.dart';
 
-class PublishPostsPage extends StatefulWidget {
+part 'feed_post_controller.dart';
+
+class FeedPostScreen extends StatefulWidget {
   final List<BoardInfo> boardInfoList;
 
-  const PublishPostsPage({super.key, required this.boardInfoList});
+  const FeedPostScreen({super.key, required this.boardInfoList});
 
   @override
-  State<PublishPostsPage> createState() => _PublishPostsPageState();
+  State<FeedPostScreen> createState() => _FeedPostScreenState();
 }
 
-class _PublishPostsPageState extends State<PublishPostsPage> with SingleTickerProviderStateMixin {
+class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProviderStateMixin {
   BoardInfo? get currentBord =>
       _prefixIndex != -1 && _prefixIndex < widget.boardInfoList.length ? widget.boardInfoList[_prefixIndex] : null;
   int _prefixIndex = -1;
@@ -522,10 +525,7 @@ class _PublishPostsPageState extends State<PublishPostsPage> with SingleTickerPr
           ),
           IconButton(
               onPressed: () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AitUserPage()),
-                );
+                final result = await Get.toNamed(Routes.atUser);
                 // 在这里处理从ResultPage返回的结果
                 if (result != null) {
                   aitUserBeanList.add(result);

@@ -6,14 +6,15 @@ import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/page/comment/item_comment.dart';
 import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 
 import '../../model/board_list.dart';
-import '../../page/forum/media_helper.dart';
-import '../../page/forum/page_forum_post_detail.dart';
-import '../../page/index/article_detail_page.dart';
+import '../../utils/media_helper.dart';
+import '../../page/feed_detail/feed_detail_screen.dart';
+import '../../page/article_detail/article_detail_screen.dart';
 import '../../utils/app_theme.dart';
 
 Widget PostListItemView(BoardBean boardBean, {bool isMyPost = false}) {
@@ -153,10 +154,10 @@ Widget PostListItemView(BoardBean boardBean, {bool isMyPost = false}) {
     onTap: () {
       if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
         if (boardBean.relType == 'content') {
-          Get.to(ArticleDetailPage(id: boardBean.id ?? 0));
+          Get.toNamed(Routes.articleDetail, arguments:  boardBean.id ?? 0);
         } else if (boardBean.relType == 'comment') {}
       } else {
-        Get.to(PostDetailPage(id: boardBean.id ?? 0));
+        Get.toNamed(Routes.feedDetail, arguments: boardBean.id ?? 0);
       }
     },
     child: isMyPost

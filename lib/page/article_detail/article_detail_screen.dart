@@ -21,16 +21,18 @@ import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:universal_html/html.dart' as html;
 
-class ArticleDetailPage extends StatefulWidget {
+part 'article_detail_controller.dart';
+
+class ArticleDetailScreen extends StatefulWidget {
   final int id;
 
-  const ArticleDetailPage({super.key, required this.id});
+  const ArticleDetailScreen({super.key, required this.id});
 
   @override
-  State<ArticleDetailPage> createState() => _ArticleDetailPageState();
+  State<ArticleDetailScreen> createState() => _ArticleDetailScreenState();
 }
 
-class _ArticleDetailPageState extends State<ArticleDetailPage> {
+class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
   ArticleDetailBean articleDetailBean = ArticleDetailBean();
   List<CommentBean> comments = [];
   bool loaded = false;

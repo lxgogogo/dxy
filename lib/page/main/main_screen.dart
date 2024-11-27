@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/app_version.dart';
+import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/message/page_message.dart';
 import 'package:holdem/page/mine/dialog_common.dart';
@@ -18,7 +19,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../forum/page_forum_tab.dart';
 import '../mine/page_mine.dart';
 
 part 'main_controller.dart';
@@ -32,7 +32,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [HomeScreen(), ForumTabPage(), MessagePage(), MinePage()];
+  final List<Widget> _pages = [HomeScreen(), FeedListScreen(), MessagePage(), MinePage()];
 
   var actionEventBus;
 

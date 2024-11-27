@@ -19,16 +19,18 @@ import 'package:video_player/video_player.dart';
 
 import '../../widget/background_container.dart';
 
-class VideoDetailPage extends StatefulWidget {
+part 'video_detail_controller.dart';
+
+class VideoDetailScreen extends StatefulWidget {
   final int id;
 
-  const VideoDetailPage({super.key, required this.id});
+  const VideoDetailScreen({super.key, required this.id});
 
   @override
-  State<VideoDetailPage> createState() => _VideoDetailPageState();
+  State<VideoDetailScreen> createState() => _VideoDetailScreenState();
 }
 
-class _VideoDetailPageState extends State<VideoDetailPage> {
+class _VideoDetailScreenState extends State<VideoDetailScreen> {
   ArticleDetailBean? articleDetailBean;
   late VideoPlayerController _playController;
   ChewieController? _chewieController;

@@ -1,39 +1,25 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:holdem/page/comment/page_comments.dart';
-import 'package:holdem/page/comment/page_publish_comment.dart';
+import 'package:holdem/page/comment_list/comment_list_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:universal_html/html.dart' as html;
 
 import '../model/upload_file.dart';
-import '../page/forum/page_comment_input.dart';
-import '../page/login/login_screen.dart';
 import '../utils/app_theme.dart';
-import '../utils/eventbus/EventBusAction.dart';
-import '../utils/eventbus/EventBusManager.dart';
 import '../utils/global.dart';
 import '../view/forum/ToastUtils.dart';
 
-/**
- *
- * @ProjectName:  flutter
- * @Desc:
- * @Author:  levin
- * @Date:  2024/5/1
- */
 class PostDetailBottomView extends StatefulWidget {
-  PostBottomViewParams viewParams;
+  final PostBottomViewParams viewParams;
 
-  PostDetailBottomView({Key? key, required this.viewParams}) : super(key: key);
+  const PostDetailBottomView({Key? key, required this.viewParams}) : super(key: key);
 
   @override
-  _PostDetailBottomViewState createState() => _PostDetailBottomViewState();
+  State createState() => _PostDetailBottomViewState();
 }
 
 class _PostDetailBottomViewState extends State<PostDetailBottomView> {
@@ -194,7 +180,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
               child: GestureDetector(
                 onTap: () {
                   Global().checkLogin(() {
-                    Get.to(PublishCommentPage(relType: viewParams.relType!, relId: viewParams.relId!));
+                    Get.toNamed(Routes.publishComment, arguments: {
+                      'relType': viewParams.relType!,
+                      'relId': viewParams.relId!,
+                    });
                   });
                 },
                 child: Container(
@@ -283,10 +272,10 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                 )),
             InkWell(
                 onTap: () {
-                  Get.to(CommentListPage(
-                    id: viewParams.relId!,
-                    relType: viewParams.relType!,
-                  ));
+                  Get.toNamed(Routes.commentList, arguments: {
+                    'relId': viewParams.relId!,
+                    'relType': viewParams.relType!,
+                  });
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.px),

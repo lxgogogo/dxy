@@ -1,49 +1,41 @@
 import 'dart:io';
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/forum/page_ait_user.dart';
-import 'package:holdem/page/forum/page_select_label.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/widget/background_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
-import 'package:super_tooltip/super_tooltip.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/common_utils.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
-import '../../widget/label_view.dart';
 
-class PublishCommentPage extends StatefulWidget {
+part 'comment_publish_controller.dart';
+
+class CommentPublishScreen extends StatefulWidget {
   final String relType;
   final int relId;
 
-  const PublishCommentPage({super.key, required this.relType, required this.relId});
+  const CommentPublishScreen({super.key, required this.relType, required this.relId});
 
   @override
-  State<PublishCommentPage> createState() => _PublishCommentPageState();
+  State<CommentPublishScreen> createState() => _CommentPublishScreenState();
 }
 
-class _PublishCommentPageState extends State<PublishCommentPage> with SingleTickerProviderStateMixin {
+class _CommentPublishScreenState extends State<CommentPublishScreen> with SingleTickerProviderStateMixin {
   final _controller = DetectableTextEditingController(
     regExp: detectionRegExp(),
   );
@@ -306,10 +298,7 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
             ),
             IconButton(
                 onPressed: () async {
-                  final result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AitUserPage()),
-                  );
+                  final result = await Get.toNamed(Routes.atUser);
                   // 在这里处理从ResultPage返回的结果
                   if (result != null) {
                     aitUserBeanList.add(result);
@@ -493,5 +482,4 @@ class _PublishCommentPageState extends State<PublishCommentPage> with SingleTick
       }
     }
   }
-
 }

@@ -24,18 +24,20 @@ import '../../utils/app_theme.dart';
 import '../../utils/storage.dart';
 import '../../view/forum/CircleImageWithText.dart';
 import '../../widget/post_detail_bottom_view.dart';
-import 'media_helper.dart';
+import '../../utils/media_helper.dart';
 
-class PostDetailPage extends StatefulWidget {
+part 'feed_detail_controller.dart';
+
+class FeedDetailScreen extends StatefulWidget {
   final int id; //帖子id
 
-  const PostDetailPage({super.key, required this.id});
+  const FeedDetailScreen({super.key, required this.id});
 
   @override
-  State<PostDetailPage> createState() => _PostDetailPageState();
+  State<FeedDetailScreen> createState() => _FeedDetailScreenState();
 }
 
-class _PostDetailPageState extends State<PostDetailPage> {
+class _FeedDetailScreenState extends State<FeedDetailScreen> {
   late int currentPostId;
   bool _isMounted = false;
   BoardBean? boardBean;

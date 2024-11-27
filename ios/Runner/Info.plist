@@ -26,8 +26,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>我们需要访问图库来上传图片</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -51,5 +49,9 @@
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
     <false/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>App需要您的同意，才能访问相册，以便于从相册获取图片上传头像等</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>App需要您的同意,才能访问您的麦克风</string>
 </dict>
 </plist>

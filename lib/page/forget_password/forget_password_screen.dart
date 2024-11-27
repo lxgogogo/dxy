@@ -269,7 +269,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                   return;
                                 }
                                 _startCountdown(); //启动倒计时
-                                NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_REGISTER, email, (data) {});
+                                NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_RESET_PW, email, (data) {});
                               },
                               child: Text(
                                 '发送验证码',

@@ -407,6 +407,8 @@ class NetRequest {
 
   static const String SEND_CODE_TYPE_CHANGE_EMAIL = "changeEmail";
 
+  static const String SEND_CODE_DELETE_ACCOUNT = "deleteAccount";
+
   Future sendCode(String type, String account, SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
     params['type'] = type;
@@ -548,6 +550,22 @@ class NetRequest {
     params['code'] = code;
 
     Map<String, dynamic> response = await HttpUtils.post(Api.updateEmail, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      LogUtils.printAll("userUpdate===>$response");
+      onSuccess(response['data']);
+    } else {
+      ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///注销接口
+  Future deleteAccount(String account, String code, SuccessCallback onSuccess) async {
+    Map<String, Object> params = {};
+    params['account'] = account;
+    params['code'] = code;
+
+    Map<String, dynamic> response = await HttpUtils.post(Api.deleteAccount, params: params);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userUpdate===>$response");

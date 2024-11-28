@@ -57,4 +57,5 @@ class Api {
 
   static const String upCount = '/api/content/upCount';
   static const String threadUpCount = '/api/thread/upCount';
+  static const String deleteAccount = '/api/user/deleteAccount';
 }

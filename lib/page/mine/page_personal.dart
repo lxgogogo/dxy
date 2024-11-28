@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/page/mine/dialog_delete_account.dart';
 import 'package:holdem/page/mine/dialog_edit_email.dart';
 import 'package:holdem/page/mine/dialog_edit_nickname.dart';
 import 'package:holdem/widget/background_container.dart';
@@ -243,6 +244,28 @@ class _PersonalPageState extends State<PersonalPage> {
                 ),
               ),
             ],
+          ),
+        ),
+        const Spacer(),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              barrierDismissible: true,
+              context: context,
+              builder: (context) => const DialogDeleteAccount(),
+            );
+          },
+          behavior: HitTestBehavior.translucent,
+          child: Container(
+            height: 48.5.px,
+            alignment: Alignment.center,
+            child: Text(
+              '注销账号',
+              style: TextStyle(
+                fontSize: 14.px,
+                color: Colors.red,
+              ),
+            ),
           ),
         ),
       ],

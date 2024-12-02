@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
-import 'package:oktoast/oktoast.dart';
 
-import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../view/forum/ToastUtils.dart';
 
 class DialogEditPassword extends StatefulWidget {
@@ -23,40 +20,75 @@ class DialogEditPassword extends StatefulWidget {
 class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
-  final TextEditingController originalController = TextEditingController();
-  bool _originalPwdObscureText = true;
-  final TextEditingController newController = TextEditingController();
-  bool _newPwdObscureText = true;
-  bool isShowNewPasswordTips = false;
-  final TextEditingController confirmController = TextEditingController();
-  bool isShowConfirmPasswordTips = false;
-  bool _confirmPwdObscureText = true;
-  String confirmTips = '';
+  final TextEditingController _controllerOriginalPw = TextEditingController();
 
-  int minLimit = 8;
-  int maxLimit = 12;
-  final RegExp regExp = RegExp(r'[A-Za-z]|[0-9]');
+  // bool isShowOriginalPwTips = false;
+  // final FocusNode _focusOriginalPw = FocusNode();
+  bool _originalPwdObscureText = true;
+
+  final TextEditingController _controllerPw = TextEditingController();
+  bool isShowPwTips = false;
+  final FocusNode _focusPw = FocusNode();
+  bool _newPwdObscureText = true;
+
+  final TextEditingController _controllerAgainPw = TextEditingController();
+  bool isShowAgainTips = false;
+  final FocusNode _focusAgainPw = FocusNode();
+  bool _confirmPwdObscureText = true;
+
+  RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,12}$');
 
   @override
   void initState() {
     super.initState();
-    newController.addListener(checkInvalid);
-    confirmController.addListener(checkInvalid);
+    // _focusOriginalPw.addListener(() {
+    //   if (!_focusOriginalPw.hasFocus) {
+    //     checkValid();
+    //   }
+    // });
+    _focusPw.addListener(() {
+      if (!_focusPw.hasFocus) {
+        checkValid();
+      }
+    });
+    _focusAgainPw.addListener(() {
+      if (!_focusAgainPw.hasFocus) {
+        checkValid();
+      }
+    });
   }
 
-  void checkInvalid() {
-    if (newController.text.length >= minLimit) {
-      isShowNewPasswordTips = false;
-    } else {
-      isShowNewPasswordTips = true;
-    }
+  void checkValid() {
+    final originalPassword = _controllerOriginalPw.text;
+    // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
+    final password = _controllerPw.text;
+    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final againPw = _controllerAgainPw.text;
+    isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
-    if (newController.text != confirmController.text && confirmController.text.isNotEmpty) {
-      isShowConfirmPasswordTips = true;
-    } else {
-      isShowConfirmPasswordTips = false;
-    }
-    _isDisable = isShowNewPasswordTips || isShowConfirmPasswordTips || confirmController.text.isEmpty;
+    _isDisable = originalPassword.isEmpty ||
+        // isShowOriginalPwTips ||
+        password.isEmpty ||
+        isShowPwTips ||
+        againPw.isEmpty ||
+        isShowAgainTips;
+    setState(() {});
+  }
+
+  void onChangeCheckValid() {
+    final originalPassword = _controllerOriginalPw.text;
+    // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
+    final password = _controllerPw.text;
+    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final againPw = _controllerAgainPw.text;
+    final isShowAgainTips = password != againPw && againPw.isNotEmpty;
+
+    _isDisable = originalPassword.isEmpty ||
+        // isShowOriginalPwTips ||
+        password.isEmpty ||
+        isShowPwTips ||
+        againPw.isEmpty ||
+        isShowAgainTips;
     setState(() {});
   }
 
@@ -136,7 +168,8 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                 ],
                               ),
                               child: TextField(
-                                controller: originalController,
+                                controller: _controllerOriginalPw,
+                                // focusNode: _focusOriginalPw,
                                 style: TextStyle(
                                   color: const Color(0xff3b5078),
                                   fontSize: 12.px,
@@ -144,6 +177,9 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                 ),
                                 maxLines: 1,
                                 obscureText: _originalPwdObscureText,
+                                onChanged: (_) {
+                                  onChangeCheckValid();
+                                },
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
                                   hintText: '请输入原密码',
@@ -182,7 +218,17 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           ),
                         ],
                       ),
-                      SizedBox(height: 11.px),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4.w),
+                        child: Text(
+                          /*isShowOriginalPwTips ? '请输入8-12位，须包含大小写字母+数字' : */
+                          '',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: /*isShowOriginalPwTips ? Colors.red : */ '95A3C4'.hexColor,
+                          ),
+                        ),
+                      ),
                       Row(
                         children: [
                           buildTitleText('新密码'),
@@ -205,17 +251,18 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                 ],
                               ),
                               child: TextField(
-                                controller: newController,
+                                controller: _controllerPw,
+                                focusNode: _focusPw,
                                 style: TextStyle(
                                   color: const Color(0xff3b5078),
                                   fontSize: 12.px,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
-                                inputFormatters: <TextInputFormatter>[
-                                  LengthLimitingTextInputFormatter(maxLimit),
-                                ],
                                 obscureText: _newPwdObscureText,
+                                onChanged: (_) {
+                                  onChangeCheckValid();
+                                },
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
                                   hintText: '请输入新密码',
@@ -254,15 +301,16 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           ),
                         ],
                       ),
-                      if (isShowNewPasswordTips)
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(12.px, 8.px, 12.px, 0),
-                          child: Text(
-                            '密码为$minLimit-$maxLimit位字母和数字组合',
-                            style: const TextStyle(fontSize: 12, color: Colors.red),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4.w),
+                        child: Text(
+                          isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
                           ),
                         ),
-                      SizedBox(height: 11.px),
+                      ),
                       Row(
                         children: [
                           buildTitleText('再次输入'),
@@ -285,17 +333,18 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                 ],
                               ),
                               child: TextField(
-                                controller: confirmController,
+                                controller: _controllerAgainPw,
+                                focusNode: _focusAgainPw,
                                 style: TextStyle(
                                   color: const Color(0xff3b5078),
                                   fontSize: 12.px,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
-                                inputFormatters: <TextInputFormatter>[
-                                  LengthLimitingTextInputFormatter(maxLimit),
-                                ],
                                 obscureText: _confirmPwdObscureText,
+                                onChanged: (_) {
+                                  onChangeCheckValid();
+                                },
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
                                   hintText: '请再次输入密码',
@@ -334,14 +383,16 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           ),
                         ],
                       ),
-                      if (isShowConfirmPasswordTips)
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(12.px, 8.px, 12.px, 0),
-                          child: const Text(
-                            '两次密码输入不一致',
-                            style: TextStyle(fontSize: 12, color: Colors.red),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4.w),
+                        child: Text(
+                          isShowAgainTips ? '两次密码输入不一致' : '',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: isShowAgainTips ? Colors.red : '95A3C4'.hexColor,
                           ),
                         ),
+                      ),
                       SizedBox(height: 18.5.px),
                       CustomButton(
                         onPressed: _submitUpdate,
@@ -387,21 +438,12 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
   }
 
   void _submitUpdate() {
-    if (newController.text != confirmController.text) {
-      showToast('两次密码不一致');
-      return;
-    }
-    if (!regExp.hasMatch(newController.text)) {
-      showToast('请输入8~12位字母数字组合的密码');
-      return;
-    }
     if (_isDisable) {
       return;
     }
-    NetRequest().updatePassword(originalController.text, newController.text, (data) {
+    NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text, (data) {
       ToastUtils.showToast('修改密码成功');
-      //保存账号密码，获取本人信息接口需要
-      StorageUtil().prefs!.setString('userPw', newController.text);
+      StorageUtil().prefs!.setString('userPw', _controllerPw.text);
       Navigator.of(context).pop();
     });
   }

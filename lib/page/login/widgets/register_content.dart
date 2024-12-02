@@ -119,7 +119,7 @@ class _RegisterContentState extends State<RegisterContent> {
       });
     }
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
           if (_countdown > 0) {

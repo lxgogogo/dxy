@@ -85,6 +85,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     if (widget.type == 'news') {
       NetRequest().indexBanner({
         'pos': 'index.banner',
+        // 'type': '1',
       }, (data) {
         List<BannerBean> bannerList = List<BannerBean>.from(data.map((banner) => BannerBean.fromJson(banner)));
         if (mounted) {

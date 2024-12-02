@@ -276,11 +276,14 @@ class _PersonalPageState extends State<PersonalPage> {
     final ImagePicker picker = ImagePicker();
     var picked = await picker.pickImage(
       source: ImageSource.gallery,
-      maxWidth: 400,
-      imageQuality: 40,
     );
 
     if (picked != null) {
+      final fileLength = await picked.length();
+      if (fileLength > 50 * 1024 * 1024) {
+        ToastUtils.showToast('上传头像不得超过50M');
+        return;
+      }
       imageUrl = picked.path;
     }
     if (imageUrl.isNotEmpty) {

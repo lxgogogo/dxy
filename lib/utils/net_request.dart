@@ -358,14 +358,31 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    LogUtils.printAll("userCommentList params===>$params");
     Map<String, dynamic> response = await HttpUtils.post(Api.userCommentList, params: params);
     HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
     if (resp.code == 200) {
-      LogUtils.printAll("userCommentList===>$response");
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message!);
+    }
+  }
+
+  ///评论列表
+  Future replyList(int pageNum, int pageSize, int? relId, String? relType, SuccessCallback onSuccess, FailureCallback onFail) async {
+    Map<String, dynamic> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+    Map<String, dynamic> filters = {};
+    filters['relId'] = relId;
+    filters['relType'] = relType;
+    params['filters'] = filters;
+    Map<String, dynamic> response = await HttpUtils.post(Api.commentList, params: params);
+    HttpUtilsResonse.Response resp = HttpUtilsResonse.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      onFail(resp.message ?? '');
+      ToastUtils.showToast(resp.message ?? '');
     }
   }
 
@@ -816,5 +833,4 @@ class NetRequest {
     }
     return false;
   }
-
 }

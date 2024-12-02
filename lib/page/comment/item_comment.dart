@@ -12,7 +12,6 @@ import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:intl/intl.dart';
-
 import '../mine/login_helper.dart';
 
 class CommentItem extends StatefulWidget {
@@ -26,8 +25,6 @@ class CommentItem extends StatefulWidget {
 }
 
 class _CommentItemState extends State<CommentItem> {
-  bool _isReplyExpanded = false;
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -173,9 +170,7 @@ class _CommentItemState extends State<CommentItem> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ...List.generate(
-                        _isReplyExpanded
-                            ? widget.commentBean.replies!.length
-                            : min(widget.commentBean.replies!.length, 2),
+                        widget.commentBean.replies!.length,
                         (index) {
                           final reply = widget.commentBean.replies![index];
                           return Padding(
@@ -260,37 +255,55 @@ class _CommentItemState extends State<CommentItem> {
                           );
                         },
                       ),
-                      if ((widget.commentBean.replies?.length ?? 0) > 2)
+                      if ((widget.commentBean.replyCount ?? 0) > 2)
                         Container(
                           height: 24.px,
                           margin: EdgeInsets.only(top: 10.px),
-                          child: GestureDetector(
-                            onTap: () {
-                              _isReplyExpanded = !_isReplyExpanded;
-                              setState(() {});
-                            },
-                            child: Row(
-                              children: [
-                                if (_isReplyExpanded)
-                                  const Spacer()
-                                else
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10.px),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xfff2f4f6),
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      '查看全部${widget.commentBean.replies?.length ?? 0}条回复',
-                                      style: TextStyle(
-                                        color: const Color(0xff3B5078),
-                                        fontSize: 12.px,
-                                      ),
+                          child: Row(
+                            children: [
+                              if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.px),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xfff2f4f6),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    '查看全部${min(pageSize, (widget.commentBean.replyCount ?? 0) - (widget.commentBean.replies?.length ?? 0))}条回复',
+                                    style: TextStyle(
+                                      color: const Color(0xff3B5078),
+                                      fontSize: 12.px,
                                     ),
                                   ),
-                                if (_isReplyExpanded)
-                                  Row(
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    getReplyList();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '展开',
+                                        style: TextStyle(
+                                          color: const Color(0xff3B5078),
+                                          fontSize: 12.px,
+                                        ),
+                                      ),
+                                      const Icon(Icons.keyboard_arrow_down),
+                                    ],
+                                  ),
+                                )
+                              ] else ...[
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    pageNum = 1;
+                                    widget.commentBean.replies = List.of(widget.commentBean.replies?.take(2) ?? []);
+                                    setState(() {});
+                                  },
+                                  child: Row(
                                     children: [
                                       Text(
                                         '收起',
@@ -301,11 +314,10 @@ class _CommentItemState extends State<CommentItem> {
                                       ),
                                       const Icon(Icons.keyboard_arrow_up),
                                     ],
-                                  )
-                                else
-                                  const Spacer()
+                                  ),
+                                )
                               ],
-                            ),
+                            ],
                           ),
                         ),
                     ],
@@ -321,6 +333,38 @@ class _CommentItemState extends State<CommentItem> {
           ),
         )
       ],
+    );
+  }
+
+  int pageNum = 1;
+  int pageSize = 10;
+
+  bool inFetching = false;
+
+  getReplyList() {
+    if (inFetching) return;
+    inFetching = true;
+    NetRequest().replyList(
+      pageNum,
+      pageSize,
+      widget.commentBean.id,
+      widget.commentBean.relType,
+      (data) {
+        CommentList commentList = CommentList.fromJson(data);
+        if (mounted) {
+          if (pageNum == 1) {
+            widget.commentBean.replies = commentList.list ?? [];
+          } else {
+            widget.commentBean.replies?.addAll(commentList.list ?? []);
+          }
+          pageNum++;
+          setState(() {});
+        }
+        inFetching = false;
+      },
+      (msg) {
+        inFetching = false;
+      },
     );
   }
 }

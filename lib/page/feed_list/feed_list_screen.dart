@@ -1,5 +1,6 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/feed_list/widgets/feed_list_child.dart';
 import 'package:holdem/page/feed_post/feed_post_screen.dart';
@@ -87,7 +88,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
             '论坛',
             style: TextStyle(
               color: const Color(0xff2c2c2c),
-              fontSize: 16.px,
+              fontSize: 16.w,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -104,18 +105,31 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
               hasShadow: false,
               borderColor: Colors.transparent,
               arrowLength: 0,
-              arrowTipDistance: 21.25.px,
+              arrowTipDistance: 21.25.w,
               bubbleDimensions: EdgeInsets.zero,
               touchThroughAreaShape: ClipAreaShape.rectangle,
               touchThroughAreaCornerRadius: 10,
               minimumOutsideMargin: 0,
               barrierColor: Colors.transparent,
-              right: 16.px,
+              right: 16.w,
               content: Container(
-                width: 90.px,
-                decoration: const BoxDecoration(
-                  color: Color(0xfffafcff),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                width: 90.w,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10.r,
+                      offset: Offset(0, 5.w),
+                    ),
+                    BoxShadow(
+                      color: const Color(0xfffafcff),
+                      blurRadius: 1.r,
+                      spreadRadius: -1.r,
+                      offset: Offset(0, -1.w),
+                    ),
+                  ],
                 ),
                 child: ListView.separated(
                   shrinkWrap: true,
@@ -137,7 +151,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                         }
                       },
                       child: Container(
-                        height: 41.5.px,
+                        height: 41.5.w,
                         alignment: Alignment.center,
                         child: Text(
                           item,
@@ -159,8 +173,8 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                 child: IconButton(
                   icon: Image.asset(
                     'assets/images/order.png',
-                    width: 20.px,
-                    height: 20.px,
+                    width: 20.w,
+                    height: 20.w,
                   ),
                   onPressed: () {
                     _tipController.showTooltip();
@@ -190,7 +204,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
           child: Row(
             children: [
               SizedBox(
-                width: 18.px,
+                width: 18.w,
               ),
               GestureDetector(
                 onTap: () {
@@ -205,12 +219,12 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                   _pageKey.currentState?.refreshData(0, order);
                 },
                 child: Container(
-                  height: 30.px,
-                  padding: EdgeInsets.symmetric(horizontal: 17.px),
-                  margin: EdgeInsets.only(right: 12.px, bottom: 12.px),
+                  height: 30.w,
+                  padding: EdgeInsets.symmetric(horizontal: 17.w),
+                  margin: EdgeInsets.only(right: 12.w, bottom: 12.w),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.px),
+                      borderRadius: BorderRadius.circular(15.w),
                       border: selIndex == 0 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
                       boxShadow: [
                         BoxShadow(
@@ -237,7 +251,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                       )),
                   child: Text(
                     '全部',
-                    style: TextStyle(color: selIndex == 0 ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                    style: TextStyle(color: selIndex == 0 ? Colors.white : const Color(0xff95A3C4), fontSize: 14.w),
                   ),
                 ),
               ),
@@ -255,12 +269,12 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                     _pageKey.currentState?.refreshData(boardInfoList[selIndex - 1].id!, order);
                   },
                   child: Container(
-                    height: 30.px,
-                    padding: EdgeInsets.symmetric(horizontal: 17.px),
-                    margin: EdgeInsets.only(right: 12.px, bottom: 12.px),
+                    height: 30.w,
+                    padding: EdgeInsets.symmetric(horizontal: 17.w),
+                    margin: EdgeInsets.only(right: 12.w, bottom: 12.w),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.px),
+                        borderRadius: BorderRadius.circular(15.w),
                         border:
                             selIndex == index + 1 ? null : Border.all(color: const Color(0xffffffff).withOpacity(0.7)),
                         boxShadow: [
@@ -289,7 +303,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                     child: Text(
                       boardInfoList[index].name!,
                       style: TextStyle(
-                          color: selIndex == index + 1 ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                          color: selIndex == index + 1 ? Colors.white : const Color(0xff95A3C4), fontSize: 14.w),
                     ),
                   ),
                 );
@@ -314,8 +328,8 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
       highlightColor: Colors.transparent,
       icon: Image.asset(
         'assets/images/posting_btn.png',
-        width: 58.px,
-        height: 58.px,
+        width: 58.w,
+        height: 58.w,
       ),
       // backgroundColor: Colors.transparent,
       onPressed: () {

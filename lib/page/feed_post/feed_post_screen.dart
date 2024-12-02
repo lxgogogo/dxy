@@ -10,7 +10,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/main.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -103,8 +105,8 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
           highlightColor: Colors.transparent,
           icon: Image.asset(
             'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
+            width: 22.w,
+            height: 22.w,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -128,9 +130,9 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
               });
             },
             child: Container(
-              width: 50.px,
-              height: 24.px,
-              margin: EdgeInsets.only(right: 10.px),
+              width: 50.w,
+              height: 24.w,
+              margin: EdgeInsets.only(right: 10.w),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/publish2.png'), fit: BoxFit.cover)),
@@ -148,7 +150,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
 
   Widget contentView() {
     return Container(
-      margin: EdgeInsets.only(top: 12.px),
+      margin: EdgeInsets.only(top: 12.w),
       padding: EdgeInsets.only(
         bottom: window.viewPadding.bottom / window.devicePixelRatio,
       ),
@@ -166,7 +168,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
             ],
           )),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.px),
+        padding: EdgeInsets.symmetric(horizontal: 18.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -176,25 +178,25 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                   bottom: BorderSide(color: Color(0xffe6e6e6), width: 0.5),
                 ),
               ),
-              height: 42.5.px,
+              height: 42.5.w,
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          fontSize: 14.px,
+                          fontSize: 14.w,
                           color: const Color(0xff2a2a2a),
                         ),
                         maxLength: 30,
                         controller: controllerTitle,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8.px),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
                           hintText: '请输入完整帖子标题（5-31个字）',
                           counterText: '',
                           hintStyle: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 14.px,
+                            fontSize: 14.w,
                             color: const Color(0xff2c2c2c).withOpacity(0.5),
                           ),
                           border: InputBorder.none,
@@ -209,17 +211,30 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                     hasShadow: false,
                     borderColor: Colors.transparent,
                     arrowLength: 0,
-                    arrowTipDistance: 21.25.px,
+                    arrowTipDistance: 21.25.w,
                     bubbleDimensions: EdgeInsets.zero,
                     touchThroughAreaShape: ClipAreaShape.rectangle,
                     touchThroughAreaCornerRadius: 10,
                     minimumOutsideMargin: 0,
                     barrierColor: Colors.transparent,
                     content: Container(
-                      width: 90.px,
-                      decoration: const BoxDecoration(
-                        color: Color(0xfffafcff),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      width: 90.w,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10.r,
+                            offset: Offset(0, 5.w),
+                          ),
+                          BoxShadow(
+                            color: const Color(0xfffafcff),
+                            blurRadius: 1.r,
+                            spreadRadius: -1.r,
+                            offset: Offset(0, -1.w),
+                          ),
+                        ],
                       ),
                       child: ListView.separated(
                         shrinkWrap: true,
@@ -236,7 +251,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                               }
                             },
                             child: Container(
-                              height: 41.5.px,
+                              height: 41.5.w,
                               alignment: Alignment.center,
                               child: Text(
                                 item.name ?? '',
@@ -261,7 +276,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                         }
                       },
                       child: SizedBox(
-                        width: 90.px,
+                        width: 90.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -288,11 +303,11 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
               ),
             ),
             SizedBox(
-              height: 150.px,
+              height: 150.w,
               child: DetectableTextField(
                   maxLines: null,
                   style: TextStyle(
-                    fontSize: 14.px,
+                    fontSize: 14.w,
                     color: const Color(0xff2a2a2a),
                   ),
                   controller: _controller,
@@ -300,10 +315,10 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                     // _handleTextChange();
                   },
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8.px, vertical: 15.5.px),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.5.w),
                     hintText: '请输入正文（建议10-2000字）',
                     hintStyle: TextStyle(
-                      fontSize: 14.px,
+                      fontSize: 14.w,
                       color: const Color(0xff2a2a2a).withOpacity(0.5),
                     ),
                     border: InputBorder.none,
@@ -313,7 +328,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
             Text(
               '单个视频或者最多9张图片',
               style: TextStyle(
-                fontSize: 12.px,
+                fontSize: 12.w,
                 color: const Color(0xff2a2a2a).withOpacity(0.5),
               ),
             ),
@@ -334,7 +349,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
             Visibility(
                 visible: imageData.length >= 6 ? true : false,
                 child: SizedBox(
-                  height: 120.px,
+                  height: 120.w,
                 )),
             const Spacer(),
             bottomView(),
@@ -371,8 +386,8 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
-                    width: 12.px,
-                    height: 12.px,
+                    width: 12.w,
+                    height: 12.w,
                   )),
             )
           ],
@@ -402,7 +417,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
   Widget _mediaShowView() {
     if (isShowVideoView) {
       return Container(
-          padding: EdgeInsets.fromLTRB(16.px, 16.px, 16.px, 0),
+          padding: EdgeInsets.fromLTRB(16.w, 16.w, 16.w, 0),
           width: 120,
           height: 180,
           child: Stack(alignment: Alignment.center, children: [
@@ -425,8 +440,8 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                   IconButton(
                     icon: Image.asset(
                       'assets/images/play_btn.png',
-                      width: 35.px,
-                      height: 35.px,
+                      width: 35.w,
+                      height: 35.w,
                     ),
                     onPressed: () {
                       _pickAndPlayVideo(imageUrlList[0].url);
@@ -452,8 +467,8 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
                   },
                   icon: Image.asset(
                     'assets/images/close_black.png',
-                    width: 12.px,
-                    height: 12.px,
+                    width: 12.w,
+                    height: 12.w,
                   )),
             )
           ]));
@@ -501,7 +516,7 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
 
   Widget bottomView() {
     return Container(
-      height: 41.5.px,
+      height: 41.5.w,
       decoration: const BoxDecoration(
         border: Border(top: BorderSide(color: Color(0xffe6e6e6))),
       ),
@@ -517,11 +532,11 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
               },
               icon: Image.asset(
                 'assets/images/photo_album.png',
-                width: 22.px,
-                height: 22.px,
+                width: 22.w,
+                height: 22.w,
               )),
           SizedBox(
-            width: 5.px,
+            width: 5.w,
           ),
           IconButton(
               onPressed: () async {
@@ -542,8 +557,8 @@ class _FeedPostScreenState extends State<FeedPostScreen> with SingleTickerProvid
               },
               icon: Image.asset(
                 'assets/images/ait.png',
-                width: 22.px,
-                height: 22.px,
+                width: 22.w,
+                height: 22.w,
               )),
         ],
       ),

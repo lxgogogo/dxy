@@ -264,7 +264,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                   ToastUtils.showToast('邮箱不能为空');
                                   return;
                                 }
-                                if (!LoginHelper().isValidEmail(email)) {
+                                if (!GetUtils.isEmail(email)) {
                                   ToastUtils.showToast('请输入正确格式邮箱');
                                   return;
                                 }

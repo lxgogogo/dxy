@@ -40,9 +40,12 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
       for (int i = 0; i < _items.length; i++) {
         final item = _items[i];
         final dayBegin = item.competition?.dayBegin;
-        final dayEnd = item.competition?.dayEnd;
+        DateTime? dayEnd = item.competition?.dayEnd;
         if (dayBegin != null && dayEnd != null) {
-          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd))) {
+          if (dayEnd.hour == 0 && dayEnd.minute == 0 && dayEnd.second == 0) {
+            dayEnd = dayEnd.subtract(const Duration(days: 1)).add(const Duration(hours: 23, minutes: 59, seconds: 59));
+          }
+          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd) || isSameDay(day, dayEnd))) {
             events.add(item);
           }
         }
@@ -57,9 +60,12 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
       for (int i = 0; i < _items.length; i++) {
         final item = _items[i];
         final dayBegin = item.competition?.dayBegin;
-        final dayEnd = item.competition?.dayEnd;
+        DateTime? dayEnd = item.competition?.dayEnd;
         if (dayBegin != null && dayEnd != null) {
-          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd))) {
+          if (dayEnd.hour == 0 && dayEnd.minute == 0 && dayEnd.second == 0) {
+            dayEnd = dayEnd.subtract(const Duration(days: 1)).add(const Duration(hours: 23, minutes: 59, seconds: 59));
+          }
+          if ((day.isAfter(dayBegin) || isSameDay(day, dayBegin)) && (day.isBefore(dayEnd) || isSameDay(day, dayEnd))) {
             count++;
           }
         }
@@ -68,8 +74,8 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
     return count;
   }
 
-  bool? _getSingleDayAvailable(DateTime day) {
-    bool? available;
+  bool? _getSingleDayNotAvailable(DateTime day) {
+    bool? notAvailable;
     if (_items.isNotEmpty) {
       for (int i = 0; i < _items.length; i++) {
         final item = _items[i];
@@ -77,16 +83,12 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
         final dayEnd = item.competition?.dayEnd;
         if (dayBegin != null && dayEnd != null) {
           if (isSameDay(dayBegin, day) && isSameDay(day, dayEnd)) {
-            if (day.isAfter(dayBegin) && day.isBefore(dayEnd)) {
-              available = day.isAfter(_toDay);
-            } else {
-              available = false;
-            }
+            notAvailable = _toDay.isAfter(day);
           }
         }
       }
     }
-    return available;
+    return notAvailable;
   }
 
   reqData() {
@@ -103,11 +105,11 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
           (e) => CompetitionBean.fromJson(e),
         ),
       );
+      _items = dataList;
       if (_selectedDay != null) {
-        _items = dataList;
         _selectedEvents = _getEventsForDay(_selectedDay!);
-        setState(() {});
       }
+      setState(() {});
     });
   }
 
@@ -183,14 +185,14 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                         final isNotPastDay = _toDay.isBefore(day) || isSameDay(_toDay, day);
                         final isSelectedDay = isSameDay(_selectedDay, day);
                         final eventCount = _getEventCountForDay(day);
-                        final isSingleDayAvailable = _getSingleDayAvailable(day);
+                        final isSingleDayNotAvailable = _getSingleDayNotAvailable(day);
                         return AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
                           decoration: BoxDecoration(
                             border: eventCount > 0
                                 ? Border(
                                     bottom: BorderSide(
-                                      color: isSingleDayAvailable != null
+                                      color: isSingleDayNotAvailable == true
                                           ? Colors.transparent
                                           : isNotPastDay
                                               ? const Color(0xffd9001b)
@@ -222,14 +224,14 @@ class _CompetitionCalendarPageState extends State<CompetitionCalendarPage> {
                                   ),
                                 ),
                               ),
-                              if (isSingleDayAvailable != null)
+                              if (isSingleDayNotAvailable != null)
                                 Positioned(
                                   bottom: 4.px,
                                   child: Container(
                                     width: 4.px,
                                     height: 4.px,
                                     decoration: ShapeDecoration(
-                                      color: isSingleDayAvailable == true
+                                      color: isSingleDayNotAvailable != true
                                           ? const Color(0xffd9001b)
                                           : const Color(0xffb0afa7),
                                       shape: const CircleBorder(),

@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:intl/intl.dart';
-import '../mine/login_helper.dart';
+import '../page/mine/login_helper.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentBean commentBean;
@@ -135,7 +135,7 @@ class _CommentItemState extends State<CommentItem> {
                     SizedBox(width: 32.px),
                     GestureDetector(
                       onTap: () {
-                        Global().checkLogin(() {
+                        UserStore.of.checkLogin(() {
                           Get.toNamed(Routes.inputComment, arguments: {
                             'relType': 'comment',
                             'relId': widget.commentBean.id!,

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
 import '../../../utils/app_theme.dart';

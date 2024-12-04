@@ -11,7 +11,7 @@ import 'package:oktoast/oktoast.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../utils/toast_utils.dart';
 
 class DialogConfirm extends StatelessWidget {
   final String title;

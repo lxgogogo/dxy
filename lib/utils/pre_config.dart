@@ -1,9 +1,11 @@
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:holdem/stores/storage.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/storage.dart';
 
 import 'env.dart';
-import 'global.dart';
 import 'interceptors.dart';
 
 class PreConfig {
@@ -13,20 +15,24 @@ class PreConfig {
     if (!_didInit) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+      await Get.putAsync<StorageService>(
+            () => StorageService().init(),
+        permanent: true,
+      );
       HttpUtils.init(
         baseUrl: Env.host,
         proxyInterceptor: ProxyInterceptor.interceptor,
         interceptors: [
           HttpHeaderInterceptors(),
+          ResponseInterceptors(),
           LogsInterceptors(),
         ],
       );
-      StorageUtil().init().then((_) {
-        if (StorageUtil().prefs!.getString("token") != null) {
-          Global().hasLogin = true;
-          Global().token = StorageUtil().prefs!.getString("token")!;
-        }
-      });
+      StorageUtil().init();
+      Get.put<UserStore>(
+        UserStore(),
+        permanent: true,
+      );
 
       _didInit = true;
     }

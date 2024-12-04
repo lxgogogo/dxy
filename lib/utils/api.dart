@@ -35,7 +35,7 @@ class Api {
   static const String logout = '/api/passport/logout';
   static const String resetPassword = '/api/passport/resetPassword';
   static const String sendCode = '/api/passport/sendCode';
-  static const String user = '/api/user';
+  static const String user = '/api/user/info';
   static const String userFavoriteList = '/api/user/favorite/list';
   static const String delFavorite = '/api/favorite/delete';
   static const String userCommentList = '/api/user/comment/list';
@@ -58,4 +58,5 @@ class Api {
   static const String upCount = '/api/content/upCount';
   static const String threadUpCount = '/api/thread/upCount';
   static const String deleteAccount = '/api/user/deleteAccount';
+  static const String saveReview = '/api/statistics/save';
 }

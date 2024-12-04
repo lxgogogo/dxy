@@ -4,12 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
-import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:oktoast/oktoast.dart';
@@ -43,6 +37,9 @@ class MyApp extends StatelessWidget {
             child: GetMaterialApp(
               title: '德学院',
               debugShowCheckedModeBanner: false,
+              navigatorObservers: [
+                Routes.observer,
+              ],
               localizationsDelegates: const [
                 RefreshLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,

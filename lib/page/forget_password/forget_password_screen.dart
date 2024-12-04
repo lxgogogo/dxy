@@ -7,7 +7,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
 import '../../utils/app_theme.dart';
@@ -440,10 +440,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     //忘记密码
     NetRequest().resetPassword(email, password, code, (data) {
       ToastUtils.showToast('重置密码成功');
-      //保存账号密码，获取本人信息接口需要
-      StorageUtil().prefs!.setString('userAccount', email);
-      StorageUtil().prefs!.setString('userPw', password);
-      Navigator.of(context).pop();
+      Get.back();
     });
   }
 }

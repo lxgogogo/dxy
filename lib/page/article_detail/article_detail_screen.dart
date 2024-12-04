@@ -1,25 +1,19 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
-import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/eventbus/EventBusAction.dart';
-import 'package:holdem/utils/eventbus/EventBusManager.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/holdem_btn.dart';
 import 'package:holdem/widget/no_data.dart';
-
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:universal_html/html.dart' as html;
 
 part 'article_detail_controller.dart';
 

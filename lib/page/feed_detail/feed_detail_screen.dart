@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
-import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
@@ -22,7 +22,7 @@ import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/storage.dart';
-import '../../view/forum/CircleImageWithText.dart';
+import '../../widget/circle_image_with_text.dart';
 import '../../widget/post_detail_bottom_view.dart';
 import '../../utils/media_helper.dart';
 
@@ -182,8 +182,8 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   ///是自己的帖子 不显示关注
   bool isOwnerPost() {
     if (boardBean != null) {
-      var ownerId = StorageUtil().prefs!.getString('ownerId');
-      if (boardBean!.user?.id.toString() == ownerId) {
+      var ownerId = UserStore.of.user.id;
+      if (boardBean!.user?.id == ownerId) {
         return true;
       }
     }
@@ -437,7 +437,7 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   }
 
   void _followToggle() {
-    Global().checkLogin(() {
+    UserStore.of.checkLogin(() {
       if (boardBean?.user?.id == null) return;
       final followed = boardBean?.user?.followed ?? false;
       NetRequest().followerToggle(boardBean!.user!.id!, !followed, (data) {

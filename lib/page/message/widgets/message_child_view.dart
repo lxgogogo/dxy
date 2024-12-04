@@ -3,11 +3,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/message.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -15,17 +10,16 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-// ignore: must_be_immutable
-class MessageTabChildPage extends StatefulWidget {
-  String type;
+class MessageChildView extends StatefulWidget {
+  final String type;
 
-  MessageTabChildPage({super.key, required this.type});
+  const MessageChildView({super.key, required this.type});
 
   @override
-  State<MessageTabChildPage> createState() => MessageTabChildPageState();
+  State<MessageChildView> createState() => MessageChildViewState();
 }
 
-class MessageTabChildPageState extends State<MessageTabChildPage> {
+class MessageChildViewState extends State<MessageChildView> {
   List<MessageBean> messages = [];
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   bool loaded = false;

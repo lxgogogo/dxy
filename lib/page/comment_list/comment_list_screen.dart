@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
-import 'package:holdem/page/comment/item_comment.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';

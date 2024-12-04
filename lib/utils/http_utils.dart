@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/model/res_base_model.dart';
 import 'package:holdem/utils/http.dart';
 
 import 'net_request.dart';
@@ -27,29 +28,18 @@ class HttpUtils {
     String path, {
     Map<String, dynamic>? params,
     Options? options,
-    CancelToken? cancelToken,
-    bool refresh = false,
-    bool noCache = true,
-    String? cacheKey,
-    bool cacheDisk = false,
   }) async {
     return await Http().get(
       path,
       params: params ?? {},
       options: options,
-      cancelToken: cancelToken,
-      refresh: refresh,
-      noCache: noCache,
-      cacheKey: cacheKey,
     );
   }
 
   static Future post(
     String path, {
-    // data,
     Map<String, dynamic>? params,
     Options? options,
-    CancelToken? cancelToken,
     bool showLoading = true,
   }) async {
     if (showLoading) {
@@ -57,10 +47,8 @@ class HttpUtils {
     }
     var ret = await Http().post(
       path,
-      // data: data,
       params: params ?? {},
       options: options,
-      cancelToken: cancelToken,
     );
     if (showLoading) {
       EasyLoading.dismiss();
@@ -90,7 +78,6 @@ class HttpUtils {
 
   static Future postFile(
     String path, {
-    // data,
     Map<String, dynamic>? params,
     Options? options,
     CancelToken? cancelToken,
@@ -103,7 +90,6 @@ class HttpUtils {
     }
     var ret = await Http().postFile(
       path,
-      // data: data,
       params: params ?? {},
       options: options,
       cancelToken: cancelToken,
@@ -116,51 +102,62 @@ class HttpUtils {
     return ret;
   }
 
-  static Future put(
-    String path, {
-    // data,
+  /// GET 请求
+  Future<ResBaseModel?> getNew(
+    String url, {
     Map<String, dynamic>? params,
     Options? options,
-    CancelToken? cancelToken,
   }) async {
-    return await Http().put(
-      path,
-      // data: data,
-      params: params ?? {},
-      options: options,
-      cancelToken: cancelToken,
-    );
+    Response response;
+    try {
+      response = params == null
+          ? await Http().get(url, options: options)
+          : await Http().get(url, params: params, options: options);
+
+      return ResBaseModel.fromJson(response.data);
+    } on DioException catch (e) {
+      return _handleError(e);
+    }
   }
 
-  static Future patch(
-    String path, {
-    // data,
+  /// POST 请求
+  Future<ResBaseModel?> postNew(
+    String url, {
     Map<String, dynamic>? params,
     Options? options,
-    CancelToken? cancelToken,
   }) async {
-    return await Http().patch(
-      path,
-      // data: data,
-      params: params ?? {},
-      options: options,
-      cancelToken: cancelToken,
-    );
+    Response response;
+    try {
+      response = await Http().post(url, params: params, options: options);
+
+      final res = response.data as Map<String, dynamic>?;
+      if (res == null) return null;
+      return ResBaseModel.fromJson(res);
+    } on DioException catch (e) {
+      return _handleError(e);
+    }
   }
 
-  static Future delete(
-    String path, {
-    // data,
-    Map<String, dynamic>? params,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return await Http().delete(
-      path,
-      // data: data,
-      params: params ?? {},
-      options: options,
-      cancelToken: cancelToken,
-    );
+  ResBaseModel? _handleError(DioException e) {
+    String msg = 'Unknown error';
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        msg = 'Connect timeout';
+      case DioExceptionType.connectionError:
+        msg = 'Connect error';
+      case DioExceptionType.badCertificate:
+        msg = 'Bad certificate';
+      case DioExceptionType.sendTimeout:
+        msg = 'Send timeout';
+      case DioExceptionType.receiveTimeout:
+        msg = 'Receive timeout';
+      case DioExceptionType.badResponse:
+        msg = 'Bad response';
+      case DioExceptionType.cancel:
+        msg = 'Request cancel';
+      case DioExceptionType.unknown:
+        msg = e.message ?? 'Unknown error';
+    }
+    return ResBaseModel(msg: msg, exception: e);
   }
 }

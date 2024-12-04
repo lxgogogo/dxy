@@ -6,7 +6,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 
 import '../../utils/app_theme.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../../utils/toast_utils.dart';
 
 part 'comment_input_controller.dart';
 class CommentInputScreen extends StatefulWidget {

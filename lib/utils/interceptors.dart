@@ -1,8 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/storage.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_util.dart';
+import 'package:holdem/utils/debounce_util.dart';
 import 'package:holdem/utils/devices_util.dart';
 import 'package:holdem/utils/log_util.dart';
+import 'package:holdem/utils/storage.dart';
 
 import 'env.dart';
 
@@ -10,13 +17,13 @@ import 'env.dart';
 class HttpHeaderInterceptors extends InterceptorsWrapper {
   @override
   void onRequest(
-      RequestOptions options,
-      RequestInterceptorHandler handler,
-      ) {
-    // final cusToken = options.headers["user-token"] as String? ?? '';
-    // if (cusToken.isEmpty) {
-    //   options.headers['user-token'] = StorageService.of.getToken();
-    // }
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
+    final token = StorageService.of.getToken();
+    if (token.isNotEmpty) {
+      options.headers['X-Auth-Token'] = token;
+    }
     options.headers = {
       ...options.headers,
       ...DevicesUtil.of.headerJson,
@@ -28,44 +35,40 @@ class HttpHeaderInterceptors extends InterceptorsWrapper {
 
 /// 响应拦截器
 class ResponseInterceptors extends InterceptorsWrapper {
-  // final _debounce = DebounceUtil(milliseconds: 300);
+  final _debounce = DebounceUtil(milliseconds: 300);
 
   @override
   void onResponse(
-      Response response,
-      ResponseInterceptorHandler handler,
-      ) {
-    // // 兼容 null data
-    // var data = response.data ?? <String, dynamic>{};
-    // if (data is String) {
-    //   data = jsonDecode(data);
-    // }
-    // if ((data is Map) &&
-    //     (response.statusCode == 200 || response.statusCode == 201)) {
-    //   final dynamic code = data['code'];
-    //   final String? msg = data['msg']?.toString();
-    //
-    //   if (code == '401' &&
-    //       ![
-    //         Routes.splash,
-    //         // 其他不需要重复跳转登录页的路由
-    //       ].contains(Get.currentRoute)) {
-    //     // 只针对 401 用 debounce
-    //     _debounce.run(() {
-    //       DialogUtil.showToast(
-    //         msg ?? '',
-    //         displayTime: const Duration(seconds: 3),
-    //       );
-    //
-    //       Future.delayed(const Duration(seconds: 3)).then((value) async {
-    //         // Get.offAllNamed(Routes.login);
-    //       });
-    //       return;
-    //     });
-    //   }
-    // }
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) {
+    // 兼容 null data
+    var data = response.data ?? <String, dynamic>{};
+    if (data is String) {
+      data = jsonDecode(data);
+    }
+    if ((data is Map) && (response.statusCode == 200 || response.statusCode == 201)) {
+      final dynamic code = data['code'];
+      final String? msg = data['msg']?.toString();
 
-    // super.onResponse(response..data = data, handler);
+      if (code == 401 &&
+          ![
+            Routes.login,
+            // 其他不需要重复跳转登录页的路由
+          ].contains(Get.currentRoute)) {
+        // 只针对 401 用 debounce
+        _debounce.run(() {
+          if (UserStore.of.isLogin) {
+            // showToast(msg ?? '请先登录', duration: const Duration(seconds: 2));
+            UserStore.of.clearUserStorage();
+            Get.toNamed(Routes.login);
+            return;
+          }
+        });
+      }
+    }
+
+    super.onResponse(response..data = data, handler);
   }
 }
 
@@ -73,9 +76,9 @@ class ResponseInterceptors extends InterceptorsWrapper {
 class LogsInterceptors extends InterceptorsWrapper {
   @override
   void onRequest(
-      RequestOptions options,
-      RequestInterceptorHandler handler,
-      ) {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) {
     Log.d("onRequest baseUrl: ${options.baseUrl}");
     Log.d("onRequest path: ${options.path}");
     Log.d('onRequest header: ${options.headers}');
@@ -88,9 +91,9 @@ class LogsInterceptors extends InterceptorsWrapper {
 
   @override
   Future<void> onResponse(
-      Response response,
-      ResponseInterceptorHandler handler,
-      ) async {
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) async {
     // if (response.data is Map) {
     final responseStr = response.toString();
     Log.d('onResponse ${response.requestOptions.path}: $responseStr');
@@ -109,14 +112,11 @@ class ProxyInterceptor {
   static HttpClient interceptor() {
     final client = HttpClient();
     if (!Env.isProxy) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) =>
-              Env.useBadCertificate;
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => Env.useBadCertificate;
       return client;
     }
 
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) {
+    client.badCertificateCallback = (X509Certificate cert, String host, int port) {
       return Env.useBadCertificate;
     };
 

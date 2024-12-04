@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/comment_list/comment_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -10,8 +11,7 @@ import 'package:holdem/utils/size_fit.dart';
 
 import '../model/upload_file.dart';
 import '../utils/app_theme.dart';
-import '../utils/global.dart';
-import '../view/forum/ToastUtils.dart';
+import '../utils/toast_utils.dart';
 
 class PostDetailBottomView extends StatefulWidget {
   final PostBottomViewParams viewParams;
@@ -179,7 +179,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  Global().checkLogin(() {
+                  UserStore.of.checkLogin(() {
                     Get.toNamed(Routes.publishComment, arguments: {
                       'relType': viewParams.relType!,
                       'relId': viewParams.relId!,
@@ -220,9 +220,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
             if (viewParams.relType == 'thread')
               InkWell(
                   onTap: () {
-                    Global().checkLogin(() {
-                      _likeToggle();
-                    });
+                    _likeToggle();
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.px),
@@ -246,9 +244,7 @@ class _PostDetailBottomViewState extends State<PostDetailBottomView> {
                   )),
             InkWell(
                 onTap: () {
-                  Global().checkLogin(() {
-                    _favoriteToggle();
-                  });
+                  _favoriteToggle();
                 },
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.px),

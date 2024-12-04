@@ -4,23 +4,16 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
-import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 
-import '../../model/board_list.dart';
-import '../../utils/media_helper.dart';
-import '../../page/feed_detail/feed_detail_screen.dart';
-import '../../page/article_detail/article_detail_screen.dart';
-import '../../utils/app_theme.dart';
+import '../model/board_list.dart';
+import '../utils/app_theme.dart';
 
-Widget PostListItemView(BoardBean boardBean, {bool isMyPost = false}) {
-  getName() {
-    return boardBean.user != null && boardBean.user!.nickname!.isNotEmpty ? boardBean.user!.nickname! : '德学院';
-  }
+Widget FeedItem(BoardBean boardBean, {bool isMyPost = false}) {
 
   Widget child = Padding(
     padding: EdgeInsets.all(12.px),

@@ -83,6 +83,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   logger: ^2.5.0
   flutter_widget_from_html: ^0.15.3
+  hive: ^2.2.3
 
 dev_dependencies:
   flutter_test:

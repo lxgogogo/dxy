@@ -18,7 +18,7 @@ import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';

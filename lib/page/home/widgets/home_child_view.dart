@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
@@ -9,26 +10,24 @@ import 'package:holdem/model/banner.dart';
 import 'package:holdem/model/competition_loop.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/index_category.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/index/competition_detail_page.dart';
-import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
-import 'package:holdem/page/index/item_article.dart';
-import 'package:holdem/page/index/item_book.dart';
-import 'package:holdem/page/index/item_course.dart';
-import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/index/competition_calendar_page.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
+import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
+import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
+import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
 import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/item_book.dart';
+import 'package:holdem/widget/item_course.dart';
+import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../model/board_list.dart';
 
@@ -478,7 +477,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         if (loops.isNotEmpty)
           GestureDetector(
             onTap: () {
-              Get.to(const CompetitionCalendarPage());
+              Get.toNamed(Routes.competitionCalendar);
             },
             child: Container(
               width: 361.px,
@@ -504,7 +503,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                         return Center(
                           child: GestureDetector(
                             onTap: () {
-                              Get.to(CompetitionDetailPage(id: loops[index].id));
+                              Get.toNamed(Routes.competitionDetail, arguments: loops[index].id);
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Text(

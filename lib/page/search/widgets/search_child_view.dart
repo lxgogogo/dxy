@@ -8,22 +8,17 @@ import 'package:holdem/model/competition_bean.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/model/userdata_list.dart';
-import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/index/competition_calendar_page.dart';
-import 'package:holdem/page/index/item_article.dart';
-import 'package:holdem/page/index/item_book.dart';
-import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/item_book.dart';
+import 'package:holdem/widget/item_comment.dart';
+import 'package:holdem/widget/item_competition.dart';
+import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -275,7 +270,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            Global().checkLogin(() {
+                            UserStore.of.checkLogin(() {
                               if (userItems[index].id == null) return;
                               final followed = userItems[index].followed ?? false;
                               NetRequest().followerToggle(userItems[index].id!, !followed, (data) {

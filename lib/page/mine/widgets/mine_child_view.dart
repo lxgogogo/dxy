@@ -3,50 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:holdem/model/article.dart';
-import 'package:holdem/model/upload_file.dart';
-import 'package:holdem/page/comment/item_comment.dart';
-import 'package:holdem/page/index/item_article.dart';
-import 'package:holdem/page/index/item_book.dart';
-import 'package:holdem/page/index/item_course.dart';
-import 'package:holdem/page/index/item_video.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
-import 'package:holdem/page/mine/dialog_confirm.dart';
+import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../model/board_list.dart';
-import '../../model/collect_page_model.dart';
-import '../../model/comment_list.dart';
-import '../../model/user.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/net_request.dart';
-import '../../utils/storage.dart';
-import '../../view/forum/PostListView.dart';
-import '../../widget/no_data.dart';
-import '../feed_detail/feed_detail_screen.dart';
-import '../article_detail/article_detail_screen.dart';
-import 'login_helper.dart';
+import '../../../model/board_list.dart';
+import '../../../model/collect_page_model.dart';
+import '../../../model/comment_list.dart';
+import '../../../model/user.dart';
+import '../../../utils/net_request.dart';
+import '../../../utils/storage.dart';
+import '../../../widget/item_feed.dart';
+import '../../../widget/no_data.dart';
+import '../login_helper.dart';
 
-class MineChildPage extends StatefulWidget {
+class MineChildView extends StatefulWidget {
   final int tabIndex;
 
-  const MineChildPage({Key? key, required this.tabIndex}) : super(key: key);
+  const MineChildView({Key? key, required this.tabIndex}) : super(key: key);
 
   @override
-  _MineChildPageState createState() => _MineChildPageState();
+  _MineChildViewState createState() => _MineChildViewState();
 }
 
-class _MineChildPageState extends State<MineChildPage> with TickerProviderStateMixin {
+class _MineChildViewState extends State<MineChildView> with TickerProviderStateMixin {
   int pageNum = 1;
   int pageSize = 10;
 
@@ -73,8 +61,8 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
   reqListData() {
     if (widget.tabIndex == 0) {
       //帖子
-      var ownerId = StorageUtil().prefs!.getString('ownerId');
-      NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId!, '', (data) {
+      var ownerId = UserStore.of.user.id;
+      NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId?.toString() ?? '', '', (data) {
         BoardList boardList = BoardList.fromJson(data);
         if (_isMounted) {
           final total = boardList.pager?.total ?? 0;
@@ -259,7 +247,7 @@ class _MineChildPageState extends State<MineChildPage> with TickerProviderStateM
                           ],
                         ),
                         child: widget.tabIndex == 0
-                            ? PostListItemView(boardPostList[i], isMyPost: true)
+                            ? FeedItem(boardPostList[i], isMyPost: true)
                             : widget.tabIndex == 1
                                 ? MyCollectItem(item: collectList[i])
                                 : MyCommentItem(

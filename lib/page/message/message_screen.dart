@@ -1,9 +1,12 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
-import 'package:holdem/page/message/page_message_tab_child.dart';
+import 'package:get/get.dart';
+import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
+
+part 'message_controller.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -24,7 +27,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
   ];
   final List<String> tabs = ['@我的', '评论我的', '赞我的', '收藏'];
   final List<String> types = ['at', 'comment', 'like', 'favorite'];
-  final _pageKey = GlobalKey<MessageTabChildPageState>();
+  final _pageKey = GlobalKey<MessageChildViewState>();
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
           ),
           // child: Text(myTabs[i].text.toString()),
         ),
-        content: MessageTabChildPage(type: types[i]),
+        content: MessageChildView(type: types[i]),
       ));
     }
   }
@@ -151,7 +154,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
           ),
         ),
         Expanded(
-            child: MessageTabChildPage(
+            child: MessageChildView(
           type: types[selIndex],
           key: _pageKey,
         ))

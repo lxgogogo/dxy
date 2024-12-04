@@ -12,10 +12,10 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
-import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../utils/app_theme.dart';
+import '../utils/eventbus/EventBusAction.dart';
+import '../utils/eventbus/EventBusManager.dart';
+import '../utils/toast_utils.dart';
 
 class DialogEditEmail extends StatefulWidget {
   final String editContent; //

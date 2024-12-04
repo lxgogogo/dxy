@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:holdem/page/mine/dialog_common.dart';
-import 'package:holdem/page/mine/dialog_edit_password.dart';
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/storage.dart';
+import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/widget/dialog_common.dart';
+import 'package:holdem/widget/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -297,9 +300,8 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void logout() {
     NetRequest().logout((data) {
-      LoginHelper().clearGlobalUserInfo();
-      //回到首页
-      Navigator.of(context).pop();
+      UserStore.of.clearUserStorage();
+      Get.until((route) => route.settings.name == Routes.main);
       //通知首页tab回到主页
       EventBusManager.eventBus.fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
     });

@@ -3,23 +3,24 @@ import 'package:get/get.dart';
 import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
-import 'package:holdem/page/message/page_message.dart';
-import 'package:holdem/page/mine/dialog_common.dart';
+import 'package:holdem/page/message/message_screen.dart';
+import 'package:holdem/services/index.dart';
+import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
-import 'package:holdem/utils/global.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../mine/page_mine.dart';
+import '../mine/mine_screen.dart';
 
 part 'main_controller.dart';
 
@@ -32,7 +33,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [HomeScreen(), FeedListScreen(), MessagePage(), MinePage()];
+  final List<Widget> _pages = [HomeScreen(), FeedListScreen(), MessagePage(), MineScreen()];
 
   var actionEventBus;
 
@@ -144,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
               useLegacyColorScheme: false,
               onTap: (int index) {
                 if (index == 2 || index == 3) {
-                  if (!Global().hasLogin) {
+                  if (!UserStore.of.isLogin) {
                     showToast('请先登录', duration: const Duration(seconds: 2));
                     Get.toNamed(Routes.login);
                     return;
@@ -152,6 +153,7 @@ class _MainScreenState extends State<MainScreen> {
                 }
                 _currentIndex = index;
                 setState(() {});
+                CommonService.of.saveReview();
               },
               items: [
                 BottomNavigationBarItem(

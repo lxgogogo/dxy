@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/login/login_screen.dart';
+import 'package:holdem/stores/storage.dart';
 
 import '../../model/user.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/global.dart';
 import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../../utils/toast_utils.dart';
 
 typedef LoginSuccess = void Function(dynamic data);
 typedef GetUserInfoSuccess = void Function(dynamic data);
@@ -21,15 +21,8 @@ class LoginHelper {
     NetRequest().userLogin(account, password, (data) {
       UserProfile userProfile = UserProfile.fromJson(data['user']);
       ToastUtils.showToast('登录成功');
-      Global().hasLogin = true;
-      Global().token = data['token'];
-      StorageUtil().setBool('hasLogin', true);
-      StorageUtil().prefs!.setString('token', data['token']);
-      StorageUtil().prefs!.setString('ownerId', userProfile.id!.toString());
-      //保存账号密码，获取本人信息接口需要
-      StorageUtil().prefs!.setString('userAccount', account);
-      StorageUtil().prefs!.setString('userPw', password);
-
+      StorageService.of.putToken(data['token']);
+      StorageService.of.putLocalUserStr(userProfile.toRawJson());
       //通知个人信息页面刷新
       EventBusManager.eventBus
           .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
@@ -39,12 +32,7 @@ class LoginHelper {
   }
 
   getUserInfo(GetUserInfoSuccess getSuccessCallback) {
-    String? token = StorageUtil().prefs!.getString('token');
-    print('token=======' + token!);
-    String? account = StorageUtil().prefs!.getString('userAccount');
-    String? password = StorageUtil().prefs!.getString('userPw');
-
-    NetRequest().getUserInfo(account ?? '', password ?? '', (data) {
+    NetRequest().getUserInfo((data) {
       UserProfile user = UserProfile.fromJson(data);
       getSuccessCallback(user);
     }, (errorMsg) {
@@ -64,17 +52,5 @@ class LoginHelper {
       errorWidget: (context, url, error) =>
           Image.asset('assets/images/default_avatar.png'),
     ),);
-  }
-
-  ///清空本地用户相关信息，需要重新登录
-  clearGlobalUserInfo() {
-    //清除本地所有用户信息
-    Global().hasLogin = false;
-    Global().token = '';
-    StorageUtil().setBool('hasLogin', false);
-    StorageUtil().prefs!.setString('ownerId', '');
-    StorageUtil().prefs!.setString('token', '');
-    StorageUtil().prefs!.setString('userAccount', '');
-    StorageUtil().prefs!.setString('userPw', '');
   }
 }

@@ -12,7 +12,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../../utils/toast_utils.dart';
 import '../../widget/follow_btn.dart';
 
 part 'following_controller.dart';

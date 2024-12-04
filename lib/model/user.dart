@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class UserProfile {
   int? id;
   String? nickname;
@@ -50,4 +52,9 @@ class UserProfile {
     _data["followed"] = followed;
     return _data;
   }
+
+  factory UserProfile.fromRawJson(String str) =>
+      UserProfile.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 }

@@ -8,7 +8,7 @@ import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
-import '../../view/forum/ToastUtils.dart';
+import '../utils/toast_utils.dart';
 
 class DialogEditPassword extends StatefulWidget {
   const DialogEditPassword({super.key});
@@ -443,7 +443,6 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
     }
     NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text, (data) {
       ToastUtils.showToast('修改密码成功');
-      StorageUtil().prefs!.setString('userPw', _controllerPw.text);
       Navigator.of(context).pop();
     });
   }

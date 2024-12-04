@@ -6,6 +6,8 @@ import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/page/comment_list/comment_list_screen.dart';
 import 'package:holdem/page/comment_publish/comment_publish_screen.dart';
+import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
+import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/feed_post/feed_post_screen.dart';
 import 'package:holdem/page/following/following_screen.dart';
@@ -14,6 +16,7 @@ import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
@@ -22,6 +25,7 @@ import 'package:holdem/page/reply_list/reply_list_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
 import 'package:holdem/page/setting/setting_screen.dart';
 import 'package:holdem/page/splash/splash_screen.dart';
+import 'package:holdem/services/index.dart';
 
 part 'app_routes.dart';
 
@@ -136,6 +140,18 @@ class AppPages {
     GetPage(
       name: Routes.feedPost,
       page: () => FeedPostScreen(boardInfoList: Get.arguments as List<BoardInfo>),
+    ),
+    GetPage(
+      name: Routes.personal,
+      page: () => const PersonalScreen(),
+    ),
+    GetPage(
+      name: Routes.competitionCalendar,
+      page: () => const CompetitionCalendarScreen(),
+    ),
+    GetPage(
+      name: Routes.competitionDetail,
+      page: () => CompetitionDetailScreen(id: Get.arguments as int?),
     ),
   ];
 }

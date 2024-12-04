@@ -8,7 +8,7 @@ import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/utils/size_fit.dart';
 
-import '../../widget/linear_card.dart';
+import 'linear_card.dart';
 
 // ignore: must_be_immutable
 class VideoItem extends StatefulWidget {

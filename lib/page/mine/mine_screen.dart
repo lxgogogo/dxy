@@ -1,33 +1,26 @@
-import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
-import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/mine/page_mine_child.dart';
-import 'package:holdem/page/following/following_screen.dart';
-import 'package:holdem/page/mine/page_personal.dart';
-import 'package:holdem/page/setting/setting_screen.dart';
+import 'package:holdem/page/personal/personal_screen.dart';
+import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/app_theme.dart';
-import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 
-import '../../model/board_list.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import 'login_helper.dart';
 
-class MinePage extends StatefulWidget {
-  const MinePage({super.key});
+part 'mine_controller.dart';
+
+class MineScreen extends StatefulWidget {
+  const MineScreen({super.key});
 
   @override
-  State<MinePage> createState() => _MinePageState();
+  State<MineScreen> createState() => _MineScreenState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   final List<String> tabs = ['帖子', '收藏', '评论'];
   late final TabController tabController;
 
@@ -163,7 +156,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                         physics: const NeverScrollableScrollPhysics(),
                         children: List.generate(
                           tabs.length,
-                          (index) => MineChildPage(tabIndex: index),
+                          (index) => MineChildView(tabIndex: index),
                         ),
                       ),
                     ),
@@ -180,7 +173,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
   Widget userInfoView() {
     return GestureDetector(
         onTap: () {
-          Get.to(PersonalPage());
+          Get.toNamed(Routes.personal);
         },
         child: Padding(
           padding: EdgeInsets.fromLTRB(10.px, 12.px, 0, 12.px),
@@ -260,7 +253,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin,
                             width: 24.px,
                           ),
                           onPressed: () {
-                            Get.to(PersonalPage());
+                            Get.toNamed(Routes.personal);
                           },
                         )
                       ],

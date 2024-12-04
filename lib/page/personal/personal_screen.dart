@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:holdem/page/mine/dialog_delete_account.dart';
-import 'package:holdem/page/mine/dialog_edit_email.dart';
-import 'package:holdem/page/mine/dialog_edit_nickname.dart';
+import 'package:get/get.dart';
+import 'package:holdem/widget/dialog_delete_account.dart';
+import 'package:holdem/widget/dialog_edit_email.dart';
+import 'package:holdem/widget/dialog_edit_nickname.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,16 +18,18 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../utils/size_fit.dart';
-import 'login_helper.dart';
+import '../mine/login_helper.dart';
 
-class PersonalPage extends StatefulWidget {
-  PersonalPage({Key? key}) : super(key: key);
+part 'personal_controller.dart';
+
+class PersonalScreen extends StatefulWidget {
+  const PersonalScreen({Key? key}) : super(key: key);
 
   @override
-  State<PersonalPage> createState() => _PersonalPageState();
+  State<PersonalScreen> createState() => _PersonalScreenState();
 }
 
-class _PersonalPageState extends State<PersonalPage> {
+class _PersonalScreenState extends State<PersonalScreen> {
   String imageUrl = ""; //本地图片地址
   UserProfile? _userProfile;
   bool _isMounted = false;

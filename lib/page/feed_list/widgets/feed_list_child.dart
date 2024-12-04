@@ -16,7 +16,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/eventbus/EventBusAction.dart';
 import '../../../utils/eventbus/EventBusManager.dart';
 import '../../../utils/log_utils.dart';
-import '../../../view/forum/PostListView.dart';
+import '../../../widget/item_feed.dart';
 
 class ForumTabChildPage extends StatefulWidget {
   int tabId;
@@ -126,7 +126,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
           ? ListView.builder(
               controller: _listController,
               itemBuilder: (c, i) {
-                return PostListItemView(boardPostList[i]);
+                return FeedItem(boardPostList[i]);
               },
               itemCount: boardPostList.length,
             )

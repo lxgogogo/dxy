@@ -3,28 +3,28 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/competition_bean.dart';
-import 'package:holdem/page/index/item_article.dart';
-import 'package:holdem/page/index/item_video.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/utils/utils.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/view/forum/PostListView.dart';
-import 'package:holdem/widget/tab_calendar/table_calendar.dart';
+import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/item_feed.dart';
+import 'package:holdem/widget/item_video.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 
-class CompetitionDetailPage extends StatefulWidget {
+part 'competition_detail_controller.dart';
+
+class CompetitionDetailScreen extends StatefulWidget {
   final int? id;
 
-  const CompetitionDetailPage({super.key, required this.id});
+  const CompetitionDetailScreen({super.key, required this.id});
 
   @override
-  State<CompetitionDetailPage> createState() => _CompetitionDetailPageState();
+  State<CompetitionDetailScreen> createState() => _CompetitionDetailScreenState();
 }
 
-class _CompetitionDetailPageState extends State<CompetitionDetailPage> {
+class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
   CompetitionBean? competitionBean;
   late VideoPlayerController _playController;
   late ChewieController _chewieController;
@@ -285,7 +285,7 @@ class _CompetitionDetailPageState extends State<CompetitionDetailPage> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     final item = competitionBean!.refThreadList![index];
-                    return PostListItemView(item);
+                    return FeedItem(item);
                   },
                   childCount: competitionBean!.refArticleList!.length,
                 ),

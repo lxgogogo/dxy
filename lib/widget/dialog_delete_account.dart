@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
@@ -15,7 +16,7 @@ import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../view/forum/ToastUtils.dart';
+import '../utils/toast_utils.dart';
 
 class DialogDeleteAccount extends StatefulWidget {
   const DialogDeleteAccount({super.key});
@@ -390,7 +391,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
     String code = _controllerCode.text;
     NetRequest().deleteAccount(email, code, (data) {
       ToastUtils.showToast('注销成功');
-      LoginHelper().clearGlobalUserInfo();
+      UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
       EventBusManager.eventBus.fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
     });

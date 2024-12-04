@@ -217,7 +217,7 @@ class _LoginContentState extends State<LoginContent> {
     var account = _controllerAccount.text;
     var password = _controllerPw.text;
     LoginHelper().userLogin(account, password, (data) {
-      Navigator.of(context).pop();
+      Get.until((route) => route.settings.name == Routes.main);
     });
   }
 }

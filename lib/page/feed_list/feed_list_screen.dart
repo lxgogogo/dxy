@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:holdem/page/feed_list/widgets/feed_list_child.dart';
 import 'package:holdem/page/feed_post/feed_post_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
@@ -14,7 +15,6 @@ import '../../model/board_info.dart';
 import '../../utils/constants.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/global.dart';
 import '../login/login_screen.dart';
 
 part 'feed_list_controller.dart';
@@ -333,7 +333,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
       ),
       // backgroundColor: Colors.transparent,
       onPressed: () {
-        Global().checkLogin(() {
+        UserStore.of.checkLogin(() {
           Get.toNamed(Routes.feedPost, arguments: boardInfoList);
         });
       },

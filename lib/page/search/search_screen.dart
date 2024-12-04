@@ -1,20 +1,15 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/search/widgets/search_child_view.dart';
-import 'package:holdem/page/mine/dialog_confirm.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/eventbus/EventBusAction.dart';
-import 'package:holdem/utils/eventbus/EventBusManager.dart';
-import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/view/forum/ToastUtils.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:holdem/widget/dialog_confirm.dart';
 
 part 'search_controller.dart';
 

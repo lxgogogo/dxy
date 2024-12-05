@@ -79,11 +79,15 @@ dependencies:
   flutter_slidable: ^3.1.1
   flutter_screenutil: ^5.9.3
   connectivity_plus: ^6.1.0
-  device_info_plus: ^11.1.0
+  device_info_plus: ^10.1.2
   flutter_secure_storage: ^9.2.2
   logger: ^2.5.0
   flutter_widget_from_html: ^0.15.3
   hive: ^2.2.3
+  flutter_quill: ^11.0.0-dev.14
+  flutter_quill_extensions: ^11.0.0-dev.4
+  flutter_quill_delta_from_html: ^1.4.2
+  vsc_quill_delta_to_html: ^1.0.5
 
 dev_dependencies:
   flutter_test:

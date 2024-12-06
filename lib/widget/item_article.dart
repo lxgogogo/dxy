@@ -1,12 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/media_helper.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +10,7 @@ import 'package:intl/intl.dart';
 // ignore: must_be_immutable
 class ArticleItem extends StatefulWidget {
   ArticleBean article;
+
   ArticleItem({super.key, required this.article});
 
   @override
@@ -32,21 +29,16 @@ class _ArticleItemState extends State<ArticleItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.article.type == 'videoList') {
-          Get.toNamed(Routes.videoList, arguments: widget.article.id ?? 0);
-          return;
-        }
-        if (widget.article.type == 'video') {
+        if (widget.article.type == 'video' || widget.article.type == 'videoList') {
           Get.toNamed(Routes.videoDetail, arguments: widget.article.id ?? 0);
           return;
         }
         Get.toNamed(Routes.articleDetail, arguments: widget.article.id ?? 0);
       },
       child: LinearCard(
-        margin:EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-        padding: EdgeInsets.only(
-              left: 20.px, right: 12.px, top: 5.px, bottom: 5.px),
-        child: itemContent()),
+          margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+          padding: EdgeInsets.only(left: 20.px, right: 12.px, top: 5.px, bottom: 5.px),
+          child: itemContent()),
     );
   }
 
@@ -60,7 +52,6 @@ class _ArticleItemState extends State<ArticleItem> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              
               Text(
                 widget.article.title ?? '',
                 overflow: TextOverflow.ellipsis,
@@ -71,36 +62,35 @@ class _ArticleItemState extends State<ArticleItem> {
                 ),
               ),
               // Spacer(),
-              if (widget.article.type != 'videoList')
-                Row(
-                  children: [
-                    Text(
-                      widget.article.createdAt != null ? DateFormat('M月d日').format(widget.article.createdAt!): '',
-                      style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 12.px,
-                      ),
+              Row(
+                children: [
+                  Text(
+                    widget.article.createdAt != null ? DateFormat('M月d日').format(widget.article.createdAt!) : '',
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 12.px,
                     ),
-                    SizedBox(
-                      width: 30.px,
+                  ),
+                  SizedBox(
+                    width: 30.px,
+                  ),
+                  Image.asset(
+                    'assets/images/comment.png',
+                    width: 13.px,
+                    height: 12.px,
+                  ),
+                  SizedBox(
+                    width: 5.px,
+                  ),
+                  Text(
+                    widget.article.commentCount.toString(),
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 12.px,
                     ),
-                    Image.asset(
-                      'assets/images/comment.png',
-                      width: 13.px,
-                      height: 12.px,
-                    ),
-                    SizedBox(
-                      width: 5.px,
-                    ),
-                    Text(
-                      widget.article.commentCount.toString(),
-                      style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 12.px,
-                      ),
-                    )
-                  ],
-                )
+                  )
+                ],
+              )
             ],
           ),
         )),
@@ -114,8 +104,7 @@ class _ArticleItemState extends State<ArticleItem> {
           clipBehavior: Clip.antiAlias,
           child: Stack(
             children: [
-              MediaHelper().cacheLoadNetworkImage(
-                  widget.article.cover ?? '', 92.px, 66.px),
+              MediaHelper().cacheLoadNetworkImage(widget.article.cover ?? '', 92.px, 66.px),
             ],
           ),
         )

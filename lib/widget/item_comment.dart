@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -32,7 +34,7 @@ class _CommentItemState extends State<CommentItem> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         BorderAvatar(avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : ''),
-        SizedBox(width: 7.px),
+        SizedBox(width: 7.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,23 +43,23 @@ class _CommentItemState extends State<CommentItem> {
                 widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
                 style: TextStyle(
                   color: const Color(0xff2a2a2a),
-                  fontSize: 12.px,
+                  fontSize: 12.w,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 3.px),
+              SizedBox(height: 3.w),
               Html(data: widget.commentBean.contentStr ?? ''),
               // Text(
               //   widget.commentBean.contentStr ?? '',
               //   style: TextStyle(
               //     color: const Color(0xff2a2a2a),
-              //     fontSize: 12.px,
+              //     fontSize: 12.w,
               //   ),
               // ),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.only(top: 10.px),
+                padding: EdgeInsets.only(top: 10.w),
                 itemCount: widget.commentBean.files?.length ?? 0,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
@@ -85,7 +87,7 @@ class _CommentItemState extends State<CommentItem> {
                   );
                 },
               ),
-              SizedBox(height: 10.px),
+              SizedBox(height: 10.w),
               Row(
                 children: [
                   Text(
@@ -94,7 +96,7 @@ class _CommentItemState extends State<CommentItem> {
                         : '',
                     style: TextStyle(
                       color: const Color(0xff9CACC9),
-                      fontSize: 10.px,
+                      fontSize: 10.w,
                     ),
                   ),
                   const Spacer(),
@@ -119,20 +121,20 @@ class _CommentItemState extends State<CommentItem> {
                             widget.commentBean.liked ?? false
                                 ? 'assets/images/praised.png'
                                 : 'assets/images/praise.png',
-                            width: 11.px,
+                            width: 11.w,
                           ),
-                          SizedBox(width: 6.px),
+                          SizedBox(width: 6.w),
                           Text(
                             widget.commentBean.likeCount!.toString(),
                             style: TextStyle(
                               color: const Color(0xff9CACC9),
-                              fontSize: 10.px,
+                              fontSize: 10.w,
                             ),
                           )
                         ],
                       ),
                     ),
-                    SizedBox(width: 32.px),
+                    SizedBox(width: 32.w),
                     GestureDetector(
                       onTap: () {
                         UserStore.of.checkLogin(() {
@@ -146,14 +148,14 @@ class _CommentItemState extends State<CommentItem> {
                         children: [
                           Image.asset(
                             'assets/images/comment.png',
-                            width: 13.px,
+                            width: 13.w,
                           ),
-                          SizedBox(width: 6.px),
+                          SizedBox(width: 6.w),
                           Text(
                             widget.commentBean.replyCount!.toString(),
                             style: TextStyle(
                               color: const Color(0xff9CACC9),
-                              fontSize: 10.px,
+                              fontSize: 10.w,
                             ),
                           )
                         ],
@@ -163,9 +165,9 @@ class _CommentItemState extends State<CommentItem> {
                 ],
               ),
               if (widget.commentBean.replies?.isNotEmpty == true) ...[
-                SizedBox(height: 17.px),
+                SizedBox(height: 17.w),
                 Padding(
-                  padding: EdgeInsets.only(left: 8.px),
+                  padding: EdgeInsets.only(left: 8.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -174,12 +176,12 @@ class _CommentItemState extends State<CommentItem> {
                         (index) {
                           final reply = widget.commentBean.replies![index];
                           return Padding(
-                            padding: EdgeInsets.only(top: 10.px),
+                            padding: EdgeInsets.only(top: 10.w),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 BorderAvatar(avatar: reply.user?.avatar ?? ''),
-                                SizedBox(width: 7.px),
+                                SizedBox(width: 7.w),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -188,27 +190,27 @@ class _CommentItemState extends State<CommentItem> {
                                         reply.user?.nickname ?? '',
                                         style: TextStyle(
                                           color: const Color(0xff2a2a2a),
-                                          fontSize: 12.px,
+                                          fontSize: 12.w,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      SizedBox(height: 3.px),
+                                      SizedBox(height: 3.w),
                                       Html(data: reply.contentStr ?? ''),
                                       // Text(
                                       //   reply.contentStr ?? '',
                                       //   style: TextStyle(
                                       //     color: const Color(0xff2a2a2a),
-                                      //     fontSize: 12.px,
+                                      //     fontSize: 12.w,
                                       //   ),
                                       // ),
-                                      SizedBox(height: 10.px),
+                                      SizedBox(height: 10.w),
                                       Row(
                                         children: [
                                           Text(
                                             reply.createdAt != null ? DateFormat('MM/d').format(reply.createdAt!) : '',
                                             style: TextStyle(
                                               color: const Color(0xff9CACC9),
-                                              fontSize: 10.px,
+                                              fontSize: 10.w,
                                             ),
                                           ),
                                           const Spacer(),
@@ -232,14 +234,14 @@ class _CommentItemState extends State<CommentItem> {
                                                   reply.liked ?? false
                                                       ? 'assets/images/praised.png'
                                                       : 'assets/images/praise.png',
-                                                  width: 11.px,
+                                                  width: 11.w,
                                                 ),
-                                                SizedBox(width: 6.px),
+                                                SizedBox(width: 6.w),
                                                 Text(
                                                   reply.likeCount!.toString(),
                                                   style: TextStyle(
                                                     color: const Color(0xff9CACC9),
-                                                    fontSize: 10.px,
+                                                    fontSize: 10.w,
                                                   ),
                                                 )
                                               ],
@@ -257,13 +259,13 @@ class _CommentItemState extends State<CommentItem> {
                       ),
                       if ((widget.commentBean.replyCount ?? 0) > 2)
                         Container(
-                          height: 24.px,
-                          margin: EdgeInsets.only(top: 10.px),
+                          height: 24.w,
+                          margin: EdgeInsets.only(top: 10.w),
                           child: Row(
                             children: [
                               if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10.px),
+                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: const Color(0xfff2f4f6),
@@ -273,7 +275,7 @@ class _CommentItemState extends State<CommentItem> {
                                     '查看全部${min(pageSize, (widget.commentBean.replyCount ?? 0) - (widget.commentBean.replies?.length ?? 0))}条回复',
                                     style: TextStyle(
                                       color: const Color(0xff3B5078),
-                                      fontSize: 12.px,
+                                      fontSize: 12.w,
                                     ),
                                   ),
                                 ),
@@ -288,7 +290,7 @@ class _CommentItemState extends State<CommentItem> {
                                         '展开',
                                         style: TextStyle(
                                           color: const Color(0xff3B5078),
-                                          fontSize: 12.px,
+                                          fontSize: 12.w,
                                         ),
                                       ),
                                       const Icon(Icons.keyboard_arrow_down),
@@ -309,7 +311,7 @@ class _CommentItemState extends State<CommentItem> {
                                         '收起',
                                         style: TextStyle(
                                           color: const Color(0xff3B5078),
-                                          fontSize: 12.px,
+                                          fontSize: 12.w,
                                         ),
                                       ),
                                       const Icon(Icons.keyboard_arrow_up),
@@ -325,8 +327,8 @@ class _CommentItemState extends State<CommentItem> {
                 ),
               ],
               Container(
-                height: 1.px,
-                margin: EdgeInsets.symmetric(vertical: 16.5.px),
+                height: 1.w,
+                margin: EdgeInsets.symmetric(vertical: 16.5.w),
                 color: const Color(0xffe6e6e6),
               ),
             ],
@@ -382,18 +384,28 @@ class BorderAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (avatarSize + 2).px,
-      height: (avatarSize + 2).px,
+      width: (avatarSize + 2).w,
+      height: (avatarSize + 2).w,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular((avatarSize / 2).px),
+        borderRadius: BorderRadius.circular((avatarSize / 2).w),
       ),
       child: ClipOval(
-        child: LoginHelper().getUserAvatar(
-          avatar,
-          avatarSize.px,
-          avatarSize.px,
+        child: CachedNetworkImage(
+          imageUrl: avatar,
+          width: avatarSize.w,
+          height: avatarSize.w,
+          fit: BoxFit.cover,
+          cacheKey: avatar,
+          memCacheWidth: avatarSize.toInt(),
+          memCacheHeight: avatarSize.toInt(),
+          placeholder: (context, url) => const Center(
+            child: CupertinoActivityIndicator(),
+          ),
+          errorWidget: (context, url, error) => Image.asset(
+            'assets/images/default_avatar.png',
+          ),
         ),
       ),
     );

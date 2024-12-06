@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:holdem/model/res_base_model.dart';
 import 'package:holdem/utils/http.dart';
+import 'package:holdem/utils/log_util.dart';
 
 import 'net_request.dart';
 
@@ -42,18 +43,24 @@ class HttpUtils {
     Options? options,
     bool showLoading = true,
   }) async {
-    if (showLoading) {
-      EasyLoading.show(status: 'loading...');
+    try {
+      if (showLoading) {
+        EasyLoading.show(status: 'loading...');
+      }
+      var ret = await Http().post(
+        path,
+        params: params ?? {},
+        options: options,
+      );
+      return ret;
+    } catch (e) {
+      Log.d(e.toString());
+    } finally {
+      if (showLoading) {
+        EasyLoading.dismiss();
+      }
     }
-    var ret = await Http().post(
-      path,
-      params: params ?? {},
-      options: options,
-    );
-    if (showLoading) {
-      EasyLoading.dismiss();
-    }
-    return ret;
+    return {};
   }
 
   static Future postBytesFile(

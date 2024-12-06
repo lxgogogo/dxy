@@ -10,14 +10,7 @@ import 'package:holdem/model/banner.dart';
 import 'package:holdem/model/competition_loop.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/model/index_category.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
-import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
-import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -386,9 +379,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {
       Get.toNamed(Routes.articleDetail, arguments: id);
-    } else if (bean.jumpType == 'videoList') {
-      Get.toNamed(Routes.videoList, arguments: id);
-    } else if (bean.jumpType == 'video') {
+    } else if (bean.jumpType == 'video' || bean.jumpType == 'videoList') {
       Get.toNamed(Routes.videoDetail, arguments: id);
     } else if (bean.jumpType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: id);

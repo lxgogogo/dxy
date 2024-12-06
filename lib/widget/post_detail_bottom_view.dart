@@ -391,10 +391,7 @@ class PostBottomViewParams {
   String? relType; //  评论对象类型   // thread 帖子，content 内容，comment 评论
   bool? favoriteState; //收藏状态 true  false
   bool? liked; //点赞状态 true  false
-  String? title; //帖子标题
-  String? content; //帖子内容
   String? shareLink; //分享
-  List<UploadFile>? files; // 帖子的图片或者视频集合
   int likeCount;
   int favoriteCount;
   int commentCount;
@@ -411,8 +408,5 @@ class PostBottomViewParams {
     required this.shareLink,
     this.commentCount = 0,
     this.shareCount = 0,
-    required this.title,
-    required this.content,
-    required this.files,
   });
 }

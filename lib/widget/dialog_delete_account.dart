@@ -239,7 +239,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                 isShowAccountTips ? '请输入正确邮箱地址' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
+                                  color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -360,7 +360,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                 isShowCodeTips ? '请输入6位数字验证码' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowCodeTips ? Colors.red : '95A3C4'.hexColor,
+                                  color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),

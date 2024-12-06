@@ -22,29 +22,32 @@ class ArticleDetailBean {
   VideoBean? video;
   BookBean? book;
   UserProfile? user;
+  List<VideoBean>? videoList;
 
-  ArticleDetailBean(
-      {this.category,
-      this.article,
-      this.author,
-      this.categoryId,
-      this.cover,
-      this.commentCount,
-      this.shareCount,
-      this.createdAt,
-      this.favoriteCount,
-      this.favorited,
-      this.liked,
-      this.id,
-      this.likeCount,
-      this.listId,
-      this.title,
-      this.description,
-      this.type,
-      this.updatedAt,
-      this.video,
-      this.book,
-      this.user});
+  ArticleDetailBean({
+    this.category,
+    this.article,
+    this.author,
+    this.categoryId,
+    this.cover,
+    this.commentCount,
+    this.shareCount,
+    this.createdAt,
+    this.favoriteCount,
+    this.favorited,
+    this.liked,
+    this.id,
+    this.likeCount,
+    this.listId,
+    this.title,
+    this.description,
+    this.type,
+    this.updatedAt,
+    this.video,
+    this.book,
+    this.user,
+    this.videoList,
+  });
 
   ArticleDetailBean.fromJson(Map<String, dynamic> json) {
     if (json["category"] is Map) {
@@ -104,16 +107,20 @@ class ArticleDetailBean {
     if (json["video"] is Map) {
       video = VideoBean.fromJson(json["video"]);
     }
-    if (json["book"] is Map){
+    if (json["book"] is Map) {
       book = BookBean.fromJson(json["book"]);
     }
     if (json['user'] != null) {
       user = UserProfile.fromJson(json['user']);
     }
+    if (json["videoList"] is List) {
+      videoList =
+          json["videoList"] == null ? null : (json["videoList"] as List).map((e) => VideoBean.fromJson(e)).toList();
+    }
   }
 }
 
-class ArticleContent{
+class ArticleContent {
   int? id;
   String? content;
 
@@ -127,8 +134,6 @@ class ArticleContent{
       content = json["content"];
     }
   }
-
-
 }
 
 class ArticleCategoryBean {
@@ -179,10 +184,11 @@ class VideoBean {
   int? duration;
   int? id;
   int? num;
+  String? title;
   String? quality;
   String? sourceUrl;
 
-  VideoBean({this.duration, this.id, this.num, this.quality, this.sourceUrl});
+  VideoBean({this.duration, this.id, this.num, this.title,this.quality, this.sourceUrl});
 
   VideoBean.fromJson(Map<String, dynamic> json) {
     if (json["duration"] is int) {
@@ -193,6 +199,9 @@ class VideoBean {
     }
     if (json["num"] is int) {
       num = json["num"];
+    }
+    if (json["title"] is String) {
+      title = json["title"];
     }
     if (json["quality"] is String) {
       quality = json["quality"];

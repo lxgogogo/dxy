@@ -410,9 +410,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {
       Get.toNamed(Routes.articleDetail, arguments: id);
-    } else if (bean.jumpType == 'videoList') {
-      Get.toNamed(Routes.videoList, arguments: id);
-    } else if (bean.jumpType == 'video') {
+    }  else if (bean.jumpType == 'video' || bean.jumpType == 'videoList') {
       Get.toNamed(Routes.videoDetail, arguments: id);
     } else if (bean.jumpType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: id);

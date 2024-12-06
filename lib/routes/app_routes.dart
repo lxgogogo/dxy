@@ -24,7 +24,6 @@ abstract class Routes {
   static const bookDetail = '/bookDetail';
   static const articleDetail = '/articleDetail';
   static const videoDetail = '/videoDetail';
-  static const videoList = '/videoList';
   static const feedDetail = '/feedDetail';
   static const feedPost = '/feedPost';
   static const personal = '/personal';

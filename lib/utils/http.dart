@@ -69,16 +69,14 @@ class Http {
     Options? options,
   }) async {
     Response response;
-    try {
+
       response = await dio.post(
         path,
         data: params,
         options: options,
       );
       return response.data;
-    } catch (e) {
-      return {};
-    }
+
   }
 
   Future postFile(

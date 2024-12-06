@@ -18,7 +18,6 @@ import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/reply_list/reply_list_screen.dart';
@@ -127,11 +126,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.videoDetail,
-      page: () => VideoDetailScreen(id: Get.arguments as int),
-    ),
-    GetPage(
-      name: Routes.videoList,
-      page: () => VideoListPage(id: Get.arguments as int),
+      page: () => const VideoDetailScreen(),
     ),
     GetPage(
       name: Routes.feedDetail,

@@ -221,7 +221,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     isShowAccountTips ? '请输入正确邮箱地址' : '范例：dxy@example.com',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: isShowAccountTips ? Colors.red : '95A3C4'.hexColor,
+                      color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                     ),
                   ),
                 ),
@@ -285,7 +285,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     isShowCodeTips ? '请输入6位数字验证码' : '',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: isShowCodeTips ? Colors.red : '95A3C4'.hexColor,
+                      color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                     ),
                   ),
                 ),
@@ -337,7 +337,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '8-12位，须包含大小写字母+数字',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
+                      color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
                     ),
                   ),
                 ),
@@ -391,7 +391,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     isShowAgainTips ? '两次输入的密码不一致' : '8-12位，须包含大小写字母+数字',
                     style: TextStyle(
                       fontSize: 12.sp,
-                      color: isShowAgainTips ? Colors.red : '95A3C4'.hexColor,
+                      color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                     ),
                   ),
                 ),

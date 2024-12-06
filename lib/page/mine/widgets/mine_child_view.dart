@@ -62,7 +62,8 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
     if (widget.tabIndex == 0) {
       //帖子
       var ownerId = UserStore.of.user.id;
-      NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId?.toString() ?? '', '', (data) {
+      NetRequest().getThreadListByBoard(
+          pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId?.toString() ?? '', '', (data) {
         BoardList boardList = BoardList.fromJson(data);
         if (_isMounted) {
           final total = boardList.pager?.total ?? 0;
@@ -483,9 +484,7 @@ class MyCollectItem extends StatelessWidget {
             Get.toNamed(Routes.articleDetail, arguments: id);
           } else if (type == 'book') {
             Get.toNamed(Routes.bookDetail, arguments: id);
-          } else if (type == 'videoList') {
-            Get.toNamed(Routes.videoList, arguments: id);
-          } else if (type == 'video') {
+          } else if (type == 'video' || type == 'videoList') {
             Get.toNamed(Routes.videoDetail, arguments: id);
           }
         }

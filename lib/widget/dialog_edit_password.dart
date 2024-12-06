@@ -225,7 +225,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           '',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: /*isShowOriginalPwTips ? Colors.red : */ '95A3C4'.hexColor,
+                            color: /*isShowOriginalPwTips ? Colors.red : */ '#95A3C4'.hexColor,
                           ),
                         ),
                       ),
@@ -307,7 +307,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: isShowPwTips ? Colors.red : '95A3C4'.hexColor,
+                            color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
                           ),
                         ),
                       ),
@@ -389,7 +389,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           isShowAgainTips ? '两次密码输入不一致' : '',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: isShowAgainTips ? Colors.red : '95A3C4'.hexColor,
+                            color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                           ),
                         ),
                       ),

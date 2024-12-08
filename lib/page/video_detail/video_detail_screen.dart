@@ -11,6 +11,7 @@ import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_scroll_physics.dart';
@@ -33,25 +34,9 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
       builder: (logic) {
         return BackgroundContainer(
           child: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                '详情',
-                style: TextStyle(
-                  color: const Color(0xff2c2c2c),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              centerTitle: true,
-              leading: IconButton(
-                icon: Image.asset(
-                  'assets/images/back.png',
-                  width: 22.w,
-                  height: 22.w,
-                ),
-                onPressed: Get.back,
-              ),
-              backgroundColor: Colors.transparent,
+            appBar: CommonAppBar.arrowBack(
+              context,
+              title: '详情',
             ),
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(

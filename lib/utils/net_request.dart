@@ -190,9 +190,7 @@ class NetRequest {
   }
 
   ///帖子详情
-  Future threadShow(String id, SuccessCallback onSuccess) async {
-    Map<String, Object> params = {};
-    params['id'] = id;
+  Future threadShow(Map<String, dynamic> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.threadShow, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {

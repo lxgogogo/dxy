@@ -9,7 +9,6 @@ class VideoDetailController extends GetxController {
 
   List<CommentBean>? comments;
   bool loaded = false;
-  int pageNum = 1;
 
   StreamSubscription? _eventSubscription;
 
@@ -50,7 +49,7 @@ class VideoDetailController extends GetxController {
     });
 
     NetRequest().commentList({
-      'pageNum': pageNum,
+      'pageNum': 1,
       'pageSize': 10,
       'filters': {'relType': 'content', 'relId': id}
     }, (data) {

@@ -8,8 +8,7 @@ import 'package:video_player/video_player.dart';
 
 class MediaHelper {
   ///图片点击效果 预览图集合
-  void imagePerView(
-      BuildContext context, List<String> imageUrlList, int index) {
+  void imagePerView(BuildContext context, List<String> imageUrlList, int index) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return Scaffold(
           body: GestureDetector(
@@ -18,8 +17,7 @@ class MediaHelper {
               },
               child: PhotoViewGallery(
                 pageOptions: imageUrlList
-                    .map((url) => PhotoViewGalleryPageOptions(
-                        imageProvider: NetworkImage(url)))
+                    .map((url) => PhotoViewGalleryPageOptions(imageProvider: CachedNetworkImageProvider(url)))
                     .toList(),
               )));
     }));
@@ -48,17 +46,15 @@ class MediaHelper {
     );
   }
 
-  Widget cacheLoadNetworkImage(
-      String imgUrl, double imgWidth, double imgHeight) {
-    return RepaintBoundary(child: CachedNetworkImage(
+  Widget cacheLoadNetworkImage(String imgUrl, double imgWidth, double imgHeight) {
+    return RepaintBoundary(
+        child: CachedNetworkImage(
       width: imgWidth,
       height: imgHeight,
       fit: BoxFit.cover,
       imageUrl: imgUrl.isNotEmpty ? imgUrl : '',
-      placeholder: (context, url) =>
-          Image.asset('assets/images/image_loading_def.png'),
-      errorWidget: (context, url, error) =>
-          Image.asset('assets/images/image_loading_def.png'),
+      placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+      errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
     ));
   }
 }

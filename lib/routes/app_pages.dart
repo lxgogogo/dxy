@@ -122,7 +122,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.articleDetail,
-      page: () => ArticleDetailScreen(id: Get.arguments as int),
+      page: () => const ArticleDetailScreen(),
     ),
     GetPage(
       name: Routes.videoDetail,
@@ -130,7 +130,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.feedDetail,
-      page: () => FeedDetailScreen(id: Get.arguments as int),
+      page: () => const FeedDetailScreen(),
     ),
     GetPage(
       name: Routes.feedPost,

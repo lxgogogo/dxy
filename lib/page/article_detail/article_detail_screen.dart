@@ -87,7 +87,7 @@ class ArticleDetailScreen extends GetView<ArticleDetailController> {
                 ],
               ),
             ),
-            bottomSheet: controller.loaded
+            bottomSheet: controller.detailBean != null
                 ? PostDetailBottomView(
                     viewParams: PostBottomViewParams(
                       postId: controller.id,

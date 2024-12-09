@@ -138,10 +138,12 @@ class _CommentItemState extends State<CommentItem> {
                     GestureDetector(
                       onTap: () {
                         UserStore.of.checkLogin(() {
-                          Get.toNamed(Routes.inputComment, arguments: {
-                            'relType': 'comment',
-                            'relId': widget.commentBean.id!,
-                          });
+                          Get.bottomSheet(
+                            CommentInputScreen(
+                              relType: widget.commentBean.relType ?? '',
+                              relId: widget.commentBean.id ?? 0,
+                            ),
+                          );
                         });
                       },
                       child: Row(

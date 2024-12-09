@@ -162,7 +162,7 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                 ],
               ),
             ),
-            bottomSheet: controller.loaded
+            bottomSheet: controller.detailBean != null
                 ? PostDetailBottomView(
                     viewParams: PostBottomViewParams(
                       postId: controller.id,

@@ -1,158 +1,123 @@
+import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/model/user.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/background_container.dart';
 
-import '../../utils/app_theme.dart';
 import '../../utils/toast_utils.dart';
 
 part 'comment_input_controller.dart';
-class CommentInputScreen extends StatefulWidget {
+
+class CommentInputScreen extends GetView<CommentInputController> {
   final String relType; //// 评论对象类型
   final int relId; //// 评论对象id
 
   const CommentInputScreen({super.key, required this.relType, required this.relId});
 
   @override
-  State<CommentInputScreen> createState() => _CommentInputScreenState();
-}
-
-class _CommentInputScreenState extends State<CommentInputScreen>
-    with SingleTickerProviderStateMixin {
-  late String relType;
-  late int relId;
-  final TextEditingController controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    relId = widget.relId;
-    relType = widget.relType;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-        child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.transparent,
-        title: const Text(
-          '评论',
-          style: AppTheme.text333333Size17,
-        ),
-        centerTitle: true,
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Divider(
-            color: AppTheme.color_F3F3F3,
-            thickness: 1,
-          ),
-        ),
-        actions: [
-          // GestureDetector(child: Container(
-          //   width: 50.px,
-          //   height: 24.px,
-          //   color: Colors.red,
-          //   child: Text('发布'),),),
-          GestureDetector(
-            onTap: () {
-              String commentContent = controller.text;
-              if (commentContent.isNotEmpty && commentContent.length >= 5) {
-                _submitComment(commentContent);
-              } else {
-                ToastUtils.showToast('评论内容不能低于5个字符');
-              }
-            },
-            child: Container(
-              width: 50.px,
-              height: 24.px,
-              margin: EdgeInsets.only(right: 20.px),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.px),
-                  color: Color(0xFF249CFC)),
-                  // color: controller.text.length>0 ? Color(0xFF249CFC) : Color(0x80249CFC)),
-              child: Text(
-                '发布',
-                style: TextStyle(color: Colors.white, fontSize: 12.px),
+    return GetBuilder<CommentInputController>(
+      init: CommentInputController(relType, relId),
+      builder: (logic) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.w).copyWith(bottom: 8.w),
+            decoration: BoxDecoration(
+              color: const Color(0xffF2F8FD),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(12.r),
               ),
             ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 51.w,
+                        decoration: BoxDecoration(
+                          color: '#95a3c4'.hexColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: DetectableTextField(
+                          maxLines: null,
+                          controller: controller.textInput,
+                          style: TextStyle(
+                            color: const Color(0xff3b5078),
+                            fontSize: 14.px,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 5.w),
+                            hintText: '说点什么…',
+                            hintStyle: TextStyle(
+                              color: const Color(0xffa3b4d3),
+                              fontSize: 14.sp,
+                            ),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                          ),
+                          onChanged: controller.onChanged,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: controller.submit,
+                      child: Container(
+                        width: 50.5.w,
+                        height: 24.w,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.r),
+                          color: '#249cfc'.hexColor.withOpacity(controller._canSend ? 1 : 0.5),
+                        ),
+                        child: Text(
+                          '发布',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 8.w),
+                GestureDetector(
+                  onTap: controller.toAtUser,
+                  child: Text(
+                    '@',
+                    style: TextStyle(
+                      color: '#787b86'.hexColor,
+                      fontSize: 22.sp,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          // IconButton(
-          //     onPressed: () {
-          //       //提交评论
-          //       String commentContent = controller.text;
-          //       if (commentContent.isNotEmpty &&  commentContent.length >= 5) {
-          //         _submitComment(commentContent);
-          //       } else {
-          //         ToastUtils.showToast('评论内容不能低于5个字符');
-          //       }
-          //     },
-
-          //     icon: Image.asset(
-          //       'assets/images/publish.png',
-          //       width: 50.px,
-          //       height: 29.px,
-          //     ))
-        ],
-      ),
-      backgroundColor: Colors.transparent,
-      body: SafeArea(child: contentView()),
-    ));
-  }
-
-  void _submitComment(String commentContent) {
-    NetRequest().commentCreate(relType, relId, commentContent, (data) {
-      EventBusUtil.of.fire(EventRefreshPage(relType));
-      ToastUtils.showToast('发布成功');
-      Navigator.pop(context);
-    });
-  }
-
-  Widget contentView() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(16, 15, 16, 0),
-      height: 180.px,
-      child: TextFormField(
-        maxLines: null, // 允许自动换行
-        minLines: 8,
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: '我来说两句',
-          hintStyle: AppTheme.text999999Size16,
-          fillColor: AppTheme.color_50000000,
-          filled: true,
-          // border: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(6),
-          //   borderSide: BorderSide(
-          //     color: AppTheme.color_0D000000,
-          //     width: 2.0,
-          //   ),
-          // ),
-          contentPadding: EdgeInsets.all(10),
-          // 文本从左上角开始
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.color_1A000000, width: 1),
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.color_1A000000, width: 1),
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

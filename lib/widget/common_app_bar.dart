@@ -37,6 +37,7 @@ class CommonAppBar {
           ),
           onPressed: Get.back,
         ),
+        actions: actions,
         backgroundColor: Colors.transparent,
       );
 }

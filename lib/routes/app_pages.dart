@@ -74,13 +74,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.publishComment,
-      page: () {
-        final arguments = Get.arguments as Map;
-        return CommentPublishScreen(
-          relType: arguments['relType'],
-          relId: arguments['relId'],
-        );
-      },
+      page: () => const CommentPublishScreen(),
     ),
     GetPage(
       name: Routes.inputComment,

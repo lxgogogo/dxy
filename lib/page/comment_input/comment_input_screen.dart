@@ -89,7 +89,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.r),
-                          color: '#249cfc'.hexColor.withOpacity(controller._canSend ? 1 : 0.5),
+                          color: '#249cfc'.hexColor.withOpacity(controller.canSend ? 1 : 0.5),
                         ),
                         child: Text(
                           '发布',
@@ -99,7 +99,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(height: 8.w),

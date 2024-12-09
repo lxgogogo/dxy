@@ -10,7 +10,7 @@ class CommentInputController extends GetxController {
 
   final aitUserBeanList = <UserProfile>[];
 
-  bool _canSend = false;
+  bool canSend = false;
 
   void submit() {
     String text = textInput.text;
@@ -26,7 +26,7 @@ class CommentInputController extends GetxController {
   }
 
   void onChanged(String value) {
-    _canSend = value.isNotEmpty;
+    canSend = value.isNotEmpty;
     safeUpdate();
   }
 

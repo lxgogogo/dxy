@@ -371,29 +371,6 @@ class NetRequest {
     }
   }
 
-  ///发布帖子
-  Future threadCreate(String title, String content, int boardId, List<String> tags, List<UploadFile> files,
-      List<int> at, SuccessCallback onSuccess, FailureCallback onFail) async {
-    Map<String, Object> params = {};
-    params['title'] = title;
-    params['content'] = content;
-    params['boardId'] = boardId;
-    params['tags'] = tags;
-    params['files'] = files;
-    params['at'] = at;
-
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: false);
-    util_response.Response resp = util_response.Response.fromJson(response);
-    if (resp.code == 200) {
-      LogUtils.printAll("threadCreate===>$response");
-      onSuccess(response['data']);
-      ToastUtils.showToast('发布成功');
-    } else {
-      onFail(resp.message!);
-      ToastUtils.showToast(resp.message ?? '未知错误');
-    }
-  }
-
   ///注册
   // register 注册
   static const String SEND_CODE_TYPE_REGISTER = "register";
@@ -755,4 +732,41 @@ class NetRequest {
       ToastUtils.showToast(resp.message ?? '未知错误');
     }
   }
+
+  Future<Map<String, dynamic>?> uploadImage(String filePath) async {
+    Map<String, Object> params = {};
+    params['file'] = filePath;
+
+    final response = await HttpUtils.postFile(
+      Api.uploadFile,
+      params: {'file': filePath},
+    );
+    util_response.Response resp = util_response.Response.fromJson(response);
+    if (resp.code == 200) {
+      return response['data'];
+    } else {
+      return null;
+    }
+  }
+
+
+  ///发布帖子
+  Future<bool> threadCreate(String title, String content, int boardId) async {
+    Map<String, Object> params = {};
+    params['title'] = title;
+    params['content'] = content;
+    params['boardId'] = boardId;
+    params['tags'] = [];
+    params['files'] = [];
+    params['at'] = [];
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: false);
+    util_response.Response resp = util_response.Response.fromJson(response);
+    if (resp.code == 200) {
+      ToastUtils.showToast('发布成功');
+    } else {
+      ToastUtils.showToast(resp.message ?? '未知错误');
+    }
+    return resp.code == 200;
+  }
+
 }

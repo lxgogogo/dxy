@@ -10,20 +10,15 @@ class HtmlFactoryBuilder extends WidgetFactory {
   @override
   void parse(BuildTree meta) {
     final e = meta.element;
-    if (e.localName == 'figure' && e.classes.contains('table')) {
-      // meta.register(
-      //   BuildOp(
-      //     onParsed: (BuildTree tree) {
-      //       return tree.register(op)
-      //     },
-      //   ),
-      // );
+    if (meta.element.localName == 'td' || meta.element.localName == 'th') {
+      meta.register(
+        BuildOp(
+          onRenderedBlock: (BuildTree tree, Widget block) {
+
+          }
+        ),
+      );
     }
     super.parse(meta);
   }
 }
-
-
-
-
-

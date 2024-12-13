@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/event_bus_util.dart';
@@ -16,6 +17,7 @@ import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/page_scroll_physics.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:lottie/lottie.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:video_player/video_player.dart';
@@ -112,7 +114,7 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.w),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
                           decoration: BoxDecoration(
                             color: '#D8E2ED'.hexColor,
                             borderRadius: BorderRadius.circular(4.r),
@@ -123,18 +125,26 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
                                 child: Text(
                                   controller.articleDetailBean!.videoList![controller.playVideoIndex].title ?? '',
                                   style: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 12.sp,
+                                    color: '#2a2a2a'.hexColor,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               SizedBox(width: 8.w),
-                              const Icon(Icons.video_collection_outlined),
+                              Image.asset(
+                                Assets.images.collection.path,
+                                width: 12.w,
+                                height: 12.w,
+                                color: '#2a2a2a'.hexColor,
+                              ),
+                              SizedBox(width: 8.w),
                               Text(
                                 '${controller.playVideoIndex + 1}/${controller.articleDetailBean!.videoList!.length}',
                                 style: TextStyle(
-                                  fontSize: 14.sp,
+                                  fontSize: 12.sp,
+                                  color: '#2a2a2a'.hexColor,
                                 ),
                               ),
                             ],
@@ -166,6 +176,13 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
                                     alignment: Alignment.center,
                                     child: Row(
                                       children: [
+                                        if (isSelected)
+                                          Lottie.asset(
+                                            'assets/lottie/play_video.json',
+                                            width: 24.w,
+                                            height: 24.w,
+                                            repeat: true,
+                                          ),
                                         Expanded(
                                           child: Text(
                                             video.title ?? '',

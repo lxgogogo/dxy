@@ -33,4 +33,20 @@ extension QuillControllerExt on QuillController {
       ..replaceText(index, length, BlockEmbed.video(videoUrl), null)
       ..moveCursorToPosition(index + 1);
   }
+
+  void insertDividerBlock() {
+    this
+      ..skipRequestKeyboard = true
+      ..replaceText(index, length, BlockEmbed.divider(), null)
+      ..moveCursorToPosition(index + 1);
+  }
+
+  void insertAtBlock({
+    required String name,
+  }) {
+    this
+      ..skipRequestKeyboard = true
+      ..replaceText(index, length, BlockEmbed.at(name), null)
+      ..moveCursorToPosition(index + 1);
+  }
 }

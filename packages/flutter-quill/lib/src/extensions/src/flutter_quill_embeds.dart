@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_quill/flutter_quill.dart';
 
+import 'editor/at_embed.dart';
+import 'editor/divider_embed.dart';
 import 'editor/image/config/image_config.dart';
 import 'editor/image/image_embed.dart';
 import 'editor/video/config/video_config.dart';
@@ -33,6 +35,8 @@ abstract final class FlutterQuillEmbeds {
         QuillEditorVideoEmbedBuilder(
           config: videoEmbedConfig,
         ),
+      QuillEditorDividerEmbedBuilder(),
+      QuillEditorAtEmbedBuilder(),
     ];
   }
 

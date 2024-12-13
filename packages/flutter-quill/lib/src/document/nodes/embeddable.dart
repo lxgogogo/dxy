@@ -33,17 +33,28 @@ class BlockEmbed extends Embeddable {
   const BlockEmbed(super.type, String super.data);
 
   static const String imageType = 'image';
+
   static BlockEmbed image(String imageUrl) => BlockEmbed(imageType, imageUrl);
 
   static const String videoType = 'video';
+
   static BlockEmbed video(String videoUrl) => BlockEmbed(videoType, videoUrl);
 
   static const String formulaType = 'formula';
+
   static BlockEmbed formula(String formula) => BlockEmbed(formulaType, formula);
 
   static const String customType = 'custom';
-  static BlockEmbed custom(CustomBlockEmbed customBlock) =>
-      BlockEmbed(customType, customBlock.toJsonString());
+
+  static BlockEmbed custom(CustomBlockEmbed customBlock) => BlockEmbed(customType, customBlock.toJsonString());
+
+  static const String dividerType = 'divider';
+
+  static BlockEmbed divider() => const BlockEmbed(dividerType, 'hr');
+
+  static const String atType = 'at';
+
+  static BlockEmbed at(String name) => BlockEmbed(atType, name);
 }
 
 class CustomBlockEmbed extends BlockEmbed {

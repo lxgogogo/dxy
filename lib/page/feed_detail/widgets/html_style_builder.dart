@@ -109,14 +109,14 @@ StylesMap? htmlCustomStyles(Element element) {
   if (element.localName == 'td') {
     return {
       'border': '1px solid #ccc',
-      'min-width': '50px',
+      'min-width': '150px',
       'height': '20px',
     };
   }
   if (element.localName == 'th') {
     return {
       'border': '1px solid #ccc',
-      'min-width': '50px',
+      'min-width': '150px',
       'height': '20px',
       'background-color': '#f1f1f1',
     };

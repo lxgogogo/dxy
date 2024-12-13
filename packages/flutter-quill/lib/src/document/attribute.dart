@@ -15,11 +15,9 @@ enum AttributeScope {
 
 @immutable
 class Attribute<T> {
-  const Attribute(
-    this.key,
-    this.scope,
-    this.value,
-  );
+  const Attribute(this.key,
+      this.scope,
+      this.value,);
 
   /// Unique key of this attribute.
   final String key;
@@ -56,15 +54,16 @@ class Attribute<T> {
     Attribute.script.key: Attribute.script,
     Attribute.image.key: Attribute.image,
     Attribute.video.key: Attribute.video,
+    Attribute.divider.key: Attribute.divider,
   });
 
   static const BoldAttribute bold = BoldAttribute();
 
   static final ScriptAttribute subscript =
-      ScriptAttribute(ScriptAttributes.sub);
+  ScriptAttribute(ScriptAttributes.sub);
 
   static final ScriptAttribute superscript =
-      ScriptAttribute(ScriptAttributes.sup);
+  ScriptAttribute(ScriptAttributes.sup);
 
   static const ItalicAttribute italic = ItalicAttribute();
 
@@ -117,6 +116,10 @@ class Attribute<T> {
   static const ImageAttribute image = ImageAttribute(null);
 
   static const VideoAttribute video = VideoAttribute(null);
+
+  static const DividerAttribute divider = DividerAttribute();
+
+  static const AtAttribute at = AtAttribute(null);
 
   static final registeredAttributeKeys = Set.unmodifiable(_registry.keys);
 
@@ -175,6 +178,8 @@ class Attribute<T> {
   static final Set<String> embedKeys = {
     Attribute.image.key,
     Attribute.video.key,
+    Attribute.divider.key,
+    Attribute.at.key,
   };
 
   /// "attributes":{"header": 1 }
@@ -418,4 +423,14 @@ class ImageAttribute extends Attribute<String?> {
 class VideoAttribute extends Attribute<String?> {
   const VideoAttribute(String? url)
       : super('video', AttributeScope.embeds, url);
+}
+
+class DividerAttribute extends Attribute<String?> {
+  const DividerAttribute()
+      : super('divider', AttributeScope.embeds, 'hr');
+}
+
+class AtAttribute extends Attribute<String?> {
+  const AtAttribute(String? name)
+      : super('at', AttributeScope.embeds, 'name');
 }

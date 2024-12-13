@@ -749,16 +749,20 @@ class NetRequest {
     }
   }
 
-
   ///发布帖子
-  Future<bool> threadCreate(String title, String content, int boardId) async {
+  Future<bool> threadCreate(
+    String title,
+    String content,
+    int boardId, {
+    List atList = const [],
+  }) async {
     Map<String, Object> params = {};
     params['title'] = title;
     params['content'] = content;
     params['boardId'] = boardId;
     params['tags'] = [];
     params['files'] = [];
-    params['at'] = [];
+    params['at'] = atList;
     Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -768,5 +772,4 @@ class NetRequest {
     }
     return resp.code == 200;
   }
-
 }

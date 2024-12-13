@@ -16,7 +16,7 @@ class Env {
       kReleaseMode && _kApiEnv == ApiEnv.prod1 || _kApiEnv == ApiEnv.prod2;
 
   static bool isProxy = true;
-  static String httpProxyHost = '192.168.0.104';
+  static String httpProxyHost = '192.168.0.30';
   static String httpProxyPort = '8888';
 
   static bool get useBadCertificate => kDebugMode;

@@ -1,21 +1,16 @@
-import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/feed_list/widgets/feed_list_child.dart';
-import 'package:holdem/page/feed_post/feed_post_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../model/board_info.dart';
-import '../../utils/constants.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../login/login_screen.dart';
 
 part 'feed_list_controller.dart';
 
@@ -42,17 +37,6 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   String get filterValue => filters[selIndex];
 
   final _pageKey = GlobalKey<ForumTabChildPageState>();
-
-  //默认全部板块
-  List<TabData> forumParentTabs = [
-    TabData(
-      index: 0,
-      title: const Tab(
-        child: Text('全部板块'),
-      ),
-      content: ForumTabChildPage(tabId: 0),
-    )
-  ];
 
   @override
   void initState() {

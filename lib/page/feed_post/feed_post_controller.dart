@@ -88,7 +88,6 @@ class FeedPostController extends GetxController {
     });
     final content = converter.convert();
 
-    print('xxx $content');
     if (currentBord == null || currentBord?.id == -1) {
       ToastUtils.showToast('请选择发帖板块');
       return;

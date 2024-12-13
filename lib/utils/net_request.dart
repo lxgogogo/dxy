@@ -762,7 +762,7 @@ class NetRequest {
     params['boardId'] = boardId;
     params['tags'] = [];
     params['files'] = [];
-    params['at'] = atList;
+    // params['at'] = atList;
     Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {

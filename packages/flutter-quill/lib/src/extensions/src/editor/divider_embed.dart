@@ -10,7 +10,7 @@ class QuillEditorDividerEmbedBuilder extends EmbedBuilder {
   String get key => BlockEmbed.dividerType;
 
   @override
-  bool get expanded => false;
+  bool get expanded => true;
 
   @override
   Widget build(

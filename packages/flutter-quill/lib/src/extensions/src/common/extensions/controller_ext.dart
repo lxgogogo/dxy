@@ -2,11 +2,10 @@ import 'package:flutter_quill/flutter_quill.dart';
 
 @Deprecated('Invalid extension')
 extension QuillControllerExt on QuillController {
-  @Deprecated(
-      'Invalid extension property and will be removed, use selection.baseOffset instead')
+  @Deprecated('Invalid extension property and will be removed, use selection.baseOffset instead')
   int get index => selection.baseOffset;
-  @Deprecated(
-      'Invalid extension property and will be removed, use selection.baseOffset instead')
+
+  @Deprecated('Invalid extension property and will be removed, use selection.baseOffset instead')
   int get length => selection.extentOffset - index;
 
   @Deprecated('Invalid extension method and will be removed.')
@@ -15,12 +14,7 @@ extension QuillControllerExt on QuillController {
   }) {
     this
       ..skipRequestKeyboard = true
-      ..replaceText(
-        index,
-        length,
-        BlockEmbed.image(imageSource),
-        null,
-      )
+      ..replaceText(index, length, BlockEmbed.image(imageSource), null)
       ..moveCursorToPosition(index + 1);
   }
 
@@ -45,7 +39,7 @@ extension QuillControllerExt on QuillController {
     required String name,
   }) {
     this
-      ..skipRequestKeyboard = true
+      ..skipRequestKeyboard = false
       ..replaceText(index, length, BlockEmbed.at(name), null)
       ..moveCursorToPosition(index + 1);
   }

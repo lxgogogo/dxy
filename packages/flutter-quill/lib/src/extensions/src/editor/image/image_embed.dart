@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
@@ -10,6 +12,7 @@ class QuillEditorImageEmbedBuilder extends EmbedBuilder {
   QuillEditorImageEmbedBuilder({
     required this.config,
   });
+
   final QuillEditorImageEmbedConfig config;
 
   @override
@@ -32,15 +35,26 @@ class QuillEditorImageEmbedBuilder extends EmbedBuilder {
     final width = imageSize.width;
     final height = imageSize.height;
 
-    final imageWidget = getImageWidgetByImageSource(
-      context: context,
-      imageSource,
-      imageProviderBuilder: config.imageProviderBuilder,
-      imageErrorWidgetBuilder: config.imageErrorWidgetBuilder,
-      alignment: alignment,
-      height: height,
-      width: width,
-    );
+    final imageWidget = LayoutBuilder(builder: (context, constraints) {
+      return Image(
+        image: getImageProviderByImageSource(
+          context: context,
+          imageSource,
+          imageProviderBuilder: config.imageProviderBuilder,
+        ),
+        width: min(width ?? constraints.maxWidth / 2, constraints.maxWidth / 2),
+        alignment: alignment,
+        errorBuilder: config.imageErrorWidgetBuilder,
+      );
+      return getImageWidgetByImageSource(
+        context: context,
+        imageSource,
+        imageProviderBuilder: config.imageProviderBuilder,
+        imageErrorWidgetBuilder: config.imageErrorWidgetBuilder,
+        alignment: alignment,
+        width: min(width ?? constraints.maxWidth / 2, constraints.maxWidth / 2),
+      );
+    });
 
     return GestureDetector(
       onTap: () {
@@ -49,17 +63,17 @@ class QuillEditorImageEmbedBuilder extends EmbedBuilder {
           onImageClicked(imageSource);
           return;
         }
-        showDialog(
-          context: context,
-          builder: (_) => ImageOptionsMenu(
-            controller: embedContext.controller,
-            config: config,
-            imageSource: imageSource,
-            imageSize: imageSize,
-            readOnly: embedContext.readOnly,
-            imageProvider: imageWidget.image,
-          ),
-        );
+        // showDialog(
+        //   context: context,
+        //   builder: (_) => ImageOptionsMenu(
+        //     controller: embedContext.controller,
+        //     config: config,
+        //     imageSource: imageSource,
+        //     imageSize: imageSize,
+        //     readOnly: embedContext.readOnly,
+        //     imageProvider: imageWidget.image,
+        //   ),
+        // );
       },
       child: Builder(
         builder: (context) {

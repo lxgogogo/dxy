@@ -281,9 +281,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     final uploadFile = UploadFile.fromJson(res);
                     imageUrl = uploadFile.url ?? '';
                   }
-                  controller
-                    ..skipRequestKeyboard = true
-                    ..insertImageBlock(imageSource: imageUrl);
+                  controller.insertImageBlock(imageSource: imageUrl);
                 },
               ),
               childBuilder: (dynamic options, dynamic extraOptions) {
@@ -361,9 +359,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   if (e.attribute == Attribute.divider) {
                     return GestureDetector(
                       onTap: () {
-                        controller.quillController
-                          ..skipRequestKeyboard = false
-                          ..insertDividerBlock();
+                        controller.quillController.insertDividerBlock();
                       },
                       child: Container(
                         width: itemWidth,
@@ -483,9 +479,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                               final uploadFile = UploadFile.fromJson(res);
                               videoUrl = uploadFile.url ?? '';
                             }
-                            controller
-                              ..skipRequestKeyboard = true
-                              ..insertVideoBlock(videoUrl: videoUrl);
+                            controller.insertVideoBlock(videoUrl: videoUrl);
                           },
                         ),
                         childBuilder: (dynamic options, dynamic extraOptions) {
@@ -528,9 +522,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         final result = await Get.toNamed(Routes.atUser);
                         if (result != null) {
                           var nickname = result.nickname;
-                          controller.quillController
-                            ..skipRequestKeyboard = true
-                            ..insertAtBlock(name: nickname);
+                          controller.quillController.insertAtBlock(name: nickname);
                         }
                       },
                       child: Column(
@@ -544,7 +536,12 @@ class FeedPostScreen extends GetView<FeedPostController> {
                               color: '#95a3c4'.hexColor.withOpacity(0.1),
                             ),
                             alignment: Alignment.center,
-                            child: const Icon(Icons.movie_creation),
+                            child: Text(
+                              '@',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                              ),
+                            ),
                           ),
                           SizedBox(height: 4.w),
                           Text(

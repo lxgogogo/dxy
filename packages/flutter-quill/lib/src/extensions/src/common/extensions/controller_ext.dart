@@ -36,11 +36,11 @@ extension QuillControllerExt on QuillController {
   }
 
   void insertAtBlock({
-    required String name,
+    required String data,
   }) {
     this
       ..skipRequestKeyboard = false
-      ..replaceText(index, length, BlockEmbed.at(name), null)
+      ..replaceText(index, length, BlockEmbed.at(data), null)
       ..moveCursorToPosition(index + 1);
   }
 }

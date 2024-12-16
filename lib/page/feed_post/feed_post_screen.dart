@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -69,7 +70,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
             body: Container(
               margin: EdgeInsets.only(top: 12.w),
               padding: EdgeInsets.only(
-                bottom: window.viewPadding.bottom / window.devicePixelRatio,
+                bottom: ScreenUtil().bottomBarHeight,
               ),
               decoration: const BoxDecoration(
                 color: Color(0xfff2f9ff),
@@ -275,13 +276,20 @@ class FeedPostScreen extends GetView<FeedPostController> {
             options: QuillToolbarImageButtonOptions(
               imageButtonConfig: QuillToolbarImageConfig(
                 onImageInsertCallback: (image, controller) async {
-                  String imageUrl = '';
+                  final file = File(image);
+                  final fileLength = await file.length();
+                  if (fileLength > 10 * 1024 * 1024) {
+                    ToastUtils.showToast('上传图片不得超过10M');
+                    return;
+                  }
                   final res = await NetRequest().uploadImage(image);
                   if (res != null) {
                     final uploadFile = UploadFile.fromJson(res);
-                    imageUrl = uploadFile.url ?? '';
+                    final imageUrl = uploadFile.url ?? '';
+                    if (imageUrl.isNotEmpty) {
+                      controller.insertImageBlock(imageSource: imageUrl);
+                    }
                   }
-                  controller.insertImageBlock(imageSource: imageUrl);
                 },
               ),
               childBuilder: (dynamic options, dynamic extraOptions) {
@@ -473,13 +481,23 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       options: QuillToolbarVideoButtonOptions(
                         videoConfig: QuillToolbarVideoConfig(
                           onVideoInsertCallback: (video, controller) async {
-                            String videoUrl = '';
+                            if (!GetUtils.isHTML(video)) {
+
+                              final file = File(video);
+                              final fileLength = await file.length();
+                              if (fileLength > 10 * 1024 * 1024) {
+                                ToastUtils.showToast('上传视频不得超过10M');
+                                return;
+                              }
+                            }
                             final res = await NetRequest().uploadImage(video);
                             if (res != null) {
                               final uploadFile = UploadFile.fromJson(res);
-                              videoUrl = uploadFile.url ?? '';
+                              final videoUrl = uploadFile.url ?? '';
+                              if (videoUrl.isNotEmpty) {
+                                controller.insertVideoBlock(videoUrl: videoUrl);
+                              }
                             }
-                            controller.insertVideoBlock(videoUrl: videoUrl);
                           },
                         ),
                         childBuilder: (dynamic options, dynamic extraOptions) {
@@ -521,8 +539,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       onTap: () async {
                         final result = await Get.toNamed(Routes.atUser);
                         if (result != null) {
-                          var nickname = result.nickname;
-                          controller.quillController.insertAtBlock(name: nickname);
+                          controller.quillController.insertAtBlock(data: json.encode(result));
                         }
                       },
                       child: Column(
@@ -570,9 +587,9 @@ class FeedPostScreen extends GetView<FeedPostController> {
     if (controller.showKeyboard) {
       return MediaQuery.of(context).viewInsets.bottom;
     } else if (controller.showMore || controller.showTextStyle) {
-      return 248.w + MediaQuery.of(context).padding.bottom;
+      return 248.w;
     } else {
-      return MediaQuery.of(context).padding.bottom;
+      return 0;
     }
   }
 }

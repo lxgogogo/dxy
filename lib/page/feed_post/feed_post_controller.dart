@@ -81,8 +81,9 @@ class FeedPostController extends GetxController {
         return '<hr>';
       }
       if (customOp.insert.type == 'at') {
-        atList.add(customOp.insert.value);
-        return "<span style='color: #249cfc; position: relative; z-index: 1;'>@${customOp.insert.value} </span>";
+        final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
+        atList.add(dataMap['id']);
+        return "<span style='color: #249cfc; position: relative; z-index: 1;'>@${dataMap['nickname']} </span>";
       }
       return '';
     });

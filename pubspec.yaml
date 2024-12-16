@@ -2,7 +2,7 @@ name: holdem
 description: A new Flutter project.
 publish_to: none
 
-version: 1.1.5+38
+version: 1.1.7+38
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
@@ -18,7 +18,8 @@ dependencies:
   flutter_quill:
     path: ./packages/flutter-quill
   flutter_quill_delta_from_html: ^1.4.2
-  vsc_quill_delta_to_html: ^1.0.5
+  vsc_quill_delta_to_html:
+    path: ./plugins/vsc_quill_delta_to_html
   flutter_widget_from_html: ^0.15.3
   pull_to_refresh: ^2.0.0
   flutter_easyloading: ^3.0.5

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -241,8 +242,8 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                               },
                               child: SvgPicture.asset(
                                 'assets/svg/icon_delete.svg',
-                                width: 22.px,
-                                height: 22.px,
+                                width: 22.w,
+                                height: 22.w,
                               ),
                             ),
                           ],
@@ -306,6 +307,8 @@ class MyCommentItem extends StatelessWidget {
         typeName = '文章';
       } else if (item.content?.type == 'video') {
         typeName = '视频';
+      } else if (item.content?.type == 'videoList') {
+        typeName = '视频合集';
       } else if (item.content?.type == 'book') {
         typeName = '书籍';
       }
@@ -328,8 +331,8 @@ class MyCommentItem extends StatelessWidget {
       }
     }
     return Container(
-      padding: EdgeInsets.fromLTRB(10.px, 10.px, 10.px, 12.px),
-      margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
+      padding: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 12.w),
+      margin: EdgeInsets.fromLTRB(10.w, 12.w, 10.w, 0),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.6),
         borderRadius: BorderRadius.circular(12.rpx),
@@ -341,10 +344,10 @@ class MyCommentItem extends StatelessWidget {
             children: [
               BorderAvatar(
                 avatar: userProfileInfo?.avatar ?? '',
-                avatarSize: 42.px,
+                avatarSize: 42.w,
               ),
               SizedBox(
-                width: 7.px,
+                width: 7.w,
               ),
               Expanded(
                 child: Column(
@@ -354,7 +357,7 @@ class MyCommentItem extends StatelessWidget {
                       userProfileInfo?.nickname ?? '',
                       style: TextStyle(
                         color: const Color(0xff2a2a2a),
-                        fontSize: 14.px,
+                        fontSize: 14.w,
                         fontWeight: FontWeight.w500,
                       ),
                       maxLines: 1,
@@ -365,7 +368,7 @@ class MyCommentItem extends StatelessWidget {
                         CommonUtils.timeFromNow(createdAt),
                         style: TextStyle(
                           color: const Color(0xff9CACC9),
-                          fontSize: 10.px,
+                          fontSize: 10.w,
                         ),
                       ),
                   ],
@@ -374,7 +377,7 @@ class MyCommentItem extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 10.px,
+            height: 10.w,
           ),
           GestureDetector(
             onTap: () {
@@ -391,7 +394,7 @@ class MyCommentItem extends StatelessWidget {
                 Get.toNamed(Routes.articleDetail, arguments: id);
               } else if (item.resourceType == 'book') {
                 Get.toNamed(Routes.bookDetail, arguments: id);
-              } else if (item.resourceType == 'video') {
+              } else if (item.resourceType == 'video' || item.resourceType == 'videoList') {
                 Get.toNamed(Routes.videoDetail, arguments: id);
               }
             },
@@ -404,12 +407,12 @@ class MyCommentItem extends StatelessWidget {
                   maxLines: 2,
                   textAlign: TextAlign.start,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12.px, color: const Color(0xff2a2a2a)),
+                  style: TextStyle(fontSize: 12.w, color: const Color(0xff2a2a2a)),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10.px),
-                  padding: EdgeInsets.all(8.px),
-                  constraints: BoxConstraints(minHeight: 52.px),
+                  margin: EdgeInsets.only(top: 10.w),
+                  padding: EdgeInsets.all(8.w),
+                  constraints: BoxConstraints(minHeight: 52.w),
                   decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
                   child: Row(
                     children: [
@@ -417,19 +420,19 @@ class MyCommentItem extends StatelessWidget {
                         CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: imageUrl ?? '',
-                          width: 36.px,
-                          height: 36.px,
+                          width: 36.w,
+                          height: 36.w,
                           placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
                           errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
                         ),
-                      SizedBox(width: 10.px),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: Text(
                           content ?? '',
                           maxLines: 1,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px),
+                          style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.w),
                         ),
                       ),
                     ],
@@ -490,8 +493,8 @@ class MyCollectItem extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(10.px, 10.px, 10.px, 12.px),
-        margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
+        padding: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 12.w),
+        margin: EdgeInsets.fromLTRB(10.w, 12.w, 10.w, 0),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.6),
           borderRadius: BorderRadius.circular(12.rpx),
@@ -500,7 +503,7 @@ class MyCollectItem extends StatelessWidget {
           children: [
             Expanded(
                 child: SizedBox(
-              height: 80.px,
+              height: 80.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -511,7 +514,7 @@ class MyCollectItem extends StatelessWidget {
                     maxLines: 2,
                     style: TextStyle(
                       color: const Color(0xff2a2a2a),
-                      fontSize: 14.px,
+                      fontSize: 14.w,
                     ),
                   ),
                   // Spacer(),
@@ -521,25 +524,25 @@ class MyCollectItem extends StatelessWidget {
                         createdAt != null ? DateFormat('M月d日').format(createdAt!) : '',
                         style: TextStyle(
                           color: const Color(0xff9CACC9),
-                          fontSize: 12.px,
+                          fontSize: 12.w,
                         ),
                       ),
                       SizedBox(
-                        width: 30.px,
+                        width: 30.w,
                       ),
                       Image.asset(
                         'assets/images/comment.png',
-                        width: 13.px,
-                        height: 12.px,
+                        width: 13.w,
+                        height: 12.w,
                       ),
                       SizedBox(
-                        width: 5.px,
+                        width: 5.w,
                       ),
                       Text(
                         '${commentCount ?? 0}',
                         style: TextStyle(
                           color: const Color(0xff9CACC9),
-                          fontSize: 12.px,
+                          fontSize: 12.w,
                         ),
                       )
                     ],
@@ -548,21 +551,44 @@ class MyCollectItem extends StatelessWidget {
               ),
             )),
             if (imageUrl?.isNotEmpty == true)
-              Container(
-                width: 92.px,
-                height: 66.px,
-                margin: EdgeInsets.only(left: 15.px),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.px)),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl!,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Image.asset(
-                    'assets/images/image_loading_def.png',
+              Stack(
+                children: [
+                  Container(
+                    width: 92.w,
+                    height: 66.w,
+                    margin: EdgeInsets.only(left: 15.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Image.asset(
+                        'assets/images/image_loading_def.png',
+                      ),
+                    ),
                   ),
-                ),
+                  if (item?.content?.type == 'videoList')
+                    Positioned(
+                      top: 2.w,
+                      right: 2.w,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        child: Text(
+                          '合集',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               )
           ],
         ),

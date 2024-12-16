@@ -54,7 +54,7 @@ class BlockEmbed extends Embeddable {
 
   static const String atType = 'at';
 
-  static BlockEmbed at(String name) => BlockEmbed(atType, name);
+  static BlockEmbed at(String data) => BlockEmbed(atType, data);
 }
 
 class CustomBlockEmbed extends BlockEmbed {

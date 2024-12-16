@@ -19,6 +19,7 @@ import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../model/board_list.dart';
@@ -130,6 +131,9 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                       controller.detailBean!.content!,
                       customStylesBuilder: htmlCustomStyles,
                       factoryBuilder: () => HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                      onTapUrl: (String url) async {
+                        return launchUrlString(url, mode : LaunchMode.externalApplication);
+                      },
                     ),
                   _buildMediaView(),
                   SizedBox(height: 16.w),

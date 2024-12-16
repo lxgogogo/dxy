@@ -49,9 +49,13 @@
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
     <false/>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>App需要您的同意，才能访问相册，以便于从相册获取图片上传头像等</string>
+    <key>NSCameraUsageDescription</key>
+    <string>App需要您的同意,才能访问您的相机</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>App需要您的同意,才能访问您的麦克风</string>
+        <string>App需要您的同意,才能访问您的麦克风</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+        <string>App需要您的同意，才能访问相册，以便于从相册获取图片上传头像等</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>App需要您的同意，才能访问相册，以便于将图片保存到相册</string>
 </dict>
 </plist>

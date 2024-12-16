@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -82,7 +83,7 @@ class MessageChildViewState extends State<MessageChildView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 12.px),
+      margin: EdgeInsets.only(top: 12.w),
       constraints: BoxConstraints(
         minHeight: MediaQuery.sizeOf(context).height,
       ),
@@ -94,13 +95,13 @@ class MessageChildViewState extends State<MessageChildView> {
           boxShadow: [
             BoxShadow(
               color: const Color(0xffa2b9d0).withOpacity(0.64),
-              offset: Offset(0, 1.px),
+              offset: Offset(0, 1.w),
               blurRadius: 2.rpx,
-              spreadRadius: -1.px,
+              spreadRadius: -1.w,
             ),
             BoxShadow(
               color: const Color(0xffffffff),
-              offset: Offset(0, -1.px),
+              offset: Offset(0, -1.w),
               blurRadius: 2.rpx,
               spreadRadius: 0,
             ),
@@ -121,10 +122,17 @@ class MessageChildViewState extends State<MessageChildView> {
           ? const Center(
               child: NoDataView(),
             )
-          : ListView.builder(
+          : ListView.separated(
+              padding: EdgeInsets.symmetric(vertical: 12.w),
               itemBuilder: (c, i) => messageCommentItem(messages[i], i),
               // itemExtent: 160.0,
-              itemCount: messages.length,
+              itemCount: messages.length, separatorBuilder: (BuildContext context, int index) {
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 10.w),
+                    color: const Color(0xffE7EDEE),
+                  height: 1.w,
+                );
+      },
             ),
     );
   }
@@ -159,34 +167,33 @@ class MessageChildViewState extends State<MessageChildView> {
       title = '收藏了我的帖子';
       smallIcon = 'assets/images/collect_small.png';
     }
+    if (messageBean.resourceType == 'videoList') {
+      return VideoCollectionItem(
+        item: messageBean,
+        onTap: () => jumpPage(messageBean),
+      );
+    }
     return Container(
-      padding: EdgeInsets.only(top: 13.px, bottom: 20.px),
-      margin: EdgeInsets.only(left: 16.px, right: 16.px),
-      // decoration: BoxDecoration(
-      //     border: Border(
-      //         bottom: BorderSide(
-      //             color: index == messages.length - 1
-      //                 ? Colors.transparent
-      //                 : const Color(0xffE5E5E5),
-      //             width: 1))),
+      padding: EdgeInsets.only(top: 13.w, bottom: 20.w),
+      margin: EdgeInsets.only(left: 16.w, right: 16.w),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 34.px,
-            height: 34.px,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(17.px), color: Colors.white),
+            width: 34.w,
+            height: 34.w,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(17.w), color: Colors.white),
             child: Stack(
               children: [
                 Positioned(
-                    left: 1.px,
-                    top: 1.px,
+                    left: 1.w,
+                    top: 1.w,
                     child: ClipOval(
                         child: Image.network(
                       messageBean.fromUser?.avatar ?? '',
-                      width: 32.px,
-                      height: 32.px,
+                      width: 32.w,
+                      height: 32.w,
                       fit: BoxFit.cover,
                     ))),
                 Positioned(
@@ -194,14 +201,14 @@ class MessageChildViewState extends State<MessageChildView> {
                     bottom: 0,
                     child: Image.asset(
                       smallIcon,
-                      width: 12.px,
-                      height: 12.px,
+                      width: 12.w,
+                      height: 12.w,
                     ))
               ],
             ),
           ),
           SizedBox(
-            width: 12.px,
+            width: 12.w,
           ),
           Expanded(
               child: Column(
@@ -213,26 +220,26 @@ class MessageChildViewState extends State<MessageChildView> {
                   children: [
                     Text(
                       messageBean.fromUser?.nickname ?? '',
-                      style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, fontWeight: FontWeight.normal),
+                      style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.w, fontWeight: FontWeight.normal),
                     ),
                     SizedBox(
-                      width: 6.px,
+                      width: 6.w,
                     ),
                     Text(DateFormat('MM-dd HH:mm').format(messageBean.createdAt!),
-                        style: TextStyle(color: Color(0xff9CACC9), fontSize: 10.px)),
+                        style: TextStyle(color: Color(0xff9CACC9), fontSize: 10.w)),
                   ],
                 ),
                 SizedBox(
-                  height: 5.px,
+                  height: 5.w,
                 ),
                 Row(
                   children: [
                     Text(
                       title,
-                      style: TextStyle(color: Color(0xff666666), fontSize: 11.px),
+                      style: TextStyle(color: Color(0xff666666), fontSize: 11.w),
                     ),
                     SizedBox(
-                      width: 8.px,
+                      width: 8.w,
                     ),
                   ],
                 ),
@@ -241,19 +248,17 @@ class MessageChildViewState extends State<MessageChildView> {
                     jumpPage(messageBean);
                   },
                   child: Container(
-                      padding: EdgeInsets.only(bottom: 10.px),
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1.px, color: const Color(0xffE7EDEE)))),
+                      padding: EdgeInsets.only(bottom: 10.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           if (str.isNotEmpty) Html(data: str) else SizedBox(height: 10.w),
                           Container(
-                            padding: EdgeInsets.all(10.px),
-                            width: 300.px,
+                            padding: EdgeInsets.all(10.w),
+                            width: 300.w,
                             decoration: BoxDecoration(
-                                color: const Color(0x1A95A3C4), borderRadius: BorderRadius.all(Radius.circular(4.px))),
+                                color: const Color(0x1A95A3C4), borderRadius: BorderRadius.all(Radius.circular(4.w))),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -262,66 +267,66 @@ class MessageChildViewState extends State<MessageChildView> {
                                   Text(messageBean.contentUser!.nickname!,
                                       style: TextStyle(
                                           color: Color(0xff2a2a2a),
-                                          fontSize: 12.px,
+                                          fontSize: 12.w,
                                           fontWeight: FontWeight.bold,
                                           height: 2.0)),
                                 Text(messageBean.content?.title ?? '',
-                                    style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.px, height: 2.0)),
+                                    style: TextStyle(color: Color(0xff2a2a2a), fontSize: 12.w, height: 2.0)),
                                 Row(
                                   children: [
                                     SizedBox(
-                                      width: 66.px,
+                                      width: 66.w,
                                       child: Row(
                                         children: [
                                           Image.asset(
                                             'assets/images/praise.png',
-                                            width: 13.px,
-                                            height: 13.px,
+                                            width: 13.w,
+                                            height: 13.w,
                                           ),
                                           SizedBox(
-                                            width: 6.px,
+                                            width: 6.w,
                                           ),
                                           Text(
                                             '${messageBean.content?.likeCount ?? 0}',
-                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.w),
                                           )
                                         ],
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 66.px,
+                                      width: 66.w,
                                       child: Row(
                                         children: [
                                           Image.asset(
                                             'assets/images/star.png',
-                                            width: 13.px,
-                                            height: 13.px,
+                                            width: 13.w,
+                                            height: 13.w,
                                           ),
                                           SizedBox(
-                                            width: 6.px,
+                                            width: 6.w,
                                           ),
                                           Text(
                                             '${messageBean.content?.favoriteCount ?? 0}',
-                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.w),
                                           )
                                         ],
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 66.px,
+                                      width: 66.w,
                                       child: Row(
                                         children: [
                                           Image.asset(
                                             'assets/images/comment.png',
-                                            width: 13.px,
-                                            height: 13.px,
+                                            width: 13.w,
+                                            height: 13.w,
                                           ),
                                           SizedBox(
-                                            width: 6.px,
+                                            width: 6.w,
                                           ),
                                           Text(
                                             '${messageBean.content?.commentCount ?? 0}',
-                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
+                                            style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.w),
                                           )
                                         ],
                                       ),
@@ -335,6 +340,166 @@ class MessageChildViewState extends State<MessageChildView> {
                       )),
                 )
               ]))
+        ],
+      ),
+    );
+  }
+}
+
+class VideoCollectionItem extends StatelessWidget {
+  final MessageBean? item;
+  final VoidCallback? onTap;
+
+  const VideoCollectionItem({
+    super.key,
+    this.item,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Text(
+                item?.content?.title ?? '',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  color: const Color(0xff2a2a2a),
+                  fontSize: 14.w,
+                ),
+              ),
+              SizedBox(
+                width: 6.w,
+              ),
+              Text(
+                item?.createdAt != null ? DateFormat('MM-dd HH:mm').format(item!.createdAt!) : '',
+                style: TextStyle(
+                  color: const Color(0xff9CACC9),
+                  fontSize: 12.w,
+                ),
+              ),
+            ],
+          ),
+          Text(
+            '更新了新的视频',
+            style: TextStyle(
+              color: const Color(0xff9CACC9),
+              fontSize: 12.w,
+            ),
+          ),
+          SizedBox(height: 4.w),
+          GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                color: const Color(0x1A95A3C4),
+                borderRadius: BorderRadius.all(Radius.circular(4.w)),
+              ),
+              child: Row(
+                children: [
+                  if (item?.contentData?.cover?.isNotEmpty == true)
+                    Container(
+                      width: 48.w,
+                      height: 48.w,
+                      margin: EdgeInsets.only(right: 15.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: CachedNetworkImage(
+                        imageUrl: item!.contentData!.cover!,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Image.asset(
+                          'assets/images/image_loading_def.png',
+                        ),
+                      ),
+                    ),
+                  Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            item?.contentData?.title ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: TextStyle(
+                              color: const Color(0xff2a2a2a),
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          SizedBox(height: 6.w),
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/praise.png',
+                                    width: 11.w,
+                                    height: 12.w,
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    '${item?.content?.likeCount ?? 0}',
+                                    style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.w),
+                                    maxLines: 1,
+                                  )
+                                ],
+                              ),
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/star.png',
+                                    width: 11.w,
+                                    height: 12.w,
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    '${item?.content?.favoriteCount ?? 0}',
+                                    style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.w),
+                                    maxLines: 1,
+                                  )
+                                ],
+                              ),
+                              const Spacer(),
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/comment.png',
+                                    width: 11.w,
+                                    height: 12.w,
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    '${item?.content?.commentCount ?? 0}',
+                                    style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.w),
+                                    maxLines: 1,
+                                  )
+                                ],
+                              ),
+
+                            ],
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

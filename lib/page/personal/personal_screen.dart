@@ -283,8 +283,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
     if (picked != null) {
       final fileLength = await picked.length();
-      if (fileLength > 50 * 1024 * 1024) {
-        ToastUtils.showToast('上传头像不得超过50M');
+      if (fileLength > 10 * 1024 * 1024) {
+        ToastUtils.showToast('上传头像不得超过10M');
         return;
       }
       imageUrl = picked.path;

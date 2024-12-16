@@ -1,3 +1,5 @@
+import 'article.dart';
+
 class MessageList {
   Paper? pager;
   List<MessageBean>? list;
@@ -39,6 +41,7 @@ class MessageBean {
   MessageUser? fromUser;
   MessageUser? contentUser;
   MessageContent? content;
+  ArticleBean? contentData;
 
   MessageBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -77,6 +80,9 @@ class MessageBean {
     if (json["content"] is Map) {
       content = MessageContent.fromJson(json["content"]);
     }
+    if (json['contentData'] != null) {
+      contentData = ArticleBean.fromJson(json['contentData']);
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -92,6 +98,7 @@ class MessageBean {
     _data["createdAt"] = createdAt;
     _data["fromUser"] = fromUser?.toJson();
     _data["content"] = content?.toJson();
+    _data["contentData"] = contentData?.toJson();
     return _data;
   }
 }

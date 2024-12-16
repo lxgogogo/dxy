@@ -27,6 +27,7 @@ class VideoDetailController extends GetxController {
   @override
   void onClose() {
     _eventSubscription?.cancel();
+    videoController?.removeListener(videoListener);
     videoController?.dispose();
     chewieController?.dispose();
     super.onClose();
@@ -41,10 +42,12 @@ class VideoDetailController extends GetxController {
       }
       articleDetailBean = ArticleDetailBean.fromJson(data);
       safeUpdate();
-      if (articleDetailBean?.videoList?.isNotEmpty == true) {
-        _startVideoPlayer(articleDetailBean!.videoList!.first.sourceUrl ?? '');
-      } else {
-        _startVideoPlayer(articleDetailBean?.video?.sourceUrl ?? '');
+      if (videoController == null) {
+        if (articleDetailBean?.videoList?.isNotEmpty == true) {
+          _startVideoPlayer(articleDetailBean!.videoList!.first.sourceUrl ?? '');
+        } else {
+          _startVideoPlayer(articleDetailBean?.video?.sourceUrl ?? '');
+        }
       }
     });
 
@@ -63,6 +66,7 @@ class VideoDetailController extends GetxController {
     loaded = false;
     safeUpdate();
     videoController = VideoPlayerController.networkUrl(Uri.parse(link))
+      ..addListener(videoListener)
       ..initialize().then((_) {
         chewieController = ChewieController(
           videoPlayerController: videoController!,
@@ -74,6 +78,20 @@ class VideoDetailController extends GetxController {
       });
   }
 
+  void videoListener() {
+      if (articleDetailBean?.videoList?.isNotEmpty != true) return;
+      if (videoController!.value.position == videoController!.value.duration) {
+        if (playVideoIndex == articleDetailBean!.videoList!.length - 1) {
+          playVideoIndex = 0;
+        } else {
+          playVideoIndex += 1;
+        }
+        autoScrollController.scrollToIndex(playVideoIndex, preferPosition: AutoScrollPosition.end);
+        safeUpdate();
+        _startVideoPlayer(articleDetailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+      }
+    }
+
   Future<void> _startVideoPlayer(String link) async {
     if (videoController == null) {
       _initController(link);
@@ -81,11 +99,13 @@ class VideoDetailController extends GetxController {
       final oldController = videoController;
 
       WidgetsBinding.instance.addPostFrameCallback((_) async {
+        oldController?.removeListener(videoListener);
         await oldController?.dispose();
         _initController(link);
       });
-      videoController = null;
-      safeUpdate();
+      // videoController?.removeListener(videoListener);
+      // videoController = null;
+      // safeUpdate();
     }
   }
 

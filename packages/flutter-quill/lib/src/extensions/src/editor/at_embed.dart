@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../flutter_quill.dart';
@@ -16,8 +18,9 @@ class QuillEditorAtEmbedBuilder extends EmbedBuilder {
     BuildContext context,
     EmbedContext embedContext,
   ) {
+    final Map<String, dynamic> map = jsonDecode(embedContext.node.value.data);
     return Text(
-      '@${embedContext.node.value.data} ',
+      '@${map['nickname']} ',
       style: const TextStyle(
         fontSize: 14,
         color: Color(0xff249cfc),

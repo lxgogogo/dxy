@@ -1993,10 +1993,9 @@ packages:
   vsc_quill_delta_to_html:
     dependency: "direct main"
     description:
-      name: vsc_quill_delta_to_html
-      sha256: "9aca60d53ed1b700e922dabff8cd8b3490daecbf99c258f19eb45820b794fa45"
-      url: "https://pub.dev"
-    source: hosted
+      path: "plugins/vsc_quill_delta_to_html"
+      relative: true
+    source: path
     version: "1.0.5"
   wakelock_plus:
     dependency: transitive

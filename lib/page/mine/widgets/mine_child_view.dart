@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/widget/item_comment.dart';
@@ -24,6 +25,8 @@ import '../../../utils/net_request.dart';
 import '../../../utils/storage.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/no_data.dart';
+import '../../feed_detail/widgets/html_factory_builder.dart';
+import '../../feed_detail/widgets/html_style_builder.dart';
 import '../login_helper.dart';
 
 class MineChildView extends StatefulWidget {
@@ -402,12 +405,9 @@ class MyCommentItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
+                HtmlWidget(
                   comment ?? '',
-                  maxLines: 2,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12.w, color: const Color(0xff2a2a2a)),
+                  customStylesBuilder: htmlCustomStyles,
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 10.w),

@@ -587,7 +587,7 @@ class NetRequest {
     String content,
     SuccessCallback onSuccess, {
     List<UploadFile> files = const [],
-    List<int> at = const [],
+    List<dynamic> at = const [],
   }) async {
     Map<String, Object> params = {};
     params['relType'] = relType; //// 评论对象类型   // thread 帖子，content 内容，comment 评论

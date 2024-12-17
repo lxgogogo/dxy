@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/user.dart';
@@ -9,6 +13,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 import '../../utils/toast_utils.dart';
 
@@ -41,41 +46,19 @@ class CommentInputScreen extends GetView<CommentInputController> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 51.w,
+                      constraints: BoxConstraints(minHeight: 56.w, maxHeight: 120.w),
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
                       decoration: BoxDecoration(
                         color: '#95a3c4'.hexColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: DetectableTextField(
-                        maxLines: null,
-                        controller: controller.textInput,
-                        style: TextStyle(
-                          color: const Color(0xff3b5078),
-                          fontSize: 14.px,
-                          fontWeight: FontWeight.w500,
+                      child: QuillEditor.basic(
+                        controller: controller.quillController,
+                        config: QuillEditorConfig(
+                          showCursor: true,
+                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                         ),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 5.w),
-                          hintText: '说点什么…',
-                          hintStyle: TextStyle(
-                            color: const Color(0xffa3b4d3),
-                            fontSize: 14.sp,
-                          ),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          disabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
-                        onChanged: controller.onChanged,
                       ),
                     ),
                   ),
@@ -88,7 +71,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.r),
-                        color: '#249cfc'.hexColor.withOpacity(controller.canSend ? 1 : 0.5),
+                        color: '#249cfc'.hexColor/*.withOpacity(controller.canSend ? 1 : 0.5)*/,
                       ),
                       child: Text(
                         '发布',
@@ -101,14 +84,20 @@ class CommentInputScreen extends GetView<CommentInputController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.w),
               GestureDetector(
-                onTap: controller.toAtUser,
-                child: Text(
-                  '@',
-                  style: TextStyle(
-                    color: '#787b86'.hexColor,
-                    fontSize: 22.sp,
+                onTap: () async {
+                  final result = await Get.toNamed(Routes.atUser);
+                  if (result != null) {
+                    controller.quillController.insertAtBlock(data: json.encode(result));
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: Text(
+                    '@',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                    ),
                   ),
                 ),
               ),

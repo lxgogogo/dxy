@@ -13,7 +13,6 @@ class CommentInputController extends GetxController {
   bool canSend = false;
 
   void submit() {
-    if (quillController.document.length == 0) return;
     final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
       List.castFrom(quillController.document.toDelta().toJson()),
       ConverterOptions.forEmail(),
@@ -29,7 +28,7 @@ class CommentInputController extends GetxController {
     });
     final content = converter.convert();
     if (content == '<p><br/></p>') {
-      ToastUtils.showToast('评论内容不能低于5个字符');
+      ToastUtils.showToast('评论内容不能为空');
       return;
     }
     NetRequest().commentCreate('comment', relId, content, at: atList, (data) {

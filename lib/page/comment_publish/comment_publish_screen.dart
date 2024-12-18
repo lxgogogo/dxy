@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -20,7 +21,23 @@ import 'package:holdem/widget/common_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/model/attribute_model.dart';
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/background_container.dart';
+import 'package:holdem/widget/common_app_bar.dart';
+import 'package:super_tooltip/super_tooltip.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../model/upload_file.dart';
 import '../../utils/common_utils.dart';
 import '../../utils/net_request.dart';
@@ -44,9 +61,8 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
               actions: [
                 GestureDetector(
                   onTap: () {
-                    var debouncer = CommonUtils.getDebouncer('publishComment');
-                    debouncer.run(() {
-                      controller.publishPosts();
+                    CommonUtils.getDebouncer('publishComment').run(() {
+                      controller.submit();
                     });
                   },
                   child: Container(
@@ -85,59 +101,52 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                   ],
                 ),
               ),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(
-                          height: 150.w,
-                          child: DetectableTextField(
-                              maxLines: null,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: const Color(0xff2a2a2a),
-                              ),
-                              controller: controller._controller,
-                              onChanged: (text) {
-                                // _handleTextChange();
-                              },
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(2000),
-                              ],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.5.w),
-                                hintText: '请输入正文（建议10-2000字）',
-                                hintStyle: TextStyle(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      height: 150.w,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.w),
+                        child: QuillEditor.basic(
+                          controller: controller.quillController,
+                          focusNode: controller.focusNode,
+                          config: QuillEditorConfig(
+                            showCursor: true,
+                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                            placeholder: '请输入正文（建议10-2000字）',
+                            customStyles: DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                DefaultTextStyle.of(context).style.copyWith(
+                                  fontWeight: FontWeight.w500,
                                   fontSize: 14.sp,
-                                  color: const Color(0xff2a2a2a).withOpacity(0.5),
+                                  color: '#2c2c2c'.hexColor.withOpacity(0.5),
+                                  height: 1.5,
                                 ),
-                                border: InputBorder.none,
-                                filled: false,
-                              )),
-                        ),
-                        Text(
-                          '最多9张图片',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: const Color(0xff2a2a2a).withOpacity(0.5),
+                                const HorizontalSpacing(0, 0),
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
+                              ),
+                            ),
                           ),
                         ),
-                        SizedBox(height: 12.w),
-                        _mediaShowView(),
-                        const Spacer(),
-                      ],
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: MediaQuery.viewInsetsOf(context).bottom,
-                    child: bottomView(),
-                  )
-                ],
+                    Text(
+                      '最多9张图片',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xff2a2a2a).withOpacity(0.5),
+                      ),
+                    ),
+                    SizedBox(height: 12.w),
+                    Expanded(child: _mediaShowView()),
+                    buildBottomToolbar(context),
+                  ],
+                ),
               ),
             ),
           ),
@@ -197,43 +206,56 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
     );
   }
 
-  Widget bottomView() {
+  Widget buildBottomToolbar(BuildContext context) {
     return Container(
-      height: 41.5.w,
-      color: const Color(0xFFE8F3FF),
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 18.w),
-        decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: Color(0xffe6e6e6))),
+      padding: EdgeInsets.symmetric(vertical: 4.w),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      decoration: const BoxDecoration(
+        border: Border.symmetric(
+          horizontal: BorderSide(color: Color(0xffe6e6e6)),
         ),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                if (!controller.isCanOpenPicker()) {
-                  ToastUtils.showToast('单个视频或者最多9张图片');
-                  return;
-                }
-                controller.openFilePicker();
-              },
-              child: Icon(
-                Icons.image_outlined,
-                color: '#787b86'.hexColor,
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              if (!controller.isCanOpenPicker()) {
+                ToastUtils.showToast('单个视频或者最多9张图片');
+                return;
+              }
+              controller.openFilePicker();
+            },
+            child: Container(
+              width: 44.w,
+              height: 44.w,
+              alignment: Alignment.center,
+              child: Image.asset(
+                Assets.images.inputImage.path,
+                width: 20.w,
+                height: 20.w,
               ),
             ),
-            SizedBox(width: 24.w),
-            GestureDetector(
-              onTap: controller.toAtUser,
+          ),
+          GestureDetector(
+            onTap: () async {
+              final result = await Get.toNamed(Routes.atUser);
+              if (result != null) {
+                controller.quillController.insertAtBlock(data: json.encode(result));
+              }
+            },
+            child: Container(
+              width: 44.w,
+              height: 44.w,
+              alignment: Alignment.center,
               child: Text(
                 '@',
                 style: TextStyle(
-                  color: '#787b86'.hexColor,
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

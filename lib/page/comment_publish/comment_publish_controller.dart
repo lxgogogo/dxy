@@ -11,9 +11,8 @@ class CommentPublishController extends GetxController {
     super.onInit();
   }
 
-  final _controller = DetectableTextEditingController(
-    regExp: detectionRegExp(),
-  );
+  final QuillController quillController = QuillController.basic();
+  final FocusNode focusNode = FocusNode();
 
   final imageData = []; //选择相册返回的本地地址集合
   final imageUrlList = <UploadFile>[]; //发布提交是的图片地址集合
@@ -41,66 +40,27 @@ class CommentPublishController extends GetxController {
     return true;
   }
 
-  Future<void> toAtUser() async {
-    final result = await Get.toNamed(Routes.atUser);
-    if (result != null) {
-      aitUserBeanList.add(result);
-      var nickname = result.nickname;
-      String originalContent = _controller.text;
-      final index = _controller.selection.baseOffset;
-      if (originalContent.isEmpty) {
-        _controller.text = '@$nickname ';
-      } else if (index >= originalContent.length - 1) {
-        _controller.text = '$originalContent @$nickname ';
-      } else {
-        _controller.text =
-            '${originalContent.substring(0, index)} @$nickname ${originalContent.substring(index - 1, originalContent.length - 1)}';
+  void submit() {
+    final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
+      List.castFrom(quillController.document.toDelta().toJson()),
+      ConverterOptions.forEmail(),
+    );
+    final atList = [];
+    converter.renderCustomWith = ((customOp, contextOp) {
+      if (customOp.insert.type == 'at') {
+        final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
+        atList.add(dataMap['id']);
+        return "<span style='color: #249cfc; position: relative; z-index: 1;'>@${dataMap['nickname']} </span>";
       }
-    }
-  }
-
-  List<int> _aitUserData() {
-    final aitList = <int>[];
-    String content = _controller.text;
-    Iterable<Match> matches = atSignRegExp.allMatches(content);
-    List<String> containsAitStrList = [];
-    List<String> splitNameList = [];
-
-    for (Match match in matches) {
-      var matchStr = match.group(0);
-      containsAitStrList.add(matchStr!);
-    }
-    if (containsAitStrList.isNotEmpty) {
-      for (String aitStr in containsAitStrList) {
-        content = content.replaceAll(aitStr, "");
-        List<String> aitStrList = aitStr.split('@');
-        splitNameList.add(aitStrList[1]);
-      }
-    }
-
-    if (splitNameList.isNotEmpty) {
-      for (String userName in splitNameList) {
-        for (UserProfile userProfile in aitUserBeanList) {
-          if (userName == userProfile.nickname) {
-            aitList.add(userProfile.id!); //@用户的id集合
-          }
-        }
-      }
-    }
-    return aitList;
-  }
-
-  ///先上传文件，文件上传完，提交发布帖子
-  void publishPosts() {
-    _aitUserData();
-
-    String content = _controller.text;
+      return '';
+    });
+    final content = converter.convert();
 
     if (imageUrlList.isNotEmpty) {
       imageUrlList.clear();
     }
 
-    if (content.isEmpty) {
+    if (content == '<p><br/></p>') {
       ToastUtils.showToast('评论内容不能为空');
       return;
     }
@@ -110,23 +70,11 @@ class CommentPublishController extends GetxController {
     if (imageData.isNotEmpty) {
       //有图
       imageData.forEach((element) async {
-        //手机端
-        // 获取应用的临时目录作为输出路径
-        final Directory tempDir = await getTemporaryDirectory();
-        String tempPath = '${tempDir.path}/image.jpg';
-        print('ios or android image tempPath=====>${tempPath}');
-        //对图片进行压缩处理
-        var result = await FlutterImageCompress.compressAndGetFile(
-          element, tempPath,
-          // format: _getCompressFormat(element),
-          quality: 50,
-        );
-        //正式上传 app这里是个 filePath
-        NetRequest().uploadFile(result!.path, (data) {
+        NetRequest().uploadFile(element, (data) {
           UploadFile uploadFile = UploadFile.fromJson(data);
           imageUrlList.add(uploadFile);
           if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
-            NetRequest().commentCreate(relType, relId, content, at: _aitUserData(), files: imageUrlList, (data) {
+            NetRequest().commentCreate(relType, relId, content, at: atList, files: imageUrlList, (data) {
               EventBusUtil.of.fire(EventRefreshPage(relType));
               EasyLoading.dismiss();
               ToastUtils.showToast('发布成功');
@@ -141,7 +89,7 @@ class CommentPublishController extends GetxController {
         }, (int sent, int total) {});
       });
     } else {
-      NetRequest().commentCreate(relType, relId, content, (data) {
+      NetRequest().commentCreate(relType, relId, content, at: atList, (data) {
         EventBusUtil.of.fire(EventRefreshPage(relType));
         EasyLoading.dismiss();
         ToastUtils.showToast('发布成功');

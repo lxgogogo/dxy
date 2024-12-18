@@ -87,7 +87,7 @@ class FeedPostController extends GetxController {
       }
       return '';
     });
-    final content = converter.convert();
+    final content = converter.convert().replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
 
     if (currentBord == null || currentBord?.id == -1) {
       ToastUtils.showToast('请选择发帖板块');
@@ -133,5 +133,36 @@ class FeedPostController extends GetxController {
       safeUpdate();
     }
     return false;
+  }
+
+  Future<void> onImageInsertCallback(String image, QuillController controller) async {
+    int count = 0;
+    final operations = quillController.document.toDelta().toJson();
+    for (final data in operations) {
+      if (data.containsKey('insert')) {
+        if (data['insert'] is Map) {
+          if (data['insert'].containsKey('image')) {
+            count++;
+          }
+        }
+      }
+    }
+    if (count == 9) {
+      ToastUtils.showToast('最多只可上传9张图片');
+      return;
+    }
+    final fileLength = await File(image).length();
+    if (fileLength > 10 * 1024 * 1024) {
+      ToastUtils.showToast('上传图片不得超过10M');
+      return;
+    }
+    final res = await NetRequest().uploadImage(image);
+    if (res != null) {
+      final uploadFile = UploadFile.fromJson(res);
+      final imageUrl = uploadFile.url ?? '';
+      if (imageUrl.isNotEmpty) {
+        controller.insertImageBlock(imageSource: '$imageUrl\$\$$image\$\$');
+      }
+    }
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
@@ -100,18 +101,36 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     //   ),
                     // ),
                     Expanded(
-                      child: QuillEditor.basic(
-                        controller: controller.quillController,
-                        focusNode: controller.focusNode,
-                        config: QuillEditorConfig(
-                          showCursor: true,
-                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                          onTapDown: controller.onTapDownEditor,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.w),
+                        child: QuillEditor.basic(
+                          controller: controller.quillController,
+                          focusNode: controller.focusNode,
+                          config: QuillEditorConfig(
+                            showCursor: true,
+                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                            onTapDown: controller.onTapDownEditor,
+                            placeholder: '请输入正文（建议10-2000字）',
+                            customStyles: DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                DefaultTextStyle.of(context).style.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                      color: '#2c2c2c'.hexColor.withOpacity(0.5),
+                                      height: 1.5,
+                                    ),
+                                const HorizontalSpacing(0, 0),
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    buildBottomToolbar(),
-                    buildBottomMenu(context),
+                    buildBottomToolbar(context),
+                    // buildBottomMenu(context),
                   ],
                 ),
               ),
@@ -139,7 +158,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
               maxLength: 30,
               controller: controller.titleInput,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
+                contentPadding: EdgeInsets.zero,
                 filled: false,
                 hintText: '请输入完整帖子标题（5-31个字）',
                 counterText: '',
@@ -248,9 +267,10 @@ class FeedPostScreen extends GetView<FeedPostController> {
     );
   }
 
-  Widget buildBottomToolbar() {
+  Widget buildBottomToolbar(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.w),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       decoration: const BoxDecoration(
         border: Border.symmetric(
           horizontal: BorderSide(color: Color(0xffe6e6e6)),
@@ -258,39 +278,24 @@ class FeedPostScreen extends GetView<FeedPostController> {
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: controller._openTextStyle,
-            child: Container(
-              width: 44.w,
-              height: 44.w,
-              alignment: Alignment.center,
-              child: Image.asset(
-                Assets.images.inputA.path,
-                width: 24.w,
-                height: 24.w,
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: controller._openTextStyle,
+          //   child: Container(
+          //     width: 44.w,
+          //     height: 44.w,
+          //     alignment: Alignment.center,
+          //     child: Image.asset(
+          //       Assets.images.inputA.path,
+          //       width: 24.w,
+          //       height: 24.w,
+          //     ),
+          //   ),
+          // ),
           QuillToolbarImageButton(
             controller: controller.quillController,
             options: QuillToolbarImageButtonOptions(
               imageButtonConfig: QuillToolbarImageConfig(
-                onImageInsertCallback: (image, controller) async {
-                  final file = File(image);
-                  final fileLength = await file.length();
-                  if (fileLength > 10 * 1024 * 1024) {
-                    ToastUtils.showToast('上传图片不得超过10M');
-                    return;
-                  }
-                  final res = await NetRequest().uploadImage(image);
-                  if (res != null) {
-                    final uploadFile = UploadFile.fromJson(res);
-                    final imageUrl = uploadFile.url ?? '';
-                    if (imageUrl.isNotEmpty) {
-                      controller.insertImageBlock(imageSource: imageUrl);
-                    }
-                  }
-                },
+                onImageInsertCallback: controller.onImageInsertCallback,
               ),
               childBuilder: (dynamic options, dynamic extraOptions) {
                 QuillToolbarImageButtonExtraOptions? buttonExtraOptions;
@@ -305,8 +310,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     alignment: Alignment.center,
                     child: Image.asset(
                       Assets.images.inputImage.path,
-                      width: 24.w,
-                      height: 24.w,
+                      width: 20.w,
+                      height: 20.w,
                     ),
                   ),
                 );
@@ -314,18 +319,37 @@ class FeedPostScreen extends GetView<FeedPostController> {
             ),
           ),
           GestureDetector(
-            onTap: controller._openMore,
+            onTap: () async {
+              final result = await Get.toNamed(Routes.atUser);
+              if (result != null) {
+                controller.quillController.insertAtBlock(data: json.encode(result));
+              }
+            },
             child: Container(
               width: 44.w,
               height: 44.w,
               alignment: Alignment.center,
-              child: Image.asset(
-                Assets.images.inputAdd.path,
-                width: 24.w,
-                height: 24.w,
+              child: Text(
+                '@',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                ),
               ),
             ),
           ),
+          // GestureDetector(
+          //   onTap: controller._openMore,
+          //   child: Container(
+          //     width: 44.w,
+          //     height: 44.w,
+          //     alignment: Alignment.center,
+          //     child: Image.asset(
+          //       Assets.images.inputAdd.path,
+          //       width: 24.w,
+          //       height: 24.w,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -482,11 +506,10 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         videoConfig: QuillToolbarVideoConfig(
                           onVideoInsertCallback: (video, controller) async {
                             if (!GetUtils.isHTML(video)) {
-
                               final file = File(video);
                               final fileLength = await file.length();
-                              if (fileLength > 10 * 1024 * 1024) {
-                                ToastUtils.showToast('上传视频不得超过10M');
+                              if (fileLength > 50 * 1024 * 1024) {
+                                ToastUtils.showToast('上传视频不得超过50M');
                                 return;
                               }
                             }

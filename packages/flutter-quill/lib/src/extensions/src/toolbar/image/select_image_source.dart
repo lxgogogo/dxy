@@ -31,14 +31,14 @@ class SelectImageSourceDialog extends StatelessWidget {
               enabled: !isDesktopApp,
               onTap: () => Navigator.of(context).pop(InsertImageSource.camera),
             ),
-            ListTile(
-              title: Text(context.loc.link),
-              subtitle: Text(
-                context.loc.pasteAPhotoUsingALink,
-              ),
-              leading: const Icon(Icons.link),
-              onTap: () => Navigator.of(context).pop(InsertImageSource.link),
-            ),
+            // ListTile(
+            //   title: Text(context.loc.link),
+            //   subtitle: Text(
+            //     context.loc.pasteAPhotoUsingALink,
+            //   ),
+            //   leading: const Icon(Icons.link),
+            //   onTap: () => Navigator.of(context).pop(InsertImageSource.link),
+            // ),
           ],
         ),
       ),

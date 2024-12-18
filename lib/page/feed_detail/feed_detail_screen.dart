@@ -17,6 +17,7 @@ import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -131,6 +132,12 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                       controller.detailBean!.content!,
                       customStylesBuilder: htmlCustomStyles,
                       factoryBuilder: () => HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                      customWidgetBuilder: (dom.Element element) {
+                        if (element.localName == 'table') {
+                          return const SizedBox();
+                        }
+                        return null;
+                      },
                       onTapUrl: (String url) async {
                         return launchUrlString(url, mode : LaunchMode.externalApplication);
                       },

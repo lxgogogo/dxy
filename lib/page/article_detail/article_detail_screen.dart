@@ -17,7 +17,9 @@ import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+import 'package:html/dom.dart' as dom;
 part 'article_detail_controller.dart';
 
 class ArticleDetailScreen extends GetView<ArticleDetailController> {
@@ -56,6 +58,15 @@ class ArticleDetailScreen extends GetView<ArticleDetailController> {
                         context,
                         content: controller.detailBean!.article!.content!,
                       ),
+                      customWidgetBuilder: (dom.Element element) {
+                        if (element.localName == 'table') {
+                          return const SizedBox();
+                        }
+                        return null;
+                      },
+                      onTapUrl: (String url) async {
+                        return launchUrlString(url, mode : LaunchMode.externalApplication);
+                      },
                     ),
                   SizedBox(height: 16.w),
                   Column(

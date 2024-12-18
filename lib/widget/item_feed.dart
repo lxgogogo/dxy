@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/widget/item_comment.dart';
@@ -13,17 +15,16 @@ import 'package:holdem/widget/linear_card.dart';
 import '../model/board_list.dart';
 import '../utils/app_theme.dart';
 
-Widget FeedItem(BoardBean boardBean, {bool isMyPost = false}) {
-
+Widget FeedItem(BoardBean item, {bool isMyPost = false}) {
   Widget child = Padding(
-    padding: EdgeInsets.all(12.px),
+    padding: EdgeInsets.all(12.w),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           children: [
-            BorderAvatar(avatar: boardBean.user?.avatar ?? ''),
-            SizedBox(width: 8.px),
+            BorderAvatar(avatar: item.user?.avatar ?? ''),
+            SizedBox(width: 8.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,20 +32,21 @@ Widget FeedItem(BoardBean boardBean, {bool isMyPost = false}) {
                   Row(
                     children: [
                       Text(
-                        boardBean.user?.nickname ?? '',
-                        style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px, height: 1.3),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        item.user?.nickname ?? '',
+                        style: TextStyle(
+                          color: const Color(0xff2a2a2a),
+                          fontSize: 12.sp,
+                        ),
                       ),
-                      if (boardBean.sign?.isNotEmpty == true) tagWidget(boardBean.sign!),
+                      if (item.sign?.isNotEmpty == true) tagWidget(item.sign!),
                     ],
                   ),
-                  if (boardBean.createdAt != null)
+                  if (item.createdAt != null)
                     Text(
-                      CommonUtils.timeFromNow(boardBean.createdAt!),
+                      CommonUtils.timeFromNow(item.createdAt!),
                       style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 10.px,
+                        color: const Color(0xff9cacc9),
+                        fontSize: 10.sp,
                       ),
                     ),
                 ],
@@ -52,91 +54,95 @@ Widget FeedItem(BoardBean boardBean, {bool isMyPost = false}) {
             )
           ],
         ),
-        SizedBox(height: 6.px),
+        SizedBox(height: 8.w),
         Text(
-          boardBean.title ?? '',
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xff2c2c2c),
-            fontWeight: FontWeight.w500,
+          item.title ?? '',
+          style: TextStyle(
+            color: const Color(0xff2a2a2a),
+            fontSize: 12.sp,
+            fontWeight: FontWeight.bold,
           ),
           softWrap: true,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
-        SizedBox(height: 6.px),
-        _showTextContentView(boardBean),
+        if (item.content?.isNotEmpty == true)
+          Container(
+            constraints: BoxConstraints(maxHeight: 80.w),
+            margin: EdgeInsets.only(bottom: 8.w),
+            child: HtmlWidget(item.content ?? ''),
+          ),
         Visibility(
-            visible: boardBean.files != null && boardBean.files!.isEmpty ? false : true,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 6.px,
-                ),
-                mediaContent(boardBean.files != null ? boardBean.files! : [])
-              ],
-            )),
-        SizedBox(height: 6.px),
+          visible: item.files != null && item.files!.isEmpty ? false : true,
+          child: Padding(
+            padding: EdgeInsets.only(top: 8.w),
+            child: mediaContent(
+              item.files != null ? item.files! : [],
+            ),
+          ),
+        ),
+        SizedBox(height: 8.w),
         Row(
           children: [
-            SizedBox(
-              width: 15.px,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/praise.png',
+                    width: 13.w,
+                    height: 13.w,
+                  ),
+                  SizedBox(width: 6.w),
+                  Text(
+                    '${item.likeCount ?? 0}',
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 10.sp,
+                    ),
+                  )
+                ],
+              ),
             ),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/praise.png',
-                  width: 11.px,
-                  height: 12.px,
-                ),
-                SizedBox(
-                  width: 4.px,
-                ),
-                Text(
-                  '${boardBean.likeCount}',
-                  style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                  maxLines: 1,
-                )
-              ],
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/comment.png',
+                    width: 13.w,
+                    height: 13.w,
+                  ),
+                  SizedBox(width: 6.w),
+                  Text(
+                    '${item.commentCount ?? 0}',
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 10.sp,
+                    ),
+                  )
+                ],
+              ),
             ),
-            const Spacer(),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/comment.png',
-                  width: 11.px,
-                  height: 12.px,
-                ),
-                SizedBox(
-                  width: 4.px,
-                ),
-                Text(
-                  '${boardBean.commentCount}',
-                  style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                  maxLines: 1,
-                )
-              ],
-            ),
-            const Spacer(),
-            Row(
-              children: [
-                Image.asset(
-                  'assets/images/star.png',
-                  width: 11.px,
-                  height: 12.px,
-                ),
-                SizedBox(
-                  width: 4.px,
-                ),
-                Text(
-                  '${boardBean.favoriteCount}',
-                  style: TextStyle(color: const Color(0xff9CACC9), fontSize: 10.px),
-                  maxLines: 1,
-                )
-              ],
-            ),
-            SizedBox(
-              width: 15.px,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/star.png',
+                    width: 13.w,
+                    height: 13.w,
+                  ),
+                  SizedBox(width: 6.w),
+                  Text(
+                    '${item.favoriteCount ?? 0}',
+                    style: TextStyle(
+                      color: const Color(0xff9CACC9),
+                      fontSize: 10.sp,
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -145,17 +151,17 @@ Widget FeedItem(BoardBean boardBean, {bool isMyPost = false}) {
   );
   return GestureDetector(
     onTap: () {
-      if (boardBean.relType != null && boardBean.relType!.isNotEmpty) {
-        if (boardBean.relType == 'content') {
-          Get.toNamed(Routes.articleDetail, arguments:  boardBean.id ?? 0);
-        } else if (boardBean.relType == 'comment') {}
+      if (item.relType != null && item.relType!.isNotEmpty) {
+        if (item.relType == 'content') {
+          Get.toNamed(Routes.articleDetail, arguments: item.id ?? 0);
+        } else if (item.relType == 'comment') {}
       } else {
-        Get.toNamed(Routes.feedDetail, arguments: boardBean.id ?? 0);
+        Get.toNamed(Routes.feedDetail, arguments: item.id ?? 0);
       }
     },
     child: isMyPost
         ? Container(
-            margin: EdgeInsets.fromLTRB(10.px, 12.px, 10.px, 0),
+            margin: EdgeInsets.fromLTRB(10.w, 12.w, 10.w, 0),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.6),
               borderRadius: BorderRadius.circular(12.rpx),
@@ -163,8 +169,8 @@ Widget FeedItem(BoardBean boardBean, {bool isMyPost = false}) {
             child: child,
           )
         : LinearCard(
-            padding: EdgeInsets.only(bottom: 2.px),
-            margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
+            padding: EdgeInsets.only(bottom: 2.w),
+            margin: EdgeInsets.only(top: 10.w, left: 16.w, right: 16.w),
             child: child,
           ),
   );
@@ -186,67 +192,25 @@ Widget tagWidget(List<String> sign) {
     return const SizedBox();
   }
   return Padding(
-    padding: EdgeInsets.only(left: 8.px),
+    padding: EdgeInsets.only(left: 8.w),
     child: Stack(
       children: [
         Positioned.fill(
           child: SvgPicture.asset(asset),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(2.px, 1.px, 2.px, 2.5.px),
+          padding: EdgeInsets.fromLTRB(2.w, 1.w, 2.w, 2.5.w),
           child: Text(
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 8.px,
+              fontSize: 8.w,
             ),
           ),
         ),
       ],
     ),
   );
-}
-
-///显示内容
-Widget _showTextContentView(BoardBean boardBean) {
-  if (boardBean.content != null && boardBean.content!.isNotEmpty) {
-    if (boardBean.content!.contains('<p>')) {
-      return SizedBox(
-        height: 90.px,
-        child: Html(
-          data: boardBean.content!,
-          extensions: [
-            TagExtension(
-              tagsToExtend: {"flutter"},
-              child: const FlutterLogo(
-                textColor: AppTheme.color_008EFF,
-                size: 14,
-              ),
-            ),
-          ],
-          style: {
-            "p.fancy": Style(
-              textAlign: TextAlign.center,
-              backgroundColor: Colors.grey,
-              margin: Margins(left: Margin(10, Unit.px), right: Margin.auto()),
-              // width: Width(300, Unit.px),
-              fontWeight: FontWeight.bold,
-            ),
-          },
-        ),
-      );
-    } else {
-      return Text(
-        boardBean.content != null ? boardBean.content! : '',
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 12, color: const Color(0xff2a2a2a)),
-        softWrap: true,
-      );
-    }
-  } else {
-    return Container();
-  }
 }
 
 Widget mediaContent(List<UploadFile> files) {
@@ -258,7 +222,7 @@ Widget mediaContent(List<UploadFile> files) {
         imageUrl: getFilesUrl(files[0]),
         fit: BoxFit.cover,
         width: double.infinity,
-        height: 179.px,
+        height: 179.w,
         placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
         errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
       ),
@@ -276,15 +240,15 @@ Widget mediaContent(List<UploadFile> files) {
               imageUrl: getFilesUrl(files[0]),
               fit: BoxFit.cover,
               width: double.infinity,
-              height: 179.px,
+              height: 179.w,
               placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
               errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
             ),
           ),
           Image.asset(
             'assets/images/play_btn.png',
-            width: 32.px,
-            height: 32.px,
+            width: 32.w,
+            height: 32.w,
           ),
         ],
       ),
@@ -299,10 +263,10 @@ Widget mediaContent(List<UploadFile> files) {
 
 Widget multipleImageWrap(int imageCount, List<String> imgUrlList) {
   return LayoutBuilder(builder: (context, constraints) {
-    final itemWidth = (constraints.maxWidth - 2 * 6.px) / imageCount;
+    final itemWidth = (constraints.maxWidth - 2 * 6.w) / imageCount;
     return Wrap(
-      spacing: 6.px,
-      runSpacing: 6.px,
+      spacing: 6.w,
+      runSpacing: 6.w,
       children: List.generate(
         imgUrlList.length,
         (index) {

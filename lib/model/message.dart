@@ -1,4 +1,5 @@
 import 'article.dart';
+import 'board_list.dart';
 
 class MessageList {
   Paper? pager;
@@ -34,6 +35,7 @@ class MessageBean {
   String? quote;
   String? resourceType;
   int? jumpId;
+  String? jumpType;
   String? itemType;
   int? itemId;
   String? description;
@@ -42,6 +44,7 @@ class MessageBean {
   MessageUser? contentUser;
   MessageContent? content;
   ArticleBean? contentData;
+  BoardBean? threadData;
 
   MessageBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -58,6 +61,9 @@ class MessageBean {
     }
     if (json["jumpId"] is int) {
       jumpId = json["jumpId"];
+    }
+    if (json["jumpType"] is String) {
+      jumpType = json["jumpType"];
     }
     if (json["itemType"] is String) {
       itemType = json["itemType"];
@@ -82,6 +88,9 @@ class MessageBean {
     }
     if (json['contentData'] != null) {
       contentData = ArticleBean.fromJson(json['contentData']);
+    }
+    if (json['threadData'] != null) {
+      threadData = BoardBean.fromJson(json['threadData']);
     }
   }
 

@@ -405,10 +405,17 @@ class MyCommentItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                HtmlWidget(
-                  comment ?? '',
-                  customStylesBuilder: htmlCustomStyles,
-                ),
+                if (comment?.isNotEmpty == true)
+                  Container(
+                    constraints: BoxConstraints(maxHeight: 80.w),
+                    child: HtmlWidget(
+                      comment ?? '',
+                      textStyle: TextStyle(
+                        color: const Color(0xff666666),
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ),
                 Container(
                   margin: EdgeInsets.only(top: 10.w),
                   padding: EdgeInsets.all(8.w),
@@ -458,16 +465,19 @@ class MyCollectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? title;
+    String? content;
     DateTime? createdAt;
     int? commentCount;
     String? imageUrl;
     if (item?.relType == 'thread') {
       title = item?.thread?.title;
+      content = item?.thread?.content;
       createdAt = item?.thread?.createdAt;
       commentCount = item?.thread?.commentCount;
       imageUrl = item?.thread?.files?.firstOrNull?.url;
     } else if (item?.relType == 'content') {
       title = item?.content?.title;
+      content = item?.content?.description;
       createdAt = item?.content?.createdAt;
       commentCount = item?.content?.commentCount;
       imageUrl = item?.content?.cover;
@@ -502,8 +512,6 @@ class MyCollectItem extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-                child: SizedBox(
-              height: 80.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -517,7 +525,18 @@ class MyCollectItem extends StatelessWidget {
                       fontSize: 14.w,
                     ),
                   ),
-                  // Spacer(),
+                  if (content?.isNotEmpty == true)
+                    Container(
+                      constraints: BoxConstraints(maxHeight: 80.w),
+                      margin: EdgeInsets.only(bottom: 8.w),
+                      child: HtmlWidget(
+                        content ?? '',
+                        textStyle: TextStyle(
+                          color: const Color(0xff666666),
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                    ),
                   Row(
                     children: [
                       Text(
@@ -549,7 +568,7 @@ class MyCollectItem extends StatelessWidget {
                   )
                 ],
               ),
-            )),
+            ),
             if (imageUrl?.isNotEmpty == true)
               Stack(
                 children: [

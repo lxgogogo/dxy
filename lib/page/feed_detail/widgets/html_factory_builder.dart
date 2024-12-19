@@ -22,6 +22,43 @@ class HtmlFactoryBuilder extends WidgetFactory {
     super.parse(meta);
   }
 
+  /// Builds [Image].
+  @override
+  Widget? buildImageWidget(BuildTree tree, ImageSource src) {
+    final url = src.url;
+
+    ImageProvider? provider;
+    if (url.startsWith('asset:')) {
+      provider = imageProviderFromAsset(url);
+    } else if (url.startsWith('data:image/')) {
+      provider = imageProviderFromDataUri(url);
+    } else if (url.startsWith('file:')) {
+      provider = imageProviderFromFileUri(url);
+    } else {
+      // provider = imageProviderFromNetwork(url);
+      final image = src.image;
+      final semanticLabel = image?.alt ?? image?.title;
+      return LayoutBuilder(builder: (context, constraints) {
+        return CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.fill,
+          placeholder: (context, url) => Image.asset(
+            'assets/images/image_loading_def.png',
+            width: constraints.maxWidth / 1.5,
+          ),
+          errorWidget: (context, url, error) => Image.asset(
+            'assets/images/image_loading_def.png',
+            width: constraints.maxWidth / 1.5,
+          ),
+        );
+      });
+    }
+    if (provider == null) {
+      return null;
+    }
+    return super.buildImageWidget(tree, src);
+  }
+
   @override
   Widget? buildVideoPlayer(
     BuildTree tree,
@@ -172,7 +209,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
             ? Chewie(
                 controller: chewieController!,
               )
-            :  Stack(
+            : Stack(
                 fit: StackFit.expand,
                 children: [
                   if (widget.poster != null) widget.poster!,

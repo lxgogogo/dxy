@@ -69,6 +69,22 @@ class FeedPostController extends GetxController {
     safeUpdate();
   }
 
+  String parseText(dom.Node node) {
+    if (node.nodeType == dom.Node.TEXT_NODE) {
+      return node.text!;
+    } else if (node.nodeType == dom.Node.ELEMENT_NODE) {
+      dom.Element element = node as dom.Element;
+      StringBuffer buffer = StringBuffer();
+      if (!element.localName!.contains('script')) {
+        for (var child in element.nodes) {
+          buffer.write(parseText(child));
+        }
+      }
+      return buffer.toString();
+    }
+    return '';
+  }
+
   void publishPosts() async {
     String title = titleInput.text;
     final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
@@ -78,7 +94,7 @@ class FeedPostController extends GetxController {
     final atList = [];
     converter.renderCustomWith = ((customOp, contextOp) {
       if (customOp.insert.type == 'divider') {
-        return '<hr>';
+        return '<hr/>';
       }
       if (customOp.insert.type == 'at') {
         final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
@@ -87,7 +103,9 @@ class FeedPostController extends GetxController {
       }
       return '';
     });
-    final content = converter.convert().replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
+    final richText = converter.convert().replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
+
+    final pureText = parseText(html.parse(richText).body!);
 
     if (currentBord == null || currentBord?.id == -1) {
       ToastUtils.showToast('请选择发帖板块');
@@ -99,7 +117,7 @@ class FeedPostController extends GetxController {
       return;
     }
 
-    if (content.isEmpty || content.length < 10) {
+    if (richText.isEmpty || richText.length < 10) {
       ToastUtils.showToast('帖子内容长度不能小于10个字符');
       return;
     }
@@ -111,7 +129,8 @@ class FeedPostController extends GetxController {
     final success = await NetRequest()
         .threadCreate(
       title,
-      content,
+      richText,
+      pureText,
       currentBord!.id!,
       atList: atList,
     )

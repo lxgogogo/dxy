@@ -16,6 +16,8 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as html;
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 

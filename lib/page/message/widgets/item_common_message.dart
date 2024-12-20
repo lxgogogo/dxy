@@ -1,24 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:get/get.dart';
 import 'package:holdem/model/message.dart';
-import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/item_comment.dart';
-import 'package:holdem/widget/no_data.dart';
-import 'package:html/dom.dart' as dom;
 import 'package:intl/intl.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-
-import '../../feed_detail/widgets/html_factory_builder.dart';
-import '../../feed_detail/widgets/html_style_builder.dart';
-import 'item_collect_message.dart';
-import 'item_video_collection_message.dart';
 
 class MessageCommonItem extends StatelessWidget {
   final MessageBean item;
@@ -32,16 +18,40 @@ class MessageCommonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String title = '@了我';
-    String str = item.description ?? '';
+    String tipTitle = '@了我';
     String smallIcon = 'assets/images/aite.png';
     if (item.type == 'comment') {
-      title = '评论了我';
+      tipTitle = '评论了我';
       smallIcon = 'assets/images/comment_small.png';
     } else if (item.type == 'like') {
-      title = '赞同了我';
+      tipTitle = '赞同了我';
       smallIcon = 'assets/images/zan.png';
+    } else if (item.type == 'favorite') {
+      tipTitle = '收藏了我的帖子';
+      smallIcon = 'assets/images/collect_small.png';
     }
+    String? title;
+    String? content;
+    String? cover;
+    int? likeCount;
+    int? favoriteCount;
+    int? commentCount;
+    if (item.jumpType == 'thread') {
+      title = item.threadData?.title;
+      content = item.threadData?.pureText;
+      cover = item.threadData?.cover;
+      likeCount = item.threadData?.likeCount;
+      favoriteCount = item.threadData?.favoriteCount;
+      commentCount = item.threadData?.commentCount;
+    } else if (item.jumpType == 'content') {
+      title = item.contentData?.title;
+      content = item.contentData?.description;
+      cover = item.contentData?.cover;
+      likeCount = item.contentData?.likeCount;
+      favoriteCount = item.contentData?.favoriteCount;
+      commentCount = item.contentData?.commentCount;
+    }
+
     return Padding(
       padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
       child: Row(
@@ -94,7 +104,7 @@ class MessageCommonItem extends StatelessWidget {
                 ),
                 SizedBox(height: 8.w),
                 Text(
-                  title,
+                  tipTitle,
                   style: TextStyle(
                     color: const Color(0xff666666),
                     fontSize: 12.sp,
@@ -108,9 +118,8 @@ class MessageCommonItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (item.description?.isNotEmpty == true)
-                        Container(
-                          constraints: BoxConstraints(maxHeight: 80.w),
-                          margin: EdgeInsets.only(bottom: 8.w),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 8.w),
                           child: HtmlWidget(
                             item.description ?? '',
                             textStyle: TextStyle(
@@ -125,87 +134,153 @@ class MessageCommonItem extends StatelessWidget {
                           color: const Color(0x1A95A3C4),
                           borderRadius: BorderRadius.circular(4.r),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        child: Row(
                           children: [
-                            if (item.contentUser?.nickname?.isNotEmpty == true)
-                              Text(
-                                item.contentUser!.nickname!,
-                                style: TextStyle(
-                                  color: const Color(0xff2a2a2a),
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold,
+                            if (cover?.isNotEmpty == true)
+                              Container(
+                                width: 48.w,
+                                height: 48.w,
+                                margin: EdgeInsets.only(right: 15.w),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: cover!,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => Image.asset(
+                                        'assets/images/image_loading_def.png',
+                                      ),
+                                    ),
+                                    if (item.resourceType == 'videoList')
+                                      Positioned(
+                                        top: 2.w,
+                                        right: 2.w,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(16.r),
+                                          ),
+                                          child: Text(
+                                            '合集',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10.sp,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               ),
-                            Text(
-                              item.content?.title ?? '',
-                              style: TextStyle(
-                                color: const Color(0xff666666),
-                                fontSize: 12.sp,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  if (item.type == 'favorite') ...[
+                                    if (title?.isNotEmpty == true)
+                                      Text(
+                                        title!,
+                                        style: TextStyle(
+                                          color: const Color(0xff2a2a2a),
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    Text(
+                                      content ?? '',
+                                      style: TextStyle(
+                                        color: const Color(0xff2a2a2a),
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    if (item.contentUser?.nickname?.isNotEmpty == true)
+                                      Text(
+                                        item.contentUser!.nickname!,
+                                        style: TextStyle(
+                                          color: const Color(0xff2a2a2a),
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    Text(
+                                      item.content?.title ?? '',
+                                      style: TextStyle(
+                                        color: const Color(0xff2a2a2a),
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ],
+                                  SizedBox(height: 8.w),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/praise.png',
+                                              width: 13.w,
+                                              height: 13.w,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Text(
+                                              '${likeCount ?? 0}',
+                                              style: TextStyle(
+                                                color: const Color(0xff9CACC9),
+                                                fontSize: 10.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/star.png',
+                                              width: 13.w,
+                                              height: 13.w,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Text(
+                                              '${favoriteCount ?? 0}',
+                                              style: TextStyle(
+                                                color: const Color(0xff9CACC9),
+                                                fontSize: 10.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/comment.png',
+                                              width: 13.w,
+                                              height: 13.w,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Text(
+                                              '${commentCount ?? 0}',
+                                              style: TextStyle(
+                                                color: const Color(0xff9CACC9),
+                                                fontSize: 10.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(height: 8.w),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/praise.png',
-                                        width: 13.w,
-                                        height: 13.w,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Text(
-                                        '${item.content?.likeCount ?? 0}',
-                                        style: TextStyle(
-                                          color: const Color(0xff9CACC9),
-                                          fontSize: 10.sp,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/star.png',
-                                        width: 13.w,
-                                        height: 13.w,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Text(
-                                        '${item.content?.favoriteCount ?? 0}',
-                                        style: TextStyle(
-                                          color: const Color(0xff9CACC9),
-                                          fontSize: 10.sp,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/comment.png',
-                                        width: 13.w,
-                                        height: 13.w,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Text(
-                                        '${item.content?.commentCount ?? 0}',
-                                        style: TextStyle(
-                                          color: const Color(0xff9CACC9),
-                                          fontSize: 10.sp,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
                             ),
                           ],
                         ),

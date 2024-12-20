@@ -41,6 +41,7 @@ class BoardBean {
   BoardInfo? board;
   String? title;
   String? content;
+  String? pureText;
   ArticleBean? contentBean;
   DateTime? createdAt;
   int? commentCount;
@@ -64,6 +65,7 @@ class BoardBean {
       this.board,
       this.title,
       this.content,
+      this.pureText,
       this.createdAt,
       this.commentCount,
       this.favoriteCount,
@@ -93,6 +95,9 @@ class BoardBean {
     if (json["content"] is String) {
       content = json["content"];
     }
+    if (json["pureText"] is String) {
+      pureText = json["pureText"];
+    }
     if (json["content"] != null && json["content"] is! String) {
       contentBean = ArticleBean.fromJson(json);
     }
@@ -101,6 +106,9 @@ class BoardBean {
     }
     if (json["createdAt"] is String) {
       createdAt = DateTime.parse(json["createdAt"]).toLocal();
+    }
+    if (json["cover"] is String) {
+      cover = json["cover"];
     }
     if (json['user'] != null) {
       user = UserProfile.fromJson(json['user']);

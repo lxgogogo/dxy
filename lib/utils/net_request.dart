@@ -753,12 +753,14 @@ class NetRequest {
   Future<bool> threadCreate(
     String title,
     String content,
+    String pureText,
     int boardId, {
     List atList = const [],
   }) async {
     Map<String, Object> params = {};
     params['title'] = title;
     params['content'] = content;
+    params['pureText'] = pureText;
     params['boardId'] = boardId;
     params['tags'] = [];
     params['files'] = [];

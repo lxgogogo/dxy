@@ -1,25 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../feed_detail/widgets/html_factory_builder.dart';
-import '../../feed_detail/widgets/html_style_builder.dart';
-import 'item_collect_message.dart';
 import 'item_common_message.dart';
-import 'item_video_collection_message.dart';
 
 class MessageChildView extends StatefulWidget {
   final String type;
@@ -167,18 +156,18 @@ class MessageChildViewState extends State<MessageChildView> {
   }
 
   Widget messageCommentItem(MessageBean item, int index) {
-    if (item.type == 'favorite') {
-      return MessageCollectItem(
-        item: item,
-        onTap: () => jumpPage(item),
-      );
-    }
-    if (item.resourceType == 'videoList') {
-      return MessageVideoCollectionItem(
-        item: item,
-        onTap: () => jumpPage(item),
-      );
-    }
+    // if (item.type == 'favorite') {
+    //   return MessageCollectItem(
+    //     item: item,
+    //     onTap: () => jumpPage(item),
+    //   );
+    // }
+    // if (item.resourceType == 'videoList') {
+    //   return MessageVideoCollectionItem(
+    //     item: item,
+    //     onTap: () => jumpPage(item),
+    //   );
+    // }
     return MessageCommonItem(
       item: item,
       onTap: () => jumpPage(item),

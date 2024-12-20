@@ -35,6 +35,8 @@ class CommentBean {
   int? resourceId;
   int? relId;
   String? relType;
+  String? title;
+  String? cover;
   String? resourceType;
   BoardBean? thread;
   List<String>? at;
@@ -55,6 +57,8 @@ class CommentBean {
     this.id,
     this.relId,
     this.relType,
+    this.title,
+    this.cover,
     this.at,
     this.comment,
     this.content,
@@ -87,6 +91,12 @@ class CommentBean {
     }
     if (json["relType"] is String) {
       relType = json["relType"];
+    }
+    if (json["title"] is String) {
+      title = json["title"];
+    }
+    if (json["cover"] is String) {
+      title = json["cover"];
     }
     if (json["delType"] is int) {
       delType = json["delType"];

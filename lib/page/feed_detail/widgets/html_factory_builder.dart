@@ -83,9 +83,7 @@ class HtmlFactoryBuilder extends WidgetFactory {
         fit: BoxFit.cover,
         imageUrl: posterUrl ?? '',
         placeholder: (context, url) => const SizedBox(),
-        errorWidget: (context, url, error) => Image.asset(
-          'assets/images/image_loading_def.png',
-        ),
+        errorWidget: (context, url, error) => const SizedBox(),
       ),
     );
   }

@@ -406,14 +406,11 @@ class MyCommentItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (comment?.isNotEmpty == true)
-                  Container(
-                    constraints: BoxConstraints(maxHeight: 80.w),
-                    child: HtmlWidget(
-                      comment ?? '',
-                      textStyle: TextStyle(
-                        color: const Color(0xff666666),
-                        fontSize: 12.sp,
-                      ),
+                  HtmlWidget(
+                    comment ?? '',
+                    textStyle: TextStyle(
+                      color: const Color(0xff666666),
+                      fontSize: 12.sp,
                     ),
                   ),
                 Container(
@@ -424,22 +421,45 @@ class MyCommentItem extends StatelessWidget {
                   child: Row(
                     children: [
                       if (imageUrl?.isNotEmpty == true)
-                        CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: imageUrl ?? '',
-                          width: 36.w,
-                          height: 36.w,
-                          placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                          errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                        Stack(
+                          children: [
+                            CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: imageUrl ?? '',
+                              width: 36.w,
+                              height: 36.w,
+                              placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                              errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                            ),
+                            if (item.resourceType == 'videoList')
+                              Positioned(
+                                top: 2.w,
+                                right: 2.w,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                  child: Text(
+                                    '合集',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       SizedBox(width: 10.w),
                       Expanded(
-                        child: Text(
+                        child: HtmlWidget(
                           content ?? '',
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.w),
+                          textStyle: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 12.sp,
+                          ),
                         ),
                       ),
                     ],
@@ -471,7 +491,8 @@ class MyCollectItem extends StatelessWidget {
     String? imageUrl;
     if (item?.relType == 'thread') {
       title = item?.thread?.title;
-      content = item?.thread?.content;
+      // content = item?.thread?.content;
+      content = item?.thread?.pureText;
       createdAt = item?.thread?.createdAt;
       commentCount = item?.thread?.commentCount;
       imageUrl = item?.thread?.files?.firstOrNull?.url;
@@ -526,12 +547,11 @@ class MyCollectItem extends StatelessWidget {
                     ),
                   ),
                   if (content?.isNotEmpty == true)
-                    Container(
-                      constraints: BoxConstraints(maxHeight: 80.w),
-                      margin: EdgeInsets.only(bottom: 8.w),
-                      child: HtmlWidget(
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.w),
+                      child: Text(
                         content ?? '',
-                        textStyle: TextStyle(
+                        style: TextStyle(
                           color: const Color(0xff666666),
                           fontSize: 12.sp,
                         ),

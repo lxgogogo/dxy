@@ -67,10 +67,15 @@ Widget FeedItem(BoardBean item, {bool isMyPost = false}) {
           overflow: TextOverflow.ellipsis,
         ),
         if (item.content?.isNotEmpty == true)
-          Container(
-            constraints: BoxConstraints(maxHeight: 80.w),
-            margin: EdgeInsets.only(bottom: 8.w),
-            child: HtmlWidget(item.content ?? ''),
+          Text(
+            item.pureText ?? '',
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: const Color(0xff2a2a2a),
+            ),
+            softWrap: true,
           ),
         Visibility(
           visible: item.files != null && item.files!.isEmpty ? false : true,
@@ -292,5 +297,5 @@ String getFilesUrl(UploadFile uploadFile) {
   if (uploadFile.type == 'video') {
     return uploadFile.posterUrl!;
   }
-  return uploadFile.url!;
+  return uploadFile.url ?? '';
 }

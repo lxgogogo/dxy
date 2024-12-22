@@ -1,19 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
-import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/linear_card.dart';
 
 import '../model/board_list.dart';
-import '../utils/app_theme.dart';
 
 Widget FeedItem(BoardBean item, {bool isMyPost = false}) {
   Widget child = Padding(
@@ -60,7 +57,7 @@ Widget FeedItem(BoardBean item, {bool isMyPost = false}) {
           style: TextStyle(
             color: const Color(0xff2a2a2a),
             fontSize: 12.sp,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
           softWrap: true,
           maxLines: 2,
@@ -73,7 +70,7 @@ Widget FeedItem(BoardBean item, {bool isMyPost = false}) {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 12.sp,
-              color: const Color(0xff2a2a2a),
+              color: const Color(0xff666666),
             ),
             softWrap: true,
           ),

@@ -182,41 +182,22 @@ class MessageCommonItem extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  if (item.type == 'favorite') ...[
-                                    if (title?.isNotEmpty == true)
-                                      Text(
-                                        title!,
-                                        style: TextStyle(
-                                          color: const Color(0xff2a2a2a),
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                  if (item.contentUser?.nickname?.isNotEmpty == true)
                                     Text(
-                                      content ?? '',
+                                      item.contentUser!.nickname!,
                                       style: TextStyle(
                                         color: const Color(0xff2a2a2a),
                                         fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ] else ...[
-                                    if (item.contentUser?.nickname?.isNotEmpty == true)
-                                      Text(
-                                        item.contentUser!.nickname!,
-                                        style: TextStyle(
-                                          color: const Color(0xff2a2a2a),
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    Text(
-                                      item.content?.title ?? '',
-                                      style: TextStyle(
-                                        color: const Color(0xff2a2a2a),
-                                        fontSize: 12.sp,
-                                      ),
+                                  Text(
+                                    item.content?.title ?? '',
+                                    style: TextStyle(
+                                      color: const Color(0xff666666),
+                                      fontSize: 12.sp,
                                     ),
-                                  ],
+                                  ),
                                   SizedBox(height: 8.w),
                                   Row(
                                     children: [

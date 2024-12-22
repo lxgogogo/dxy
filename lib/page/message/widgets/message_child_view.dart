@@ -123,7 +123,10 @@ class MessageChildViewState extends State<MessageChildView> {
             )
           : ListView.separated(
               padding: EdgeInsets.symmetric(vertical: 12.w),
-              itemBuilder: (c, i) => messageCommentItem(messages[i], i),
+              itemBuilder: (c, i) => MessageCommonItem(
+                item: messages[i],
+                onTap: () => jumpPage(messages[i]),
+              ),
               // itemExtent: 160.0,
               itemCount: messages.length,
               separatorBuilder: (BuildContext context, int index) {
@@ -153,24 +156,5 @@ class MessageChildViewState extends State<MessageChildView> {
     } else if (bean.jumpType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: id);
     }
-  }
-
-  Widget messageCommentItem(MessageBean item, int index) {
-    // if (item.type == 'favorite') {
-    //   return MessageCollectItem(
-    //     item: item,
-    //     onTap: () => jumpPage(item),
-    //   );
-    // }
-    // if (item.resourceType == 'videoList') {
-    //   return MessageVideoCollectionItem(
-    //     item: item,
-    //     onTap: () => jumpPage(item),
-    //   );
-    // }
-    return MessageCommonItem(
-      item: item,
-      onTap: () => jumpPage(item),
-    );
   }
 }

@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
-import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/html_parse_util.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/at_text.dart';
 import 'package:holdem/widget/dialog_confirm.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -22,11 +23,8 @@ import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
 import '../../../model/user.dart';
 import '../../../utils/net_request.dart';
-import '../../../utils/storage.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/no_data.dart';
-import '../../feed_detail/widgets/html_factory_builder.dart';
-import '../../feed_detail/widgets/html_style_builder.dart';
 import '../login_helper.dart';
 
 class MineChildView extends StatefulWidget {
@@ -297,7 +295,7 @@ class MyCommentItem extends StatelessWidget {
     //6.评论没删, 资源没删 -> 评论保留, 资源跳转;  ->  resourceId=17815(内容id或者帖子id) resourceType="video" delType=6
 
     DateTime? createdAt = item.createdAt;
-    String? comment = item.comment;
+    String? comment = HtmlParseUtil.of.pureCommentText(item.comment);
     String? imageUrl;
     String? content;
     String typeName = '资源';
@@ -319,7 +317,7 @@ class MyCommentItem extends StatelessWidget {
       content = item.delType == 6 ? item.content?.title : '该$typeName已被删除';
     } else if (item.relType == 'comment') {
       imageUrl = item.parentComment?.files?.firstOrNull?.url;
-      content = item.parentComment?.contentStr;
+      content = HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
       if (item.delType == 1) {
         //1.回复没删, 评论删了, 资源删了或者禁用 -> 回复保留, 评论显示 该评论已经删除, 不做资源跳转; -> 显示html其中的内容是 资源已被删除
         content = '该评论已经删除';
@@ -405,14 +403,7 @@ class MyCommentItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (comment?.isNotEmpty == true)
-                  HtmlWidget(
-                    comment ?? '',
-                    textStyle: TextStyle(
-                      color: const Color(0xff666666),
-                      fontSize: 12.sp,
-                    ),
-                  ),
+                if (comment.isNotEmpty == true) AtText(text: comment),
                 Container(
                   margin: EdgeInsets.only(top: 10.w),
                   padding: EdgeInsets.all(8.w),
@@ -454,13 +445,7 @@ class MyCommentItem extends StatelessWidget {
                         ),
                       SizedBox(width: 10.w),
                       Expanded(
-                        child: HtmlWidget(
-                          content ?? '',
-                          textStyle: TextStyle(
-                            color: const Color(0xff666666),
-                            fontSize: 12.sp,
-                          ),
-                        ),
+                        child: AtText(text: content ?? ''),
                       ),
                     ],
                   ),
@@ -555,12 +540,14 @@ class MyCollectItem extends StatelessWidget {
                           color: const Color(0xff666666),
                           fontSize: 12.sp,
                         ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   Row(
                     children: [
                       Text(
-                        createdAt != null ? DateFormat('M月d日').format(createdAt!) : '',
+                        createdAt != null ? DateFormat('M月d日').format(createdAt) : '',
                         style: TextStyle(
                           color: const Color(0xff9CACC9),
                           fontSize: 12.w,

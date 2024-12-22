@@ -13,6 +13,7 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/attribute_model.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/html_parse_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';

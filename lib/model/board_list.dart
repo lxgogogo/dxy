@@ -2,6 +2,9 @@ import 'package:holdem/model/article.dart';
 import 'package:holdem/model/board_info.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/utils/html_parse_util.dart';
+import 'package:html/dom.dart';
+import 'package:html/parser.dart';
 
 /// pager : {"total":1,"pageNum":0,"pageSize":10}
 /// list : [{"id":2,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"titletitletitletitle 你好","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false},{"id":1,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"title","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false}]
@@ -18,9 +21,7 @@ class BoardList {
     }
 
     if (json["list"] is List) {
-      list = json["list"] == null
-          ? null
-          : (json["list"] as List).map((e) => BoardBean.fromJson(e)).toList();
+      list = json["list"] == null ? null : (json["list"] as List).map((e) => BoardBean.fromJson(e)).toList();
     }
   }
 
@@ -97,6 +98,9 @@ class BoardBean {
     }
     if (json["pureText"] is String) {
       pureText = json["pureText"];
+      if (pureText?.isNotEmpty != true) {
+        pureText = HtmlParseUtil.of.pureText(content);
+      }
     }
     if (json["content"] != null && json["content"] is! String) {
       contentBean = ArticleBean.fromJson(json);
@@ -136,25 +140,17 @@ class BoardBean {
       favorited = json["favorited"];
     }
     if (json["tags"] is List) {
-      tags = json["tags"] == null
-          ? null
-          : (json["tags"] as List).map((e) => e.toString()).toList();
+      tags = json["tags"] == null ? null : (json["tags"] as List).map((e) => e.toString()).toList();
     }
     if (json["sign"] is List) {
-      sign = json["sign"] == null
-          ? null
-          : (json["sign"] as List).map((e) => e.toString()).toList();
+      sign = json["sign"] == null ? null : (json["sign"] as List).map((e) => e.toString()).toList();
     }
 
     if (json["files"] is List) {
-      files = json["files"] == null
-          ? null
-          : (json["files"] as List).map((e) => UploadFile.fromJson(e)).toList();
+      files = json["files"] == null ? null : (json["files"] as List).map((e) => UploadFile.fromJson(e)).toList();
     }
     if (json["pics"] is List) {
-      pics = json["pics"] == null
-          ? null
-          : (json["pics"] as List).map((e) => e.toString()).toList();
+      pics = json["pics"] == null ? null : (json["pics"] as List).map((e) => e.toString()).toList();
     }
   }
 

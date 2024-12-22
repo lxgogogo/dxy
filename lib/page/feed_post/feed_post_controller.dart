@@ -69,22 +69,6 @@ class FeedPostController extends GetxController {
     safeUpdate();
   }
 
-  String parseText(dom.Node node) {
-    if (node.nodeType == dom.Node.TEXT_NODE) {
-      return node.text!;
-    } else if (node.nodeType == dom.Node.ELEMENT_NODE) {
-      dom.Element element = node as dom.Element;
-      StringBuffer buffer = StringBuffer();
-      if (!element.localName!.contains('script')) {
-        for (var child in element.nodes) {
-          buffer.write(parseText(child));
-        }
-      }
-      return buffer.toString();
-    }
-    return '';
-  }
-
   void publishPosts() async {
     String title = titleInput.text;
     final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
@@ -105,7 +89,7 @@ class FeedPostController extends GetxController {
     });
     final richText = converter.convert().replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
 
-    final pureText = parseText(html.parse(richText).body!);
+    final pureText = HtmlParseUtil.of.pureText(richText);
 
     if (currentBord == null || currentBord?.id == -1) {
       ToastUtils.showToast('请选择发帖板块');

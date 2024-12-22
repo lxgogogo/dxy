@@ -18,7 +18,7 @@ class ToastUtils {
 
     OkToast.showToast(
         msg,
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         position: ToastPosition.center,
         backgroundColor: Colors.black.withOpacity(0.8),
         textPadding: EdgeInsets.all(15),

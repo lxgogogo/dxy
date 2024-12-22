@@ -29,7 +29,7 @@ class ArticleDetailController extends GetxController {
   requestDetail() {
     NetRequest().contentShow({'id': id}, (data) {
       if (data == null) {
-        showToast('该文章已删除');
+        ToastUtils.showToast('该文章已删除');
         Get.back();
         return;
       }

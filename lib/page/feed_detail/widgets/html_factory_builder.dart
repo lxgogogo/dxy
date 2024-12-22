@@ -134,7 +134,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
       ..initialize().then((_) {
         chewieController = ChewieController(
           videoPlayerController: videoController!,
-          autoPlay: true,
+          autoPlay: false,
           showOptions: false,
         );
         setState(() {});

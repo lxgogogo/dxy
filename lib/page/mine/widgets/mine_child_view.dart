@@ -293,44 +293,41 @@ class MyCommentItem extends StatelessWidget {
     //当前数据是内容的评论
     //5.评论没删, 资源删了或者禁用 -> 显示html其中的内容是 资源已被删除 ->  resourceId=17815(内容id或者帖子id) resourceType="video" delType=5
     //6.评论没删, 资源没删 -> 评论保留, 资源跳转;  ->  resourceId=17815(内容id或者帖子id) resourceType="video" delType=6
-
-    DateTime? createdAt = item.createdAt;
-    String? comment = HtmlParseUtil.of.pureCommentText(item.comment);
-    String? imageUrl;
+    String? cover;
     String? content;
-    String typeName = '资源';
     if (item.relType == 'thread') {
-      typeName = '帖子';
-      imageUrl = item.thread?.files?.firstOrNull?.url;
-      content = item.delType == 6 ? item.thread?.title : '该$typeName已被删除';
+      cover = item.thread?.files?.firstOrNull?.url;
+      content = item.thread?.title;
     } else if (item.relType == 'content') {
-      if (item.content?.type == 'article') {
-        typeName = '文章';
-      } else if (item.content?.type == 'video') {
+      cover = item.content?.cover;
+      content = item.content?.title;
+    } else if (item.relType == 'comment') {
+      content = HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
+    }
+
+    String typeName = '';
+    if (item.delType == 1 || item.delType == 2) {
+      typeName = '评论';
+    } else if (item.delType == 4) {
+      typeName = '资源';
+    } else {
+      if (item.resourceType == 'thread') {
+        typeName = '帖子';
+      } else if (item.resourceType == 'article') {
+        typeName = '资讯';
+      } else if (item.resourceType == 'video') {
         typeName = '视频';
-      } else if (item.content?.type == 'videoList') {
+      } else if (item.resourceType == 'videoList') {
         typeName = '视频合集';
-      } else if (item.content?.type == 'book') {
+      } else if (item.resourceType == 'book') {
         typeName = '书籍';
       }
-      imageUrl = item.content?.cover;
-      content = item.delType == 6 ? item.content?.title : '该$typeName已被删除';
-    } else if (item.relType == 'comment') {
-      imageUrl = item.parentComment?.files?.firstOrNull?.url;
-      content = HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
-      if (item.delType == 1) {
-        //1.回复没删, 评论删了, 资源删了或者禁用 -> 回复保留, 评论显示 该评论已经删除, 不做资源跳转; -> 显示html其中的内容是 资源已被删除
-        content = '该评论已经删除';
-      } else if (item.delType == 2) {
-        //2.回复没删, 评论删了, 资源没删 -> 回复保留, 评论显示 该评论已经删除,不做资源跳转; -> 显示?????
-        content = '该评论已经删除';
-      } else if (item.delType == 3) {
-        //3.回复没删, 评论没删, 资源没删 -> 回复保留, 评论显示, 资源跳转;
-      } else if (item.delType == 4) {
-        //4.回复没删 评论没删,资源删了或者禁用; -> 回复保留, 评论显示, 资源不跳转;  -> 显示html其中的内容是 资源已被删除;
-        content = '资源已被删除';
-      }
     }
+
+    if (item.isDeleted) {
+      content = '该$typeName已被删除';
+    }
+
     return Container(
       padding: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 12.w),
       margin: EdgeInsets.fromLTRB(10.w, 12.w, 10.w, 0),
@@ -364,9 +361,9 @@ class MyCommentItem extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (createdAt != null)
+                    if (item.createdAt != null)
                       Text(
-                        CommonUtils.timeFromNow(createdAt),
+                        CommonUtils.timeFromNow(item.createdAt!),
                         style: TextStyle(
                           color: const Color(0xff9CACC9),
                           fontSize: 10.w,
@@ -377,14 +374,12 @@ class MyCommentItem extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(
-            height: 10.w,
-          ),
+          SizedBox(height: 10.w),
           GestureDetector(
             onTap: () {
               if (item.id == null) return;
-              if (item.delType != 6 && item.delType != 3) {
-                showToast('该$typeName已被删除');
+              if (item.isDeleted) {
+                ToastUtils.showToast('该$typeName已被删除');
                 return;
               }
               final id = item.resourceId;
@@ -403,7 +398,8 @@ class MyCommentItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (comment.isNotEmpty == true) AtText(text: comment),
+                if (HtmlParseUtil.of.pureCommentText(item.comment).isNotEmpty == true)
+                  AtText(text: HtmlParseUtil.of.pureCommentText(item.comment)),
                 Container(
                   margin: EdgeInsets.only(top: 10.w),
                   padding: EdgeInsets.all(8.w),
@@ -411,39 +407,45 @@ class MyCommentItem extends StatelessWidget {
                   decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
                   child: Row(
                     children: [
-                      if (imageUrl?.isNotEmpty == true)
-                        Stack(
-                          children: [
-                            CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: imageUrl ?? '',
-                              width: 36.w,
-                              height: 36.w,
-                              placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                              errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-                            ),
-                            if (item.resourceType == 'videoList')
-                              Positioned(
-                                top: 2.w,
-                                right: 2.w,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(16.r),
-                                  ),
-                                  child: Text(
-                                    '合集',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10.sp,
+                      if (cover?.isNotEmpty == true)
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.w),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(4.r),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: cover ?? '',
+                                  width: 36.w,
+                                  height: 36.w,
+                                  placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset('assets/images/image_loading_def.png'),
+                                ),
+                              ),
+                              if (item.resourceType == 'videoList')
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(4.r),
+                                    ),
+                                    child: Text(
+                                      '合集',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 8.sp,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      SizedBox(width: 10.w),
                       Expanded(
                         child: AtText(text: content ?? ''),
                       ),

@@ -45,6 +45,8 @@ class MessageBean {
   MessageContent? content;
   ArticleBean? contentData;
   BoardBean? threadData;
+  int? delType;
+  bool get isDeleted => delType != 3 && delType != 6 && delType != 7;
 
   MessageBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -91,6 +93,9 @@ class MessageBean {
     }
     if (json['threadData'] != null) {
       threadData = BoardBean.fromJson(json['threadData']);
+    }
+    if (json["delType"] is int) {
+      delType = json["delType"];
     }
   }
 

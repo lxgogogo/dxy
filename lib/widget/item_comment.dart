@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -47,8 +48,14 @@ class _CommentItemState extends State<CommentItem> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 3.w),
-              Html(data: widget.commentBean.contentStr ?? ''),
+              SizedBox(height: 2.w),
+              HtmlWidget(
+                widget.commentBean.contentStr ?? '',
+                textStyle: TextStyle(
+                  color: const Color(0xff666666),
+                  fontSize: 12.sp,
+                ),
+              ),
               // Text(
               //   widget.commentBean.contentStr ?? '',
               //   style: TextStyle(
@@ -56,38 +63,39 @@ class _CommentItemState extends State<CommentItem> {
               //     fontSize: 12.w,
               //   ),
               // ),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.only(top: 10.w),
-                itemCount: widget.commentBean.files?.length ?? 0,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      MediaHelper().imagePerView(
-                        context,
-                        widget.commentBean.files!.map((e) => e.url ?? '').toList(),
-                        index,
-                      );
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: widget.commentBean.files?[index].url ?? '',
-                        placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                        errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+              if (widget.commentBean.files?.isNotEmpty == true)
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(top: 8.w),
+                  itemCount: widget.commentBean.files?.length ?? 0,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        MediaHelper().imagePerView(
+                          context,
+                          widget.commentBean.files!.map((e) => e.url ?? '').toList(),
+                          index,
+                        );
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: widget.commentBean.files?[index].url ?? '',
+                          placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
+                          errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              SizedBox(height: 10.w),
+                    );
+                  },
+                ),
+              SizedBox(height: 8.w),
               Row(
                 children: [
                   Text(
@@ -196,8 +204,14 @@ class _CommentItemState extends State<CommentItem> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      SizedBox(height: 3.w),
-                                      Html(data: reply.contentStr ?? ''),
+                                      SizedBox(height: 2.w),
+                                      HtmlWidget(
+                                        reply.contentStr ?? '',
+                                        textStyle: TextStyle(
+                                          color: const Color(0xff666666),
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
                                       // Text(
                                       //   reply.contentStr ?? '',
                                       //   style: TextStyle(
@@ -205,7 +219,7 @@ class _CommentItemState extends State<CommentItem> {
                                       //     fontSize: 12.w,
                                       //   ),
                                       // ),
-                                      SizedBox(height: 10.w),
+                                      SizedBox(height: 8.w),
                                       Row(
                                         children: [
                                           Text(

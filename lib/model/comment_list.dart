@@ -14,9 +14,7 @@ class CommentList {
     }
 
     if (json["list"] is List) {
-      list = json["list"] == null
-          ? null
-          : (json["list"] as List).map((e) => CommentBean.fromJson(e)).toList();
+      list = json["list"] == null ? null : (json["list"] as List).map((e) => CommentBean.fromJson(e)).toList();
     }
   }
 
@@ -52,6 +50,8 @@ class CommentBean {
   bool? liked;
   CommentBean? parentComment;
   int? delType;
+
+  bool get isDeleted => delType != 3 && delType != 6 && delType != 7;
 
   CommentBean({
     this.id,
@@ -133,9 +133,7 @@ class CommentBean {
     }
 
     if (json["at"] is List) {
-      at = json["at"] == null
-          ? null
-          : (json["at"] as List).map((e) => e.toString()).toList();
+      at = json["at"] == null ? null : (json["at"] as List).map((e) => e.toString()).toList();
     }
     if (json["replies"] is List) {
       replies = (json["replies"] as List).map((e) => CommentBean.fromJson(e)).toList();
@@ -203,10 +201,9 @@ class User {
     _data["nickname"] = nickname;
     return _data;
   }
-
 }
 
-class Reply{
+class Reply {
   int? id;
   String? content;
   DateTime? createdAt;

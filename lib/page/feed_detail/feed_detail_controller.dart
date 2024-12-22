@@ -36,7 +36,7 @@ class FeedDetailController extends GetxController {
       {'id': id},
       (data) async {
         if (data == null) {
-          showToast('该帖子已删除');
+          ToastUtils.showToast('该帖子已删除');
           Get.back();
           return;
         }
@@ -88,7 +88,7 @@ class FeedDetailController extends GetxController {
       ..initialize().then((_) {
         chewieController = ChewieController(
           videoPlayerController: videoController!,
-          autoPlay: true,
+          autoPlay: false,
           showOptions: false,
         );
         loaded = true;

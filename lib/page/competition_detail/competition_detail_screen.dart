@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:holdem/model/competition_bean.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/item_article.dart';
 import 'package:holdem/widget/item_feed.dart';
@@ -48,7 +49,7 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
   reqData() {
     NetRequest().contentShow({'id': widget.id}, (data) async {
       if (data == null) {
-        showToast('该帖子已删除');
+        ToastUtils.showToast('该帖子已删除');
         Get.back();
         return;
       }
@@ -61,7 +62,7 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
         await _playController.initialize();
         _chewieController = ChewieController(
           videoPlayerController: _playController,
-          autoPlay: true,
+          autoPlay: false,
         );
         _isPlaying = true;
         setState(() {});

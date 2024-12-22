@@ -8,6 +8,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
@@ -306,17 +307,9 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
 
   ///底部FloatingButton
   Widget bottomFloatingButton() {
-    return IconButton(
-      padding: EdgeInsets.zero,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      icon: Image.asset(
-        'assets/images/posting_btn.png',
-        width: 58.w,
-        height: 58.w,
-      ),
-      // backgroundColor: Colors.transparent,
-      onPressed: () {
+    return GestureDetector(
+      child: Assets.images.iconPostFeed.image(width: 44.w),
+      onTap: () {
         UserStore.of.checkLogin(() {
           Get.toNamed(Routes.feedPost, arguments: boardInfoList);
         });

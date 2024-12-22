@@ -146,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
               onTap: (int index) {
                 if (index == 2 || index == 3) {
                   if (!UserStore.of.isLogin) {
-                    showToast('请先登录', duration: const Duration(seconds: 2));
+                    ToastUtils.showToast('请先登录');
                     Get.toNamed(Routes.login);
                     return;
                   }

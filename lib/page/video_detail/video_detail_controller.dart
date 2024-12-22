@@ -36,7 +36,7 @@ class VideoDetailController extends GetxController {
   requestDetail() {
     NetRequest().contentShow({'id': id}, (data) async {
       if (data == null) {
-        showToast('该视频已删除');
+        ToastUtils.showToast('该视频已删除');
         Get.back();
         return;
       }
@@ -70,7 +70,7 @@ class VideoDetailController extends GetxController {
       ..initialize().then((_) {
         chewieController = ChewieController(
           videoPlayerController: videoController!,
-          autoPlay: true,
+          autoPlay: false,
           showOptions: false,
         );
         loaded = true;

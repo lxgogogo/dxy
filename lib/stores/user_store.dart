@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:holdem/utils/toast_utils.dart';
 
 class UserStore extends GetxController {
   static UserStore get of => Get.find();
@@ -17,7 +17,7 @@ class UserStore extends GetxController {
 
   void checkLogin(VoidCallback callback) async {
     if(!isLogin) {
-      showToast('请先登录',duration: const Duration(seconds: 2));
+      ToastUtils.showToast('请先登录');
       Get.toNamed(Routes.login);
       return;
     }

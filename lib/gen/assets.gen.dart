@@ -157,6 +157,10 @@ class $AssetsImagesGen {
   AssetGenImage get icTwitter =>
       const AssetGenImage('assets/images/ic_twitter.png');
 
+  /// File path: assets/images/icon_post_feed.png
+  AssetGenImage get iconPostFeed =>
+      const AssetGenImage('assets/images/icon_post_feed.png');
+
   /// File path: assets/images/image_add.png
   AssetGenImage get imageAdd =>
       const AssetGenImage('assets/images/image_add.png');
@@ -463,6 +467,7 @@ class $AssetsImagesGen {
         icTelegram,
         icTiktok,
         icTwitter,
+        iconPostFeed,
         imageAdd,
         imageLoadingDef,
         inputA,
@@ -538,6 +543,16 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/play_video.json
+  String get playVideo => 'assets/lottie/play_video.json';
+
+  /// List of all assets
+  List<String> get values => [playVideo];
+}
+
 class $AssetsSvgGen {
   const $AssetsSvgGen();
 
@@ -582,6 +597,7 @@ class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
 }
 

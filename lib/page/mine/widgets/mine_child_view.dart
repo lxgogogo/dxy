@@ -342,14 +342,12 @@ class MyCommentItem extends StatelessWidget {
             children: [
               BorderAvatar(
                 avatar: userProfileInfo?.avatar ?? '',
-                avatarSize: 42.w,
+                avatarSize: 36.w,
               ),
-              SizedBox(
-                width: 7.w,
-              ),
+              SizedBox(width: 8.w),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                       userProfileInfo?.nickname ?? '',
@@ -395,15 +393,15 @@ class MyCommentItem extends StatelessWidget {
               }
             },
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (HtmlParseUtil.of.pureCommentText(item.comment).isNotEmpty == true)
                   AtText(text: HtmlParseUtil.of.pureCommentText(item.comment)),
                 Container(
                   margin: EdgeInsets.only(top: 10.w),
                   padding: EdgeInsets.all(8.w),
-                  constraints: BoxConstraints(minHeight: 52.w),
+                  constraints: BoxConstraints(minHeight: 48.w),
                   decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
                   child: Row(
                     children: [
@@ -447,7 +445,15 @@ class MyCommentItem extends StatelessWidget {
                           ),
                         ),
                       Expanded(
-                        child: AtText(text: content ?? ''),
+                        child: item.isDeleted
+                            ? Text(
+                                content ?? '',
+                                style: TextStyle(
+                                  color: const Color(0xff2a2a2a),
+                                  fontSize: 12.sp,
+                                ),
+                              )
+                            : AtText(text: content ?? ''),
                       ),
                     ],
                   ),
@@ -521,7 +527,7 @@ class MyCollectItem extends StatelessWidget {
           children: [
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
@@ -542,7 +548,7 @@ class MyCollectItem extends StatelessWidget {
                           color: const Color(0xff666666),
                           fontSize: 12.sp,
                         ),
-                        maxLines: 3,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

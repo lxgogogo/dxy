@@ -37,6 +37,7 @@ class AtText extends StatelessWidget {
       ),
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
+      softWrap: true,
     );
   }
 }

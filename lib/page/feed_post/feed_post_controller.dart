@@ -91,6 +91,8 @@ class FeedPostController extends GetxController {
 
     final pureText = HtmlParseUtil.of.pureText(richText);
 
+    final imageList = HtmlParseUtil.of.imageList(richText);
+
     if (currentBord == null || currentBord?.id == -1) {
       ToastUtils.showToast('请选择发帖板块');
       return;
@@ -117,6 +119,7 @@ class FeedPostController extends GetxController {
       pureText,
       currentBord!.id!,
       atList: atList,
+      files: imageList,
     )
         .whenComplete(() {
       isClickPublish = false;

@@ -44,7 +44,11 @@ class MessageCommonItem extends StatelessWidget {
     int? commentCount;
     if (item.jumpType == 'thread') {
       title = item.threadData?.title;
-      cover = item.threadData?.cover;
+      if (item.threadData?.cover?.isNotEmpty == true) {
+        cover = item.threadData?.cover;
+      } else if (item.threadData?.files?.firstOrNull?.url?.isNotEmpty == true) {
+        cover = item.threadData?.files?.firstOrNull?.url;
+      }
       likeCount = item.threadData?.likeCount;
       favoriteCount = item.threadData?.favoriteCount;
       commentCount = item.threadData?.commentCount;
@@ -85,8 +89,8 @@ class MessageCommonItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 34.w,
-            height: 34.w,
+            width: 36.w,
+            height: 36.w,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -104,10 +108,10 @@ class MessageCommonItem extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 12.w),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
@@ -152,154 +156,150 @@ class MessageCommonItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (item.description?.isNotEmpty == true)
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8.w),
-                          child: AtText(
-                            text: HtmlParseUtil.of.pureCommentText(item.description),
-                          ),
-                        ),
+                        AtText(text: HtmlParseUtil.of.pureCommentText(item.description)),
                       Container(
-                        padding: EdgeInsets.all(10.w),
-                        decoration: BoxDecoration(
-                          color: const Color(0x1A95A3C4),
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
+                        margin: EdgeInsets.only(top: 10.w),
+                        padding: EdgeInsets.all(8.w),
+                        decoration: const BoxDecoration(color: Color(0x1a95A3C4)),
                         child: item.isDeleted
                             ? Text(
                                 title ?? '',
                                 style: TextStyle(
                                   color: const Color(0xff2a2a2a),
                                   fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
                                 ),
                               )
-                            : Row(
-                                children: [
-                                  if (cover?.isNotEmpty == true)
-                                    Container(
-                                      width: 48.w,
-                                      height: 48.w,
-                                      margin: EdgeInsets.only(right: 15.w),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(4.r)),
-                                      ),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: Stack(
-                                        fit: StackFit.expand,
-                                        children: [
-                                          CachedNetworkImage(
-                                            imageUrl: cover!,
-                                            fit: BoxFit.cover,
-                                            placeholder: (context, url) => Image.asset(
-                                              'assets/images/image_loading_def.png',
-                                            ),
-                                          ),
-                                          if (item.resourceType == 'videoList')
-                                            Positioned(
-                                              top: 0,
-                                              right: 0,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.red,
-                                                  borderRadius: BorderRadius.circular(4.r),
-                                                ),
-                                                child: Text(
-                                                  '合集',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 10.sp,
+                            : Column(
+                              children: [
+                                Row(
+                                    children: [
+                                      if (cover?.isNotEmpty == true)
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 10.w),
+                                          child: Stack(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: BorderRadius.circular(4.r),
+                                                child: CachedNetworkImage(
+                                                  fit: BoxFit.cover,
+                                                  imageUrl: cover!,
+                                                  width: 24.w,
+                                                  height: 24.w,
+                                                  placeholder: (context, url) => Image.asset(
+                                                    'assets/images/image_loading_def.png',
                                                   ),
+                                                  errorWidget: (context, url, error) =>
+                                                      Image.asset('assets/images/image_loading_def.png'),
                                                 ),
                                               ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        if (item.contentUser?.nickname?.isNotEmpty == true)
-                                          Text(
-                                            item.contentUser!.nickname!,
-                                            style: TextStyle(
-                                              color: const Color(0xff2a2a2a),
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                              if (item.resourceType == 'videoList')
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius: BorderRadius.circular(4.r),
+                                                    ),
+                                                    child: Text(
+                                                      '合集',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 8.sp,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
                                           ),
-                                        AtText(
-                                          text: HtmlParseUtil.of.pureCommentText(title),
                                         ),
-                                        SizedBox(height: 8.w),
-                                        Row(
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                                           children: [
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/praise.png',
-                                                    width: 13.w,
-                                                    height: 13.w,
-                                                  ),
-                                                  SizedBox(width: 6.w),
-                                                  Text(
-                                                    '${likeCount ?? 0}',
-                                                    style: TextStyle(
-                                                      color: const Color(0xff9CACC9),
-                                                      fontSize: 10.sp,
-                                                    ),
-                                                  )
-                                                ],
+                                            if (item.contentUser?.nickname?.isNotEmpty == true)
+                                              Text(
+                                                item.contentUser!.nickname!,
+                                                style: TextStyle(
+                                                  color: const Color(0xff2a2a2a),
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/star.png',
-                                                    width: 13.w,
-                                                    height: 13.w,
-                                                  ),
-                                                  SizedBox(width: 6.w),
-                                                  Text(
-                                                    '${favoriteCount ?? 0}',
-                                                    style: TextStyle(
-                                                      color: const Color(0xff9CACC9),
-                                                      fontSize: 10.sp,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/images/comment.png',
-                                                    width: 13.w,
-                                                    height: 13.w,
-                                                  ),
-                                                  SizedBox(width: 6.w),
-                                                  Text(
-                                                    '${commentCount ?? 0}',
-                                                    style: TextStyle(
-                                                      color: const Color(0xff9CACC9),
-                                                      fontSize: 10.sp,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                            AtText(
+                                              text: HtmlParseUtil.of.pureCommentText(title),
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                SizedBox(height: 8.w),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/praise.png',
+                                            width: 13.w,
+                                            height: 13.w,
+                                          ),
+                                          SizedBox(width: 6.w),
+                                          Text(
+                                            '${likeCount ?? 0}',
+                                            style: TextStyle(
+                                              color: const Color(0xff9CACC9),
+                                              fontSize: 10.sp,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/star.png',
+                                            width: 13.w,
+                                            height: 13.w,
+                                          ),
+                                          SizedBox(width: 6.w),
+                                          Text(
+                                            '${favoriteCount ?? 0}',
+                                            style: TextStyle(
+                                              color: const Color(0xff9CACC9),
+                                              fontSize: 10.sp,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/comment.png',
+                                            width: 13.w,
+                                            height: 13.w,
+                                          ),
+                                          SizedBox(width: 6.w),
+                                          Text(
+                                            '${commentCount ?? 0}',
+                                            style: TextStyle(
+                                              color: const Color(0xff9CACC9),
+                                              fontSize: 10.sp,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                       )
                     ],
                   ),

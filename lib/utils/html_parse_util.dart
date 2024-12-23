@@ -49,4 +49,17 @@ class HtmlParseUtil {
 
     return '';
   }
+
+  List<String> imageList(String htmlText) {
+    final document = parse(htmlText);
+    final List<Element> imageTags = document.getElementsByTagName('img');
+    List<String> images = [];
+    for (Element imgTag in imageTags) {
+      String? src = imgTag.attributes['src'];
+      if (src?.isNotEmpty == true) {
+        images.add(src!);
+      }
+    }
+    return images;
+  }
 }

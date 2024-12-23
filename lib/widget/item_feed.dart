@@ -63,7 +63,7 @@ Widget FeedItem(BoardBean item, {bool isMyPost = false}) {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
-        if (item.content?.isNotEmpty == true)
+        if (item.pureText?.isNotEmpty == true)
           Text(
             item.pureText ?? '',
             maxLines: 3,

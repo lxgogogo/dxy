@@ -143,7 +143,7 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                         return launchUrlString(url, mode : LaunchMode.externalApplication);
                       },
                     ),
-                  _buildMediaView(),
+                  // _buildMediaView(),
                   SizedBox(height: 16.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

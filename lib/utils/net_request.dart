@@ -756,6 +756,7 @@ class NetRequest {
     String pureText,
     int boardId, {
     List atList = const [],
+    List files = const [],
   }) async {
     Map<String, Object> params = {};
     params['title'] = title;
@@ -763,7 +764,7 @@ class NetRequest {
     params['pureText'] = pureText;
     params['boardId'] = boardId;
     params['tags'] = [];
-    params['files'] = [];
+    params['files'] = files.map((e) => {'url': e}).toList();
     params['at'] = atList;
     Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);

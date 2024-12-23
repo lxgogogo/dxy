@@ -28,6 +28,19 @@ class CommentItem extends StatefulWidget {
 }
 
 class _CommentItemState extends State<CommentItem> {
+  final int pageSize = 10;
+
+  int pageNum = 1;
+  bool inFetching = false;
+
+  @override
+  void didUpdateWidget(covariant CommentItem oldWidget) {
+    if (oldWidget.commentBean != widget.commentBean) {
+      pageNum = 1;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -353,11 +366,6 @@ class _CommentItemState extends State<CommentItem> {
       ],
     );
   }
-
-  int pageNum = 1;
-  int pageSize = 10;
-
-  bool inFetching = false;
 
   getReplyList() {
     if (inFetching) return;

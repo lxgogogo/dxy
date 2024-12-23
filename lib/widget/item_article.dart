@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -36,8 +37,8 @@ class _ArticleItemState extends State<ArticleItem> {
         Get.toNamed(Routes.articleDetail, arguments: widget.article.id ?? 0);
       },
       child: LinearCard(
-          margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px),
-          padding: EdgeInsets.only(left: 20.px, right: 12.px, top: 5.px, bottom: 5.px),
+          margin: EdgeInsets.only(top: 10.w, left: 16.w, right: 16.w),
+          padding: EdgeInsets.only(left: 20.w, right: 12.w, top: 5.w, bottom: 5.w),
           child: itemContent()),
     );
   }
@@ -47,7 +48,7 @@ class _ArticleItemState extends State<ArticleItem> {
       children: [
         Expanded(
             child: SizedBox(
-          height: 80.px,
+          height: 80.w,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -58,35 +59,35 @@ class _ArticleItemState extends State<ArticleItem> {
                 maxLines: 2,
                 style: TextStyle(
                   color: const Color(0xff2a2a2a),
-                  fontSize: 14.px,
+                  fontSize: 14.sp,
                 ),
               ),
               // Spacer(),
               Row(
                 children: [
                   Text(
-                    widget.article.createdAt != null ? DateFormat('M月d日').format(widget.article.createdAt!) : '',
+                    widget.article.createdAt != null ? DateFormat('yyyy-MM-dd').format(widget.article.createdAt!) : '',
                     style: TextStyle(
                       color: const Color(0xff9CACC9),
-                      fontSize: 12.px,
+                      fontSize: 12.sp,
                     ),
                   ),
                   SizedBox(
-                    width: 30.px,
+                    width: 30.w,
                   ),
                   Image.asset(
                     'assets/images/comment.png',
-                    width: 13.px,
-                    height: 12.px,
+                    width: 13.w,
+                    height: 12.w,
                   ),
                   SizedBox(
-                    width: 5.px,
+                    width: 5.w,
                   ),
                   Text(
                     widget.article.commentCount.toString(),
                     style: TextStyle(
                       color: const Color(0xff9CACC9),
-                      fontSize: 12.px,
+                      fontSize: 12.sp,
                     ),
                   )
                 ],
@@ -95,16 +96,16 @@ class _ArticleItemState extends State<ArticleItem> {
           ),
         )),
         Container(
-          width: 92.px,
-          height: 66.px,
-          margin: EdgeInsets.only(left: 15.px),
+          width: 92.w,
+          height: 66.w,
+          margin: EdgeInsets.only(left: 15.w),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8.px)),
+            borderRadius: BorderRadius.all(Radius.circular(8.w)),
           ),
           clipBehavior: Clip.antiAlias,
           child: Stack(
             children: [
-              MediaHelper().cacheLoadNetworkImage(widget.article.cover ?? '', 92.px, 66.px),
+              MediaHelper().cacheLoadNetworkImage(widget.article.cover ?? '', 92.w, 66.w),
             ],
           ),
         )

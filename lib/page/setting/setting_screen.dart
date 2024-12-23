@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
@@ -10,6 +11,7 @@ import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
+import 'package:holdem/widget/linear_card.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -57,8 +59,8 @@ class _SettingScreenState extends State<SettingScreen> {
         leading: IconButton(
           icon: Image.asset(
             'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
+            width: 22.w,
+            height: 22.w,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -79,13 +81,12 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget contentView() {
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(16.px, 0, 16.px, 0),
-          decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'), fit: BoxFit.fill)),
-          child: Column(
-            children: [
-              GestureDetector(
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: LinearCard(
+            child: Column(
+              children: [
+                GestureDetector(
                   onTap: () {
                     showDialog(
                       barrierDismissible: true,
@@ -95,8 +96,8 @@ class _SettingScreenState extends State<SettingScreen> {
                   },
                   behavior: HitTestBehavior.translucent,
                   child: Container(
-                    height: 56.px,
-                    padding: EdgeInsets.symmetric(horizontal: 17.px),
+                    height: 56.w,
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -110,111 +111,107 @@ class _SettingScreenState extends State<SettingScreen> {
                         )
                       ],
                     ),
-                  )),
-              Container(
-                color: AppTheme.color_1A000000,
-                height: 0.5.px,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    _checkAppVersion();
-                  },
-                  behavior: HitTestBehavior.translucent,
-                  child: Container(
-                    height: 56.px,
-                    padding: EdgeInsets.symmetric(horizontal: 17.px),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          '检查更新',
-                          style: AppTheme.text333333Size15,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
-                              style: AppTheme.text333333Size15,
-                            ),
-                            if (_canUpdate)
-                              Container(
-                                width: 7.px,
-                                height: 7.px,
-                                decoration: const ShapeDecoration(shape: CircleBorder(), color: Color(0xffff4040)),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 12.w),
+                  color: AppTheme.color_1A000000,
+                  height: 0.5.w,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      _checkAppVersion();
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: Container(
+                      height: 56.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '检查更新',
+                            style: AppTheme.text333333Size15,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
+                                style: AppTheme.text333333Size15,
                               ),
-                            const ImageIcon(
-                              AssetImage('assets/images/item_arrow.png'),
-                              size: 22,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(16.px, 0, 16.px, 0),
-          decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/images/setting_bg.png'), fit: BoxFit.fill)),
-          child: Column(
-            children: [
-              Container(
-                height: 56.px,
-                padding: EdgeInsets.symmetric(horizontal: 17.px),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      '社群',
-                      style: AppTheme.text333333Size15,
-                    ),
-                    const Spacer(),
-                    buildSocialIcon(
-                      'assets/images/ic_facebook.png',
-                      url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
-                    ),
-                    buildSocialIcon(
-                      'assets/images/ic_twitter.png',
-                      url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
-                    ),
-                    buildSocialIcon(
-                      'assets/images/ic_tiktok.png',
-                      url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
-                    ),
-                    buildSocialIcon(
-                      'assets/images/ic_telegram.png',
-                      url: 'https://t.me/dpoker',
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-            margin: EdgeInsets.fromLTRB(16.px, 20.px, 16.px, 0),
-            decoration: BoxDecoration(
-              color: Colors.transparent, // 设置白色背景色
-              borderRadius: BorderRadius.circular(10), // 添加圆角
+                              if (_canUpdate)
+                                Container(
+                                  width: 7.w,
+                                  height: 7.w,
+                                  decoration: const ShapeDecoration(shape: CircleBorder(), color: Color(0xffff4040)),
+                                ),
+                              const ImageIcon(
+                                AssetImage('assets/images/item_arrow.png'),
+                                size: 22,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+              ],
             ),
-            child: GestureDetector(
-              onTap: () {
-                logout();
-              },
-              child: Container(
-                width: 350.px,
-                height: 45.px,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage('assets/images/logout_btn.png'), fit: BoxFit.fill)),
-                child: Text(
-                  '退出登录',
-                  style: TextStyle(color: const Color(0xff249CFC), fontSize: 15.px),
-                ),
+          ),
+        ),
+        SizedBox(height: 8.w),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: LinearCard(
+            child: Container(
+              height: 56.w,
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    '社群',
+                    style: AppTheme.text333333Size15,
+                  ),
+                  const Spacer(),
+                  buildSocialIcon(
+                    'assets/images/ic_facebook.png',
+                    url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
+                  ),
+                  buildSocialIcon(
+                    'assets/images/ic_twitter.png',
+                    url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
+                  ),
+                  buildSocialIcon(
+                    'assets/images/ic_tiktok.png',
+                    url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
+                  ),
+                  buildSocialIcon(
+                    'assets/images/ic_telegram.png',
+                    url: 'https://t.me/dpoker',
+                  ),
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.w),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: GestureDetector(
+            onTap: logout,
+            child: Container(
+              height: 45.w,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage('assets/images/logout_btn.png'), fit: BoxFit.fill),
+              ),
+              child: Text(
+                '退出登录',
+                style: TextStyle(color: const Color(0xff249CFC), fontSize: 15.sp),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -229,11 +226,11 @@ class _SettingScreenState extends State<SettingScreen> {
       },
       behavior: HitTestBehavior.translucent,
       child: Padding(
-        padding: EdgeInsets.all(10.px),
+        padding: EdgeInsets.all(10.w),
         child: Image.asset(
           asset,
-          width: 24.px,
-          height: 24.px,
+          width: 24.w,
+          height: 24.w,
         ),
       ),
     );

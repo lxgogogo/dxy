@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/widget/background_container.dart';
+import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import 'widgets/home_child_view.dart';
 
@@ -91,10 +92,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               Expanded(
                 child: TabBarView(
                   controller: tabController,
-                  physics: const NeverScrollableScrollPhysics(),
+                  // physics: const NeverScrollableScrollPhysics(),
                   children: List.generate(
                     tabs.length,
-                    (index) => HomeChildView(type: types[index]),
+                    (index) => HomeChildView(type: types[index]).keepAlive,
                   ),
                 ),
               ),

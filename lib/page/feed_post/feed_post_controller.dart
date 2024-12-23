@@ -14,59 +14,12 @@ class FeedPostController extends GetxController {
   final QuillController quillController = QuillController.basic();
   final FocusNode focusNode = FocusNode();
 
-  bool showKeyboard = false;
-
-  bool showTextStyle = false;
-
-  final textAttributes = [
-    AttributeModel(
-      '标题',
-      Attribute.header,
-      children: [
-        AttributeModel('H1 标题', Attribute.h1),
-        AttributeModel('H2 标题', Attribute.h2),
-        AttributeModel('H3 标题', Attribute.h3),
-        AttributeModel('H4 标题', Attribute.h4),
-        AttributeModel('H5 标题', Attribute.h5),
-      ],
-    ),
-    AttributeModel('加粗', Attribute.bold),
-    AttributeModel('引用', Attribute.blockQuote),
-    AttributeModel('有序列表', Attribute.ul),
-    AttributeModel('无序列表', Attribute.ol),
-    AttributeModel('分割线', Attribute.divider),
-  ];
-  bool showMore = false;
-
-  final moreAttributes = [
-    AttributeModel('添加链接', Attribute.link),
-    AttributeModel('添加视频', Attribute.video),
-    AttributeModel('提到', Attribute.at),
-  ];
-
   bool isClickPublish = false;
 
   @override
   void onInit() {
     boardInfoList = Get.arguments as List<BoardInfo>? ?? [];
     super.onInit();
-  }
-
-  _openMore() {
-    SystemChannels.textInput.invokeMethod("TextInput.hide");
-    showKeyboard = false;
-    showTextStyle = false;
-    showMore = true;
-    safeUpdate();
-  }
-
-  _openTextStyle() {
-    SystemChannels.textInput.invokeMethod("TextInput.hide");
-    showKeyboard = false;
-    showTextStyle = true;
-    textAttributes.first.isSelected = false;
-    showMore = false;
-    safeUpdate();
   }
 
   void publishPosts() async {
@@ -129,16 +82,6 @@ class FeedPostController extends GetxController {
 
       Get.back();
     }
-  }
-
-  bool onTapDownEditor(TapDragDownDetails details, TextPosition Function(Offset offset) function) {
-    if (!showKeyboard) {
-      showKeyboard = true;
-      showTextStyle = false;
-      showMore = false;
-      safeUpdate();
-    }
-    return false;
   }
 
   Future<void> onImageInsertCallback(String image, QuillController controller) async {

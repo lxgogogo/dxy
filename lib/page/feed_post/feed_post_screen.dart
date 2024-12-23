@@ -1,24 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/attribute_model.dart';
+import 'package:holdem/page/tag_list/tag_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/html_parse_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' as html;
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
@@ -28,7 +25,6 @@ import '../../model/upload_file.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
-import 'widgets/header_style_buttons.dart';
 
 part 'feed_post_controller.dart';
 
@@ -96,13 +92,6 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     buildTitleInput(),
-                    // QuillSimpleToolbar(
-                    //   controller: controller.quillController,
-                    //   config: QuillSimpleToolbarConfig(
-                    //     linkStyleType: LinkStyleType.alternative,
-                    //     embedButtons: FlutterQuillEmbeds.toolbarButtons(),
-                    //   ),
-                    // ),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.w),
@@ -112,16 +101,15 @@ class FeedPostScreen extends GetView<FeedPostController> {
                           config: QuillEditorConfig(
                             showCursor: true,
                             embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                            onTapDown: controller.onTapDownEditor,
                             placeholder: '请输入正文（建议10-2000字）',
                             customStyles: DefaultStyles(
                               placeHolder: DefaultTextBlockStyle(
-                                DefaultTextStyle.of(context).style.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp,
-                                      color: '#2c2c2c'.hexColor.withOpacity(0.5),
-                                      height: 1.5,
-                                    ),
+                                TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.sp,
+                                  color: '#2c2c2c'.hexColor.withOpacity(0.5),
+                                  height: 1.5,
+                                ),
                                 const HorizontalSpacing(0, 0),
                                 VerticalSpacing.zero,
                                 VerticalSpacing.zero,
@@ -132,8 +120,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         ),
                       ),
                     ),
-                    buildBottomToolbar(context),
-                    // buildBottomMenu(context),
+                    if (controller.focusNode.hasFocus) buildBottomToolbar(context) else buildTagList(context)
                   ],
                 ),
               ),
@@ -281,19 +268,6 @@ class FeedPostScreen extends GetView<FeedPostController> {
       ),
       child: Row(
         children: [
-          // GestureDetector(
-          //   onTap: controller._openTextStyle,
-          //   child: Container(
-          //     width: 44.w,
-          //     height: 44.w,
-          //     alignment: Alignment.center,
-          //     child: Image.asset(
-          //       Assets.images.inputA.path,
-          //       width: 24.w,
-          //       height: 24.w,
-          //     ),
-          //   ),
-          // ),
           QuillToolbarImageButton(
             controller: controller.quillController,
             options: QuillToolbarImageButtonOptions(
@@ -340,282 +314,46 @@ class FeedPostScreen extends GetView<FeedPostController> {
               ),
             ),
           ),
-          // GestureDetector(
-          //   onTap: controller._openMore,
-          //   child: Container(
-          //     width: 44.w,
-          //     height: 44.w,
-          //     alignment: Alignment.center,
-          //     child: Image.asset(
-          //       Assets.images.inputAdd.path,
-          //       width: 24.w,
-          //       height: 24.w,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
   }
 
-  Widget buildBottomMenu(BuildContext context) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: (controller.showKeyboard && Platform.isAndroid) ? 200 : 340),
-      height: _getBottomHeight(context),
-      padding: EdgeInsets.symmetric(vertical: 16.w),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (controller.showTextStyle) {
-            final itemWidth = (constraints.maxWidth - 12.w) / 2;
-            if (controller.textAttributes.first.isSelected) {
-              return Wrap(
-                spacing: 12.w,
-                runSpacing: 12.w,
-                children: List.generate(
-                  controller.textAttributes.first.children.length,
-                  (index) {
-                    final e = controller.textAttributes.first.children[index];
-                    return QuillToolbarHeaderButton(
-                      attributeModel: e,
-                      controller: controller.quillController,
-                      itemWidth: itemWidth,
-                    );
-                  },
-                ).toList(),
-              );
-            }
-            return Wrap(
-              spacing: 12.w,
-              runSpacing: 12.w,
-              children: List.generate(
-                controller.textAttributes.length,
-                (index) {
-                  final e = controller.textAttributes[index];
-                  if (e.attribute == Attribute.divider) {
-                    return GestureDetector(
-                      onTap: () {
-                        controller.quillController.insertDividerBlock();
-                      },
-                      child: Container(
-                        width: itemWidth,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.r),
-                          color: '#95a3c4'.hexColor.withOpacity(0.1),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          e.title,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: '#2a2a2a'.hexColor,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return QuillToolbarToggleStyleButton(
-                    controller: controller.quillController,
-                    options: QuillToolbarToggleStyleButtonOptions(
-                      childBuilder: (dynamic options, dynamic extraOptions) {
-                        QuillToolbarToggleStyleButtonExtraOptions? buttonExtraOptions;
-                        if (extraOptions is QuillToolbarToggleStyleButtonExtraOptions) {
-                          buttonExtraOptions = extraOptions;
-                        }
-                        return GestureDetector(
-                          onTap: () {
-                            if (index == 0) {
-                              controller.textAttributes.first.isSelected = true;
-                              controller.safeUpdate();
-                              return;
-                            }
-                            buttonExtraOptions?.onPressed?.call();
-                          },
-                          child: Container(
-                            width: itemWidth,
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.r),
-                              color: '#95a3c4'.hexColor.withOpacity(0.1),
-                            ),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              e.title,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: buttonExtraOptions?.isToggled == true ? '#249cfc'.hexColor : '#2a2a2a'.hexColor,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    attribute: e.attribute,
-                  );
-                },
-              ).toList(),
-            );
-          } else if (controller.showMore) {
-            final itemWidth = (constraints.maxWidth - 12.w * 4) / 5;
-            return Wrap(
-              spacing: 12.w,
-              runSpacing: 12.w,
-              children: List.generate(
-                controller.moreAttributes.length,
-                (index) {
-                  final e = controller.moreAttributes[index];
-                  if (e.attribute == Attribute.link) {
-                    return QuillToolbarLinkStyleButton(
-                      controller: controller.quillController,
-                      options: QuillToolbarLinkStyleButtonOptions(
-                        childBuilder: (dynamic options, dynamic extraOptions) {
-                          QuillToolbarLinkStyleButtonExtraOptions? buttonExtraOptions;
-                          if (extraOptions is QuillToolbarLinkStyleButtonExtraOptions) {
-                            buttonExtraOptions = extraOptions;
-                          }
-                          return GestureDetector(
-                            onTap: buttonExtraOptions?.onPressed,
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: itemWidth,
-                                  height: itemWidth,
-                                  padding: EdgeInsets.all(8.w),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4.r),
-                                    color: '#95a3c4'.hexColor.withOpacity(0.1),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.link),
-                                ),
-                                SizedBox(height: 4.w),
-                                Text(
-                                  e.title,
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: '#2a2a2a'.hexColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  } else if (e.attribute == Attribute.video) {
-                    return QuillToolbarVideoButton(
-                      controller: controller.quillController,
-                      options: QuillToolbarVideoButtonOptions(
-                        videoConfig: QuillToolbarVideoConfig(
-                          onVideoInsertCallback: (video, controller) async {
-                            if (!GetUtils.isHTML(video)) {
-                              final file = File(video);
-                              final fileLength = await file.length();
-                              if (fileLength > 50 * 1024 * 1024) {
-                                ToastUtils.showToast('上传视频不得超过50M');
-                                return;
-                              }
-                            }
-                            final res = await NetRequest().uploadImage(video);
-                            if (res != null) {
-                              final uploadFile = UploadFile.fromJson(res);
-                              final videoUrl = uploadFile.url ?? '';
-                              if (videoUrl.isNotEmpty) {
-                                controller.insertVideoBlock(videoUrl: videoUrl);
-                              }
-                            }
-                          },
-                        ),
-                        childBuilder: (dynamic options, dynamic extraOptions) {
-                          QuillToolbarVideoButtonExtraOptions? buttonExtraOptions;
-                          if (extraOptions is QuillToolbarVideoButtonExtraOptions) {
-                            buttonExtraOptions = extraOptions;
-                          }
-                          return GestureDetector(
-                            onTap: buttonExtraOptions?.onPressed,
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: itemWidth,
-                                  height: itemWidth,
-                                  padding: EdgeInsets.all(8.w),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4.r),
-                                    color: '#95a3c4'.hexColor.withOpacity(0.1),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.movie_creation),
-                                ),
-                                SizedBox(height: 4.w),
-                                Text(
-                                  e.title,
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: '#2a2a2a'.hexColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  } else if (e.attribute == Attribute.at) {
-                    return GestureDetector(
-                      onTap: () async {
-                        final result = await Get.toNamed(Routes.atUser);
-                        if (result != null) {
-                          controller.quillController.insertAtBlock(data: json.encode(result));
-                        }
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            width: itemWidth,
-                            height: itemWidth,
-                            padding: EdgeInsets.all(8.w),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.r),
-                              color: '#95a3c4'.hexColor.withOpacity(0.1),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '@',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 4.w),
-                          Text(
-                            e.title,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: '#2a2a2a'.hexColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              ).toList(),
-            );
-          }
-          return const SizedBox();
-        },
+  Widget buildTagList(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4.w),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      decoration: const BoxDecoration(
+        border: Border.symmetric(
+          horizontal: BorderSide(color: Color(0xffe6e6e6)),
+        ),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              Get.bottomSheet(const TagListScreen());
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: '#249CFC'.hexColor,
+                ),
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                '+ 插入话题',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: '#249CFC'.hexColor,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  double _getBottomHeight(BuildContext context) {
-    if (controller.showKeyboard) {
-      return MediaQuery.of(context).viewInsets.bottom;
-    } else if (controller.showMore || controller.showTextStyle) {
-      return 248.w;
-    } else {
-      return 0;
-    }
   }
 }

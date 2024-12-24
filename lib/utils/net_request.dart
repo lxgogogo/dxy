@@ -25,7 +25,7 @@ class NetRequest {
     }
   }
 
-  Future indexList(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+  Future indexList(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.indexList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -55,7 +55,7 @@ class NetRequest {
     }
   }
 
-  Future courseList(Map<String, Object> params, SuccessCallback onSuccess) async {
+  Future courseList(Map<String, dynamic> params, SuccessCallback onSuccess) async {
     Map<dynamic, dynamic> response = await HttpUtils.post(Api.courseList, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {

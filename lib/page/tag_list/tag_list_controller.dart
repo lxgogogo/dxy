@@ -32,7 +32,7 @@ class TagListController extends GetxController {
   }
 
   Future<void> getTagList() async {
-    final res = await CommonService.of.tagIndex(pageNum: 1, pageSize: pageSize);
+    final res = await CommonService.of.tagIndex(pageNum: 1, pageSize: 10);
     if (res.isSuccess) {
       final listRes = res.data['list'] as List? ?? [];
       final records = listRes.map((e) => TagModel.fromJson(e as Map? ?? {})).toList();
@@ -65,13 +65,13 @@ extension SearchFunc on TagListController {
   }
 
   Future<void> onSearch() async {
-    EasyLoading.show(status: 'loading...');
     pageNum = 1;
     try {
       final res = await CommonService.of.tagIndex(
         pageNum: pageNum,
         pageSize: pageSize,
         keyword: searchController.text,
+        isShowLoading: true,
       );
       items.clear();
       if (res.isSuccess) {
@@ -91,7 +91,6 @@ extension SearchFunc on TagListController {
       searchRefreshController.refreshFailed();
     } finally {
       safeUpdate();
-      EasyLoading.dismiss();
     }
   }
 

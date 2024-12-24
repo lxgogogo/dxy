@@ -10,7 +10,6 @@ import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 
-import '../utils/app_theme.dart';
 import '../utils/toast_utils.dart';
 
 class FeedDetailBottomView extends StatefulWidget {
@@ -49,7 +48,13 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.tagList.isNotEmpty) TagListView(tagList: widget.tagList),
+        if (widget.tagList.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.only(left: 12.w),
+            child: TagListView(
+              tagList: widget.tagList,
+            ),
+          ),
         Container(
           height: 68.w,
           padding: EdgeInsets.only(left: 25.w, top: 15.w),
@@ -273,33 +278,39 @@ class TagListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.w),
+      width: double.infinity,
+      margin: EdgeInsets.only(top: 8.w, bottom: 12.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(left: 12.w),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(
             tagList.length,
-            (index) => Container(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.w),
-              margin: EdgeInsets.only(right: 10.w),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                gradient: const LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Color(0xFFEDF6FD),
-                    Color(0xFFF2F9FF),
-                  ],
+            (index) => GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.searchTag, arguments: {'tagId': tagList[index].id});
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.w),
+                margin: EdgeInsets.only(right: 10.w),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  gradient: const LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Color(0xFFEDF6FD),
+                      Color(0xFFF2F9FF),
+                    ],
+                  ),
                 ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                tagList[index].name ?? '',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: '#249CFC'.hexColor,
+                alignment: Alignment.center,
+                child: Text(
+                  tagList[index].name ?? '',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: '#249CFC'.hexColor,
+                  ),
                 ),
               ),
             ),

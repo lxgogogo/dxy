@@ -1,0 +1,149 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart' hide SearchController;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/model/article.dart';
+import 'package:holdem/model/course.dart';
+import 'package:holdem/page/search_tag/search_tag_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/item_book.dart';
+import 'package:holdem/widget/item_video.dart';
+import 'package:holdem/widget/no_data.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+part 'search_tag_child_controller.dart';
+
+class SearchTagChildView extends GetView<SearchTagChildView> {
+  final SearchTagType type;
+
+  const SearchTagChildView({super.key, required this.type});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<SearchTagChildController>(
+      global: false,
+      init: SearchTagChildController(type),
+      builder: (controller) {
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: controller.refreshController,
+          onLoading: controller.onLoading,
+          child: controller.isLoaded ? _buildView(controller) : const SizedBox(),
+        );
+      },
+    );
+  }
+
+  Widget _buildView(SearchTagChildController controller) {
+    switch (type) {
+      case SearchTagType.news:
+        return _buildNewsView(controller);
+      case SearchTagType.video:
+        return _buildVideoView(controller);
+      case SearchTagType.book:
+        return _buildBookView(controller);
+      case SearchTagType.course:
+        return _buildCourseView(controller);
+    }
+  }
+
+  Widget _buildCourseView(SearchTagChildController controller) {
+    return controller.courses.isNotEmpty
+        ? CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
+                sliver: DecoratedSliver(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      centerSlice: Rect.fromLTRB(30, 14, 35, 28),
+                      image: AssetImage('assets/images/commen_bg.png'),
+                    ),
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
+                          },
+                          child: Container(
+                            height: 48.w,
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: index < controller.courses.length - 1
+                                        ? const Color(0xffe6e6e6)
+                                        : Colors.transparent),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.courses[index].title ?? '',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Image.asset(
+                                  'assets/images/arrow.png',
+                                  width: 6.w,
+                                  height: 10.w,
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: controller.courses.length,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        : const NoDataView();
+  }
+
+  Widget _buildBookView(SearchTagChildController controller) {
+    return controller.articles.isNotEmpty
+        ? ListView.builder(
+            itemBuilder: (c, i) => BookItem(article: controller.articles[i]),
+            itemCount: controller.articles.length,
+          )
+        : const NoDataView();
+  }
+
+  Widget _buildVideoView(SearchTagChildController controller) {
+    return controller.articles.isNotEmpty
+        ? GridView.builder(
+            padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.w,
+              mainAxisSpacing: 8.w,
+            ),
+            itemCount: controller.articles.length,
+            itemBuilder: (c, i) => VideoItem(article: controller.articles[i]),
+          )
+        : const NoDataView();
+  }
+
+  Widget _buildNewsView(SearchTagChildController controller) {
+    return controller.articles.isNotEmpty
+        ? ListView.builder(
+            itemBuilder: (c, i) => ArticleItem(article: controller.articles[i]),
+            itemCount: controller.articles.length,
+          )
+        : const NoDataView();
+  }
+}

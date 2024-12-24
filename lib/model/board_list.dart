@@ -1,5 +1,6 @@
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/board_info.dart';
+import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/utils/html_parse_util.dart';
@@ -51,7 +52,7 @@ class BoardBean {
   int? shareCount;
   bool? liked;
   bool? favorited;
-  List<String>? tags;
+  List<TagModel>? tagList;
   List<String>? sign;
   List<String>? pics;
   List<UploadFile>? files;
@@ -74,7 +75,7 @@ class BoardBean {
       this.shareCount,
       this.liked,
       this.favorited,
-      this.tags,
+      this.tagList,
       this.sign,
       this.pics,
       this.files,
@@ -139,8 +140,8 @@ class BoardBean {
     if (json["favorited"] is bool) {
       favorited = json["favorited"];
     }
-    if (json["tags"] is List) {
-      tags = json["tags"] == null ? null : (json["tags"] as List).map((e) => e.toString()).toList();
+    if (json["tagList"] is List) {
+      tagList = json["tagList"] == null ? null : (json["tagList"] as List).map((e) => TagModel.fromJson(e)).toList();
     }
     if (json["sign"] is List) {
       sign = json["sign"] == null ? null : (json["sign"] as List).map((e) => e.toString()).toList();
@@ -166,7 +167,7 @@ class BoardBean {
     _data["likeCount"] = likeCount;
     _data["shareCount"] = shareCount;
     _data["liked"] = liked;
-    _data["tags"] = tags;
+    _data["tagList"] = tagList;
     _data["files"] = files;
     _data["relType"] = relType;
     _data["comment"] = comment;

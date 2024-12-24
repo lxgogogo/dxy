@@ -21,7 +21,7 @@ class TagModel {
 
   String toRawJson() => json.encode(toJson());
 
-  factory TagModel.fromJson(Map<String, dynamic> json) => TagModel(
+  factory TagModel.fromJson(Map<dynamic, dynamic> json) => TagModel(
         id: json["id"],
         name: json["name"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),

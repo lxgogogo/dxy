@@ -27,7 +27,7 @@ class CourseItem extends StatelessWidget {
           ),
           child: Column(
             children: [
-              ...List.generate(article.sublist!.length, (i) {
+              ...List.generate(article.sublist?.length ?? 0, (i) {
                 CollectBean collectBean = article.sublist![i];
                 return GestureDetector(
                     onTap: () {

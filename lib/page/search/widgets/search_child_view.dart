@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
@@ -18,6 +19,7 @@ import 'package:holdem/widget/item_article.dart';
 import 'package:holdem/widget/item_book.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/item_competition.dart';
+import 'package:holdem/widget/item_course.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:holdem/widget/no_data.dart';
@@ -33,7 +35,7 @@ class SearchChildView extends StatefulWidget {
   State<SearchChildView> createState() => SearchChildViewState();
 }
 
-class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliveClientMixin {
+class SearchChildViewState extends State<SearchChildView> {
   List<ArticleBean> articles = [];
   List<CollectBean> courses = [];
   List<UserProfile> userItems = [];
@@ -152,256 +154,251 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
   }
 
   void _onRefresh() async {
-    setState(() {
-      pageNum = 1;
-    });
+    pageNum = 1;
     reqListData();
   }
 
   void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
+    pageNum++;
     reqListData();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    if (widget.type == SearchType.news) {
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: isLoaded
-            ? articles.isNotEmpty
-                ? ListView.builder(
-                    controller: _listController,
-                    itemBuilder: (c, i) => ArticleItem(article: articles[i]),
-                    itemCount: articles.length,
-                  )
-                : const NoDataView()
-            : const SizedBox(),
-      );
-    } else if (widget.type == SearchType.video) {
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: isLoaded
-            ? articles.isNotEmpty
-                ? GridView.builder(
-                    padding: EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.px,
-                      mainAxisSpacing: 8.px,
-                    ),
-                    itemCount: articles.length,
-                    itemBuilder: (c, i) => VideoItem(article: articles[i]),
-                  )
-                : const NoDataView()
-            : const SizedBox(),
-      );
-    } else if (widget.type == SearchType.book) {
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: isLoaded
-            ? articles.isNotEmpty
-                ? ListView.builder(
-                    controller: _listController,
-                    itemBuilder: (c, i) => BookItem(article: articles[i]),
-                    itemCount: articles.length,
-                  )
-                : const NoDataView()
-            : const SizedBox(),
-      );
-    } else if (widget.type == SearchType.course) {
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: isLoaded
-            ? courses.isNotEmpty
-                ? ListView.builder(
-                    controller: _listController,
-                    itemBuilder: (c, i) => courseItem(i),
-                    itemCount: courses.length,
-                  )
-                : const NoDataView()
-            : const SizedBox(),
-      );
-    } else if (widget.type == SearchType.user) {
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: isLoaded
-            ? userItems.isNotEmpty
-                ? ListView.builder(
-                    controller: _listController,
-                    itemBuilder: (context, index) => Container(
-                      height: 58.px,
-                      margin: EdgeInsets.symmetric(horizontal: 18.px),
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: const Color(0xffE6E6E6), width: 1.px))),
-                      child: Row(children: [
-                        BorderAvatar(avatar: userItems[index].avatar ?? ''),
-                        SizedBox(
-                          width: 10.px,
-                        ),
-                        Text(
-                          userItems[index].nickname!.isNotEmpty ? userItems[index].nickname! : '',
-                          style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.px),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            UserStore.of.checkLogin(() {
-                              if (userItems[index].id == null) return;
-                              final followed = userItems[index].followed ?? false;
-                              NetRequest().followerToggle(userItems[index].id!, !followed, (data) {
-                                if (mounted) {
-                                  userItems[index].followed = !followed;
-                                  setState(() {});
-                                }
-                              });
-                            });
-                          },
-                          child: userItems[index].followed == true
-                              ? Container(
-                                  height: 28.px,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffd8d8d8),
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 10.px),
-                                  child: const Text(
-                                    '已关注',
-                                    style: TextStyle(
-                                      color: Color(0xff95a3c4),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: 28.px,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff249cfc),
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 10.px),
-                                  child: const Text(
-                                    '+关注',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                        ),
-                      ]),
-                    ),
-                    itemCount: userItems.length,
-                  )
-                : const NoDataView()
-            : const SizedBox(),
-      );
-    } else if (widget.type == SearchType.competition) {
-      return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: true,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: isLoaded
-            ? competitionItems.isNotEmpty
-                ? ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 14.px),
-                    controller: _listController,
-                    itemBuilder: (context, index) => CompetitionItem(item: competitionItems[index]),
-                    itemCount: competitionItems.length,
-                  )
-                : const NoDataView()
-            : const SizedBox(),
-      );
-    }
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: ListView.builder(
-        controller: _listController,
-        itemBuilder: (c, i) => const SizedBox(),
-        itemCount: articles.length,
-      ),
-    );
-  }
-
-  Widget courseItem(int index) {
-    return LinearCard(
-      padding: EdgeInsets.only(bottom: 2.px),
-      margin: EdgeInsets.only(top: 10.px, left: 18.px, right: 18.px, bottom: 10.px),
-      child: Container(
-          // padding: EdgeInsets.only(left: 20.px,right: 12.px,top:5.px,bottom: 5.px),
-          decoration: BoxDecoration(
-            color: const Color(0xffF8FBFF),
-            borderRadius: BorderRadius.all(Radius.circular(13.px)),
-          ),
-          child: Column(
-            children: [
-              ...List.generate(courses.length, (i) {
-                CollectBean collectBean = courses[i];
-                return GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.articleDetail, arguments: collectBean.targetId ?? 0);
-                    },
-                    child: Container(
-                      height: 48.px,
-                      padding: EdgeInsets.symmetric(horizontal: 20.px),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: i < courses.length - 1 ? const Color(0xffe6e6e6) : Colors.transparent))),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Text(
-                            collectBean.title!,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          )),
-                          Image.asset(
-                            'assets/images/arrow.png',
-                            width: 6.px,
-                            height: 10.px,
-                          )
-                        ],
+    switch (widget.type) {
+      case SearchType.news:
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: isLoaded
+              ? articles.isNotEmpty
+                  ? ListView.builder(
+                      controller: _listController,
+                      itemBuilder: (c, i) => ArticleItem(article: articles[i]),
+                      itemCount: articles.length,
+                    )
+                  : const NoDataView()
+              : const SizedBox(),
+        );
+      case SearchType.video:
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: isLoaded
+              ? articles.isNotEmpty
+                  ? GridView.builder(
+                      padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 8.w,
+                        mainAxisSpacing: 8.w,
                       ),
-                    ));
-              }),
-            ],
-          )),
-    );
+                      itemCount: articles.length,
+                      itemBuilder: (c, i) => VideoItem(article: articles[i]),
+                    )
+                  : const NoDataView()
+              : const SizedBox(),
+        );
+      case SearchType.book:
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: isLoaded
+              ? articles.isNotEmpty
+                  ? ListView.builder(
+                      controller: _listController,
+                      itemBuilder: (c, i) => BookItem(article: articles[i]),
+                      itemCount: articles.length,
+                    )
+                  : const NoDataView()
+              : const SizedBox(),
+        );
+      case SearchType.course:
+        return LinearCard(
+          padding: EdgeInsets.only(bottom: 2.w),
+          margin: EdgeInsets.only(top: 10.w, left: 18.w, right: 18.w, bottom: 10.w),
+          child: Container(
+            decoration: BoxDecoration(
+              color: const Color(0xffF8FBFF),
+              borderRadius: BorderRadius.all(Radius.circular(13.w)),
+            ),
+            child: SmartRefresher(
+              enablePullDown: false,
+              enablePullUp: true,
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
+              child: isLoaded
+                  ? courses.isNotEmpty
+                      ? ListView.builder(
+                          controller: _listController,
+                          itemBuilder: (c, i) => GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.articleDetail, arguments: courses[i].targetId ?? 0);
+                            },
+                            child: Container(
+                              height: 48.px,
+                              padding: EdgeInsets.symmetric(horizontal: 20.px),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                      color: i < courses.length - 1 ? const Color(0xffe6e6e6) : Colors.transparent),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      courses[i].title ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Image.asset(
+                                    'assets/images/arrow.png',
+                                    width: 6.px,
+                                    height: 10.px,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          itemCount: courses.length,
+                        )
+                      : const NoDataView()
+                  : const SizedBox(),
+            ),
+          ),
+        );
+      case SearchType.user:
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: isLoaded
+              ? userItems.isNotEmpty
+                  ? ListView.builder(
+                      controller: _listController,
+                      itemBuilder: (context, index) => Container(
+                        height: 58.w,
+                        margin: EdgeInsets.symmetric(horizontal: 18.w),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color: const Color(0xffE6E6E6), width: 1.w))),
+                        child: Row(children: [
+                          BorderAvatar(avatar: userItems[index].avatar ?? ''),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Text(
+                            userItems[index].nickname!.isNotEmpty ? userItems[index].nickname! : '',
+                            style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.w),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              UserStore.of.checkLogin(() {
+                                if (userItems[index].id == null) return;
+                                final followed = userItems[index].followed ?? false;
+                                NetRequest().followerToggle(userItems[index].id!, !followed, (data) {
+                                  if (mounted) {
+                                    userItems[index].followed = !followed;
+                                    setState(() {});
+                                  }
+                                });
+                              });
+                            },
+                            child: userItems[index].followed == true
+                                ? Container(
+                                    height: 28.w,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xffd8d8d8),
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                    child: const Text(
+                                      '已关注',
+                                      style: TextStyle(
+                                        color: Color(0xff95a3c4),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: 28.w,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xff249cfc),
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                    child: const Text(
+                                      '+关注',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        ]),
+                      ),
+                      itemCount: userItems.length,
+                    )
+                  : const NoDataView()
+              : const SizedBox(),
+        );
+      case SearchType.tag:
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: isLoaded
+              ? competitionItems.isNotEmpty
+                  ? ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      controller: _listController,
+                      itemBuilder: (context, index) => CompetitionItem(item: competitionItems[index]),
+                      itemCount: competitionItems.length,
+                    )
+                  : const NoDataView()
+              : const SizedBox(),
+        );
+      case SearchType.competition:
+        return SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: isLoaded
+              ? competitionItems.isNotEmpty
+                  ? ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      controller: _listController,
+                      itemBuilder: (context, index) => CompetitionItem(item: competitionItems[index]),
+                      itemCount: competitionItems.length,
+                    )
+                  : const NoDataView()
+              : const SizedBox(),
+        );
+    }
   }
 
   jumpPage(BannerBean bean) {
@@ -410,7 +407,7 @@ class SearchChildViewState extends State<SearchChildView> with AutomaticKeepAliv
       Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {
       Get.toNamed(Routes.articleDetail, arguments: id);
-    }  else if (bean.jumpType == 'video' || bean.jumpType == 'videoList') {
+    } else if (bean.jumpType == 'video' || bean.jumpType == 'videoList') {
       Get.toNamed(Routes.videoDetail, arguments: id);
     } else if (bean.jumpType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: id);

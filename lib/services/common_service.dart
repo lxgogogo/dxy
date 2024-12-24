@@ -9,8 +9,15 @@ class CommonService {
     await HttpUtils.postNew(Api.saveReview);
   }
 
-  Future<ResBaseModel> tagIndex() async {
-    final res = await HttpUtils.postNew(Api.tagIndex);
+  Future<ResBaseModel> tagIndex({
+    required int pageNum,
+    int pageSize = 20,
+    String keyword = '',
+  }) async {
+    final res = await HttpUtils.postNew(Api.tagIndex, params: {
+      'pageNum': pageNum,
+      'pageSize': pageSize,
+    });
     return res ?? ResBaseModel.defaultRes;
   }
 }

@@ -16,10 +16,22 @@ class FeedPostController extends GetxController {
 
   bool isClickPublish = false;
 
+  List<TagModel> tagList = [];
+
+  final int tagMaxLength = 5;
+
   @override
   void onInit() {
     boardInfoList = Get.arguments as List<BoardInfo>? ?? [];
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    focusNode.addListener(() {
+      safeUpdate();
+    });
   }
 
   void publishPosts() async {
@@ -30,9 +42,9 @@ class FeedPostController extends GetxController {
     );
     final atList = [];
     converter.renderCustomWith = ((customOp, contextOp) {
-      if (customOp.insert.type == 'divider') {
-        return '<hr/>';
-      }
+      // if (customOp.insert.type == 'divider') {
+      //   return '<hr/>';
+      // }
       if (customOp.insert.type == 'at') {
         final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
         atList.add(dataMap['id']);
@@ -73,6 +85,7 @@ class FeedPostController extends GetxController {
       currentBord!.id!,
       atList: atList,
       files: imageList,
+      tagIds: tagList.map((e) => e.id).toList(),
     )
         .whenComplete(() {
       isClickPublish = false;
@@ -113,5 +126,21 @@ class FeedPostController extends GetxController {
         controller.insertImageBlock(imageSource: '$imageUrl\$\$$image\$\$');
       }
     }
+  }
+
+  Future<void> toAddTag() async {
+    final tag = await Get.bottomSheet<TagModel?>(
+      const TagListScreen(),
+      isScrollControlled: true,
+    );
+    if (tag != null) {
+      tagList.add(tag);
+      safeUpdate();
+    }
+  }
+
+  void removeTag(int index) {
+    tagList.removeAt(index);
+    safeUpdate();
   }
 }

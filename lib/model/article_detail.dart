@@ -1,3 +1,4 @@
+import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/model/user.dart';
 
 class ArticleDetailBean {
@@ -23,6 +24,8 @@ class ArticleDetailBean {
   BookBean? book;
   UserProfile? user;
   List<VideoBean>? videoList;
+  List<TagModel>? tagList;
+
 
   ArticleDetailBean({
     this.category,
@@ -47,6 +50,7 @@ class ArticleDetailBean {
     this.book,
     this.user,
     this.videoList,
+    this.tagList,
   });
 
   ArticleDetailBean.fromJson(Map<String, dynamic> json) {
@@ -116,6 +120,9 @@ class ArticleDetailBean {
     if (json["videoList"] is List) {
       videoList =
           json["videoList"] == null ? null : (json["videoList"] as List).map((e) => VideoBean.fromJson(e)).toList();
+    }
+    if (json["tagList"] is List) {
+      tagList = json["tagList"] == null ? null : (json["tagList"] as List).map((e) => TagModel.fromJson(e)).toList();
     }
   }
 }

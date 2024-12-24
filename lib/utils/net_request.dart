@@ -118,7 +118,7 @@ class NetRequest {
     }
   }
 
-  Future contentLike(Map<String, Object> params, SuccessCallback onSuccess) async {
+  Future contentLike(Map<String, dynamic> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.like, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -650,8 +650,8 @@ class NetRequest {
   }
 
   ///收藏操作 取消、收藏
-  Future favoriteToggle(String relType, int relId, bool state, SuccessCallback onSuccess) async {
-    Map<String, Object> params = {};
+  Future favoriteToggle(String? relType, int? relId, bool state, SuccessCallback onSuccess) async {
+    Map<String, dynamic> params = {};
     params['relType'] = relType; //// 类型 thread 帖子，content 内容
     params['relId'] = relId; // 收藏对象id
     params['state'] = state;
@@ -757,6 +757,7 @@ class NetRequest {
     int boardId, {
     List atList = const [],
     List files = const [],
+    List tagIds = const [],
   }) async {
     Map<String, Object> params = {};
     params['title'] = title;
@@ -766,6 +767,7 @@ class NetRequest {
     params['tags'] = [];
     params['files'] = files.map((e) => {'url': e}).toList();
     params['at'] = atList;
+    params['tagIds'] = tagIds;
     Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: true);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {

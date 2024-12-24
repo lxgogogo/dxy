@@ -1,15 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/model/attribute_model.dart';
+import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/tag_list/tag_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/html_parse_util.dart';
@@ -323,36 +321,74 @@ class FeedPostScreen extends GetView<FeedPostController> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.w),
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      decoration: const BoxDecoration(
-        border: Border.symmetric(
-          horizontal: BorderSide(color: Color(0xffe6e6e6)),
-        ),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              Get.bottomSheet(const TagListScreen());
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: '#249CFC'.hexColor,
-                ),
-                borderRadius: BorderRadius.circular(4.r),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                '+ 插入话题',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: '#249CFC'.hexColor,
-                ),
-              ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            ...List.generate(
+              controller.tagList.length,
+              (index) {
+                final tag = controller.tagList[index];
+                return GestureDetector(
+                  onTap: () => controller.removeTag(index),
+                  child: Stack(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
+                        margin: EdgeInsets.all(5.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: '#249CFC'.hexColor),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          tag.name ?? '',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: '#249CFC'.hexColor,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0.w,
+                        top: 0.w,
+                        child: GestureDetector(
+                          onTap: () => controller.removeTag(index),
+                          child: Assets.images.closeBlack.image(
+                            width: 10.w,
+                            height: 10.w,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          ),
-        ],
+            if (controller.tagList.length < controller.tagMaxLength)
+              GestureDetector(
+                onTap: controller.toAddTag,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
+                  margin: EdgeInsets.all(5.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: '#249CFC'.hexColor),
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '+ 插入话题（${controller.tagList.length}/${controller.tagMaxLength}）',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: '#249CFC'.hexColor,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -12,7 +12,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
-import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -150,7 +150,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           child: bookDetail(),
         ),
         bottomSheet: loaded
-            ? PostDetailBottomView(
+            ? FeedDetailBottomView(
                 viewParams: PostBottomViewParams(
                 postId: widget.id,
                 relId: widget.id,

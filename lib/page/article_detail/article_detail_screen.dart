@@ -16,11 +16,12 @@ import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
-import 'package:holdem/widget/post_detail_bottom_view.dart';
+import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:html/dom.dart' as dom;
+
 part 'article_detail_controller.dart';
 
 class ArticleDetailScreen extends GetView<ArticleDetailController> {
@@ -66,7 +67,7 @@ class ArticleDetailScreen extends GetView<ArticleDetailController> {
                         return null;
                       },
                       onTapUrl: (String url) async {
-                        return launchUrlString(url, mode : LaunchMode.externalApplication);
+                        return launchUrlString(url, mode: LaunchMode.externalApplication);
                       },
                     ),
                   SizedBox(height: 16.w),
@@ -95,8 +96,8 @@ class ArticleDetailScreen extends GetView<ArticleDetailController> {
                 ],
               ),
             ),
-            bottomSheet: controller.detailBean != null
-                ? PostDetailBottomView(
+            bottomNavigationBar: controller.detailBean != null
+                ? FeedDetailBottomView(
                     viewParams: PostBottomViewParams(
                       postId: controller.id,
                       relId: controller.id,
@@ -109,6 +110,7 @@ class ArticleDetailScreen extends GetView<ArticleDetailController> {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                     ),
+                    tagList: controller.detailBean?.tagList ?? [],
                   )
                 : const SizedBox(),
           ),

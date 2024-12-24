@@ -117,9 +117,7 @@ class HttpUtils {
   }) async {
     Response response;
     try {
-      response = params == null
-          ? await Http.dio.get(url, options: options)
-          : await Http.dio.get(url, queryParameters: params, options: options);
+      response = await Http.dio.get(url, queryParameters: params ?? {}, options: options);
 
       return ResBaseModel.fromJson(response.data);
     } on DioException catch (e) {
@@ -135,9 +133,7 @@ class HttpUtils {
   }) async {
     Response response;
     try {
-      response = params == null
-          ? await Http.dio.post(url, options: options)
-          : await Http.dio.post(url, data: params, options: options);
+      response = await Http.dio.post(url, data: params ?? {}, options: options);
 
       final res = response.data as Map<String, dynamic>?;
       if (res == null) return null;

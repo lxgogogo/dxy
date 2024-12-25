@@ -48,6 +48,7 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
               title: '详情',
             ),
             backgroundColor: Colors.transparent,
+            extendBody: true,
             body: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
               child: Column(

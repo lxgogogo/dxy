@@ -14,12 +14,10 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
+import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
-import 'package:holdem/widget/page_scroll_physics.dart';
-import 'package:holdem/widget/post_detail_bottom_view.dart';
 import 'package:lottie/lottie.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:video_player/video_player.dart';
 
@@ -42,6 +40,7 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
               title: '详情',
             ),
             backgroundColor: Colors.transparent,
+            extendBody: true,
             body: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
               child: Column(
@@ -109,7 +108,9 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 16.w),
+                  SizedBox(height: 12.w),
+                  if (controller.articleDetailBean?.tagList?.isNotEmpty == true)
+                    TagListView(tagList: controller.articleDetailBean?.tagList ?? []),
                   if (controller.articleDetailBean?.videoList?.isNotEmpty == true)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -235,7 +236,7 @@ class VideoDetailScreen extends GetView<VideoDetailController> {
               ),
             ),
             bottomSheet: controller.articleDetailBean != null
-                ? PostDetailBottomView(
+                ? FeedDetailBottomView(
                     viewParams: PostBottomViewParams(
                       postId: controller.id,
                       relId: controller.id,

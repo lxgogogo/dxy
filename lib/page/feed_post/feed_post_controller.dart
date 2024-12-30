@@ -14,37 +14,11 @@ class FeedPostController extends GetxController {
   final QuillController quillController = QuillController.basic();
   final FocusNode focusNode = FocusNode();
 
-  bool showKeyboard = false;
-
-  bool showTextStyle = false;
-
-  final textAttributes = [
-    AttributeModel(
-      '标题',
-      Attribute.header,
-      children: [
-        AttributeModel('H1 标题', Attribute.h1),
-        AttributeModel('H2 标题', Attribute.h2),
-        AttributeModel('H3 标题', Attribute.h3),
-        AttributeModel('H4 标题', Attribute.h4),
-        AttributeModel('H5 标题', Attribute.h5),
-      ],
-    ),
-    AttributeModel('加粗', Attribute.bold),
-    AttributeModel('引用', Attribute.blockQuote),
-    AttributeModel('有序列表', Attribute.ul),
-    AttributeModel('无序列表', Attribute.ol),
-    AttributeModel('分割线', Attribute.divider),
-  ];
-  bool showMore = false;
-
-  final moreAttributes = [
-    AttributeModel('添加链接', Attribute.link),
-    AttributeModel('添加视频', Attribute.video),
-    AttributeModel('提到', Attribute.at),
-  ];
-
   bool isClickPublish = false;
+
+  List<TagModel> tagList = [];
+
+  final int tagMaxLength = 5;
 
   @override
   void onInit() {
@@ -52,21 +26,12 @@ class FeedPostController extends GetxController {
     super.onInit();
   }
 
-  _openMore() {
-    SystemChannels.textInput.invokeMethod("TextInput.hide");
-    showKeyboard = false;
-    showTextStyle = false;
-    showMore = true;
-    safeUpdate();
-  }
-
-  _openTextStyle() {
-    SystemChannels.textInput.invokeMethod("TextInput.hide");
-    showKeyboard = false;
-    showTextStyle = true;
-    textAttributes.first.isSelected = false;
-    showMore = false;
-    safeUpdate();
+  @override
+  void onReady() {
+    super.onReady();
+    focusNode.addListener(() {
+      safeUpdate();
+    });
   }
 
   void publishPosts() async {
@@ -77,9 +42,9 @@ class FeedPostController extends GetxController {
     );
     final atList = [];
     converter.renderCustomWith = ((customOp, contextOp) {
-      if (customOp.insert.type == 'divider') {
-        return '<hr/>';
-      }
+      // if (customOp.insert.type == 'divider') {
+      //   return '<hr/>';
+      // }
       if (customOp.insert.type == 'at') {
         final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
         atList.add(dataMap['id']);
@@ -120,6 +85,7 @@ class FeedPostController extends GetxController {
       currentBord!.id!,
       atList: atList,
       files: imageList,
+      tagIds: tagList.map((e) => e.id).toList(),
     )
         .whenComplete(() {
       isClickPublish = false;
@@ -129,16 +95,6 @@ class FeedPostController extends GetxController {
 
       Get.back();
     }
-  }
-
-  bool onTapDownEditor(TapDragDownDetails details, TextPosition Function(Offset offset) function) {
-    if (!showKeyboard) {
-      showKeyboard = true;
-      showTextStyle = false;
-      showMore = false;
-      safeUpdate();
-    }
-    return false;
   }
 
   Future<void> onImageInsertCallback(String image, QuillController controller) async {
@@ -170,5 +126,21 @@ class FeedPostController extends GetxController {
         controller.insertImageBlock(imageSource: '$imageUrl\$\$$image\$\$');
       }
     }
+  }
+
+  Future<void> toAddTag() async {
+    final tag = await Get.bottomSheet<TagModel?>(
+      const TagListScreen(),
+      isScrollControlled: true,
+    );
+    if (tag != null) {
+      tagList.add(tag);
+      safeUpdate();
+    }
+  }
+
+  void removeTag(int index) {
+    tagList.removeAt(index);
+    safeUpdate();
   }
 }

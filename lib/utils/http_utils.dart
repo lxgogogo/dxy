@@ -110,16 +110,14 @@ class HttpUtils {
   }
 
   /// GET 请求
-  Future<ResBaseModel?> getNew(
+  static Future<ResBaseModel?> getNew(
     String url, {
     Map<String, dynamic>? params,
     Options? options,
   }) async {
     Response response;
     try {
-      response = params == null
-          ? await Http().get(url, options: options)
-          : await Http().get(url, params: params, options: options);
+      response = await Http.dio.get(url, queryParameters: params ?? {}, options: options);
 
       return ResBaseModel.fromJson(response.data);
     } on DioException catch (e) {
@@ -128,14 +126,14 @@ class HttpUtils {
   }
 
   /// POST 请求
-  Future<ResBaseModel?> postNew(
+  static Future<ResBaseModel?> postNew(
     String url, {
     Map<String, dynamic>? params,
     Options? options,
   }) async {
     Response response;
     try {
-      response = await Http().post(url, params: params, options: options);
+      response = await Http.dio.post(url, data: params ?? {}, options: options);
 
       final res = response.data as Map<String, dynamic>?;
       if (res == null) return null;
@@ -145,7 +143,7 @@ class HttpUtils {
     }
   }
 
-  ResBaseModel? _handleError(DioException e) {
+  static ResBaseModel? _handleError(DioException e) {
     String msg = 'Unknown error';
     switch (e.type) {
       case DioExceptionType.connectionTimeout:

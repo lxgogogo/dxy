@@ -20,7 +20,7 @@ class ResBaseModel {
   String msg;
   dynamic data;
   DioException? exception;
-  bool get isSuccess => code == 0;
+  bool get isSuccess => code == 200;
   bool get hasException => exception != null;
 
   ResBaseModel copyWith({

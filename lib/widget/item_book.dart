@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
@@ -29,19 +30,19 @@ class _BookItemState extends State<BookItem> {
         });
       },
       child: LinearCard(
-        margin: EdgeInsets.only(top: 10.px, left: 16.px, right: 16.px, bottom: 2.px),
-        padding: EdgeInsets.only(left: 15.px, right: 12.px, top: 10.px, bottom: 12.px),
+        margin: EdgeInsets.only(top: 10.w, left: 16.w, right: 16.w, bottom: 2.w),
+        padding: EdgeInsets.only(left: 15.w, right: 12.w, top: 10.w, bottom: 12.w),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               clipBehavior: Clip.antiAlias,
-              margin: EdgeInsets.only(right: 18.px),
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(3.px))),
+              margin: EdgeInsets.only(right: 18.w),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(3.w))),
               child: CachedNetworkImage(
                 imageUrl: widget.article.cover ?? '',
-                width: 51.px,
-                height: 68.px,
+                width: 51.w,
+                height: 68.w,
                 fit: BoxFit.cover,
               ),
             ),
@@ -53,25 +54,25 @@ class _BookItemState extends State<BookItem> {
                     widget.article.title ?? '',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 15.px, height: 1.3),
+                    style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 15.w, height: 1.3),
                   ),
                   SizedBox(
-                    height: 4.px,
+                    height: 4.w,
                   ),
                   Text(
                     widget.article.author ?? '',
                     maxLines: 1,
-                    style: TextStyle(color: const Color(0xff5D6E8E), fontSize: 12.px, height: 1.2),
+                    style: TextStyle(color: const Color(0xff5D6E8E), fontSize: 12.w, height: 1.2),
                   ),
                   SizedBox(
-                    height: 10.px,
+                    height: 10.w,
                   ),
                   Row(
                     children: [
                       Expanded(
                         child: Text(
                           '阅读 ${widget.article.viewCount}',
-                          style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
+                          style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.w),
                         ),
                       ),
                       Expanded(
@@ -79,15 +80,15 @@ class _BookItemState extends State<BookItem> {
                           children: [
                             Image.asset(
                               'assets/images/comment.png',
-                              width: 13.px,
-                              height: 12.px,
+                              width: 13.w,
+                              height: 12.w,
                             ),
                             SizedBox(
-                              width: 4.px,
+                              width: 4.w,
                             ),
                             Text(
                               widget.article.commentCount.toString(),
-                              style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
+                              style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.w),
                             )
                           ],
                         ),
@@ -97,15 +98,15 @@ class _BookItemState extends State<BookItem> {
                           children: [
                             Image.asset(
                               'assets/images/star.png',
-                              width: 11.px,
-                              height: 12.px,
+                              width: 11.w,
+                              height: 12.w,
                             ),
                             SizedBox(
-                              width: 4.px,
+                              width: 4.w,
                             ),
                             Text(
                               widget.article.favoriteCount.toString(),
-                              style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.px),
+                              style: TextStyle(color: Color(0xff9CACC9), fontSize: 12.w),
                             )
                           ],
                         ),

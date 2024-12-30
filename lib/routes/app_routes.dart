@@ -12,6 +12,7 @@ abstract class Routes {
   static const forgetPassword = '/forgetPassword';
   static const main = '/main';
   static const search = '/search';
+  static const searchTag = '/searchTag';
   static const home = '/home';
   static const feedList = '/feedList';
   static const setting = '/setting';

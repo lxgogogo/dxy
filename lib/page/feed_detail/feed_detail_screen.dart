@@ -15,6 +15,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
+import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
@@ -29,7 +30,6 @@ import '../../model/comment_list.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/media_helper.dart';
 import '../../widget/circle_image_with_text.dart';
-import '../../widget/post_detail_bottom_view.dart';
 
 part 'feed_detail_controller.dart';
 
@@ -48,6 +48,7 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
               title: '详情',
             ),
             backgroundColor: Colors.transparent,
+            extendBody: true,
             body: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
               child: Column(
@@ -140,7 +141,7 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                         return null;
                       },
                       onTapUrl: (String url) async {
-                        return launchUrlString(url, mode : LaunchMode.externalApplication);
+                        return launchUrlString(url, mode: LaunchMode.externalApplication);
                       },
                     ),
                   // _buildMediaView(),
@@ -174,8 +175,8 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                 ],
               ),
             ),
-            bottomSheet: controller.detailBean != null
-                ? PostDetailBottomView(
+            bottomNavigationBar: controller.detailBean != null
+                ? FeedDetailBottomView(
                     viewParams: PostBottomViewParams(
                       postId: controller.id,
                       relId: controller.id,
@@ -188,6 +189,7 @@ class FeedDetailScreen extends GetView<FeedDetailController> {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                     ),
+                    tagList: controller.detailBean?.tagList ?? [],
                   )
                 : const SizedBox(),
           ),

@@ -21,7 +21,7 @@ import 'package:holdem/widget/item_course.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../model/board_list.dart';
 
 class HomeChildView extends StatefulWidget {
@@ -374,7 +374,15 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
   }
 
   jumpPage(BannerBean bean) {
-    var id = int.parse(bean.jumpValue!);
+    if (bean.jumpValue == null ) return;
+    if (bean.jumpType == 'url') {
+      if (bean.jumpValue?.isNotEmpty == true) {
+        launchUrlString(bean.jumpValue!, mode: LaunchMode.externalApplication);
+      }
+      return;
+    }
+    var id = int.tryParse(bean.jumpValue!);
+    if (id == null ) return;
     if (bean.jumpType == 'book') {
       Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {

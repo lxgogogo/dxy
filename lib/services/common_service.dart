@@ -5,8 +5,30 @@ class CommonService {
 
   CommonService._();
 
-  Future saveReview() async {
-    final res = await HttpUtils.post(Api.saveReview, showLoading: false);
+  Future<void> saveReview() async {
+    await HttpUtils.postNew(Api.saveReview);
+  }
+
+  Future<ResBaseModel> tagIndex({
+    required int pageNum,
+    int pageSize = 20,
+    String keyword = '',
+    bool isShowLoading = false,
+  }) async {
+    if (isShowLoading) {
+      EasyLoading.show(status: 'loading...');
+    }
+    final res = await HttpUtils.postNew(Api.tagIndex, params: {
+      'pageNum': pageNum,
+      'pageSize': pageSize,
+      'filters': {
+        'q': keyword,
+      }
+    }).whenComplete(() {
+      if (isShowLoading) {
+        EasyLoading.dismiss();
+      }
+    });
     return res ?? ResBaseModel.defaultRes;
   }
 }

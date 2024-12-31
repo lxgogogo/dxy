@@ -24,14 +24,15 @@ import 'package:html/dom.dart' as dom;
 
 part 'article_detail_controller.dart';
 
-class ArticleDetailScreen extends GetView<ArticleDetailController> {
+class ArticleDetailScreen extends StatelessWidget {
   const ArticleDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ArticleDetailController>(
       init: ArticleDetailController(),
-      builder: (logic) {
+      global: false,
+      builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(
             appBar: CommonAppBar.arrowBack(

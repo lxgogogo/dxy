@@ -38,8 +38,7 @@ class UserStore extends GetxController {
 }
 
 extension UserStoreFunc on UserStore {
-  bool isMe(String? otherUserId) {
-    return false;
-    // return otherUserId?.isNotEmpty == true && otherUserId == userId;
+  bool isMe(int? otherUserId) {
+    return otherUserId != null && otherUserId == user.id;
   }
 }

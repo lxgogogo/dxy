@@ -130,7 +130,7 @@ class FeedItem extends StatelessWidget {
             children: [
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/images/praise.png',
@@ -150,7 +150,7 @@ class FeedItem extends StatelessWidget {
               ),
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/images/comment.png',
@@ -170,7 +170,7 @@ class FeedItem extends StatelessWidget {
               ),
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/images/star.png',
@@ -190,7 +190,7 @@ class FeedItem extends StatelessWidget {
               ),
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/images/share.png',
@@ -275,81 +275,6 @@ class FeedItem extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget mediaContent(List<UploadFile> files) {
-    int picCount = files.length;
-    if (picCount == 1 && files[0].type == 'image') {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: CachedNetworkImage(
-          imageUrl: getFilesUrl(files[0]),
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: 179.w,
-          placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-          errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-        ),
-      );
-    } else if (picCount == 1 && files[0].type == 'video') {
-      //视频
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0), // 设置圆角半径
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: CachedNetworkImage(
-                imageUrl: getFilesUrl(files[0]),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 179.w,
-                placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-              ),
-            ),
-            Image.asset(
-              'assets/images/play_btn.png',
-              width: 32.w,
-              height: 32.w,
-            ),
-          ],
-        ),
-      );
-    } else if (picCount == 2) {
-      return multipleImageWrap(2, files.map((e) => getFilesUrl(e)).toList());
-    } else if (picCount >= 3) {
-      return multipleImageWrap(3, files.map((e) => getFilesUrl(e)).toList());
-    }
-    return const SizedBox();
-  }
-
-  Widget multipleImageWrap(int imageCount, List<String> imgUrlList) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final itemWidth = (constraints.maxWidth - 2 * 6.w) / imageCount;
-      return Wrap(
-        spacing: 6.w,
-        runSpacing: 6.w,
-        children: List.generate(
-          imgUrlList.length,
-          (index) {
-            String imageUrl = imgUrlList.length > index ? imgUrlList[index] : '';
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.cover,
-                width: itemWidth,
-                height: itemWidth,
-                placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-              ),
-            );
-          },
-        ).toList(),
-      );
-    });
   }
 
   String getFilesUrl(UploadFile uploadFile) {

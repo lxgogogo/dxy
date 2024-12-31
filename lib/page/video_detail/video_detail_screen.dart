@@ -25,14 +25,15 @@ import '../../widget/background_container.dart';
 
 part 'video_detail_controller.dart';
 
-class VideoDetailScreen extends GetView<VideoDetailController> {
+class VideoDetailScreen extends StatelessWidget {
   const VideoDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<VideoDetailController>(
       init: VideoDetailController(),
-      builder: (logic) {
+      global: false,
+      builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(
             appBar: CommonAppBar.arrowBack(

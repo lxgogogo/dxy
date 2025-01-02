@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/login/widgets/user_terms.dart';
+import 'package:holdem/page/login/widgets/user_terms_uncheck.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -67,6 +69,25 @@ class _LoginContentState extends State<LoginContent> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void reviewTerms() {
+    Get.toNamed(
+      Routes.termsAndPrivacy,
+      arguments: {
+        'title': '用户协议',
+      },
+    );
+  }
+
+  void reviewPrivacy() {
+    Get.toNamed(
+      Routes.termsAndPrivacy,
+      arguments: {
+        'title': '隐私政策',
+        'url': 'https://privacyagreement.dxbet.com/',
+      },
+    );
   }
 
   @override
@@ -199,9 +220,12 @@ class _LoginContentState extends State<LoginContent> {
               ),
             ],
           ),
-          SizedBox(
-            height: 60.w,
+          SizedBox(height: 36.w),
+          UserTermsUncheck(
+            reviewTerms: reviewTerms,
+            reviewPrivacy: reviewPrivacy,
           ),
+          SizedBox(height: 12.w),
           CustomButton(
             onPressed: login,
             disable: _isLoginDisable,

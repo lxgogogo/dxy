@@ -5,22 +5,24 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/linear_card.dart';
 
 import '../gen/assets.gen.dart';
 import '../model/board_list.dart';
+import 'feed_more_action.dart';
 
 class FeedItem extends StatelessWidget {
   final BoardBean item;
   final bool isMyPost;
+  final VoidCallback? onShield;
 
   const FeedItem(
     this.item, {
     super.key,
     this.isMyPost = false,
+    this.onShield,
   });
 
   @override
@@ -47,7 +49,9 @@ class FeedItem extends StatelessWidget {
                     if (item.sign?.isNotEmpty == true) tagWidget(item.sign!),
                   ],
                 ),
-              )
+              ),
+              SizedBox(width: 8.w),
+              if (onShield != null) FeedMoreAction(onShield: onShield),
             ],
           ),
           SizedBox(height: 8.w),

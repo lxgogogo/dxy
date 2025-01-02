@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/login/widgets/user_terms.dart';
 import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
@@ -61,7 +63,8 @@ class _RegisterContentState extends State<RegisterContent> {
         password.isEmpty ||
         isShowPwTips ||
         againPw.isEmpty ||
-        isShowAgainTips;
+        isShowAgainTips ||
+        !_didAgreeTerms.value;
     setState(() {});
   }
 
@@ -82,33 +85,71 @@ class _RegisterContentState extends State<RegisterContent> {
         password.isEmpty ||
         isShowPwTips ||
         againPw.isEmpty ||
-        isShowAgainTips;
+        isShowAgainTips ||
+        !_didAgreeTerms.value;
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
+    _didAgreeTerms = ValueNotifier<bool>(false);
+    _didAgreeTerms.addListener(() {
+      onChangeCheckValid();
+    });
     _focusEmail.addListener(() {
-      if(!_focusEmail.hasFocus) {
+      if (!_focusEmail.hasFocus) {
         checkValid();
       }
     });
     _focusCode.addListener(() {
-      if(!_focusCode.hasFocus) {
+      if (!_focusCode.hasFocus) {
         checkValid();
       }
     });
     _focusPw.addListener(() {
-      if(!_focusPw.hasFocus) {
+      if (!_focusPw.hasFocus) {
         checkValid();
       }
     });
     _focusAgainPw.addListener(() {
-      if(!_focusAgainPw.hasFocus) {
+      if (!_focusAgainPw.hasFocus) {
         checkValid();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _didAgreeTerms.dispose();
+    super.dispose();
+  }
+
+  ///隐私协议
+  ValueNotifier<bool> get didAgreeTerms => _didAgreeTerms;
+  late ValueNotifier<bool> _didAgreeTerms;
+
+  void onTermsCheck() {
+    _didAgreeTerms.value = !_didAgreeTerms.value;
+  }
+
+  void reviewTerms() {
+    Get.toNamed(
+      Routes.termsAndPrivacy,
+      arguments: {
+        'title': '用户协议',
+      },
+    );
+  }
+
+  void reviewPrivacy() {
+    Get.toNamed(
+      Routes.termsAndPrivacy,
+      arguments: {
+        'title': '隐私政策',
+        'url': 'https://privacyagreement.dxbet.com/',
+      },
+    );
   }
 
   void _startCountdown() {
@@ -208,28 +249,28 @@ class _RegisterContentState extends State<RegisterContent> {
                 ),
                 _isCountingDown
                     ? Text(
-                  '${_countdown}s',
-                  style: AppTheme.text008EFFSize16,
-                )
+                        '${_countdown}s',
+                        style: AppTheme.text008EFFSize16,
+                      )
                     : GestureDetector(
-                  onTap: () {
-                    var email = _controllerEmail.text;
-                    if (email.isEmpty) {
-                      ToastUtils.showToast('邮箱不能为空');
-                      return;
-                    }
-                    if (!GetUtils.isEmail(email)) {
-                      ToastUtils.showToast('请输入正确格式邮箱');
-                      return;
-                    }
-                    _startCountdown(); //启动倒计时
-                    NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_REGISTER, email, (data) {});
-                  },
-                  child: Text(
-                    '发送验证码',
-                    style: AppTheme.text008EFFSize16,
-                  ),
-                )
+                        onTap: () {
+                          var email = _controllerEmail.text;
+                          if (email.isEmpty) {
+                            ToastUtils.showToast('邮箱不能为空');
+                            return;
+                          }
+                          if (!GetUtils.isEmail(email)) {
+                            ToastUtils.showToast('请输入正确格式邮箱');
+                            return;
+                          }
+                          _startCountdown(); //启动倒计时
+                          NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_REGISTER, email, (data) {});
+                        },
+                        child: Text(
+                          '发送验证码',
+                          style: AppTheme.text008EFFSize16,
+                        ),
+                      )
               ],
             ),
           ),
@@ -349,7 +390,14 @@ class _RegisterContentState extends State<RegisterContent> {
               ),
             ),
           ),
-          SizedBox(height: 10.w),
+          SizedBox(height: 36.w),
+          UserTerms(
+            onTermsCheck: onTermsCheck,
+            didAgreeTerms: didAgreeTerms,
+            reviewTerms: reviewTerms,
+            reviewPrivacy: reviewPrivacy,
+          ),
+          SizedBox(height: 12.w),
           CustomButton(
             onPressed: registerOrConfirm,
             disable: _isLoginDisable,

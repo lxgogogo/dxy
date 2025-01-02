@@ -18,6 +18,7 @@ import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/search_tag/search_tag_screen.dart';
+import 'package:holdem/page/terms_privacy/terms_privacy_screen.dart';
 import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/login/login_screen.dart';
@@ -40,6 +41,10 @@ class AppPages {
     GetPage(
       name: Routes.splash,
       page: () => const SplashScreen(),
+    ),
+    GetPage(
+      name: Routes.termsAndPrivacy,
+      page: () => const TermsPrivacyPage(),
     ),
     GetPage(
       name: Routes.login,

@@ -8,6 +8,7 @@ abstract class Routes {
   static List<String> history = [];
 
   static const splash = '/splash';
+  static const termsAndPrivacy = '/termsAndPrivacy';
   static const login = '/login';
   static const forgetPassword = '/forgetPassword';
   static const main = '/main';

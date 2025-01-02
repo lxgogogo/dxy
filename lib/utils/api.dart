@@ -21,6 +21,7 @@ class Api {
   static const String messageBadge = '/api/message/badge';
 
   static const String threadCreate = '/api/thread/create';
+  static const String threadShield = '/api/thread/shield';
   static const String threadShow = '/api/thread/show';
   static const String uploadFile = '/api/upload';
 

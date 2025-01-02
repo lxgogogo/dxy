@@ -777,4 +777,18 @@ class NetRequest {
     }
     return resp.code == 200;
   }
+
+  ///屏蔽帖子
+  Future<bool> shieldFeed(int id) async {
+    Map<String, Object> params = {};
+    params['id'] = id;
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadShield, params: params, showLoading: false);
+    util_response.Response resp = util_response.Response.fromJson(response);
+    if (resp.code == 200) {
+      ToastUtils.showToast('屏蔽成功');
+    } else {
+      ToastUtils.showToast(resp.message ?? '未知错误');
+    }
+    return resp.code == 200;
+  }
 }

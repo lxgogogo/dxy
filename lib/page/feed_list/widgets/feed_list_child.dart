@@ -2,20 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:group_button/group_button.dart';
 import 'package:holdem/model/board_list.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
-import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../utils/constants.dart';
 import '../../../utils/eventbus/EventBusAction.dart';
 import '../../../utils/eventbus/EventBusManager.dart';
-import '../../../utils/log_utils.dart';
 import '../../../widget/item_feed.dart';
 
 class ForumTabChildPage extends StatefulWidget {
@@ -106,6 +100,14 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     });
   }
 
+  Future<void> onShied(int id) async {
+    final success = await NetRequest().shieldFeed(id);
+    if (success) {
+      pageNum = 1;
+      reqListData();
+    }
+  }
+
   @override
   void dispose() {
     _listController.dispose(); // 释放资源
@@ -126,7 +128,13 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
           ? ListView.builder(
               controller: _listController,
               itemBuilder: (c, i) {
-                return FeedItem(boardPostList[i]);
+                return FeedItem(boardPostList[i], onShield: () {
+                  if (boardPostList[i].id != null) {
+                    UserStore.of.checkLogin(() {
+                      onShied.call(boardPostList[i].id!);
+                    });
+                  }
+                });
               },
               itemCount: boardPostList.length,
             )

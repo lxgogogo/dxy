@@ -119,7 +119,7 @@ class BoardBean {
       user = UserProfile.fromJson(json['user']);
     }
     if (json['board'] != null) {
-      board = BoardInfo.fromJson(json['user']);
+      board = BoardInfo.fromJson(json['board']);
     }
 
     if (json["commentCount"] is int) {

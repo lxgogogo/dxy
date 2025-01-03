@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
@@ -217,7 +218,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               ),
                               Row(children: [
                                 GestureDetector(
-                                  child: Text('${userProfile?.followedCount ?? 0} 关注',
+                                  child: Text('${userProfile?.followedCount.abbreviateNumber ?? '0'} 关注',
                                       style: TextStyle(
                                         color: const Color(0xff2a2a2a),
                                         fontSize: 12.px,
@@ -233,7 +234,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 ),
                                 GestureDetector(
                                   child: Text(
-                                    '${userProfile?.fansCount ?? 0} 粉丝',
+                                    '${userProfile?.fansCount.abbreviateNumber ?? '0'} 粉丝',
                                     style: TextStyle(
                                       color: const Color(0xff2a2a2a),
                                       fontSize: 12.px,

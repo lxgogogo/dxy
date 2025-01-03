@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -9,6 +10,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/count_widget.dart';
 
 import '../utils/toast_utils.dart';
 
@@ -57,7 +59,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           ),
         Container(
           height: 68.w,
-          padding: EdgeInsets.only(left: 25.w, top: 15.w),
+          padding: EdgeInsets.only(top: 16.w),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
@@ -65,6 +67,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           alignment: Alignment.topCenter,
           child: Row(
             children: <Widget>[
+              SizedBox(width: 8.w),
               Expanded(
                 child: InkWell(
                   onTap: _pushComment,
@@ -99,98 +102,29 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                   ),
                 ),
               ),
+              SizedBox(width: 8.w),
               if (viewParams.relType == 'thread')
                 InkWell(
                   onTap: _likeToggle,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          viewParams.liked == true ? 'assets/images/praised.png' : 'assets/images/praise.png',
-                          width: 13.w,
-                          height: 13.w,
-                        ),
-                        SizedBox(width: 4.w),
-                        Text(
-                          '${viewParams.likeCount}',
-                          style: TextStyle(
-                            color: const Color(0xff9cacc9),
-                            fontSize: 12.sp,
-                          ),
-                        )
-                      ],
-                    ),
+                  child: CountLike(
+                    count: viewParams.likeCount.abbreviateNumber,
+                    liked: viewParams.liked == true,
                   ),
                 ),
               InkWell(
                 onTap: _favoriteToggle,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        viewParams.favoriteState == true ? 'assets/images/stared.png' : 'assets/images/star.png',
-                        width: 13.w,
-                        height: 13.w,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        '${viewParams.favoriteCount}',
-                        style: TextStyle(
-                          color: const Color(0xff9cacc9),
-                          fontSize: 12.sp,
-                        ),
-                      )
-                    ],
-                  ),
+                child: CountFavorite(
+                  count: viewParams.favoriteCount.abbreviateNumber,
+                  stared: viewParams.favoriteState == true,
                 ),
               ),
               InkWell(
                 onTap: _toCommentList,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/comment.png',
-                        width: 13.w,
-                        height: 13.w,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        '${viewParams.commentCount}',
-                        style: TextStyle(
-                          color: const Color(0xff9cacc9),
-                          fontSize: 12.sp,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                child: CountComment(count: viewParams.commentCount.abbreviateNumber),
               ),
               InkWell(
                 onTap: _toShare,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/share.png',
-                        width: 13.w,
-                        height: 13.w,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        '${viewParams.shareCount}',
-                        style: TextStyle(
-                          color: const Color(0xff9cacc9),
-                          fontSize: 12.sp,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                child: CountShare(count: viewParams.shareCount.abbreviateNumber),
               ),
             ],
           ),

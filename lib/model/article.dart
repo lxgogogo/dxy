@@ -10,6 +10,7 @@ class ArticleBean {
   int? favoriteCount;
   int? id;
   int? likeCount;
+  int? shareCount;
   String? title;
   String? type;
   DateTime? updatedAt;
@@ -25,6 +26,7 @@ class ArticleBean {
       this.favoriteCount,
       this.id,
       this.likeCount,
+      this.shareCount,
       this.title,
       this.type,
       this.updatedAt});
@@ -63,6 +65,9 @@ class ArticleBean {
     if (json["likeCount"] is num) {
       likeCount = json["likeCount"];
     }
+    if (json["shareCount"] is num) {
+      shareCount = json["shareCount"];
+    }
     if (json["title"] is String) {
       title = json["title"];
     }
@@ -85,6 +90,7 @@ class ArticleBean {
     _data["favorite_count"] = favoriteCount;
     _data["id"] = id;
     _data["like_count"] = likeCount;
+    _data["shareCount"] = shareCount;
     _data["title"] = title;
     _data["type"] = type;
     _data["updated_at"] = updatedAt;

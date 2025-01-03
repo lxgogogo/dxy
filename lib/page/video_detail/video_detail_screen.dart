@@ -5,6 +5,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
@@ -213,7 +214,7 @@ class VideoDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        '评论(${controller.articleDetailBean?.commentCount ?? 0})',
+                        '评论(${controller.articleDetailBean?.commentCount?.abbreviateNumber ?? '0'})',
                         style: TextStyle(
                           color: const Color(0xff2a2a2a),
                           fontSize: 12.sp,

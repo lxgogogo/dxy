@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:intl/intl.dart';
 
@@ -170,8 +172,8 @@ class MessageCommonItem extends StatelessWidget {
                                 ),
                               )
                             : Column(
-                              children: [
-                                Row(
+                                children: [
+                                  Row(
                                     children: [
                                       if (cover?.isNotEmpty == true)
                                         Padding(
@@ -236,70 +238,22 @@ class MessageCommonItem extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                SizedBox(height: 8.w),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/praise.png',
-                                            width: 13.w,
-                                            height: 13.w,
-                                          ),
-                                          SizedBox(width: 6.w),
-                                          Text(
-                                            '${likeCount ?? 0}',
-                                            style: TextStyle(
-                                              color: const Color(0xff9CACC9),
-                                              fontSize: 10.sp,
-                                            ),
-                                          )
-                                        ],
+                                  SizedBox(height: 8.w),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CountLike(count: likeCount?.abbreviateNumber ?? '0'),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/star.png',
-                                            width: 13.w,
-                                            height: 13.w,
-                                          ),
-                                          SizedBox(width: 6.w),
-                                          Text(
-                                            '${favoriteCount ?? 0}',
-                                            style: TextStyle(
-                                              color: const Color(0xff9CACC9),
-                                              fontSize: 10.sp,
-                                            ),
-                                          )
-                                        ],
+                                      Expanded(
+                                        child: CountFavorite(count: favoriteCount?.abbreviateNumber ?? '0'),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/comment.png',
-                                            width: 13.w,
-                                            height: 13.w,
-                                          ),
-                                          SizedBox(width: 6.w),
-                                          Text(
-                                            '${commentCount ?? 0}',
-                                            style: TextStyle(
-                                              color: const Color(0xff9CACC9),
-                                              fontSize: 10.sp,
-                                            ),
-                                          )
-                                        ],
+                                      Expanded(
+                                        child: CountComment(count: commentCount?.abbreviateNumber ?? '0'),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                       )
                     ],
                   ),

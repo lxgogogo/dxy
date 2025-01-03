@@ -7,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/media_helper.dart';
@@ -14,6 +15,7 @@ import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/count_widget.dart';
 import 'package:intl/intl.dart';
 import '../page/mine/login_helper.dart';
 
@@ -136,23 +138,9 @@ class _CommentItemState extends State<CommentItem> {
                           });
                         });
                       },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            widget.commentBean.liked ?? false
-                                ? 'assets/images/praised.png'
-                                : 'assets/images/praise.png',
-                            width: 11.w,
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            widget.commentBean.likeCount!.toString(),
-                            style: TextStyle(
-                              color: const Color(0xff9CACC9),
-                              fontSize: 10.w,
-                            ),
-                          )
-                        ],
+                      child: CountLike(
+                        count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
+                        liked: widget.commentBean.liked ?? false,
                       ),
                     ),
                     SizedBox(width: 32.w),
@@ -167,21 +155,8 @@ class _CommentItemState extends State<CommentItem> {
                           );
                         });
                       },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/comment.png',
-                            width: 13.w,
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            widget.commentBean.replyCount!.toString(),
-                            style: TextStyle(
-                              color: const Color(0xff9CACC9),
-                              fontSize: 10.w,
-                            ),
-                          )
-                        ],
+                      child: CountComment(
+                        count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
                       ),
                     ),
                   ],
@@ -257,23 +232,9 @@ class _CommentItemState extends State<CommentItem> {
                                                 });
                                               });
                                             },
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  reply.liked ?? false
-                                                      ? 'assets/images/praised.png'
-                                                      : 'assets/images/praise.png',
-                                                  width: 11.w,
-                                                ),
-                                                SizedBox(width: 6.w),
-                                                Text(
-                                                  reply.likeCount!.toString(),
-                                                  style: TextStyle(
-                                                    color: const Color(0xff9CACC9),
-                                                    fontSize: 10.w,
-                                                  ),
-                                                )
-                                              ],
+                                            child: CountLike(
+                                              count: reply.likeCount.abbreviateNumber,
+                                              liked: reply.liked ?? false,
                                             ),
                                           ),
                                         ],

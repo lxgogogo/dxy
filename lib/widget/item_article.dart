@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/media_helper.dart';
-import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:intl/intl.dart';
 
@@ -37,79 +40,74 @@ class _ArticleItemState extends State<ArticleItem> {
         Get.toNamed(Routes.articleDetail, arguments: widget.article.id ?? 0);
       },
       child: LinearCard(
-          margin: EdgeInsets.only(top: 10.w, left: 16.w, right: 16.w),
-          padding: EdgeInsets.only(left: 20.w, right: 12.w, top: 5.w, bottom: 5.w),
-          child: itemContent()),
-    );
-  }
-
-  Widget itemContent() {
-    return Row(
-      children: [
-        Expanded(
-            child: SizedBox(
-          height: 80.w,
+        padding: EdgeInsets.only(bottom: 2.w),
+        margin: EdgeInsets.only(top: 10.w, left: 16.w, right: 16.w),
+        child: Padding(
+          padding: EdgeInsets.all(12.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 widget.article.title ?? '',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
                 style: TextStyle(
                   color: const Color(0xff2a2a2a),
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
                 ),
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              // Spacer(),
+              if (widget.article.description?.isNotEmpty == true)
+                Text(
+                  widget.article.description ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: const Color(0xff666666),
+                  ),
+                  softWrap: true,
+                ),
+              if (widget.article.cover?.isNotEmpty == true)
+                Padding(
+                  padding: EdgeInsets.only(top: 8.w),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.article.cover ?? '',
+                      fit: BoxFit.cover,
+                      height: 180.w,
+                      placeholder: (context, url) => Center(
+                        child: Assets.images.imageLoadingDef.image(),
+                      ),
+                      errorWidget: (context, url, error) => Center(
+                        child: Assets.images.imageLoadingDef.image(),
+                      ),
+                    ),
+                  ),
+                ),
+              SizedBox(height: 16.w),
               Row(
                 children: [
-                  Text(
-                    widget.article.createdAt != null ? DateFormat('yyyy-MM-dd').format(widget.article.createdAt!) : '',
-                    style: TextStyle(
-                      color: const Color(0xff9CACC9),
-                      fontSize: 12.sp,
-                    ),
+                  Expanded(
+                    child: CountLike(count: widget.article.likeCount?.abbreviateNumber ?? '0'),
                   ),
-                  SizedBox(
-                    width: 30.w,
+                  Expanded(
+                    child: CountComment(count: widget.article.commentCount?.abbreviateNumber ?? '0'),
                   ),
-                  Image.asset(
-                    'assets/images/comment.png',
-                    width: 13.w,
-                    height: 12.w,
+                  Expanded(
+                    child: CountFavorite(count: widget.article.favoriteCount?.abbreviateNumber ?? '0'),
                   ),
-                  SizedBox(
-                    width: 5.w,
+                  Expanded(
+                    child: CountShare(count: widget.article.shareCount?.abbreviateNumber ?? '0'),
                   ),
-                  Text(
-                    widget.article.commentCount.toString(),
-                    style: TextStyle(
-                      color: const Color(0xff9CACC9),
-                      fontSize: 12.sp,
-                    ),
-                  )
                 ],
-              )
+              ),
             ],
           ),
-        )),
-        Container(
-          width: 92.w,
-          height: 66.w,
-          margin: EdgeInsets.only(left: 15.w),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8.w)),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Stack(
-            children: [
-              MediaHelper().cacheLoadNetworkImage(widget.article.cover ?? '', 92.w, 66.w),
-            ],
-          ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }

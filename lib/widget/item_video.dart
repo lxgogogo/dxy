@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/media_helper.dart';
@@ -81,7 +82,7 @@ class _VideoItemState extends State<VideoItem> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${widget.article.viewCount!}次播放',
+                            '${widget.article.viewCount?.abbreviateNumber ?? '0'}次播放',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10.sp,

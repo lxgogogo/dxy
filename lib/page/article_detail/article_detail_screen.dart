@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
@@ -77,7 +78,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        '评论(${controller.detailBean?.commentCount ?? 0})',
+                        '评论(${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'})',
                         style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.w, fontWeight: FontWeight.w500),
                       ),
                       SizedBox(height: 10.w),

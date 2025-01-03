@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/linear_card.dart';
 
@@ -135,84 +137,16 @@ class FeedItem extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/praise.png',
-                      width: 13.w,
-                      height: 13.w,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      '${item.likeCount ?? 0}',
-                      style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 10.sp,
-                      ),
-                    )
-                  ],
-                ),
+                child: CountLike(count: item.likeCount?.abbreviateNumber ?? '0'),
               ),
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/comment.png',
-                      width: 13.w,
-                      height: 13.w,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      '${item.commentCount ?? 0}',
-                      style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 10.sp,
-                      ),
-                    )
-                  ],
-                ),
+                child: CountComment(count: item.commentCount?.abbreviateNumber ?? '0'),
               ),
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/star.png',
-                      width: 13.w,
-                      height: 13.w,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      '${item.favoriteCount ?? 0}',
-                      style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 10.sp,
-                      ),
-                    )
-                  ],
-                ),
+                child: CountFavorite(count: item.favoriteCount?.abbreviateNumber ?? '0'),
               ),
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/share.png',
-                      width: 13.w,
-                      height: 13.w,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      '${item.shareCount ?? 0}',
-                      style: TextStyle(
-                        color: const Color(0xff9CACC9),
-                        fontSize: 10.sp,
-                      ),
-                    )
-                  ],
-                ),
+                child: CountShare(count: item.shareCount?.abbreviateNumber ?? '0'),
               ),
             ],
           ),
@@ -234,7 +168,7 @@ class FeedItem extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(10.w, 12.w, 10.w, 0),
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.6),
-                borderRadius: BorderRadius.circular(12.rpx),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: child,
             )

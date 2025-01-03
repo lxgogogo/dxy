@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -245,7 +246,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                '评论(${articleDetailBean.commentCount})',
+                '评论(${articleDetailBean.commentCount.abbreviateNumber})',
                 style: TextStyle(
                   color: const Color(0xff2a2a2a),
                   fontSize: 12.sp,

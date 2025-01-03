@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
@@ -200,14 +201,14 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         Row(
           children: [
             Container(
-              width: 3.px,
-              height: 11.px,
-              margin: EdgeInsets.only(right: 5.px, left: 18.px),
-              decoration: BoxDecoration(color: const Color(0xff249CFC), borderRadius: BorderRadius.circular(1.5.px)),
+              width: 3.w,
+              height: 11.w,
+              margin: EdgeInsets.only(right: 5.w, left: 18.w),
+              decoration: BoxDecoration(color: const Color(0xff249CFC), borderRadius: BorderRadius.circular(1.5.w)),
             ),
             Text(
               bean.heading!,
-              style: TextStyle(color: const Color(0xff424242), fontSize: 14.px),
+              style: TextStyle(color: const Color(0xff424242), fontSize: 14.w),
             )
           ],
         ),
@@ -230,14 +231,14 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
 
   Widget buildHomeTabs() {
     return SizedBox(
-        height: 40.px,
+        height: 40.w,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 16.px,
+                width: 16.w,
               ),
               ...List.generate(categories.length, (index) {
                 return GestureDetector(
@@ -251,12 +252,12 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                     _scrollToTop();
                   },
                   child: Container(
-                    height: 30.px,
-                    margin: EdgeInsets.only(right: 10.px),
-                    padding: EdgeInsets.symmetric(horizontal: 15.px),
+                    height: 30.w,
+                    margin: EdgeInsets.only(right: 10.w),
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.px),
+                        borderRadius: BorderRadius.circular(15.w),
                         boxShadow: [
                           BoxShadow(
                             color: categorySel == index ? const Color(0xFFC8D4EE) : const Color(0xFFd6e2f0),
@@ -283,7 +284,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                     child: Text(
                       categories[index].name ?? '',
                       style: TextStyle(
-                          color: categorySel == index ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                          color: categorySel == index ? Colors.white : const Color(0xff95A3C4), fontSize: 14.w),
                     ),
                   ),
                 );
@@ -353,12 +354,12 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
             );
           }
           return GridView.builder(
-            padding: EdgeInsets.only(left: 12.px, right: 12.px, top: 12.px),
+            padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 1.0,
-              crossAxisSpacing: 8.px,
-              mainAxisSpacing: 8.px,
+              crossAxisSpacing: 8.w,
+              mainAxisSpacing: 8.w,
             ),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -417,12 +418,12 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       children: [
         if (banners.isNotEmpty)
           Container(
-            margin: EdgeInsets.only(left: 16.px, right: 16.px, top: 10.px),
+            margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 10.w),
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.px),
+              borderRadius: BorderRadius.circular(10.w),
             ),
-            height: 140.px + 20,
+            height: 140.w + 20,
             child: Swiper(
               itemCount: banners.length,
               itemBuilder: (BuildContext context, int index) {
@@ -430,7 +431,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                   margin: const EdgeInsets.only(bottom: 20),
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.px),
+                    borderRadius: BorderRadius.circular(10.w),
                   ),
                   child: GestureDetector(
                     onTap: () {
@@ -447,7 +448,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
               },
               pagination: SwiperPagination(
                 alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.only(bottom: 0.px),
+                margin: EdgeInsets.only(bottom: 0.w),
                 builder: SwiperCustomPagination(builder: (BuildContext context, SwiperPluginConfig config) {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -479,9 +480,9 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
               Get.toNamed(Routes.competitionCalendar);
             },
             child: Container(
-              width: 361.px,
-              height: 85.px,
-              padding: EdgeInsets.only(left: 60.px, right: 60.px, top: 20.px, bottom: 10.px),
+              width: 361.w,
+              height: 85.w,
+              padding: EdgeInsets.only(left: 60.w, right: 60.w, top: 20.w, bottom: 10.w),
               decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/game.png'), fit: BoxFit.fill)),
               alignment: Alignment.center,
@@ -492,7 +493,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                     opacity: 0,
                     child: Text(
                       loops[index].title ?? '',
-                      style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                      style: TextStyle(fontSize: 12.w, color: const Color(0xff36B3F4)),
                     ),
                   ),
                   Positioned.fill(
@@ -507,7 +508,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                             behavior: HitTestBehavior.translucent,
                             child: Text(
                               loops[index].title ?? '',
-                              style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+                              style: TextStyle(fontSize: 12.w, color: const Color(0xff36B3F4)),
                             ),
                           ),
                         );
@@ -529,7 +530,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
               //       child: Center(
               //         child: Text(
               //           loops[index].title ?? '',
-              //           style: TextStyle(fontSize: 12.px, color: const Color(0xff36B3F4)),
+              //           style: TextStyle(fontSize: 12.w, color: const Color(0xff36B3F4)),
               //         ),
               //       ),
               //     );
@@ -547,9 +548,9 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       children: [
         if (bookSuggests.isNotEmpty)
           LinearCard(
-              margin: EdgeInsets.all(16.px).copyWith(bottom: 0),
+              margin: EdgeInsets.all(16.w).copyWith(bottom: 0),
               child: Container(
-                padding: EdgeInsets.all(16.px),
+                padding: EdgeInsets.all(16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -558,7 +559,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                       children: [
                         Text(
                           '热门推荐',
-                          style: TextStyle(color: const Color(0xff2C2C2C), fontSize: 16.px),
+                          style: TextStyle(color: const Color(0xff2C2C2C), fontSize: 16.w),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -568,22 +569,22 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                             children: [
                               Text(
                                 '换一换',
-                                style: TextStyle(color: const Color(0xff2A2C31), fontSize: 12.px),
+                                style: TextStyle(color: const Color(0xff2A2C31), fontSize: 12.w),
                               ),
-                              SizedBox(width: 5.px),
+                              SizedBox(width: 5.w),
                               Image.asset(
                                 'assets/images/refresh.png',
-                                width: 12.px,
+                                width: 12.w,
                               )
                             ],
                           ),
                         )
                       ],
                     ),
-                    SizedBox(height: 8.px),
+                    SizedBox(height: 8.w),
                     LayoutBuilder(builder: (context, constraints) {
                       final maxWidth = constraints.maxWidth;
-                      final itemWidth = (maxWidth - 16.px * 3) / 4;
+                      final itemWidth = (maxWidth - 16.w * 3) / 4;
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -602,28 +603,28 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                                     AspectRatio(
                                       aspectRatio: 3 / 4,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.all(Radius.circular(4.px)),
+                                        borderRadius: BorderRadius.all(Radius.circular(4.w)),
                                         child: Image.network(
                                           bookSuggests[i].cover ?? '',
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 8.px),
+                                    SizedBox(height: 8.w),
                                     Text(
                                       bookSuggests[i].title ?? '',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 14.px),
+                                      style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 14.w),
                                     ),
                                     SizedBox(
-                                      height: 10.px,
+                                      height: 10.w,
                                     ),
                                     Text(
                                       bookSuggests[i].author ?? '',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: const Color(0xff909FBB), fontSize: 12.px),
+                                      style: TextStyle(color: const Color(0xff909FBB), fontSize: 12.w),
                                     ),
                                   ],
                                 ),

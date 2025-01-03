@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/common_utils.dart';
@@ -12,6 +13,7 @@ import 'package:holdem/utils/html_parse_util.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/at_text.dart';
+import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:intl/intl.dart';
@@ -564,21 +566,7 @@ class MyCollectItem extends StatelessWidget {
                       SizedBox(
                         width: 30.w,
                       ),
-                      Image.asset(
-                        'assets/images/comment.png',
-                        width: 13.w,
-                        height: 12.w,
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      Text(
-                        '${commentCount ?? 0}',
-                        style: TextStyle(
-                          color: const Color(0xff9CACC9),
-                          fontSize: 12.w,
-                        ),
-                      )
+                      CountComment(count: commentCount?.abbreviateNumber ?? '0'),
                     ],
                   )
                 ],

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/widget/count_widget.dart';
 
 class TagItem extends StatelessWidget {
   final TagModel tag;
@@ -19,7 +21,7 @@ class TagItem extends StatelessWidget {
       child: Container(
         height: 44.w,
         margin: EdgeInsets.only(bottom: 12.w),
-        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        padding: EdgeInsets.only(left: 12.w, right: 4.w),
         decoration: BoxDecoration(
           color: '#F8FBFF'.hexColor,
           borderRadius: BorderRadius.circular(12.r),
@@ -41,7 +43,7 @@ class TagItem extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Row(
                 children: [
                   Container(
@@ -68,38 +70,23 @@ class TagItem extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 12.w),
-            Expanded(
-              flex: 1,
-              child: Text(
-                '浏览 ${tag.viewCount ?? 0}',
-                style: TextStyle(
-                  color: '#9CACC9'.hexColor,
-                  fontSize: 12.sp,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
+            Padding(
+              padding: EdgeInsets.only(left: 12.w, right: 4.w),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/comment.png',
-                    width: 13.w,
-                    height: 13.w,
-                  ),
-                  SizedBox(width: 4.w),
                   Text(
-                    '${tag.commentCount ?? 0}',
+                    '浏览',
                     style: TextStyle(
                       color: '#9CACC9'.hexColor,
                       fontSize: 12.sp,
                     ),
-                  )
+                  ),
+                  SizedBox(width: 6.w),
+                  CountText(count: tag.viewCount.abbreviateNumber),
                 ],
               ),
             ),
+            CountComment(count: tag.commentCount?.abbreviateNumber ?? '0'),
           ],
         ),
       ),

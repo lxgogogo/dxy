@@ -21,7 +21,7 @@ class UserTerms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ValueListenableBuilder(
           valueListenable: didAgreeTerms,

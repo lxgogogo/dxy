@@ -221,8 +221,7 @@ class _LoginContentState extends State<LoginContent> {
             ],
           ),
           SizedBox(height: 36.w),
-          Padding(
-            padding: EdgeInsets.only(left: 20.w),
+          Center(
             child: UserTermsUncheck(
               reviewTerms: reviewTerms,
               reviewPrivacy: reviewPrivacy,

@@ -221,9 +221,12 @@ class _LoginContentState extends State<LoginContent> {
             ],
           ),
           SizedBox(height: 36.w),
-          UserTermsUncheck(
-            reviewTerms: reviewTerms,
-            reviewPrivacy: reviewPrivacy,
+          Padding(
+            padding: EdgeInsets.only(left: 20.w),
+            child: UserTermsUncheck(
+              reviewTerms: reviewTerms,
+              reviewPrivacy: reviewPrivacy,
+            ),
           ),
           SizedBox(height: 12.w),
           CustomButton(

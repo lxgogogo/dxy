@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/upload_file.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/linear_card.dart';
@@ -51,7 +53,7 @@ class FeedItem extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              if (onShield != null) FeedMoreAction(onShield: onShield),
+              if (onShield != null && !UserStore.of.isMe(item.user?.id)) FeedMoreAction(onShield: onShield),
             ],
           ),
           SizedBox(height: 8.w),

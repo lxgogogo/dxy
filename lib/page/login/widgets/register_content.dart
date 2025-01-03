@@ -391,11 +391,14 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           SizedBox(height: 36.w),
-          UserTerms(
-            onTermsCheck: onTermsCheck,
-            didAgreeTerms: didAgreeTerms,
-            reviewTerms: reviewTerms,
-            reviewPrivacy: reviewPrivacy,
+          Padding(
+            padding: EdgeInsets.only(left: 20.w),
+            child: UserTerms(
+              onTermsCheck: onTermsCheck,
+              didAgreeTerms: didAgreeTerms,
+              reviewTerms: reviewTerms,
+              reviewPrivacy: reviewPrivacy,
+            ),
           ),
           SizedBox(height: 12.w),
           CustomButton(

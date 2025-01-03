@@ -5,10 +5,6 @@ class TermsPrivacyController extends GetxController {
   String title = '';
   bool isLoading = true;
 
-  void onBack() {
-    Get.back();
-  }
-
   // void onAgree() {
   //   Get.back(result: true);
   // }

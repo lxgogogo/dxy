@@ -1,3 +1,5 @@
+import 'package:holdem/utils/html_parse_util.dart';
+
 class ArticleBean {
   String? author;
   int? categoryId;
@@ -6,6 +8,7 @@ class ArticleBean {
   String? cover;
   DateTime? createdAt;
   String? description;
+  String? pureText;
   int? duration;
   int? favoriteCount;
   int? id;
@@ -23,6 +26,7 @@ class ArticleBean {
       this.cover,
       this.createdAt,
       this.description,
+      this.pureText,
       this.favoriteCount,
       this.id,
       this.likeCount,
@@ -55,6 +59,9 @@ class ArticleBean {
     }
     if (json["description"] is String) {
       description = json["description"];
+    }
+    if (json["description"] is String) {
+      pureText = HtmlParseUtil.of.pureText(json["description"]);
     }
     if (json["favoriteCount"] is num) {
       favoriteCount = json["favoriteCount"];

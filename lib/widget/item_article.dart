@@ -6,10 +6,8 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/linear_card.dart';
-import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class ArticleItem extends StatefulWidget {
@@ -58,9 +56,9 @@ class _ArticleItemState extends State<ArticleItem> {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              if (widget.article.description?.isNotEmpty == true)
+              if (widget.article.pureText?.isNotEmpty == true)
                 Text(
-                  widget.article.description ?? '',
+                  widget.article.pureText ?? '',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

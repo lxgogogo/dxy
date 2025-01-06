@@ -604,8 +604,8 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                                       aspectRatio: 3 / 4,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.all(Radius.circular(4.w)),
-                                        child: Image.network(
-                                          bookSuggests[i].cover ?? '',
+                                        child: CachedNetworkImage(
+                                          imageUrl: bookSuggests[i].cover ?? '',
                                           fit: BoxFit.cover,
                                         ),
                                       ),

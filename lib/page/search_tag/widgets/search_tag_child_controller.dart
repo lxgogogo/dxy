@@ -2,25 +2,22 @@ part of 'search_tag_child_view.dart';
 
 class SearchTagChildController extends GetxController with GetSingleTickerProviderStateMixin {
   final SearchTagType type;
+  final TagModel? tagModel;
 
-  SearchTagChildController(this.type);
+  SearchTagChildController(
+    this.type,
+    this.tagModel,
+  );
 
   List<ArticleBean> articles = [];
   List<CollectBean> courses = [];
+  List<BoardBean> feeds = [];
 
   final RefreshController refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
   bool isLoaded = false;
-
-  int? tagId;
-
-  @override
-  void onInit() {
-    tagId = Get.arguments?['tagId'] as int?;
-    super.onInit();
-  }
 
   @override
   void onReady() {
@@ -34,7 +31,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
       'pageSize': pageSize,
       'filters': {
         'categoryAlias': type.categoryAlias,
-        'tagId': tagId,
+        'tagId': tagModel?.id,
       },
     };
     try {
@@ -60,6 +57,15 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
               courses.clear();
             }
             courses.addAll(dataList);
+          });
+        case SearchTagType.feed:
+          await NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', '', '', (data) {
+            final dataList = List<BoardBean>.from(data['list'].map((article) => BoardBean.fromJson(article)));
+            recordsSize = dataList.length;
+            if (pageNum == 1) {
+              feeds.clear();
+            }
+            feeds.addAll(dataList);
           });
           break;
       }

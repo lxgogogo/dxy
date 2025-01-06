@@ -42,6 +42,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
             resizeToAvoidBottomInset: false,
             appBar: CommonAppBar.arrowBack(
               context,
+              title: '发帖',
               actions: [
                 GestureDetector(
                   onTap: controller.publishPosts,
@@ -55,7 +56,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       color: '#249cfc'.hexColor,
                     ),
                     child: Text(
-                      '发帖',
+                      '发布',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.sp,
@@ -329,40 +330,37 @@ class FeedPostScreen extends GetView<FeedPostController> {
               controller.tagList.length,
               (index) {
                 final tag = controller.tagList[index];
-                return GestureDetector(
-                  onTap: () => controller.removeTag(index),
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
-                        margin: EdgeInsets.all(5.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: '#249CFC'.hexColor),
-                          borderRadius: BorderRadius.circular(4.r),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          tag.name ?? '',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: '#249CFC'.hexColor,
-                          ),
+                return Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
+                      margin: EdgeInsets.all(5.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: '#249CFC'.hexColor),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        tag.name ?? '',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: '#249CFC'.hexColor,
                         ),
                       ),
-                      Positioned(
-                        right: 0.w,
-                        top: 0.w,
-                        child: GestureDetector(
-                          onTap: () => controller.removeTag(index),
-                          child: Assets.images.closeBlack.image(
-                            width: 10.w,
-                            height: 10.w,
-                          ),
+                    ),
+                    Positioned(
+                      right: 0.w,
+                      top: 0.w,
+                      child: GestureDetector(
+                        onTap: () => controller.removeTag(index),
+                        child: Assets.images.closeBlack.image(
+                          width: 12.w,
+                          height: 12.w,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
             ),

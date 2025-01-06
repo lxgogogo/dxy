@@ -16,7 +16,9 @@ class TagItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.searchTag, arguments: {'tagId': tag.id});
+        Get.toNamed(Routes.searchTag, arguments: {
+          'tag': tag,
+        });
       },
       child: Container(
         height: 44.w,

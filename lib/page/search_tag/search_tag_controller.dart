@@ -5,8 +5,11 @@ class SearchTagController extends GetxController with GetSingleTickerProviderSta
 
   late TabController tabController;
 
+  TagModel? tagModel;
+
   @override
   void onInit() {
+    tagModel = Get.arguments?['tag'] as TagModel?;
     tabController = TabController(
       length: SearchTagType.values.length,
       vsync: this,

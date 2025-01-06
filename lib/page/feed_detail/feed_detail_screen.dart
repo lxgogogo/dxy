@@ -143,7 +143,10 @@ class FeedDetailScreen extends StatelessWidget {
                       },
                     ),
                   // _buildMediaView(),
-                  SizedBox(height: 16.w),
+                  if (controller.detailBean?.tagList?.isNotEmpty == true)
+                    TagListView(tagList: controller.detailBean?.tagList ?? [])
+                  else
+                    SizedBox(height: 16.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -187,7 +190,6 @@ class FeedDetailScreen extends StatelessWidget {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                     ),
-                    tagList: controller.detailBean?.tagList ?? [],
                   )
                 : const SizedBox(),
           ),

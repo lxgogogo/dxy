@@ -1,6 +1,6 @@
 part of 'tag_list_screen.dart';
 
-class TagListController extends GetxController {
+class TagListController extends GetxController with RefreshControllerMixin {
   late TextEditingController searchController;
   late FocusNode searchFocusNode;
   List<TagModel> hotItems = [];
@@ -9,9 +9,8 @@ class TagListController extends GetxController {
   late final RefreshController searchRefreshController;
   bool showSearchResult = false;
 
-  int pageNum = 1;
-  int pageSize = 20;
-  bool noMore = false;
+  int searchPageNum = 1;
+  bool searchNoMore = false;
 
   @override
   void onInit() {
@@ -28,17 +27,23 @@ class TagListController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getTagList();
+    onRefresh();
   }
 
-  Future<void> getTagList() async {
-    final res = await CommonService.of.tagIndex(pageNum: 1, pageSize: 10);
+  @override
+  Future<List?> loadData() async {
+    if (page == 1) items.clear();
+    final res = await CommonService.of.tagIndex(
+      pageNum: page,
+      pageSize: pageSize,
+    );
     if (res.isSuccess) {
       final listRes = res.data['list'] as List? ?? [];
       final records = listRes.map((e) => TagModel.fromJson(e as Map? ?? {})).toList();
-      hotItems.assignAll(records);
-      safeUpdate();
+      hotItems.addAll(records);
+      return records;
     }
+    return null;
   }
 }
 
@@ -65,10 +70,10 @@ extension SearchFunc on TagListController {
   }
 
   Future<void> onSearch() async {
-    pageNum = 1;
+    searchPageNum = 1;
     try {
       final res = await CommonService.of.tagIndex(
-        pageNum: pageNum,
+        pageNum: searchPageNum,
         pageSize: pageSize,
         keyword: searchController.text,
         isShowLoading: true,
@@ -81,10 +86,10 @@ extension SearchFunc on TagListController {
       }
       searchRefreshController.refreshCompleted();
       if (items.length < pageSize) {
-        noMore = true;
+        searchNoMore = true;
         searchRefreshController.loadNoData();
       } else {
-        noMore = false;
+        searchNoMore = false;
         searchRefreshController.resetNoData();
       }
     } catch (e) {
@@ -95,14 +100,14 @@ extension SearchFunc on TagListController {
   }
 
   Future<void> onSearchLoading() async {
-    if (noMore) {
+    if (searchNoMore) {
       searchRefreshController.loadNoData();
       return;
     }
-    pageNum++;
+    searchPageNum++;
     try {
       final res = await CommonService.of.tagIndex(
-        pageNum: pageNum,
+        pageNum: searchPageNum,
         pageSize: pageSize,
         keyword: searchController.text,
       );
@@ -114,10 +119,10 @@ extension SearchFunc on TagListController {
         items.addAll(records);
       } else {}
       if (recordsSize < pageSize) {
-        noMore = true;
+        searchNoMore = true;
         searchRefreshController.loadNoData();
       } else {
-        noMore = false;
+        searchNoMore = false;
         searchRefreshController.loadComplete();
       }
     } catch (e) {

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/search_tag/widgets/search_tag_child_view.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
+import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 part 'search_tag_controller.dart';
@@ -12,7 +16,8 @@ enum SearchTagType {
   news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
-  course('教程', categoryAlias: 'course');
+  course('教程', categoryAlias: 'course'),
+  feed('论坛', categoryAlias: 'thread');
 
   final String title;
 
@@ -31,7 +36,36 @@ class SearchTagScreen extends GetView<SearchTagController> {
         init: SearchTagController(),
         builder: (controller) {
           return Scaffold(
-            appBar: CommonAppBar.arrowBack(context, title: '控池'),
+            appBar: CommonAppBar.arrowBack(
+              context,
+              title: controller.tagModel?.name ?? '控池',
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: Row(
+                    children: [
+                      Text(
+                        '浏览',
+                        style: TextStyle(
+                          color: '#9CACC9'.hexColor,
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+                      CountText(
+                        count: controller.tagModel?.viewCount?.abbreviateNumber ?? '0',
+                        usePlaceHolder: false,
+                      ),
+                      SizedBox(width: 4.w),
+                      CountComment(
+                        count: controller.tagModel?.commentCount?.abbreviateNumber ?? '0',
+                        usePlaceHolder: false,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
             backgroundColor: Colors.transparent,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,7 +112,12 @@ class SearchTagScreen extends GetView<SearchTagController> {
                 Expanded(
                   child: TabBarView(
                     controller: controller.tabController,
-                    children: SearchTagType.values.map((e) => SearchTagChildView(type: e).keepAlive).toList(),
+                    children: SearchTagType.values
+                        .map((e) => SearchTagChildView(
+                              type: e,
+                              tagModel: controller.tagModel,
+                            ).keepAlive)
+                        .toList(),
                   ),
                 )
               ],

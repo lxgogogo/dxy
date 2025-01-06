@@ -5,9 +5,11 @@ class CountComment extends StatelessWidget {
   const CountComment({
     super.key,
     required this.count,
+    this.usePlaceHolder = true,
   });
 
   final String count;
+  final bool usePlaceHolder;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CountComment extends StatelessWidget {
             width: 13.w,
           ),
           SizedBox(width: 6.w),
-          CountText(count: count),
+          CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
     );
@@ -117,24 +119,27 @@ class CountText extends StatelessWidget {
   const CountText({
     super.key,
     required this.count,
+    this.usePlaceHolder = true,
   });
 
   final String count;
+  final bool usePlaceHolder;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Opacity(
-          opacity: 0,
-          child: Text(
-            '999.9T',
-            style: TextStyle(
-              color: const Color(0xff9CACC9),
-              fontSize: 12.sp,
+        if (usePlaceHolder)
+          Opacity(
+            opacity: 0,
+            child: Text(
+              '999.9T',
+              style: TextStyle(
+                color: const Color(0xff9CACC9),
+                fontSize: 12.sp,
+              ),
             ),
           ),
-        ),
         Text(
           count,
           style: TextStyle(

@@ -222,7 +222,9 @@ class TagListView extends StatelessWidget {
             tagList.length,
             (index) => GestureDetector(
               onTap: () {
-                Get.toNamed(Routes.searchTag, arguments: {'tagId': tagList[index].id});
+                Get.toNamed(Routes.searchTag, arguments: {
+                  'tag': tagList[index],
+                });
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.w),

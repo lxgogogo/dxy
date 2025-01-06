@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/mixins/refresh_controller_mixin.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/utils/debounce_throttle_util.dart';
@@ -33,7 +33,7 @@ class TagListScreen extends StatelessWidget {
           children: [
             CommonAppBar.arrowBack(
               context,
-              title: '详情',
+              title: '插入话题',
             ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 18.w),
@@ -53,7 +53,7 @@ class TagListScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                       decoration: InputDecoration(
-                        hintText: '# 请输入话题',
+                        hintText: '请输入话题',
                         hintStyle: TextStyle(
                           color: '#95A3C4'.hexColor,
                           fontSize: 14.sp,
@@ -88,9 +88,11 @@ class TagListScreen extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18.w),
-                child: controller.showSearchResult
-                    ? CommonRefresher(
+                  padding: EdgeInsets.symmetric(horizontal: 18.w),
+                  child: IndexedStack(
+                    index: controller.showSearchResult ? 0 : 1,
+                    children: [
+                      CommonRefresher(
                         controller: controller.searchRefreshController,
                         onLoading: controller.onSearchLoading,
                         enablePullDown: false,
@@ -120,31 +122,40 @@ class TagListScreen extends StatelessWidget {
                                 },
                               )
                             : const Center(child: NoDataView()),
-                      )
-                    : ListView.builder(
-                        padding: EdgeInsets.symmetric(vertical: 8.w),
-                        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                        itemCount: controller.hotItems.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Get.back(result: controller.hotItems[index]);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.w),
-                              child: Text(
-                                controller.hotItems[index].name ?? '',
-                                style: TextStyle(
-                                  color: '#3B5078'.hexColor,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
                       ),
-              ),
+                      CommonRefresher(
+                        controller: controller.refreshController,
+                        onLoading: controller.onLoading,
+                        enablePullDown: false,
+                        enablePullUp: true,
+                        child: controller.hotItems.isNotEmpty
+                            ? ListView.builder(
+                                padding: EdgeInsets.symmetric(vertical: 8.w),
+                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                itemCount: controller.hotItems.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Get.back(result: controller.hotItems[index]);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 8.w),
+                                      child: Text(
+                                        controller.hotItems[index].name ?? '',
+                                        style: TextStyle(
+                                          color: '#3B5078'.hexColor,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox(),
+                      ),
+                    ],
+                  )),
             ),
           ],
         ),

@@ -64,7 +64,7 @@ class FeedPostController extends GetxController {
     }
 
     if (title.isEmpty || title.length < 5) {
-      ToastUtils.showToast('请输入5-30个字符标题');
+      ToastUtils.showToast('请输入5-31个字符标题');
       return;
     }
 
@@ -134,8 +134,10 @@ class FeedPostController extends GetxController {
       isScrollControlled: true,
     );
     if (tag != null) {
-      tagList.add(tag);
-      safeUpdate();
+      if (!tagList.any((e)=> e.id == tag.id)) {
+        tagList.add(tag);
+        safeUpdate();
+      }
     }
   }
 

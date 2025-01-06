@@ -5,13 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/model/article.dart';
+import 'package:holdem/model/board_list.dart';
 import 'package:holdem/model/course.dart';
+import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/search_tag/search_tag_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_article.dart';
 import 'package:holdem/widget/item_book.dart';
+import 'package:holdem/widget/item_feed.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -20,14 +23,15 @@ part 'search_tag_child_controller.dart';
 
 class SearchTagChildView extends GetView<SearchTagChildView> {
   final SearchTagType type;
+  final TagModel? tagModel;
 
-  const SearchTagChildView({super.key, required this.type});
+  const SearchTagChildView({super.key, required this.type, this.tagModel});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SearchTagChildController>(
       global: false,
-      init: SearchTagChildController(type),
+      init: SearchTagChildController(type, tagModel),
       builder: (controller) {
         return SmartRefresher(
           enablePullDown: false,
@@ -50,6 +54,8 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
         return _buildBookView(controller);
       case SearchTagType.course:
         return _buildCourseView(controller);
+      case SearchTagType.feed:
+        return _buildFeedView(controller);
     }
   }
 
@@ -143,6 +149,15 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
         ? ListView.builder(
             itemBuilder: (c, i) => ArticleItem(article: controller.articles[i]),
             itemCount: controller.articles.length,
+          )
+        : const NoDataView();
+  }
+
+  Widget _buildFeedView(SearchTagChildController controller) {
+    return controller.feeds.isNotEmpty
+        ? ListView.builder(
+            itemBuilder: (c, i) => FeedItem(controller.feeds[i]),
+            itemCount: controller.feeds.length,
           )
         : const NoDataView();
   }

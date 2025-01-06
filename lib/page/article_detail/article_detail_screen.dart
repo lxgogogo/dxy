@@ -73,7 +73,10 @@ class ArticleDetailScreen extends StatelessWidget {
                         return launchUrlString(url, mode: LaunchMode.externalApplication);
                       },
                     ),
-                  SizedBox(height: 16.w),
+                  if (controller.detailBean?.tagList?.isNotEmpty == true)
+                    TagListView(tagList: controller.detailBean?.tagList ?? [])
+                  else
+                    SizedBox(height: 16.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -113,7 +116,6 @@ class ArticleDetailScreen extends StatelessWidget {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                     ),
-                    tagList: controller.detailBean?.tagList ?? [],
                   )
                 : const SizedBox(),
           ),

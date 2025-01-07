@@ -75,7 +75,17 @@ class MyApp extends StatelessWidget {
                 // 可根据需求调整该值
               ),
               // home: WebFitPage(child: SplashScreen()),
-              builder: EasyLoading.init(),
+              builder: EasyLoading.init(
+                builder: (BuildContext context, Widget? child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                    child: ScrollConfiguration(
+                      behavior: NoShadowScrollBehavior(),
+                      child: child ?? const Material(),
+                    ),
+                  );
+                },
+              ),
               initialRoute: AppPages.initial,
               getPages: AppPages.pages,
             ),
@@ -83,5 +93,34 @@ class MyApp extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class NoShadowScrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+    switch (getPlatform(context)) {
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return child;
+      case TargetPlatform.android:
+        return GlowingOverscrollIndicator(
+          showLeading: false,
+          showTrailing: false,
+          axisDirection: details.direction,
+          color: Colors.transparent,
+          child: child,
+        );
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return GlowingOverscrollIndicator(
+          showLeading: false,
+          showTrailing: false,
+          axisDirection: details.direction,
+          color: Colors.transparent,
+          child: child,
+        );
+    }
   }
 }

@@ -160,29 +160,10 @@ class NetRequest {
   static const String BOARD_SORT_COMMENT = "comment";
   static const String BOARD_SORT_LIKE = "like";
 
-  Future getThreadListByBoard(int pageNum, int pageSize, String boardSort, String boardId, String ownerId, String q,
-      SuccessCallback onSuccess) async {
-    Map<String, Object> params = {};
-    params['pageNum'] = pageNum;
-    params['pageSize'] = pageSize;
-    params['ordered'] = boardSort;
-
-    Map<String, Object> filters = {};
-    if (boardId.isNotEmpty) {
-      filters['boardId'] = boardId;
-    }
-    if (ownerId.isNotEmpty) {
-      filters['ownerId'] = ownerId;
-    }
-    if (q.isNotEmpty) {
-      filters['q'] = q;
-    }
-    params['filters'] = filters;
-    LogUtils.printAll("getThreadListByBoard params===>$params");
+  Future getThreadListByBoard(Map<String, dynamic> params, SuccessCallback onSuccess) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.threadList, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
-      LogUtils.printAll("getThreadListByBoard===>$response");
       onSuccess(response['data']);
     } else {
       ToastUtils.showToast(resp.message ?? '未知错误');

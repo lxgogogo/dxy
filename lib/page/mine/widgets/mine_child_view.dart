@@ -64,10 +64,16 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
 
   reqListData() {
     if (widget.tabIndex == 0) {
-      //帖子
+      Map<String, dynamic> params = {};
+      params['pageNum'] = pageNum;
+      params['pageSize'] = pageSize;
+      params['ordered'] = NetRequest.BOARD_SORT_TIME;
+
+      Map<String, dynamic> filters = {};
       var ownerId = UserStore.of.user.id;
-      NetRequest().getThreadListByBoard(
-          pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', ownerId?.toString() ?? '', '', (data) {
+      filters['ownerId'] = ownerId;
+      params['filters'] = filters;
+      NetRequest().getThreadListByBoard(params, (data) {
         BoardList boardList = BoardList.fromJson(data);
         if (_isMounted) {
           final total = boardList.pager?.total ?? 0;

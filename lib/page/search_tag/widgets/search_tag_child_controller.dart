@@ -29,8 +29,13 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
     Map<String, dynamic> params = {
       'pageNum': pageNum,
       'pageSize': pageSize,
+      if (type == SearchTagType.feed) ...{
+        'ordered': NetRequest.BOARD_SORT_TIME,
+      },
       'filters': {
-        'categoryAlias': type.categoryAlias,
+        if (type != SearchTagType.feed) ...{
+          'categoryAlias': type.categoryAlias,
+        },
         'tagId': tagModel?.id,
       },
     };
@@ -59,7 +64,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
             courses.addAll(dataList);
           });
         case SearchTagType.feed:
-          await NetRequest().getThreadListByBoard(pageNum, pageSize, NetRequest.BOARD_SORT_TIME, '', '', '', (data) {
+          await NetRequest().getThreadListByBoard(params, (data) {
             final dataList = List<BoardBean>.from(data['list'].map((article) => BoardBean.fromJson(article)));
             recordsSize = dataList.length;
             if (pageNum == 1) {

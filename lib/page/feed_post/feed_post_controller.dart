@@ -134,10 +134,12 @@ class FeedPostController extends GetxController {
       isScrollControlled: true,
     );
     if (tag != null) {
-      if (!tagList.any((e)=> e.id == tag.id)) {
-        tagList.add(tag);
-        safeUpdate();
+      if (tagList.any((e) => e.id == tag.id)) {
+        ToastUtils.showToast('不可重复插入同一话题');
+        return;
       }
+      tagList.add(tag);
+      safeUpdate();
     }
   }
 

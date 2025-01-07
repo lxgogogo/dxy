@@ -82,9 +82,19 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   }
 
   reqListData() {
+    Map<String, Object> params = {};
+    params['pageNum'] = pageNum;
+    params['pageSize'] = pageSize;
+    params['ordered'] = boardSort;
+
+    Map<String, Object> filters = {};
+    final boardId = tabIdValue == 0 ? '' : tabIdValue.toString();
+    if (boardId.isNotEmpty) {
+      filters['boardId'] = boardId;
+    }
+    params['filters'] = filters;
     //tabIdValue = 0全部板块,不传boardId
-    NetRequest().getThreadListByBoard(
-        pageNum, pageSize, boardSort, tabIdValue == 0 ? '' : tabIdValue.toString(), '', '', (data) {
+    NetRequest().getThreadListByBoard(params, (data) {
       BoardList boardList = BoardList.fromJson(data);
       if (mounted) {
         setState(() {

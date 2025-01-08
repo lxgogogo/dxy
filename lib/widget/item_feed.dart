@@ -109,12 +109,8 @@ class FeedItem extends StatelessWidget {
                                   imageUrl: getFilesUrl(fileItem),
                                   fit: BoxFit.cover,
                                   width: double.infinity,
-                                  placeholder: (context, url) => Center(
-                                    child: Assets.images.imageLoadingDef.image(),
-                                  ),
-                                  errorWidget: (context, url, error) => Center(
-                                    child: Assets.images.imageLoadingDef.image(),
-                                  ),
+                                  placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                 ),
                                 if (fileItem.type == 'video')
                                   Center(

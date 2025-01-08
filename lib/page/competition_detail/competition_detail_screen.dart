@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/competition_bean.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -334,8 +335,8 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                 CachedNetworkImage(
                   fit: BoxFit.cover,
                   imageUrl: competitionBean?.competition?.thumbnail ?? '',
-                  placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                  placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                 ),
                 const Center(
                   child: CircularProgressIndicator(),

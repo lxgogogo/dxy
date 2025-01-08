@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/count_widget.dart';
@@ -187,11 +188,16 @@ class MessageCommonItem extends StatelessWidget {
                                                   imageUrl: cover!,
                                                   width: 24.w,
                                                   height: 24.w,
-                                                  placeholder: (context, url) => Image.asset(
-                                                    'assets/images/image_loading_def.png',
+                                                  placeholder: (context, url) => Center(
+                                                    child: Assets.images.imageLoadingDef.image(
+                                                      fit: BoxFit.fill,
+                                                    ),
                                                   ),
-                                                  errorWidget: (context, url, error) =>
-                                                      Image.asset('assets/images/image_loading_def.png'),
+                                                  errorWidget: (context, url, error) => Center(
+                                                    child: Assets.images.imageLoadingDef.image(
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                               if (item.resourceType == 'videoList')

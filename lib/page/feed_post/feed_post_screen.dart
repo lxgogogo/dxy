@@ -119,7 +119,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         ),
                       ),
                     ),
-                    if (controller.focusNode.hasFocus) buildBottomToolbar(context) else buildTagList(context)
+                    buildBottomToolbar(context),
                   ],
                 ),
               ),
@@ -144,7 +144,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                 fontSize: 14.sp,
                 color: '#2a2a2a'.hexColor,
               ),
-              maxLength: 30,
+              maxLength: 31,
               controller: controller.titleInput,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
@@ -265,53 +265,59 @@ class FeedPostScreen extends GetView<FeedPostController> {
           horizontal: BorderSide(color: Color(0xffe6e6e6)),
         ),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          QuillToolbarImageButton(
-            controller: controller.quillController,
-            options: QuillToolbarImageButtonOptions(
-              imageButtonConfig: QuillToolbarImageConfig(
-                onImageInsertCallback: controller.onImageInsertCallback,
-              ),
-              childBuilder: (dynamic options, dynamic extraOptions) {
-                QuillToolbarImageButtonExtraOptions? buttonExtraOptions;
-                if (extraOptions is QuillToolbarImageButtonExtraOptions) {
-                  buttonExtraOptions = extraOptions;
-                }
-                return GestureDetector(
-                  onTap: buttonExtraOptions?.onPressed,
-                  child: Container(
-                    width: 44.w,
-                    height: 44.w,
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      Assets.images.inputImage.path,
-                      width: 20.w,
-                      height: 20.w,
-                    ),
+          buildTagList(context),
+          Row(
+            children: [
+              QuillToolbarImageButton(
+                controller: controller.quillController,
+                options: QuillToolbarImageButtonOptions(
+                  imageButtonConfig: QuillToolbarImageConfig(
+                    onImageInsertCallback: controller.onImageInsertCallback,
                   ),
-                );
-              },
-            ),
-          ),
-          GestureDetector(
-            onTap: () async {
-              final result = await Get.toNamed(Routes.atUser);
-              if (result != null) {
-                controller.quillController.insertAtBlock(data: json.encode(result));
-              }
-            },
-            child: Container(
-              width: 44.w,
-              height: 44.w,
-              alignment: Alignment.center,
-              child: Text(
-                '@',
-                style: TextStyle(
-                  fontSize: 20.sp,
+                  childBuilder: (dynamic options, dynamic extraOptions) {
+                    QuillToolbarImageButtonExtraOptions? buttonExtraOptions;
+                    if (extraOptions is QuillToolbarImageButtonExtraOptions) {
+                      buttonExtraOptions = extraOptions;
+                    }
+                    return GestureDetector(
+                      onTap: buttonExtraOptions?.onPressed,
+                      child: Container(
+                        width: 36.w,
+                        height: 36.w,
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          Assets.images.inputImage.path,
+                          width: 20.w,
+                          height: 20.w,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
+              GestureDetector(
+                onTap: () async {
+                  final result = await Get.toNamed(Routes.atUser);
+                  if (result != null) {
+                    controller.quillController.insertAtBlock(data: json.encode(result));
+                  }
+                },
+                child: Container(
+                  width: 36.w,
+                  height: 36.w,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '@',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -319,9 +325,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
   }
 
   Widget buildTagList(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.w),
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+    return Padding(
+      padding:  EdgeInsets.symmetric(vertical: 4.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

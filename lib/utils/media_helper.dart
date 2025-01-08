@@ -45,16 +45,4 @@ class MediaHelper {
       },
     );
   }
-
-  Widget cacheLoadNetworkImage(String imgUrl, double imgWidth, double imgHeight) {
-    return RepaintBoundary(
-        child: CachedNetworkImage(
-      width: imgWidth,
-      height: imgHeight,
-      fit: BoxFit.cover,
-      imageUrl: imgUrl.isNotEmpty ? imgUrl : '',
-      placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-      errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-    ));
-  }
 }

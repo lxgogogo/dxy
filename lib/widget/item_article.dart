@@ -76,12 +76,8 @@ class _ArticleItemState extends State<ArticleItem> {
                       imageUrl: widget.article.cover ?? '',
                       fit: BoxFit.cover,
                       height: 180.w,
-                      placeholder: (context, url) => Center(
-                        child: Assets.images.imageLoadingDef.image(),
-                      ),
-                      errorWidget: (context, url, error) => Center(
-                        child: Assets.images.imageLoadingDef.image(),
-                      ),
+                      placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                      errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                     ),
                   ),
                 ),

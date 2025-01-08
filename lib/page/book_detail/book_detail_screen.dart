@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -17,8 +18,6 @@ import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 part 'book_detail_controller.dart';
@@ -154,12 +153,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     child: CachedNetworkImage(
                       imageUrl: articleDetailBean.cover ?? '',
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/images/image_loading_def.png',
-                      ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/image_loading_def.png',
-                      ),
+                      placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                      errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                     ),
                   ),
                 ),

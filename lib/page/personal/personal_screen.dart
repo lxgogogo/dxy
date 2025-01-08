@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
@@ -121,7 +122,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 width: 63.px,
                 height: 63.px,
                 placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
-                errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
               ),
             ),
           ),

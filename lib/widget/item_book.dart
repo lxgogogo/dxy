@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -46,6 +47,8 @@ class _BookItemState extends State<BookItem> {
                 width: 51.w,
                 height: 68.w,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
               ),
             ),
             Expanded(

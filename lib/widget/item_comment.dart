@@ -1,23 +1,19 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/media_helper.dart';
-import 'package:holdem/page/comment_input/comment_input_screen.dart';
-import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:intl/intl.dart';
-import '../page/mine/login_helper.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentBean commentBean;
@@ -103,8 +99,8 @@ class _CommentItemState extends State<CommentItem> {
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: widget.commentBean.files?[index].url ?? '',
-                          placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                          errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                         ),
                       ),
                     );
@@ -385,12 +381,8 @@ class BorderAvatar extends StatelessWidget {
           cacheKey: avatar,
           memCacheWidth: avatarSize.toInt(),
           memCacheHeight: avatarSize.toInt(),
-          placeholder: (context, url) => const Center(
-            child: CupertinoActivityIndicator(),
-          ),
-          errorWidget: (context, url, error) => Image.asset(
-            'assets/images/default_avatar.png',
-          ),
+          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
         ),
       ),
     );

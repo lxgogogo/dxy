@@ -6,6 +6,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/banner.dart';
 import 'package:holdem/model/competition_loop.dart';
@@ -375,7 +377,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
   }
 
   jumpPage(BannerBean bean) {
-    if (bean.jumpValue == null ) return;
+    if (bean.jumpValue == null) return;
     if (bean.jumpType == 'url') {
       if (bean.jumpValue?.isNotEmpty == true) {
         launchUrlString(bean.jumpValue!, mode: LaunchMode.externalApplication);
@@ -383,7 +385,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       return;
     }
     var id = int.tryParse(bean.jumpValue!);
-    if (id == null ) return;
+    if (id == null) return;
     if (bean.jumpType == 'book') {
       Get.toNamed(Routes.bookDetail, arguments: id);
     } else if (bean.jumpType == 'article') {
@@ -417,61 +419,63 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     return Column(
       children: [
         if (banners.isNotEmpty)
-          Container(
-            margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 10.w),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.w),
-            ),
-            height: 140.w + 20,
-            child: Swiper(
-              itemCount: banners.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.w),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      jumpPage(banners[index]);
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 10.w),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SizedBox(
+                  height: constraints.maxWidth / (1200 / 500) + 20.w,
+                  child: Swiper(
+                    itemCount: banners.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          jumpPage(banners[index]);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 20.w),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: banners[index].imgMobile ?? '',
+                            placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                            errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          ),
+                        ),
+                      );
                     },
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: banners[index].imgMobile ?? '',
-                      placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                      errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
-                    ),
-                  ),
-                );
-              },
-              pagination: SwiperPagination(
-                alignment: Alignment.bottomCenter,
-                margin: EdgeInsets.only(bottom: 0.w),
-                builder: SwiperCustomPagination(builder: (BuildContext context, SwiperPluginConfig config) {
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                          config.itemCount,
-                          (index) => Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    pagination: SwiperPagination(
+                      builder: SwiperCustomPagination(
+                        builder: (context, config) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(
+                              config.itemCount,
+                              (index) => Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 3.w),
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 300),
-                                  width: config.activeIndex == index ? 20.0 : 6.0,
-                                  height: 6.0,
+                                  width: config.activeIndex == index ? 20.w : 6.w,
+                                  height: 6.w,
                                   decoration: BoxDecoration(
                                     color:
                                         config.activeIndex == index ? const Color(0xff008EFF) : const Color(0xffADCCE8),
-                                    borderRadius: config.activeIndex == index
-                                        ? BorderRadius.circular(3.0)
-                                        : BorderRadius.circular(3.0),
+                                    borderRadius: BorderRadius.circular(3.r),
                                   ),
                                 ),
-                              )));
-                }),
-              ),
-              autoplay: true,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    autoplay: true,
+                  ),
+                );
+              },
             ),
           ),
         if (loops.isNotEmpty)
@@ -607,6 +611,8 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                                         child: CachedNetworkImage(
                                           imageUrl: bookSuggests[i].cover ?? '',
                                           fit: BoxFit.cover,
+                                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                         ),
                                       ),
                                     ),

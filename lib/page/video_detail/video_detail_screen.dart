@@ -90,10 +90,8 @@ class VideoDetailScreen extends StatelessWidget {
                                 CachedNetworkImage(
                                   fit: BoxFit.cover,
                                   imageUrl: controller.articleDetailBean?.cover ?? '',
-                                  placeholder: (context, url) => const SizedBox(),
-                                  errorWidget: (context, url, error) => Image.asset(
-                                    'assets/images/image_loading_def.png',
-                                  ),
+                                  placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                 ),
                                 const Center(
                                   child: CircularProgressIndicator(),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/media_helper.dart';
@@ -62,8 +63,8 @@ class _VideoItemState extends State<VideoItem> {
                   CachedNetworkImage(
                     fit: BoxFit.cover,
                     imageUrl: widget.article.cover ?? '',
-                    placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                    errorWidget: (context, url, error) => Image.asset('assets/images/image_loading_def.png'),
+                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                   ),
                   Positioned.fill(
                     child: Center(

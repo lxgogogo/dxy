@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/common_utils.dart';
@@ -425,9 +426,8 @@ class MyCommentItem extends StatelessWidget {
                                   imageUrl: cover ?? '',
                                   width: 36.w,
                                   height: 36.w,
-                                  placeholder: (context, url) => Image.asset('assets/images/image_loading_def.png'),
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset('assets/images/image_loading_def.png'),
+                                  placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                 ),
                               ),
                               if (item.resourceType == 'videoList')
@@ -592,9 +592,8 @@ class MyCollectItem extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: imageUrl!,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/images/image_loading_def.png',
-                      ),
+                      placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                      errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                     ),
                   ),
                   if (item?.content?.type == 'videoList')

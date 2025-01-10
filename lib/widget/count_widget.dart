@@ -14,15 +14,15 @@ class CountComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             'assets/images/comment.png',
-            width: 13.w,
+            width: 11.w,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 3.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -43,15 +43,15 @@ class CountFavorite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             stared ? 'assets/images/stared.png' : 'assets/images/star.png',
-            width: 13.w,
+            width: 11.w,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 3.w),
           CountText(count: count),
         ],
       ),
@@ -70,15 +70,15 @@ class CountShare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             'assets/images/share.png',
-            width: 13.w,
+            width: 11.w,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 3.w),
           CountText(count: count),
         ],
       ),
@@ -99,15 +99,15 @@ class CountLike extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             liked ? 'assets/images/praised.png' : 'assets/images/praise.png',
-            width: 13.w,
+            width: 11.w,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 3.w),
           CountText(count: count),
         ],
       ),

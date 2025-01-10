@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/competition_bean.dart';
 import 'package:holdem/model/course.dart';
@@ -158,12 +159,31 @@ class SearchChildView extends GetView<SearchChildView> {
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
                 sliver: DecoratedSliver(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      centerSlice: Rect.fromLTRB(30, 14, 35, 28),
-                      image: AssetImage('assets/images/commen_bg.png'),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(12.r),
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: 'b9d0e5'.hexColor.withOpacity(0.64),
+                        blurRadius: 2.r,
+                        offset: Offset(0, -1.w),
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        spreadRadius: 1.r,
+                        blurRadius: 2.r,
+                        offset: Offset(0, 1.w),
+                      ),
+                      BoxShadow(
+                        color: 'bfd2e2'.hexColor.withOpacity(0.81),
+                        blurRadius: 4.r,
+                        offset: Offset(0, 2.w),
+                      ),
+                      BoxShadow(
+                        color: 'f8fbff'.hexColor,
+                      ),
+                    ],
                   ),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(

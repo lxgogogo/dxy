@@ -25,27 +25,31 @@ class TagItem extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 12.w),
         padding: EdgeInsets.only(left: 12.w, right: 4.w),
         decoration: BoxDecoration(
-          color: const Color(0xfff4f9ff),
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.all(
+            Radius.circular(12.r),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: 'b9d0e5'.hexColor.withOpacity(0.64),
+              blurRadius: 2.r,
+              offset: Offset(0, -1.w),
+            ),
+            BoxShadow(
+              color: Colors.white,
+              spreadRadius: 1.r,
+              blurRadius: 2.r,
+              offset: Offset(0, 1.w),
+            ),
+            BoxShadow(
+              color: 'bfd2e2'.hexColor.withOpacity(0.81),
+              blurRadius: 4.r,
+              offset: Offset(0, 2.w),
+            ),
+            BoxShadow(
+              color: 'f8fbff'.hexColor,
+            ),
+          ],
         ),
-        // decoration: BoxDecoration(
-        //   color: '#F8FBFF'.hexColor,
-        //   borderRadius: BorderRadius.circular(12.r),
-        //   boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.white,
-        //       offset: Offset(0, 1.w),
-        //       blurRadius: 2.r,
-        //       spreadRadius: 1.r,
-        //     ),
-        //     BoxShadow(
-        //       color: '#B9D0E5'.hexColor.withOpacity(0.64),
-        //       offset: Offset(0, -1.w),
-        //       blurRadius: 2.r,
-        //       spreadRadius: 0,
-        //     ),
-        //   ],
-        // ),
         child: Row(
           children: [
             Expanded(

@@ -115,6 +115,36 @@ class CountLike extends StatelessWidget {
   }
 }
 
+class CountView extends StatelessWidget {
+  const CountView({
+    super.key,
+    required this.count,
+    this.usePlaceHolder = true,
+  });
+
+  final String count;
+  final bool usePlaceHolder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/images/eye_open.png',
+            width: 11.w,
+            color: const Color(0xff9CACC9),
+          ),
+          SizedBox(width: 3.w),
+          CountText(count: count, usePlaceHolder: usePlaceHolder),
+        ],
+      ),
+    );
+  }
+}
+
 class CountText extends StatelessWidget {
   const CountText({
     super.key,

@@ -33,6 +33,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
   Widget build(BuildContext context) {
     return BackgroundContainer(
       child: GetBuilder<SearchTagController>(
+        global: false,
         init: SearchTagController(),
         builder: (controller) {
           return Scaffold(
@@ -44,15 +45,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
                   padding: EdgeInsets.only(right: 16.w),
                   child: Row(
                     children: [
-                      Text(
-                        '浏览',
-                        style: TextStyle(
-                          color: '#9CACC9'.hexColor,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                      SizedBox(width: 6.w),
-                      CountText(
+                      CountView(
                         count: controller.tagModel?.viewCount?.abbreviateNumber ?? '0',
                         usePlaceHolder: false,
                       ),

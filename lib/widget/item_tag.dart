@@ -49,7 +49,6 @@ class TagItem extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 2,
               child: Row(
                 children: [
                   Container(
@@ -76,22 +75,7 @@ class TagItem extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 12.w, right: 4.w),
-              child: Row(
-                children: [
-                  Text(
-                    '浏览',
-                    style: TextStyle(
-                      color: '#9CACC9'.hexColor,
-                      fontSize: 12.sp,
-                    ),
-                  ),
-                  SizedBox(width: 6.w),
-                  CountText(count: tag.viewCount.abbreviateNumber),
-                ],
-              ),
-            ),
+            CountView(count: tag.viewCount?.abbreviateNumber ?? '0'),
             CountComment(count: tag.commentCount?.abbreviateNumber ?? '0'),
           ],
         ),

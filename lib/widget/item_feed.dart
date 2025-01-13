@@ -21,12 +21,16 @@ class FeedItem extends StatelessWidget {
   final BoardBean item;
   final bool isMyPost;
   final VoidCallback? onShield;
+  final VoidCallback? onShieldUser;
+  final VoidCallback? onReport;
 
   const FeedItem(
     this.item, {
     super.key,
     this.isMyPost = false,
     this.onShield,
+    this.onShieldUser,
+    this.onReport,
   });
 
   @override
@@ -55,7 +59,12 @@ class FeedItem extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              if (onShield != null && !UserStore.of.isMe(item.user?.id)) FeedMoreAction(onShield: onShield),
+              if ((onShield != null || onShieldUser !=null ) && !UserStore.of.isMe(item.user?.id))
+                FeedMoreAction(
+                  onShield: onShield,
+                  onShieldUser: onShieldUser,
+                  onReport: onReport,
+                ),
             ],
           ),
           SizedBox(height: 8.w),
@@ -110,7 +119,8 @@ class FeedItem extends StatelessWidget {
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                   placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                  errorWidget: (context, url, error) =>
+                                      Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                 ),
                                 if (fileItem.type == 'video')
                                   Center(

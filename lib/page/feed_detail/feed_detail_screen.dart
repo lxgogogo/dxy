@@ -165,6 +165,7 @@ class FeedDetailScreen extends StatelessWidget {
                         ...List.generate(controller.comments!.length, (index) {
                           return CommentItem(
                             commentBean: controller.comments![index],
+                            relType : 'thread',
                           );
                         })
                       else

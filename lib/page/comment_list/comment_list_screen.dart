@@ -14,8 +14,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 part 'comment_list_controller.dart';
 
 class CommentListScreen extends StatefulWidget {
- final int relId;
- final String relType;
+  final int relId;
+  final String relType;
 
   const CommentListScreen({super.key, required this.relId, required this.relType});
 
@@ -138,6 +138,7 @@ class _CommentListScreenState extends State<CommentListScreen> {
       padding: EdgeInsets.symmetric(horizontal: 15.px),
       child: CommentItem(
         commentBean: comments[i],
+        relType: widget.relType,
       ),
     );
   }

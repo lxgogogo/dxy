@@ -24,7 +24,7 @@ class CommonAppBar {
           title,
           style: TextStyle(
             color: const Color(0xff2c2c2c),
-            fontSize: 16.w,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),
         ),

@@ -31,4 +31,25 @@ class CommonService {
     });
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> reportDefined() async {
+    EasyLoading.show(status: 'loading...');
+    final res = await HttpUtils.postNew(Api.reportDefined).whenComplete(() {
+      EasyLoading.dismiss();
+    });
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> reportCreate(String relType, int id, int userId, {required String? reason}) async {
+    EasyLoading.show(status: 'loading...');
+    final res = await HttpUtils.postNew(Api.reportCreate, params: {
+      'relType': relType,
+      'relId': id,
+      'relUserId': userId,
+      'reason': reason,
+    }).whenComplete(() {
+      EasyLoading.dismiss();
+    });
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

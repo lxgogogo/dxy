@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
+import '../stores/user_store.dart';
+
 class FeedMoreAction extends StatefulWidget {
   final VoidCallback? onShield;
+  final VoidCallback? onShieldUser;
+  final VoidCallback? onReport;
 
   const FeedMoreAction({
     super.key,
     this.onShield,
+    this.onShieldUser,
+    this.onReport,
   });
 
   @override
@@ -18,11 +24,9 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
   final SuperTooltipController _tipController = SuperTooltipController();
   List<String> actions = [
     '屏蔽该内容',
+    '屏蔽该用户',
+    '举报该内容',
   ];
-
-  int actionIndex = 0;
-
-  String get actionValue => actions[actionIndex];
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +73,13 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
             return GestureDetector(
               onTap: () {
                 _tipController.hideTooltip();
-                if (actionIndex != index) {
-                  actionIndex = index;
-                  setState(() {});
-                }
-                switch (actionIndex) {
+                switch (index) {
                   case 0:
                     widget.onShield?.call();
+                  case 1:
+                    widget.onShieldUser?.call();
+                  case 2:
+                    widget.onReport?.call();
                 }
               },
               child: Container(
@@ -84,8 +88,8 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
                 child: Text(
                   item,
                   style: TextStyle(
-                    color: actionIndex == index ? const Color(0xff249cfc) : const Color(0xff95a3c4),
-                    fontSize: 14,
+                    color: const Color(0xff249cfc),
+                    fontSize: 14.sp,
                   ),
                 ),
               ),
@@ -103,7 +107,9 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
           size: 14.sp,
         ),
         onPressed: () {
-          _tipController.showTooltip();
+          UserStore.of.checkLogin(() {
+            _tipController.showTooltip();
+          });
         },
       ),
     );

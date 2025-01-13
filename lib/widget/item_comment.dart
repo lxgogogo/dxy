@@ -13,13 +13,24 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
+import 'package:holdem/widget/report_sheet.dart';
 import 'package:intl/intl.dart';
+
+import '../services/index.dart';
+import '../stores/config_store.dart';
+import '../utils/toast_utils.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentBean commentBean;
   final bool isReply;
+  final String relType;
 
-  const CommentItem({super.key, required this.commentBean, this.isReply = false});
+  const CommentItem({
+    super.key,
+    required this.commentBean,
+    this.relType = '',
+    this.isReply = false,
+  });
 
   @override
   State<CommentItem> createState() => _CommentItemState();
@@ -39,8 +50,33 @@ class _CommentItemState extends State<CommentItem> {
     super.didUpdateWidget(oldWidget);
   }
 
+  Future<void> _onReport(int id, int userId) async {
+    final reportTypes = await ConfigStore.of.getReportTypes();
+    Get.bottomSheet(
+      ReportSheet(
+        reportTypes: reportTypes,
+        onReport: (int index) async {
+          try {
+            final res = await CommonService.of.reportCreate(
+              'comment',
+              id,
+              userId,
+              reason: reportTypes[index].value,
+            );
+            if (res.isSuccess) {
+              ToastUtils.showToast('举报成功，我们将会在24小时内受理');
+            }
+          } finally {
+            Get.back();
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final showReport = widget.relType == 'thread' && !UserStore.of.isMe(widget.commentBean.user?.id);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -67,13 +103,6 @@ class _CommentItemState extends State<CommentItem> {
                   fontSize: 12.sp,
                 ),
               ),
-              // Text(
-              //   widget.commentBean.contentStr ?? '',
-              //   style: TextStyle(
-              //     color: const Color(0xff2a2a2a),
-              //     fontSize: 12.w,
-              //   ),
-              // ),
               if (widget.commentBean.files?.isNotEmpty == true)
                 GridView.builder(
                   shrinkWrap: true,
@@ -139,7 +168,6 @@ class _CommentItemState extends State<CommentItem> {
                         liked: widget.commentBean.liked ?? false,
                       ),
                     ),
-                    SizedBox(width: 32.w),
                     GestureDetector(
                       onTap: () {
                         UserStore.of.checkLogin(() {
@@ -153,8 +181,23 @@ class _CommentItemState extends State<CommentItem> {
                       },
                       child: CountComment(
                         count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
+                        usePlaceHolder: showReport,
                       ),
                     ),
+                    if (showReport)
+                      GestureDetector(
+                        onTap: () {
+                          if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
+                            UserStore.of.checkLogin(() {
+                              _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                            });
+                          }
+                        },
+                        child: Image.asset(
+                          'assets/images/report.png',
+                          width: 12.w,
+                        ),
+                      ),
                   ],
                 ],
               ),
@@ -169,6 +212,7 @@ class _CommentItemState extends State<CommentItem> {
                         widget.commentBean.replies!.length,
                         (index) {
                           final reply = widget.commentBean.replies![index];
+                          final showReplyReport = widget.relType == 'thread' && !UserStore.of.isMe(reply.user?.id);
                           return Padding(
                             padding: EdgeInsets.only(top: 10.w),
                             child: Row(
@@ -196,13 +240,6 @@ class _CommentItemState extends State<CommentItem> {
                                           fontSize: 12.sp,
                                         ),
                                       ),
-                                      // Text(
-                                      //   reply.contentStr ?? '',
-                                      //   style: TextStyle(
-                                      //     color: const Color(0xff2a2a2a),
-                                      //     fontSize: 12.w,
-                                      //   ),
-                                      // ),
                                       SizedBox(height: 8.w),
                                       Row(
                                         children: [
@@ -231,8 +268,23 @@ class _CommentItemState extends State<CommentItem> {
                                             child: CountLike(
                                               count: reply.likeCount.abbreviateNumber,
                                               liked: reply.liked ?? false,
+                                              usePlaceHolder: showReplyReport,
                                             ),
                                           ),
+                                          if (showReplyReport)
+                                            GestureDetector(
+                                              onTap: () {
+                                                if (reply.id != null && reply.user?.id != null) {
+                                                  UserStore.of.checkLogin(() {
+                                                    _onReport(reply.id!, reply.user!.id!);
+                                                  });
+                                                }
+                                              },
+                                              child: Image.asset(
+                                                'assets/images/report.png',
+                                                width: 12.w,
+                                              ),
+                                            ),
                                         ],
                                       ),
                                     ],

@@ -1,16 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/board_list.dart';
-import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../services/index.dart';
+import '../../../stores/config_store.dart';
 import '../../../utils/eventbus/EventBusAction.dart';
 import '../../../utils/eventbus/EventBusManager.dart';
+import '../../../utils/log_util.dart';
+import '../../../utils/toast_utils.dart';
 import '../../../widget/item_feed.dart';
+import '../../../widget/report_sheet.dart';
 
 class ForumTabChildPage extends StatefulWidget {
   int tabId;
@@ -110,12 +115,44 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     });
   }
 
-  Future<void> onShied(int id) async {
+  Future<void> _onShield(int id) async {
     final success = await NetRequest().shieldFeed(id);
     if (success) {
       pageNum = 1;
       reqListData();
     }
+  }
+
+  Future<void> _onShieldUser(int id) async {
+    final success = await NetRequest().shieldUser(id);
+    if (success) {
+      pageNum = 1;
+      reqListData();
+    }
+  }
+
+  Future<void> _onReport(int id, int userId) async {
+    final reportTypes = await ConfigStore.of.getReportTypes();
+    Get.bottomSheet(
+      ReportSheet(
+        reportTypes: reportTypes,
+        onReport: (int index) async {
+          try {
+            final res = await CommonService.of.reportCreate(
+              'thread',
+              id,
+              userId,
+              reason: reportTypes[index].value,
+            );
+            if (res.isSuccess) {
+              ToastUtils.showToast('举报成功，我们将会在24小时内受理');
+            }
+          } finally {
+            Get.back();
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -138,13 +175,24 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
           ? ListView.builder(
               controller: _listController,
               itemBuilder: (c, i) {
-                return FeedItem(boardPostList[i], onShield: () {
-                  if (boardPostList[i].id != null) {
-                    UserStore.of.checkLogin(() {
-                      onShied.call(boardPostList[i].id!);
-                    });
-                  }
-                });
+                return FeedItem(
+                  boardPostList[i],
+                  onShield: () {
+                    if (boardPostList[i].id != null) {
+                      _onShield(boardPostList[i].id!);
+                    }
+                  },
+                  onShieldUser: () {
+                    if (boardPostList[i].user?.id != null) {
+                      _onShieldUser(boardPostList[i].user!.id!);
+                    }
+                  },
+                  onReport: () {
+                    if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
+                      _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
+                    }
+                  },
+                );
               },
               itemCount: boardPostList.length,
             )

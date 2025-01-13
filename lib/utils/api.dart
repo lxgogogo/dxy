@@ -22,6 +22,7 @@ class Api {
 
   static const String threadCreate = '/api/thread/create';
   static const String threadShield = '/api/thread/shield';
+  static const String threadUserShield = '/api/thread/shield/user';
   static const String threadShow = '/api/thread/show';
   static const String uploadFile = '/api/upload';
 
@@ -62,4 +63,6 @@ class Api {
   static const String saveReview = '/api/statistics/save';
 
   static const String tagIndex = '/api/tag/index';
+  static const String reportDefined = '/api/report/defined';
+  static const String reportCreate = '/api/report/create';
 }

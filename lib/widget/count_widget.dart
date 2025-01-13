@@ -91,10 +91,12 @@ class CountLike extends StatelessWidget {
     super.key,
     required this.count,
     this.liked = false,
+    this.usePlaceHolder = true,
   });
 
   final String count;
   final bool liked;
+  final bool usePlaceHolder;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +110,7 @@ class CountLike extends StatelessWidget {
             width: 11.w,
           ),
           SizedBox(width: 3.w),
-          CountText(count: count),
+          CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
     );

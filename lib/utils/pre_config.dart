@@ -5,6 +5,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/storage.dart';
 
+import '../stores/config_store.dart';
 import 'env.dart';
 import 'interceptors.dart';
 
@@ -16,7 +17,7 @@ class PreConfig {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
       await Get.putAsync<StorageService>(
-            () => StorageService().init(),
+        () => StorageService().init(),
         permanent: true,
       );
       HttpUtils.init(
@@ -33,7 +34,10 @@ class PreConfig {
         UserStore(),
         permanent: true,
       );
-
+      Get.put<ConfigStore>(
+        ConfigStore(),
+        permanent: true,
+      );
       _didInit = true;
     }
     return Future.value();

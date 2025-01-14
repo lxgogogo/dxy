@@ -162,13 +162,15 @@ class CountText extends StatelessWidget {
     return Stack(
       children: [
         if (usePlaceHolder)
-          Opacity(
-            opacity: 0,
-            child: Text(
-              '999.9T',
-              style: TextStyle(
-                color: const Color(0xff9CACC9),
-                fontSize: 12.sp,
+          IgnorePointer(
+            child: Opacity(
+              opacity: 0,
+              child: Text(
+                '999.9T',
+                style: TextStyle(
+                  color: const Color(0xff9CACC9),
+                  fontSize: 12.sp,
+                ),
               ),
             ),
           ),

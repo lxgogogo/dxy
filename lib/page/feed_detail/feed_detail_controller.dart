@@ -4,7 +4,6 @@ class FeedDetailController extends GetxController {
   int? id;
 
   BoardBean? detailBean;
-  bool hasVideo = false;
   VideoPlayerController? videoController;
   ChewieController? chewieController;
   List<CommentBean>? comments;
@@ -19,7 +18,7 @@ class FeedDetailController extends GetxController {
     super.onInit();
     requestDetail();
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail();
+      requestDetail(showLoading: false);
     });
   }
 
@@ -31,9 +30,12 @@ class FeedDetailController extends GetxController {
     super.onClose();
   }
 
-  requestDetail() {
+  requestDetail({
+    bool showLoading = true,
+  }) {
     NetRequest().threadShow(
       {'id': id},
+      showLoading: showLoading,
       (data) async {
         if (data == null) {
           ToastUtils.showToast('该帖子已删除');
@@ -45,7 +47,6 @@ class FeedDetailController extends GetxController {
         if (detailBean?.files?.isNotEmpty == true) {
           final videoIndex = detailBean!.files!.indexWhere((e) => e.type == 'video');
           if (videoIndex != -1) {
-            hasVideo = true;
             final videoUrl = detailBean!.files![videoIndex].url ?? '';
             if (videoUrl.isNotEmpty) {
               _startVideoPlayer(videoUrl);
@@ -55,15 +56,23 @@ class FeedDetailController extends GetxController {
       },
     );
 
-    NetRequest().commentList({
-      'pageNum': 1,
-      'pageSize': 10,
-      'filters': {'relType': 'Thread', 'relId': id}
-    }, (data) {
-      List<CommentBean> dataList = List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
-      comments = dataList;
-      safeUpdate();
-    });
+    NetRequest().commentList(
+      {
+        'pageNum': 1,
+        'pageSize': 10,
+        'filters': {
+          'relType': 'Thread',
+          'relId': id,
+        },
+      },
+      showLoading: showLoading,
+      (data) {
+        List<CommentBean> dataList =
+            List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
+        comments = dataList;
+        safeUpdate();
+      },
+    );
   }
 
   Future<void> _startVideoPlayer(String link) async {

@@ -7,7 +7,7 @@ enum ApiEnv {
   prod2,
 }
 
-ApiEnv _kApiEnv = ApiEnv.test;
+ApiEnv _kApiEnv = ApiEnv.prod1;
 
 ApiEnv get kAPiEnv => _kApiEnv;
 
@@ -31,7 +31,7 @@ class Env {
         return 'https://school-java.dx261.com';
       case ApiEnv.prod2:
         return 'https://school-java.dx262.com';
-      }
+    }
   }
   static String get shareHost {
     switch (_kApiEnv) {
@@ -43,6 +43,6 @@ class Env {
         return 'https://school-h5-web.dx261.com';
       case ApiEnv.prod2:
         return 'https://school-h5-web.dx262.com';
-      }
+    }
   }
 }

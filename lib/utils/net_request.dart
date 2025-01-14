@@ -107,8 +107,8 @@ class NetRequest {
     }
   }
 
-  Future commentList(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<dynamic, dynamic> response = await HttpUtils.post(Api.commentList, params: params);
+  Future commentList(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.commentList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("commentList===>$response");
@@ -171,8 +171,8 @@ class NetRequest {
   }
 
   ///帖子详情
-  Future threadShow(Map<String, dynamic> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadShow, params: params);
+  Future threadShow(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadShow, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("threadShow===>$response");

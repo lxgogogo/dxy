@@ -69,7 +69,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
             children: <Widget>[
               SizedBox(width: 8.w),
               Expanded(
-                child: InkWell(
+                child: GestureDetector(
                   onTap: _pushComment,
                   child: Container(
                     height: 30.w,
@@ -104,25 +104,25 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
               ),
               SizedBox(width: 8.w),
               if (viewParams.relType == 'thread')
-                InkWell(
+                GestureDetector(
                   onTap: _likeToggle,
                   child: CountLike(
                     count: viewParams.likeCount.abbreviateNumber,
                     liked: viewParams.liked == true,
                   ),
                 ),
-              InkWell(
+              GestureDetector(
                 onTap: _favoriteToggle,
                 child: CountFavorite(
                   count: viewParams.favoriteCount.abbreviateNumber,
                   stared: viewParams.favoriteState == true,
                 ),
               ),
-              InkWell(
+              GestureDetector(
                 onTap: _toCommentList,
                 child: CountComment(count: viewParams.commentCount.abbreviateNumber),
               ),
-              InkWell(
+              GestureDetector(
                 onTap: _toShare,
                 child: CountShare(count: viewParams.shareCount.abbreviateNumber),
               ),

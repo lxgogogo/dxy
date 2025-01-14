@@ -16,7 +16,7 @@ class ArticleDetailController extends GetxController {
     super.onInit();
     requestDetail();
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail();
+      requestDetail(showLoading: false);
     });
   }
 
@@ -26,8 +26,8 @@ class ArticleDetailController extends GetxController {
     super.onClose();
   }
 
-  requestDetail() {
-    NetRequest().contentShow({'id': id}, (data) {
+  requestDetail({bool showLoading = true,}) {
+    NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) {
       if (data == null) {
         ToastUtils.showToast('该文章已删除');
         Get.back();
@@ -42,7 +42,7 @@ class ArticleDetailController extends GetxController {
       'pageNum': 1,
       'pageSize': 10,
       'filters': {'relType': 'content', 'relId': id}
-    }, (data) {
+    }, showLoading: showLoading, (data) {
       List<CommentBean> dataList = List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
       comments = dataList;
       safeUpdate();

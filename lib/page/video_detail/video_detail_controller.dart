@@ -20,7 +20,7 @@ class VideoDetailController extends GetxController {
     super.onInit();
     requestDetail();
     _eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail();
+      requestDetail(showLoading: false);
     });
   }
 
@@ -33,8 +33,8 @@ class VideoDetailController extends GetxController {
     super.onClose();
   }
 
-  requestDetail() {
-    NetRequest().contentShow({'id': id}, (data) async {
+  requestDetail({bool showLoading = true}) {
+    NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) async {
       if (data == null) {
         ToastUtils.showToast('该视频已删除');
         Get.back();
@@ -55,7 +55,7 @@ class VideoDetailController extends GetxController {
       'pageNum': 1,
       'pageSize': 10,
       'filters': {'relType': 'content', 'relId': id}
-    }, (data) {
+    }, showLoading: showLoading, (data) {
       List<CommentBean> dataList = List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
       comments = dataList;
       safeUpdate();

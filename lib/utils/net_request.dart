@@ -65,8 +65,8 @@ class NetRequest {
     }
   }
 
-  Future contentShow(Map<String, dynamic> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.contentShow, params: params);
+  Future contentShow(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.contentShow, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);

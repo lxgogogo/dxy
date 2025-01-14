@@ -44,7 +44,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     super.initState();
     requestDetail();
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail();
+      requestDetail(showLoading: false);
     });
   }
 
@@ -54,8 +54,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     super.dispose();
   }
 
-  requestDetail() {
-    NetRequest().contentShow({'id': widget.id}, (data) {
+  requestDetail({bool showLoading = true,}) {
+    NetRequest().contentShow({'id': widget.id}, showLoading: showLoading, (data) {
       if (data == null) {
         ToastUtils.showToast('该书籍已删除');
         Get.back();
@@ -70,7 +70,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       'pageNum': pageNum,
       'pageSize': 10,
       'filters': {'relType': 'content', 'relId': widget.id}
-    }, (data) {
+    }, showLoading: showLoading, (data) {
       if (mounted) {
         List<CommentBean> dataList =
             List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));

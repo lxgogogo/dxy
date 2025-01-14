@@ -161,7 +161,7 @@ class CountText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (usePlaceHolder)
+        if (usePlaceHolder) ...[
           IgnorePointer(
             child: Opacity(
               opacity: 0,
@@ -174,6 +174,17 @@ class CountText extends StatelessWidget {
               ),
             ),
           ),
+          Opacity(
+            opacity: 0,
+            child: Text(
+              '99',
+              style: TextStyle(
+                color: const Color(0xff9CACC9),
+                fontSize: 12.sp,
+              ),
+            ),
+          ),
+        ],
         Text(
           count,
           style: TextStyle(

@@ -76,7 +76,7 @@ class _CommentItemState extends State<CommentItem> {
 
   @override
   Widget build(BuildContext context) {
-    final showReport = widget.relType == 'thread' && !UserStore.of.isMe(widget.commentBean.user?.id);
+    final showReport = /*widget.relType == 'thread' &&*/ !UserStore.of.isMe(widget.commentBean.user?.id);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -212,7 +212,7 @@ class _CommentItemState extends State<CommentItem> {
                         widget.commentBean.replies!.length,
                         (index) {
                           final reply = widget.commentBean.replies![index];
-                          final showReplyReport = widget.relType == 'thread' && !UserStore.of.isMe(reply.user?.id);
+                          final showReplyReport = /*widget.relType == 'thread' &&*/ !UserStore.of.isMe(reply.user?.id);
                           return Padding(
                             padding: EdgeInsets.only(top: 10.w),
                             child: Row(

@@ -60,11 +60,11 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
       List<ConnectivityResult> events,
     ) {
       if (!events.contains(ConnectivityResult.none)) {
-        _onRefresh();
+        _onRefresh(showLoading: false);
       }
     });
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      _onRefresh();
+      _onRefresh(showLoading: false);
     });
     _onRefresh();
   }
@@ -76,12 +76,12 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     super.dispose();
   }
 
-  reqOtherData() {
+  reqOtherData({bool showLoading = true}) {
     if (widget.type == 'news') {
       NetRequest().indexBanner({
         'pos': 'index.banner',
         'type': '1',
-      }, (data) {
+      }, showLoading: showLoading, (data) {
         List<BannerBean> bannerList = List<BannerBean>.from(data.map((banner) => BannerBean.fromJson(banner)));
         if (mounted) {
           setState(() {
@@ -89,7 +89,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
           });
         }
       });
-      NetRequest().competitionLoop({}, (data) {
+      NetRequest().competitionLoop({}, showLoading: showLoading, (data) {
         List<CompetionLoopBean> loopList =
             List<CompetionLoopBean>.from(data.map((loop) => CompetionLoopBean.fromJson(loop)));
         if (mounted) {
@@ -98,9 +98,9 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         }
       });
     } else if (widget.type == 'book') {
-      getBookSuggest();
+      getBookSuggest(showLoading: showLoading);
     } else if (widget.type == 'course') {
-      NetRequest().courseCategory({"parentAlias": "course", "parentId": 1}, (data) {
+      NetRequest().courseCategory({"parentAlias": "course", "parentId": 1}, showLoading: showLoading, (data) {
         List<IndexCategory> categoryList =
             List<IndexCategory>.from(data.map((category) => IndexCategory.fromJson(category)));
         categoryList.insert(0, IndexCategory(name: '全部'));
@@ -113,7 +113,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     }
   }
 
-  reqListData() {
+  reqListData({bool showLoading = true}) {
     if (widget.type == 'course') {
       NetRequest().courseList({
         'pageNum': pageNum,
@@ -122,7 +122,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
           'categoryAlias': 'course',
           if (categoryId != null) 'categoryId': categoryId,
         }
-      }, (data) {
+      }, showLoading: showLoading, (data) {
         List<CourseBean> dataList = List<CourseBean>.from(data['list'].map((course) => CourseBean.fromJson(course)));
         if (mounted) {
           final pager = Paper.fromJson(data['pager']);
@@ -153,7 +153,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
         'filters': {
           'categoryAlias': widget.type, //'article'
         }
-      }, (data) {
+      }, showLoading: showLoading, (data) {
         List<ArticleBean> dataList =
             List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
 
@@ -172,8 +172,8 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     }
   }
 
-  void getBookSuggest() {
-    NetRequest().bookRecommend({"pageSize": 4}, (data) {
+  void getBookSuggest({bool showLoading = true}) {
+    NetRequest().bookRecommend({"pageSize": 4}, showLoading: showLoading, (data) {
       List<ArticleBean> dataList = List<ArticleBean>.from(data.map((article) => ArticleBean.fromJson(article)));
 
       if (mounted) {
@@ -184,10 +184,10 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
     });
   }
 
-  void _onRefresh() async {
+  void _onRefresh({bool showLoading = true}) async {
     pageNum = 1;
-    reqListData();
-    reqOtherData();
+    reqListData(showLoading: showLoading);
+    reqOtherData(showLoading: showLoading);
   }
 
   void _onLoading() async {

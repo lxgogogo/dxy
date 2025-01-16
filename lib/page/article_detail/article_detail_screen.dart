@@ -32,7 +32,7 @@ class ArticleDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ArticleDetailController>(
       init: ArticleDetailController(),
-      global: false,
+      tag: '${Get.arguments}',
       builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(

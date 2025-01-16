@@ -12,6 +12,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
@@ -33,7 +34,7 @@ class VideoDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<VideoDetailController>(
       init: VideoDetailController(),
-      global: false,
+      tag: '${Get.arguments}',
       builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(
@@ -243,7 +244,7 @@ class VideoDetailScreen extends StatelessWidget {
                       relType: NetRequest.COMMENT_TYPE_CONTENT,
                       favoriteState: controller.articleDetailBean?.favorited ?? false,
                       liked: controller.articleDetailBean?.liked ?? false,
-                      shareLink: 'details/video-${controller.id}',
+                      shareLink: 'details/${controller.articleDetailBean?.type ?? 'video'}-${controller.id}',
                       likeCount: controller.articleDetailBean?.likeCount ?? 0,
                       favoriteCount: controller.articleDetailBean?.favoriteCount ?? 0,
                       commentCount: controller.articleDetailBean?.commentCount ?? 0,

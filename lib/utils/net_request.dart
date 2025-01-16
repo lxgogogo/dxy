@@ -15,8 +15,8 @@ typedef SuccessCallback = void Function(dynamic data);
 typedef FailureCallback = void Function(String errorMsg);
 
 class NetRequest {
-  Future courseCategory(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.indexCategory, params: params);
+  Future courseCategory(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.indexCategory, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -35,8 +35,8 @@ class NetRequest {
     }
   }
 
-  Future competitionLoop(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.competitionLoop, params: params);
+  Future competitionLoop(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.competitionLoop, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -55,8 +55,8 @@ class NetRequest {
     }
   }
 
-  Future courseList(Map<String, dynamic> params, SuccessCallback onSuccess) async {
-    Map<dynamic, dynamic> response = await HttpUtils.post(Api.courseList, params: params);
+  Future courseList(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.courseList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -75,8 +75,8 @@ class NetRequest {
     }
   }
 
-  Future indexBanner(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.indexBanner, params: params);
+  Future indexBanner(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.indexBanner, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -85,8 +85,8 @@ class NetRequest {
     }
   }
 
-  Future bookRecommend(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.bookSuggest, params: params);
+  Future bookRecommend(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.bookSuggest, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);

@@ -15,8 +15,8 @@ class Env {
   static bool get isDistribute =>
       kReleaseMode && _kApiEnv == ApiEnv.prod1 || _kApiEnv == ApiEnv.prod2;
 
-  static bool isProxy = false;
-  static String httpProxyHost = '192.168.0.101';
+  static bool isProxy = true;
+  static String httpProxyHost = '192.168.0.30';
   static String httpProxyPort = '8888';
 
   static bool get useBadCertificate => kDebugMode;
@@ -40,9 +40,9 @@ class Env {
       case ApiEnv.test:
         return 'https://school-h5-web-fat.dx252.com';
       case ApiEnv.prod1:
-        return 'https://school-h5-web.dx261.com';
+        return 'https://dpoker.club';
       case ApiEnv.prod2:
-        return 'https://school-h5-web.dx262.com';
+        return 'https://dpoker.club';
     }
   }
 }

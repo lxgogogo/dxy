@@ -26,7 +26,7 @@ class ArticleDetailController extends GetxController {
     super.onClose();
   }
 
-  requestDetail({bool showLoading = true,}) {
+  requestDetail({bool showLoading = true}) {
     NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) {
       if (data == null) {
         ToastUtils.showToast('该文章已删除');

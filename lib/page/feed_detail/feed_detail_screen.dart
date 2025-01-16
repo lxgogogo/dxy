@@ -37,7 +37,7 @@ class FeedDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<FeedDetailController>(
       init: FeedDetailController(),
-      global: false,
+      tag: '${Get.arguments}',
       builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(

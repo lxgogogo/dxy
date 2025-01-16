@@ -14,6 +14,14 @@ class VideoDetailController extends GetxController {
 
   final autoScrollController = AutoScrollController(axis: Axis.horizontal);
 
+  String get shareLink {
+    String shareUrlSuffix = '';
+    if (articleDetailBean?.type == 'videoList') {
+      shareUrlSuffix = '?id=${articleDetailBean?.videoList?[playVideoIndex].id}';
+    }
+    return 'details/${articleDetailBean?.type}-$id$shareUrlSuffix';
+  }
+
   @override
   void onInit() {
     id = Get.arguments as int?;
@@ -81,7 +89,8 @@ class VideoDetailController extends GetxController {
   void videoListener() {
     if (articleDetailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
-    if (videoController!.value.isPlaying && videoController!.value.position.inSeconds >= videoController!.value.duration.inSeconds) {
+    if (videoController!.value.isPlaying &&
+        videoController!.value.position.inSeconds >= videoController!.value.duration.inSeconds) {
       if (playVideoIndex == articleDetailBean!.videoList!.length - 1) {
         playVideoIndex = 0;
       } else {

@@ -92,7 +92,8 @@ class VideoDetailScreen extends StatelessWidget {
                                   fit: BoxFit.cover,
                                   imageUrl: controller.articleDetailBean?.cover ?? '',
                                   placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                  errorWidget: (context, url, error) =>
+                                      Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                 ),
                                 const Center(
                                   child: CircularProgressIndicator(),
@@ -244,7 +245,7 @@ class VideoDetailScreen extends StatelessWidget {
                       relType: NetRequest.COMMENT_TYPE_CONTENT,
                       favoriteState: controller.articleDetailBean?.favorited ?? false,
                       liked: controller.articleDetailBean?.liked ?? false,
-                      shareLink: 'details/${controller.articleDetailBean?.type ?? 'video'}-${controller.id}',
+                      shareLink: controller.shareLink,
                       likeCount: controller.articleDetailBean?.likeCount ?? 0,
                       favoriteCount: controller.articleDetailBean?.favoriteCount ?? 0,
                       commentCount: controller.articleDetailBean?.commentCount ?? 0,

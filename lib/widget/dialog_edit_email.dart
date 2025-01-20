@@ -76,6 +76,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
   }
 
   void _startCountdown() {
+    ToastUtils.showToast('已发送');
     if (mounted) {
       setState(() {
         _isCountingDown = true;

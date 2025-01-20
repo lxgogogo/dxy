@@ -243,7 +243,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                     ),
                                   ),
                                   onTap: () {
-                                    Get.toNamed(Routes.following, arguments: true);
+                                    Get.toNamed(Routes.following, arguments: false);
                                   },
                                 )
                               ]),

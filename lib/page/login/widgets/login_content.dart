@@ -169,9 +169,8 @@ class _LoginContentState extends State<LoginContent> {
                     controller: _controllerPw,
                     focusNode: _focusPwd,
                     obscureText: !isOpen,
-                    // 输入内容显示为密文
                     decoration: InputDecoration(
-                      border: InputBorder.none, // 没有边框
+                      border: InputBorder.none,
                       hintText: '请输入密码',
                       hintStyle: AppTheme.text999999Size16,
                       contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),

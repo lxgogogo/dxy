@@ -6,8 +6,6 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/media_helper.dart';
-import 'package:holdem/utils/size_fit.dart';
 
 import 'linear_card.dart';
 

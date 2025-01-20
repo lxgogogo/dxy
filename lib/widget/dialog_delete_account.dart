@@ -76,6 +76,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
   }
 
   void _startCountdown() {
+    ToastUtils.showToast('已发送');
     if (mounted) {
       setState(() {
         _isCountingDown = true;

@@ -7,7 +7,7 @@ enum ApiEnv {
   prod2,
 }
 
-ApiEnv _kApiEnv = ApiEnv.prod1;
+ApiEnv _kApiEnv = ApiEnv.test;
 
 ApiEnv get kAPiEnv => _kApiEnv;
 
@@ -15,8 +15,8 @@ class Env {
   static bool get isDistribute =>
       kReleaseMode && _kApiEnv == ApiEnv.prod1 || _kApiEnv == ApiEnv.prod2;
 
-  static bool isProxy = false;
-  static String httpProxyHost = '192.168.0.30';
+  static bool isProxy = true;
+  static String httpProxyHost = '192.168.0.101';
   static String httpProxyPort = '8888';
 
   static bool get useBadCertificate => kDebugMode;

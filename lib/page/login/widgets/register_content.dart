@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
@@ -153,6 +154,7 @@ class _RegisterContentState extends State<RegisterContent> {
   }
 
   void _startCountdown() {
+    ToastUtils.showToast('已发送');
     if (mounted) {
       setState(() {
         _isCountingDown = true;
@@ -181,26 +183,39 @@ class _RegisterContentState extends State<RegisterContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          SizedBox(
+            height: 30.w,
+          ),
           Container(
-            height: 50.px,
-            margin: EdgeInsets.only(top: 35.px),
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            height: 50.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
             // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.px),
+                borderRadius: BorderRadius.circular(25.w),
                 border: Border.all(color: _focusEmail.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
+                Image.asset(
+                  'assets/images/email.png',
+                  width: 14.w,
+                  height: 14.w,
+                ),
                 Expanded(
                   child: TextField(
-                    controller: _controllerEmail,
                     focusNode: _focusEmail,
+                    keyboardType: TextInputType.text,
+                    controller: _controllerEmail,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(
+                        RegExp('[\\s]'),
+                      )
+                    ],
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '请输入邮箱地址',
-                      hintStyle: AppTheme.text999999Size14,
-                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+                      hintStyle: AppTheme.text999999Size16,
+                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -221,12 +236,11 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Container(
-            height: 50.px,
-
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px), // 水平内边距
+            height: 50.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w), // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.px),
+                borderRadius: BorderRadius.circular(25.w),
                 border: Border.all(color: _focusCode.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
@@ -239,8 +253,8 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '验证码',
-                      hintStyle: AppTheme.text999999Size14,
-                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+                      hintStyle: AppTheme.text999999Size16,
+                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -285,39 +299,43 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Container(
-            height: 50.px,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            height: 50.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
             // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.px),
+                borderRadius: BorderRadius.circular(25.w),
                 border: Border.all(color: _focusPw.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
+                Image.asset(
+                  'assets/images/password.png',
+                  width: 14.w,
+                  height: 14.w,
+                ),
                 Expanded(
                   child: TextField(
                     controller: _controllerPw,
                     focusNode: _focusPw,
                     obscureText: !_isVisible,
-                    // 输入内容显示为密文
                     decoration: InputDecoration(
-                      border: InputBorder.none, // 没有边框
+                      border: InputBorder.none,
                       hintText: '请设置新密码',
-                      hintStyle: AppTheme.text999999Size14,
-                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+                      hintStyle: AppTheme.text999999Size16,
+                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
                     },
                   ),
                 ),
-                IconButton(
-                  icon: Image.asset(
+                GestureDetector(
+                  child: Image.asset(
                     _isVisible ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
-                    width: 18.px,
-                    height: 18.px,
+                    width: 18.w,
+                    height: 18.w,
                   ),
-                  onPressed: () {
+                  onTap: () {
                     setState(() {
                       _isVisible = !_isVisible;
                     });
@@ -337,15 +355,20 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Container(
-            height: 50.px,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.px),
+            height: 50.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
             // 水平内边距
             decoration: BoxDecoration(
                 color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.px),
+                borderRadius: BorderRadius.circular(25.w),
                 border: Border.all(color: _focusAgainPw.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
             child: Row(
               children: <Widget>[
+                Image.asset(
+                  'assets/images/password.png',
+                  width: 14.w,
+                  height: 14.w,
+                ),
                 Expanded(
                   child: TextField(
                     controller: _controllerAgainPw,
@@ -355,21 +378,21 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '再次输入新密码',
-                      hintStyle: AppTheme.text999999Size14,
-                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.px, 0),
+                      hintStyle: AppTheme.text999999Size16,
+                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
                     },
                   ),
                 ),
-                IconButton(
-                  icon: Image.asset(
+                GestureDetector(
+                  child: Image.asset(
                     _isVisibleAgain ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
-                    width: 18.px,
-                    height: 18.px,
+                    width: 18.w,
+                    height: 18.w,
                   ),
-                  onPressed: () {
+                  onTap: () {
                     if (mounted) {
                       setState(() {
                         _isVisibleAgain = !_isVisibleAgain;

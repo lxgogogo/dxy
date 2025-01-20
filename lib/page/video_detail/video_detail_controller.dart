@@ -78,7 +78,7 @@ class VideoDetailController extends GetxController {
       ..initialize().then((_) {
         chewieController = ChewieController(
           videoPlayerController: videoController!,
-          autoPlay: false,
+          autoPlay: true,
           showOptions: false,
         );
         loaded = true;

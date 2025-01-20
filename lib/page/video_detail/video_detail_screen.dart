@@ -95,9 +95,9 @@ class VideoDetailScreen extends StatelessWidget {
                                   errorWidget: (context, url, error) =>
                                       Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                 ),
-                                const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                                // const Center(
+                                //   child: CircularProgressIndicator(),
+                                // ),
                               ],
                             ),
                     ),

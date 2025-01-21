@@ -102,21 +102,48 @@ class MainController extends GetxController {
   }
 
   void dealWithLink(Uri linkUri) {
-    if (linkUri.scheme == 'kilofun') {
-      final routeName = linkUri.queryParameters['routeName'] ?? '';
-      switch (routeName) {
-        /// kilofun:///kilofun.com?routeName=/marketDetail&contractAddress=HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC
+    if (linkUri.scheme == 'holdem') {
+      if (linkUri.path.contains('details/')) {
+        try {
+          var detailsPart = linkUri.path.split('details/')[1];
+          String id = '';
+          String type = '';
+          String childId = '';
+
+          if (detailsPart.startsWith('videoList')) {
+            var parts = detailsPart.split('-');
+            type = 'videoList';
+            id = parts[1].split('.')[0];
+            childId = linkUri.queryParameters['id'] ?? '';
+          } else {
+            var parts = detailsPart.split('-');
+            type = parts[0];
+            id = parts[1].split('.')[0];
+          }
+
+          final intId = int.tryParse(id);
+          if (intId == null) return;
+          switch (type) {
+            case 'article':
+              Get.toNamed(Routes.articleDetail, arguments: intId);
+              break;
+            case 'thread':
+              Get.toNamed(Routes.feedDetail, arguments: intId);
+              break;
+            case 'book':
+              Get.toNamed(Routes.bookDetail, arguments: intId);
+              break;
+            case 'video':
+              Get.toNamed(Routes.videoDetail, arguments: intId);
+              break;
+            case 'videoList':
+              Get.toNamed(Routes.videoDetail, arguments: intId);
+              break;
+          }
+        } catch (e) {
+          Log.d(e.toString());
+        }
       }
-      // final base64GroupId = linkUri.queryParameters['groupId'] ?? '';
-      // if (base64GroupId.isNotEmpty) {
-      //   final groupID = utf8.decode(base64.decode(base64GroupId));
-      //   if (groupID.isNotEmpty) _dealWithGroup(groupID);
-      // } else if (base64UserId.isNotEmpty) {
-      //   final userId = utf8.decode(base64.decode(base64UserId));
-      //   if (userId.isNotEmpty && userId != UserStore.to.userId) {
-      //     _dealWithUser(userId);
-      //   }
-      // }
     }
   }
 }

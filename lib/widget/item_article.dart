@@ -84,18 +84,10 @@ class _ArticleItemState extends State<ArticleItem> {
               SizedBox(height: 16.w),
               Row(
                 children: [
-                  Expanded(
-                    child: CountLike(count: widget.article.likeCount?.abbreviateNumber ?? '0'),
-                  ),
-                  Expanded(
-                    child: CountComment(count: widget.article.commentCount?.abbreviateNumber ?? '0'),
-                  ),
-                  Expanded(
-                    child: CountFavorite(count: widget.article.favoriteCount?.abbreviateNumber ?? '0'),
-                  ),
-                  Expanded(
-                    child: CountShare(count: widget.article.shareCount?.abbreviateNumber ?? '0'),
-                  ),
+                  CountLike(count: widget.article.likeCount?.abbreviateNumber ?? '0'),
+                  CountComment(count: widget.article.commentCount?.abbreviateNumber ?? '0'),
+                  CountFavorite(count: widget.article.favoriteCount?.abbreviateNumber ?? '0'),
+                  CountShare(count: widget.article.shareCount?.abbreviateNumber ?? '0'),
                 ],
               ),
             ],

@@ -142,18 +142,10 @@ class FeedItem extends StatelessWidget {
           SizedBox(height: 16.w),
           Row(
             children: [
-              Expanded(
-                child: CountLike(count: item.likeCount?.abbreviateNumber ?? '0'),
-              ),
-              Expanded(
-                child: CountComment(count: item.commentCount?.abbreviateNumber ?? '0'),
-              ),
-              Expanded(
-                child: CountFavorite(count: item.favoriteCount?.abbreviateNumber ?? '0'),
-              ),
-              Expanded(
-                child: CountShare(count: item.shareCount?.abbreviateNumber ?? '0'),
-              ),
+              CountLike(count: item.likeCount?.abbreviateNumber ?? '0'),
+              CountComment(count: item.commentCount?.abbreviateNumber ?? '0'),
+              CountFavorite(count: item.favoriteCount?.abbreviateNumber ?? '0'),
+              CountShare(count: item.shareCount?.abbreviateNumber ?? '0'),
             ],
           ),
         ],

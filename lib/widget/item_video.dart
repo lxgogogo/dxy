@@ -97,13 +97,16 @@ class _VideoItemState extends State<VideoItem> {
                                 Radius.circular(8.w),
                               ),
                             ),
-                            child: Text(
-                              formatDuration(Duration(seconds: widget.article.duration ?? 0)),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10.sp,
-                              ),
+                            child: DurationText(
+                              durationInSeconds: widget.article.duration ?? 0,
                             ),
+                            // child: Text(
+                            //   formatDuration(Duration(seconds: widget.article.duration ?? 0)),
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontSize: 10.sp,
+                            //   ),
+                            // ),
                           ),
                         ],
                       )),
@@ -144,6 +147,39 @@ class _VideoItemState extends State<VideoItem> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class DurationText extends StatelessWidget {
+  final int durationInSeconds;
+
+  const DurationText({super.key, required this.durationInSeconds});
+
+  String formatDuration(int seconds) {
+    int hours = (seconds ~/ 3600);
+    int minutes = (seconds % 3600) ~/ 60;
+    int secs = seconds % 60;
+
+    if (hours > 0) {
+      return '${_twoDigits(hours)}:${_twoDigits(minutes)}:${_twoDigits(secs)}';
+    } else {
+      return '${_twoDigits(minutes)}:${_twoDigits(secs)}';
+    }
+  }
+
+  String _twoDigits(int n) {
+    return n.toString().padLeft(2, '0');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      formatDuration(durationInSeconds),
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 10.sp,
       ),
     );
   }

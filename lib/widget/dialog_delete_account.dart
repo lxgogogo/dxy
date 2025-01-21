@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -16,6 +17,7 @@ import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
+import '../utils/event_bus_util.dart';
 import '../utils/toast_utils.dart';
 
 class DialogDeleteAccount extends StatefulWidget {
@@ -34,9 +36,6 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
   final TextEditingController _controllerCode = TextEditingController();
   bool isShowCodeTips = false;
   final FocusNode _focusCode = FocusNode();
-
-  int _countdown = 60;
-  bool _isCountingDown = false;
 
   RegExp codeRegExp = RegExp(r'^\d{6}$');
 
@@ -75,29 +74,6 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
     });
   }
 
-  void _startCountdown() {
-    ToastUtils.showToast('已发送');
-    if (mounted) {
-      setState(() {
-        _isCountingDown = true;
-        _countdown = 60;
-      });
-    }
-
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          if (_countdown > 0) {
-            _countdown--;
-          } else {
-            _isCountingDown = false;
-            timer.cancel();
-          }
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -109,10 +85,10 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 10.5.px,
-          margin: EdgeInsets.only(left: 18.px, right: 18.px),
+          borderRadius: 10.5.w,
+          margin: EdgeInsets.only(left: 18.w, right: 18.w),
           child: Container(
-            padding: EdgeInsets.only(bottom: 26.px),
+            padding: EdgeInsets.only(bottom: 26.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -120,65 +96,65 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                 Stack(
                   children: [
                     SizedBox(
-                      height: 72.px,
+                      height: 72.w,
                       width: double.infinity,
                       child: Center(
                         child: Text(
                           "注销账户",
                           style: TextStyle(
                             color: const Color(0xff3b5078),
-                            fontSize: 17.px,
+                            fontSize: 17.w,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                     ),
                     Positioned(
-                      right: 10.px,
-                      top: 10.px,
+                      right: 10.w,
+                      top: 10.w,
                       child: InkWell(
                         onTap: () => Navigator.of(context).pop(),
                         child: SvgPicture.asset(
                           "assets/svg/icon_close.svg",
-                          width: 28.px,
-                          height: 28.px,
+                          width: 28.w,
+                          height: 28.w,
                         ),
                       ),
                     ),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 21.5.px),
+                  padding: EdgeInsets.symmetric(horizontal: 21.5.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Row(
                         children: [
                           SizedBox(
-                            width: 68.5.px,
+                            width: 68.5.w,
                             child: Text(
                               "邮箱",
                               style: TextStyle(
                                 color: const Color(0xff3b5078),
-                                fontSize: 15.px,
+                                fontSize: 15.w,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
-                          SizedBox(width: 8.px),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Container(
-                              height: 45.px,
+                              height: 45.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.px),
+                                borderRadius: BorderRadius.circular(10.w),
                                 boxShadow: [
                                   BoxShadow(
                                     color: const Color(0xff709ac8).withOpacity(0.22),
                                   ),
                                   BoxShadow(
                                     color: const Color(0xffebf6ff),
-                                    spreadRadius: -2.px,
-                                    blurRadius: 5.px,
+                                    spreadRadius: -2.w,
+                                    blurRadius: 5.w,
                                     offset: const Offset(1, 1),
                                   ),
                                 ],
@@ -188,7 +164,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                 focusNode: _focusEmail,
                                 style: TextStyle(
                                   color: const Color(0xff3b5078),
-                                  fontSize: 12.px,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
@@ -198,27 +174,27 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                   )
                                 ],
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
                                   hintText: '请输入邮箱',
                                   hintStyle: TextStyle(
                                     color: const Color(0xffa3b4d3),
-                                    fontSize: 12.px,
+                                    fontSize: 14.sp,
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(10.w),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(10.w),
                                   ),
                                   disabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(10.w),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(10.w),
                                   ),
                                 ),
                                 onChanged: (_) {
@@ -231,8 +207,8 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                       ),
                       Row(
                         children: [
-                          SizedBox(width: 68.5.px),
-                          SizedBox(width: 8.px),
+                          SizedBox(width: 68.5.w),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
@@ -250,30 +226,30 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                       Row(
                         children: [
                           SizedBox(
-                            width: 68.5.px,
+                            width: 68.5.w,
                             child: Text(
                               "验证码",
                               style: TextStyle(
                                 color: const Color(0xff3b5078),
-                                fontSize: 15.px,
+                                fontSize: 15.w,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
-                          SizedBox(width: 8.px),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Container(
-                              height: 45.px,
+                              height: 45.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.px),
+                                borderRadius: BorderRadius.circular(10.w),
                                 boxShadow: [
                                   BoxShadow(
                                     color: const Color(0xff709ac8).withOpacity(0.22),
                                   ),
                                   BoxShadow(
                                     color: const Color(0xffebf6ff),
-                                    spreadRadius: -2.px,
-                                    blurRadius: 5.px,
+                                    spreadRadius: -2.w,
+                                    blurRadius: 5.w,
                                     offset: const Offset(1, 1),
                                   ),
                                 ],
@@ -286,7 +262,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                     focusNode: _focusCode,
                                     style: TextStyle(
                                       color: const Color(0xff3b5078),
-                                      fontSize: 12.px,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                     maxLines: 1,
@@ -296,27 +272,27 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                       LengthLimitingTextInputFormatter(6),
                                     ],
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
                                       hintText: '请输入验证码',
                                       hintStyle: TextStyle(
                                         color: const Color(0xffa3b4d3),
-                                        fontSize: 12.px,
+                                        fontSize: 14.sp,
                                       ),
                                       border: OutlineInputBorder(
                                         borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.px),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.px),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       disabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.px),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(color: Color(0xff2eacfb)),
-                                        borderRadius: BorderRadius.circular(10.px),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                     ),
                                     onChanged: (_) {
@@ -324,25 +300,11 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                     },
                                   ),
                                   Positioned(
-                                    right: 12.px,
-                                    child: _isCountingDown
-                                        ? Text(
-                                            '${_countdown}s',
-                                            style: TextStyle(
-                                              color: const Color(0xff249cfc),
-                                              fontSize: 12.px,
-                                            ),
-                                          )
-                                        : GestureDetector(
-                                            onTap: _sendCode,
-                                            child: Text(
-                                              "发送验证码",
-                                              style: TextStyle(
-                                                color: const Color(0xff249cfc),
-                                                fontSize: 12.px,
-                                              ),
-                                            ),
-                                          ),
+                                    right: 12.w,
+                                    child: CountDownView(
+                                      type: NetRequest.SEND_CODE_DELETE_ACCOUNT,
+                                      email: _controllerEmail.text,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -352,8 +314,8 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                       ),
                       Row(
                         children: [
-                          SizedBox(width: 68.5.px),
-                          SizedBox(width: 8.px),
+                          SizedBox(width: 68.5.w),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
@@ -368,11 +330,11 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                           ),
                         ],
                       ),
-                      SizedBox(height: 42.px),
+                      SizedBox(height: 42.w),
                       CustomButton(
                         onPressed: _submit,
                         disable: _isDisable,
-                        height: 42.px,
+                        height: 42.w,
                         title: '确认',
                       ),
                     ],
@@ -394,25 +356,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
       ToastUtils.showToast('注销成功');
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
-      EventBusManager.eventBus.fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
+      EventBusUtil.of.fire(EventResetMainTab());
     });
-  }
-
-  void _sendCode() {
-    var email = _controllerEmail.text;
-    if (email.isEmpty) {
-      ToastUtils.showToast('邮箱不能为空');
-      return;
-    }
-    if (!GetUtils.isEmail(email)) {
-      ToastUtils.showToast('请输入正确格式邮箱');
-      return;
-    }
-    _startCountdown();
-    NetRequest().sendCode(
-      NetRequest.SEND_CODE_DELETE_ACCOUNT,
-      email,
-      (data) {},
-    );
   }
 }

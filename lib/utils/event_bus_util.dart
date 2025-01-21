@@ -32,3 +32,6 @@ class EventRefreshPage {
 
 /// event
 class EventRefreshSearchResult {}
+
+/// event
+class EventResetMainTab {}

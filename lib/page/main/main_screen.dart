@@ -1,25 +1,27 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/message/message_screen.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/widget/dialog_common.dart';
-import 'package:holdem/page/login/login_screen.dart';
-import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:holdem/widget/background_container.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
+import '../../utils/event_bus_util.dart';
 import '../mine/mine_screen.dart';
 
 part 'main_controller.dart';
@@ -32,169 +34,91 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const FeedListScreen(),
-    const MessagePage(),
-    const MineScreen(),
-  ];
-
-  var actionEventBus;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _checkAppVersion();
-    //接受退出登录之后首页tab通知切换到0位置
-    actionEventBus = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.noticeMainTabSwitchHome.eventBusTypeName) {
-        setState(() {
-          _currentIndex = 0;
-        });
-      }
-    });
-  }
-
-  void _checkAppVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String currentVersion = packageInfo.version;
-
-    NetRequest().appVersion((data) {
-      AppVersion appVersion = AppVersion.fromJson(data);
-      String latestVersion = (CommonUtils.isAndroid(context) ? appVersion.androidVersion : appVersion.iosVersion) ?? '';
-      if (latestVersion.isNotEmpty == true) {
-        if (latestVersion.compareTo(currentVersion) > 0) {
-          // 强制升级
-          bool forceUpdate = appVersion.forced ?? false;
-          if (forceUpdate) {
-            // 这里可以弹出不可取消的弹窗提示用户升级
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => CommonDialog(
-                title: '更新以获得最佳体验',
-                onConfirm: () {
-                  _launchURL(appVersion);
-                },
-                onlyConfirm: true,
-              ),
-            );
-          } else {
-            // 普通升级
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => CommonDialog(
-                title: '有新版本可以更新',
-                confirmText: '立即更新',
-                onConfirm: () {
-                  Navigator.of(context).pop();
-                  _launchURL(appVersion);
-                },
-                cancelText: '下次再说',
-              ),
-            );
-          }
-        }
-      }
-    });
-  }
-
-  _launchURL(AppVersion appVersion) async {
-    var url = '';
-    if (CommonUtils.isAndroid(context)) {
-      url = appVersion.androidUrl!;
-    } else {
-      url = appVersion.iosUrl!;
-    }
-    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
     return BackgroundContainer(
-      child: Scaffold(
-        body: _pages[_currentIndex],
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: Container(
-            padding: EdgeInsets.only(top: 12.px),
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff1e0000).withOpacity(0.12),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
+      child: GetBuilder<MainController>(
+        init: MainController(),
+        builder: (controller) {
+          return Scaffold(
+            body: [
+              const HomeScreen(),
+              const FeedListScreen(),
+              const MessagePage(),
+              const MineScreen(),
+            ][controller.currentIndex],
+            backgroundColor: Colors.transparent,
+            bottomNavigationBar: Container(
+              padding: EdgeInsets.only(top: 12.w),
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xff1e0000).withOpacity(0.12),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: BottomNavigationBar(
+                currentIndex: controller.currentIndex,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                selectedItemColor: const Color(0xff008EFF),
+                unselectedItemColor: const Color(0xff9CACC9),
+                showSelectedLabels: true,
+                // 取消显示选中项的标签
+                showUnselectedLabels: true,
+                // 取消显示未选中项的标签
+                useLegacyColorScheme: false,
+                onTap: controller.onTabBarItem,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      controller.currentIndex == 0 ? 'assets/images/tab_index_sel.png' : 'assets/images/tab_index.png',
+                      width: 20.w,
+                      height: 20.w,
+                    ),
+                    label: '首页',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      controller.currentIndex == 1 ? 'assets/images/tab_forum_sel.png' : 'assets/images/tab_forum.png',
+                      width: 20.w,
+                      height: 20.w,
+                    ),
+                    label: '论坛',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      controller.currentIndex == 2
+                          ? 'assets/images/tab_message_sel.png'
+                          : 'assets/images/tab_message.png',
+                      width: 20.w,
+                      height: 20.w,
+                    ),
+                    label: '消息',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Image.asset(
+                      controller.currentIndex == 3 ? 'assets/images/tab_me_sel.png' : 'assets/images/tab_me.png',
+                      width: 20.w,
+                      height: 20.w,
+                    ),
+                    label: '我的',
+                  ),
+                ],
+              ),
             ),
-            child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              selectedFontSize: 12,
-              unselectedFontSize: 12,
-              selectedItemColor: const Color(0xff008EFF),
-              unselectedItemColor: const Color(0xff9CACC9),
-              showSelectedLabels: true,
-              // 取消显示选中项的标签
-              showUnselectedLabels: true,
-              // 取消显示未选中项的标签
-              useLegacyColorScheme: false,
-              onTap: (int index) {
-                if (index == 2 || index == 3) {
-                  if (!UserStore.of.isLogin) {
-                    ToastUtils.showToast('请先登录');
-                    Get.toNamed(Routes.login);
-                    return;
-                  }
-                }
-                _currentIndex = index;
-                setState(() {});
-                CommonService.of.saveReview();
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    _currentIndex == 0 ? 'assets/images/tab_index_sel.png' : 'assets/images/tab_index.png',
-                    width: 20.px,
-                    height: 20.px,
-                  ),
-                  label: '首页',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    _currentIndex == 1 ? 'assets/images/tab_forum_sel.png' : 'assets/images/tab_forum.png',
-                    width: 20.px,
-                    height: 20.px,
-                  ),
-                  label: '论坛',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    _currentIndex == 2 ? 'assets/images/tab_message_sel.png' : 'assets/images/tab_message.png',
-                    width: 20.px,
-                    height: 20.px,
-                  ),
-                  label: '消息',
-                ),
-                BottomNavigationBarItem(
-                  icon: Image.asset(
-                    _currentIndex == 3 ? 'assets/images/tab_me_sel.png' : 'assets/images/tab_me.png',
-                    width: 20.px,
-                    height: 20.px,
-                  ),
-                  label: '我的',
-                ),
-              ],
-            )),
+          );
+        },
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/page/login/widgets/user_terms.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -25,8 +26,6 @@ class RegisterContent extends StatefulWidget {
 }
 
 class _RegisterContentState extends State<RegisterContent> {
-  int _countdown = 60;
-  bool _isCountingDown = false;
   bool _isVisible = false;
   bool _isVisibleAgain = false;
 
@@ -153,29 +152,6 @@ class _RegisterContentState extends State<RegisterContent> {
     );
   }
 
-  void _startCountdown() {
-    ToastUtils.showToast('已发送');
-    if (mounted) {
-      setState(() {
-        _isCountingDown = true;
-        _countdown = 60;
-      });
-    }
-
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          if (_countdown > 0) {
-            _countdown--;
-          } else {
-            _isCountingDown = false;
-            timer.cancel();
-          }
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -261,30 +237,10 @@ class _RegisterContentState extends State<RegisterContent> {
                     },
                   ),
                 ),
-                _isCountingDown
-                    ? Text(
-                        '${_countdown}s',
-                        style: AppTheme.text008EFFSize16,
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          var email = _controllerEmail.text;
-                          if (email.isEmpty) {
-                            ToastUtils.showToast('邮箱不能为空');
-                            return;
-                          }
-                          if (!GetUtils.isEmail(email)) {
-                            ToastUtils.showToast('请输入正确格式邮箱');
-                            return;
-                          }
-                          _startCountdown(); //启动倒计时
-                          NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_REGISTER, email, (data) {});
-                        },
-                        child: Text(
-                          '发送验证码',
-                          style: AppTheme.text008EFFSize16,
-                        ),
-                      )
+                CountDownView(
+                  type: NetRequest.SEND_CODE_TYPE_REGISTER,
+                  email: _controllerEmail.text,
+                ),
               ],
             ),
           ),

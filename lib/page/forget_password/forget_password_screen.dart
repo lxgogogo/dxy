@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
@@ -23,8 +24,6 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  int _countdown = 60;
-  bool _isCountingDown = false;
   bool _isVisible = false;
   bool _isVisibleAgain = false;
 
@@ -85,29 +84,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         againPw.isEmpty ||
         isShowAgainTips;
     setState(() {});
-  }
-
-  void _startCountdown() {
-    ToastUtils.showToast('已发送');
-    if (mounted) {
-      setState(() {
-        _isCountingDown = true;
-        _countdown = 60;
-      });
-    }
-
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          if (_countdown > 0) {
-            _countdown--;
-          } else {
-            _isCountingDown = false;
-            timer.cancel();
-          }
-        });
-      }
-    });
   }
 
   @override
@@ -268,30 +244,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                 },
                               ),
                             ),
-                            _isCountingDown
-                                ? Text(
-                              '${_countdown}s',
-                              style: AppTheme.text008EFFSize16,
-                            )
-                                : GestureDetector(
-                              onTap: () {
-                                var email = _controllerEmail.text;
-                                if (email.isEmpty) {
-                                  ToastUtils.showToast('邮箱不能为空');
-                                  return;
-                                }
-                                if (!GetUtils.isEmail(email)) {
-                                  ToastUtils.showToast('请输入正确格式邮箱');
-                                  return;
-                                }
-                                _startCountdown();
-                                NetRequest().sendCode(NetRequest.SEND_CODE_TYPE_RESET_PW, email, (data) {});
-                              },
-                              child: Text(
-                                '发送验证码',
-                                style: AppTheme.text008EFFSize16,
-                              ),
-                            )
+                            CountDownView(
+                              type: NetRequest.SEND_CODE_TYPE_RESET_PW,
+                              email: _controllerEmail.text,
+                            ),
                           ],
                         ),
                       ),

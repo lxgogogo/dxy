@@ -8,7 +8,8 @@ class VideoDetailController extends GetxController {
   ChewieController? chewieController;
 
   List<CommentBean>? comments;
-  bool loaded = false;
+  bool isInitLoading = false;
+  bool isInitialize = false;
 
   StreamSubscription? _eventSubscription;
 
@@ -26,9 +27,9 @@ class VideoDetailController extends GetxController {
   void onInit() {
     id = Get.arguments as int?;
     super.onInit();
-    requestDetail();
+    requestData();
     _eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail(showLoading: false);
+      requestData(showLoading: false);
     });
   }
 
@@ -41,37 +42,65 @@ class VideoDetailController extends GetxController {
     super.onClose();
   }
 
-  requestDetail({bool showLoading = true}) {
-    NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) async {
-      if (data == null) {
-        ToastUtils.showToast('该视频已删除');
-        Get.back();
-        return;
-      }
-      articleDetailBean = ArticleDetailBean.fromJson(data);
+  void requestData({bool showLoading = true}) {
+    if (showLoading) {
+      isInitLoading = true;
       safeUpdate();
-      if (videoController == null) {
-        if (articleDetailBean?.videoList?.isNotEmpty == true) {
-          _startVideoPlayer(articleDetailBean!.videoList!.first.sourceUrl ?? '');
-        } else {
-          _startVideoPlayer(articleDetailBean?.video?.sourceUrl ?? '');
-        }
+      EasyLoading.show(status: 'loading...');
+    }
+    Future.wait([
+      requestDetail(),
+      requestCommentList(),
+    ]).whenComplete(() {
+      if (showLoading) {
+        isInitLoading = false;
+        EasyLoading.dismiss();
       }
-    });
-
-    NetRequest().commentList({
-      'pageNum': 1,
-      'pageSize': 10,
-      'filters': {'relType': 'content', 'relId': id}
-    }, showLoading: showLoading, (data) {
-      List<CommentBean> dataList = List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
-      comments = dataList;
-      safeUpdate();
     });
   }
 
+  Future<void> requestDetail() async {
+    await NetRequest().contentShow(
+      {'id': id},
+      showLoading: false,
+      (data) async {
+        if (data == null) {
+          ToastUtils.showToast('该视频已删除');
+          Get.back();
+          return;
+        }
+        articleDetailBean = ArticleDetailBean.fromJson(data);
+        safeUpdate();
+        if (videoController == null) {
+          if (articleDetailBean?.videoList?.isNotEmpty == true) {
+            _startVideoPlayer(articleDetailBean!.videoList!.first.sourceUrl ?? '');
+          } else {
+            _startVideoPlayer(articleDetailBean?.video?.sourceUrl ?? '');
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> requestCommentList() async {
+    await NetRequest().commentList(
+      {
+        'pageNum': 1,
+        'pageSize': 10,
+        'filters': {'relType': 'content', 'relId': id}
+      },
+      showLoading: false,
+      (data) {
+        List<CommentBean> dataList =
+            List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
+        comments = dataList;
+        safeUpdate();
+      },
+    );
+  }
+
   void _initController(String link) {
-    loaded = false;
+    isInitialize = false;
     safeUpdate();
     videoController = VideoPlayerController.networkUrl(Uri.parse(link))
       ..addListener(videoListener)
@@ -80,8 +109,9 @@ class VideoDetailController extends GetxController {
           videoPlayerController: videoController!,
           autoPlay: true,
           showOptions: false,
+          showControlsOnInitialize: false,
         );
-        loaded = true;
+        isInitialize = true;
         safeUpdate();
       });
   }
@@ -120,7 +150,7 @@ class VideoDetailController extends GetxController {
   }
 
   void playVideo() {
-    if (loaded) {
+    if (isInitialize) {
       if (videoController?.value.isPlaying == true) {
         videoController?.pause();
       } else {

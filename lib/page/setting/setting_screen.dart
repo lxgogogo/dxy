@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/event_bus_util.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
@@ -299,8 +300,7 @@ class _SettingScreenState extends State<SettingScreen> {
     NetRequest().logout((data) {
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
-      //通知首页tab回到主页
-      EventBusManager.eventBus.fire(EventBusAction.noticeMainTabSwitchHome.eventBusTypeName);
+      EventBusUtil.of.fire(EventResetMainTab());
     });
   }
 }

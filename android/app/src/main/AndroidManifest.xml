@@ -31,11 +31,18 @@
             <!-- App Link sample -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="www.example.com"
-                    android:pathPrefix="/foo"
+                    android:host="school-java-dev.dx252.com"
+                    android:scheme="https" />
+                <data
+                    android:host="school-java-fat.dx252.com"
+                    android:scheme="https" />
+                <data
+                    android:host="dpoker.club"
                     android:scheme="https" />
             </intent-filter>
 
@@ -48,8 +55,8 @@
                 <!-- Add optional android:host to distinguish your app
                       from others in case of conflicting scheme name -->
                 <data
-                    android:host="open.my.app"
-                    android:scheme="sample" />
+                    android:host="com.dxy.holdem"
+                    android:scheme="holdem" />
                 <!-- <data android:scheme="sample" /> -->
             </intent-filter>
         </activity>

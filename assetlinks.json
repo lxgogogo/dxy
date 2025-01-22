@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.dxy.holdem",
+    "sha256_cert_fingerprints":
+    ["CA:6A:9B:69:E4:40:EE:A4:A6:6F:D2:DF:3F:55:C6:CF:15:39:D7:0D:33:61:9C:62:A5:18:64:03:34:08:D2:78"]
+  }
+}]

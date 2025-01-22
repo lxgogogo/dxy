@@ -102,48 +102,48 @@ class MainController extends GetxController {
   }
 
   void dealWithLink(Uri linkUri) {
-    if (linkUri.scheme == 'holdem') {
-      if (linkUri.path.contains('details/')) {
-        try {
-          var detailsPart = linkUri.path.split('details/')[1];
-          String id = '';
-          String type = '';
-          String childId = '';
+    // if (linkUri.scheme == 'holdem') {
+    if (linkUri.path.contains('details/')) {
+      try {
+        var detailsPart = linkUri.path.split('details/')[1];
+        String id = '';
+        String type = '';
+        String childId = '';
 
-          if (detailsPart.startsWith('videoList')) {
-            var parts = detailsPart.split('-');
-            type = 'videoList';
-            id = parts[1].split('.')[0];
-            childId = linkUri.queryParameters['id'] ?? '';
-          } else {
-            var parts = detailsPart.split('-');
-            type = parts[0];
-            id = parts[1].split('.')[0];
-          }
-
-          final intId = int.tryParse(id);
-          if (intId == null) return;
-          switch (type) {
-            case 'article':
-              Get.toNamed(Routes.articleDetail, arguments: intId);
-              break;
-            case 'thread':
-              Get.toNamed(Routes.feedDetail, arguments: intId);
-              break;
-            case 'book':
-              Get.toNamed(Routes.bookDetail, arguments: intId);
-              break;
-            case 'video':
-              Get.toNamed(Routes.videoDetail, arguments: intId);
-              break;
-            case 'videoList':
-              Get.toNamed(Routes.videoDetail, arguments: intId);
-              break;
-          }
-        } catch (e) {
-          Log.d(e.toString());
+        if (detailsPart.startsWith('videoList')) {
+          var parts = detailsPart.split('-');
+          type = 'videoList';
+          id = parts[1].split('.')[0];
+          childId = linkUri.queryParameters['id'] ?? '';
+        } else {
+          var parts = detailsPart.split('-');
+          type = parts[0];
+          id = parts[1].split('.')[0];
         }
+
+        final intId = int.tryParse(id);
+        if (intId == null) return;
+        switch (type) {
+          case 'article':
+            Get.toNamed(Routes.articleDetail, arguments: intId);
+            break;
+          case 'thread':
+            Get.toNamed(Routes.feedDetail, arguments: intId);
+            break;
+          case 'book':
+            Get.toNamed(Routes.bookDetail, arguments: intId);
+            break;
+          case 'video':
+            Get.toNamed(Routes.videoDetail, arguments: intId);
+            break;
+          case 'videoList':
+            Get.toNamed(Routes.videoDetail, arguments: intId);
+            break;
+        }
+      } catch (e) {
+        Log.d(e.toString());
       }
     }
+    // }
   }
 }

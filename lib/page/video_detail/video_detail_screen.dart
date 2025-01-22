@@ -87,22 +87,9 @@ class VideoDetailScreen extends StatelessWidget {
                                 ? Chewie(
                                     controller: controller.chewieController!,
                                   )
-                                : Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      CachedNetworkImage(
-                                        fit: BoxFit.cover,
-                                        imageUrl: controller.articleDetailBean?.cover ?? '',
-                                        placeholder: (context, url) =>
-                                            Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                        errorWidget: (context, url, error) =>
-                                            Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                      ),
-                                      // const Center(
-                                      //   child: CircularProgressIndicator(),
-                                      // ),
-                                    ],
-                                  ),
+                                : const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                           ),
                         ),
                         Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -82,29 +83,33 @@ class MessageChildViewState extends State<MessageChildView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 12.w),
       constraints: BoxConstraints(
         minHeight: MediaQuery.sizeOf(context).height,
       ),
       decoration: BoxDecoration(
-          color: const Color(0xfff8fbff),
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(12),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+        boxShadow: [
+          BoxShadow(
+            color: '#b9d0e5'.hexColor.withOpacity(0.64),
+            blurRadius: 2.r,
+            offset: Offset(0, -1.w),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xffa2b9d0).withOpacity(0.64),
-              offset: Offset(0, 1.w),
-              blurRadius: 2.rpx,
-              spreadRadius: -1.w,
-            ),
-            BoxShadow(
-              color: const Color(0xffffffff),
-              offset: Offset(0, -1.w),
-              blurRadius: 2.rpx,
-              spreadRadius: 0,
-            ),
-          ]),
+          BoxShadow(
+            color: Colors.white,
+            spreadRadius: 1.r,
+            blurRadius: 2.r,
+            offset: Offset(0, 1.w),
+          ),
+          BoxShadow(
+            color: '#bfd2e2'.hexColor.withOpacity(0.81),
+            blurRadius: 4.r,
+            offset: Offset(0, 2.w),
+          ),
+          BoxShadow(
+            color: '#f8fbff'.hexColor,
+          ),
+        ],
+      ),
       child: content(),
     );
   }

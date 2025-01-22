@@ -36,13 +36,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="school-java-dev.dx252.com"
-                    android:scheme="https" />
-                <data
-                    android:host="school-java-fat.dx252.com"
-                    android:scheme="https" />
-                <data
-                    android:host="dpoker.club"
+                    android:host="school-h5-web-dev.dx252.com "
                     android:scheme="https" />
             </intent-filter>
 

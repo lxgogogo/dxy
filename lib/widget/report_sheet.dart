@@ -20,7 +20,7 @@ class ReportSheet extends StatelessWidget {
       height: 0.8.sh,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

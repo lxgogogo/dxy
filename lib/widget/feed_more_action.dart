@@ -101,16 +101,16 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
           ),
         ),
       ),
-      child: IconButton(
-        icon: Icon(
-          Icons.more_vert,
-          size: 14.sp,
-        ),
-        onPressed: () {
+      child: GestureDetector(
+        onTap: () {
           UserStore.of.checkLogin(() {
             _tipController.showTooltip();
           });
         },
+        child: Icon(
+          Icons.more_vert,
+          size: 14.sp,
+        ),
       ),
     );
   }

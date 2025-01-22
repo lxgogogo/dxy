@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -20,12 +21,6 @@ class ArticleItem extends StatefulWidget {
 }
 
 class _ArticleItemState extends State<ArticleItem> {
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return '$twoDigitMinutes:$twoDigitSeconds';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,61 +32,63 @@ class _ArticleItemState extends State<ArticleItem> {
         }
         Get.toNamed(Routes.articleDetail, arguments: widget.article.id ?? 0);
       },
-      child: LinearCard(
-        padding: EdgeInsets.only(bottom: 2.w),
-        margin: EdgeInsets.only(top: 10.w, left: 16.w, right: 16.w),
-        child: Padding(
-          padding: EdgeInsets.all(12.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 12.w),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: '#E6E6E6'.hexColor)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.article.title ?? '',
+              style: TextStyle(
+                color: const Color(0xff2a2a2a),
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            if (widget.article.pureText?.isNotEmpty == true)
               Text(
-                widget.article.title ?? '',
-                style: TextStyle(
-                  color: const Color(0xff2a2a2a),
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                softWrap: true,
+                widget.article.pureText ?? '',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-              ),
-              if (widget.article.pureText?.isNotEmpty == true)
-                Text(
-                  widget.article.pureText ?? '',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: const Color(0xff666666),
-                  ),
-                  softWrap: true,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: const Color(0xff666666),
                 ),
-              if (widget.article.cover?.isNotEmpty == true)
-                Padding(
-                  padding: EdgeInsets.only(top: 8.w),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.article.cover ?? '',
-                      fit: BoxFit.cover,
-                      height: 180.w,
-                      placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    ),
+                softWrap: true,
+              ),
+            if (widget.article.cover?.isNotEmpty == true)
+              Container(
+                padding: EdgeInsets.only(top: 8.w),
+                alignment: Alignment.centerLeft,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.article.cover ?? '',
+                    fit: BoxFit.cover,
+                    width: 150.w,
+                    height: 110.w,
+                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                   ),
                 ),
-              SizedBox(height: 16.w),
-              Row(
-                children: [
-                  CountLike(count: widget.article.likeCount?.abbreviateNumber ?? '0'),
-                  CountComment(count: widget.article.commentCount?.abbreviateNumber ?? '0'),
-                  CountFavorite(count: widget.article.favoriteCount?.abbreviateNumber ?? '0'),
-                  CountShare(count: widget.article.shareCount?.abbreviateNumber ?? '0'),
-                ],
               ),
-            ],
-          ),
+            SizedBox(height: 8.w),
+            Row(
+              children: [
+                CountLike(count: widget.article.likeCount?.abbreviateNumber ?? '0'),
+                CountComment(count: widget.article.commentCount?.abbreviateNumber ?? '0'),
+                CountFavorite(count: widget.article.favoriteCount?.abbreviateNumber ?? '0'),
+                CountShare(count: widget.article.shareCount?.abbreviateNumber ?? '0'),
+              ],
+            ),
+          ],
         ),
       ),
     );

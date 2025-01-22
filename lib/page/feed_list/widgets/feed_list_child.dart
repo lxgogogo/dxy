@@ -18,9 +18,9 @@ import '../../../widget/item_feed.dart';
 import '../../../widget/report_sheet.dart';
 
 class ForumTabChildPage extends StatefulWidget {
-  int tabId;
+  final int tabId;
 
-  ForumTabChildPage({super.key, required this.tabId});
+  const ForumTabChildPage({super.key, required this.tabId});
 
   @override
   State<ForumTabChildPage> createState() => ForumTabChildPageState();
@@ -164,39 +164,70 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
-      controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: boardPostList.isNotEmpty
-          ? ListView.builder(
-              controller: _listController,
-              itemBuilder: (c, i) {
-                return FeedItem(
-                  boardPostList[i],
-                  onShield: () {
-                    if (boardPostList[i].id != null) {
-                      _onShield(boardPostList[i].id!);
-                    }
-                  },
-                  onShieldUser: () {
-                    if (boardPostList[i].user?.id != null) {
-                      _onShieldUser(boardPostList[i].user!.id!);
-                    }
-                  },
-                  onReport: () {
-                    if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
-                      _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
-                    }
-                  },
-                );
-              },
-              itemCount: boardPostList.length,
-            )
-          : const NoDataView(),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+        boxShadow: [
+          BoxShadow(
+            color: '#b9d0e5'.hexColor.withOpacity(0.64),
+            blurRadius: 2.r,
+            offset: Offset(0, -1.w),
+          ),
+          BoxShadow(
+            color: Colors.white,
+            spreadRadius: 1.r,
+            blurRadius: 2.r,
+            offset: Offset(0, 1.w),
+          ),
+          BoxShadow(
+            color: '#bfd2e2'.hexColor.withOpacity(0.81),
+            blurRadius: 4.r,
+            offset: Offset(0, 2.w),
+          ),
+          BoxShadow(
+            color: '#f8fbff'.hexColor,
+          ),
+        ],
+      ),
+      child: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: boardPostList.isEmpty
+            ? const NoDataView()
+            : CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int i) {
+                        return FeedItem(
+                          boardPostList[i],
+                          onShield: () {
+                            if (boardPostList[i].id != null) {
+                              _onShield(boardPostList[i].id!);
+                            }
+                          },
+                          onShieldUser: () {
+                            if (boardPostList[i].user?.id != null) {
+                              _onShieldUser(boardPostList[i].user!.id!);
+                            }
+                          },
+                          onReport: () {
+                            if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
+                              _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
+                            }
+                          },
+                        );
+                      },
+                      childCount: boardPostList.length,
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 

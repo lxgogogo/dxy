@@ -38,7 +38,7 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
       hasShadow: false,
       borderColor: Colors.transparent,
       arrowLength: 0,
-      arrowTipDistance: 21.25.w,
+      arrowTipDistance: 10.w,
       bubbleDimensions: EdgeInsets.zero,
       touchThroughAreaShape: ClipAreaShape.rectangle,
       touchThroughAreaCornerRadius: 10,
@@ -107,10 +107,17 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
             _tipController.showTooltip();
           });
         },
-        child: Icon(
-          Icons.more_vert,
-          size: 14.sp,
+        behavior: HitTestBehavior.translucent,
+        child: Container(
+          width: 20.w,
+          height: 20.w,
+          alignment: Alignment.center,
+          child: Icon(
+            Icons.more_vert,
+            size: 14.sp,
+          ),
         ),
+
       ),
     );
   }

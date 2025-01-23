@@ -18,6 +18,13 @@ class ArticleBean {
   String? type;
   DateTime? updatedAt;
 
+  String get showTitle {
+    if ((title?.length ?? 0) > 31) {
+      return '${title!.substring(0, 31)}...';
+    }
+    return title ?? '';
+  }
+
   ArticleBean(
       {this.author,
       this.categoryId,
@@ -47,7 +54,7 @@ class ArticleBean {
     }
     if (json["viewCount"] is num) {
       viewCount = json["viewCount"];
-    } 
+    }
     if (json['duration'] is num) {
       duration = json['duration'];
     }
@@ -60,8 +67,13 @@ class ArticleBean {
     if (json["description"] is String) {
       description = json["description"];
     }
+    if (json["pureText"] is String) {
+      pureText = json["pureText"];
+    }
     if (json["description"] is String) {
-      pureText = HtmlParseUtil.of.pureText(json["description"]);
+      if (pureText?.isNotEmpty != true) {
+        pureText = HtmlParseUtil.of.pureText(json["description"]);
+      }
     }
     if (json["favoriteCount"] is num) {
       favoriteCount = json["favoriteCount"];

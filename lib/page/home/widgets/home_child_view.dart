@@ -193,8 +193,8 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
 
   void _onLoading() async {
     pageNum++;
-    reqListData();
-    reqOtherData();
+    reqListData(showLoading: false);
+    reqOtherData(showLoading: false);
   }
 
   Widget courseItem(int index) {
@@ -229,8 +229,8 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
           enablePullDown: true,
           enablePullUp: true,
           controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
+          onRefresh: () => _onRefresh(showLoading: false),
+          onLoading: () => _onLoading(),
           child: CustomScrollView(
             slivers: [
               if (banners.isNotEmpty)
@@ -283,7 +283,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
           enablePullDown: true,
           enablePullUp: true,
           controller: _refreshController,
-          onRefresh: _onRefresh,
+          onRefresh: () => _onRefresh(showLoading: false),
           onLoading: _onLoading,
           child: articles.isEmpty ? Container() : videoList(),
         );
@@ -292,7 +292,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
           enablePullDown: true,
           enablePullUp: true,
           controller: _refreshController,
-          onRefresh: _onRefresh,
+          onRefresh: () => _onRefresh(showLoading: false),
           onLoading: _onLoading,
           child: ListView.builder(
             controller: _listController,
@@ -315,7 +315,7 @@ class _HomeChildViewState extends State<HomeChildView> with AutomaticKeepAliveCl
                 enablePullDown: true,
                 enablePullUp: true,
                 controller: _refreshController,
-                onRefresh: _onRefresh,
+                onRefresh: () => _onRefresh(showLoading: false),
                 onLoading: _onLoading,
                 child: ListView.builder(
                   controller: _listController,

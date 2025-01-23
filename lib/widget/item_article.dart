@@ -42,7 +42,7 @@ class _ArticleItemState extends State<ArticleItem> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              widget.article.title ?? '',
+              widget.article.showTitle,
               style: TextStyle(
                 color: const Color(0xff2a2a2a),
                 fontSize: 12.sp,
@@ -65,17 +65,18 @@ class _ArticleItemState extends State<ArticleItem> {
               ),
             if (widget.article.cover?.isNotEmpty == true)
               Container(
-                padding: EdgeInsets.only(top: 8.w),
-                alignment: Alignment.centerLeft,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.r),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.article.cover ?? '',
-                    fit: BoxFit.cover,
-                    width: 150.w,
-                    height: 110.w,
-                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                margin: EdgeInsets.only(top: 8.w),
+                child: AspectRatio(
+                  aspectRatio: 3 / 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.article.cover ?? '',
+                      fit: BoxFit.cover,
+                      height: 180.w,
+                      placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                      errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                    ),
                   ),
                 ),
               ),

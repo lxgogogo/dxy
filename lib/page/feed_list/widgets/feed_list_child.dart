@@ -38,21 +38,21 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
-  void _onRefresh() async {
+  void _onRefresh({bool showLoading = true}) async {
     setState(() {
       pageNum = 1;
     });
     //通知外层板块tab拉取最新数据
     EventBusManager.eventBus.fire(EventBusAction.updateBoardTabData.eventBusTypeName);
     //当前列表刷新
-    reqListData();
+    reqListData(showLoading: showLoading);
   }
 
   void _onLoading() async {
     setState(() {
       pageNum++;
     });
-    reqListData();
+    reqListData(showLoading: false);
   }
 
   void refreshData(int id, String order) {
@@ -86,7 +86,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     });
   }
 
-  reqListData() {
+  reqListData({bool showLoading = true}) {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -99,7 +99,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     }
     params['filters'] = filters;
     //tabIdValue = 0全部板块,不传boardId
-    NetRequest().getThreadListByBoard(params, (data) {
+    NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
       BoardList boardList = BoardList.fromJson(data);
       if (mounted) {
         setState(() {
@@ -194,7 +194,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
         enablePullUp: true,
         header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
         controller: _refreshController,
-        onRefresh: _onRefresh,
+        onRefresh: () => _onRefresh(showLoading: false),
         onLoading: _onLoading,
         child: boardPostList.isEmpty
             ? const NoDataView()

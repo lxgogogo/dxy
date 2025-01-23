@@ -160,8 +160,8 @@ class NetRequest {
   static const String BOARD_SORT_COMMENT = "comment";
   static const String BOARD_SORT_LIKE = "like";
 
-  Future getThreadListByBoard(Map<String, dynamic> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadList, params: params);
+  Future getThreadListByBoard(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);

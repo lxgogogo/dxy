@@ -110,53 +110,46 @@ class FeedItem extends StatelessWidget {
                 softWrap: true,
               ),
             if (item.files?.isNotEmpty == true)
-              LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  final itemWidth = (constraints.maxWidth - 12.w * 2) / 2.2;
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.only(top: 8.w),
-                    child: Row(
-                      children: List.generate(
-                        item.files?.length ?? 0,
-                            (index) {
-                          final fileItem = item.files![index];
-                          return Container(
-                            width: itemWidth,
-                            margin: EdgeInsets.only(right: 12.w),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(top: 8.w),
+                child: Row(
+                  children: List.generate(
+                    item.files?.length ?? 0,
+                    (index) {
+                      final fileItem = item.files![index];
+                      return Container(
+                        width: 150.w,
+                        height: 110.w,
+                        margin: EdgeInsets.only(right: 6.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: getFilesUrl(fileItem),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                              errorWidget: (context, url, error) =>
+                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                             ),
-                            clipBehavior: Clip.antiAlias,
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: getFilesUrl(fileItem),
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                    errorWidget: (context, url, error) =>
-                                        Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                  ),
-                                  if (fileItem.type == 'video')
-                                    Center(
-                                      child: Assets.images.playBtn.image(
-                                        width: 32.w,
-                                        height: 32.w,
-                                      ),
-                                    ),
-                                ],
+                            if (fileItem.type == 'video')
+                              Center(
+                                child: Assets.images.playBtn.image(
+                                  width: 32.w,
+                                  height: 32.w,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             SizedBox(height: 8.w),
             Row(

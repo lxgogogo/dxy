@@ -42,7 +42,7 @@ class _ArticleItemState extends State<ArticleItem> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              widget.article.showTitle,
+              widget.article.title ?? '',
               style: TextStyle(
                 color: const Color(0xff2a2a2a),
                 fontSize: 12.sp,

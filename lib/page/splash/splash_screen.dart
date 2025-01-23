@@ -14,9 +14,14 @@ class SplashScreen extends GetView<SplashController> {
         init: SplashController(),
         builder: (_) => Scaffold(
               extendBodyBehindAppBar: true,
-              body: Image.asset(
-                'assets/images/splash_bg.png',
-                fit: BoxFit.fill,
+              body: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    'assets/images/splash_bg.png',
+                    fit: BoxFit.fill,
+                  ),
+                ],
               ),
             ));
   }

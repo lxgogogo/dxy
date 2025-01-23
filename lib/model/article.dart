@@ -18,13 +18,6 @@ class ArticleBean {
   String? type;
   DateTime? updatedAt;
 
-  String get showTitle {
-    if ((title?.length ?? 0) > 31) {
-      return '${title!.substring(0, 31)}...';
-    }
-    return title ?? '';
-  }
-
   ArticleBean(
       {this.author,
       this.categoryId,

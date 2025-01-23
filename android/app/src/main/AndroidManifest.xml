@@ -38,7 +38,10 @@
                 <data android:scheme="https" />
                 <data android:host="school-h5-web-dev.dx252.com" />
                 <data android:host="school-h5-web-fat.dx252.com" />
+                <data android:host="school-pc-web-fat.dx252.com" />
+                <data android:host="school-pc-web-dev.dx252.com" />
                 <data android:host="dpoker.club" />
+                <data android:host="m.dpoker.club" />
             </intent-filter>
 
             <!-- Deep Link sample -->

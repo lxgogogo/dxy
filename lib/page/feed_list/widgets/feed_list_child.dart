@@ -38,11 +38,11 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
-  void _onRefresh({bool showLoading = true, bool needJump = false}) async {
+  void _onRefresh({bool showLoading = true}) async {
     //通知外层板块tab拉取最新数据
     EventBusManager.eventBus.fire(EventBusAction.updateBoardTabData.eventBusTypeName);
     pageNum = 1;
-    reqListData(showLoading: showLoading, needJump: needJump);
+    reqListData(showLoading: showLoading);
   }
 
   void _onLoading() async {
@@ -51,10 +51,13 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   }
 
   void refreshData(int id, String order) {
+    if (_listController.hasClients) {
+      _listController.jumpTo(0.0);
+    }
     pageId = id;
     tabIdValue = id;
     boardSort = order;
-    _onRefresh(needJump: true);
+    _onRefresh();
   }
 
   @override
@@ -74,7 +77,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     });
   }
 
-  reqListData({bool showLoading = true, bool needJump = false}) {
+  reqListData({bool showLoading = true}) {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -100,9 +103,6 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
       }
       _refreshController.loadComplete();
       _refreshController.refreshCompleted();
-      if (needJump && _listController.hasClients) {
-        _listController.jumpTo(0.0);
-      }
     });
   }
 
@@ -187,10 +187,10 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
         controller: _refreshController,
         onRefresh: () => _onRefresh(showLoading: false),
         onLoading: _onLoading,
+        scrollController: _listController,
         child: boardPostList.isEmpty
             ? const NoDataView()
             : CustomScrollView(
-                controller: _listController,
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(

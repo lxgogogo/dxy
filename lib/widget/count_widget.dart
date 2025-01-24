@@ -177,7 +177,7 @@ class CountText extends StatelessWidget {
           Opacity(
             opacity: 0,
             child: Text(
-              '99',
+              '000',
               style: TextStyle(
                 color: const Color(0xff9CACC9),
                 fontSize: 12.sp,

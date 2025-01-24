@@ -44,7 +44,7 @@ class FeedItem extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w),
-        padding: EdgeInsets.symmetric(vertical: 12.w),
+        padding: EdgeInsets.only(top: 16.w , bottom: 12.w),
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: '#E6E6E6'.hexColor)),
         ),
@@ -58,7 +58,7 @@ class FeedItem extends StatelessWidget {
                     item.title ?? '',
                     style: TextStyle(
                       color: const Color(0xff2a2a2a),
-                      fontSize: 12.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
                     softWrap: true,
@@ -97,15 +97,15 @@ class FeedItem extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 4.w),
+            SizedBox(height: 8.w),
             if (item.pureText?.isNotEmpty == true)
               Text(
                 item.pureText ?? '',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 12.sp,
-                  color: '#2A2A2A'.hexColor,
+                  fontSize: 14.sp,
+                  color: '#696969'.hexColor,
                 ),
                 softWrap: true,
               ),
@@ -121,7 +121,7 @@ class FeedItem extends StatelessWidget {
                       return Container(
                         width: 150.w,
                         height: 110.w,
-                        margin: EdgeInsets.only(right: 6.w),
+                        margin: EdgeInsets.only(right: 8.w),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.r),
                         ),

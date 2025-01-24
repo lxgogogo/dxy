@@ -34,7 +34,7 @@ class _ArticleItemState extends State<ArticleItem> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w),
-        padding: EdgeInsets.symmetric(vertical: 12.w),
+        padding: EdgeInsets.only(top: 16.w , bottom: 12.w),
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: '#E6E6E6'.hexColor)),
         ),
@@ -45,21 +45,22 @@ class _ArticleItemState extends State<ArticleItem> {
               widget.article.title ?? '',
               style: TextStyle(
                 color: const Color(0xff2a2a2a),
-                fontSize: 12.sp,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
               softWrap: true,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            SizedBox(height: 6.w),
             if (widget.article.pureText?.isNotEmpty == true)
               Text(
                 widget.article.pureText ?? '',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 12.sp,
-                  color: const Color(0xff666666),
+                  fontSize: 14.sp,
+                  color: '#696969'.hexColor,
                 ),
                 softWrap: true,
               ),
@@ -73,7 +74,6 @@ class _ArticleItemState extends State<ArticleItem> {
                     child: CachedNetworkImage(
                       imageUrl: widget.article.cover ?? '',
                       fit: BoxFit.cover,
-                      height: 180.w,
                       placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                       errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                     ),

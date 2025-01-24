@@ -1,21 +1,23 @@
 part of 'count_down_view.dart';
 
 class CountDownController extends GetxController {
-  var countdown = 60.obs;
-  var isCountingDown = false.obs;
+  int countdown = 60;
+  bool isCountingDown = false;
 
   void startCountdown(String type, String email) {
     NetRequest().sendCode(type, email, (data) {});
-    isCountingDown.value = true;
-    countdown.value = 60;
+    isCountingDown = true;
+    countdown = 60;
+    safeUpdate();
 
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown > 0) {
         countdown--;
       } else {
-        isCountingDown.value = false;
+        isCountingDown = false;
         timer.cancel();
       }
+      safeUpdate();
     });
   }
 }

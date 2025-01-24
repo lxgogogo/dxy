@@ -135,10 +135,10 @@ class NetRequest {
   }
 
   ///论坛顶部板块列表
-  Future getBoardData(SuccessCallback onSuccess) async {
+  Future getBoardData(SuccessCallback onSuccess, {bool showLoading = true}) async {
     Map<String, Object> params = {};
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.boardList, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.boardList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -277,7 +277,7 @@ class NetRequest {
   }
 
   ///收藏列表 user/favorite/list
-  Future userFavoriteList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess) async {
+  Future userFavoriteList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess, {bool showLoading = true}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -290,7 +290,7 @@ class NetRequest {
     params['filters'] = filters;
 
     LogUtils.printAll("userFavoriteList params===>$params");
-    Map<String, dynamic> response = await HttpUtils.post(Api.userFavoriteList, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.userFavoriteList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userFavoriteList===>$response");
@@ -311,7 +311,7 @@ class NetRequest {
   }
 
   ///评论列表
-  Future userCommentList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess) async {
+  Future userCommentList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess, {bool showLoading = true}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -323,7 +323,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.userCommentList, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.userCommentList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);

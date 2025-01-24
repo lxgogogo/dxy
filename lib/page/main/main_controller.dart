@@ -123,6 +123,7 @@ class MainController extends GetxController {
 
         final intId = int.tryParse(id);
         if (intId == null) return;
+        Get.until((route) => route.settings.name == Routes.main);
         switch (type) {
           case 'article':
             Get.toNamed(Routes.articleDetail, arguments: intId);

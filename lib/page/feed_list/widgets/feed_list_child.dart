@@ -38,30 +38,23 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
-  void _onRefresh({bool showLoading = true}) async {
-    setState(() {
-      pageNum = 1;
-    });
+  void _onRefresh({bool showLoading = true, bool needJump = false}) async {
     //通知外层板块tab拉取最新数据
     EventBusManager.eventBus.fire(EventBusAction.updateBoardTabData.eventBusTypeName);
-    //当前列表刷新
-    reqListData(showLoading: showLoading);
+    pageNum = 1;
+    reqListData(showLoading: showLoading, needJump: needJump);
   }
 
   void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
+    pageNum++;
     reqListData(showLoading: false);
   }
 
   void refreshData(int id, String order) {
-    setState(() {
-      pageId = id;
-      tabIdValue = id;
-      boardSort = order;
-    });
-    _onRefresh();
+    pageId = id;
+    tabIdValue = id;
+    boardSort = order;
+    _onRefresh(needJump: true);
   }
 
   @override
@@ -74,19 +67,14 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
     //接受通知刷新页面
     EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.refreshForumList.eventBusTypeName) {
-        if (mounted) {
-          boardSort = NetRequest.BOARD_SORT_TIME;
-          pageNum = 1;
-          setState(() {
-            reqListData();
-            _scrollToTop();
-          });
-        }
+        boardSort = NetRequest.BOARD_SORT_TIME;
+        pageNum = 1;
+        reqListData();
       }
     });
   }
 
-  reqListData({bool showLoading = true}) {
+  reqListData({bool showLoading = true, bool needJump = false}) {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -112,6 +100,9 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
       }
       _refreshController.loadComplete();
       _refreshController.refreshCompleted();
+      if (needJump && _listController.hasClients) {
+        _listController.jumpTo(0.0);
+      }
     });
   }
 
@@ -199,6 +190,7 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
         child: boardPostList.isEmpty
             ? const NoDataView()
             : CustomScrollView(
+                controller: _listController,
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
@@ -233,12 +225,4 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
 
   @override
   bool get wantKeepAlive => true;
-
-  void _scrollToTop() {
-    _listController.animateTo(
-      0.0, // 滚动到顶部的偏移量
-      duration: const Duration(milliseconds: 300), // 滚动动画的持续时间
-      curve: Curves.ease, // 滚动动画的曲线
-    );
-  }
 }

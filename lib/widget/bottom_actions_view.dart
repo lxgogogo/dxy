@@ -36,14 +36,14 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
     viewParams = widget.viewParams;
     super.initState();
   }
-
-  @override
-  void didUpdateWidget(covariant FeedDetailBottomView oldWidget) {
-    if (oldWidget.viewParams != widget.viewParams) {
-      viewParams = widget.viewParams;
-    }
-    super.didUpdateWidget(oldWidget);
-  }
+  //
+  // @override
+  // void didUpdateWidget(covariant FeedDetailBottomView oldWidget) {
+  //   if (oldWidget.viewParams != widget.viewParams) {
+  //     viewParams = widget.viewParams;
+  //   }
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   @override
   Widget build(BuildContext context) {

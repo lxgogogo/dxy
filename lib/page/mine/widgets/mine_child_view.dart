@@ -63,7 +63,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
     });
   }
 
-  reqListData() {
+  reqListData({bool showLoading = true}) {
     if (widget.tabIndex == 0) {
       Map<String, dynamic> params = {};
       params['pageNum'] = pageNum;
@@ -74,7 +74,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
       var ownerId = UserStore.of.user.id;
       filters['ownerId'] = ownerId;
       params['filters'] = filters;
-      NetRequest().getThreadListByBoard(params, (data) {
+      NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
         BoardList boardList = BoardList.fromJson(data);
         if (_isMounted) {
           final total = boardList.pager?.total ?? 0;
@@ -100,7 +100,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
       });
     } else if (widget.tabIndex == 1) {
       //收藏
-      NetRequest().userFavoriteList(pageNum, pageSize, '', (data) {
+      NetRequest().userFavoriteList(pageNum, pageSize, '', showLoading:showLoading, (data) {
         CollectPageModel collectPageModel = CollectPageModel.fromJson(data);
         if (_isMounted) {
           final total = collectPageModel.pager?.total ?? 0;
@@ -126,7 +126,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
       });
     } else if (widget.tabIndex == 2) {
       //评论
-      NetRequest().userCommentList(pageNum, pageSize, '', (data) {
+      NetRequest().userCommentList(pageNum, pageSize, '', showLoading:showLoading, (data) {
         CommentList commentList = CommentList.fromJson(data);
         if (_isMounted) {
           final total = commentList.pager?.total ?? 0;
@@ -155,12 +155,12 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
 
   void _onRefresh() async {
     pageNum = 1;
-    reqListData();
+    reqListData(showLoading: false);
   }
 
   void _onLoading() async {
     pageNum++;
-    reqListData();
+    reqListData(showLoading: false);
   }
 
   @override

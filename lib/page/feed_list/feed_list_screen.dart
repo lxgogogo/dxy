@@ -54,7 +54,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   }
 
   void getPlateData() {
-    NetRequest().getBoardData((data) {
+    NetRequest().getBoardData(showLoading: false, (data) {
       List<BoardInfo> dataList = List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
       if (mounted) {
         setState(() {

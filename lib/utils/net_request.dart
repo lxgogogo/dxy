@@ -119,12 +119,10 @@ class NetRequest {
   }
 
   Future contentLike(Map<String, dynamic> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.like, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.like, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
-    } else {
-      ToastUtils.showToast(resp.message ?? '未知错误');
     }
   }
 
@@ -636,7 +634,7 @@ class NetRequest {
 
     LogUtils.printAll("favoriteToggle params===>$params");
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.favoriteToggle, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.favoriteToggle, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("favoriteToggle===>$response");
@@ -687,7 +685,7 @@ class NetRequest {
     Map<String, dynamic> params = {};
     params['id'] = id;
     params['type'] = 'share';
-    Map<String, dynamic> response = await HttpUtils.post(Api.upCount, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.upCount, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("upCount===>$response");
@@ -701,7 +699,7 @@ class NetRequest {
     Map<String, dynamic> params = {};
     params['id'] = id;
     params['type'] = 'share';
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadUpCount, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.threadUpCount, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("threadUpCount===>$response");

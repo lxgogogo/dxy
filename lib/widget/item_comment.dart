@@ -149,9 +149,11 @@ class _CommentItemState extends State<CommentItem> {
                   ),
                   const Spacer(),
                   if (!widget.isReply) ...[
-                    GestureDetector(
-                      onTap: () {
-                        NetRequest().contentLike({
+                    CountLikeAni(
+                      count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
+                      liked: widget.commentBean.liked ?? false,
+                      onToggleLike: () {
+                        return NetRequest().contentLike({
                           'relType': 'comment',
                           'relId': widget.commentBean.id!,
                           'state': widget.commentBean.liked! ? false : true
@@ -163,10 +165,6 @@ class _CommentItemState extends State<CommentItem> {
                           });
                         });
                       },
-                      child: CountLike(
-                        count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
-                        liked: widget.commentBean.liked ?? false,
-                      ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -251,9 +249,12 @@ class _CommentItemState extends State<CommentItem> {
                                             ),
                                           ),
                                           const Spacer(),
-                                          GestureDetector(
-                                            onTap: () {
-                                              NetRequest().contentLike({
+                                          CountLikeAni(
+                                            count: reply.likeCount.abbreviateNumber,
+                                            liked: reply.liked ?? false,
+                                            usePlaceHolder: showReplyReport,
+                                            onToggleLike: ()  {
+                                              return NetRequest().contentLike({
                                                 'relType': 'comment',
                                                 'relId': reply.id!,
                                                 'state': reply.liked! ? false : true
@@ -265,11 +266,6 @@ class _CommentItemState extends State<CommentItem> {
                                                 });
                                               });
                                             },
-                                            child: CountLike(
-                                              count: reply.likeCount.abbreviateNumber,
-                                              liked: reply.liked ?? false,
-                                              usePlaceHolder: showReplyReport,
-                                            ),
                                           ),
                                           if (showReplyReport)
                                             GestureDetector(

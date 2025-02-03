@@ -36,6 +36,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
     viewParams = widget.viewParams;
     super.initState();
   }
+
   //
   // @override
   // void didUpdateWidget(covariant FeedDetailBottomView oldWidget) {
@@ -104,12 +105,10 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
               ),
               SizedBox(width: 8.w),
               if (viewParams.relType == 'thread')
-                GestureDetector(
-                  onTap: _likeToggle,
-                  child: CountLike(
-                    count: viewParams.likeCount.abbreviateNumber,
-                    liked: viewParams.liked == true,
-                  ),
+                CountLikeAni(
+                  count: viewParams.likeCount.abbreviateNumber,
+                  liked: viewParams.liked == true,
+                  onToggleLike: _likeToggle,
                 ),
               GestureDetector(
                 onTap: _favoriteToggle,
@@ -133,8 +132,8 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
     );
   }
 
-  void _likeToggle() {
-    NetRequest().contentLike({
+  Future<void> _likeToggle() async {
+    await NetRequest().contentLike({
       'relType': viewParams.relType,
       'relId': viewParams.relId,
       'state': viewParams.liked ?? false ? false : true,
@@ -153,7 +152,9 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
 
   void _favoriteToggle() {
     NetRequest().favoriteToggle(viewParams.relType, viewParams.relId, !(viewParams.favoriteState ?? false), (data) {
-      ToastUtils.showToast(viewParams.favoriteState == true ? '取消成功' : '收藏成功');
+      if (viewParams.favoriteState != true) {
+        ToastUtils.showToast('收藏成功');
+      }
       if (viewParams.favoriteState == true) {
         viewParams.favoriteState = false;
         viewParams.favoriteCount = viewParams.favoriteCount - 1;

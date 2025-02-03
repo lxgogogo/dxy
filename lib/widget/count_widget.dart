@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'like_button/like_button.dart';
+
 class CountComment extends StatelessWidget {
   const CountComment({
     super.key,
@@ -111,6 +113,58 @@ class CountLike extends StatelessWidget {
           ),
           SizedBox(width: 3.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
+        ],
+      ),
+    );
+  }
+}
+
+class CountLikeAni extends StatefulWidget {
+  const CountLikeAni({
+    super.key,
+    required this.count,
+    this.liked = false,
+    this.usePlaceHolder = true,
+    this.onToggleLike,
+  });
+
+  final String count;
+  final bool liked;
+  final bool usePlaceHolder;
+  final Function? onToggleLike;
+
+  @override
+  State<CountLikeAni> createState() => _CountLikeAniState();
+}
+
+class _CountLikeAniState extends State<CountLikeAni> {
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    await widget.onToggleLike?.call();
+    return !isLiked;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LikeButton(
+            isLiked: widget.liked,
+            size: 11.w,
+            onTap: onLikeButtonTapped,
+            likeBuilder: (bool isLiked) {
+              return Image.asset(
+                isLiked ? 'assets/images/praised.png' : 'assets/images/praise.png',
+              );
+            },
+            likeCountPadding: EdgeInsets.only(left: 3.w),
+            countBuilder: (_, __, ___) => CountText(
+              count: widget.count,
+              usePlaceHolder: widget.usePlaceHolder,
+            ),
+          ),
         ],
       ),
     );

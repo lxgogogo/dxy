@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:holdem/utils/size_fit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NoDataView extends StatelessWidget {
   final String text;
@@ -11,15 +11,15 @@ class NoDataView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('assets/images/no_result.png',  height: 102.px),
+        Image.asset('assets/images/no_result.png', height: 102.w),
         SizedBox(
-          height: 10.px,
+          height: 10.w,
         ),
         Text(
           text,
-          style: const TextStyle(
-            color: Color(0xff5d6e8e),
-            fontSize: 12,
+          style: TextStyle(
+            color: const Color(0xff3b5078),
+            fontSize: 14.sp,
           ),
         )
       ],

@@ -6,7 +6,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
@@ -18,7 +17,6 @@ import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/item_article.dart';
 import 'package:holdem/widget/item_book.dart';
 import 'package:holdem/widget/item_course.dart';
@@ -26,6 +24,7 @@ import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/linear_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import '../../../model/board_list.dart';
 
 class HomeChildView extends StatefulWidget {

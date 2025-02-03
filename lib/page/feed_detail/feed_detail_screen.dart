@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chewie/chewie.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -18,6 +19,7 @@ import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/no_network.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -47,136 +49,143 @@ class FeedDetailScreen extends StatelessWidget {
             ),
             backgroundColor: Colors.transparent,
             extendBody: true,
-            body: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    controller.detailBean?.title ?? '',
-                    style: TextStyle(
-                      color: const Color(0xff2c2c2c),
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CircleImageWithText(
-                            imageUrl: (controller.detailBean != null && controller.detailBean!.user != null)
-                                ? controller.detailBean!.user!.avatar!
-                                : '',
-                            imageWidth: 40,
-                            imageHeight: 40,
-                            topText: controller.detailBean?.user?.nickname ?? '',
-                            topTextStyle: const TextStyle(),
-                            bottomText1: controller.detailBean?.createdAt != null
-                                ? '发布于${DateFormat('MM-dd HH:mm').format(controller.detailBean!.createdAt!)}'
-                                : '',
-                            bottomText1Style: AppTheme.text999999Size11,
-                            bottomText2: '',
-                            bottomText2Style: const TextStyle(),
-                          ),
-                        ),
-                        if ((controller.detailBean?.user?.id ?? 0) != 0)
-                          Visibility(
-                            visible: !UserStore.of.isMe(controller.detailBean!.user?.id),
-                            child: GestureDetector(
-                              onTap: controller._followToggle,
-                              child: controller.detailBean?.user?.followed == true
-                                  ? Container(
-                                      height: 28.w,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffd8d8d8),
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                      child: Text(
-                                        '已关注',
-                                        style: TextStyle(
-                                          color: const Color(0xff95a3c4),
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 28.w,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xff249cfc),
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                      child: Text(
-                                        '+关注',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+            body: controller.noNetwork
+                ? NoNetworkView(
+                    onRefresh: controller.refreshData,
+                  )
+                : controller.detailBean == null
+                    ? const SizedBox()
+                    : SingleChildScrollView(
+                        padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              controller.detailBean?.title ?? '',
+                              style: TextStyle(
+                                color: const Color(0xff2c2c2c),
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: CircleImageWithText(
+                                      imageUrl: (controller.detailBean != null && controller.detailBean!.user != null)
+                                          ? controller.detailBean!.user!.avatar!
+                                          : '',
+                                      imageWidth: 40,
+                                      imageHeight: 40,
+                                      topText: controller.detailBean?.user?.nickname ?? '',
+                                      topTextStyle: const TextStyle(),
+                                      bottomText1: controller.detailBean?.createdAt != null
+                                          ? '发布于${DateFormat('MM-dd HH:mm').format(controller.detailBean!.createdAt!)}'
+                                          : '',
+                                      bottomText1Style: AppTheme.text999999Size11,
+                                      bottomText2: '',
+                                      bottomText2Style: const TextStyle(),
+                                    ),
+                                  ),
+                                  if ((controller.detailBean?.user?.id ?? 0) != 0)
+                                    Visibility(
+                                      visible: !UserStore.of.isMe(controller.detailBean!.user?.id),
+                                      child: GestureDetector(
+                                        onTap: controller._followToggle,
+                                        child: controller.detailBean?.user?.followed == true
+                                            ? Container(
+                                                height: 28.w,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xffd8d8d8),
+                                                  borderRadius: BorderRadius.circular(25),
+                                                ),
+                                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                                child: Text(
+                                                  '已关注',
+                                                  style: TextStyle(
+                                                    color: const Color(0xff95a3c4),
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                height: 28.w,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xff249cfc),
+                                                  borderRadius: BorderRadius.circular(25),
+                                                ),
+                                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                                child: Text(
+                                                  '+关注',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
                                       ),
                                     ),
+                                ],
+                              ),
                             ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  if (controller.detailBean?.content?.isNotEmpty == true)
-                    HtmlWidget(
-                      controller.detailBean!.content!,
-                      customStylesBuilder: htmlCustomStyles,
-                      factoryBuilder: () => HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
-                      customWidgetBuilder: (dom.Element element) {
-                        if (element.localName == 'table') {
-                          return const SizedBox();
-                        }
-                        return null;
-                      },
-                      onTapUrl: (String url) async {
-                        return launchUrlString(url, mode: LaunchMode.externalApplication);
-                      },
-                    ),
-                  // _buildMediaView(),
-                  if (controller.detailBean?.tagList?.isNotEmpty == true)
-                    TagListView(tagList: controller.detailBean?.tagList ?? [])
-                  else
-                    SizedBox(height: 16.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        '评论(${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'})',
-                        style: TextStyle(
-                          color: const Color(0xff2a2a2a),
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
+                            if (controller.detailBean?.content?.isNotEmpty == true)
+                              HtmlWidget(
+                                controller.detailBean!.content!,
+                                customStylesBuilder: htmlCustomStyles,
+                                factoryBuilder: () =>
+                                    HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                                customWidgetBuilder: (dom.Element element) {
+                                  if (element.localName == 'table') {
+                                    return const SizedBox();
+                                  }
+                                  return null;
+                                },
+                                onTapUrl: (String url) async {
+                                  return launchUrlString(url, mode: LaunchMode.externalApplication);
+                                },
+                              ),
+                            // _buildMediaView(),
+                            if (controller.detailBean?.tagList?.isNotEmpty == true)
+                              TagListView(tagList: controller.detailBean?.tagList ?? [])
+                            else
+                              SizedBox(height: 16.w),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  '评论(${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'})',
+                                  style: TextStyle(
+                                    color: const Color(0xff2a2a2a),
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 10.w),
+                                if (controller.comments == null)
+                                  const SizedBox()
+                                else if (controller.comments?.isNotEmpty == true)
+                                  ...List.generate(controller.comments!.length, (index) {
+                                    return CommentItem(
+                                      commentBean: controller.comments![index],
+                                      relType: 'thread',
+                                    );
+                                  })
+                                else
+                                  const Center(
+                                    child: NoDataView(),
+                                  ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 10.w),
-                      if (controller.comments == null)
-                        const SizedBox()
-                      else if (controller.comments?.isNotEmpty == true)
-                        ...List.generate(controller.comments!.length, (index) {
-                          return CommentItem(
-                            commentBean: controller.comments![index],
-                            relType : 'thread',
-                          );
-                        })
-                      else
-                        const Center(
-                          child: NoDataView(),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
             bottomNavigationBar: controller.detailBean != null
                 ? FeedDetailBottomView(
                     viewParams: PostBottomViewParams(

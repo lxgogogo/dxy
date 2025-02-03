@@ -113,8 +113,6 @@ class NetRequest {
     if (resp.code == 200) {
       LogUtils.printAll("commentList===>$response");
       onSuccess(response['data']);
-    } else {
-      ToastUtils.showToast(resp.message ?? '未知错误');
     }
   }
 

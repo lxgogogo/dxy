@@ -122,7 +122,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.bookDetail,
-      page: () => BookDetailScreen(id: Get.arguments as int),
+      page: () => const BookDetailScreen(),
     ),
     GetPage(
       name: Routes.articleDetail,

@@ -3,12 +3,11 @@ part of 'video_detail_screen.dart';
 class VideoDetailController extends GetxController {
   int? id;
 
-  ArticleDetailBean? articleDetailBean;
+  ArticleDetailBean? detailBean;
   VideoPlayerController? videoController;
   ChewieController? chewieController;
 
   List<CommentBean>? comments;
-  bool isInitLoading = false;
   bool isInitialize = false;
 
   StreamSubscription? _eventSubscription;
@@ -17,20 +16,42 @@ class VideoDetailController extends GetxController {
 
   String get shareLink {
     String shareUrlSuffix = '';
-    if (articleDetailBean?.type == 'videoList') {
-      shareUrlSuffix = '?id=${articleDetailBean?.videoList?[playVideoIndex].id}';
+    if (detailBean?.type == 'videoList') {
+      shareUrlSuffix = '?id=${detailBean?.videoList?[playVideoIndex].id}';
     }
-    return 'details/${articleDetailBean?.type}-$id$shareUrlSuffix';
+    return 'details/${detailBean?.type}-$id$shareUrlSuffix';
   }
+
+  bool noNetwork = false;
 
   @override
   void onInit() {
     id = Get.arguments as int?;
     super.onInit();
-    requestData();
     _eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       requestData(showLoading: false);
     });
+    dataInit();
+  }
+
+  Future<void> dataInit() async {
+    final events = await Connectivity().checkConnectivity();
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      safeUpdate();
+      return;
+    }
+    requestData(showLoading: false);
+  }
+
+  Future<void> refreshData() async {
+    final events = await Connectivity().checkConnectivity();
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      ToastUtils.showToast('请检查网络');
+      return;
+    }
+    requestData();
   }
 
   @override
@@ -44,8 +65,6 @@ class VideoDetailController extends GetxController {
 
   void requestData({bool showLoading = true}) {
     if (showLoading) {
-      isInitLoading = true;
-      safeUpdate();
       EasyLoading.show(status: 'loading...');
     }
     Future.wait([
@@ -53,7 +72,6 @@ class VideoDetailController extends GetxController {
       requestCommentList(),
     ]).whenComplete(() {
       if (showLoading) {
-        isInitLoading = false;
         EasyLoading.dismiss();
       }
     });
@@ -69,13 +87,13 @@ class VideoDetailController extends GetxController {
           Get.back();
           return;
         }
-        articleDetailBean = ArticleDetailBean.fromJson(data);
+        detailBean = ArticleDetailBean.fromJson(data);
         safeUpdate();
         if (videoController == null) {
-          if (articleDetailBean?.videoList?.isNotEmpty == true) {
-            _startVideoPlayer(articleDetailBean!.videoList!.first.sourceUrl ?? '');
+          if (detailBean?.videoList?.isNotEmpty == true) {
+            _startVideoPlayer(detailBean!.videoList!.first.sourceUrl ?? '');
           } else {
-            _startVideoPlayer(articleDetailBean?.video?.sourceUrl ?? '');
+            _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           }
         }
       },
@@ -117,18 +135,18 @@ class VideoDetailController extends GetxController {
   }
 
   void videoListener() {
-    if (articleDetailBean?.videoList?.isNotEmpty != true) return;
+    if (detailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
     if (videoController!.value.isPlaying &&
         videoController!.value.position.inSeconds >= videoController!.value.duration.inSeconds) {
-      if (playVideoIndex == articleDetailBean!.videoList!.length - 1) {
+      if (playVideoIndex == detailBean!.videoList!.length - 1) {
         playVideoIndex = 0;
       } else {
         playVideoIndex += 1;
       }
       autoScrollController.scrollToIndex(playVideoIndex, preferPosition: AutoScrollPosition.end);
       safeUpdate();
-      _startVideoPlayer(articleDetailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+      _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
     }
   }
 
@@ -171,6 +189,6 @@ class VideoDetailController extends GetxController {
     autoScrollController.scrollToIndex(index, preferPosition: AutoScrollPosition.end);
     playVideoIndex = index;
     safeUpdate();
-    _startVideoPlayer(articleDetailBean!.videoList![index].sourceUrl ?? '');
+    _startVideoPlayer(detailBean!.videoList![index].sourceUrl ?? '');
   }
 }

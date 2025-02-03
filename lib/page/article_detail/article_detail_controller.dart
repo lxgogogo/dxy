@@ -10,14 +10,36 @@ class ArticleDetailController extends GetxController {
 
   StreamSubscription? eventSubscription;
 
+  bool noNetwork = false;
+
   @override
   void onInit() {
     id = Get.arguments as int?;
     super.onInit();
-    requestDetail();
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       requestDetail(showLoading: false);
     });
+    dataInit();
+  }
+
+  Future<void> dataInit() async {
+    final events = await Connectivity().checkConnectivity();
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      safeUpdate();
+      return;
+    }
+    requestDetail(showLoading: false);
+  }
+
+  Future<void> refreshData() async {
+    final events = await Connectivity().checkConnectivity();
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      ToastUtils.showToast('请检查网络');
+      return;
+    }
+    requestDetail();
   }
 
   @override

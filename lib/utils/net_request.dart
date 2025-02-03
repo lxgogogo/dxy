@@ -363,19 +363,16 @@ class NetRequest {
 
   static const String SEND_CODE_DELETE_ACCOUNT = "deleteAccount";
 
-  Future sendCode(String type, String account, SuccessCallback onSuccess, {bool showLoading = false}) async {
+  Future sendCode(String type, String account) async {
     Map<String, Object> params = {};
     params['type'] = type;
     params['email'] = account;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.sendCode, params: params, showLoading: showLoading);
+    Map<String, dynamic> response = await HttpUtils.post(Api.sendCode, params: params, showLoading: false);
     LogUtils.printAll("sendCode===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("sendCode success===>");
-      onSuccess(response['data']);
-    } else {
-      ToastUtils.showToast(resp.message ?? '未知错误');
     }
   }
 

@@ -29,6 +29,7 @@ class MainController extends GetxController {
     _checkAppVersion();
     eventSubscription = EventBusUtil.of.on<EventResetMainTab>().listen((event) {
       currentIndex = 0;
+      safeUpdate();
     });
   }
 

@@ -50,8 +50,7 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
         final elapsedSeconds = DateTime.now().difference(_startTime!).inSeconds;
         final remainingSeconds = countdownDuration - elapsedSeconds;
         if (remainingSeconds <= 0) {
-          countdown(0);
-          _timer?.cancel();
+          resetCountdown();
         } else {
           countdown(remainingSeconds);
         }
@@ -59,13 +58,17 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
     );
   }
 
+  void resetCountdown() {
+    countdown(0);
+    _timer?.cancel();
+  }
+
   void _resumeCountdown() {
     if (_startTime != null) {
       final elapsedSeconds = DateTime.now().difference(_startTime!).inSeconds;
       final remainingSeconds = countdownDuration - elapsedSeconds;
       if (remainingSeconds <= 0) {
-        countdown(0);
-        _timer?.cancel();
+        resetCountdown();
       } else {
         countdown(remainingSeconds);
         _startTimer();

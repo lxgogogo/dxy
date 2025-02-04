@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,14 +7,12 @@ import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/page/login/widgets/user_terms.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
 import '../../../utils/app_theme.dart';
-import '../../../utils/eventbus/EventBusAction.dart';
-import '../../../utils/eventbus/EventBusManager.dart';
-import '../../../utils/size_fit.dart';
 
 class RegisterContent extends StatefulWidget {
   const RegisterContent({Key? key}) : super(key: key);
@@ -420,11 +416,14 @@ class _RegisterContentState extends State<RegisterContent> {
 
     //提交
     NetRequest().registerAccount(email, password, code, (data) {
-      ToastUtils.showToast('注册成功');
-      //成功后直接登录 通知关闭登录页面
+      try {
+        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_REGISTER);
+        logic.resetCountdown();
+      } catch (e) {
+        Log.e(e.toString());
+      }
       LoginHelper().userLogin(email, password, (data) {
-        EventBusManager.eventBus.fire(EventBusAction.closeLoginPage.eventBusTypeName);
-        Navigator.of(context).pop();
+        Get.back();
       });
     });
   }

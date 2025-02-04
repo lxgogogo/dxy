@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,13 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
-import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
-import '../utils/app_theme.dart';
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
 import '../utils/toast_utils.dart';
@@ -353,8 +349,14 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     String code = _controllerCode.text;
     NetRequest().updateEmail(email, code, (data) {
       ToastUtils.showToast('修改成功');
+      try {
+        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL);
+        logic.resetCountdown();
+      } catch (e) {
+        Log.e(e.toString());
+      }
+      Get.back();
       EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
-      Navigator.pop(context);
     });
   }
 }

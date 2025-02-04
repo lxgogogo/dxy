@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,16 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
-import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../utils/event_bus_util.dart';
 import '../utils/toast_utils.dart';
 
@@ -354,6 +349,12 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
     String code = _controllerCode.text;
     NetRequest().deleteAccount(email, code, (data) {
       ToastUtils.showToast('注销成功');
+      try {
+        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW);
+        logic.resetCountdown();
+      } catch (e) {
+        Log.e(e.toString());
+      }
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
       EventBusUtil.of.fire(EventResetMainTab());

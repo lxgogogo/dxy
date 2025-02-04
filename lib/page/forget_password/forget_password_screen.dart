@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
@@ -90,22 +91,22 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   void initState() {
     super.initState();
     _focusEmail.addListener(() {
-      if(!_focusEmail.hasFocus) {
+      if (!_focusEmail.hasFocus) {
         checkValid();
       }
     });
     _focusCode.addListener(() {
-      if(!_focusCode.hasFocus) {
+      if (!_focusCode.hasFocus) {
         checkValid();
       }
     });
     _focusPw.addListener(() {
-      if(!_focusPw.hasFocus) {
+      if (!_focusPw.hasFocus) {
         checkValid();
       }
     });
     _focusAgainPw.addListener(() {
-      if(!_focusAgainPw.hasFocus) {
+      if (!_focusAgainPw.hasFocus) {
         checkValid();
       }
     });
@@ -115,7 +116,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   Widget build(BuildContext context) {
     return BackgroundContainer(
         child: Scaffold(
-          extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           Positioned(
@@ -435,6 +436,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     //忘记密码
     NetRequest().resetPassword(email, password, code, (data) {
       ToastUtils.showToast('重置密码成功');
+      try {
+        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW);
+        logic.resetCountdown();
+      } catch (e) {
+        Log.e(e.toString());
+      }
       Get.back();
     });
   }

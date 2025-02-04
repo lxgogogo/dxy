@@ -349,15 +349,10 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
     String code = _controllerCode.text;
     NetRequest().deleteAccount(email, code, (data) {
       ToastUtils.showToast('注销成功');
-      try {
-        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW);
-        logic.resetCountdown();
-      } catch (e) {
-        Log.e(e.toString());
-      }
+      EventBusUtil.of.fire(EventResetMainTab());
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
-      EventBusUtil.of.fire(EventResetMainTab());
+      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW, force: true);
     });
   }
 }

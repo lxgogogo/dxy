@@ -436,13 +436,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     //忘记密码
     NetRequest().resetPassword(email, password, code, (data) {
       ToastUtils.showToast('重置密码成功');
-      try {
-        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW);
-        logic.resetCountdown();
-      } catch (e) {
-        Log.e(e.toString());
-      }
       Get.back();
+      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW, force: true);
     });
   }
 }

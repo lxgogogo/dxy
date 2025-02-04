@@ -416,14 +416,9 @@ class _RegisterContentState extends State<RegisterContent> {
 
     //提交
     NetRequest().registerAccount(email, password, code, (data) {
-      try {
-        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_REGISTER);
-        logic.resetCountdown();
-      } catch (e) {
-        Log.e(e.toString());
-      }
       LoginHelper().userLogin(email, password, (data) {
         Get.back();
+        Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_REGISTER, force: true);
       });
     });
   }

@@ -349,14 +349,9 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     String code = _controllerCode.text;
     NetRequest().updateEmail(email, code, (data) {
       ToastUtils.showToast('修改成功');
-      try {
-        final logic = Get.find<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL);
-        logic.resetCountdown();
-      } catch (e) {
-        Log.e(e.toString());
-      }
-      Get.back();
       EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      Get.back();
+      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
     });
   }
 }

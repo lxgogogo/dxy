@@ -59,8 +59,8 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
   }
 
   void resetCountdown() {
-    countdown(0);
     _timer?.cancel();
+    countdown(0);
   }
 
   void _resumeCountdown() {

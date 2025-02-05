@@ -352,7 +352,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
       EventBusUtil.of.fire(EventResetMainTab());
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
-      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW, force: true);
+      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_DELETE_ACCOUNT, force: true);
     });
   }
 }

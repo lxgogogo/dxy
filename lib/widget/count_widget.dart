@@ -139,8 +139,8 @@ class CountLikeAni extends StatefulWidget {
 
 class _CountLikeAniState extends State<CountLikeAni> {
   Future<bool> onLikeButtonTapped(bool isLiked) async {
-    await widget.onToggleLike?.call();
-    return !isLiked;
+    final success = await widget.onToggleLike?.call();
+    return success ? !isLiked : isLiked;
   }
 
   @override

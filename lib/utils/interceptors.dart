@@ -58,12 +58,12 @@ class ResponseInterceptors extends InterceptorsWrapper {
           ].contains(Get.currentRoute)) {
         // 只针对 401 用 debounce
         _debounce.run(() {
-          if (UserStore.of.isLogin) {
+          // if (UserStore.of.isLogin) {
             // showToast(msg ?? '请先登录', duration: const Duration(seconds: 2));
             UserStore.of.clearUserStorage();
             Get.toNamed(Routes.login);
             return;
-          }
+          // }
         });
       }
     }

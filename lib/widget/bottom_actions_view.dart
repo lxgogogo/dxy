@@ -132,22 +132,20 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
     );
   }
 
-  Future<void> _likeToggle() async {
-    await NetRequest().contentLike({
+  Future<bool> _likeToggle() async {
+    final data = await NetRequest().newContentLike({
       'relType': viewParams.relType,
       'relId': viewParams.relId,
       'state': viewParams.liked ?? false ? false : true,
-    }, (data) {
-      if (viewParams.liked == true) {
-        viewParams.liked = false;
-        viewParams.likeCount = viewParams.likeCount - 1;
-      } else {
-        viewParams.liked = true;
-        viewParams.likeCount = viewParams.likeCount + 1;
-      }
-      setState(() {});
-      EventBusUtil.of.fire(EventRefreshPage(viewParams.relType ?? ''));
     });
+    if (data is int) {
+      EventBusUtil.of.fire(EventRefreshPage(viewParams.relType ?? ''));
+      viewParams.likeCount = data;
+      viewParams.liked = !(viewParams.liked ?? false);
+      setState(() {});
+      return true;
+    }
+    return false;
   }
 
   void _favoriteToggle() {

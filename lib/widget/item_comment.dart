@@ -152,18 +152,20 @@ class _CommentItemState extends State<CommentItem> {
                     CountLikeAni(
                       count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
                       liked: widget.commentBean.liked ?? false,
-                      onToggleLike: () {
-                        return NetRequest().contentLike({
+                      onToggleLike: () async {
+                        final data = await NetRequest().newContentLike({
                           'relType': 'comment',
                           'relId': widget.commentBean.id!,
                           'state': widget.commentBean.liked! ? false : true
-                        }, (data) {
-                          setState(() {
-                            widget.commentBean.liked = !widget.commentBean.liked!;
-                            int count = widget.commentBean.likeCount!;
-                            widget.commentBean.likeCount = widget.commentBean.liked! ? count + 1 : count - 1;
-                          });
                         });
+                        if (data is int) {
+                          widget.commentBean.liked = !widget.commentBean.liked!;
+                          int count = widget.commentBean.likeCount!;
+                          widget.commentBean.likeCount = widget.commentBean.liked! ? count + 1 : count - 1;
+                          setState(() {});
+                          return true;
+                        }
+                        return false;
                       },
                     ),
                     GestureDetector(
@@ -253,18 +255,20 @@ class _CommentItemState extends State<CommentItem> {
                                             count: reply.likeCount.abbreviateNumber,
                                             liked: reply.liked ?? false,
                                             usePlaceHolder: showReplyReport,
-                                            onToggleLike: ()  {
-                                              return NetRequest().contentLike({
+                                            onToggleLike: () async {
+                                              final data = await NetRequest().newContentLike({
                                                 'relType': 'comment',
                                                 'relId': reply.id!,
                                                 'state': reply.liked! ? false : true
-                                              }, (data) {
-                                                setState(() {
-                                                  reply.liked = !reply.liked!;
-                                                  int count = reply.likeCount!;
-                                                  reply.likeCount = reply.liked! ? count + 1 : count - 1;
-                                                });
                                               });
+                                              if (data is int) {
+                                                reply.liked = !reply.liked!;
+                                                int count = reply.likeCount!;
+                                                reply.likeCount = reply.liked! ? count + 1 : count - 1;
+                                                setState(() {});
+                                                return true;
+                                              }
+                                              return false;
                                             },
                                           ),
                                           if (showReplyReport)

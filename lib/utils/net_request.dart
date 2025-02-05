@@ -124,6 +124,12 @@ class NetRequest {
     }
   }
 
+  Future newContentLike(Map<String, dynamic> params) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.like, params: params, showLoading: false);
+    util_response.Response resp = util_response.Response.fromJson(response);
+    return response['data'];
+  }
+
   Future getBoardList() async {
     var data = await HttpUtils.post(Api.boardList);
     print(data);

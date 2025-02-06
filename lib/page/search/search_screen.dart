@@ -94,7 +94,7 @@ class SearchScreen extends GetView<SearchController> {
                             indicator: UnderlineTabIndicator(
                               borderSide: BorderSide(
                                 color: const Color(0xff6198f7),
-                                width: 2.w, // 选中线条宽度
+                                width: 2.w,
                               ),
                               insets: EdgeInsets.symmetric(horizontal: 8.w),
                               borderRadius: BorderRadius.circular(2.w),

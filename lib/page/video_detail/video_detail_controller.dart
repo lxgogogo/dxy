@@ -36,7 +36,7 @@ class VideoDetailController extends GetxController {
 
   Future<void> dataInit() async {
     final events = await Connectivity().checkConnectivity();
-    noNetwork = events.length > 1 && events.contains(ConnectivityResult.none);
+    noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
       safeUpdate();
       return;
@@ -46,7 +46,7 @@ class VideoDetailController extends GetxController {
 
   Future<void> refreshData() async {
     final events = await Connectivity().checkConnectivity();
-    noNetwork = events.length > 1 && events.contains(ConnectivityResult.none);
+    noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
       ToastUtils.showToast('请检查网络');
       return;

@@ -94,10 +94,15 @@ class HomeChildView extends StatelessWidget {
                               child: CachedNetworkImage(
                                 fit: BoxFit.cover,
                                 imageUrl: controller.banners[index].imgMobile ?? '',
+                                fadeOutDuration: Duration.zero,
+                                fadeInDuration: Duration.zero,
                                 cacheKey: controller.banners[index].imgMobile ?? '',
-                                placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                errorWidget: (context, url, error) =>
-                                    Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+                                  fit: BoxFit.fill,
+                                ),
+                                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           );

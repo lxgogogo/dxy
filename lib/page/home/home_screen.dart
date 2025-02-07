@@ -56,60 +56,57 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 6.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TabBar(
-                        controller: tabController,
-                        tabs: HomeType.values
-                            .map((e) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w),
-                          child: Tab(text: e.title),
-                        ))
-                            .toList(),
-                        isScrollable: true,
-                        tabAlignment: TabAlignment.start,
-                        labelPadding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
-                        indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                        indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                            color: const Color(0xff6198f7),
-                            width: 2.w,
-                          ),
-                          insets: EdgeInsets.symmetric(horizontal: 8.w),
-                          borderRadius: BorderRadius.circular(2.w),
+              Row(
+                children: [
+                  Expanded(
+                    child: TabBar(
+                      controller: tabController,
+                      tabs: HomeType.values
+                          .map((e) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6.w),
+                        child: Tab(text: e.title),
+                      ))
+                          .toList(),
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
+                      labelPadding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 0),
+                      indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                      indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(
+                          color: const Color(0xff6198f7),
+                          width: 2.w,
                         ),
-                        enableFeedback: false,
-                        overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                          return Colors.transparent;
-                        }),
-                        dividerHeight: 0,
-                        labelStyle: TextStyle(
-                          color: const Color(0xff2c2c2c),
-                          fontSize: 16.w,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        unselectedLabelStyle: TextStyle(
-                          color: const Color(0xff666666),
-                          fontSize: 16.w,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        insets: EdgeInsets.symmetric(horizontal: 8.w),
+                        borderRadius: BorderRadius.circular(2.w),
+                      ),
+                      enableFeedback: false,
+                      overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                        return Colors.transparent;
+                      }),
+                      dividerHeight: 0,
+                      labelStyle: TextStyle(
+                        color: const Color(0xff2c2c2c),
+                        fontSize: 16.w,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        color: const Color(0xff666666),
+                        fontSize: 16.w,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    IconButton(
-                      icon: Image.asset(
-                        'assets/images/navi_search.png',
-                        width: 16.w,
-                        height: 16.w,
-                      ),
-                      onPressed: () {
-                        Get.toNamed(Routes.search);
-                      },
+                  ),
+                  IconButton(
+                    icon: Image.asset(
+                      'assets/images/navi_search.png',
+                      width: 16.w,
+                      height: 16.w,
                     ),
-                  ],
-                ),
+                    onPressed: () {
+                      Get.toNamed(Routes.search);
+                    },
+                  ),
+                ],
               ),
               Expanded(
                 child: TabBarView(

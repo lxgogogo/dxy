@@ -34,6 +34,15 @@ class DevicesUtil {
     }
     return Platform.operatingSystem;
   }
+  String get platformDesc {
+    if (Platform.isIOS) {
+      return '苹果APP';
+    }
+    if (Platform.isAndroid) {
+      return '安卓APP';
+    }
+    return Platform.operatingSystem;
+  }
 
   Future<void> _requestDeviceInfo() async {
     if (Platform.isIOS) {

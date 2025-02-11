@@ -9,6 +9,20 @@ class CommonService {
     await HttpUtils.postNew(Api.saveReview);
   }
 
+  Future<void> sourceCreate(Uri linkUri) async {
+    if (linkUri.isScheme('http') || linkUri.isScheme('https')) {
+      final interview = linkUri.toString();
+      final source = linkUri.queryParameters['source'] ?? '';
+      if (source.isNotEmpty) {
+        await HttpUtils.postNew(Api.sourceCreate, params: {
+          "interview": interview,
+          "source": source,
+          "deviceType": DevicesUtil.of.platformDesc,
+        });
+      }
+    }
+  }
+
   Future<ResBaseModel> tagIndex({
     required int pageNum,
     int pageSize = 20,

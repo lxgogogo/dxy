@@ -10,13 +10,16 @@ class UserStore extends GetxController {
 
   String get localUserStr => StorageService.of.getLocalUserStr();
 
-  UserProfile get user =>
-      UserProfile.fromRawJson(localUserStr.isEmpty ? '{}' : localUserStr);
+  UserProfile get user => UserProfile.fromRawJson(localUserStr.isEmpty ? '{}' : localUserStr);
+
+  bool isMe(int? otherUserId) {
+    return otherUserId != null && otherUserId == user.id;
+  }
 
   bool get isLogin => localUserStr.isNotEmpty;
 
   void checkLogin(VoidCallback callback) async {
-    if(!isLogin) {
+    if (!isLogin) {
       ToastUtils.showToast('请先登录');
       Get.toNamed(Routes.login);
       return;
@@ -33,12 +36,5 @@ class UserStore extends GetxController {
     // _userModel = null;
     await StorageService.of.putLocalUserStr('');
     await StorageService.of.putToken('');
-    await StorageService.of.putLocalUserStr('');
-  }
-}
-
-extension UserStoreFunc on UserStore {
-  bool isMe(int? otherUserId) {
-    return otherUserId != null && otherUserId == user.id;
   }
 }

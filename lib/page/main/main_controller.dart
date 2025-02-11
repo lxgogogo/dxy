@@ -136,10 +136,11 @@ class MainController extends GetxController {
             Get.toNamed(Routes.bookDetail, arguments: intId);
             break;
           case 'video':
-            Get.toNamed(Routes.videoDetail, arguments: intId);
+            Get.toNamed(Routes.videoDetail, arguments: {'id': intId});
             break;
           case 'videoList':
-            Get.toNamed(Routes.videoDetail, arguments: intId);
+            final intChildId = int.tryParse(childId);
+            Get.toNamed(Routes.videoDetail, arguments: {'id': intId, 'childId': intChildId});
             break;
         }
       } catch (e) {

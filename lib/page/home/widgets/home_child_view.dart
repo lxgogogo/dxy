@@ -515,7 +515,7 @@ class HomeChildView extends StatelessWidget {
     } else if (bean.jumpType == 'article') {
       Get.toNamed(Routes.articleDetail, arguments: id);
     } else if (bean.jumpType == 'video' || bean.jumpType == 'videoList') {
-      Get.toNamed(Routes.videoDetail, arguments: id);
+      Get.toNamed(Routes.videoDetail, arguments: {'id': id});
     } else if (bean.jumpType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: id);
     }

@@ -31,7 +31,7 @@ class _VideoItemState extends State<VideoItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.videoDetail, arguments: widget.article.id ?? 0)?.whenComplete(() {
+        Get.toNamed(Routes.videoDetail, arguments: {'id': widget.article.id ?? 0})?.whenComplete(() {
           widget.article.viewCount = (widget.article.viewCount ?? 0) + 1;
           setState(() {});
         });

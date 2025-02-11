@@ -36,7 +36,7 @@ class VideoDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<VideoDetailController>(
       init: VideoDetailController(),
-      tag: '${Get.arguments}',
+      tag: '${Get.arguments['id']}',
       builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(

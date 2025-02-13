@@ -139,11 +139,12 @@ class MainController extends GetxController {
             CommonService.of.sourceCreate(linkUri);
             break;
           case 'video':
-            Get.toNamed(Routes.videoDetail, arguments: intId);
+            Get.toNamed(Routes.videoDetail, arguments: {'id': intId});
             CommonService.of.sourceCreate(linkUri);
             break;
           case 'videoList':
-            Get.toNamed(Routes.videoDetail, arguments: intId);
+            final intChildId = int.tryParse(childId);
+            Get.toNamed(Routes.videoDetail, arguments: {'id': intId, 'childId': intChildId});
             CommonService.of.sourceCreate(linkUri);
             break;
         }

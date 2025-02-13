@@ -2,6 +2,7 @@ part of 'video_detail_screen.dart';
 
 class VideoDetailController extends GetxController {
   int? id;
+  int? childId;
 
   ArticleDetailBean? detailBean;
   VideoPlayerController? videoController;
@@ -26,7 +27,8 @@ class VideoDetailController extends GetxController {
 
   @override
   void onInit() {
-    id = Get.arguments as int?;
+    id = Get.arguments['id'] as int?;
+    childId = Get.arguments['childId'] as int?;
     super.onInit();
     _eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       requestData(showLoading: false);
@@ -91,7 +93,14 @@ class VideoDetailController extends GetxController {
         safeUpdate();
         if (videoController == null) {
           if (detailBean?.videoList?.isNotEmpty == true) {
-            _startVideoPlayer(detailBean!.videoList!.first.sourceUrl ?? '');
+            if (childId != null) {
+              final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
+              if (index != -1) {
+                playVideoIndex = index;
+                autoScrollController.scrollToIndex(playVideoIndex, preferPosition: AutoScrollPosition.end);
+              }
+            }
+            _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
           } else {
             _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           }

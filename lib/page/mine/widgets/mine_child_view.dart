@@ -398,7 +398,7 @@ class MyCommentItem extends StatelessWidget {
               } else if (item.resourceType == 'book') {
                 Get.toNamed(Routes.bookDetail, arguments: id);
               } else if (item.resourceType == 'video' || item.resourceType == 'videoList') {
-                Get.toNamed(Routes.videoDetail, arguments: id);
+                Get.toNamed(Routes.videoDetail, arguments: {'id': id});
               }
             },
             child: Column(
@@ -520,7 +520,7 @@ class MyCollectItem extends StatelessWidget {
           } else if (type == 'book') {
             Get.toNamed(Routes.bookDetail, arguments: id);
           } else if (type == 'video' || type == 'videoList') {
-            Get.toNamed(Routes.videoDetail, arguments: id);
+            Get.toNamed(Routes.videoDetail, arguments: {'id': id});
           }
         }
       },

@@ -27,7 +27,7 @@ class _ArticleItemState extends State<ArticleItem> {
     return GestureDetector(
       onTap: () {
         if (widget.article.type == 'video' || widget.article.type == 'videoList') {
-          Get.toNamed(Routes.videoDetail, arguments: widget.article.id ?? 0);
+          Get.toNamed(Routes.videoDetail, arguments: {'id': widget.article.id ?? 0});
           return;
         }
         Get.toNamed(Routes.articleDetail, arguments: widget.article.id ?? 0);

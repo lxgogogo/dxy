@@ -29,22 +29,6 @@ class FeedDetailBottomView extends StatefulWidget {
 }
 
 class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
-  late PostBottomViewParams viewParams;
-
-  @override
-  void initState() {
-    viewParams = widget.viewParams;
-    super.initState();
-  }
-
-  //
-  // @override
-  // void didUpdateWidget(covariant FeedDetailBottomView oldWidget) {
-  //   if (oldWidget.viewParams != widget.viewParams) {
-  //     viewParams = widget.viewParams;
-  //   }
-  //   super.didUpdateWidget(oldWidget);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,26 +88,26 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                 ),
               ),
               SizedBox(width: 8.w),
-              if (viewParams.relType == 'thread')
+              if (widget.viewParams.relType == 'thread')
                 CountLikeAni(
-                  count: viewParams.likeCount.abbreviateNumber,
-                  liked: viewParams.liked == true,
+                  count: widget.viewParams.likeCount.abbreviateNumber,
+                  liked: widget.viewParams.liked == true,
                   onToggleLike: _likeToggle,
                 ),
               GestureDetector(
                 onTap: _favoriteToggle,
                 child: CountFavorite(
-                  count: viewParams.favoriteCount.abbreviateNumber,
-                  stared: viewParams.favoriteState == true,
+                  count: widget.viewParams.favoriteCount.abbreviateNumber,
+                  stared: widget.viewParams.favoriteState == true,
                 ),
               ),
               GestureDetector(
                 onTap: _toCommentList,
-                child: CountComment(count: viewParams.commentCount.abbreviateNumber),
+                child: CountComment(count: widget.viewParams.commentCount.abbreviateNumber),
               ),
               GestureDetector(
                 onTap: _toShare,
-                child: CountShare(count: viewParams.shareCount.abbreviateNumber),
+                child: CountShare(count: widget.viewParams.shareCount.abbreviateNumber),
               ),
             ],
           ),
@@ -134,14 +118,14 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
 
   Future<bool> _likeToggle() async {
     final data = await NetRequest().newContentLike({
-      'relType': viewParams.relType,
-      'relId': viewParams.relId,
-      'state': viewParams.liked ?? false ? false : true,
+      'relType': widget.viewParams.relType,
+      'relId': widget.viewParams.relId,
+      'state': widget.viewParams.liked ?? false ? false : true,
     });
     if (data is int) {
-      EventBusUtil.of.fire(EventRefreshPage(viewParams.relType ?? ''));
-      viewParams.likeCount = data;
-      viewParams.liked = !(viewParams.liked ?? false);
+      EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
+      widget.viewParams.likeCount = data;
+      widget.viewParams.liked = !(widget.viewParams.liked ?? false);
       setState(() {});
       return true;
     }
@@ -149,35 +133,35 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   }
 
   void _favoriteToggle() {
-    NetRequest().favoriteToggle(viewParams.relType, viewParams.relId, !(viewParams.favoriteState ?? false), (data) {
-      if (viewParams.favoriteState != true) {
+    NetRequest().favoriteToggle(widget.viewParams.relType, widget.viewParams.relId, !(widget.viewParams.favoriteState ?? false), (data) {
+      if (widget.viewParams.favoriteState != true) {
         ToastUtils.showToast('收藏成功');
       }
-      if (viewParams.favoriteState == true) {
-        viewParams.favoriteState = false;
-        viewParams.favoriteCount = viewParams.favoriteCount - 1;
+      if (widget.viewParams.favoriteState == true) {
+        widget.viewParams.favoriteState = false;
+        widget.viewParams.favoriteCount = widget.viewParams.favoriteCount - 1;
       } else {
-        viewParams.favoriteState = true;
-        viewParams.favoriteCount = viewParams.favoriteCount + 1;
+        widget.viewParams.favoriteState = true;
+        widget.viewParams.favoriteCount = widget.viewParams.favoriteCount + 1;
       }
       setState(() {});
-      EventBusUtil.of.fire(EventRefreshPage(viewParams.relType ?? ''));
+      EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
     });
   }
 
   void _toShare() {
-    if (viewParams.relType == 'thread') {
-      NetRequest().threadUpCount(viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${viewParams.shareLink}'));
+    if (widget.viewParams.relType == 'thread') {
+      NetRequest().threadUpCount(widget.viewParams.relId!, (data) async {
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
-        viewParams.shareCount = viewParams.shareCount + 1;
+        widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
       });
     } else {
-      NetRequest().upCount(viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${viewParams.shareLink}'));
+      NetRequest().upCount(widget.viewParams.relId!, (data) async {
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
-        viewParams.shareCount = viewParams.shareCount + 1;
+        widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
       });
     }
@@ -186,16 +170,16 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   void _pushComment() {
     UserStore.of.checkLogin(() {
       Get.toNamed(Routes.publishComment, arguments: {
-        'relType': viewParams.relType!,
-        'relId': viewParams.relId!,
+        'relType': widget.viewParams.relType!,
+        'relId': widget.viewParams.relId!,
       });
     });
   }
 
   void _toCommentList() {
     Get.toNamed(Routes.commentList, arguments: {
-      'relId': viewParams.relId!,
-      'relType': viewParams.relType!,
+      'relId': widget.viewParams.relId!,
+      'relType': widget.viewParams.relType!,
     });
   }
 }

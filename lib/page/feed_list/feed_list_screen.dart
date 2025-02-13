@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/feed_list/widgets/feed_list_child.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:super_tooltip/super_tooltip.dart';
@@ -23,8 +26,8 @@ class FeedListScreen extends StatefulWidget {
 }
 
 class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProviderStateMixin {
-  late int currentBoardId = 0;
-  late List<BoardInfo> boardInfoList;
+  int currentBoardId = 0;
+  List<BoardInfo> boardInfoList = [];
   int selIndex = 0;
 
   SuperTooltipController _tipController = SuperTooltipController();
@@ -37,20 +40,23 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
 
   String get filterValue => filters[selIndex];
 
-  final _pageKey = GlobalKey<ForumTabChildPageState>();
+  final _pageKey = GlobalKey<FeedListChildViewState>();
+
+  StreamSubscription? eventSubscription;
 
   @override
   void initState() {
     super.initState();
-    boardInfoList = [];
     getPlateData();
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.updateBoardTabData.eventBusTypeName) {
-        if (mounted) {
-          getPlateData();
-        }
-      }
+    eventSubscription = EventBusUtil.of.on<EventRefreshFeedTabs>().listen((event) {
+      getPlateData();
     });
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    super.dispose();
   }
 
   void getPlateData() {
@@ -297,7 +303,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
           ),
         ),
         Expanded(
-            child: ForumTabChildPage(
+            child: FeedListChildView(
           tabId: tabId,
           key: _pageKey,
         ))

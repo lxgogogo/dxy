@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
@@ -10,6 +11,7 @@ import 'package:holdem/utils/debounce_util.dart';
 import 'package:holdem/utils/devices_util.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/storage.dart';
+import 'package:holdem/widget/dialog_tip.dart';
 
 import 'env.dart';
 
@@ -57,12 +59,24 @@ class ResponseInterceptors extends InterceptorsWrapper {
             // 其他不需要重复跳转登录页的路由
           ].contains(Get.currentRoute)) {
         // 只针对 401 用 debounce
-        _debounce.run(() {
+        _debounce.run(() async {
           // if (UserStore.of.isLogin) {
-            // showToast(msg ?? '请先登录', duration: const Duration(seconds: 2));
-            UserStore.of.clearUserStorage();
-            Get.toNamed(Routes.login);
-            return;
+          // showToast(msg ?? '请先登录', duration: const Duration(seconds: 2));
+          if (Get.context != null) {
+            final isConfirm = await showDialog(
+              barrierDismissible: true,
+              context: Get.context!,
+              builder: (context) => const DialogTip(
+                title: '账号已被登出',
+                content: '您的账号已在其他设备上登录，若要继续，请重新登录',
+              ),
+            );
+            if (isConfirm == true) {
+              UserStore.of.clearUserStorage();
+              Get.toNamed(Routes.login);
+              return;
+            }
+          }
           // }
         });
       }

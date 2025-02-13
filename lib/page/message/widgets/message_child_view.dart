@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -21,63 +23,88 @@ class MessageChildView extends StatefulWidget {
 }
 
 class MessageChildViewState extends State<MessageChildView> {
-  List<MessageBean> messages = [];
-  final RefreshController _refreshController = RefreshController();
   bool loaded = false;
   int pageNum = 1;
+  int pageSize = 20;
   String strType = '';
 
-  @override
-  void initState() {
-    super.initState();
-    strType = widget.type;
-    reqListData();
-  }
+  List<MessageBean> messages = [];
+  final RefreshController _refreshController = RefreshController();
+  final ScrollController _listController = ScrollController();
 
-  reqListData() {
-    NetRequest().messageList({
-      'pageNum': pageNum,
-      'pageSize': 10,
-      'filters': {'type': strType}
-    }, (data) {
-      MessageList boardList = MessageList.fromJson(data);
-      if (mounted) {
-        final total = boardList.pager?.total ?? 0;
-        if (pageNum == 1) {
-          messages = boardList.list!;
-          _refreshController.refreshCompleted();
-          if (messages.length >= total) {
-            _refreshController.loadNoData();
-          } else {
-            _refreshController.resetNoData();
-          }
-        } else {
-          messages.addAll(boardList.list!);
-          if (messages.length >= total) {
-            _refreshController.loadNoData();
-          } else {
-            _refreshController.loadComplete();
-          }
-        }
-        loaded = true;
-        setState(() {});
-      }
-    });
-  }
-
-  void refreshData(String type) {
-    strType = type;
-    _onRefresh();
-  }
+  StreamSubscription? eventSubscription;
 
   void _onRefresh() async {
     pageNum = 1;
-    reqListData();
+    reqListData(showLoading: false);
   }
 
   void _onLoading() async {
     pageNum++;
+    reqListData(showLoading: false);
+  }
+
+  void refreshData(String type) {
+    if (_listController.hasClients) {
+      _listController.jumpTo(0.0);
+    }
+    strType = type;
+    pageNum = 1;
     reqListData();
+  }
+
+  @override
+  void initState() {
+    strType = widget.type;
+    super.initState();
+    reqListData();
+    eventSubscription = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
+      reqListData(showLoading: false);
+    });
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    _listController.dispose();
+    super.dispose();
+  }
+
+  reqListData({bool showLoading = true}) {
+    NetRequest().messageList(
+      {
+        'pageNum': pageNum,
+        'pageSize': pageSize,
+        'filters': {
+          'type': strType,
+        },
+      },
+      showLoading: showLoading,
+      (data) {
+        MessageList boardList = MessageList.fromJson(data);
+        if (mounted) {
+          final total = boardList.pager?.total ?? 0;
+          if (pageNum == 1) {
+            messages = boardList.list!;
+            _refreshController.refreshCompleted();
+            if (messages.length >= total) {
+              _refreshController.loadNoData();
+            } else {
+              _refreshController.resetNoData();
+            }
+          } else {
+            messages.addAll(boardList.list!);
+            if (messages.length >= total) {
+              _refreshController.loadNoData();
+            } else {
+              _refreshController.loadComplete();
+            }
+          }
+          loaded = true;
+          setState(() {});
+        }
+      },
+    );
   }
 
   @override
@@ -120,6 +147,7 @@ class MessageChildViewState extends State<MessageChildView> {
       enablePullUp: true,
       header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
       controller: _refreshController,
+      scrollController: _listController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: loaded && messages.isEmpty

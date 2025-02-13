@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/stores/storage.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 
 import '../../model/user.dart';
 import '../../utils/eventbus/EventBusAction.dart';
@@ -26,7 +27,7 @@ class LoginHelper {
       //通知个人信息页面刷新
       EventBusManager.eventBus
           .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
-
+      EventBusUtil.of.fire(EventLoginSuccess());
       loginSuccessCallBack(data);
     });
   }

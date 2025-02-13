@@ -1,5 +1,6 @@
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/utils/constants.dart';
@@ -36,10 +37,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       parentTabs.add(TabData(
         index: i,
         title: Tab(
-          child: Container(
-            // color: Colors.red,
-            child: Text(myTabs[i].text.toString()),
-          ),
+          child: Text(myTabs[i].text.toString()),
           // child: Text(myTabs[i].text.toString()),
         ),
         content: MessageChildView(type: types[i]),
@@ -58,9 +56,9 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       //底部下标颜色
       enableFeedback: false,
       dividerHeight: 0,
-      labelStyle: TextStyle(height: 1, color: forumAppMainColor, fontSize: 16.px, fontWeight: FontWeight.w600),
+      labelStyle: TextStyle(height: 1, color: forumAppMainColor, fontSize: 16.w, fontWeight: FontWeight.w600),
       unselectedLabelStyle:
-          TextStyle(height: 1, color: tabTitleUnselectColor, fontSize: 16.px, fontWeight: FontWeight.w400),
+          TextStyle(height: 1, color: tabTitleUnselectColor, fontSize: 16.w, fontWeight: FontWeight.w400),
       onTabChanged: (index) {
         setState(() {
           selIndex = index!;
@@ -80,7 +78,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
             '消息',
             style: TextStyle(
               color: const Color(0xff2c2c2c),
-              fontSize: 16.px,
+              fontSize: 16.w,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -102,7 +100,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
           child: Row(
             children: [
               SizedBox(
-                width: 18.px,
+                width: 18.w,
               ),
               ...List.generate(tabs.length, (index) {
                 return GestureDetector(
@@ -113,12 +111,12 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                     _pageKey.currentState?.refreshData(types[selIndex]);
                   },
                   child: Container(
-                    height: 30.px,
-                    padding: EdgeInsets.symmetric(horizontal: 17.px),
-                    margin: EdgeInsets.only(right: 12.px, bottom: 12.px),
+                    height: 30.w,
+                    padding: EdgeInsets.symmetric(horizontal: 17.w),
+                    margin: EdgeInsets.only(right: 12.w, bottom: 12.w),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.px),
+                        borderRadius: BorderRadius.circular(15.w),
                         boxShadow: [
                           BoxShadow(
                             color: selIndex == index ? const Color(0xFFC8D4EE) : const Color(0xFFd6e2f0),
@@ -145,7 +143,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                     child: Text(
                       tabs[index],
                       style:
-                          TextStyle(color: selIndex == index ? Colors.white : const Color(0xff95A3C4), fontSize: 14.px),
+                          TextStyle(color: selIndex == index ? Colors.white : const Color(0xff95A3C4), fontSize: 14.w),
                     ),
                   ),
                 );

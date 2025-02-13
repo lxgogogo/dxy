@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -163,6 +165,9 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
     reqListData(showLoading: false);
   }
 
+  StreamSubscription? eventSub1;
+  StreamSubscription? eventSub2;
+
   @override
   void initState() {
     super.initState();
@@ -170,7 +175,10 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
     getUserInfo();
     reqListData();
 
-    EventBusUtil.of.on<EventRefreshPage>().listen((event) {
+    eventSub1 = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
+      _onRefresh();
+    });
+    eventSub2 = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
       _onRefresh();
     });
   }
@@ -178,6 +186,8 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
   @override
   void dispose() {
     _isMounted = false;
+    eventSub1?.cancel();
+    eventSub2?.cancel();
     _listController.dispose(); // 释放资源
     super.dispose();
   }

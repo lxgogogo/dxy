@@ -10,7 +10,7 @@ class CommonService {
   }
 
   Future<void> sourceCreate(Uri linkUri) async {
-    if (linkUri.isScheme('http') || linkUri.isScheme('https')) {
+    if (linkUri.isScheme('http') || linkUri.isScheme('https') || linkUri.isScheme('holdem')) {
       final interview = linkUri.toString();
       final source = linkUri.queryParameters['source'] ?? '';
       if (source.isNotEmpty) {

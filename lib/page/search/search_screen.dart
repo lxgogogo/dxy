@@ -228,7 +228,7 @@ class SearchScreen extends GetView<SearchController> {
                 '搜索历史',
                 style: TextStyle(
                   color: const Color(0xff95A3C4),
-                  fontSize: 12.w,
+                  fontSize: 12.sp,
                 ),
               ),
               GestureDetector(

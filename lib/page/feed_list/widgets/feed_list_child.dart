@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/board_list.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:oktoast/oktoast.dart';
@@ -17,20 +20,20 @@ import '../../../utils/toast_utils.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/report_sheet.dart';
 
-class ForumTabChildPage extends StatefulWidget {
+class FeedListChildView extends StatefulWidget {
   final int tabId;
 
-  const ForumTabChildPage({super.key, required this.tabId});
+  const FeedListChildView({super.key, required this.tabId});
 
   @override
-  State<ForumTabChildPage> createState() => ForumTabChildPageState();
+  State<FeedListChildView> createState() => FeedListChildViewState();
 }
 
-class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeepAliveClientMixin {
+class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeepAliveClientMixin {
   late int tabIdValue;
 
   int pageNum = 1;
-  int pageSize = 10;
+  int pageSize = 20;
   int pageId = 0;
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
@@ -38,9 +41,10 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
+  StreamSubscription? eventSubscription;
+
   void _onRefresh({bool showLoading = true}) async {
-    //通知外层板块tab拉取最新数据
-    EventBusManager.eventBus.fire(EventBusAction.updateBoardTabData.eventBusTypeName);
+    EventBusUtil.of.fire(EventRefreshFeedTabs());
     pageNum = 1;
     reqListData(showLoading: showLoading);
   }
@@ -67,14 +71,20 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
 
     reqListData();
 
-    //接受通知刷新页面
-    EventBusManager.eventBus.on().listen((event) {
+    eventSubscription = EventBusManager.eventBus.on().listen((event) {
       if (event.toString() == EventBusAction.refreshForumList.eventBusTypeName) {
         boardSort = NetRequest.BOARD_SORT_TIME;
         pageNum = 1;
         reqListData();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    eventSubscription?.cancel();
+    _listController.dispose();
+    super.dispose();
   }
 
   reqListData({bool showLoading = true}) {
@@ -144,12 +154,6 @@ class ForumTabChildPageState extends State<ForumTabChildPage> with AutomaticKeep
         },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _listController.dispose(); // 释放资源
-    super.dispose();
   }
 
   @override

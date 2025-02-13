@@ -35,3 +35,9 @@ class EventRefreshSearchResult {}
 
 /// event
 class EventResetMainTab {}
+
+/// event
+class EventRefreshFeedTabs {}
+
+/// event
+class EventLoginSuccess{}

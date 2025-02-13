@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -25,22 +26,22 @@ class DialogConfirm extends StatelessWidget {
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.zero,
       child: ShadowWrapper(
-        borderRadius: 10.5.px,
-        margin: EdgeInsets.only(left: 18.px, right: 18.px),
+        borderRadius: 10.5.r,
+        margin: EdgeInsets.symmetric(horizontal: 24.w),
         child: Container(
-          padding: EdgeInsets.only(top: 35.px, bottom: 20.px),
+          padding: EdgeInsets.only(top: 35.w, bottom: 20.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SvgPicture.asset(
                 "assets/svg/icon_warning.svg",
-                width: 46.px,
-                height: 46.px,
+                width: 46.w,
+                height: 46.w,
               ),
-              SizedBox(height: 25.px),
+              SizedBox(height: 25.w),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.px),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
                   title,
                   style: const TextStyle(
@@ -50,9 +51,9 @@ class DialogConfirm extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 36.px),
+              SizedBox(height: 36.w),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 22.px),
+                padding: EdgeInsets.symmetric(horizontal: 22.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -60,19 +61,19 @@ class DialogConfirm extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        height: 42.px,
+                        height: 42.w,
                         title: '取消',
                         isCancel: true,
                         textColor: const Color(0xff95a3c4),
                       ),
                     ),
-                    SizedBox(width: 15.px),
+                    SizedBox(width: 15.w),
                     Expanded(
                       child: CustomButton(
                         onPressed: () {
                           Navigator.of(context).pop(true);
                         },
-                        height: 42.px,
+                        height: 42.w,
                         title: '确认',
                       ),
                     ),

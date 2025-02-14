@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
@@ -7,10 +8,11 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_util.dart';
-import 'package:holdem/utils/debounce_util.dart';
+import 'package:holdem/utils/debounce_throttle_util.dart';
 import 'package:holdem/utils/devices_util.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/log_util.dart';
-import 'package:holdem/utils/storage.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/dialog_tip.dart';
 
 import 'env.dart';
@@ -37,8 +39,6 @@ class HttpHeaderInterceptors extends InterceptorsWrapper {
 
 /// 响应拦截器
 class ResponseInterceptors extends InterceptorsWrapper {
-  final _debounce = DebounceUtil(milliseconds: 300);
-
   @override
   void onResponse(
     Response response,
@@ -53,32 +53,35 @@ class ResponseInterceptors extends InterceptorsWrapper {
       final dynamic code = data['code'];
       final String? msg = data['msg']?.toString();
 
-      if (code == 401 &&
-          ![
-            Routes.login,
-            // 其他不需要重复跳转登录页的路由
-          ].contains(Get.currentRoute)) {
-        // 只针对 401 用 debounce
-        _debounce.run(() async {
-          // if (UserStore.of.isLogin) {
-          // showToast(msg ?? '请先登录', duration: const Duration(seconds: 2));
-          if (Get.context != null) {
-            final isConfirm = await showDialog(
-              barrierDismissible: true,
-              context: Get.context!,
-              builder: (context) => const DialogTip(
-                title: '账号已被登出',
-                content: '您的账号已在其他设备上登录，若要继续，请重新登录',
-              ),
-            );
-            if (isConfirm == true) {
-              UserStore.of.clearUserStorage();
-              Get.toNamed(Routes.login);
-              return;
+      if (Get.currentRoute != Routes.login) {
+        if (code == 401) {
+          DebounceThrottle.debounce(() {
+            ToastUtils.showToast(msg ?? '请先登录');
+            UserStore.of.clearUserStorage();
+            Get.until((route) => route.settings.name == Routes.main);
+            EventBusUtil.of.fire(EventResetMainTab());
+            Get.toNamed(Routes.login);
+          });
+        } else if (code == 402) {
+          DebounceThrottle.debounce(() async {
+            if (Get.context != null) {
+              final isConfirm = await showDialog(
+                barrierDismissible: false,
+                context: Get.context!,
+                builder: (context) => const DialogTip(
+                  title: '账号已被登出',
+                  content: '您的账号已在其他设备上登录，若要继续，请重新登录',
+                ),
+              );
+              if (isConfirm == true) {
+                UserStore.of.clearUserStorage();
+                Get.until((route) => route.settings.name == Routes.main);
+                EventBusUtil.of.fire(EventResetMainTab());
+                Get.toNamed(Routes.login);
+              }
             }
-          }
-          // }
-        });
+          });
+        }
       }
     }
 

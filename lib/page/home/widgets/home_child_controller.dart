@@ -36,7 +36,7 @@ class HomeChildController extends GetxController with GetSingleTickerProviderSta
     eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       loadData();
     });
-    loadData(showLoading: true);
+    loadData();
   }
 
   @override

@@ -128,26 +128,22 @@ class MainController extends GetxController {
         switch (type) {
           case 'article':
             Get.toNamed(Routes.articleDetail, arguments: intId);
-            CommonService.of.sourceCreate(linkUri);
             break;
           case 'thread':
             Get.toNamed(Routes.feedDetail, arguments: intId);
-            CommonService.of.sourceCreate(linkUri);
             break;
           case 'book':
             Get.toNamed(Routes.bookDetail, arguments: intId);
-            CommonService.of.sourceCreate(linkUri);
             break;
           case 'video':
             Get.toNamed(Routes.videoDetail, arguments: {'id': intId});
-            CommonService.of.sourceCreate(linkUri);
             break;
           case 'videoList':
             final intChildId = int.tryParse(childId);
             Get.toNamed(Routes.videoDetail, arguments: {'id': intId, 'childId': intChildId});
-            CommonService.of.sourceCreate(linkUri);
             break;
         }
+        CommonService.of.sourceCreate(linkUri);
       } catch (e) {
         Log.d(e.toString());
       }

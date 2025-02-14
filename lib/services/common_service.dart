@@ -11,15 +11,15 @@ class CommonService {
 
   Future<void> sourceCreate(Uri linkUri) async {
     if (linkUri.isScheme('http') || linkUri.isScheme('https') || linkUri.isScheme('holdem')) {
-      final interview = linkUri.toString();
+      final interview = linkUri.toString().replaceAll('holdem://com.dxy.holdem', Env.shareHost);
       final source = linkUri.queryParameters['source'] ?? '';
-      if (source.isNotEmpty) {
-        await HttpUtils.postNew(Api.sourceCreate, params: {
-          "interview": interview,
-          "source": source,
-          "deviceType": DevicesUtil.of.platformDesc,
-        });
-      }
+      // if (source.isNotEmpty) {
+      await HttpUtils.postNew(Api.sourceCreate, params: {
+        "interview": interview,
+        "source": source.isNotEmpty ? source : '直接访问',
+        "deviceType": DevicesUtil.of.platformDesc,
+      });
+      // }
     }
   }
 

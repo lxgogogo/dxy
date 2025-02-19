@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
@@ -22,184 +24,155 @@ class MineScreen extends StatefulWidget {
 }
 
 class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  final List<String> tabs = ['帖子', '收藏', '评论'];
-  late final TabController tabController;
-
-  bool _isMounted = false;
-  UserProfile? userProfile;
-
-  @override
-  void initState() {
-    tabController = TabController(length: tabs.length, vsync: this);
-    super.initState();
-    getUserInfo();
-    _isMounted = true;
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
-        getUserInfo();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _isMounted = false;
-    super.dispose();
-  }
-
-  void getUserInfo() {
-    LoginHelper().getUserInfo((data) {
-      if (_isMounted) {
-        userProfile = data;
-        setState(() {});
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return BackgroundContainer(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Image.asset(
-                'assets/images/setting.png',
-                width: 20.px,
-                height: 20.px,
-              ),
-              onPressed: () {
-                Get.toNamed(Routes.setting);
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 8.px),
-              padding: EdgeInsets.all(6.px),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/profile_header.png',
+      child: GetBuilder<MineController>(
+        init: MineController(),
+        builder: (controller) {
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                IconButton(
+                  icon: Image.asset(
+                    'assets/images/setting.png',
+                    width: 20.w,
+                    height: 20.w,
                   ),
-                  fit: BoxFit.fill,
+                  onPressed: () {
+                    Get.toNamed(Routes.setting);
+                  },
                 ),
-              ),
-              child: userInfoView(),
+              ],
             ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 12.px),
-                decoration: BoxDecoration(
-                    color: const Color(0xfff2f9ff),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(12),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8.w),
+                  padding: EdgeInsets.all(6.w),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/images/profile_header.png',
+                      ),
+                      fit: BoxFit.fill,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xffb9d0e5).withOpacity(0.64),
-                        offset: Offset(0, -1.px),
-                        blurRadius: 2.rpx,
-                        spreadRadius: 0,
-                      ),
-                      BoxShadow(
-                        color: const Color(0xffffffff),
-                        offset: Offset(0, 1.px),
-                        blurRadius: 2.rpx,
-                        spreadRadius: 1.px,
-                      )
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TabBar(
-                      controller: tabController,
-                      tabs: tabs.map((e) => Tab(text: e)).toList(),
-                      isScrollable: false,
-                      labelPadding: EdgeInsets.fromLTRB(6.px, 6.px, 6.px, 0),
-                      indicatorPadding: EdgeInsets.only(bottom: 4.px),
-                      indicator: UnderlineTabIndicator(
-                        borderSide: BorderSide(
-                          color: const Color(0xff6198f7),
-                          width: 2.px, // 选中线条宽度
-                        ),
-                        insets: EdgeInsets.symmetric(horizontal: 8.px),
-                        borderRadius: BorderRadius.circular(2.px),
-                      ),
-                      //底部下标颜色
-                      enableFeedback: false,
-                      overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                        return Colors.transparent;
-                      }),
-                      dividerHeight: 0,
-                      labelStyle: TextStyle(
-                        color: const Color(0xff2c2c2c),
-                        fontSize: 16.px,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      unselectedLabelStyle: TextStyle(
-                        color: const Color(0xff666666),
-                        fontSize: 16.px,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: tabController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: List.generate(
-                          tabs.length,
-                          (index) => MineChildView(tabIndex: index),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
+                  child: userInfoView(controller.userProfile),
                 ),
-              ),
-            )
-          ],
-        ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 12.w),
+                    decoration: BoxDecoration(
+                        color: const Color(0xfff2f9ff),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xffb9d0e5).withOpacity(0.64),
+                            offset: Offset(0, -1.w),
+                            blurRadius: 2.rpx,
+                            spreadRadius: 0,
+                          ),
+                          BoxShadow(
+                            color: const Color(0xffffffff),
+                            offset: Offset(0, 1.w),
+                            blurRadius: 2.rpx,
+                            spreadRadius: 1.w,
+                          )
+                        ]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TabBar(
+                          controller: controller.tabController,
+                          tabs: controller.tabs.map((e) => Tab(text: e)).toList(),
+                          isScrollable: false,
+                          labelPadding: EdgeInsets.fromLTRB(6.w, 6.w, 6.w, 0),
+                          indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                              color: const Color(0xff6198f7),
+                              width: 2.w, // 选中线条宽度
+                            ),
+                            insets: EdgeInsets.symmetric(horizontal: 8.w),
+                            borderRadius: BorderRadius.circular(2.w),
+                          ),
+                          //底部下标颜色
+                          enableFeedback: false,
+                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                            return Colors.transparent;
+                          }),
+                          dividerHeight: 0,
+                          labelStyle: TextStyle(
+                            color: const Color(0xff2c2c2c),
+                            fontSize: 16.w,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 16.w,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: controller.tabController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: List.generate(
+                              controller.tabs.length,
+                              (index) => MineChildView(tabIndex: index),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget userInfoView() {
+  Widget userInfoView(UserProfile? userProfile) {
     return GestureDetector(
         onTap: () {
           Get.toNamed(Routes.personal);
         },
         child: Padding(
-          padding: EdgeInsets.fromLTRB(10.px, 12.px, 0, 12.px),
+          padding: EdgeInsets.fromLTRB(10.w, 12.w, 0, 12.w),
           child: Row(
             children: <Widget>[
               Container(
-                width: 56.px,
-                height: 56.px,
+                width: 56.w,
+                height: 56.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2.px),
+                  border: Border.all(color: Colors.white, width: 2.w),
                 ),
                 child: Stack(children: <Widget>[
                   ClipOval(
                     child: LoginHelper().getUserAvatar(
                       userProfile?.avatar ?? '',
-                      56.px,
-                      56.px,
+                      56.w,
+                      56.w,
                     ),
                   ),
                 ]),
               ),
               Expanded(
                 child: Padding(
-                    padding: EdgeInsets.only(left: 8.5.px),
+                    padding: EdgeInsets.only(left: 8.5.w),
                     child: Row(
                       children: [
                         Expanded(
@@ -210,18 +183,18 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               Text(
                                 userProfile?.nickname ?? '',
                                 style: TextStyle(
-                                    fontSize: 16.px, fontWeight: FontWeight.bold, color: const Color(0xff2C2C2C)),
+                                    fontSize: 16.w, fontWeight: FontWeight.bold, color: const Color(0xff2C2C2C)),
                                 overflow: TextOverflow.ellipsis,
                               ),
                               SizedBox(
-                                height: 8.px,
+                                height: 8.w,
                               ),
                               Row(children: [
                                 GestureDetector(
                                   child: Text('${userProfile?.followedCount.abbreviateNumber ?? '0'} 关注',
                                       style: TextStyle(
                                         color: const Color(0xff2a2a2a),
-                                        fontSize: 12.px,
+                                        fontSize: 12.w,
                                         fontWeight: FontWeight.w500,
                                         decoration: TextDecoration.underline,
                                       )),
@@ -230,14 +203,14 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                   },
                                 ),
                                 SizedBox(
-                                  width: 19.px,
+                                  width: 19.w,
                                 ),
                                 GestureDetector(
                                   child: Text(
                                     '${userProfile?.fansCount.abbreviateNumber ?? '0'} 粉丝',
                                     style: TextStyle(
                                       color: const Color(0xff2a2a2a),
-                                      fontSize: 12.px,
+                                      fontSize: 12.w,
                                       fontWeight: FontWeight.w500,
                                       decoration: TextDecoration.underline,
                                     ),
@@ -251,7 +224,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                         IconButton(
                           icon: Image.asset(
                             'assets/images/arrow_right.png',
-                            width: 24.px,
+                            width: 24.w,
                           ),
                           onPressed: () {
                             Get.toNamed(Routes.personal);

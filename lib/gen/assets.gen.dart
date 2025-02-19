@@ -72,6 +72,10 @@ class $AssetsImagesGen {
   AssetGenImage get commentSmall =>
       const AssetGenImage('assets/images/comment_small.png');
 
+  /// File path: assets/images/common_bg.png
+  AssetGenImage get commonBg =>
+      const AssetGenImage('assets/images/common_bg.png');
+
   /// File path: assets/images/confirm_btn.png
   AssetGenImage get confirmBtn =>
       const AssetGenImage('assets/images/confirm_btn.png');
@@ -224,6 +228,10 @@ class $AssetsImagesGen {
   AssetGenImage get messageTop =>
       const AssetGenImage('assets/images/message_top.png');
 
+  /// File path: assets/images/mine_header_bg.png
+  AssetGenImage get mineHeaderBg =>
+      const AssetGenImage('assets/images/mine_header_bg.png');
+
   /// File path: assets/images/more.png
   AssetGenImage get more => const AssetGenImage('assets/images/more.png');
 
@@ -309,6 +317,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/reply.png
   AssetGenImage get reply => const AssetGenImage('assets/images/reply.png');
+
+  /// File path: assets/images/report.png
+  AssetGenImage get report => const AssetGenImage('assets/images/report.png');
 
   /// File path: assets/images/search_clear.png
   AssetGenImage get searchClear =>
@@ -444,6 +455,7 @@ class $AssetsImagesGen {
         commenBg,
         comment,
         commentSmall,
+        commonBg,
         confirmBtn,
         defaultAvatar,
         delete,
@@ -485,6 +497,7 @@ class $AssetsImagesGen {
         logout,
         logoutBtn,
         messageTop,
+        mineHeaderBg,
         more,
         naviBack,
         naviSearch,
@@ -509,6 +522,7 @@ class $AssetsImagesGen {
         registrationBtn,
         release,
         reply,
+        report,
         searchClear,
         searchIcon,
         setting,

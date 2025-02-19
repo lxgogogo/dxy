@@ -25,6 +25,8 @@ class VideoDetailController extends GetxController {
 
   bool noNetwork = false;
 
+  final VideoNotifier videoNotifier = VideoNotifier();
+
   @override
   void onInit() {
     id = Get.arguments['id'] as int?;
@@ -132,12 +134,7 @@ class VideoDetailController extends GetxController {
     videoController = VideoPlayerController.networkUrl(Uri.parse(link))
       ..addListener(videoListener)
       ..initialize().then((_) {
-        chewieController = ChewieController(
-          videoPlayerController: videoController!,
-          autoPlay: true,
-          showOptions: false,
-          showControlsOnInitialize: false,
-        );
+        videoNotifier.initChewieController(videoController!);
         isInitialize = true;
         safeUpdate();
       });

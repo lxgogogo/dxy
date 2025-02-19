@@ -223,12 +223,11 @@ packages:
     source: hosted
     version: "2.0.3"
   chewie:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
-      name: chewie
-      sha256: "335df378c025588aef400c704bd71f0daea479d4cd57c471c88c056c1144e7cd"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/chewie"
+      relative: true
+    source: path
     version: "1.8.5"
   cli_util:
     dependency: transitive

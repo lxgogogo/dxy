@@ -36,7 +36,7 @@ class VideoDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<VideoDetailController>(
       init: VideoDetailController(),
-      tag: '${DateTime.now().millisecondsSinceEpoch}',
+      // tag: '${DateTime.now().millisecondsSinceEpoch}',
       builder: (controller) {
         return BackgroundContainer(
           child: Scaffold(
@@ -89,9 +89,9 @@ class VideoDetailScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                child: controller.isInitialize && controller.chewieController != null
-                                    ? Chewie(
-                                        controller: controller.chewieController!,
+                                child: controller.videoNotifier.chewieController != null
+                                    ? ChewieVideo(
+                                        notifier: controller.videoNotifier,
                                       )
                                     : const Center(
                                         child: CircularProgressIndicator(),
@@ -255,5 +255,53 @@ class VideoDetailScreen extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class ChewieVideo extends StatelessWidget {
+  final VideoNotifier _videoNotifier;
+
+  const ChewieVideo({super.key, notifier}) : _videoNotifier = notifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        return ListenableBuilder(
+            listenable: _videoNotifier,
+            builder: (context, child) {
+              _videoNotifier.chewieController!.isFullScreen = orientation == Orientation.landscape;
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                body: Container(
+                  alignment: Alignment.center,
+                  color: Colors.black,
+                  child: Chewie(
+                    controller: _videoNotifier.chewieController!,
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+}
+
+class VideoNotifier extends ChangeNotifier {
+  ChewieController? _chewieController;
+
+  ChewieController? get chewieController => _chewieController;
+
+  void initChewieController(videoPlayerController) {
+    _chewieController = ChewieController(
+      videoPlayerController: videoPlayerController,
+      autoPlay: true,
+      showOptions: false,
+      showControlsOnInitialize: false,
+      routePageBuilder: (context, animation, secondaryAnimation, controllerProvider) {
+        return ChewieVideo(notifier: this);
+      },
+    );
+    notifyListeners();
   }
 }

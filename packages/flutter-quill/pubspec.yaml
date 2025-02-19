@@ -42,7 +42,9 @@ dependencies:
   gal: ^2.3.0
   gal_linux: ^0.1.0
   image_picker: ^1.0.0
-  chewie: ^1.8.1
+#  chewie: ^1.8.1
+  chewie:
+    path: ../chewie
   cached_network_image: ^3.3.1
 
 dev_dependencies:

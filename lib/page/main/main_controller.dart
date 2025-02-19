@@ -95,10 +95,10 @@ class MainController extends GetxController {
   }
 
   Future<void> _initAppLinks() async {
-    final initialUri = await _appLinks.getInitialLink();
-    if (initialUri != null) {
-      dealWithLink(initialUri);
-    }
+    // final initialUri = await _appLinks.getInitialLink();
+    // if (initialUri != null) {
+    //   dealWithLink(initialUri);
+    // }
     _appLinks.uriLinkStream.listen(dealWithLink);
   }
 

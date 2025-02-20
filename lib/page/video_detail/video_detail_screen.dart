@@ -265,25 +265,22 @@ class ChewieVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
-        return ListenableBuilder(
-            listenable: _videoNotifier,
-            builder: (context, child) {
-              _videoNotifier.chewieController!.isFullScreen = orientation == Orientation.landscape;
-              return Scaffold(
-                resizeToAvoidBottomInset: false,
-                body: Container(
-                  alignment: Alignment.center,
-                  color: Colors.black,
-                  child: Chewie(
-                    controller: _videoNotifier.chewieController!,
-                  ),
-                ),
-              );
-            });
-      },
-    );
+    return ListenableBuilder(
+        listenable: _videoNotifier,
+        builder: (context, child) {
+          final orientation = MediaQuery.of(context).orientation;
+          _videoNotifier.chewieController!.isFullScreen = orientation == Orientation.landscape;
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Container(
+              alignment: Alignment.center,
+              color: Colors.black,
+              child: Chewie(
+                controller: _videoNotifier.chewieController!,
+              ),
+            ),
+          );
+        });
   }
 }
 

@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/login_helper.dart';
@@ -31,30 +34,25 @@ class _FollowingScreenState extends State<FollowingScreen> {
   int pageSize = 10;
   bool isFollowPage = true;
 
-  List<UserProfile> followOrFanUserList = [];
+  List<UserProfile> items = [];
   bool _isMounted = false;
 
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController = RefreshController();
 
   final TextEditingController searchController = TextEditingController();
 
   void _onRefresh() async {
-    setState(() {
-      pageNum = 1;
-    });
+    pageNum = 1;
     reqListData();
   }
 
   void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
+    pageNum++;
     reqListData();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isMounted = true;
     isFollowPage = widget.isFollowPage;
@@ -74,9 +72,9 @@ class _FollowingScreenState extends State<FollowingScreen> {
         if (_isMounted) {
           setState(() {
             if (pageNum == 1) {
-              followOrFanUserList = followOrFan.list!;
+              items = followOrFan.list!;
             } else {
-              followOrFanUserList.addAll(followOrFan.list!);
+              items.addAll(followOrFan.list!);
             }
           });
         }
@@ -89,9 +87,9 @@ class _FollowingScreenState extends State<FollowingScreen> {
         if (_isMounted) {
           setState(() {
             if (pageNum == 1) {
-              followOrFanUserList = followOrFan.list!;
+              items = followOrFan.list!;
             } else {
-              followOrFanUserList.addAll(followOrFan.list!);
+              items.addAll(followOrFan.list!);
             }
           });
         }
@@ -103,20 +101,17 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
-    return BackgroundContainer(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
             'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
+            width: 22.w,
+            height: 22.w,
           ),
           onPressed: () {
-            //通知我的页面刷新关注粉丝数量
             EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
-            Navigator.pop(context);
+            Get.back();
           },
         ),
         backgroundColor: Colors.transparent,
@@ -125,149 +120,88 @@ class _FollowingScreenState extends State<FollowingScreen> {
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
-        // bottom: const PreferredSize(
-        //   preferredSize: Size.fromHeight(1.0),
-        //   child: Divider(
-        //     color: AppTheme.color_F3F3F3,
-        //     thickness: 1,
-        //   ),
-        // ),
       ),
-      backgroundColor: Colors.transparent,
-      body: SafeArea(
-          child: Container(
-              // color: Colors.red,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFFF4F7FC), Color(0xFFE4EEF9), Color(0xFFE4EEF9)],
-              )),
-              child: contentView())),
-    ));
-  }
-
-  Widget contentView() {
-    return Center(
-        child: Row(
-      children: [Expanded(child: followOrFanUserList.isNotEmpty ? listView() : const NoDataView())],
-    ));
-  }
-
-  ///列表数据
-  Widget listView() {
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      header: WaterDropHeader(),
-      controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: ListView.builder(
-        itemBuilder: (c, i) => listDataItem(i),
-        // itemExtent: 160.0,
-        itemCount: followOrFanUserList.length,
-      ),
-    );
-  }
-
-  Widget listDataItem(int index) {
-    return Container(
-      margin: EdgeInsets.only(left: 18.px, right: 18.px),
-      padding: EdgeInsets.only(top: 12.px, bottom: 12.px),
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1.px, color: const Color(0xffE6E6E6)))),
-      child: Row(children: [
-        Container(
-            height: 34.px,
-            width: 34.px,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22.px), border: Border.all(color: Colors.white, width: 1)),
-            child: Center(
-                child: ClipOval(
-              child: LoginHelper().getUserAvatar(
-                  followOrFanUserList[index].avatar!.isNotEmpty ? followOrFanUserList[index].avatar! : '',
-                  32.px,
-                  32.px),
-            ))),
-        SizedBox(
-          width: 7.px,
-        ),
-        Text(
-          followOrFanUserList[index].nickname!.isNotEmpty ? followOrFanUserList[index].nickname! : '',
-          style: TextStyle(color: const Color(0xff2a2a2a), fontSize: 12.px),
-        ),
-        const Spacer(),
-        FollowBtn(
-            isFollowed: followOrFanUserList[index].followed!,
-            onTap: () {
-              NetRequest().followerToggle(followOrFanUserList[index].id!, !followOrFanUserList[index].followed!,
-                  (data) {
-                if (_isMounted) {
-                  setState(() {
-                    if (isFollowPage) {
-                      //关注页面移除当前条目
-                      followOrFanUserList.remove(followOrFanUserList[index]);
-                    } else {
-                      //粉丝页面需要刷新状态
-                      setState(() {
-                        pageNum = 1;
-                      });
-                      reqListData();
-                    }
-                  });
-                }
-              });
-            })
-      ]),
-    );
-  }
-
-  Widget topSearchView() {
-    return Container(
-        height: 40,
-        child: Center(
-            child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: '搜索用户',
-              contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-              prefixIcon: IconButton(
-                icon: Image.asset(
-                  'assets/images/search_icon.png',
-                  width: 15,
-                  height: 15,
-                ),
-                onPressed: () {},
-              ),
-              suffixIcon: IconButton(
-                icon: Image.asset(
-                  'assets/images/search_clear.png',
-                  width: 20,
-                  height: 20,
-                ),
-                onPressed: () {
-                  if (_isMounted) {
-                    setState(() {
-                      searchController.text = '';
-                    });
-                  }
+      backgroundColor: '#F7F8FC'.hexColor,
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: items.isNotEmpty
+            ? ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      ClipOval(
+                        child: CachedNetworkImage(
+                          width: 36.w,
+                          height: 36.w,
+                          fit: BoxFit.cover,
+                          imageUrl: items[index].avatar ?? '',
+                          errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Text(
+                            items[index].nickname ?? '',
+                            style: TextStyle(
+                              color: '#333333'.hexColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          NetRequest().followerToggle(
+                            items[index].id!,
+                            !items[index].followed!,
+                            (data) {
+                              if (isFollowPage) {
+                                items.removeAt(index);
+                                if (_isMounted) {
+                                  setState(() {});
+                                }
+                              } else {
+                                pageNum = 1;
+                                reqListData();
+                              }
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 70.w,
+                          height: 28.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: items[index].followed == true
+                                ? '#EBEBEB'.hexColor
+                                : '#557BF6'.hexColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                          child: Text(
+                            items[index].followed == true ? '已关注' : '关注',
+                            style: TextStyle(
+                              color: items[index].followed == true ? '#333333'.hexColor : '#557BF6'.hexColor,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
                 },
-              ),
-              filled: true,
-              fillColor: AppTheme.color_EFEFEF,
-              hintStyle: AppTheme.text999999Size14,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-        )));
+                itemCount: items.length,
+                separatorBuilder: (_, __) => SizedBox(height: 16.w),
+              )
+            : const NoDataView(),
+      ),
+    );
   }
 }

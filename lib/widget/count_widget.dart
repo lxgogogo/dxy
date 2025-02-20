@@ -250,3 +250,58 @@ class CountText extends StatelessWidget {
     );
   }
 }
+
+class SimpleCountText extends StatelessWidget {
+  const SimpleCountText({
+    super.key,
+    required this.count,
+    required this.desc,
+  });
+
+  final String count;
+  final String desc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          count,
+          style: TextStyle(
+            color: const Color(0xff999999),
+            fontSize: 12.sp,
+          ),
+        ),
+        SizedBox(width: 2.w),
+        Text(
+          desc,
+          style: TextStyle(
+            color: const Color(0xff999999),
+            fontSize: 12.sp,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SimpleDot extends StatelessWidget {
+  const SimpleDot({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: 4.w),
+      child: Text(
+        '·',
+        style: TextStyle(
+          color: const Color(0xff999999),
+          fontSize: 12.sp,
+        ),
+      ),
+    );
+  }
+}

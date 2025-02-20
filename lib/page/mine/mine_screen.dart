@@ -1,14 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/background_container.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
@@ -27,215 +27,169 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BackgroundContainer(
-      child: GetBuilder<MineController>(
-        init: MineController(),
-        builder: (controller) {
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              actions: [
-                IconButton(
-                  icon: Image.asset(
-                    'assets/images/setting.png',
-                    width: 20.w,
-                    height: 20.w,
-                  ),
-                  onPressed: () {
-                    Get.toNamed(Routes.setting);
-                  },
-                ),
-              ],
-            ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8.w),
-                  padding: EdgeInsets.all(6.w),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/profile_header.png',
-                      ),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  child: userInfoView(controller.userProfile),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 12.w),
-                    decoration: BoxDecoration(
-                        color: const Color(0xfff2f9ff),
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xffb9d0e5).withOpacity(0.64),
-                            offset: Offset(0, -1.w),
-                            blurRadius: 2.rpx,
-                            spreadRadius: 0,
-                          ),
-                          BoxShadow(
-                            color: const Color(0xffffffff),
-                            offset: Offset(0, 1.w),
-                            blurRadius: 2.rpx,
-                            spreadRadius: 1.w,
-                          )
-                        ]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TabBar(
-                          controller: controller.tabController,
-                          tabs: controller.tabs.map((e) => Tab(text: e)).toList(),
-                          isScrollable: false,
-                          labelPadding: EdgeInsets.fromLTRB(6.w, 6.w, 6.w, 0),
-                          indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                          indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                              color: const Color(0xff6198f7),
-                              width: 2.w, // 选中线条宽度
-                            ),
-                            insets: EdgeInsets.symmetric(horizontal: 8.w),
-                            borderRadius: BorderRadius.circular(2.w),
-                          ),
-                          //底部下标颜色
-                          enableFeedback: false,
-                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                            return Colors.transparent;
-                          }),
-                          dividerHeight: 0,
-                          labelStyle: TextStyle(
-                            color: const Color(0xff2c2c2c),
-                            fontSize: 16.w,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            color: const Color(0xff666666),
-                            fontSize: 16.w,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: controller.tabController,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: List.generate(
-                              controller.tabs.length,
-                              (index) => MineChildView(tabIndex: index),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget userInfoView(UserProfile? userProfile) {
-    return GestureDetector(
-        onTap: () {
-          Get.toNamed(Routes.personal);
-        },
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 12.w, 0, 12.w),
-          child: Row(
-            children: <Widget>[
+    return GetBuilder<MineController>(
+      init: MineController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
               Container(
-                width: 56.w,
-                height: 56.w,
+                height: 268.w,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2.w),
-                ),
-                child: Stack(children: <Widget>[
-                  ClipOval(
-                    child: LoginHelper().getUserAvatar(
-                      userProfile?.avatar ?? '',
-                      56.w,
-                      56.w,
-                    ),
+                  image: DecorationImage(
+                    image: Assets.images.mineHeaderBg.provider(),
+                    fit: BoxFit.fill,
                   ),
-                ]),
-              ),
-              Expanded(
-                child: Padding(
-                    padding: EdgeInsets.only(left: 8.5.w),
-                    child: Row(
+                ),
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Expanded(
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                              Text(
-                                userProfile?.nickname ?? '',
-                                style: TextStyle(
-                                    fontSize: 16.w, fontWeight: FontWeight.bold, color: const Color(0xff2C2C2C)),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(
-                                height: 8.w,
-                              ),
-                              Row(children: [
-                                GestureDetector(
-                                  child: Text('${userProfile?.followedCount.abbreviateNumber ?? '0'} 关注',
-                                      style: TextStyle(
-                                        color: const Color(0xff2a2a2a),
-                                        fontSize: 12.w,
-                                        fontWeight: FontWeight.w500,
-                                        decoration: TextDecoration.underline,
-                                      )),
-                                  onTap: () {
-                                    Get.toNamed(Routes.following, arguments: true);
-                                  },
-                                ),
-                                SizedBox(
-                                  width: 19.w,
-                                ),
-                                GestureDetector(
-                                  child: Text(
-                                    '${userProfile?.fansCount.abbreviateNumber ?? '0'} 粉丝',
-                                    style: TextStyle(
-                                      color: const Color(0xff2a2a2a),
-                                      fontSize: 12.w,
-                                      fontWeight: FontWeight.w500,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Get.toNamed(Routes.following, arguments: false);
-                                  },
-                                )
-                              ]),
-                            ])),
-                        IconButton(
-                          icon: Image.asset(
-                            'assets/images/arrow_right.png',
-                            width: 24.w,
+                        Center(
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              width: 88.w,
+                              height: 88.w,
+                              fit: BoxFit.cover,
+                              imageUrl: controller.userProfile?.avatar ?? '',
+                              errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                            ),
                           ),
-                          onPressed: () {
-                            Get.toNamed(Routes.personal);
-                          },
-                        )
+                        ),
+                        SizedBox(height: 8.w),
+                        Text(
+                          controller.userProfile?.nickname ?? '',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xff333333),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4.w),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.following, arguments: true);
+                              },
+                              child: Text(
+                                '${controller.userProfile?.followedCount.abbreviateNumber ?? '0'} 关注',
+                                style: TextStyle(
+                                  color: const Color(0xff6B6D70),
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 24.w),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.following, arguments: false);
+                              },
+                              child: Text(
+                                '${controller.userProfile?.fansCount.abbreviateNumber ?? '0'} 粉丝',
+                                style: TextStyle(
+                                  color: const Color(0xff6B6D70),
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 24.w + 268.w - 239.w),
                       ],
-                    )),
+                    ),
+                    Positioned(
+                      top: ScreenUtil().statusBarHeight + 4.w,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.setting);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16.w),
+                          child: SvgPicture.asset(
+                            Assets.svg.iconSetting,
+                            width: 24.w,
+                            height: 24.w,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 239.w),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.w),
+                            child: TabBar(
+                              controller: controller.tabController,
+                              tabs: controller.tabs.map((e) => Tab(text: e)).toList(),
+                              isScrollable: false,
+                              indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                              indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                  color: const Color(0xff557BF6),
+                                  width: 2.w, // 选中线条宽度
+                                ),
+                                insets: EdgeInsets.symmetric(horizontal: 10.w),
+                                borderRadius: BorderRadius.circular(2.w),
+                              ),
+                              //底部下标颜色
+                              enableFeedback: false,
+                              overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                                return Colors.transparent;
+                              }),
+                              dividerHeight: 0,
+                              labelStyle: TextStyle(
+                                color: const Color(0xff333333),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              unselectedLabelStyle: TextStyle(
+                                color: const Color(0xff333333),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              controller: controller.tabController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: List.generate(
+                                controller.tabs.length,
+                                (index) => MineChildView(tabIndex: index),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
             ],
           ),
-        ));
+        );
+      },
+    );
   }
 
   @override

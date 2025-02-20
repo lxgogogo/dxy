@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -19,6 +20,7 @@ import 'package:holdem/widget/at_text.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/item_comment.dart';
+import 'package:holdem/widget/my_item_feed.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -269,7 +271,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                           ],
                         ),
                         child: widget.tabIndex == 0
-                            ? FeedItem(boardPostList[i], isMyPost: true)
+                            ? MyFeedItem(boardPostList[i])
                             : widget.tabIndex == 1
                                 ? MyCollectItem(item: collectList[i])
                                 : MyCommentItem(
@@ -498,20 +500,26 @@ class MyCollectItem extends StatelessWidget {
     String? title;
     String? content;
     DateTime? createdAt;
+    int? likeCount;
     int? commentCount;
+    int? favoriteCount;
     String? imageUrl;
     if (item?.relType == 'thread') {
       title = item?.thread?.title;
       // content = item?.thread?.content;
       content = item?.thread?.pureText;
       createdAt = item?.thread?.createdAt;
+      likeCount = item?.thread?.likeCount;
       commentCount = item?.thread?.commentCount;
+      favoriteCount = item?.thread?.favoriteCount;
       imageUrl = item?.thread?.files?.firstOrNull?.url;
     } else if (item?.relType == 'content') {
       title = item?.content?.title;
       content = item?.content?.description;
       createdAt = item?.content?.createdAt;
+      likeCount = item?.content?.likeCount;
       commentCount = item?.content?.commentCount;
+      favoriteCount = item?.content?.favoriteCount;
       imageUrl = item?.content?.cover;
     }
     return GestureDetector(
@@ -535,98 +543,110 @@ class MyCollectItem extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(10.w, 10.w, 10.w, 12.w),
-        margin: EdgeInsets.fromLTRB(10.w, 12.w, 10.w, 0),
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 16.w),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(12.rpx),
+          border: Border(bottom: BorderSide(color: '#F2F2F2'.hexColor)),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Text(
+              title ?? '',
+              style: TextStyle(
+                color: '#333333'.hexColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              softWrap: true,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 12.w),
+            SizedBox(
+              height: 66.w,
+              child: Row(
                 children: [
-                  Text(
-                    title ?? '',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyle(
-                      color: const Color(0xff2a2a2a),
-                      fontSize: 14.w,
+                  if (imageUrl?.isNotEmpty == true)
+                    Container(
+                      width: 88.w,
+                      height: 66.w,
+                      margin: EdgeInsets.only(right: 8.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: imageUrl ?? '',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                            errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          ),
+                          if (item?.content?.type == 'videoList')
+                            Positioned(
+                              top: 2.w,
+                              right: 2.w,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(16.r),
+                                ),
+                                child: Text(
+                                  '合集',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          content ?? '',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: '#333333'.hexColor,
+                          ),
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Row(
+                          children: [
+                            SimpleCountText(
+                              count: likeCount?.abbreviateNumber ?? '0',
+                              desc: '点赞',
+                            ),
+                            const SimpleDot(),
+                            SimpleCountText(
+                              count: commentCount?.abbreviateNumber ?? '0',
+                              desc: '评论',
+                            ),
+                            const SimpleDot(),
+                            SimpleCountText(
+                              count: favoriteCount?.abbreviateNumber ?? '0',
+                              desc: '收藏',
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  if (content?.isNotEmpty == true)
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 8.w),
-                      child: Text(
-                        content ?? '',
-                        style: TextStyle(
-                          color: const Color(0xff666666),
-                          fontSize: 12.sp,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  Row(
-                    children: [
-                      Text(
-                        createdAt != null ? DateFormat('M月d日').format(createdAt) : '',
-                        style: TextStyle(
-                          color: const Color(0xff9CACC9),
-                          fontSize: 12.w,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 30.w,
-                      ),
-                      CountComment(count: commentCount?.abbreviateNumber ?? '0'),
-                    ],
-                  )
                 ],
               ),
             ),
-            if (imageUrl?.isNotEmpty == true)
-              Stack(
-                children: [
-                  Container(
-                    width: 92.w,
-                    height: 66.w,
-                    margin: EdgeInsets.only(left: 15.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl!,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    ),
-                  ),
-                  if (item?.content?.type == 'videoList')
-                    Positioned(
-                      top: 2.w,
-                      right: 2.w,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Text(
-                          '合集',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              )
           ],
         ),
       ),

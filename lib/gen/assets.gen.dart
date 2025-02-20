@@ -582,6 +582,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_delete.svg
   String get iconDelete => 'assets/svg/icon_delete.svg';
 
+  /// File path: assets/svg/icon_setting.svg
+  String get iconSetting => 'assets/svg/icon_setting.svg';
+
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
 
@@ -600,6 +603,7 @@ class $AssetsSvgGen {
         arrowRight,
         iconClose,
         iconDelete,
+        iconSetting,
         iconWarning,
         postGood,
         postNewer,

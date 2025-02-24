@@ -80,6 +80,26 @@ class $AssetsImagesGen {
   AssetGenImage get confirmBtn =>
       const AssetGenImage('assets/images/confirm_btn.png');
 
+  /// File path: assets/images/course_0.png
+  AssetGenImage get course0 =>
+      const AssetGenImage('assets/images/course_0.png');
+
+  /// File path: assets/images/course_1.png
+  AssetGenImage get course1 =>
+      const AssetGenImage('assets/images/course_1.png');
+
+  /// File path: assets/images/course_2.png
+  AssetGenImage get course2 =>
+      const AssetGenImage('assets/images/course_2.png');
+
+  /// File path: assets/images/course_3.png
+  AssetGenImage get course3 =>
+      const AssetGenImage('assets/images/course_3.png');
+
+  /// File path: assets/images/course_card_bg.png
+  AssetGenImage get courseCardBg =>
+      const AssetGenImage('assets/images/course_card_bg.png');
+
   /// File path: assets/images/default_avatar.png
   AssetGenImage get defaultAvatar =>
       const AssetGenImage('assets/images/default_avatar.png');
@@ -141,9 +161,25 @@ class $AssetsImagesGen {
   /// File path: assets/images/hearted.png
   AssetGenImage get hearted => const AssetGenImage('assets/images/hearted.png');
 
+  /// File path: assets/images/home_banner.png
+  AssetGenImage get homeBanner =>
+      const AssetGenImage('assets/images/home_banner.png');
+
+  /// File path: assets/images/home_book.svg
+  String get homeBook => 'assets/images/home_book.svg';
+
+  /// File path: assets/images/home_course.svg
+  String get homeCourse => 'assets/images/home_course.svg';
+
+  /// File path: assets/images/home_feed.svg
+  String get homeFeed => 'assets/images/home_feed.svg';
+
   /// File path: assets/images/home_top.png
   AssetGenImage get homeTop =>
       const AssetGenImage('assets/images/home_top.png');
+
+  /// File path: assets/images/home_video.svg
+  String get homeVideo => 'assets/images/home_video.svg';
 
   /// File path: assets/images/ic_facebook.png
   AssetGenImage get icFacebook =>
@@ -160,6 +196,26 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_twitter.png
   AssetGenImage get icTwitter =>
       const AssetGenImage('assets/images/ic_twitter.png');
+
+  /// File path: assets/images/icon_home_book.png
+  AssetGenImage get iconHomeBook =>
+      const AssetGenImage('assets/images/icon_home_book.png');
+
+  /// File path: assets/images/icon_home_course.png
+  AssetGenImage get iconHomeCourse =>
+      const AssetGenImage('assets/images/icon_home_course.png');
+
+  /// File path: assets/images/icon_home_feed.png
+  AssetGenImage get iconHomeFeed =>
+      const AssetGenImage('assets/images/icon_home_feed.png');
+
+  /// File path: assets/images/icon_home_video.png
+  AssetGenImage get iconHomeVideo =>
+      const AssetGenImage('assets/images/icon_home_video.png');
+
+  /// File path: assets/images/icon_play.png
+  AssetGenImage get iconPlay =>
+      const AssetGenImage('assets/images/icon_play.png');
 
   /// File path: assets/images/icon_post_feed.png
   AssetGenImage get iconPostFeed =>
@@ -216,6 +272,10 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
+
+  /// File path: assets/images/logo_text.png
+  AssetGenImage get logoText =>
+      const AssetGenImage('assets/images/logo_text.png');
 
   /// File path: assets/images/logout.png
   AssetGenImage get logout => const AssetGenImage('assets/images/logout.png');
@@ -437,7 +497,7 @@ class $AssetsImagesGen {
   AssetGenImage get zan => const AssetGenImage('assets/images/zan.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
         aboutUs,
         add,
         ait,
@@ -457,6 +517,11 @@ class $AssetsImagesGen {
         commentSmall,
         commonBg,
         confirmBtn,
+        course0,
+        course1,
+        course2,
+        course3,
+        courseCardBg,
         defaultAvatar,
         delete,
         delete2,
@@ -474,11 +539,21 @@ class $AssetsImagesGen {
         game,
         heart,
         hearted,
+        homeBanner,
+        homeBook,
+        homeCourse,
+        homeFeed,
         homeTop,
+        homeVideo,
         icFacebook,
         icTelegram,
         icTiktok,
         icTwitter,
+        iconHomeBook,
+        iconHomeCourse,
+        iconHomeFeed,
+        iconHomeVideo,
+        iconPlay,
         iconPostFeed,
         imageAdd,
         imageLoadingDef,
@@ -494,6 +569,7 @@ class $AssetsImagesGen {
         loginBg,
         loginBtn,
         logo,
+        logoText,
         logout,
         logoutBtn,
         messageTop,
@@ -576,17 +652,62 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_right.svg
   String get arrowRight => 'assets/svg/arrow_right.svg';
 
+  /// File path: assets/svg/home_tag.svg
+  String get homeTag => 'assets/svg/home_tag.svg';
+
   /// File path: assets/svg/icon_close.svg
   String get iconClose => 'assets/svg/icon_close.svg';
 
+  /// File path: assets/svg/icon_comment.svg
+  String get iconComment => 'assets/svg/icon_comment.svg';
+
   /// File path: assets/svg/icon_delete.svg
   String get iconDelete => 'assets/svg/icon_delete.svg';
+
+  /// File path: assets/svg/icon_like.svg
+  String get iconLike => 'assets/svg/icon_like.svg';
+
+  /// File path: assets/svg/icon_like_white.svg
+  String get iconLikeWhite => 'assets/svg/icon_like_white.svg';
+
+  /// File path: assets/svg/icon_more.svg
+  String get iconMore => 'assets/svg/icon_more.svg';
+
+  /// File path: assets/svg/icon_refresh.svg
+  String get iconRefresh => 'assets/svg/icon_refresh.svg';
+
+  /// File path: assets/svg/icon_search.svg
+  String get iconSearch => 'assets/svg/icon_search.svg';
 
   /// File path: assets/svg/icon_setting.svg
   String get iconSetting => 'assets/svg/icon_setting.svg';
 
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
+
+  /// File path: assets/svg/nav_icon_feed.svg
+  String get navIconFeed => 'assets/svg/nav_icon_feed.svg';
+
+  /// File path: assets/svg/nav_icon_feed_act.svg
+  String get navIconFeedAct => 'assets/svg/nav_icon_feed_act.svg';
+
+  /// File path: assets/svg/nav_icon_home.svg
+  String get navIconHome => 'assets/svg/nav_icon_home.svg';
+
+  /// File path: assets/svg/nav_icon_home_act.svg
+  String get navIconHomeAct => 'assets/svg/nav_icon_home_act.svg';
+
+  /// File path: assets/svg/nav_icon_message.svg
+  String get navIconMessage => 'assets/svg/nav_icon_message.svg';
+
+  /// File path: assets/svg/nav_icon_message_act.svg
+  String get navIconMessageAct => 'assets/svg/nav_icon_message_act.svg';
+
+  /// File path: assets/svg/nav_icon_mine.svg
+  String get navIconMine => 'assets/svg/nav_icon_mine.svg';
+
+  /// File path: assets/svg/nav_icon_mine_act.svg
+  String get navIconMineAct => 'assets/svg/nav_icon_mine_act.svg';
 
   /// File path: assets/svg/post_good.svg
   String get postGood => 'assets/svg/post_good.svg';
@@ -601,10 +722,25 @@ class $AssetsSvgGen {
   List<String> get values => [
         arrowLeft,
         arrowRight,
+        homeTag,
         iconClose,
+        iconComment,
         iconDelete,
+        iconLike,
+        iconLikeWhite,
+        iconMore,
+        iconRefresh,
+        iconSearch,
         iconSetting,
         iconWarning,
+        navIconFeed,
+        navIconFeedAct,
+        navIconHome,
+        navIconHomeAct,
+        navIconMessage,
+        navIconMessageAct,
+        navIconMine,
+        navIconMineAct,
         postGood,
         postNewer,
         postOffice

@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
@@ -38,84 +42,69 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return BackgroundContainer(
-      child: GetBuilder<MainController>(
-        init: MainController(),
-        builder: (controller) {
-          return Scaffold(
-            body: [
-              const HomeScreen(),
-              const FeedListScreen(),
-              const MessagePage(),
-              const MineScreen(),
-            ][controller.currentIndex],
-            backgroundColor: Colors.transparent,
-            bottomNavigationBar: Container(
-              color: Colors.white,
+    return GetBuilder<MainController>(
+      init: MainController(),
+      builder: (controller) {
+        return Scaffold(
+          body: [
+            const HomeScreen(),
+            const FeedListScreen(),
+            const MessagePage(),
+            const MineScreen(),
+          ][controller.currentIndex],
+          backgroundColor: Colors.white,
+          bottomNavigationBar: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
               child: Container(
-                padding: EdgeInsets.only(top: 12.w),
-                clipBehavior: Clip.hardEdge,
+                padding: EdgeInsets.only(top: 4.w),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xff1e0000).withOpacity(0.12),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(18.r),
+                  ),
                 ),
                 child: BottomNavigationBar(
                   currentIndex: controller.currentIndex,
                   type: BottomNavigationBarType.fixed,
                   backgroundColor: Colors.transparent,
                   elevation: 0.0,
-                  selectedFontSize: 12,
-                  unselectedFontSize: 12,
-                  selectedItemColor: const Color(0xff008EFF),
-                  unselectedItemColor: const Color(0xff9CACC9),
+                  selectedFontSize: 10.sp,
+                  unselectedFontSize: 10.sp,
+                  selectedItemColor: '#557BF6'.hexColor,
+                  unselectedItemColor: '#333333'.hexColor,
                   showSelectedLabels: true,
-                  // 取消显示选中项的标签
                   showUnselectedLabels: true,
-                  // 取消显示未选中项的标签
                   useLegacyColorScheme: false,
                   onTap: controller.onTabBarItem,
                   items: [
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentIndex == 0
-                            ? 'assets/images/tab_index_sel.png'
-                            : 'assets/images/tab_index.png',
+                      icon: SvgPicture.asset(
+                        controller.currentIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHomeAct,
                         width: 20.w,
                         height: 20.w,
                       ),
                       label: '首页',
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentIndex == 1
-                            ? 'assets/images/tab_forum_sel.png'
-                            : 'assets/images/tab_forum.png',
+                      icon: SvgPicture.asset(
+                        controller.currentIndex == 0 ? Assets.svg.navIconFeed : Assets.svg.navIconFeedAct,
                         width: 20.w,
                         height: 20.w,
                       ),
                       label: '论坛',
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentIndex == 2
-                            ? 'assets/images/tab_message_sel.png'
-                            : 'assets/images/tab_message.png',
+                      icon: SvgPicture.asset(
+                        controller.currentIndex == 0 ? Assets.svg.navIconMessage : Assets.svg.navIconMessageAct,
                         width: 20.w,
                         height: 20.w,
                       ),
                       label: '消息',
                     ),
                     BottomNavigationBarItem(
-                      icon: Image.asset(
-                        controller.currentIndex == 3 ? 'assets/images/tab_me_sel.png' : 'assets/images/tab_me.png',
+                      icon: SvgPicture.asset(
+                        controller.currentIndex == 0 ? Assets.svg.navIconMine : Assets.svg.navIconMineAct,
                         width: 20.w,
                         height: 20.w,
                       ),
@@ -125,9 +114,9 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

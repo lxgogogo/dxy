@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 
 import 'like_button/like_button.dart';
 
@@ -20,11 +23,11 @@ class CountComment extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/comment.png',
-            width: 11.w,
+          SvgPicture.asset(
+            Assets.svg.iconComment,
+            width: 12.w,
           ),
-          SizedBox(width: 3.w),
+          SizedBox(width: 6.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -107,11 +110,11 @@ class CountLike extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            liked ? 'assets/images/praised.png' : 'assets/images/praise.png',
-            width: 11.w,
+          SvgPicture.asset(
+            liked ? Assets.svg.iconLike : Assets.svg.iconLike,
+            width: 12.w,
           ),
-          SizedBox(width: 3.w),
+          SizedBox(width: 6.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -242,7 +245,7 @@ class CountText extends StatelessWidget {
         Text(
           count,
           style: TextStyle(
-            color: const Color(0xff9CACC9),
+            color: '#1E1E1E'.hexColor.withOpacity(0.7),
             fontSize: 12.sp,
           ),
         ),
@@ -294,7 +297,7 @@ class SimpleDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 4.w),
+      padding: EdgeInsets.symmetric(horizontal: 4.w),
       child: Text(
         '·',
         style: TextStyle(

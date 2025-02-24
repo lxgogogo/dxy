@@ -4,10 +4,12 @@ import 'package:holdem/extensions/string_extensions.dart';
 
 class AtText extends StatelessWidget {
   final String text;
+  final int maxLines;
 
   const AtText({
     super.key,
     required this.text,
+    this.maxLines = 3,
   });
 
   RegExp get regExp => RegExp(r'\$@([\u4e00-\u9fa5\w]+) \$');
@@ -35,7 +37,7 @@ class AtText extends StatelessWidget {
         color: const Color(0xff666666),
         fontSize: 12.sp,
       ),
-      maxLines: 3,
+      maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
       softWrap: true,
     );

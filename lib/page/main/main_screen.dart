@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
                   items: [
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        controller.currentIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHomeAct,
+                        controller.currentIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
                         width: 20.w,
                         height: 20.w,
                       ),
@@ -88,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        controller.currentIndex == 0 ? Assets.svg.navIconFeed : Assets.svg.navIconFeedAct,
+                        controller.currentIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
                         width: 20.w,
                         height: 20.w,
                       ),
@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        controller.currentIndex == 0 ? Assets.svg.navIconMessage : Assets.svg.navIconMessageAct,
+                        controller.currentIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
                         width: 20.w,
                         height: 20.w,
                       ),
@@ -104,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     BottomNavigationBarItem(
                       icon: SvgPicture.asset(
-                        controller.currentIndex == 0 ? Assets.svg.navIconMine : Assets.svg.navIconMineAct,
+                        controller.currentIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
                         width: 20.w,
                         height: 20.w,
                       ),

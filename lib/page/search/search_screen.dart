@@ -290,7 +290,7 @@ class SearchScreen extends GetView<SearchController> {
           Row(
             children: [
               SvgPicture.asset(
-                Assets.svg.clubs,
+                Assets.svg.spades,
                 width: 12.w,
                 height: 12.w,
               ),

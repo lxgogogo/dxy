@@ -22,10 +22,33 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.dxy.holdem</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>holdem</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<false/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>App需要您的同意,才能访问您的相机</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App需要您的同意,才能访问您的麦克风</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>App需要您的同意，才能访问相册，以便于将图片保存到相册</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App需要您的同意，才能访问相册，以便于从相册获取图片上传头像等</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -47,29 +70,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
-    <key>NSCameraUsageDescription</key>
-    <string>App需要您的同意,才能访问您的相机</string>
-    <key>NSMicrophoneUsageDescription</key>
-        <string>App需要您的同意,才能访问您的麦克风</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-        <string>App需要您的同意，才能访问相册，以便于从相册获取图片上传头像等</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>App需要您的同意，才能访问相册，以便于将图片保存到相册</string>
-    <key>FlutterDeepLinkingEnabled</key>
-    <false/>
-        <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleURLName</key>
-                <string>com.dxy.holdem</string>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>holdem</string>
-                </array>
-            </dict>
-        </array>
-
 </dict>
 </plist>

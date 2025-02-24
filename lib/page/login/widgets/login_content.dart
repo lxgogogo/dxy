@@ -12,7 +12,8 @@ import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/button.dart';
 
 class LoginContent extends StatefulWidget {
-  const LoginContent({Key? key}) : super(key: key);
+  const LoginContent({Key? key, required this.goRegister}) : super(key: key);
+  final Function goRegister;
 
   @override
   State<LoginContent> createState() => _LoginContentState();
@@ -38,7 +39,10 @@ class _LoginContentState extends State<LoginContent> {
     isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final password = _controllerPw.text;
     isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
-    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
+    _isLoginDisable = account.isEmpty ||
+        isShowAccountTips ||
+        password.isEmpty ||
+        isShowPwTips;
     setState(() {});
   }
 
@@ -46,8 +50,12 @@ class _LoginContentState extends State<LoginContent> {
     final account = _controllerAccount.text;
     final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
-    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
+    final isShowPwTips =
+        !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    _isLoginDisable = account.isEmpty ||
+        isShowAccountTips ||
+        password.isEmpty ||
+        isShowPwTips;
     setState(() {});
   }
 
@@ -93,7 +101,7 @@ class _LoginContentState extends State<LoginContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -101,20 +109,24 @@ class _LoginContentState extends State<LoginContent> {
             height: 30.w,
           ),
           Container(
-            height: 50.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+            height: 44.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
             // 水平内边距
             decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.w),
-                border: Border.all(color: _focusEmail.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),
+              // border: Border.all(
+              //     color: _focusEmail.hasFocus
+              //         ? Color(0xff249CFC)
+              //         : Color(0xffCCD7F0))
+            ),
             child: Row(
               children: <Widget>[
-                Image.asset(
-                  'assets/images/email.png',
-                  width: 14.w,
-                  height: 14.w,
-                ),
+                // Image.asset(
+                //   'assets/images/email.png',
+                //   width: 14.w,
+                //   height: 14.w,
+                // ),
                 Expanded(
                   child: TextField(
                     focusNode: _focusEmail,
@@ -127,9 +139,10 @@ class _LoginContentState extends State<LoginContent> {
                     ],
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
-                      hintText: '请输入邮箱地址',
-                      hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                      hintText: '账号',
+                      hintStyle:
+                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -139,31 +152,30 @@ class _LoginContentState extends State<LoginContent> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
-            child: Text(
-              isShowAccountTips ? '请输入正确邮箱地址' : '范例：dxy@example.com',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+          SizedBox(
+            height: 12.w,
+          ),
+          if (isShowAccountTips)
+            Padding(
+              padding: EdgeInsets.only(left: 10.w, bottom: 10.w),
+              child: Text(
+                isShowAccountTips ? '*请输入正确邮箱地址' : '',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                ),
               ),
             ),
-          ),
           Container(
-            height: 50.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+            height: 44.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
             // 水平内边距
             decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.w),
-                border: Border.all(color: _focusPwd.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),
+            ),
             child: Row(
               children: <Widget>[
-                Image.asset(
-                  'assets/images/password.png',
-                  width: 14.w,
-                  height: 14.w,
-                ),
                 Expanded(
                   child: TextField(
                     controller: _controllerPw,
@@ -171,9 +183,10 @@ class _LoginContentState extends State<LoginContent> {
                     obscureText: !isOpen,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '请输入密码',
-                      hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                      hintText: '密码',
+                      hintStyle:
+                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -187,7 +200,9 @@ class _LoginContentState extends State<LoginContent> {
                     });
                   },
                   child: Image.asset(
-                    isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+                    isOpen
+                        ? 'assets/images/eye_open.png'
+                        : 'assets/images/eye_close.png',
                     width: 18.w,
                     height: 18.w,
                   ),
@@ -195,45 +210,73 @@ class _LoginContentState extends State<LoginContent> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
-            child: Text(
-              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '8-12位，须包含大小写字母+数字',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-              ),
-            ),
-          ),
+
           Row(
             children: [
+              Padding(
+                padding: EdgeInsets.only(left: 10.w, bottom: 10.w, top: 10.w),
+                child: Text(
+                  isShowPwTips ? '*密码错误' : '',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                  ),
+                ),
+              ),
               const Spacer(),
               GestureDetector(
                 onTap: () {
                   Get.toNamed(Routes.forgetPassword);
                 },
-                child: const Text(
+                child: Text(
                   '忘记密码?',
-                  style: AppTheme.text3B5078Size14,
+                  style: TextStyle(fontSize: 12, color: '#557BF6'.hexColor),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 36.w),
-          Center(
-            child: UserTermsUncheck(
-              reviewTerms: reviewTerms,
-              reviewPrivacy: reviewPrivacy,
-            ),
-          ),
-          SizedBox(height: 12.w),
+          SizedBox(height: 48.w),
+          // Center(
+          //   child: UserTermsUncheck(
+          //     reviewTerms: reviewTerms,
+          //     reviewPrivacy: reviewPrivacy,
+          //   ),
+          // ),
+          // SizedBox(height: 12.w),
           CustomButton(
             onPressed: login,
             disable: _isLoginDisable,
+            showOpacityAnimation: true,
+            textColor: Colors.white,
             height: 50.w,
             title: '登录',
           ),
+          SizedBox(height: 24.w),
+          goRegister()
         ],
+      ),
+    );
+  }
+
+  Widget goRegister() {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          widget.goRegister.call();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '没有账号？',
+              style: TextStyle(fontSize: 12, color: '#333333'.hexColor),
+            ),
+            Text(
+              '去注册',
+              style: TextStyle(fontSize: 12, color: '#557BF6'.hexColor),
+            ),
+          ],
+        ),
       ),
     );
   }

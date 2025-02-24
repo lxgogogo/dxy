@@ -22,112 +22,134 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              child: Image.asset('assets/images/login_bg.png'),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 30.w, top: 103.w, bottom: 44.5.w),
-                    alignment: Alignment.topLeft,
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 38.w,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 50.w),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            isLogin = true;
-                            setState(() {});
-                          },
-                          child: Column(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Stack(
+                  children: [
+                    Image.asset('assets/images/login_bg.png'),
+                    Positioned(
+                      child: SafeArea(
+                        child: Container(
+                          margin: EdgeInsets.only(left: 10.w),
+                          width: context.width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                '登录',
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: isLogin ? FontWeight.w500 : FontWeight.w400,
-                                  color: isLogin ? '#249cfc'.hexColor : '#3b5078'.hexColor,
-                                ),
+                              Image.asset(
+                                'assets/images/logo.png',
+                                height: 23.w,
                               ),
-                              Container(
-                                width: 21.w,
-                                height: 2.5.w,
-                                margin: EdgeInsets.only(top: 4.w),
-                                decoration: BoxDecoration(
-                                  color: isLogin ? '#249cfc'.hexColor : Colors.transparent,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(1.5.r),
-                                  ),
-                                ),
+                              CloseImageButton(
+                                width: 16.w,
+                                height: 16.w,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          width: 25.w,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isLogin = false;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                '注册',
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: !isLogin ? FontWeight.w500 : FontWeight.w400,
-                                  color: !isLogin ? '#249cfc'.hexColor : '#3b5078'.hexColor,
+                      ),
+                    )
+                  ],
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(left: 16.w, top: 24.w),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          isLogin = true;
+                          setState(() {});
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              '登录',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                fontWeight: isLogin
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                                color: isLogin ? '#333333'.hexColor : '#333333'
+                                    .hexColor,
+                              ),
+                            ),
+                            Container(
+                              width: 21.w,
+                              height: 4.w,
+                              margin: EdgeInsets.only(top: 4.w),
+                              decoration: BoxDecoration(
+                                color: isLogin ? '#557BF6'.hexColor : Colors
+                                    .transparent,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(1.5.r),
                                 ),
                               ),
-                              Container(
-                                width: 21.w,
-                                height: 2.5.w,
-                                margin: EdgeInsets.only(top: 4.w),
-                                decoration: BoxDecoration(
-                                  color: !isLogin ? '#249cfc'.hexColor : Colors.transparent,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(1.5.r),
-                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 25.w,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isLogin = false;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              '注册',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                fontWeight: !isLogin
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
+                                color: !isLogin ? '#333333'.hexColor : '#333333'
+                                    .hexColor,
+                              ),
+                            ),
+                            Container(
+                              width: 21.w,
+                              height: 4.w,
+                              margin: EdgeInsets.only(top: 4.w),
+                              decoration: BoxDecoration(
+                                color: !isLogin ? '#557BF6'.hexColor : Colors
+                                    .transparent,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(1.5.r),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  if (isLogin) const LoginContent() else const RegisterContent()
-                ],
-              ),
+                ),
+                if (isLogin) LoginContent(goRegister: () {
+                  setState(() {
+                    isLogin = false;
+                  });
+                },) else
+                  const RegisterContent()
+              ],
             ),
-            Positioned(
-              top: 53.w,
-              right: 15.w,
-              child: CloseImageButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+
+        ],
       ),
     );
   }

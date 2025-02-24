@@ -56,10 +56,11 @@ class CountDownView extends GetView<CountDownController> {
           controller.startCountdown(type, email);
         },
         child: Text(
-          '发送验证码',
+          '获取验证码',
           style: TextStyle(
             fontSize: 14.sp,
-            color: '#008EFF'.hexColor,
+            fontWeight: FontWeight.w600,
+            color: '#557BF6'.hexColor,
           ),
         ),
       );

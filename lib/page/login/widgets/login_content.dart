@@ -248,7 +248,7 @@ class _LoginContentState extends State<LoginContent> {
             disable: _isLoginDisable,
             showOpacityAnimation: true,
             textColor: Colors.white,
-            height: 50.w,
+            height: 48.w,
             title: '登录',
           ),
           SizedBox(height: 24.w),

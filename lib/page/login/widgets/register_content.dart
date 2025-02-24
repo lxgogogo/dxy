@@ -15,8 +15,8 @@ import 'package:holdem/widget/button.dart';
 import '../../../utils/app_theme.dart';
 
 class RegisterContent extends StatefulWidget {
-  const RegisterContent({Key? key}) : super(key: key);
-
+  const RegisterContent({Key? key, required this.goLogin}) : super(key: key);
+  final Function goLogin;
   @override
   State<RegisterContent> createState() => _RegisterContentState();
 }
@@ -70,7 +70,8 @@ class _RegisterContentState extends State<RegisterContent> {
     final code = _controllerCode.text;
     final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips =
+        !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
@@ -151,7 +152,7 @@ class _RegisterContentState extends State<RegisterContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -159,20 +160,14 @@ class _RegisterContentState extends State<RegisterContent> {
             height: 30.w,
           ),
           Container(
-            height: 50.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+            height: 44.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
             // 水平内边距
             decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.w),
-                border: Border.all(color: _focusEmail.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),),
             child: Row(
               children: <Widget>[
-                Image.asset(
-                  'assets/images/email.png',
-                  width: 14.w,
-                  height: 14.w,
-                ),
                 Expanded(
                   child: TextField(
                     focusNode: _focusEmail,
@@ -186,8 +181,9 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '请输入邮箱地址',
-                      hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                      hintStyle:
+                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -198,22 +194,21 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
+            padding:isShowAccountTips? EdgeInsets.symmetric(vertical: 3.w):EdgeInsets.zero,
             child: Text(
-              isShowAccountTips ? '请输入正确邮箱地址' : '范例：dxy@example.com',
+              isShowAccountTips ? '*请输入正确邮箱地址' : '',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 10.sp,
                 color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
           ),
           Container(
-            height: 50.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w), // 水平内边距
+            height: 44.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w), // 水平内边距
             decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.w),
-                border: Border.all(color: _focusCode.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -225,7 +220,7 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '验证码',
-                      hintStyle: AppTheme.text999999Size16,
+                      hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
@@ -241,30 +236,24 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
+            padding: isShowCodeTips?EdgeInsets.symmetric(vertical: 3.w):EdgeInsets.zero,
             child: Text(
-              isShowCodeTips ? '请输入6位数字验证码' : '',
+              isShowCodeTips ? '*验证码错误' : '',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 10.sp,
                 color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
           ),
           Container(
-            height: 50.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+            height: 44.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
             // 水平内边距
             decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.w),
-                border: Border.all(color: _focusPw.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),),
             child: Row(
               children: <Widget>[
-                Image.asset(
-                  'assets/images/password.png',
-                  width: 14.w,
-                  height: 14.w,
-                ),
                 Expanded(
                   child: TextField(
                     controller: _controllerPw,
@@ -272,9 +261,9 @@ class _RegisterContentState extends State<RegisterContent> {
                     obscureText: !_isVisible,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '请设置新密码',
-                      hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                      hintText: '请输入密码',
+                      hintStyle:  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -283,7 +272,9 @@ class _RegisterContentState extends State<RegisterContent> {
                 ),
                 GestureDetector(
                   child: Image.asset(
-                    _isVisible ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+                    _isVisible
+                        ? 'assets/images/eye_open.png'
+                        : 'assets/images/eye_close.png',
                     width: 18.w,
                     height: 18.w,
                   ),
@@ -297,30 +288,24 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
+            padding:EdgeInsets.symmetric(vertical: 6.w),
             child: Text(
-              isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '8-12位，须包含大小写字母+数字',
+              '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 10.sp,
                 color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
           ),
           Container(
-            height: 50.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+            height: 40.w,
+            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
             // 水平内边距
             decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(25.w),
-                border: Border.all(color: _focusAgainPw.hasFocus ? Color(0xff249CFC) : Color(0xffCCD7F0))),
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),),
             child: Row(
               children: <Widget>[
-                Image.asset(
-                  'assets/images/password.png',
-                  width: 14.w,
-                  height: 14.w,
-                ),
                 Expanded(
                   child: TextField(
                     controller: _controllerAgainPw,
@@ -329,9 +314,9 @@ class _RegisterContentState extends State<RegisterContent> {
                     // 输入内容显示为密文
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
-                      hintText: '再次输入新密码',
-                      hintStyle: AppTheme.text999999Size16,
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                      hintText: '请再次输入新密码',
+                      hintStyle:  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
                       onChangeCheckValid();
@@ -340,7 +325,9 @@ class _RegisterContentState extends State<RegisterContent> {
                 ),
                 GestureDetector(
                   child: Image.asset(
-                    _isVisibleAgain ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+                    _isVisibleAgain
+                        ? 'assets/images/eye_open.png'
+                        : 'assets/images/eye_close.png',
                     width: 18.w,
                     height: 18.w,
                   ),
@@ -356,34 +343,60 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.w).copyWith(left: 20.w),
+            padding:EdgeInsets.symmetric(vertical: 6.w),
             child: Text(
-              isShowAgainTips ? '两次输入的密码不一致' : '8-12位，须包含大小写字母+数字',
+              '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 10.sp,
                 color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
           ),
-          SizedBox(height: 36.w),
-          UserTerms(
-            onTermsCheck: onTermsCheck,
-            didAgreeTerms: didAgreeTerms,
-            reviewTerms: reviewTerms,
-            reviewPrivacy: reviewPrivacy,
-          ),
-          SizedBox(height: 12.w),
+          SizedBox(height: 48.w),
+          // UserTerms(
+          //   onTermsCheck: onTermsCheck,
+          //   didAgreeTerms: didAgreeTerms,
+          //   reviewTerms: reviewTerms,
+          //   reviewPrivacy: reviewPrivacy,
+          // ),
+          // SizedBox(height: 12.w),
           CustomButton(
             onPressed: registerOrConfirm,
             disable: _isLoginDisable,
-            height: 50.w,
+            showOpacityAnimation: true,
+            textColor: Colors.white,
+            height: 48.w,
             title: '注册',
           ),
+          SizedBox(height: 24.w),
+          goLogin()
         ],
       ),
     );
   }
 
+  Widget goLogin() {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          widget.goLogin.call();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '已有账号？',
+              style: TextStyle(fontSize: 12, color: '#333333'.hexColor),
+            ),
+            Text(
+              '去登录',
+              style: TextStyle(fontSize: 12, color: '#557BF6'.hexColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   //注册提交或者修改密码提交
   void registerOrConfirm() {
     var email = _controllerEmail.text;
@@ -418,7 +431,8 @@ class _RegisterContentState extends State<RegisterContent> {
     NetRequest().registerAccount(email, password, code, (data) {
       LoginHelper().userLogin(email, password, (data) {
         Get.back();
-        Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_REGISTER, force: true);
+        Get.delete<CountDownController>(
+            tag: NetRequest.SEND_CODE_TYPE_REGISTER, force: true);
       });
     });
   }

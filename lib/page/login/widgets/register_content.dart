@@ -180,7 +180,7 @@ class _RegisterContentState extends State<RegisterContent> {
                     ],
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
-                      hintText: '请输入邮箱地址',
+                      hintText: '请输入邮箱',
                       hintStyle:
                           TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
@@ -219,7 +219,7 @@ class _RegisterContentState extends State<RegisterContent> {
                     // maxLength: 8,
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
-                      hintText: '验证码',
+                      hintText: '请输入验证码',
                       hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                     ),
@@ -314,7 +314,7 @@ class _RegisterContentState extends State<RegisterContent> {
                     // 输入内容显示为密文
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
-                      hintText: '请再次输入新密码',
+                      hintText: '请再次输入密码',
                       hintStyle:  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),

@@ -5,9 +5,9 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
 
   final TextEditingController controller = TextEditingController();
   List<String> historyItems = [];
-  List<ArticleBean> articles = [];
   late TabController tabController;
   bool showResult = false;
+  List<TagModel> hotTagItems = [];
 
   @override
   void onInit() {
@@ -15,8 +15,29 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
       length: SearchType.values.length,
       vsync: this,
     );
-    historyItems = StorageUtil().prefs?.getStringList('search') ?? [];
     super.onInit();
+  }
+
+  @override
+  void onReady () {
+    historyItems = StorageUtil().prefs?.getStringList('search') ?? [];
+    loadHotTags();
+    super.onReady();
+  }
+
+  Future<void> loadHotTags() async {
+    final res = await CommonService.of.tagIndex(
+      pageNum: 1,
+      pageSize: 20,
+    );
+    if (res.isSuccess) {
+      final listRes = res.data['list'] as List? ?? [];
+      final records = listRes.map((e) => TagModel.fromJson(e as Map? ?? {})).toList();
+      if (records.isNotEmpty) {
+        hotTagItems.assignAll(records);
+        safeUpdate();
+      }
+    }
   }
 
   void onChanged(String value) {

@@ -251,7 +251,7 @@ class SearchChildView extends GetView<SearchChildView> {
               mainAxisSpacing: 8.w,
             ),
             itemCount: controller.articles.length,
-            itemBuilder: (c, i) => VideoItem(article: controller.articles[i]),
+            itemBuilder: (c, i) => VideoItem(item: controller.articles[i]),
           )
         : const NoDataView();
   }

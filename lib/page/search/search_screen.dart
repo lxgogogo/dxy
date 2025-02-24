@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
-import 'package:holdem/model/article.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/search/widgets/search_child_view.dart';
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/services/index.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
@@ -34,141 +38,136 @@ class SearchScreen extends GetView<SearchController> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-      child: GetBuilder<SearchController>(
-          init: SearchController(),
-          builder: (controller) {
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                automaticallyImplyLeading: false,
-                titleSpacing: 0.0,
-                leading: UnconstrainedBox(
-                  child: GestureDetector(
-                    onTap: Get.back,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 8.w, right: 4.w),
-                      child: Image.asset(
-                        'assets/images/navi_back.png',
-                        width: 24.w,
-                      ),
+    return GetBuilder<SearchController>(
+        init: SearchController(),
+        builder: (controller) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              titleSpacing: 0.0,
+              leading: UnconstrainedBox(
+                child: GestureDetector(
+                  onTap: Get.back,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8.w, right: 4.w),
+                    child: Image.asset(
+                      'assets/images/navi_back.png',
+                      width: 24.w,
                     ),
                   ),
                 ),
-                title: buildSearchInput(),
-                actions: [
-                  GestureDetector(
-                    onTap: controller.onSearch,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 12.w, right: 16.w),
-                      child: Text(
-                        '搜索',
-                        style: TextStyle(
-                          color: const Color(0xff249CFC),
-                          fontSize: 15.w,
-                        ),
+              ),
+              title: buildSearchInput(),
+              actions: [
+                GestureDetector(
+                  onTap: controller.onSearch,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 12.w, right: 16.w),
+                    child: Text(
+                      '搜索',
+                      style: TextStyle(
+                        color: const Color(0xff249CFC),
+                        fontSize: 15.w,
                       ),
                     ),
-                  )
-                ],
-              ),
-              backgroundColor: Colors.transparent,
-              body: controller.showResult
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 6.w),
-                          child: TabBar(
-                            controller: controller.tabController,
-                            tabs: SearchType.values
-                                .map((e) => Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 6.w),
-                                      child: Tab(text: e.title),
-                                    ))
-                                .toList(),
-                            isScrollable: true,
-                            tabAlignment: TabAlignment.start,
-                            labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
-                            indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                            indicator: UnderlineTabIndicator(
-                              borderSide: BorderSide(
-                                color: const Color(0xff6198f7),
-                                width: 2.w,
-                              ),
-                              insets: EdgeInsets.symmetric(horizontal: 8.w),
-                              borderRadius: BorderRadius.circular(2.w),
+                  ),
+                )
+              ],
+            ),
+            backgroundColor: Colors.transparent,
+            body: controller.showResult
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 6.w),
+                        child: TabBar(
+                          controller: controller.tabController,
+                          tabs: SearchType.values
+                              .map((e) => Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 6.w),
+                                    child: Tab(text: e.title),
+                                  ))
+                              .toList(),
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
+                          indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                              color: const Color(0xff6198f7),
+                              width: 2.w,
                             ),
-                            enableFeedback: false,
-                            overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                              return Colors.transparent;
-                            }),
-                            dividerHeight: 0,
-                            labelStyle: TextStyle(
-                              color: const Color(0xff2c2c2c),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              color: const Color(0xff666666),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            insets: EdgeInsets.symmetric(horizontal: 8.w),
+                            borderRadius: BorderRadius.circular(2.w),
+                          ),
+                          enableFeedback: false,
+                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                            return Colors.transparent;
+                          }),
+                          dividerHeight: 0,
+                          labelStyle: TextStyle(
+                            color: const Color(0xff2c2c2c),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: controller.tabController,
-                            children: SearchType.values.map((e) => SearchChildView(type: e).keepAlive).toList(),
-                          ),
-                        )
-                      ],
-                    )
-                  : buildSearchHistory(context),
-            );
-          }),
-    );
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: controller.tabController,
+                          children: SearchType.values.map((e) => SearchChildView(type: e).keepAlive).toList(),
+                        ),
+                      )
+                    ],
+                  )
+                : buildSearchHistory(context),
+          );
+        });
   }
 
   Widget buildSearchInput() {
     return Container(
       height: 32.w,
-      padding: EdgeInsets.only(left: 16.w, right: 6.w),
+      padding: EdgeInsets.only(left: 12.w, right: 6.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.w),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x80BFD2E2),
-            offset: Offset(0, 5),
-            blurRadius: 10,
-          ),
-        ],
-        image: const DecorationImage(
-          image: AssetImage('assets/images/input_bg.png'),
-          fit: BoxFit.contain,
-        ),
+        borderRadius: BorderRadius.circular(100.r),
+        color: '#333333'.hexColor.withOpacity(0.05),
       ),
       child: Row(
         children: [
+          SvgPicture.asset(
+            Assets.svg.iconSearchHistory,
+            width: 16.w,
+            height: 16.w,
+          ),
+          SizedBox(width: 8.w),
           Expanded(
             child: TextField(
               controller: controller.controller,
               keyboardType: TextInputType.text,
               autocorrect: false,
               onChanged: controller.onChanged,
-              cursorHeight: 14.w,
               style: TextStyle(
-                fontSize: 14.w,
-                color: const Color(0xff333333),
+                fontSize: 12.sp,
+                color: '#333333'.hexColor,
               ),
               decoration: InputDecoration(
                 counterText: "",
-                hintText: '请输入搜索内容',
+                hintText: '请输入你想搜索的内容',
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.only(bottom: 12),
+                contentPadding: EdgeInsets.zero,
+                isCollapsed: true,
+                isDense: true,
                 hintStyle: TextStyle(
-                  color: const Color(0xFFBBBBBB),
-                  fontSize: 14.w,
+                  fontSize: 12.sp,
+                  color: '#333333'.hexColor,
                 ),
               ),
             ),
@@ -178,10 +177,9 @@ class SearchScreen extends GetView<SearchController> {
               onTap: controller.onClear,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 6.w),
-                child: Image.asset(
-                  'assets/images/clear.png',
-                  width: 20.w,
-                  height: 20.w,
+                child: Assets.images.clear.image(
+                  width: 16.w,
+                  height: 16.w,
                 ),
               ),
             ),
@@ -191,32 +189,8 @@ class SearchScreen extends GetView<SearchController> {
   }
 
   Widget buildSearchHistory(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(minHeight: 200.w),
-      margin: EdgeInsets.symmetric(horizontal: 9.w).copyWith(top: 8.w, bottom: 8.w),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.5.w),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFF5F8FF),
-            Color(0xFFECF3FF),
-          ],
-        ),
-        border: Border.all(
-          color: const Color.fromRGBO(255, 255, 255, 0.7),
-          width: 0.6,
-        ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xFFD6E2F0),
-            offset: Offset(0, 3),
-            blurRadius: 10,
-          ),
-        ],
-        borderRadius: BorderRadius.circular(12),
-      ),
+    return Padding(
+      padding: EdgeInsets.all(16.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -224,12 +198,23 @@ class SearchScreen extends GetView<SearchController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '搜索历史',
-                style: TextStyle(
-                  color: const Color(0xff95A3C4),
-                  fontSize: 12.sp,
-                ),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    Assets.svg.clubs,
+                    width: 12.w,
+                    height: 12.w,
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    '历史搜索',
+                    style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
               GestureDetector(
                 onTap: () async {
@@ -244,21 +229,21 @@ class SearchScreen extends GetView<SearchController> {
                     controller.deleteAllHistory();
                   }
                 },
-                child: Image.asset(
-                  'assets/images/label_del.png',
-                  width: 12.w,
-                  height: 12.w,
-                  color: const Color(0xff95A3C4),
+                child: SvgPicture.asset(
+                  Assets.svg.iconHistoryDelete,
+                  width: 14.w,
+                  height: 14.w,
                 ),
               ),
             ],
           ),
           SizedBox(height: 12.w),
-          Flexible(
-            child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 8.w,
-                runSpacing: 8.w,
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final itemWidth = (constraints.maxWidth - 24.w) / 2;
+              return Wrap(
+                spacing: 24.w,
+                runSpacing: 12.w,
                 alignment: WrapAlignment.start,
                 children: [
                   ...List.generate(
@@ -282,26 +267,85 @@ class SearchScreen extends GetView<SearchController> {
                           }
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffF8FCFF),
-                            borderRadius: BorderRadius.circular(13.5.w),
-                          ),
+                          width: itemWidth,
+                          alignment: Alignment.centerLeft,
                           child: Text(
                             controller.historyItems[index],
                             style: TextStyle(
-                              color: const Color(0xff7282A0),
-                              fontSize: 14.w,
+                              color: '#333333'.hexColor,
+                              fontSize: 14.sp,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       );
                     },
                   )
                 ],
+              );
+            },
+          ),
+          SizedBox(height: 16.w),
+          Row(
+            children: [
+              SvgPicture.asset(
+                Assets.svg.spades,
+                width: 12.w,
+                height: 12.w,
               ),
-            ),
-          )
+              SizedBox(width: 8.w),
+              Text(
+                '热门话题',
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12.w),
+          Wrap(
+            spacing: 12.w,
+            runSpacing: 12.w,
+            alignment: WrapAlignment.start,
+            children: [
+              ...List.generate(
+                controller.hotTagItems.length,
+                (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.searchTag, arguments: {
+                        'tag': controller.hotTagItems[index],
+                      });
+                    },
+                    child: Container(
+                      height: 32.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      decoration: BoxDecoration(
+                        color: '#557BF6'.hexColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            controller.hotTagItems[index].name ?? '',
+                            style: TextStyle(
+                              color: '#557BF6'.hexColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
         ],
       ),
     );

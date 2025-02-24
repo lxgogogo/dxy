@@ -239,8 +239,7 @@ class HomeChildView extends StatelessWidget {
         itemBuilder: (context, index) {
           if (index == 0) {
             return VideoItem(
-              article: controller.articles[0],
-              isBanner: true,
+              item: controller.articles[0],
             );
           }
           return GridView.builder(
@@ -256,8 +255,7 @@ class HomeChildView extends StatelessWidget {
             itemCount: controller.articles.skip(1).toList().length,
             itemBuilder: (context, index) {
               return VideoItem(
-                article: controller.articles.skip(1).toList()[index],
-                isBanner: false,
+                item: controller.articles.skip(1).toList()[index],
               );
             },
           );

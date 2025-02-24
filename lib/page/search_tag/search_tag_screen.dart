@@ -39,7 +39,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
           return Scaffold(
             appBar: CommonAppBar.arrowBack(
               context,
-              title: controller.tagModel?.name ?? '控池',
+              title: controller.tagModel?.name ?? '',
               actions: [
                 Padding(
                   padding: EdgeInsets.only(right: 16.w),

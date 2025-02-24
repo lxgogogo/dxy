@@ -263,7 +263,7 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     final item = competitionBean!.refVideoList![index];
-                    return VideoItem(article: item);
+                    return VideoItem(item: item);
                   },
                   childCount: competitionBean!.refVideoList!.length,
                 ),

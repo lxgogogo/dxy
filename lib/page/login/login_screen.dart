@@ -144,7 +144,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     isLogin = false;
                   });
                 },) else
-                  const RegisterContent()
+                   RegisterContent(goLogin: (){
+                    setState(() {
+                      isLogin = true;
+                    });
+                  },)
               ],
             ),
           ),

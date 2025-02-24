@@ -652,6 +652,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_right.svg
   String get arrowRight => 'assets/svg/arrow_right.svg';
 
+  /// File path: assets/svg/clubs.svg
+  String get clubs => 'assets/svg/clubs.svg';
+
   /// File path: assets/svg/home_tag.svg
   String get homeTag => 'assets/svg/home_tag.svg';
 
@@ -663,6 +666,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_delete.svg
   String get iconDelete => 'assets/svg/icon_delete.svg';
+
+  /// File path: assets/svg/icon_history_delete.svg
+  String get iconHistoryDelete => 'assets/svg/icon_history_delete.svg';
 
   /// File path: assets/svg/icon_like.svg
   String get iconLike => 'assets/svg/icon_like.svg';
@@ -678,6 +684,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_search.svg
   String get iconSearch => 'assets/svg/icon_search.svg';
+
+  /// File path: assets/svg/icon_search_history.svg
+  String get iconSearchHistory => 'assets/svg/icon_search_history.svg';
 
   /// File path: assets/svg/icon_setting.svg
   String get iconSetting => 'assets/svg/icon_setting.svg';
@@ -718,19 +727,25 @@ class $AssetsSvgGen {
   /// File path: assets/svg/post_office.svg
   String get postOffice => 'assets/svg/post_office.svg';
 
+  /// File path: assets/svg/spades.svg
+  String get spades => 'assets/svg/spades.svg';
+
   /// List of all assets
   List<String> get values => [
         arrowLeft,
         arrowRight,
+        clubs,
         homeTag,
         iconClose,
         iconComment,
         iconDelete,
+        iconHistoryDelete,
         iconLike,
         iconLikeWhite,
         iconMore,
         iconRefresh,
         iconSearch,
+        iconSearchHistory,
         iconSetting,
         iconWarning,
         navIconFeed,
@@ -743,7 +758,8 @@ class $AssetsSvgGen {
         navIconMineAct,
         postGood,
         postNewer,
-        postOffice
+        postOffice,
+        spades
       ];
 }
 

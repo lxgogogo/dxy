@@ -36,7 +36,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
   final FocusNode _focusAgainPw = FocusNode();
   bool _confirmPwdObscureText = true;
 
-  RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,12}$');
+  RegExp passwordRegExp = RegExp(r'''[!"#\$%&'()*+,-./:;<=>?@\[\]^_`{|}~]''');
 
   @override
   void initState() {

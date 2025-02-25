@@ -206,7 +206,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 ? EdgeInsets.symmetric(vertical: 3.w)
                 : EdgeInsets.zero,
             child: Text(
-              isShowAccountTips ? '*请输入正确邮箱地址' : '',
+              isShowAccountTips ? '*请输入正确邮箱' : '',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,

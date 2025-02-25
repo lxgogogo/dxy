@@ -9,6 +9,7 @@ import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../utils/toast_utils.dart';
+import 'close_image_button.dart';
 
 class DialogEditPassword extends StatefulWidget {
   const DialogEditPassword({super.key});
@@ -17,7 +18,8 @@ class DialogEditPassword extends StatefulWidget {
   State<DialogEditPassword> createState() => _DialogEditPasswordState();
 }
 
-class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTickerProviderStateMixin {
+class _DialogEditPasswordState extends State<DialogEditPassword>
+    with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
   final TextEditingController _controllerOriginalPw = TextEditingController();
@@ -79,7 +81,8 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
     final originalPassword = _controllerOriginalPw.text;
     // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips =
+        !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
@@ -120,23 +123,23 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                         child: Text(
                           "修改密码",
                           style: TextStyle(
-                            color: const Color(0xff3b5078),
-                            fontSize: 17.px,
-                            fontWeight: FontWeight.w500,
+                            color: '#333333'.hexColor,
+                            fontSize: 16.px,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
                     Positioned(
-                      right: 10.px,
-                      top: 10.px,
-                      child: InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: SvgPicture.asset(
-                          "assets/svg/icon_close.svg",
-                          width: 28.px,
-                          height: 28.px,
-                        ),
+                      right: 0.w,
+                      top: 0.w,
+                      child: CloseImageButton(
+                        width: 16.w,
+                        height: 16.w,
+                        color: '#333333'.hexColor.withOpacity(0.5),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                       ),
                     ),
                   ],
@@ -144,35 +147,29 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 21.5.px),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(
                         children: [
-                          buildTitleText('原密码'),
+                          Expanded(child: buildTitleText('原密码')),
                           SizedBox(width: 8.px),
                           Expanded(
+                            flex: 4,
                             child: Container(
-                              height: 45.px,
+                              height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.px),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xff709ac8).withOpacity(0.22),
-                                  ),
-                                  BoxShadow(
-                                    color: const Color(0xffebf6ff),
-                                    spreadRadius: -2.px,
-                                    blurRadius: 5.px,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ],
+                                borderRadius: BorderRadius.circular(8.px),
+                                border: Border.all(
+                                  color: '#333333'.hexColor.withOpacity(0.2),
+                                  width: 1.px,
+                                ),
                               ),
                               child: TextField(
                                 controller: _controllerOriginalPw,
                                 // focusNode: _focusOriginalPw,
                                 style: TextStyle(
-                                  color: const Color(0xff3b5078),
-                                  fontSize: 12.px,
+                                  color: '#333333'.hexColor,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
@@ -181,32 +178,38 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                   onChangeCheckValid();
                                 },
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 12.px),
                                   hintText: '请输入原密码',
                                   hintStyle: TextStyle(
-                                    color: const Color(0xffa3b4d3),
-                                    fontSize: 12.px,
+                                    color: '#3333334D'.hexColor,
+                                    fontSize: 12.sp,
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xff2eacfb)),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   suffix: UnconstrainedBox(
                                     child: CustomObscure(
                                       onTap: () {
-                                        _originalPwdObscureText = !_originalPwdObscureText;
+                                        _originalPwdObscureText =
+                                            !_originalPwdObscureText;
                                         setState(() {});
                                       },
                                       obscureText: _originalPwdObscureText,
@@ -218,44 +221,39 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.w),
-                        child: Text(
-                          /*isShowOriginalPwTips ? '请输入8-12位，须包含大小写字母+数字' : */
-                          '',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: /*isShowOriginalPwTips ? Colors.red : */ '#95A3C4'.hexColor,
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(vertical: 2.w),
+                      //   child: Text(
+                      //     /*isShowOnalPwTips ? '请输入8-12位，须包含大小写字母+数字' : */
+                      //     '',
+                      //     style: TextStyle(
+                      //       fontSize: 12.sp,
+                      //       color: /*isShowOriginalPwTips ? Colors.red : */ '#95A3C4'.hexColor,
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(height: 12.px),
                       Row(
                         children: [
-                          buildTitleText('新密码'),
+                          Expanded(child: buildTitleText('新密码')),
                           SizedBox(width: 8.px),
                           Expanded(
+                            flex: 4,
                             child: Container(
-                              height: 45.px,
+                              height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.px),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xff709ac8).withOpacity(0.22),
-                                  ),
-                                  BoxShadow(
-                                    color: const Color(0xffebf6ff),
-                                    spreadRadius: -2.px,
-                                    blurRadius: 5.px,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ],
+                                borderRadius: BorderRadius.circular(8.px),
+                                border: Border.all(
+                                  color: '#333333'.hexColor.withOpacity(0.2),
+                                  width: 1.px,
+                                ),
                               ),
                               child: TextField(
                                 controller: _controllerPw,
                                 focusNode: _focusPw,
                                 style: TextStyle(
-                                  color: const Color(0xff3b5078),
-                                  fontSize: 12.px,
+                                  color: '#333333'.hexColor,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
@@ -264,32 +262,38 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                   onChangeCheckValid();
                                 },
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 12.px),
                                   hintText: '请输入新密码',
                                   hintStyle: TextStyle(
-                                    color: const Color(0xffa3b4d3),
-                                    fontSize: 12.px,
+                                    color: '#3333334D'.hexColor,
+                                    fontSize: 12.sp,
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xff2eacfb)),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   suffix: UnconstrainedBox(
                                     child: CustomObscure(
                                       onTap: () {
-                                        _newPwdObscureText = !_newPwdObscureText;
+                                        _newPwdObscureText =
+                                            !_newPwdObscureText;
                                         setState(() {});
                                       },
                                       obscureText: _newPwdObscureText,
@@ -301,43 +305,52 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.w),
-                        child: Text(
-                          isShowPwTips ? '请输入8-12位，须包含大小写字母+数字' : '',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                          ),
+                      if (isShowPwTips)
+                        Row(
+                          children: [
+                            const Spacer(),
+                            Expanded(
+                              flex: 4,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 4.w),
+                                child: Text(
+                                  isShowPwTips ? '*请输入8-12位，须包含大小写字母+数字' : '',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: isShowPwTips
+                                        ? Colors.red
+                                        : '#95A3C4'.hexColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                      if (!isShowPwTips)
+                        SizedBox(
+                          height: 12.w,
+                        ),
                       Row(
                         children: [
-                          buildTitleText('再次输入'),
+                          Expanded(child: buildTitleText('再次输入')),
                           SizedBox(width: 8.px),
                           Expanded(
+                            flex: 4,
                             child: Container(
-                              height: 45.px,
+                              height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.px),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xff709ac8).withOpacity(0.22),
-                                  ),
-                                  BoxShadow(
-                                    color: const Color(0xffebf6ff),
-                                    spreadRadius: -2.px,
-                                    blurRadius: 5.px,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ],
+                                borderRadius: BorderRadius.circular(8.px),
+                                border: Border.all(
+                                  color: '#333333'.hexColor.withOpacity(0.2),
+                                  width: 1.px,
+                                ),
                               ),
                               child: TextField(
                                 controller: _controllerAgainPw,
                                 focusNode: _focusAgainPw,
                                 style: TextStyle(
-                                  color: const Color(0xff3b5078),
-                                  fontSize: 12.px,
+                                  color: '#333333'.hexColor,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
@@ -346,32 +359,38 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                   onChangeCheckValid();
                                 },
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 12.px),
                                   hintText: '请再次输入密码',
                                   hintStyle: TextStyle(
-                                    color: const Color(0xffa3b4d3),
-                                    fontSize: 12.px,
+                                    color: '#3333334D'.hexColor,
+                                    fontSize: 12.sp,
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderSide: const BorderSide(
+                                        color: Color(0xff2eacfb)),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   suffix: UnconstrainedBox(
                                     child: CustomObscure(
                                       onTap: () {
-                                        _confirmPwdObscureText = !_confirmPwdObscureText;
+                                        _confirmPwdObscureText =
+                                            !_confirmPwdObscureText;
                                         setState(() {});
                                       },
                                       obscureText: _confirmPwdObscureText,
@@ -383,23 +402,89 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.w),
-                        child: Text(
-                          isShowAgainTips ? '两次密码输入不一致' : '',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
+                      Row(
+                        children: [
+                          const Spacer(),
+                          Expanded(
+                            flex: 4,
+                            child:Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.w),
+                              child: Text(
+                                isShowAgainTips ? '*两次密码输入不一致' : '',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: isShowAgainTips
+                                      ? Colors.red
+                                      : '#95A3C4'.hexColor,
+                                ),
+                              ),
+                            ),
                           ),
+                        ],
+                      ),
+
+                      SizedBox(height: 18.5.px),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                width: 96.w,
+                                height: 33.w,
+
+                                decoration: ShapeDecoration(
+                                  color: '#333333'.hexColor.withOpacity(0.1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '取消',
+                                  style: TextStyle(
+                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                    fontSize: 12.px,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 24.w),
+                            InkWell(
+                              onTap: _submitUpdate,
+                              child: Container(
+                                width: 96.w,
+                                height: 33.w,
+
+                                decoration: ShapeDecoration(
+                                  gradient: const LinearGradient(
+                                    begin: Alignment(1.00, 0.00),
+                                    end: Alignment(-1, 0),
+                                    colors: [ Color(0xFF84BCF9),Color(0xFF557BF6),],
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '确定修改',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.px,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 18.5.px),
-                      CustomButton(
-                        onPressed: _submitUpdate,
-                        disable: _isDisable,
-                        height: 42.px,
-                        title: '确认',
-                      ),
+
                     ],
                   ),
                 ),
@@ -412,28 +497,16 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
   }
 
   Widget buildTitleText(String title) {
-    return Stack(
-      children: [
-        Opacity(
-          opacity: 0,
-          child: Text(
-            '四字占位',
-            style: TextStyle(
-              color: const Color(0xff3b5078),
-              fontSize: 15.px,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+    return Container(
+      alignment: Alignment.centerRight,
+      child: Text(
+        title,
+        style: TextStyle(
+          color: '#333333'.hexColor,
+          fontSize: 14.px,
+          fontWeight: FontWeight.w500,
         ),
-        Text(
-          title,
-          style: TextStyle(
-            color: const Color(0xff3b5078),
-            fontSize: 15.px,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -441,7 +514,8 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
     if (_isDisable) {
       return;
     }
-    NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text, (data) {
+    NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text,
+        (data) {
       ToastUtils.showToast('修改密码成功');
       Navigator.of(context).pop();
     });
@@ -460,7 +534,9 @@ class CustomObscure extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Image.asset(
-        obscureText ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+        obscureText
+            ? 'assets/images/eye_open.png'
+            : 'assets/images/eye_close.png',
         width: 18.px,
       ),
     );

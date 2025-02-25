@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
@@ -10,6 +12,7 @@ import '../utils/app_theme.dart';
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
 import '../utils/toast_utils.dart';
+import 'close_image_button.dart';
 
 class DialogEditNickname extends StatefulWidget {
   final String editContent; //
@@ -58,9 +61,9 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                         child: Text(
                           "修改昵称",
                           style: TextStyle(
-                            color: const Color(0xff3b5078),
-                            fontSize: 17.px,
-                            fontWeight: FontWeight.w500,
+                            color: '#333333'.hexColor,
+                            fontSize: 16.px,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -68,13 +71,13 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                     Positioned(
                       right: 10.px,
                       top: 10.px,
-                      child: InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: SvgPicture.asset(
-                          "assets/svg/icon_close.svg",
-                          width: 28.px,
-                          height: 28.px,
-                        ),
+                      child:  CloseImageButton(
+                        width: 16.w,
+                        height: 16.w,
+                        color: '#333333'.hexColor.withOpacity(0.5),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
                       ),
                     ),
                   ],
@@ -89,33 +92,37 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                           Text(
                             "昵称",
                             style: TextStyle(
-                              color: const Color(0xff3b5078),
-                              fontSize: 15.px,
+                              color:'#333333'.hexColor,
+                              fontSize: 14.px,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 8.px),
                           Expanded(
                             child: Container(
-                              height: 45.px,
+                              height: 30.px,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.px),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xff709ac8).withOpacity(0.22),
-                                  ),
-                                  BoxShadow(
-                                    color: const Color(0xffebf6ff),
-                                    spreadRadius: -2.px,
-                                    blurRadius: 5.px,
-                                    offset: const Offset(1, 1),
-                                  ),
-                                ],
+                                borderRadius: BorderRadius.circular(8.px),
+                                border: Border.all(
+                                  color: '#333333'.hexColor.withOpacity(0.2),
+                                  width: 1.px,
+                                ),
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: const Color(0xff709ac8).withOpacity(0.22),
+                                //   ),
+                                //   BoxShadow(
+                                //     color: const Color(0xffebf6ff),
+                                //     spreadRadius: -2.px,
+                                //     blurRadius: 5.px,
+                                //     offset: const Offset(1, 1),
+                                //   ),
+                                // ],
                               ),
                               child: TextField(
                                 controller: controller,
                                 style: TextStyle(
-                                  color: const Color(0xff3b5078),
+                                  color: '#333333'.hexColor,
                                   fontSize: 12.px,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -132,19 +139,19 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   disabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(10.px),
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
                                 ),
                                 onChanged: (value) {

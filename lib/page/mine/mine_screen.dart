@@ -48,14 +48,19 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Center(
-                          child: ClipOval(
-                            child: CachedNetworkImage(
-                              width: 88.w,
-                              height: 88.w,
-                              fit: BoxFit.cover,
-                              imageUrl: controller.userProfile?.avatar ?? '',
-                              errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                        InkWell(
+                          onTap: (){
+                            Get.toNamed(Routes.personal);
+                          },
+                          child: Center(
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                width: 88.w,
+                                height: 88.w,
+                                fit: BoxFit.cover,
+                                imageUrl: controller.userProfile?.avatar ?? '',
+                                errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                              ),
                             ),
                           ),
                         ),

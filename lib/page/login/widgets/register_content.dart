@@ -17,6 +17,7 @@ import '../../../utils/app_theme.dart';
 class RegisterContent extends StatefulWidget {
   const RegisterContent({Key? key, required this.goLogin}) : super(key: key);
   final Function goLogin;
+
   @override
   State<RegisterContent> createState() => _RegisterContentState();
 }
@@ -40,7 +41,8 @@ class _RegisterContentState extends State<RegisterContent> {
 
   bool _isLoginDisable = true;
   RegExp codeRegExp = RegExp(r'^\d{6}$');
-  RegExp passwordRegExp = RegExp(r'''[!"#\$%&'()*+,-./:;<=>?@\[\]^_`{|}~a-zA-Z0-9]''');
+  RegExp passwordRegExp =
+      RegExp(r'''[!"#\$%&'()*+,-./:;<=>?@\[\]^_`{|}~a-zA-Z0-9]''');
 
   void checkValid() {
     final account = _controllerEmail.text;
@@ -75,16 +77,21 @@ class _RegisterContentState extends State<RegisterContent> {
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
-    _isLoginDisable = account.isEmpty ||
-        isShowAccountTips ||
-        code.isEmpty ||
-        isShowCodeTips ||
-        password.isEmpty ||
-        isShowPwTips ||
-        againPw.isEmpty ||
-        isShowAgainTips ||
-        !_didAgreeTerms.value;
-    setState(() {});
+    setState(() {
+      _isLoginDisable = account.isEmpty ||
+          isShowAccountTips ||
+          code.isEmpty ||
+          isShowCodeTips ||
+          password.isEmpty ||
+          isShowPwTips ||
+          againPw.isEmpty ||
+          isShowAgainTips ;
+          // || !_didAgreeTerms.value;
+      // Log.d('account.isEmpty: ${account.isEmpty} isShowAccountTips: $isShowAccountTips '
+      //     ' code.isEmpty: ${code.isEmpty} isShowCodeTips: $isShowCodeTips '
+      //     'password.isEmpty: ${password.isEmpty} isShowPwTips: $isShowPwTips againPw.isEmpty: ${ againPw.isEmpty } '
+      //     'isShowAgainTips: $isShowAgainTips');
+    });
   }
 
   @override
@@ -165,7 +172,8 @@ class _RegisterContentState extends State<RegisterContent> {
             // 水平内边距
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),),
+              borderRadius: BorderRadius.circular(12.w),
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -194,7 +202,9 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding:isShowAccountTips? EdgeInsets.symmetric(vertical: 3.w):EdgeInsets.zero,
+            padding: isShowAccountTips
+                ? EdgeInsets.symmetric(vertical: 3.w)
+                : EdgeInsets.zero,
             child: Text(
               isShowAccountTips ? '*请输入正确邮箱地址' : '',
               style: TextStyle(
@@ -208,7 +218,8 @@ class _RegisterContentState extends State<RegisterContent> {
             padding: EdgeInsets.symmetric(horizontal: 10.0.w), // 水平内边距
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),),
+              borderRadius: BorderRadius.circular(12.w),
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -220,7 +231,8 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '请输入验证码',
-                      hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintStyle:
+                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
@@ -236,7 +248,9 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding: isShowCodeTips?EdgeInsets.symmetric(vertical: 3.w):EdgeInsets.zero,
+            padding: isShowCodeTips
+                ? EdgeInsets.symmetric(vertical: 3.w)
+                : EdgeInsets.zero,
             child: Text(
               isShowCodeTips ? '*验证码错误' : '',
               style: TextStyle(
@@ -251,7 +265,8 @@ class _RegisterContentState extends State<RegisterContent> {
             // 水平内边距
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),),
+              borderRadius: BorderRadius.circular(12.w),
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -262,7 +277,8 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: '请输入密码',
-                      hintStyle:  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintStyle:
+                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
@@ -288,7 +304,7 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding:EdgeInsets.symmetric(vertical: 6.w),
+            padding: EdgeInsets.symmetric(vertical: 6.w),
             child: Text(
               '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
               style: TextStyle(
@@ -303,7 +319,8 @@ class _RegisterContentState extends State<RegisterContent> {
             // 水平内边距
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),),
+              borderRadius: BorderRadius.circular(12.w),
+            ),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -315,7 +332,8 @@ class _RegisterContentState extends State<RegisterContent> {
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '请再次输入密码',
-                      hintStyle:  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintStyle:
+                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
@@ -343,7 +361,7 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           Padding(
-            padding:EdgeInsets.symmetric(vertical: 6.w),
+            padding: EdgeInsets.symmetric(vertical: 6.w),
             child: Text(
               '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
               style: TextStyle(
@@ -397,6 +415,7 @@ class _RegisterContentState extends State<RegisterContent> {
       ),
     );
   }
+
   //注册提交或者修改密码提交
   void registerOrConfirm() {
     var email = _controllerEmail.text;

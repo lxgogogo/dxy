@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/main.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
@@ -41,7 +44,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
     _isMounted = true;
     getUserInfo();
     EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
+      if (event.toString() ==
+          EventBusAction.refreshPersonalProfile.eventBusTypeName) {
         getUserInfo();
       }
     });
@@ -67,8 +71,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   @override
   Widget build(BuildContext context) {
     SizeFit.initialize(context);
-    return BackgroundContainer(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Image.asset(
@@ -80,16 +83,16 @@ class _PersonalScreenState extends State<PersonalScreen> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         title: const Text(
           '个人资料',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       body: contentView(),
-    ));
+    );
   }
 
   Widget contentView() {
@@ -101,28 +104,31 @@ class _PersonalScreenState extends State<PersonalScreen> {
         ),
         Center(
           child: Container(
-            width: 69.px,
-            height: 69.px,
+            width: 88.px,
+            height: 88.px,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(69.px),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xff6d85b5).withOpacity(0.16), // inset 0 1px 2px 1px #FFFFFF
-                  offset: Offset(0, 3.px),
-                  blurRadius: 4.px,
-                ),
-              ],
-            ),
+            // decoration: BoxDecoration(
+            //   color: Colors.white,
+            //   borderRadius: BorderRadius.circular(69.px),
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: const Color(0xff6d85b5).withOpacity(0.16),
+            //       // inset 0 1px 2px 1px #FFFFFF
+            //       offset: Offset(0, 3.px),
+            //       blurRadius: 4.px,
+            //     ),
+            //   ],
+            // ),
             child: ClipOval(
               child: CachedNetworkImage(
                 imageUrl: _userProfile?.avatar ?? '',
                 fit: BoxFit.cover,
-                width: 63.px,
-                height: 63.px,
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
-                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                width: 88.px,
+                height: 88.px,
+                placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(color: Colors.black12)),
+                errorWidget: (context, url, error) =>
+                    Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
               ),
             ),
           ),
@@ -136,14 +142,17 @@ class _PersonalScreenState extends State<PersonalScreen> {
               _phoneSelectImage();
             },
             child: Container(
-              width: 72.px,
-              padding: EdgeInsets.only(top: 4.4.px, bottom: 6.2.px),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/change_avatar.png',
-                  ),
-                  fit: BoxFit.fill,
+              width: 72.w,
+              height: 30.w,
+
+              decoration: ShapeDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment(1.00, 0.00),
+                  end: Alignment(-1, 0),
+                  colors: [ Color(0xFF84BCF9),Color(0xFF557BF6),],
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
                 ),
               ),
               alignment: Alignment.center,
@@ -152,15 +161,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 12.px,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           ),
         ),
-        LinearCard(
-          margin: EdgeInsets.fromLTRB(16.px, 24.px, 16.px, 0),
-          padding: EdgeInsets.symmetric(horizontal: 19.px),
+        Container(
+          padding: EdgeInsets.only(left: 16.px, right: 16.px,top: 16.px),
           child: Column(
             children: [
               GestureDetector(
@@ -181,8 +189,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       Text(
                         '昵称',
                         style: TextStyle(
-                          fontSize: 14.px,
-                          color: const Color(0xff2a2a2a),
+                          fontSize: 16.px,
+                          color:'#333333'.hexColor,
                         ),
                       ),
                       SizedBox(width: 14.px),
@@ -190,15 +198,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         child: Text(
                           _userProfile?.nickname ?? '',
                           style: TextStyle(
-                            color: const Color(0xff9399A5),
-                            fontSize: 14.px,
-                            fontWeight: FontWeight.w500,
+                            color:'#333333'.hexColor,
+                            fontSize: 16.px,
+                            fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Image.asset('assets/images/item_arrow.png', width: 24.px),
+                      Image.asset('assets/images/edit_password.png', width: 24.px),
                     ],
                   ),
                 ),
@@ -225,8 +233,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       Text(
                         '邮箱',
                         style: TextStyle(
-                          fontSize: 14.px,
-                          color: const Color(0xff2a2a2a),
+                          color:'#333333'.hexColor,
+                          fontSize: 16.px,
                         ),
                       ),
                       SizedBox(width: 14.px),
@@ -234,15 +242,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         child: Text(
                           _userProfile?.account ?? '',
                           style: TextStyle(
-                            color: const Color(0xff9399A5),
-                            fontSize: 14.px,
+                            color:'#333333'.hexColor,
+                            fontSize: 16.px,
                             fontWeight: FontWeight.w500,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Image.asset('assets/images/item_arrow.png', width: 24.px),
+                      Image.asset('assets/images/edit_password.png', width: 24.px),
                     ],
                   ),
                 ),
@@ -272,6 +280,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             ),
           ),
         ),
+        SizedBox(height: 26.px)
       ],
     );
   }
@@ -293,7 +302,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
     if (imageUrl.isNotEmpty) {
       NetRequest().updateAvatar(imageUrl, (data) {
         ToastUtils.showToast('上传成功');
-        EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+        EventBusManager.eventBus
+            .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
       }, (errMsg) {
         ToastUtils.showToast('上传文件失败，请重新上传');
       }, (int sent, int total) {});
@@ -302,7 +312,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
 
   Future<void> _takePicture() async {
     final imagePicker = ImagePicker();
-    final XFile? image = await imagePicker.pickImage(source: ImageSource.camera);
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.camera);
 
     if (_isMounted) {
       setState(() {

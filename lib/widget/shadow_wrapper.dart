@@ -29,30 +29,30 @@ class ShadowWrapper extends StatelessWidget {
                 borderRadius: BorderRadius.all(
                   Radius.circular(borderRadius),
                 ),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xff799DBC),
-                    Color(0xffAFCEE9),
-                    Color(0xff7A9EBD),
-                    Color(0xff85A8C6),
-                    Color(0xffB0CEE8),
-                    Color(0xff85A8C6),
-                    Color(0xff7A9EBD),
-                    Color(0xffADCCE8),
-                    Color(0xff7A9EBD),
-                  ],
-                  stops: [
-                    0,
-                    0.03,
-                    0.05,
-                    0.23,
-                    0.5,
-                    0.8,
-                    0.96,
-                    0.97,
-                    100,
-                  ],
-                ),
+                // gradient: const LinearGradient(
+                //   colors: [
+                //     Color(0xff799DBC),
+                //     Color(0xffAFCEE9),
+                //     Color(0xff7A9EBD),
+                //     Color(0xff85A8C6),
+                //     Color(0xffB0CEE8),
+                //     Color(0xff85A8C6),
+                //     Color(0xff7A9EBD),
+                //     Color(0xffADCCE8),
+                //     Color(0xff7A9EBD),
+                //   ],
+                //   stops: [
+                //     0,
+                //     0.03,
+                //     0.05,
+                //     0.23,
+                //     0.5,
+                //     0.8,
+                //     0.96,
+                //     0.97,
+                //     100,
+                //   ],
+                // ),
               ),
             ),
           ),
@@ -88,17 +88,17 @@ class ShadowWrapper extends StatelessWidget {
                       borderRadius: BorderRadius.all(
                         Radius.circular(borderRadius),
                       ),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xffB9D0E5),
-                        ),
-                        BoxShadow(
-                          color: Colors.white,
-                          spreadRadius: 0,
-                          blurRadius: 1.5,
-                          offset: Offset(0, -1),
-                        ),
-                      ],
+                      // boxShadow: const [
+                      //   BoxShadow(
+                      //     color: Color(0xffB9D0E5),
+                      //   ),
+                      //   BoxShadow(
+                      //     color: Colors.white,
+                      //     spreadRadius: 0,
+                      //     blurRadius: 1.5,
+                      //     offset: Offset(0, -1),
+                      //   ),
+                      // ],
                     ),
                   ),
                 ),

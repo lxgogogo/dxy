@@ -54,29 +54,28 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-        child: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.w,
-            height: 22.w,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.transparent,
-        title: const Text(
-          '设置',
-          style: AppTheme.text333333Size17,
-        ),
-        centerTitle: true,
+    return Scaffold(
+          appBar: AppBar(
+    leading: IconButton(
+      icon: Image.asset(
+        'assets/images/back.png',
+        width: 22.w,
+        height: 22.w,
       ),
-      backgroundColor: Colors.transparent,
-      body: SafeArea(child: contentView()),
-    ));
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    ),
+    backgroundColor: Colors.white,
+    title: const Text(
+      '设置',
+      style: AppTheme.text333333Size17,
+    ),
+    centerTitle: true,
+          ),
+          backgroundColor: Colors.white,
+          body: SafeArea(child: contentView()),
+        );
   }
 
   Widget contentView() {
@@ -84,7 +83,7 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: LinearCard(
+          child: Container(
             child: Column(
               children: [
                 GestureDetector(
@@ -98,24 +97,22 @@ class _SettingScreenState extends State<SettingScreen> {
                   behavior: HitTestBehavior.translucent,
                   child: Container(
                     height: 56.w,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           '修改密码',
-                          style: AppTheme.text333333Size15,
+                          style: AppTheme.text333333Size16,
                         ),
                         ImageIcon(
-                          AssetImage('assets/images/item_arrow.png'),
-                          size: 22,
+                          AssetImage('assets/images/edit_password.png'),
+                          size: 20,
                         )
                       ],
                     ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 12.w),
                   color: AppTheme.color_1A000000,
                   height: 0.5.w,
                 ),
@@ -126,19 +123,18 @@ class _SettingScreenState extends State<SettingScreen> {
                     behavior: HitTestBehavior.translucent,
                     child: Container(
                       height: 56.w,
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
                             '检查更新',
-                            style: AppTheme.text333333Size15,
+                            style: AppTheme.text333333Size16,
                           ),
                           Row(
                             children: [
                               Text(
                                 '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
-                                style: AppTheme.text333333Size15,
+                                style: AppTheme.text333333Size16,
                               ),
                               if (_canUpdate)
                                 Container(
@@ -162,40 +158,43 @@ class _SettingScreenState extends State<SettingScreen> {
         SizedBox(height: 8.w),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: LinearCard(
-            child: Container(
-              height: 56.w,
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    '社群',
-                    style: AppTheme.text333333Size15,
-                  ),
-                  const Spacer(),
-                  buildSocialIcon(
-                    'assets/images/ic_facebook.png',
-                    url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
-                  ),
-                  buildSocialIcon(
-                    'assets/images/ic_twitter.png',
-                    url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
-                  ),
-                  buildSocialIcon(
-                    'assets/images/ic_tiktok.png',
-                    url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
-                  ),
-                  buildSocialIcon(
-                    'assets/images/ic_telegram.png',
-                    url: 'https://t.me/dpoker',
-                  ),
-                ],
-              ),
+          child: Container(
+            margin: EdgeInsets.only(top: 24.w),
+            child: Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '联系我们',
+                  style: AppTheme.text333333Size16,
+                ),
+                SizedBox(height: 16.w),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    buildSocialIcon(
+                      'assets/images/ic_facebook.png',
+                      url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
+                    ),
+                    buildSocialIcon(
+                      'assets/images/ic_twitter.png',
+                      url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
+                    ),
+                    buildSocialIcon(
+                      'assets/images/ic_tiktok.png',
+                      url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
+                    ),
+                    buildSocialIcon(
+                      'assets/images/ic_telegram.png',
+                      url: 'https://t.me/dpoker',
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-        SizedBox(height: 16.w),
+        const Spacer(),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: GestureDetector(
@@ -203,16 +202,14 @@ class _SettingScreenState extends State<SettingScreen> {
             child: Container(
               height: 45.w,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage('assets/images/logout_btn.png'), fit: BoxFit.fill),
-              ),
-              child: Text(
+              child: const Text(
                 '退出登录',
-                style: TextStyle(color: const Color(0xff249CFC), fontSize: 15.sp),
+                style: AppTheme.text333333Size16,
               ),
             ),
           ),
         ),
+        SizedBox(height: 26.w)
       ],
     );
   }
@@ -227,11 +224,11 @@ class _SettingScreenState extends State<SettingScreen> {
       },
       behavior: HitTestBehavior.translucent,
       child: Padding(
-        padding: EdgeInsets.all(10.w),
+        padding: EdgeInsets.only(right:20.w),
         child: Image.asset(
           asset,
-          width: 24.w,
-          height: 24.w,
+          width: 48.w,
+          height: 48.w,
         ),
       ),
     );

@@ -8,6 +8,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -41,168 +42,166 @@ class FeedDetailScreen extends StatelessWidget {
       init: FeedDetailController(),
       tag: '${Get.arguments}',
       builder: (controller) {
-        return BackgroundContainer(
-          child: Scaffold(
-            appBar: CommonAppBar.arrowBack(
-              context,
-              title: '详情',
-            ),
-            backgroundColor: Colors.transparent,
-            extendBody: true,
-            body: controller.noNetwork
-                ? NoNetworkView(
-                    onRefresh: controller.refreshData,
-                  )
-                : controller.detailBean == null
-                    ? const SizedBox()
-                    : SingleChildScrollView(
-                        padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              controller.detailBean?.title ?? '',
-                              style: TextStyle(
-                                color: const Color(0xff2c2c2c),
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
+        return Scaffold(
+          appBar: CommonAppBar.arrowBack(
+            context,
+            title: '',
+          ),
+          backgroundColor: Colors.white,
+          extendBody: true,
+          body: controller.noNetwork
+              ? NoNetworkView(
+                  onRefresh: controller.refreshData,
+                )
+              : controller.detailBean == null
+                  ? const SizedBox()
+                  : SingleChildScrollView(
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            controller.detailBean?.title ?? '',
+                            style: TextStyle(
+                              color: '#333333'.hexColor,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600,
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16.w),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: CircleImageWithText(
-                                      imageUrl: (controller.detailBean != null && controller.detailBean!.user != null)
-                                          ? controller.detailBean!.user!.avatar!
-                                          : '',
-                                      imageWidth: 40,
-                                      imageHeight: 40,
-                                      topText: controller.detailBean?.user?.nickname ?? '',
-                                      topTextStyle: const TextStyle(),
-                                      bottomText1: controller.detailBean?.createdAt != null
-                                          ? '发布于${DateFormat('MM-dd HH:mm').format(controller.detailBean!.createdAt!)}'
-                                          : '',
-                                      bottomText1Style: AppTheme.text999999Size11,
-                                      bottomText2: '',
-                                      bottomText2Style: const TextStyle(),
-                                    ),
-                                  ),
-                                  if ((controller.detailBean?.user?.id ?? 0) != 0)
-                                    Visibility(
-                                      visible: !UserStore.of.isMe(controller.detailBean!.user?.id),
-                                      child: GestureDetector(
-                                        onTap: controller._followToggle,
-                                        child: controller.detailBean?.user?.followed == true
-                                            ? Container(
-                                                height: 28.w,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xffd8d8d8),
-                                                  borderRadius: BorderRadius.circular(25),
-                                                ),
-                                                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                                child: Text(
-                                                  '已关注',
-                                                  style: TextStyle(
-                                                    color: const Color(0xff95a3c4),
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              )
-                                            : Container(
-                                                height: 28.w,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xff249cfc),
-                                                  borderRadius: BorderRadius.circular(25),
-                                                ),
-                                                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                                child: Text(
-                                                  '+关注',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            if (controller.detailBean?.content?.isNotEmpty == true)
-                              HtmlWidget(
-                                controller.detailBean!.content!,
-                                customStylesBuilder: htmlCustomStyles,
-                                factoryBuilder: () =>
-                                    HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
-                                customWidgetBuilder: (dom.Element element) {
-                                  if (element.localName == 'table') {
-                                    return const SizedBox();
-                                  }
-                                  return null;
-                                },
-                                onTapUrl: (String url) async {
-                                  return launchUrlString(url, mode: LaunchMode.externalApplication);
-                                },
-                              ),
-                            // _buildMediaView(),
-                            if (controller.detailBean?.tagList?.isNotEmpty == true)
-                              TagListView(tagList: controller.detailBean?.tagList ?? [])
-                            else
-                              SizedBox(height: 16.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  '评论(${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'})',
-                                  style: TextStyle(
-                                    color: const Color(0xff2a2a2a),
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
+                                Expanded(
+                                  child: CircleImageWithText(
+                                    imageUrl: (controller.detailBean != null && controller.detailBean!.user != null)
+                                        ? controller.detailBean!.user!.avatar!
+                                        : '',
+                                    imageWidth: 20,
+                                    imageHeight: 20,
+                                    topText: controller.detailBean?.user?.nickname ?? '',
+                                    topTextStyle: const TextStyle(),
+                                    bottomText1: controller.detailBean?.createdAt != null
+                                        ? '发布于${DateFormat('MM-dd HH:mm').format(controller.detailBean!.createdAt!)}'
+                                        : '',
+                                    bottomText1Style: AppTheme.text999999Size11,
+                                    bottomText2: '',
+                                    bottomText2Style: const TextStyle(),
                                   ),
                                 ),
-                                SizedBox(height: 10.w),
-                                if (controller.comments == null)
-                                  const SizedBox()
-                                else if (controller.comments?.isNotEmpty == true)
-                                  ...List.generate(controller.comments!.length, (index) {
-                                    return CommentItem(
-                                      commentBean: controller.comments![index],
-                                      relType: 'thread',
-                                    );
-                                  })
-                                else
-                                  const Center(
-                                    child: NoDataView(),
+                                if ((controller.detailBean?.user?.id ?? 0) != 0)
+                                  Visibility(
+                                    visible: !UserStore.of.isMe(controller.detailBean!.user?.id),
+                                    child: GestureDetector(
+                                      onTap: controller._followToggle,
+                                      child: controller.detailBean?.user?.followed == true
+                                          ? Container(
+                                              height: 28.w,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xffd8d8d8),
+                                                borderRadius: BorderRadius.circular(25),
+                                              ),
+                                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                              child: Text(
+                                                '已关注',
+                                                style: TextStyle(
+                                                  color: const Color(0xff95a3c4),
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 28.w,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xff249cfc),
+                                                borderRadius: BorderRadius.circular(25),
+                                              ),
+                                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                              child: Text(
+                                                '+关注',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                    ),
                                   ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          if (controller.detailBean?.content?.isNotEmpty == true)
+                            HtmlWidget(
+                              controller.detailBean!.content!,
+                              customStylesBuilder: htmlCustomStyles,
+                              factoryBuilder: () =>
+                                  HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                              customWidgetBuilder: (dom.Element element) {
+                                if (element.localName == 'table') {
+                                  return const SizedBox();
+                                }
+                                return null;
+                              },
+                              onTapUrl: (String url) async {
+                                return launchUrlString(url, mode: LaunchMode.externalApplication);
+                              },
+                            ),
+                          // _buildMediaView(),
+                          if (controller.detailBean?.tagList?.isNotEmpty == true)
+                            TagListView(tagList: controller.detailBean?.tagList ?? [])
+                          else
+                            SizedBox(height: 16.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                '评论(${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'})',
+                                style: TextStyle(
+                                  color: const Color(0xff2a2a2a),
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 10.w),
+                              if (controller.comments == null)
+                                const SizedBox()
+                              else if (controller.comments?.isNotEmpty == true)
+                                ...List.generate(controller.comments!.length, (index) {
+                                  return CommentItem(
+                                    commentBean: controller.comments![index],
+                                    relType: 'thread',
+                                  );
+                                })
+                              else
+                                const Center(
+                                  child: NoDataView(),
+                                ),
+                            ],
+                          ),
+                        ],
                       ),
-            bottomNavigationBar: controller.detailBean != null
-                ? FeedDetailBottomView(
-                    viewParams: PostBottomViewParams(
-                      postId: controller.id,
-                      relId: controller.id,
-                      relType: NetRequest.COMMENT_TYPE_THREAD,
-                      favoriteState: controller.detailBean?.favorited!,
-                      liked: controller.detailBean?.liked!,
-                      shareLink: 'details/thread-${controller.id}',
-                      likeCount: controller.detailBean?.likeCount ?? 0,
-                      favoriteCount: controller.detailBean?.favoriteCount ?? 0,
-                      commentCount: controller.detailBean?.commentCount ?? 0,
-                      shareCount: controller.detailBean?.shareCount ?? 0,
                     ),
-                  )
-                : const SizedBox(),
-          ),
+          bottomNavigationBar: controller.detailBean != null
+              ? FeedDetailBottomView(
+                  viewParams: PostBottomViewParams(
+                    postId: controller.id,
+                    relId: controller.id,
+                    relType: NetRequest.COMMENT_TYPE_THREAD,
+                    favoriteState: controller.detailBean?.favorited!,
+                    liked: controller.detailBean?.liked!,
+                    shareLink: 'details/thread-${controller.id}',
+                    likeCount: controller.detailBean?.likeCount ?? 0,
+                    favoriteCount: controller.detailBean?.favoriteCount ?? 0,
+                    commentCount: controller.detailBean?.commentCount ?? 0,
+                    shareCount: controller.detailBean?.shareCount ?? 0,
+                  ),
+                )
+              : const SizedBox(),
         );
       },
     );

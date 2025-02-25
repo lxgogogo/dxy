@@ -36,19 +36,13 @@ class CircleImageWithText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
           child: ClipOval(
               child: LoginHelper()
                   .getUserAvatar(imageUrl, imageWidth, imageHeight)),
         ),
-        Expanded(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTopText(),
-            _buildBottomText(),
-          ],
-        ))
+        _buildTopText(),
+        _buildBottomText(),
       ],
     );
   }

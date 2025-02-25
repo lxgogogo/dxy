@@ -40,7 +40,7 @@ class _RegisterContentState extends State<RegisterContent> {
 
   bool _isLoginDisable = true;
   RegExp codeRegExp = RegExp(r'^\d{6}$');
-  RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,12}$');
+  RegExp passwordRegExp = RegExp(r'''[!"#\$%&'()*+,-./:;<=>?@\[\]^_`{|}~]''');
 
   void checkValid() {
     final account = _controllerEmail.text;

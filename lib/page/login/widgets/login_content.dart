@@ -31,7 +31,7 @@ class _LoginContentState extends State<LoginContent> {
 
   bool _isLoginDisable = true;
 
-  RegExp passwordRegExp = RegExp(r'''[!"#\$%&'()*+,-./:;<=>?@\[\]^_`{|}~a-zA-Z0-9]''');
+  RegExp passwordRegExp = RegExp(r'''^(?=.*[A-Z])[A-Za-z0-9!@#$%^&*(),.?"{}|<>']{8,12}$''');
 
   void checkValid() {
     final account = _controllerAccount.text;

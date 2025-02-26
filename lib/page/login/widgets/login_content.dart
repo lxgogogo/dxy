@@ -41,7 +41,6 @@ class _LoginContentState extends State<LoginContent> {
     _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
     setState(() {});
   }
-'
   void onChangeCheckValid() {
     final account = _controllerAccount.text;
     final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;

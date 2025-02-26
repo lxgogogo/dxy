@@ -196,7 +196,7 @@ class TagListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only(top: 8.w, bottom: 12.w),
+      margin: EdgeInsets.only( bottom: 24.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -213,22 +213,16 @@ class TagListView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 4.w),
                 margin: EdgeInsets.only(right: 10.w),
                 decoration: BoxDecoration(
+                  color: '#ECF0FE'.hexColor,
                   borderRadius: BorderRadius.circular(20.r),
-                  gradient: const LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Color(0xFFEDF6FD),
-                      Color(0xFFF2F9FF),
-                    ],
-                  ),
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   tagList[index].name ?? '',
                   style: TextStyle(
-                    fontSize: 14.sp,
-                    color: '#249CFC'.hexColor,
+                    fontSize: 12.sp,
+                    color: '#557BF6'.hexColor,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

@@ -150,7 +150,7 @@ DEPENDENCIES:
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - DKImagePickerController
     - DKPhotoGallery
     - libwebp
@@ -250,6 +250,6 @@ SPEC CHECKSUMS:
   wakelock_plus: 373cfe59b235a6dd5837d0fb88791d2f13a90d56
   webview_flutter_wkwebview: a4af96a051138e28e29f60101d094683b9f82188
 
-PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
+PODFILE CHECKSUM: bbb3b55671998a7a2f1feb8b7734ce6a935957e2
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2

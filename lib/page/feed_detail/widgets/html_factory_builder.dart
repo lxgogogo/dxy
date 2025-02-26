@@ -3,6 +3,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:video_player/video_player.dart';
 
 class HtmlFactoryBuilder extends WidgetFactory {
@@ -25,6 +26,7 @@ class HtmlFactoryBuilder extends WidgetFactory {
   /// Builds [Image].
   @override
   Widget? buildImageWidget(BuildTree tree, ImageSource src) {
+
     final url = src.url;
 
     ImageProvider? provider;
@@ -39,16 +41,24 @@ class HtmlFactoryBuilder extends WidgetFactory {
       final image = src.image;
       final semanticLabel = image?.alt ?? image?.title;
       return LayoutBuilder(builder: (context, constraints) {
-        return CachedNetworkImage(
-          imageUrl: url,
-          fit: BoxFit.fill,
-          placeholder: (context, url) => Image.asset(
-            'assets/images/image_loading_def.png',
-            width: constraints.maxWidth / 1.5,
+
+        return Container(
+          margin: EdgeInsets.only(top: 12.w),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.w),
           ),
-          errorWidget: (context, url, error) => Image.asset(
-            'assets/images/image_loading_def.png',
-            width: constraints.maxWidth / 1.5,
+          child: CachedNetworkImage(
+            imageUrl: url,
+            fit: BoxFit.fill,
+            placeholder: (context, url) => Image.asset(
+              'assets/images/image_loading_def.png',
+              width: constraints.maxWidth / 1.5,
+            ),
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/images/image_loading_def.png',
+              width: constraints.maxWidth / 1.5,
+            ),
           ),
         );
       });

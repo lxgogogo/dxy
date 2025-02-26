@@ -29,6 +29,7 @@ import 'package:video_player/video_player.dart';
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/date_util.dart';
 import '../../widget/circle_image_with_text.dart';
 
 part 'feed_detail_controller.dart';
@@ -75,39 +76,50 @@ class FeedDetailScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: CircleImageWithText(
-                                    imageUrl: (controller.detailBean != null && controller.detailBean!.user != null)
+                                    imageUrl: (controller.detailBean != null &&
+                                            controller.detailBean!.user != null)
                                         ? controller.detailBean!.user!.avatar!
                                         : '',
                                     imageWidth: 20,
                                     imageHeight: 20,
-                                    topText: controller.detailBean?.user?.nickname ?? '',
-                                    topTextStyle: const TextStyle(),
-                                    bottomText1: controller.detailBean?.createdAt != null
-                                        ? '发布于${DateFormat('MM-dd HH:mm').format(controller.detailBean!.createdAt!)}'
+                                    topText:
+                                        controller.detailBean?.user?.nickname ??
+                                            '',
+                                    topTextStyle:  TextStyle(color: '#535861'.hexColor,fontSize: 12,fontWeight: FontWeight.w600),
+                                    bottomText1: controller
+                                                .detailBean?.createdAt !=
+                                            null
+                                        ? '${DateUtil.formatDateAlias(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布'
                                         : '',
-                                    bottomText1Style: AppTheme.text999999Size11,
+                                    bottomText1Style: TextStyle(color: '#333333'.hexColor,fontSize: 12),
                                     bottomText2: '',
                                     bottomText2Style: const TextStyle(),
                                   ),
                                 ),
                                 if ((controller.detailBean?.user?.id ?? 0) != 0)
                                   Visibility(
-                                    visible: !UserStore.of.isMe(controller.detailBean!.user?.id),
+                                    visible: !UserStore.of
+                                        .isMe(controller.detailBean!.user?.id),
                                     child: GestureDetector(
                                       onTap: controller._followToggle,
-                                      child: controller.detailBean?.user?.followed == true
+                                      child: controller
+                                                  .detailBean?.user?.followed ==
+                                              true
                                           ? Container(
                                               height: 28.w,
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
                                                 color: const Color(0xffd8d8d8),
-                                                borderRadius: BorderRadius.circular(25),
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
                                               ),
-                                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.w),
                                               child: Text(
                                                 '已关注',
                                                 style: TextStyle(
-                                                  color: const Color(0xff95a3c4),
+                                                  color:
+                                                      const Color(0xff95a3c4),
                                                   fontSize: 14.sp,
                                                   fontWeight: FontWeight.w500,
                                                 ),
@@ -118,9 +130,11 @@ class FeedDetailScreen extends StatelessWidget {
                                               alignment: Alignment.center,
                                               decoration: BoxDecoration(
                                                 color: const Color(0xff249cfc),
-                                                borderRadius: BorderRadius.circular(25),
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
                                               ),
-                                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10.w),
                                               child: Text(
                                                 '+关注',
                                                 style: TextStyle(
@@ -135,43 +149,51 @@ class FeedDetailScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          if (controller.detailBean?.content?.isNotEmpty == true)
+                          if (controller.detailBean?.content?.isNotEmpty ==
+                              true)
                             HtmlWidget(
                               controller.detailBean!.content!,
                               customStylesBuilder: htmlCustomStyles,
-                              factoryBuilder: () =>
-                                  HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                              factoryBuilder: () => HtmlFactoryBuilder(context,
+                                  content: controller.detailBean!.content!),
                               customWidgetBuilder: (dom.Element element) {
                                 if (element.localName == 'table') {
                                   return const SizedBox();
                                 }
+                                // if(element.localName=='p'){
+                                //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor),);
+                                // }
                                 return null;
                               },
                               onTapUrl: (String url) async {
-                                return launchUrlString(url, mode: LaunchMode.externalApplication);
+                                return launchUrlString(url,
+                                    mode: LaunchMode.externalApplication);
                               },
                             ),
                           // _buildMediaView(),
-                          if (controller.detailBean?.tagList?.isNotEmpty == true)
-                            TagListView(tagList: controller.detailBean?.tagList ?? [])
+                          if (controller.detailBean?.tagList?.isNotEmpty ==
+                              true)
+                            TagListView(
+                                tagList: controller.detailBean?.tagList ?? [])
                           else
                             SizedBox(height: 16.w),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                '评论(${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'})',
+                                '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
                                 style: TextStyle(
-                                  color: const Color(0xff2a2a2a),
+                                  color: '#333333'.hexColor,
                                   fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                               SizedBox(height: 10.w),
                               if (controller.comments == null)
                                 const SizedBox()
                               else if (controller.comments?.isNotEmpty == true)
-                                ...List.generate(controller.comments!.length, (index) {
+                                ...List.generate(controller.comments!.length,
+                                    (index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
                                     relType: 'thread',

@@ -31,7 +31,7 @@ class _LoginContentState extends State<LoginContent> {
 
   bool _isLoginDisable = true;
 
-  RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
+  RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
 
   void checkValid() {
     final account = _controllerAccount.text;
@@ -41,7 +41,7 @@ class _LoginContentState extends State<LoginContent> {
     _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
     setState(() {});
   }
-
+'
   void onChangeCheckValid() {
     final account = _controllerAccount.text;
     final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;

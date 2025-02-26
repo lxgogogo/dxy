@@ -25,10 +25,12 @@ class CountComment extends StatelessWidget {
         children: [
           SvgPicture.asset(
             Assets.svg.iconComment,
-            width: 12.w,
+            color: '##333333'.hexColor.withOpacity(0.7),
+            width: 14.w,
           ),
-          SizedBox(width: 6.w),
-          CountText(count: count, usePlaceHolder: usePlaceHolder),
+          SizedBox(width: 4.w),
+         Text('回复',style: TextStyle(color: '##333333'.hexColor.withOpacity(0.7),),)
+        //  CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
     );
@@ -155,14 +157,15 @@ class _CountLikeAniState extends State<CountLikeAni> {
         children: [
           LikeButton(
             isLiked: widget.liked,
-            size: 11.w,
+            size: 14.w,
+            padding: EdgeInsets.zero,
             onTap: onLikeButtonTapped,
             likeBuilder: (bool isLiked) {
               return Image.asset(
                 isLiked ? 'assets/images/praised.png' : 'assets/images/praise.png',
               );
             },
-            likeCountPadding: EdgeInsets.only(left: 3.w),
+            likeCountPadding: EdgeInsets.only(left: 4.w),
             countBuilder: (_, __, ___) => CountText(
               count: widget.count,
               usePlaceHolder: widget.usePlaceHolder,
@@ -225,7 +228,7 @@ class CountText extends StatelessWidget {
               child: Text(
                 '000.0M',
                 style: TextStyle(
-                  color: const Color(0xff9CACC9),
+                  color:'#333333'.hexColor.withOpacity(0.7),
                   fontSize: 12.sp,
                 ),
               ),
@@ -245,7 +248,7 @@ class CountText extends StatelessWidget {
         Text(
           count,
           style: TextStyle(
-            color: '#1E1E1E'.hexColor.withOpacity(0.7),
+            color:'#333333'.hexColor.withOpacity(0.7),
             fontSize: 12.sp,
           ),
         ),

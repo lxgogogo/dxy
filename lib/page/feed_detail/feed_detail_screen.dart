@@ -28,9 +28,11 @@ import 'package:video_player/video_player.dart';
 
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
+import '../../routes/app_pages.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/date_util.dart';
 import '../../widget/circle_image_with_text.dart';
+import '../mine/login_helper.dart';
 
 part 'feed_detail_controller.dart';
 
@@ -85,13 +87,18 @@ class FeedDetailScreen extends StatelessWidget {
                                     topText:
                                         controller.detailBean?.user?.nickname ??
                                             '',
-                                    topTextStyle:  TextStyle(color: '#535861'.hexColor,fontSize: 12,fontWeight: FontWeight.w600),
+                                    topTextStyle: TextStyle(
+                                        color: '#535861'.hexColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600),
                                     bottomText1: controller
                                                 .detailBean?.createdAt !=
                                             null
                                         ? '${DateUtil.formatDateAlias(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布'
                                         : '',
-                                    bottomText1Style: TextStyle(color: '#333333'.hexColor,fontSize: 12),
+                                    bottomText1Style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12),
                                     bottomText2: '',
                                     bottomText2Style: const TextStyle(),
                                   ),
@@ -189,6 +196,52 @@ class FeedDetailScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 10.w),
+                              GestureDetector(
+                                onTap: (){
+
+                                    UserStore.of.checkLogin(() {
+                                      Get.toNamed(Routes.publishComment, arguments: {
+                                        'relType': NetRequest.COMMENT_TYPE_THREAD,
+                                        'relId': controller.id,
+                                      });
+                                    });
+
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 16.w),
+                                  child: Row(
+                                    children: [
+                                      ClipOval(
+                                          child: LoginHelper().getUserAvatar(
+                                              UserStore.of.user.avatar ?? '',
+                                              30.w,
+                                              30.w)),
+                                      Expanded(
+                                        child: Container(
+                                          height: 30.w,
+                                          margin: EdgeInsets.only(left: 12.w),
+                                          padding: EdgeInsets.only(left: 12.w),
+                                          decoration: BoxDecoration(
+                                            color: '#333333'
+                                                .hexColor
+                                                .withOpacity(0.05),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            '说点什么吧',
+                                            style: TextStyle(
+                                                color: '#333333'
+                                                    .hexColor
+                                                    .withOpacity(0.5)),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                               if (controller.comments == null)
                                 const SizedBox()
                               else if (controller.comments?.isNotEmpty == true)

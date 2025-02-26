@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
@@ -18,6 +19,7 @@ import 'package:intl/intl.dart';
 
 import '../services/index.dart';
 import '../stores/config_store.dart';
+import '../utils/date_util.dart';
 import '../utils/toast_utils.dart';
 
 class CommentItem extends StatefulWidget {
@@ -81,25 +83,41 @@ class _CommentItemState extends State<CommentItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        BorderAvatar(avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : ''),
+        BorderAvatar(avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : '',borderWidth: 0,),
         SizedBox(width: 7.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
-                style: TextStyle(
-                  color: const Color(0xff2a2a2a),
-                  fontSize: 12.w,
-                  fontWeight: FontWeight.w500,
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
+                    style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 12.w,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const Spacer(),
+                  if (showReport)
+                    GestureDetector(
+                      onTap: () {
+                        if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
+                          UserStore.of.checkLogin(() {
+                            _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                          });
+                        }
+                      },
+                      child: Icon(Icons.more_horiz,color: '#333333'.hexColor.withOpacity(0.7),)
+                    ),
+                ],
               ),
               SizedBox(height: 2.w),
               HtmlWidget(
                 widget.commentBean.contentStr ?? '',
                 textStyle: TextStyle(
-                  color: const Color(0xff666666),
+                  color: '#333333'.hexColor.withOpacity(0.7),
                   fontSize: 12.sp,
                 ),
               ),
@@ -124,7 +142,7 @@ class _CommentItemState extends State<CommentItem> {
                         );
                       },
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: widget.commentBean.files?[index].url ?? '',
@@ -140,7 +158,7 @@ class _CommentItemState extends State<CommentItem> {
                 children: [
                   Text(
                     widget.commentBean.createdAt != null
-                        ? DateFormat('MM/d').format(widget.commentBean.createdAt!)
+                        ? '${DateUtil.formatDateAlias(widget.commentBean.createdAt!.millisecondsSinceEpoch)}发布'
                         : '',
                     style: TextStyle(
                       color: const Color(0xff9CACC9),
@@ -152,6 +170,7 @@ class _CommentItemState extends State<CommentItem> {
                     CountLikeAni(
                       count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
                       liked: widget.commentBean.liked ?? false,
+                      usePlaceHolder: false,
                       onToggleLike: () async {
                         final data = await NetRequest().newContentLike({
                           'relType': 'comment',
@@ -168,6 +187,7 @@ class _CommentItemState extends State<CommentItem> {
                         return false;
                       },
                     ),
+                    SizedBox(width: 16.w,),
                     GestureDetector(
                       onTap: () {
                         UserStore.of.checkLogin(() {
@@ -181,193 +201,169 @@ class _CommentItemState extends State<CommentItem> {
                       },
                       child: CountComment(
                         count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
-                        usePlaceHolder: showReport,
+                        usePlaceHolder: false,
                       ),
                     ),
-                    if (showReport)
-                      GestureDetector(
-                        onTap: () {
-                          if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
-                            UserStore.of.checkLogin(() {
-                              _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
-                            });
-                          }
-                        },
-                        child: Image.asset(
-                          'assets/images/report.png',
-                          width: 12.w,
-                        ),
-                      ),
+
                   ],
                 ],
               ),
               if (widget.commentBean.replies?.isNotEmpty == true) ...[
                 SizedBox(height: 17.w),
-                Padding(
-                  padding: EdgeInsets.only(left: 8.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ...List.generate(
-                        widget.commentBean.replies!.length,
-                        (index) {
-                          final reply = widget.commentBean.replies![index];
-                          final showReplyReport = /*widget.relType == 'thread' &&*/ !UserStore.of.isMe(reply.user?.id);
-                          return Padding(
-                            padding: EdgeInsets.only(top: 10.w),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                BorderAvatar(avatar: reply.user?.avatar ?? ''),
-                                SizedBox(width: 7.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        reply.user?.nickname ?? '',
-                                        style: TextStyle(
-                                          color: const Color(0xff2a2a2a),
-                                          fontSize: 12.w,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(height: 2.w),
-                                      HtmlWidget(
-                                        reply.contentStr ?? '',
-                                        textStyle: TextStyle(
-                                          color: const Color(0xff666666),
-                                          fontSize: 12.sp,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.w),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            reply.createdAt != null ? DateFormat('MM/d').format(reply.createdAt!) : '',
-                                            style: TextStyle(
-                                              color: const Color(0xff9CACC9),
-                                              fontSize: 10.w,
-                                            ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ...List.generate(
+                      widget.commentBean.replies!.length,
+                      (index) {
+                        final reply = widget.commentBean.replies![index];
+                        final showReplyReport = /*widget.relType == 'thread' &&*/ !UserStore.of.isMe(reply.user?.id);
+                        return Padding(
+                          padding: EdgeInsets.only(top: 10.w),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BorderAvatar(avatar: reply.user?.avatar ?? '',borderWidth: 0,),
+                              SizedBox(width: 7.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          reply.user?.nickname ?? '',
+                                          style: TextStyle(
+                                            color: '#333333'.hexColor,
+                                            fontSize: 12.w,
+                                            fontWeight: FontWeight.w600,
                                           ),
-                                          const Spacer(),
-                                          CountLikeAni(
-                                            count: reply.likeCount.abbreviateNumber,
-                                            liked: reply.liked ?? false,
-                                            usePlaceHolder: showReplyReport,
-                                            onToggleLike: () async {
-                                              final data = await NetRequest().newContentLike({
-                                                'relType': 'comment',
-                                                'relId': reply.id!,
-                                                'state': reply.liked! ? false : true
-                                              });
-                                              if (data is int) {
-                                                reply.liked = !reply.liked!;
-                                                int count = reply.likeCount!;
-                                                reply.likeCount = reply.liked! ? count + 1 : count - 1;
-                                                setState(() {});
-                                                return true;
-                                              }
-                                              return false;
-                                            },
-                                          ),
-                                          if (showReplyReport)
-                                            GestureDetector(
+                                        ),
+                                        const Spacer(),
+                                        if (showReplyReport)
+                                          GestureDetector(
                                               onTap: () {
-                                                if (reply.id != null && reply.user?.id != null) {
+                                                if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
                                                   UserStore.of.checkLogin(() {
-                                                    _onReport(reply.id!, reply.user!.id!);
+                                                    _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
                                                   });
                                                 }
                                               },
-                                              child: Image.asset(
-                                                'assets/images/report.png',
-                                                width: 12.w,
-                                              ),
-                                            ),
-                                        ],
+                                              child: Icon(Icons.more_horiz,color: '#333333'.hexColor.withOpacity(0.7),)
+                                          ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 2.w),
+                                    HtmlWidget(
+                                      reply.contentStr ?? '',
+                                      textStyle: TextStyle(
+                                        color: '#333333'.hexColor.withOpacity(0.7),
+                                        fontSize: 12.sp,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(height: 8.w),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          widget.commentBean.createdAt != null
+                                              ? '${DateUtil.formatDateAlias(reply.createdAt!.millisecondsSinceEpoch)}发布'
+                                              : '',
+                                          style: TextStyle(
+                                            color: const Color(0xff9CACC9),
+                                            fontSize: 10.w,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        CountLikeAni(
+                                          count: reply.likeCount.abbreviateNumber,
+                                          liked: reply.liked ?? false,
+                                          usePlaceHolder: false,
+                                          onToggleLike: () async {
+                                            final data = await NetRequest().newContentLike({
+                                              'relType': 'comment',
+                                              'relId': reply.id!,
+                                              'state': reply.liked! ? false : true
+                                            });
+                                            if (data is int) {
+                                              reply.liked = !reply.liked!;
+                                              int count = reply.likeCount!;
+                                              reply.likeCount = reply.liked! ? count + 1 : count - 1;
+                                              setState(() {});
+                                              return true;
+                                            }
+                                            return false;
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      if ((widget.commentBean.replyCount ?? 0) > 2)
-                        Container(
-                          height: 24.w,
-                          margin: EdgeInsets.only(top: 10.w),
-                          child: Row(
-                            children: [
-                              if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    if ((widget.commentBean.replyCount ?? 0) > 2)
+                      Container(
+                        height: 24.w,
+                        margin: EdgeInsets.only(top: 10.w),
+                        child: Row(
+                          children: [
+                            if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
+                              GestureDetector(
+                                onTap: () {
+                                  getReplyList();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 4.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: const Color(0xfff2f4f6),
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: Text(
-                                    '查看全部${min(pageSize, (widget.commentBean.replyCount ?? 0) - (widget.commentBean.replies?.length ?? 0))}条回复',
+                                    '查看全部${min(pageSize, (widget.commentBean.replyCount ?? 0) - (widget.commentBean.replies?.length ?? 0))}条回复>',
                                     style: TextStyle(
-                                      color: const Color(0xff3B5078),
-                                      fontSize: 12.w,
+                                      color:  '#333333'.hexColor,
+                                      fontSize: 14.w,
                                     ),
                                   ),
                                 ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    getReplyList();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '展开',
-                                        style: TextStyle(
-                                          color: const Color(0xff3B5078),
-                                          fontSize: 12.w,
-                                        ),
+                              ),
+
+                            ] else ...[
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  pageNum = 1;
+                                  widget.commentBean.replies = List.of(widget.commentBean.replies?.take(2) ?? []);
+                                  setState(() {});
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '收起',
+                                      style: TextStyle(
+                                        color: const Color(0xff3B5078),
+                                        fontSize: 12.w,
                                       ),
-                                      const Icon(Icons.keyboard_arrow_down),
-                                    ],
-                                  ),
-                                )
-                              ] else ...[
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    pageNum = 1;
-                                    widget.commentBean.replies = List.of(widget.commentBean.replies?.take(2) ?? []);
-                                    setState(() {});
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '收起',
-                                        style: TextStyle(
-                                          color: const Color(0xff3B5078),
-                                          fontSize: 12.w,
-                                        ),
-                                      ),
-                                      const Icon(Icons.keyboard_arrow_up),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                    ),
+                                    const Icon(Icons.keyboard_arrow_up),
+                                  ],
+                                ),
+                              )
                             ],
-                          ),
+                          ],
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
               ],
               Container(
-                height: 1.w,
-                margin: EdgeInsets.symmetric(vertical: 16.5.w),
-                color: const Color(0xffe6e6e6),
+
+                margin: EdgeInsets.symmetric(vertical:8.w),
+
               ),
             ],
           ),
@@ -408,17 +404,19 @@ class BorderAvatar extends StatelessWidget {
   const BorderAvatar({
     super.key,
     required this.avatar,
-    this.avatarSize = 34,
+    this.avatarSize = 30,
+    this.borderWidth=2,
   });
 
   final String avatar;
   final double avatarSize;
+  final double borderWidth ;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (avatarSize + 2).w,
-      height: (avatarSize + 2).w,
+      width: (avatarSize + borderWidth).w,
+      height: (avatarSize + borderWidth).w,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.white,

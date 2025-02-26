@@ -42,77 +42,75 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
               tagList: widget.tagList,
             ),
           ),
-        SafeArea(
-          child: Container(
-            height: 68.w,
-            padding: EdgeInsets.only(top: 16.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
-              border: Border(top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),)
-            ),
-            alignment: Alignment.topCenter,
-            child: Row(
-              children: <Widget>[
-                SizedBox(width: 8.w),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: _pushComment,
-                    child: Container(
-                      height: 30.w,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff95A3C4).withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 17.w),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/input_e.png',
-                            width: 13.5.w,
-                          ),
-                          SizedBox(width: 9.5.w),
-                          Expanded(
-                            child: Text(
-                              '说点什么',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: const Color(0xff9CACC9),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+        Container(
+          height: 88.w,
+          padding: EdgeInsets.only(top: 16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
+            border: Border(top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),)
+          ),
+          alignment: Alignment.topCenter,
+          child: Row(
+            children: <Widget>[
+              SizedBox(width: 8.w),
+              Expanded(
+                child: GestureDetector(
+                  onTap: _pushComment,
+                  child: Container(
+                    height: 30.w,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff95A3C4).withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 17.w),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/input_e.png',
+                          width: 13.5.w,
+                        ),
+                        SizedBox(width: 9.5.w),
+                        Expanded(
+                          child: Text(
+                            '说点什么',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: const Color(0xff9CACC9),
                             ),
-                          )
-                        ],
-                      ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(width: 8.w),
-                if (widget.viewParams.relType == 'thread')
-                  CountLikeAni(
-                    count: widget.viewParams.likeCount.abbreviateNumber,
-                    liked: widget.viewParams.liked == true,
-                    onToggleLike: _likeToggle,
-                  ),
-                GestureDetector(
-                  onTap: _favoriteToggle,
-                  child: CountFavorite(
-                    count: widget.viewParams.favoriteCount.abbreviateNumber,
-                    stared: widget.viewParams.favoriteState == true,
-                  ),
+              ),
+              SizedBox(width: 8.w),
+              if (widget.viewParams.relType == 'thread')
+                CountLikeAni(
+                  count: widget.viewParams.likeCount.abbreviateNumber,
+                  liked: widget.viewParams.liked == true,
+                  onToggleLike: _likeToggle,
                 ),
-                GestureDetector(
-                  onTap: _toCommentList,
-                  child: CountComment(count: widget.viewParams.commentCount.abbreviateNumber),
+              GestureDetector(
+                onTap: _favoriteToggle,
+                child: CountFavorite(
+                  count: widget.viewParams.favoriteCount.abbreviateNumber,
+                  stared: widget.viewParams.favoriteState == true,
                 ),
-                GestureDetector(
-                  onTap: _toShare,
-                  child: CountShare(count: widget.viewParams.shareCount.abbreviateNumber),
-                ),
-              ],
-            ),
+              ),
+              GestureDetector(
+                onTap: _toCommentList,
+                child: CountComment(count: widget.viewParams.commentCount.abbreviateNumber),
+              ),
+              GestureDetector(
+                onTap: _toShare,
+                child: CountShare(count: widget.viewParams.shareCount.abbreviateNumber),
+              ),
+            ],
           ),
         ),
       ],

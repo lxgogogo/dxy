@@ -129,7 +129,7 @@ class FeedDetailController extends GetxController {
       });
   }
 
-  void _followToggle() {
+  void followToggle() {
     UserStore.of.checkLogin(() {
       if (detailBean?.user?.id == null) return;
       final followed = detailBean?.user?.followed ?? false;

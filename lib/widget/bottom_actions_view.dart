@@ -14,6 +14,9 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
 
+import '../model/user.dart';
+import '../page/feed_detail/feed_detail_screen.dart';
+import '../page/mine/login_helper.dart';
 import '../utils/toast_utils.dart';
 
 class FeedDetailBottomView extends StatefulWidget {
@@ -55,41 +58,82 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           alignment: Alignment.topCenter,
           child: Row(
             children: <Widget>[
-              SizedBox(width: 8.w),
-              Expanded(
+              SizedBox(width: 17.w),
+              SizedBox(
+               // width: 100.w,
                 child: GestureDetector(
                   onTap: _pushComment,
                   child: Container(
-                    height: 30.w,
+                    height: 32.w,
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      color: const Color(0xff95A3C4).withOpacity(0.08),
+                      color: '#333333'.hexColor.withOpacity(0.05),
                       borderRadius: BorderRadius.circular(16.r),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 17.w),
                     child: Row(
                       children: [
-                        Image.asset(
-                          'assets/images/input_e.png',
-                          width: 13.5.w,
-                        ),
-                        SizedBox(width: 9.5.w),
-                        Expanded(
+                        ClipOval(
+                            child: LoginHelper()
+                                .getUserAvatar(widget.viewParams.author?.avatar??'', 30.w, 30.w)),
+                        Container(
+                          margin: EdgeInsets.only(left: 4.w,right: 4.w),
+                          width: 30.w,
                           child: Text(
-                            '说点什么',
+                            widget.viewParams.author?.nickname??'',
                             style: TextStyle(
-                              fontSize: 12.sp,
-                              color: const Color(0xff9CACC9),
+                              fontSize: 14.sp,
+                              color: '##333333'.hexColor,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        )
+                        ),
+                        if ((widget.viewParams.author?.id ?? 0) != 0)
+                          Visibility(
+                            visible: !UserStore.of
+                                .isMe(widget.viewParams.author?.id),
+                            child: GestureDetector(
+                              onTap: (){
+                                Get.find<FeedDetailController>().followToggle();
+                              },
+                              child: widget.viewParams.author?.followed ==
+                                  true
+                                  ? Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 10.w),
+                                child: Text(
+                                  '已关注',
+                                  style: TextStyle(
+                                    color:
+                                    '#557BF6'.hexColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                                  : Container(
+                                height: 28.w,
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 10.w),
+                                child: Text(
+                                  '+关注',
+                                  style: TextStyle(
+                                    color: '#557BF6'.hexColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
                 ),
               ),
+              const Spacer(),
               SizedBox(width: 8.w),
             //  if (widget.viewParams.relType == 'thread')
                 // CountCommentBadge(
@@ -117,8 +161,8 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                       iconWidget: Container(
                         padding:  EdgeInsets.all(3.w),
                         child: widget.viewParams.liked == true
-                            ? SvgPicture.asset(Assets.svg.liked)
-                            : SvgPicture.asset(Assets.svg.like),
+                            ? SvgPicture.asset(Assets.svg.liked, color: '#333333'.hexColor.withOpacity(0.7),)
+                            : SvgPicture.asset(Assets.svg.like, color: '#333333'.hexColor.withOpacity(0.7),),
                       ),
                     ),
                   ),
@@ -130,8 +174,8 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                     padding:
                     EdgeInsets.all(3.w),
                     child: widget.viewParams.favoriteState == true
-                        ? SvgPicture.asset(Assets.svg.stared)
-                        : SvgPicture.asset(Assets.svg.star),
+                        ? SvgPicture.asset(Assets.svg.stared, color: '#333333'.hexColor.withOpacity(0.7),)
+                        : SvgPicture.asset(Assets.svg.star, color: '#333333'.hexColor.withOpacity(0.7),),
                   ),
                 ),
               ),
@@ -143,7 +187,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                            EdgeInsets.all(3.w),
                       child: SvgPicture.asset(
                         Assets.svg.comment,
-                        color: Colors.black,
+                        color: '#333333'.hexColor,
                       ),
                     ),
                     count: widget.viewParams.commentCount.abbreviateNumber),
@@ -156,7 +200,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                       EdgeInsets.all(3.w),
                       child: SvgPicture.asset(
                         Assets.svg.share,
-                        color: Colors.black,
+                        color: '#333333'.hexColor,
                       ),
                     ),
                     count: ''),
@@ -303,7 +347,7 @@ class PostBottomViewParams {
   int favoriteCount;
   int commentCount;
   int shareCount;
-
+  UserProfile? author;
   PostBottomViewParams({
     this.postId,
     required this.relId,
@@ -315,5 +359,6 @@ class PostBottomViewParams {
     required this.shareLink,
     this.commentCount = 0,
     this.shareCount = 0,
+    this.author,
   });
 }

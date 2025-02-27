@@ -103,56 +103,6 @@ class FeedDetailScreen extends StatelessWidget {
                                     bottomText2Style: const TextStyle(),
                                   ),
                                 ),
-                                if ((controller.detailBean?.user?.id ?? 0) != 0)
-                                  Visibility(
-                                    visible: !UserStore.of
-                                        .isMe(controller.detailBean!.user?.id),
-                                    child: GestureDetector(
-                                      onTap: controller._followToggle,
-                                      child: controller
-                                                  .detailBean?.user?.followed ==
-                                              true
-                                          ? Container(
-                                              height: 28.w,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xffd8d8d8),
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                              ),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.w),
-                                              child: Text(
-                                                '已关注',
-                                                style: TextStyle(
-                                                  color:
-                                                      const Color(0xff95a3c4),
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            )
-                                          : Container(
-                                              height: 28.w,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xff249cfc),
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                              ),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10.w),
-                                              child: Text(
-                                                '+关注',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                    ),
-                                  ),
                               ],
                             ),
                           ),
@@ -274,6 +224,7 @@ class FeedDetailScreen extends StatelessWidget {
                     favoriteCount: controller.detailBean?.favoriteCount ?? 0,
                     commentCount: controller.detailBean?.commentCount ?? 0,
                     shareCount: controller.detailBean?.shareCount ?? 0,
+                    author: controller.detailBean?.user
                   ),
                 )
               : const SizedBox(),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -29,7 +31,6 @@ class FeedDetailBottomView extends StatefulWidget {
 }
 
 class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,10 +47,11 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           height: 88.w,
           padding: EdgeInsets.only(top: 16.w),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
-            border: Border(top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),)
-          ),
+              color: Colors.white,
+              // borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
+              border: Border(
+                top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),
+              )),
           alignment: Alignment.topCenter,
           child: Row(
             children: <Widget>[
@@ -89,26 +91,76 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                 ),
               ),
               SizedBox(width: 8.w),
-              if (widget.viewParams.relType == 'thread')
-                CountLikeAni(
-                  count: widget.viewParams.likeCount.abbreviateNumber,
-                  liked: widget.viewParams.liked == true,
-                  onToggleLike: _likeToggle,
-                ),
+            //  if (widget.viewParams.relType == 'thread')
+                // CountCommentBadge(
+                //   count: widget.viewParams.likeCount.abbreviateNumber,
+                //   iconWidget: SizedBox(
+                //     child: CountLikeAni(
+                //       count: '',
+                //       liked: widget.viewParams.liked == true,
+                //       likeWidget: SizedBox(
+                //         width: 20.w,
+                //         child: widget.viewParams.liked == true
+                //             ? SvgPicture.asset(Assets.svg.liked)
+                //             : SvgPicture.asset(Assets.svg.like),
+                //       ),
+                //       onToggleLike: _likeToggle,
+                //       usePlaceHolder: false,
+                //     ),
+                //   ),
+                // ),
+                if (widget.viewParams.relType == 'thread')
+                  GestureDetector(
+                    onTap: _likeToggle,
+                    child: CountCommentBadge(
+                      count: widget.viewParams.likeCount.abbreviateNumber,
+                      iconWidget: Container(
+                        padding:  EdgeInsets.all(3.w),
+                        child: widget.viewParams.liked == true
+                            ? SvgPicture.asset(Assets.svg.liked)
+                            : SvgPicture.asset(Assets.svg.like),
+                      ),
+                    ),
+                  ),
               GestureDetector(
                 onTap: _favoriteToggle,
-                child: CountFavorite(
+                child: CountCommentBadge(
                   count: widget.viewParams.favoriteCount.abbreviateNumber,
-                  stared: widget.viewParams.favoriteState == true,
+                  iconWidget: Container(
+                    padding:
+                    EdgeInsets.all(3.w),
+                    child: widget.viewParams.favoriteState == true
+                        ? SvgPicture.asset(Assets.svg.stared)
+                        : SvgPicture.asset(Assets.svg.star),
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: _toCommentList,
-                child: CountComment(count: widget.viewParams.commentCount.abbreviateNumber),
+                child: CountCommentBadge(
+                    iconWidget: Padding(
+                      padding:
+                           EdgeInsets.all(3.w),
+                      child: SvgPicture.asset(
+                        Assets.svg.comment,
+                        color: Colors.black,
+                      ),
+                    ),
+                    count: widget.viewParams.commentCount.abbreviateNumber),
               ),
               GestureDetector(
                 onTap: _toShare,
-                child: CountShare(count: widget.viewParams.shareCount.abbreviateNumber),
+                child: CountCommentBadge(
+                    iconWidget: Padding(
+                      padding:
+                      EdgeInsets.all(3.w),
+                      child: SvgPicture.asset(
+                        Assets.svg.share,
+                        color: Colors.black,
+                      ),
+                    ),
+                    count: ''),
+
               ),
             ],
           ),
@@ -134,7 +186,10 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   }
 
   void _favoriteToggle() {
-    NetRequest().favoriteToggle(widget.viewParams.relType, widget.viewParams.relId, !(widget.viewParams.favoriteState ?? false), (data) {
+    NetRequest().favoriteToggle(
+        widget.viewParams.relType,
+        widget.viewParams.relId,
+        !(widget.viewParams.favoriteState ?? false), (data) {
       if (widget.viewParams.favoriteState != true) {
         ToastUtils.showToast('收藏成功');
       }
@@ -153,14 +208,16 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   void _toShare() {
     if (widget.viewParams.relType == 'thread') {
       NetRequest().threadUpCount(widget.viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(
+            text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
       });
     } else {
       NetRequest().upCount(widget.viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(
+            text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
@@ -197,7 +254,7 @@ class TagListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only( bottom: 24.w),
+      margin: EdgeInsets.only(bottom: 24.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

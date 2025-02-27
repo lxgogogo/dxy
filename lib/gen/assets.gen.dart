@@ -118,6 +118,10 @@ class $AssetsImagesGen {
   AssetGenImage get download =>
       const AssetGenImage('assets/images/download.png');
 
+  /// File path: assets/images/edit_password.png
+  AssetGenImage get editPassword =>
+      const AssetGenImage('assets/images/edit_password.png');
+
   /// File path: assets/images/email.png
   AssetGenImage get email => const AssetGenImage('assets/images/email.png');
 
@@ -527,6 +531,7 @@ class $AssetsImagesGen {
         delete2,
         deleteAll,
         download,
+        editPassword,
         email,
         eye,
         eyeClose,
@@ -655,6 +660,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/clubs.svg
   String get clubs => 'assets/svg/clubs.svg';
 
+  /// File path: assets/svg/comment.svg
+  String get comment => 'assets/svg/comment.svg';
+
   /// File path: assets/svg/home_tag.svg
   String get homeTag => 'assets/svg/home_tag.svg';
 
@@ -694,6 +702,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
 
+  /// File path: assets/svg/like.svg
+  String get like => 'assets/svg/like.svg';
+
+  /// File path: assets/svg/liked.svg
+  String get liked => 'assets/svg/liked.svg';
+
   /// File path: assets/svg/nav_icon_feed.svg
   String get navIconFeed => 'assets/svg/nav_icon_feed.svg';
 
@@ -727,14 +741,24 @@ class $AssetsSvgGen {
   /// File path: assets/svg/post_office.svg
   String get postOffice => 'assets/svg/post_office.svg';
 
+  /// File path: assets/svg/share.svg
+  String get share => 'assets/svg/share.svg';
+
   /// File path: assets/svg/spades.svg
   String get spades => 'assets/svg/spades.svg';
+
+  /// File path: assets/svg/star.svg
+  String get star => 'assets/svg/star.svg';
+
+  /// File path: assets/svg/stared.svg
+  String get stared => 'assets/svg/stared.svg';
 
   /// List of all assets
   List<String> get values => [
         arrowLeft,
         arrowRight,
         clubs,
+        comment,
         homeTag,
         iconClose,
         iconComment,
@@ -748,6 +772,8 @@ class $AssetsSvgGen {
         iconSearchHistory,
         iconSetting,
         iconWarning,
+        like,
+        liked,
         navIconFeed,
         navIconFeedAct,
         navIconHome,
@@ -759,7 +785,10 @@ class $AssetsSvgGen {
         postGood,
         postNewer,
         postOffice,
-        spades
+        share,
+        spades,
+        star,
+        stared
       ];
 }
 

@@ -53,6 +53,7 @@ dependencies:
   share_plus: ^10.1.2
   universal_html: ^2.2.4
   http: any
+  badges: ^3.1.2
 #  chewie: ^1.8.1
   # get_thumbnail_video: ^0.6.1
   flutter_image_compress: ^2.3.0

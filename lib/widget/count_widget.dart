@@ -5,16 +5,18 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 
 import 'like_button/like_button.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CountComment extends StatelessWidget {
-  const CountComment({
-    super.key,
-    required this.count,
-    this.usePlaceHolder = true,
-  });
+  const CountComment(
+      {super.key,
+      required this.count,
+      this.usePlaceHolder = true,
+      this.iconWidget});
 
   final String count;
   final bool usePlaceHolder;
+  final Widget? iconWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +25,57 @@ class CountComment extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(
-            Assets.svg.iconComment,
-            color: '##333333'.hexColor.withOpacity(0.7),
-            width: 14.w,
-          ),
+          iconWidget ??
+              SvgPicture.asset(
+                Assets.svg.iconComment,
+                color: '##333333'.hexColor.withOpacity(0.7),
+                width: 14.w,
+              ),
           SizedBox(width: 4.w),
-         Text('回复',style: TextStyle(color: '##333333'.hexColor.withOpacity(0.7),),)
-        //  CountText(count: count, usePlaceHolder: usePlaceHolder),
+          Text(
+            '回复',
+            style: TextStyle(
+              color: '##333333'.hexColor.withOpacity(0.7),
+            ),
+          )
+          //  CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
+    );
+  }
+}
+
+class CountCommentBadge extends StatelessWidget {
+  const CountCommentBadge({
+    super.key,
+    required this.count,
+    required this.iconWidget,
+  });
+
+  final String count;
+  final Widget iconWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    return badges.Badge(
+      position: badges.BadgePosition.topEnd(top: -10, end: -12),
+      showBadge: true,
+      ignorePointer: false,
+      onTap: () {},
+      badgeContent: Text(
+        count,
+        style: TextStyle(
+          color: '##333333'.hexColor.withOpacity(0.7),
+        ),
+      ),
+      badgeStyle: badges.BadgeStyle(
+        shape: badges.BadgeShape.square,
+        badgeColor: Colors.white,
+        borderRadius: BorderRadius.circular(50),
+        padding:  EdgeInsets.symmetric(horizontal: 4.w),
+        elevation: 0,
+      ),
+      child: iconWidget,
     );
   }
 }
@@ -54,10 +97,9 @@ class CountFavorite extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            stared ? 'assets/images/stared.png' : 'assets/images/star.png',
-            width: 11.w,
-          ),
+          stared
+              ? SvgPicture.asset(Assets.svg.stared)
+              : SvgPicture.asset(Assets.svg.star),
           SizedBox(width: 3.w),
           CountText(count: count),
         ],
@@ -125,18 +167,19 @@ class CountLike extends StatelessWidget {
 }
 
 class CountLikeAni extends StatefulWidget {
-  const CountLikeAni({
-    super.key,
-    required this.count,
-    this.liked = false,
-    this.usePlaceHolder = true,
-    this.onToggleLike,
-  });
+  const CountLikeAni(
+      {super.key,
+      required this.count,
+      this.liked = false,
+      this.usePlaceHolder = true,
+      this.onToggleLike,
+      this.likeWidget});
 
   final String count;
   final bool liked;
   final bool usePlaceHolder;
   final Function? onToggleLike;
+  final Widget? likeWidget;
 
   @override
   State<CountLikeAni> createState() => _CountLikeAniState();
@@ -157,16 +200,19 @@ class _CountLikeAniState extends State<CountLikeAni> {
         children: [
           LikeButton(
             isLiked: widget.liked,
-            size: 14.w,
+            size: 24.w,
             padding: EdgeInsets.zero,
             onTap: onLikeButtonTapped,
             likeBuilder: (bool isLiked) {
-              return Image.asset(
-                isLiked ? 'assets/images/praised.png' : 'assets/images/praise.png',
-              );
+              return widget.likeWidget ??
+                  Image.asset(
+                    isLiked
+                        ? 'assets/images/praised.png'
+                        : 'assets/images/praise.png',
+                  );
             },
             likeCountPadding: EdgeInsets.only(left: 4.w),
-            countBuilder: (_, __, ___) => CountText(
+            countBuilder: (_, __, ___) =>widget.count.isEmpty? const SizedBox(): CountText(
               count: widget.count,
               usePlaceHolder: widget.usePlaceHolder,
             ),
@@ -228,7 +274,7 @@ class CountText extends StatelessWidget {
               child: Text(
                 '000.0M',
                 style: TextStyle(
-                  color:'#333333'.hexColor.withOpacity(0.7),
+                  color: '#333333'.hexColor.withOpacity(0.7),
                   fontSize: 12.sp,
                 ),
               ),
@@ -248,7 +294,7 @@ class CountText extends StatelessWidget {
         Text(
           count,
           style: TextStyle(
-            color:'#333333'.hexColor.withOpacity(0.7),
+            color: '#333333'.hexColor.withOpacity(0.7),
             fontSize: 12.sp,
           ),
         ),

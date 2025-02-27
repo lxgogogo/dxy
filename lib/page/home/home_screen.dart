@@ -11,6 +11,7 @@ import 'package:holdem/model/article.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/page/home/widgets/home_book_item.dart';
 import 'package:holdem/page/home/widgets/home_course_item.dart';
+import 'package:holdem/page/home/widgets/home_menu_animation.dart';
 import 'package:holdem/page/home/widgets/home_nemu_item.dart';
 import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -87,46 +88,38 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 ),
               ),
               Expanded(
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (ScrollNotification scrollNotification) {
-                    if (scrollNotification is! ScrollUpdateNotification) {
-                      return false;
-                    }
-                    final metrics = scrollNotification.metrics;
-                    if ([AxisDirection.up, AxisDirection.down].contains(metrics.axisDirection)) {
-                      controller.setPixels(metrics.pixels);
-                    }
-                    return false;
-                  },
-                  child: Stack(
-                    children: <Widget>[
-                      Assets.images.homeBanner.image(
-                        height: 272.w,
-                      ),
-                      SingleChildScrollView(
-                        controller: controller.scrollController,
-                        physics: const ClampingScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            SizedBox(height: 211.w),
-                            ClipRRect(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 100),
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                  decoration: BoxDecoration(
-                                    color: '#F3F8FF'.hexColor.withOpacity(0.7),
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(12.r),
-                                    ),
+                child: Stack(
+                  children: <Widget>[
+                    Assets.images.homeBanner.image(
+                      height: 272.w,
+                    ),
+                    SingleChildScrollView(
+                      controller: controller.scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          SizedBox(height: 211.w),
+                          ClipRRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 100),
+                                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                decoration: BoxDecoration(
+                                  color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(12.r),
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      SizedBox(height: 24.w),
-                                      LayoutBuilder(
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    SizedBox(height: 24.w),
+                                    AnimatedOpacity(
+                                      opacity: controller.isShowHomeMenu ? 0 : 1,
+                                      duration: const Duration(milliseconds: 300),
+                                      child: LayoutBuilder(
                                         builder: (BuildContext context, BoxConstraints constraints) {
                                           final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                           return Wrap(
@@ -161,146 +154,156 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           );
                                         },
                                       ),
-                                      SizedBox(height: 24.w),
-                                      HomeTitle(
-                                        title: '热门视频',
-                                        subtitle: GestureDetector(
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '换一批',
-                                                style: TextStyle(
-                                                  color: '#1E1E1E'.hexColor.withOpacity(0.5),
-                                                  fontSize: 12.sp,
-                                                ),
+                                    ),
+                                    SizedBox(height: 24.w),
+                                    HomeTitle(
+                                      title: '热门视频',
+                                      subtitle: GestureDetector(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '换一批',
+                                              style: TextStyle(
+                                                color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                                                fontSize: 12.sp,
                                               ),
-                                              SizedBox(width: 3.w),
-                                              SvgPicture.asset(
-                                                Assets.svg.iconRefresh,
-                                                width: 12.w,
-                                                height: 12.w,
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                            SizedBox(width: 3.w),
+                                            SvgPicture.asset(
+                                              Assets.svg.iconRefresh,
+                                              width: 12.w,
+                                              height: 12.w,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      SizedBox(height: 12.w),
-                                      LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                                          return Wrap(
-                                            spacing: 12.w,
-                                            runSpacing: 12.w,
-                                            children: controller.videoItems
-                                                .map((e) => SizedBox(
-                                                      width: itemWidth,
-                                                      child: VideoItem(item: e),
-                                                    ))
-                                                .toList(),
-                                          );
-                                        },
-                                      ),
-                                      SizedBox(height: 12.w),
-                                      HomeTitle(
-                                        title: '精彩视频',
-                                        onTap: controller.toVideoList,
-                                      ),
-                                      Column(
-                                        children: controller.videoItems
-                                            .map((e) => Padding(
-                                                  padding: EdgeInsets.only(top: 6.w),
-                                                  child: VideoHorizontalItem(item: e),
-                                                ))
-                                            .toList(),
-                                      ),
-                                      SizedBox(height: 24.w),
-                                      const HomeTitle(
-                                        title: '德州教程',
-                                        subtitle: SizedBox(),
-                                      ),
-                                      SizedBox(height: 12.w),
-                                      LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                                          return Wrap(
-                                            spacing: 12.w,
-                                            runSpacing: 12.w,
-                                            children: [
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course0.path,
-                                                title: '菜鸟上路',
-                                                subtitles: const [
-                                                  'GTO上手',
-                                                  '基础术语',
-                                                  '牌桌礼仪',
-                                                ],
-                                              ),
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course1.path,
-                                                title: '新手指导',
-                                                subtitles: const [
-                                                  '基础策略',
-                                                  '算牌技巧',
-                                                  '位置意识',
-                                                ],
-                                              ),
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course2.path,
-                                                title: '进阶教程',
-                                                subtitles: const [
-                                                  '进阶升华',
-                                                  '诈唬策略',
-                                                  '下注尺度',
-                                                ],
-                                              ),
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course3.path,
-                                                title: '职业打法',
-                                                subtitles: const [
-                                                  '多桌策略',
-                                                  '诈唬进阶',
-                                                  'GTO策略',
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                      SizedBox(height: 24.w),
-                                      const HomeTitle(title: '好书推荐'),
-                                      SizedBox(height: 12.w),
-                                      LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                                          return Wrap(
-                                            spacing: 12.w,
-                                            runSpacing: 12.w,
-                                            children: controller.bookItems
-                                                .map(
-                                                  (e) => HomeBookItem(
-                                                    itemWidth: itemWidth,
-                                                    item: e,
-                                                  ),
-                                                )
-                                                .toList(),
-                                          );
-                                        },
-                                      ),
-                                      SizedBox(height: 32.w),
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(height: 12.w),
+                                    LayoutBuilder(
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                        return Wrap(
+                                          spacing: 12.w,
+                                          runSpacing: 12.w,
+                                          children: controller.videoItems
+                                              .map((e) => SizedBox(
+                                                    width: itemWidth,
+                                                    child: VideoItem(item: e),
+                                                  ))
+                                              .toList(),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 12.w),
+                                    HomeTitle(
+                                      title: '精彩视频',
+                                      onTap: controller.toVideoList,
+                                    ),
+                                    Column(
+                                      children: controller.videoItems
+                                          .map((e) => Padding(
+                                                padding: EdgeInsets.only(top: 6.w),
+                                                child: VideoHorizontalItem(item: e),
+                                              ))
+                                          .toList(),
+                                    ),
+                                    SizedBox(height: 24.w),
+                                    const HomeTitle(
+                                      title: '德州教程',
+                                      subtitle: SizedBox(),
+                                    ),
+                                    SizedBox(height: 12.w),
+                                    LayoutBuilder(
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                        return Wrap(
+                                          spacing: 12.w,
+                                          runSpacing: 12.w,
+                                          children: [
+                                            HomeCourseItem(
+                                              itemWidth: itemWidth,
+                                              imagePath: Assets.images.course0.path,
+                                              title: '菜鸟上路',
+                                              subtitles: const [
+                                                'GTO上手',
+                                                '基础术语',
+                                                '牌桌礼仪',
+                                              ],
+                                            ),
+                                            HomeCourseItem(
+                                              itemWidth: itemWidth,
+                                              imagePath: Assets.images.course1.path,
+                                              title: '新手指导',
+                                              subtitles: const [
+                                                '基础策略',
+                                                '算牌技巧',
+                                                '位置意识',
+                                              ],
+                                            ),
+                                            HomeCourseItem(
+                                              itemWidth: itemWidth,
+                                              imagePath: Assets.images.course2.path,
+                                              title: '进阶教程',
+                                              subtitles: const [
+                                                '进阶升华',
+                                                '诈唬策略',
+                                                '下注尺度',
+                                              ],
+                                            ),
+                                            HomeCourseItem(
+                                              itemWidth: itemWidth,
+                                              imagePath: Assets.images.course3.path,
+                                              title: '职业打法',
+                                              subtitles: const [
+                                                '多桌策略',
+                                                '诈唬进阶',
+                                                'GTO策略',
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 24.w),
+                                    const HomeTitle(title: '好书推荐'),
+                                    SizedBox(height: 12.w),
+                                    LayoutBuilder(
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                        return Wrap(
+                                          spacing: 12.w,
+                                          runSpacing: 12.w,
+                                          children: controller.bookItems
+                                              .map(
+                                                (e) => HomeBookItem(
+                                                  itemWidth: itemWidth,
+                                                  item: e,
+                                                ),
+                                              )
+                                              .toList(),
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 32.w),
+                                  ],
                                 ),
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    if (controller.isShowHomeMenu)
+                      HomeMenuSlideAnimation(
+                          child: const HomeMenu(),
+                          onEnd: () {
+                            // _userEnterList.removeAt(0);
+                            // if (_userEnterList.isNotEmpty) {
+                            //   _currentUserEnter = _getUserInfo();
+                            //   setState(() {});
+                            // }
+                          }),
+                  ],
                 ),
               ),
             ],

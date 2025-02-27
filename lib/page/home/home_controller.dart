@@ -1,18 +1,13 @@
 part of 'home_screen.dart';
 
 class HomeController extends GetxController {
-  double pixels = 0;
-
   final ScrollController scrollController = ScrollController();
-
-  void setPixels(double p) {
-    pixels = p;
-    safeUpdate();
-  }
 
   List<ArticleBean> videoItems = [];
   List<IndexCategory> courseItems = [];
   List<ArticleBean> bookItems = [];
+
+  bool isShowHomeMenu = false;
 
   @override
   void onReady() {
@@ -20,6 +15,13 @@ class HomeController extends GetxController {
     loadCourses();
     loadBooks();
     super.onReady();
+    scrollController.addListener(() {
+      final isShow = scrollController.offset > (211.w + 24.w + 52.w + 24.w + 52.w - (12.w + 32.w + 12.w));
+      if (isShowHomeMenu != isShow) {
+        isShowHomeMenu = isShow;
+        safeUpdate();
+      }
+    });
   }
 
   Future<void> loadVideos() async {

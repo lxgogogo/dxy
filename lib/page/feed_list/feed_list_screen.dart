@@ -75,16 +75,10 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
     return BackgroundContainer(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            '论坛',
-            style: TextStyle(
-              color: const Color(0xff2c2c2c),
-              fontSize: 16.w,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          centerTitle: true,
           backgroundColor: Colors.transparent,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Image.asset(Assets.images.feedBg.path,fit: BoxFit.cover,),
+          ),
           // 设置导航条背景透明
           elevation: 0,
           actions: [

@@ -8,11 +8,36 @@ import 'like_button/like_button.dart';
 import 'package:badges/badges.dart' as badges;
 
 class CountComment extends StatelessWidget {
-  const CountComment(
-      {super.key,
-      required this.count,
-      this.usePlaceHolder = true,
-      this.iconWidget});
+  const CountComment({
+    super.key,
+    required this.count,
+    this.usePlaceHolder = true,
+  });
+
+  final String count;
+  final bool usePlaceHolder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            Assets.svg.iconComment,
+            width: 12.w,
+          ),
+          SizedBox(width: 6.w),
+          CountText(count: count, usePlaceHolder: usePlaceHolder),
+        ],
+      ),
+    );
+  }
+}
+
+class CountReply extends StatelessWidget {
+  const CountReply({super.key, required this.count, this.usePlaceHolder = true, this.iconWidget});
 
   final String count;
   final bool usePlaceHolder;
@@ -28,14 +53,14 @@ class CountComment extends StatelessWidget {
           iconWidget ??
               SvgPicture.asset(
                 Assets.svg.iconComment,
-                color: '##333333'.hexColor.withOpacity(0.7),
+                color: '#333333'.hexColor.withOpacity(0.7),
                 width: 14.w,
               ),
           SizedBox(width: 4.w),
           Text(
             '回复',
             style: TextStyle(
-              color: '##333333'.hexColor.withOpacity(0.7),
+              color: '#333333'.hexColor.withOpacity(0.7),
             ),
           )
           //  CountText(count: count, usePlaceHolder: usePlaceHolder),
@@ -72,7 +97,7 @@ class CountCommentBadge extends StatelessWidget {
         shape: badges.BadgeShape.square,
         badgeColor: Colors.white,
         borderRadius: BorderRadius.circular(50),
-        padding:  EdgeInsets.symmetric(horizontal: 4.w),
+        padding: EdgeInsets.symmetric(horizontal: 4.w),
         elevation: 0,
       ),
       child: iconWidget,
@@ -97,9 +122,7 @@ class CountFavorite extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          stared
-              ? SvgPicture.asset(Assets.svg.stared)
-              : SvgPicture.asset(Assets.svg.star),
+          stared ? SvgPicture.asset(Assets.svg.stared) : SvgPicture.asset(Assets.svg.star),
           SizedBox(width: 3.w),
           CountText(count: count),
         ],
@@ -206,16 +229,16 @@ class _CountLikeAniState extends State<CountLikeAni> {
             likeBuilder: (bool isLiked) {
               return widget.likeWidget ??
                   Image.asset(
-                    isLiked
-                        ? 'assets/images/praised.png'
-                        : 'assets/images/praise.png',
+                    isLiked ? 'assets/images/praised.png' : 'assets/images/praise.png',
                   );
             },
             likeCountPadding: EdgeInsets.only(left: 4.w),
-            countBuilder: (_, __, ___) =>widget.count.isEmpty? const SizedBox(): CountText(
-              count: widget.count,
-              usePlaceHolder: widget.usePlaceHolder,
-            ),
+            countBuilder: (_, __, ___) => widget.count.isEmpty
+                ? const SizedBox()
+                : CountText(
+                    count: widget.count,
+                    usePlaceHolder: widget.usePlaceHolder,
+                  ),
           ),
         ],
       ),
@@ -308,30 +331,89 @@ class SimpleCountText extends StatelessWidget {
     super.key,
     required this.count,
     required this.desc,
+    this.descStyle,
+    this.usePlaceHolder = false,
   });
 
   final String count;
   final String desc;
+  final TextStyle? descStyle;
+  final bool usePlaceHolder;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
       children: [
-        Text(
-          count,
-          style: TextStyle(
-            color: const Color(0xff999999),
-            fontSize: 12.sp,
+        if (usePlaceHolder) ...[
+          IgnorePointer(
+            child: Opacity(
+              opacity: 0,
+              child: Row(
+                children: [
+                  Text(
+                    '000.0M',
+                    style: TextStyle(
+                      color: '#333333'.hexColor.withOpacity(0.7),
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                  SizedBox(width: 2.w),
+                  Text(
+                    desc,
+                    style: descStyle ??
+                        TextStyle(
+                          color: const Color(0xff999999),
+                          fontSize: 12.sp,
+                        ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        SizedBox(width: 2.w),
-        Text(
-          desc,
-          style: TextStyle(
-            color: const Color(0xff999999),
-            fontSize: 12.sp,
+          Opacity(
+            opacity: 0,
+            child: Row(
+              children: [
+                Text(
+                  '000',
+                  style: TextStyle(
+                    color: const Color(0xff9CACC9),
+                    fontSize: 12.sp,
+                  ),
+                ),
+                SizedBox(width: 2.w),
+                Text(
+                  desc,
+                  style: descStyle ??
+                      TextStyle(
+                        color: const Color(0xff999999),
+                        fontSize: 12.sp,
+                      ),
+                ),
+              ],
+            ),
           ),
+        ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              count,
+              style: TextStyle(
+                color: const Color(0xff999999),
+                fontSize: 12.sp,
+              ),
+            ),
+            SizedBox(width: 2.w),
+            Text(
+              desc,
+              style: descStyle ??
+                  TextStyle(
+                    color: const Color(0xff999999),
+                    fontSize: 12.sp,
+                  ),
+            ),
+          ],
         ),
       ],
     );

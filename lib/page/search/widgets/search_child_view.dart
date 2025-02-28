@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/article.dart';
@@ -17,13 +18,15 @@ import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/count_widget.dart';
+import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_book.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/item_competition.dart';
 import 'package:holdem/widget/item_tag.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 part 'search_child_controller.dart';
@@ -81,11 +84,72 @@ class SearchChildView extends GetView<SearchChildView> {
 
   Widget _buildTagView(SearchChildController controller) {
     return controller.tagItems.isNotEmpty
-        ? ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
-            itemBuilder: (c, i) => TagItem(tag: controller.tagItems[i]),
+        ? ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            itemBuilder: (_, int index) => GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.searchTag, arguments: {
+                  'tag': tag,
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: 16.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: index < controller.tagItems.length - 1
+                          ? '#000000'.hexColor.withOpacity(0.05)
+                          : Colors.transparent,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        controller.tagItems[index].name ?? '',
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontSize: 16.sp,
+                        ),
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(width: 24.w),
+                    SimpleCountText(
+                      count: controller.tagItems[index].viewCount?.abbreviateNumber ?? '0',
+                      desc: '阅读',
+                      descStyle: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      usePlaceHolder: true,
+                    ),
+                    SimpleCountText(
+                      count: controller.tagItems[index].commentCount?.abbreviateNumber ?? '0',
+                      desc: '讨论',
+                      descStyle: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      usePlaceHolder: true,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.tagItems.length,
           )
+        // ? ListView.builder(
+        //     padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
+        //     itemBuilder: (c, i) => TagItem(tag: controller.tagItems[i]),
+        //     itemCount: controller.tagItems.length,
+        //   )
         : const NoDataView();
   }
 
@@ -154,112 +218,105 @@ class SearchChildView extends GetView<SearchChildView> {
 
   Widget _buildCourseView(SearchChildController controller) {
     return controller.courses.isNotEmpty
-        ? CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
-                sliver: DecoratedSliver(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12.r),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: 'b9d0e5'.hexColor.withOpacity(0.64),
-                        blurRadius: 2.r,
-                        offset: Offset(0, -1.w),
-                      ),
-                      BoxShadow(
-                        color: Colors.white,
-                        spreadRadius: 1.r,
-                        blurRadius: 2.r,
-                        offset: Offset(0, 1.w),
-                      ),
-                      BoxShadow(
-                        color: 'bfd2e2'.hexColor.withOpacity(0.81),
-                        blurRadius: 4.r,
-                        offset: Offset(0, 2.w),
-                      ),
-                      BoxShadow(
-                        color: 'f8fbff'.hexColor,
-                      ),
-                    ],
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
-                          },
-                          child: Container(
-                            height: 48.w,
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    color: index < controller.courses.length - 1
-                                        ? const Color(0xffe6e6e6)
-                                        : Colors.transparent),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    controller.courses[index].title ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                Image.asset(
-                                  'assets/images/arrow.png',
-                                  width: 6.w,
-                                  height: 10.w,
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: controller.courses.length,
+        ? ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            itemBuilder: (_, int index) => GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: 16.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: index < controller.courses.length - 1
+                          ? '#000000'.hexColor.withOpacity(0.05)
+                          : Colors.transparent,
                     ),
                   ),
                 ),
+                child: Text(
+                  controller.courses[index].title ?? '',
+                  style: TextStyle(
+                    color: '#333333'.hexColor,
+                    fontSize: 16.sp,
+                  ),
+                  softWrap: true,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ],
+            ),
+            separatorBuilder: (_, int index) => SizedBox(height: 16.w),
+            itemCount: controller.courses.length,
           )
         : const NoDataView();
   }
 
   Widget _buildBookView(SearchChildController controller) {
     return controller.articles.isNotEmpty
-        ? ListView.builder(
-            itemBuilder: (c, i) => BookItem(article: controller.articles[i]),
-            itemCount: controller.articles.length,
+        ? Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                return Wrap(
+                  spacing: 12.w,
+                  runSpacing: 12.w,
+                  children: controller.articles
+                      .map(
+                        (e) => ThreeDBookItem(
+                          itemWidth: itemWidth,
+                          item: e,
+                        ),
+                      )
+                      .toList(),
+                );
+              },
+            ),
           )
         : const NoDataView();
   }
 
   Widget _buildVideoView(SearchChildController controller) {
-    return controller.articles.isNotEmpty
-        ? GridView.builder(
-            padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.w,
-              mainAxisSpacing: 8.w,
-            ),
-            itemCount: controller.articles.length,
-            itemBuilder: (c, i) => VideoItem(item: controller.articles[i]),
-          )
-        : const NoDataView();
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      child: controller.articles.isNotEmpty
+          ? LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                return Wrap(
+                  spacing: 12.w,
+                  runSpacing: 12.w,
+                  children: controller.articles
+                      .map((e) => SizedBox(
+                            width: itemWidth,
+                            child: VideoItem(item: e),
+                          ))
+                      .toList(),
+                );
+              },
+            )
+          // ? GridView.builder(
+          //     padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
+          //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: 2,
+          //       crossAxisSpacing: 8.w,
+          //       mainAxisSpacing: 8.w,
+          //     ),
+          //     itemCount: controller.articles.length,
+          //     itemBuilder: (c, i) => VideoItem(item: controller.articles[i]),
+          //   )
+          : const NoDataView(),
+    );
   }
 
   Widget _buildNewsView(SearchChildController controller) {
     return controller.articles.isNotEmpty
-        ? ListView.builder(
-            itemBuilder: (c, i) => ArticleItem(article: controller.articles[i]),
+        ? ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            itemBuilder: (_, int index) => NewsItem(item: controller.articles[index]),
+            separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.articles.length,
           )
         : const NoDataView();

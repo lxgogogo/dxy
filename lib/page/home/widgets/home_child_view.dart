@@ -20,7 +20,7 @@ import 'package:holdem/page/home/widgets/home_marquee_widget.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_book.dart';
 import 'package:holdem/widget/item_course.dart';
 import 'package:holdem/widget/item_video.dart';
@@ -214,8 +214,8 @@ class HomeChildView extends StatelessWidget {
             ),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => ArticleItem(
-                  article: controller.articles[index],
+                (context, index) => NewsItem(
+                  item: controller.articles[index],
                 ),
                 childCount: controller.articles.length,
               ),

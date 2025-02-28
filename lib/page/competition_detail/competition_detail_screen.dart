@@ -8,7 +8,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/item_article.dart';
+import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_feed.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:intl/intl.dart';
@@ -233,7 +233,7 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     final item = competitionBean!.refArticleList![index];
-                    return ArticleItem(article: item);
+                    return NewsItem(item: item);
                   },
                   childCount: competitionBean!.refArticleList!.length,
                 ),

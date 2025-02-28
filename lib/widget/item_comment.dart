@@ -199,7 +199,7 @@ class _CommentItemState extends State<CommentItem> {
                           );
                         });
                       },
-                      child: CountComment(
+                      child: CountReply(
                         count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
                         usePlaceHolder: false,
                       ),

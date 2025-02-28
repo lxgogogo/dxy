@@ -7,8 +7,8 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 
-class HomeBookItem extends StatelessWidget {
-  const HomeBookItem({
+class ThreeDBookItem extends StatelessWidget {
+  const ThreeDBookItem({
     super.key,
     required this.itemWidth,
     required this.item,

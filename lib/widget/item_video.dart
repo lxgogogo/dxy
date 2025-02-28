@@ -30,86 +30,80 @@ class VideoItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            height: 96.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: item.cover ?? '',
-                  placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: ClipRRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                      child: Container(
-                        height: 22.w,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        decoration: BoxDecoration(
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12.r),
+            child: SizedBox(
+              height: 96.w,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: item.cover ?? '',
+                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: ClipRRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                        child: Container(
+                          height: 22.w,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
                           color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8.w),
+                          child: Row(
+                            children: [
+                              Assets.images.iconPlay.image(
+                                width: 10.w,
+                                height: 10.w,
+                              ),
+                              Text(
+                                '${item.viewCount?.abbreviateNumber ?? '0'}次播放',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 9.sp,
+                                ),
+                              ),
+                              const Spacer(),
+                              DurationText(
+                                durationInSeconds: item.duration ?? 0,
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Assets.images.iconPlay.image(
-                              width: 10.w,
-                              height: 10.w,
-                            ),
-                            Text(
-                              '${item.viewCount?.abbreviateNumber ?? '0'}次播放',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 9.sp,
-                              ),
-                            ),
-                            const Spacer(),
-                            DurationText(
-                              durationInSeconds: item.duration ?? 0,
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),
-                ),
-                if (item.type == 'videoList')
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      padding: EdgeInsets.all(4.w),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            '#557BF6'.hexColor,
-                            '#84BCF9'.hexColor,
-                          ],
+                  if (item.type == 'videoList')
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(4.w),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              '#557BF6'.hexColor,
+                              '#84BCF9'.hexColor,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(6.r)),
                         ),
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(6.r)),
-                      ),
-                      child: Text(
-                        '合集',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.sp,
+                        child: Text(
+                          '合集',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
           Padding(

@@ -9,7 +9,6 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/index_category.dart';
-import 'package:holdem/page/home/widgets/home_book_item.dart';
 import 'package:holdem/page/home/widgets/home_course_item.dart';
 import 'package:holdem/page/home/widgets/home_menu_animation.dart';
 import 'package:holdem/page/home/widgets/home_nemu_item.dart';
@@ -17,6 +16,7 @@ import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
+import 'package:holdem/widget/three_d_book_item.dart';
 
 part 'home_controller.dart';
 
@@ -275,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           runSpacing: 12.w,
                                           children: controller.bookItems
                                               .map(
-                                                (e) => HomeBookItem(
+                                                (e) => ThreeDBookItem(
                                                   itemWidth: itemWidth,
                                                   item: e,
                                                 ),

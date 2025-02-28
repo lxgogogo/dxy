@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -145,73 +146,64 @@ class SearchChildView extends GetView<SearchChildView> {
             separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.tagItems.length,
           )
-        // ? ListView.builder(
-        //     padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
-        //     itemBuilder: (c, i) => TagItem(tag: controller.tagItems[i]),
-        //     itemCount: controller.tagItems.length,
-        //   )
         : const NoDataView();
   }
 
   Widget _buildUserView(SearchChildController controller) {
     return controller.userItems.isNotEmpty
-        ? ListView.builder(
-            itemBuilder: (context, index) => Container(
-              height: 58.w,
-              margin: EdgeInsets.symmetric(horizontal: 18.w),
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(border: Border(bottom: BorderSide(color: const Color(0xffE6E6E6), width: 1.w))),
-              child: Row(children: [
-                BorderAvatar(avatar: controller.userItems[index].avatar ?? ''),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Text(
-                  controller.userItems[index].nickname!.isNotEmpty ? controller.userItems[index].nickname! : '',
-                  style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.w),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () => controller.onFollowUser(index),
-                  child: controller.userItems[index].followed == true
-                      ? Container(
-                          height: 28.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffd8d8d8),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: const Text(
-                            '已关注',
-                            style: TextStyle(
-                              color: Color(0xff95a3c4),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: 28.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: const Color(0xff249cfc),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: const Text(
-                            '+关注',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+        ? ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            itemBuilder: (context, index) {
+              final item = controller.userItems[index];
+              return Row(
+                children: [
+                  ClipOval(
+                    child: CachedNetworkImage(
+                      width: 36.w,
+                      height: 36.w,
+                      fit: BoxFit.cover,
+                      imageUrl: item.avatar ?? '',
+                      errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Text(
+                        item.nickname ?? '',
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
                         ),
-                ),
-              ]),
-            ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => controller.onFollowUser(index),
+                    child: Container(
+                      width: 70.w,
+                      height: 28.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: item.followed == true ? '#EBEBEB'.hexColor : '#557BF6'.hexColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                      child: Text(
+                        item.followed == true ? '已关注' : '关注',
+                        style: TextStyle(
+                          color: item.followed == true ? '#333333'.hexColor : '#557BF6'.hexColor,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
             itemCount: controller.userItems.length,
+            separatorBuilder: (_, __) => SizedBox(height: 16.w),
           )
         : const NoDataView();
   }

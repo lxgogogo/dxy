@@ -94,7 +94,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                                 .isMe(widget.viewParams.author?.id),
                             child: GestureDetector(
                               onTap: (){
-                                Get.find<FeedDetailController>().followToggle();
+                                Get.find<FeedDetailController>(tag: Get.arguments).followToggle();
                               },
                               child: widget.viewParams.author?.followed ==
                                   true

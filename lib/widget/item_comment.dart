@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
@@ -202,6 +203,11 @@ class _CommentItemState extends State<CommentItem> {
                       child: CountReply(
                         count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
                         usePlaceHolder: false,
+                        iconWidget: SvgPicture.asset(
+                          Assets.svg.feedComment,
+                          color: '#333333'.hexColor.withOpacity(0.7),
+                          width: 14.w,
+                        ),
                       ),
                     ),
 
@@ -306,7 +312,6 @@ class _CommentItemState extends State<CommentItem> {
                     ),
                     if ((widget.commentBean.replyCount ?? 0) > 2)
                       Container(
-                        height: 24.w,
                         margin: EdgeInsets.only(top: 10.w),
                         child: Row(
                           children: [
@@ -316,7 +321,7 @@ class _CommentItemState extends State<CommentItem> {
                                   getReplyList();
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 4.w),
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w,vertical: 5),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: const Color(0xfff2f4f6),

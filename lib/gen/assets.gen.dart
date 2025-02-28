@@ -667,6 +667,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/comment.svg
   String get comment => 'assets/svg/comment.svg';
 
+  /// File path: assets/svg/feed_comment.svg
+  String get feedComment => 'assets/svg/feed_comment.svg';
+
   /// File path: assets/svg/home_tag.svg
   String get homeTag => 'assets/svg/home_tag.svg';
 
@@ -763,6 +766,7 @@ class $AssetsSvgGen {
         arrowRight,
         clubs,
         comment,
+        feedComment,
         homeTag,
         iconClose,
         iconComment,

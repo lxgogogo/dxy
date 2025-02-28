@@ -232,7 +232,7 @@ class _CountLikeAniState extends State<CountLikeAni> {
                     isLiked ? 'assets/images/praised.png' : 'assets/images/praise.png',
                   );
             },
-            likeCountPadding: EdgeInsets.only(left: 4.w),
+            likeCountPadding: EdgeInsets.only(left: 0.w),
             countBuilder: (_, __, ___) => widget.count.isEmpty
                 ? const SizedBox()
                 : CountText(

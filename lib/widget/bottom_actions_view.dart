@@ -206,6 +206,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                     count: ''),
 
               ),
+              SizedBox(width: 6.w,)
             ],
           ),
         ),

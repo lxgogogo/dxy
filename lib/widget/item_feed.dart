@@ -12,6 +12,7 @@ import 'package:holdem/widget/item_comment.dart';
 
 import '../gen/assets.gen.dart';
 import '../model/board_list.dart';
+import '../utils/date_util.dart';
 import 'feed_more_action.dart';
 
 class FeedItem extends StatelessWidget {
@@ -43,10 +44,10 @@ class FeedItem extends StatelessWidget {
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w),
-        padding: EdgeInsets.only(top: 16.w , bottom: 12.w),
+        margin: EdgeInsets.only(left: 16.w,right: 16.w,bottom: 16.w),
+        padding: EdgeInsets.only(bottom: 16.w),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: '#E6E6E6'.hexColor)),
+          border: Border(bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,7 +58,7 @@ class FeedItem extends StatelessWidget {
                   child: Text(
                     item.title ?? '',
                     style: TextStyle(
-                      color: const Color(0xff2a2a2a),
+                      color: '#333333'.hexColor,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
@@ -67,7 +68,8 @@ class FeedItem extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 4.w),
-                if ((onShield != null || onShieldUser != null) && !UserStore.of.isMe(item.user?.id))
+                if ((onShield != null || onShieldUser != null) &&
+                    !UserStore.of.isMe(item.user?.id))
                   FeedMoreAction(
                     onShield: onShield,
                     onShieldUser: onShieldUser,
@@ -86,9 +88,9 @@ class FeedItem extends StatelessWidget {
                       Text(
                         item.user?.nickname ?? '',
                         style: TextStyle(
-                          color: '#2A2A2A'.hexColor,
+                          color: '#535861'.hexColor,
                           fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (item.sign?.isNotEmpty == true) tagWidget(item.sign!),
@@ -105,7 +107,7 @@ class FeedItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: '#696969'.hexColor,
+                  color: '#333333'.hexColor.withOpacity(0.8),
                 ),
                 softWrap: true,
               ),
@@ -133,9 +135,12 @@ class FeedItem extends StatelessWidget {
                               imageUrl: getFilesUrl(fileItem),
                               fit: BoxFit.cover,
                               width: double.infinity,
-                              placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                              errorWidget: (context, url, error) =>
-                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                              placeholder: (context, url) => Assets
+                                  .images.imageLoadingDef
+                                  .image(fit: BoxFit.fill),
+                              errorWidget: (context, url, error) => Assets
+                                  .images.imageLoadingDef
+                                  .image(fit: BoxFit.fill),
                             ),
                             if (fileItem.type == 'video')
                               Center(
@@ -152,13 +157,17 @@ class FeedItem extends StatelessWidget {
                 ),
               ),
             SizedBox(height: 8.w),
-            Row(
-              children: [
-                CountLike(count: item.likeCount?.abbreviateNumber ?? '0'),
-                CountComment(count: item.commentCount?.abbreviateNumber ?? '0'),
-                CountFavorite(count: item.favoriteCount?.abbreviateNumber ?? '0'),
-                CountShare(count: item.shareCount?.abbreviateNumber ?? '0'),
-              ],
+            Text(
+              [
+                '${DateUtil.formatDateAlias(item.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布    '
+                    '${item.likeCount?.abbreviateNumber ?? '0'}点赞',
+                '${item.commentCount?.abbreviateNumber ?? '0'}评论',
+                '${item.favoriteCount?.abbreviateNumber ?? '0'}收藏',
+              ].join(' · '),
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: '#333333'.hexColor.withOpacity(0.8),
+              ),
             ),
           ],
         ),
@@ -170,20 +179,20 @@ class FeedItem extends StatelessWidget {
     String hex;
     String text;
     if (sign.contains('office')) {
-      hex = '249CFC';
+      hex = '557BF6';
       text = '官方贴';
     } else if (sign.contains('boutique')) {
-      hex = '#FF6700';
+      hex = '#F69555';
       text = '精品贴';
     } else if (sign.contains('newbie')) {
-      hex = '#3CCB78';
+      hex = '36CA76';
       text = '新人贴';
     } else {
       return const SizedBox();
     }
     return Container(
       margin: EdgeInsets.only(left: 4.w),
-      padding: EdgeInsets.fromLTRB(2.5.w, 1.w, 2.5.w, 1.w),
+      padding: EdgeInsets.fromLTRB(6.w, 2.w, 6.w, 2.w),
       decoration: BoxDecoration(
         color: hex.hexColor,
         borderRadius: BorderRadius.circular(4.r),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../stores/user_store.dart';
@@ -46,7 +47,7 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
       barrierColor: Colors.transparent,
       right: 16.w,
       content: Container(
-        width: 90.w,
+        width: 84.w,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(10.r)),
@@ -88,16 +89,17 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
                 child: Text(
                   item,
                   style: TextStyle(
-                    color: const Color(0xff249cfc),
-                    fontSize: 14.sp,
+                    color:'#333333'.hexColor,
+                    fontSize: 12.sp,
                   ),
                 ),
               ),
             );
           },
           separatorBuilder: (_, __) => Container(
-            color: const Color(0xffe7f0fa),
-            height: 0.5,
+            margin: EdgeInsets.symmetric(horizontal: 12.w),
+            color: '#333333'.hexColor.withOpacity(0.1),
+            height: 1,
           ),
         ),
       ),

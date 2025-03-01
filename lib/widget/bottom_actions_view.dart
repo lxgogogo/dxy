@@ -48,7 +48,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           ),
         Container(
           height: 88.w,
-          padding: EdgeInsets.only(top: 16.w),
+          padding: EdgeInsets.only(top: 10.w),
           decoration: BoxDecoration(
               color: Colors.white,
               // borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
@@ -59,7 +59,32 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           child: Row(
             children: <Widget>[
               SizedBox(width: 17.w),
-              SizedBox(
+              if(widget.viewParams.relType ==NetRequest.COMMENT_TYPE_CONTENT)
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    height: 30.w,
+                    padding: EdgeInsets.only(left: 12.w),
+                    decoration: BoxDecoration(
+                      color: '#333333'
+                          .hexColor
+                          .withOpacity(0.05),
+                      borderRadius:
+                      BorderRadius.circular(15),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '说点什么吧...',
+                      style: TextStyle(
+                        fontSize: 12,
+                          color: '#333333'
+                              .hexColor
+                              .withOpacity(0.5)),
+                    ),
+                  ),
+                )
+              else
+                SizedBox(
                // width: 100.w,
                 child: GestureDetector(
                   onTap: _pushComment,
@@ -133,8 +158,6 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                   ),
                 ),
               ),
-              const Spacer(),
-              SizedBox(width: 8.w),
             //  if (widget.viewParams.relType == 'thread')
                 // CountCommentBadge(
                 //   count: widget.viewParams.likeCount.abbreviateNumber,
@@ -153,7 +176,9 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                 //     ),
                 //   ),
                 // ),
-                if (widget.viewParams.relType == 'thread')
+              const Spacer(),
+              SizedBox(width: 8.w),
+               // if (widget.viewParams.relType == 'thread')
                   GestureDetector(
                     onTap: _likeToggle,
                     child: CountCommentBadge(

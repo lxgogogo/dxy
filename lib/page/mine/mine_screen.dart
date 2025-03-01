@@ -83,7 +83,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 Get.toNamed(Routes.following, arguments: true);
                               },
                               child: Text(
-                                '${controller.userProfile?.followedCount.abbreviateNumber ?? '0'} 关注',
+                                '关注 ${controller.userProfile?.followedCount.abbreviateNumber ?? '0'}',
                                 style: TextStyle(
                                   color: const Color(0xff6B6D70),
                                   fontSize: 12.sp,
@@ -96,7 +96,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 Get.toNamed(Routes.following, arguments: false);
                               },
                               child: Text(
-                                '${controller.userProfile?.fansCount.abbreviateNumber ?? '0'} 粉丝',
+                                '粉丝 ${controller.userProfile?.fansCount.abbreviateNumber ?? '0'}',
                                 style: TextStyle(
                                   color: const Color(0xff6B6D70),
                                   fontSize: 12.sp,

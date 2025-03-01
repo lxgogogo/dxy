@@ -33,7 +33,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
     Tab(text: '提到了我'),
   ];
   final List<String> tabs = ['@我的', '评论我的', '赞我的', '收藏'];
-  final List<String> types = ['at', 'comment', 'like', 'favorite'];
+  final List<String> types = [ 'comment', 'like', 'favorite','at',];
   final _pageKey = GlobalKey<MessageChildViewState>();
 
   @override

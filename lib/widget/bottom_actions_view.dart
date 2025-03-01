@@ -324,7 +324,7 @@ class TagListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only(bottom: 24.w),
+      margin: EdgeInsets.symmetric(vertical: 12.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

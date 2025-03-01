@@ -120,6 +120,7 @@ class DynamicTabBarWidget extends TabBar {
   /// By default [clipBehavior] is Clip.hardEdge.
   final Clip clipBehaviorTabBarView;
 
+
   DynamicTabBarWidget({
     super.key,
     required this.dynamicTabs,
@@ -187,8 +188,7 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _tabController =
-        getTabController(initialIndex: widget.dynamicTabs.length - 1);
+    _tabController = getTabController(initialIndex: 0);
     if (_tabController != null) {
       widget.onTabControllerUpdated.call(_tabController!);
     }
@@ -306,14 +306,9 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
       child: DefaultTabController(
         length: widget.dynamicTabs.length,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
               children: [
                 if (widget.leading != null) widget.leading!,
                 if (widget.isScrollable == true && widget.showBackIcon == true)
@@ -360,7 +355,7 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
                           tabAlignment: widget.tabAlignment,
                         ),
                 ),
-                if (widget.showNextIcon == true)
+                if (widget.showNextIcon == true&&widget.isScrollable)
                   IconButton(
                     icon: widget.nextIcon ??
                         const Icon(

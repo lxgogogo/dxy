@@ -79,7 +79,7 @@ class MessageChildViewState extends State<MessageChildView> {
           'type': strType,
         },
       },
-      showLoading: showLoading,
+      showLoading: false,
       (data) {
         MessageList boardList = MessageList.fromJson(data);
         if (mounted) {

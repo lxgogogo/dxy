@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/utils/constants.dart';
 import 'package:holdem/utils/log_util.dart';
@@ -25,10 +27,10 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
   int selIndex = 0;
 
   final List<Tab> myTabs = const <Tab>[
-    Tab(text: '@我的'),
-    Tab(text: '评论我的'),
-    Tab(text: '赞我的'),
-    Tab(text: '收藏'),
+    Tab(text: '评论了我'),
+    Tab(text: '点赞了我'),
+    Tab(text: '收藏了我'),
+    Tab(text: '提到了我'),
   ];
   final List<String> tabs = ['@我的', '评论我的', '赞我的', '收藏'];
   final List<String> types = ['at', 'comment', 'like', 'favorite'];
@@ -41,7 +43,27 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       parentTabs.add(TabData(
         index: i,
         title: Tab(
-          child: Text(myTabs[i].text.toString()),
+          child: Stack(
+            children: [
+              Container(
+                  padding: EdgeInsets.only(right: 4.w),
+                  child: Center(child: Text(myTabs[i].text.toString()))),
+              Visibility(
+                visible: false,
+                child: Positioned(
+                    right: 1,
+                    top:10,
+                    child: Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFFFF3232),
+                    shape: OvalBorder(),
+                  ),
+                )),
+              )
+            ],
+          ),
           // child: Text(myTabs[i].text.toString()),
         ),
         content: MessageChildView(type: types[i]),
@@ -55,15 +77,15 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       dynamicTabs: parentTabs,
       isScrollable: true,
       showBackIcon: false,
-      showNextIcon: true,
+      showNextIcon: false,
       padding: EdgeInsets.zero,
-      labelPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      labelPadding: const EdgeInsets.fromLTRB(16, 0, 10, 0),
       indicatorColor: '#557BF6'.hexColor,
-      indicatorPadding: const EdgeInsets.symmetric(horizontal:15,vertical:5),
+      indicatorPadding: const EdgeInsets.symmetric(horizontal:35,vertical:5),
       indicatorSize: TabBarIndicatorSize.tab,
       tabAlignment: TabAlignment.start,
       //底部下标颜色
-      enableFeedback: false,
+      enableFeedback: true,
       dividerHeight: 0,
       labelStyle: TextStyle(height: 1, color: '#333333'.hexColor, fontSize: 14.w, fontWeight: FontWeight.w600),
       unselectedLabelStyle:
@@ -74,6 +96,13 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
           selIndex = index!;
         });
       },
+      trailing: GestureDetector(
+        onTap: (){},
+        child: Container(
+          margin: EdgeInsets.only(right: 16.w,bottom: 5.w),
+          alignment: Alignment.centerRight,
+            child: SvgPicture.asset(Assets.svg.messageClean)),
+      ),
       onTabControllerUpdated: (TabController) {},
     );
   }

@@ -110,7 +110,7 @@ class NetRequest {
   }
 
   Future messageList(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.messageList, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.messageList, params: params,showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);

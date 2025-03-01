@@ -715,6 +715,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/liked.svg
   String get liked => 'assets/svg/liked.svg';
 
+  /// File path: assets/svg/message_clean.svg
+  String get messageClean => 'assets/svg/message_clean.svg';
+
   /// File path: assets/svg/nav_icon_feed.svg
   String get navIconFeed => 'assets/svg/nav_icon_feed.svg';
 
@@ -782,6 +785,7 @@ class $AssetsSvgGen {
         iconWarning,
         like,
         liked,
+        messageClean,
         navIconFeed,
         navIconFeedAct,
         navIconHome,

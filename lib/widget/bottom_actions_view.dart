@@ -62,24 +62,34 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
               if(widget.viewParams.relType ==NetRequest.COMMENT_TYPE_CONTENT)
                 Expanded(
                   flex: 2,
-                  child: Container(
-                    height: 30.w,
-                    padding: EdgeInsets.only(left: 12.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'
-                          .hexColor
-                          .withOpacity(0.05),
-                      borderRadius:
-                      BorderRadius.circular(15),
-                    ),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '说点什么吧...',
-                      style: TextStyle(
-                        fontSize: 12,
-                          color: '#333333'
-                              .hexColor
-                              .withOpacity(0.5)),
+                  child: GestureDetector(
+                    onTap: (){
+                      UserStore.of.checkLogin(() {
+                        Get.toNamed(Routes.publishComment, arguments: {
+                          'relType':widget.viewParams.relType,
+                          'relId':widget.viewParams.relId,
+                        });
+                      });
+                    },
+                    child: Container(
+                      height: 30.w,
+                      padding: EdgeInsets.only(left: 12.w),
+                      decoration: BoxDecoration(
+                        color: '#333333'
+                            .hexColor
+                            .withOpacity(0.05),
+                        borderRadius:
+                        BorderRadius.circular(15),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '说点什么吧...',
+                        style: TextStyle(
+                          fontSize: 12,
+                            color: '#333333'
+                                .hexColor
+                                .withOpacity(0.5)),
+                      ),
                     ),
                   ),
                 )

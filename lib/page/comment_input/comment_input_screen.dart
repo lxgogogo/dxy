@@ -47,59 +47,68 @@ class CommentInputScreen extends GetView<CommentInputController> {
                   Expanded(
                     child: Container(
                       constraints: BoxConstraints(minHeight: 56.w, maxHeight: 120.w),
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
-                      decoration: BoxDecoration(
-                        color: '#95a3c4'.hexColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                      clipBehavior: Clip.antiAlias,
+                      padding: EdgeInsets.symmetric( vertical: 8.w),
+
                       child: QuillEditor.basic(
                         controller: controller.quillController,
                         config: QuillEditorConfig(
                           showCursor: true,
                           embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                          placeholder: '说点什么吧...',
+                          customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
+                              TextStyle(
+                                fontSize: 14,
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                              ),
+                              HorizontalSpacing.zero,
+                              VerticalSpacing.zero,
+                              VerticalSpacing.zero,
+                              null))),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(width: 10.w),
+
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      final result = await Get.toNamed(Routes.atUser);
+                      if (result != null) {
+                        controller.quillController.insertAtBlock(data: json.encode(result));
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Text(
+                        '@',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ),
+                  ),
                   GestureDetector(
                     onTap: controller.submit,
                     child: Container(
                       width: 50.5.w,
                       height: 24.w,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
-                        color: '#249cfc'.hexColor/*.withOpacity(controller.canSend ? 1 : 0.5)*/,
-                      ),
                       child: Text(
                         '发布',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: '#557BF6'.hexColor,
+                          fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
                         ),
                       ),
                     ),
                   ),
                 ],
-              ),
-              GestureDetector(
-                onTap: () async {
-                  final result = await Get.toNamed(Routes.atUser);
-                  if (result != null) {
-                    controller.quillController.insertAtBlock(data: json.encode(result));
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: Text(
-                    '@',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),

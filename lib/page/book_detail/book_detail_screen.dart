@@ -216,7 +216,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                         '下载资源',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 10.sp,
+                                          fontSize: 16.sp,
                                         ),
                                       ),
                                     ),

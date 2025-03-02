@@ -15,6 +15,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
 
 import '../model/user.dart';
+import '../page/comment_publish/comment_publish_screen.dart';
 import '../page/feed_detail/feed_detail_screen.dart';
 import '../page/mine/login_helper.dart';
 import '../utils/toast_utils.dart';
@@ -65,10 +66,13 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                   child: GestureDetector(
                     onTap: (){
                       UserStore.of.checkLogin(() {
-                        Get.toNamed(Routes.publishComment, arguments: {
-                          'relType':widget.viewParams.relType,
-                          'relId':widget.viewParams.relId,
-                        });
+                        Get.bottomSheet(
+                          isScrollControlled: true,
+                          CommentPublishScreen(
+                            relType:  widget.viewParams.relType!,
+                            relId:widget.viewParams.relId!,
+                          ),
+                        );
                       });
                     },
                     child: Container(

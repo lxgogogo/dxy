@@ -78,7 +78,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       isScrollable: true,
       showBackIcon: false,
       showNextIcon: false,
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.only(bottom: 12.w),
       labelPadding: const EdgeInsets.fromLTRB(16, 0, 10, 0),
       indicatorColor: '#557BF6'.hexColor,
       indicatorPadding: const EdgeInsets.symmetric(horizontal:35,vertical:5),
@@ -99,7 +99,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       trailing: GestureDetector(
         onTap: (){},
         child: Container(
-          margin: EdgeInsets.only(right: 16.w,bottom: 5.w),
+          margin: EdgeInsets.only(right: 16.w,bottom: 15.w),
           alignment: Alignment.centerRight,
             child: SvgPicture.asset(Assets.svg.messageClean)),
       ),

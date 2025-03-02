@@ -113,30 +113,6 @@ class MessageChildViewState extends State<MessageChildView> {
       constraints: BoxConstraints(
         minHeight: MediaQuery.sizeOf(context).height,
       ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-        boxShadow: [
-          BoxShadow(
-            color: '#b9d0e5'.hexColor.withOpacity(0.64),
-            blurRadius: 2.r,
-            offset: Offset(0, -1.w),
-          ),
-          BoxShadow(
-            color: Colors.white,
-            spreadRadius: 1.r,
-            blurRadius: 2.r,
-            offset: Offset(0, 1.w),
-          ),
-          BoxShadow(
-            color: '#bfd2e2'.hexColor.withOpacity(0.81),
-            blurRadius: 4.r,
-            offset: Offset(0, 2.w),
-          ),
-          BoxShadow(
-            color: '#f8fbff'.hexColor,
-          ),
-        ],
-      ),
       child: content(),
     );
   }
@@ -164,8 +140,8 @@ class MessageChildViewState extends State<MessageChildView> {
               itemCount: messages.length,
               separatorBuilder: (BuildContext context, int index) {
                 return Container(
-                  margin: EdgeInsets.symmetric(vertical: 12.w),
-                  color: const Color(0xffE7EDEE),
+                  margin: EdgeInsets.symmetric(vertical: 12.w,horizontal: 16.w),
+                  color: '#000000'.hexColor.withOpacity(0.05),
                   height: 1.w,
                 );
               },

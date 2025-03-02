@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/comment_publish/comment_publish_screen.dart';
 import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -148,12 +149,14 @@ class FeedDetailScreen extends StatelessWidget {
                               SizedBox(height: 10.w),
                               GestureDetector(
                                 onTap: (){
-
                                     UserStore.of.checkLogin(() {
-                                      Get.toNamed(Routes.publishComment, arguments: {
-                                        'relType': NetRequest.COMMENT_TYPE_THREAD,
-                                        'relId': controller.id,
-                                      });
+                                      Get.bottomSheet(
+                                        isScrollControlled: true,
+                                        CommentPublishScreen(
+                                          relType:  NetRequest.COMMENT_TYPE_THREAD,
+                                          relId: controller.id!,
+                                        ),
+                                      );
                                     });
 
                                 },

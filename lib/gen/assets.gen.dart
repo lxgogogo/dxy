@@ -661,6 +661,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_right.svg
   String get arrowRight => 'assets/svg/arrow_right.svg';
 
+  /// File path: assets/svg/close_black.svg
+  String get closeBlack => 'assets/svg/close_black.svg';
+
   /// File path: assets/svg/clubs.svg
   String get clubs => 'assets/svg/clubs.svg';
 
@@ -708,6 +711,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
+
+  /// File path: assets/svg/input_image.svg
+  String get inputImage => 'assets/svg/input_image.svg';
 
   /// File path: assets/svg/like.svg
   String get like => 'assets/svg/like.svg';
@@ -767,6 +773,7 @@ class $AssetsSvgGen {
   List<String> get values => [
         arrowLeft,
         arrowRight,
+        closeBlack,
         clubs,
         comment,
         feedComment,
@@ -783,6 +790,7 @@ class $AssetsSvgGen {
         iconSearchHistory,
         iconSetting,
         iconWarning,
+        inputImage,
         like,
         liked,
         messageClean,

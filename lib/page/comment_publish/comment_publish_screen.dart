@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
@@ -45,116 +46,128 @@ import '../../utils/net_request.dart';
 part 'comment_publish_controller.dart';
 
 class CommentPublishScreen extends GetView<CommentPublishController> {
-  const CommentPublishScreen({super.key});
-
+  const CommentPublishScreen({super.key,required this.relType,required this.relId});
+  final String relType;
+  final int relId;
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CommentPublishController>(
-      init: CommentPublishController(),
+      init: CommentPublishController(relType, relId),
       builder: (logic) {
-        return BackgroundContainer(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.transparent,
-            appBar: CommonAppBar.arrowBack(
-              context,
-              actions: [
-                GestureDetector(
-                  onTap: () {
-                    CommonUtils.getDebouncer('publishComment').run(() {
-                      controller.submit();
-                    });
-                  },
-                  child: Container(
-                    width: 50.5.w,
-                    height: 24.w,
-                    margin: EdgeInsets.only(right: 10.w),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.r),
-                      color: '#249cfc'.hexColor,
-                    ),
-                    child: Text(
-                      '发布',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.sp,
+        return Container(
+          margin: EdgeInsets.only(top: 12.w,),
+          // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height/2+MediaQuery.of(context).viewInsets.bottom),
+          decoration: const BoxDecoration(
+            color: Color(0xfff2f9ff),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(12),
+            ),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFF6FBFF),
+                Color(0xFFE8F3FF),
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 18.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  constraints: BoxConstraints(minHeight: 150.w),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.w),
+                    child: QuillEditor.basic(
+                      controller: controller.quillController,
+                      focusNode: controller.focusNode,
+                      config: QuillEditorConfig(
+                        showCursor: true,
+                        embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                        placeholder: '说点什么吧...',
+                        customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
+                            TextStyle(
+                              fontSize: 14,
+                              color: '#333333'.hexColor.withOpacity(0.7),
+                            ),
+                            HorizontalSpacing.zero,
+                            VerticalSpacing.zero,
+                            VerticalSpacing.zero,
+                            null))),
                       ),
                     ),
                   ),
                 ),
+                SizedBox(height: 12.w),
+                imageGallery(),
+                buildBottomToolbar(context),
               ],
-            ),
-            body: Container(
-              margin: EdgeInsets.only(top: 12.w),
-              decoration: const BoxDecoration(
-                color: Color(0xfff2f9ff),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(12),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFF6FBFF),
-                    Color(0xFFE8F3FF),
-                  ],
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 150.w,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.w),
-                        child: QuillEditor.basic(
-                          controller: controller.quillController,
-                          focusNode: controller.focusNode,
-                          config: QuillEditorConfig(
-                            showCursor: true,
-                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                            placeholder: '请输入正文（建议10-2000字）',
-                            customStyles: DefaultStyles(
-                              placeHolder: DefaultTextBlockStyle(
-                                DefaultTextStyle.of(context).style.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: '#2c2c2c'.hexColor.withOpacity(0.5),
-                                  height: 1.5,
-                                ),
-                                const HorizontalSpacing(0, 0),
-                                VerticalSpacing.zero,
-                                VerticalSpacing.zero,
-                                null,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '最多9张图片',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: const Color(0xff2a2a2a).withOpacity(0.5),
-                      ),
-                    ),
-                    SizedBox(height: 12.w),
-                    Expanded(child: _mediaShowView()),
-                    buildBottomToolbar(context),
-                  ],
-                ),
-              ),
             ),
           ),
         );
       },
     );
   }
+  Widget imageGallery(){
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        padding:  EdgeInsets.symmetric(vertical: 12.w),
+        child: Row(
+         children:  controller.imageData
+              .map(
+                (filePath) => Row(
+                  children: [
+                    SizedBox(
+                      width: 70.w,
+                      height: 70.w,
+                      child: Stack(
+                                      key: ValueKey(filePath),
+                                      fit: StackFit.expand,
+                                      children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(6),
+                          ),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.file(
+                          File(filePath),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: GestureDetector(
+                          onTap: () => controller.deleteMediaItem(filePath),
+                          behavior: HitTestBehavior.translucent,
+                          child: Padding(
+                            padding: EdgeInsets.all(4.w),
+                            child: SvgPicture.asset(
+                              Assets.svg.closeBlack,
+                              width: 12.w,
+                              height: 12.w,
+                            ),
+                          ),
+                        ),
+                      ),
+                                      ],
+                                    ),
+                    ),
+                    SizedBox(width: 8.w,)
+                  ],
+                ),
 
+          )
+              .toList(),
+        ),
+      ),
+    );
+  }
   Widget _mediaShowView() {
     return ReorderableGridView.count(
       shrinkWrap: true,
@@ -208,8 +221,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
 
   Widget buildBottomToolbar(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.w),
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(top: 4.w,bottom: 30.w),
       decoration: const BoxDecoration(
         border: Border.symmetric(
           horizontal: BorderSide(color: Color(0xffe6e6e6)),
@@ -226,11 +238,9 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
               controller.openFilePicker();
             },
             child: Container(
-              width: 44.w,
-              height: 44.w,
-              alignment: Alignment.center,
-              child: Image.asset(
-                Assets.images.inputImage.path,
+              margin: EdgeInsets.only(right: 16.w,),
+              child: SvgPicture.asset(
+                Assets.svg.inputImage,
                 width: 20.w,
                 height: 20.w,
               ),
@@ -243,14 +253,32 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                 controller.quillController.insertAtBlock(data: json.encode(result));
               }
             },
+            child: Text(
+              '@',
+              style: TextStyle(
+                fontSize: 16.sp,
+                color: '#333333'.hexColor.withOpacity(0.7)
+              ),
+            ),
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              CommonUtils.getDebouncer('publishComment').run(() {
+                controller.submit();
+              });
+            },
             child: Container(
-              width: 44.w,
-              height: 44.w,
+
+              height: 24.w,
+             // margin: EdgeInsets.only(right: 10.w),
               alignment: Alignment.center,
               child: Text(
-                '@',
+                '发布',
                 style: TextStyle(
-                  fontSize: 20.sp,
+                  color: '#557BF6'.hexColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
                 ),
               ),
             ),

@@ -4,12 +4,14 @@ class CommentPublishController extends GetxController {
   late String relType;
   late int relId;
 
-  @override
-  void onInit() {
-    relType = Get.arguments['relType'] as String? ?? '';
-    relId = Get.arguments['relId'] as int? ?? 0;
-    super.onInit();
-  }
+  CommentPublishController(this.relType,this.relId);
+
+  // @override
+  // void onInit() {
+  //   relType = Get.arguments['relType'] as String? ?? '';
+  //   relId = Get.arguments['relId'] as int? ?? 0;
+  //   super.onInit();
+  // }
 
   final QuillController quillController = QuillController.basic();
   final FocusNode focusNode = FocusNode();

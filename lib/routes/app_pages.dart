@@ -82,10 +82,10 @@ class AppPages {
       name: Routes.atUser,
       page: () => const AtUserScreen(),
     ),
-    GetPage(
-      name: Routes.publishComment,
-      page: () => const CommentPublishScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.publishComment,
+    //   page: () => const CommentPublishScreen(),
+    // ),
     GetPage(
       name: Routes.inputComment,
       page: () {

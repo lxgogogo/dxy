@@ -254,7 +254,7 @@ class DateUtil {
 
   //格式化时间前缀 （xx分钟/小时前）/（今天/明天/昨天/(x月x日) xx:xx 星期x）
   static String formatDateAlias(int date,
-      {bool hasBefore = false,
+      {bool hasBefore = true,
       bool hasMDText = false,
       bool onlyMDText = false,
       bool hasHM = false,

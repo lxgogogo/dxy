@@ -205,28 +205,28 @@ class MessageCommonItem extends StatelessWidget {
               ],
             ),
           ),
-          if(isFavorite)
-          Container(
-            width: 70,
-            height: 28,
-            decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(width: 1, color: Color(0xFF557BF6)),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            child:const Center(
-              child: Text(
-                '回关',
-                style: TextStyle(
-                  color: Color(0xFF557BF6),
-                  fontSize: 12,
-                  fontFamily: 'PingFang SC',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ) ,
-          )
+          // if(isFavorite)
+          // Container(
+          //   width: 70,
+          //   height: 28,
+          //   decoration: ShapeDecoration(
+          //     shape: RoundedRectangleBorder(
+          //       side: const BorderSide(width: 1, color: Color(0xFF557BF6)),
+          //       borderRadius: BorderRadius.circular(4),
+          //     ),
+          //   ),
+          //   child:const Center(
+          //     child: Text(
+          //       '回关',
+          //       style: TextStyle(
+          //         color: Color(0xFF557BF6),
+          //         fontSize: 12,
+          //         fontFamily: 'PingFang SC',
+          //         fontWeight: FontWeight.w600,
+          //       ),
+          //     ),
+          //   ) ,
+          // )
         ],
       ),
     );

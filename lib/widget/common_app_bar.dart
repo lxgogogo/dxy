@@ -6,6 +6,7 @@ class CommonAppBar {
   static AppBar arrowBack(
     BuildContext context, {
     String title = '',
+        TextStyle ? titleStyle,
     VoidCallback? onBack,
     List<Widget>? actions,
     double? elevation,
@@ -22,7 +23,7 @@ class CommonAppBar {
       AppBar(
         title: Text(
           title,
-          style: TextStyle(
+          style: titleStyle??TextStyle(
             color: const Color(0xff2c2c2c),
             fontSize: 16.sp,
             fontWeight: FontWeight.w500,

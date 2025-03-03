@@ -36,92 +36,74 @@ class FeedPostScreen extends GetView<FeedPostController> {
     return GetBuilder<FeedPostController>(
       init: FeedPostController(),
       builder: (_) {
-        return BackgroundContainer(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            resizeToAvoidBottomInset: false,
-            appBar: CommonAppBar.arrowBack(
-              context,
-              title: '发帖',
-              actions: [
-                GestureDetector(
-                  onTap: controller.publishPosts,
-                  child: Container(
-                    height: 24.w,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    margin: EdgeInsets.only(right: 10.w),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.r),
-                      color: '#249cfc'.hexColor,
-                    ),
-                    child: Text(
-                      '发布',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            body: Container(
-              margin: EdgeInsets.only(top: 12.w),
-              padding: EdgeInsets.only(
-                bottom: ScreenUtil().bottomBarHeight,
-              ),
-              decoration: const BoxDecoration(
-                color: Color(0xfff2f9ff),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(12),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFF6FBFF),
-                    Color(0xFFE8F3FF),
-                  ],
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    buildTitleInput(),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.w),
-                        child: QuillEditor.basic(
-                          controller: controller.quillController,
-                          focusNode: controller.focusNode,
-                          config: QuillEditorConfig(
-                            showCursor: true,
-                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                            placeholder: '请输入正文（建议10-2000字）',
-                            customStyles: DefaultStyles(
-                              placeHolder: DefaultTextBlockStyle(
-                                TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp,
-                                  color: '#2c2c2c'.hexColor.withOpacity(0.5),
-                                  height: 1.5,
-                                ),
-                                const HorizontalSpacing(0, 0),
-                                VerticalSpacing.zero,
-                                VerticalSpacing.zero,
-                                null,
+        return Scaffold(
+          backgroundColor: Colors.white,
+          resizeToAvoidBottomInset: false,
+          appBar: CommonAppBar.arrowBack(
+            context,
+            title: '发帖',
+            titleStyle: TextStyle(
+                fontSize: 14.sp,
+                color: '#333333'.hexColor,
+                fontWeight: FontWeight.w600),
+            actions: [
+
+            ],
+          ),
+          body: Container(
+            margin: EdgeInsets.only(top: 12.w),
+            // padding: EdgeInsets.only(
+            //   bottom: ScreenUtil().bottomBarHeight,
+            // ),
+
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  buildTitleInput(),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 16.w),
+                      child: QuillEditor.basic(
+                        controller: controller.quillController,
+                        focusNode: controller.focusNode,
+                        config: QuillEditorConfig(
+                          showCursor: true,
+                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                          placeholder: '请输入正文（建议10-2000字）',
+                          customStyles: DefaultStyles(
+                            paragraph: DefaultTextBlockStyle(
+                              TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.sp,
+                                color: '#333333'.hexColor,
+                                height: 1.5,
                               ),
+                              const HorizontalSpacing(0, 0),
+                              VerticalSpacing.zero,
+                              VerticalSpacing.zero,
+                              null,
+                            ),
+                            placeHolder: DefaultTextBlockStyle(
+                              TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12.sp,
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                                height: 1.5,
+                              ),
+                              const HorizontalSpacing(0, 0),
+                              VerticalSpacing.zero,
+                              VerticalSpacing.zero,
+                              null,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    buildBottomToolbar(context),
-                  ],
-                ),
+                  ),
+                  buildBottomToolbar(context),
+                ],
               ),
             ),
           ),
@@ -133,28 +115,29 @@ class FeedPostScreen extends GetView<FeedPostController> {
   Widget buildTitleInput() {
     return Container(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: 'e6e6e6'.hexColor, width: 0.5)),
+        border:
+            Border(bottom: BorderSide(color: 'e6e6e6'.hexColor, width: 0.5)),
       ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14.sp,
-                color: '#2a2a2a'.hexColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 16.sp,
+                color: '#333333'.hexColor,
               ),
               maxLength: 31,
               controller: controller.titleInput,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
                 filled: false,
-                hintText: '请输入完整帖子标题（5-31个字）',
+                hintText: '添加标题(最多31字)',
                 counterText: '',
                 hintStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
-                  color: '#2c2c2c'.hexColor.withOpacity(0.5),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.sp,
+                  color: '##333333'.hexColor.withOpacity(0.5),
                 ),
                 border: InputBorder.none,
               ),
@@ -208,13 +191,16 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       }
                     },
                     child: Container(
-                      height: 41.5.w,
                       alignment: Alignment.center,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
                       child: Text(
                         item.name ?? '',
                         style: TextStyle(
-                          color: controller.prefixIndex == index ? const Color(0xff249cfc) : const Color(0xff95a3c4),
-                          fontSize: 14.sp,
+                          color: controller.prefixIndex == index
+                              ? const Color(0xff249cfc)
+                              : '#333333'.hexColor,
+                          fontSize: 12.sp,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -237,13 +223,17 @@ class FeedPostScreen extends GetView<FeedPostController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    controller.prefixIndex != -1 && controller.prefixIndex < controller.boardInfoList.length
-                        ? (controller.boardInfoList[controller.prefixIndex].name ?? '')
+                    controller.prefixIndex != -1 &&
+                            controller.prefixIndex <
+                                controller.boardInfoList.length
+                        ? (controller
+                                .boardInfoList[controller.prefixIndex].name ??
+                            '')
                         : '选择板块',
                     style: TextStyle(
-                      color: '#2a2a2a'.hexColor,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
+                      color: '#333333'.hexColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Icon(Icons.arrow_drop_down, color: '#2a2a2a'.hexColor),
@@ -260,16 +250,11 @@ class FeedPostScreen extends GetView<FeedPostController> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.w),
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      decoration: const BoxDecoration(
-        border: Border.symmetric(
-          horizontal: BorderSide(color: Color(0xffe6e6e6)),
-        ),
-      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildTagList(context),
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               QuillToolbarImageButton(
                 controller: controller.quillController,
@@ -285,48 +270,117 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     return GestureDetector(
                       onTap: buttonExtraOptions?.onPressed,
                       child: Container(
-                        width: 36.w,
-                        height: 36.w,
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          Assets.images.inputImage.path,
-                          width: 20.w,
-                          height: 20.w,
-                        ),
-                      ),
+                          width: 75.w,
+                          height: 75.w,
+                          alignment: Alignment.center,
+                          decoration: ShapeDecoration(
+                            color: const Color(0xFF333333).withOpacity(0.1),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            size: 26.w,
+                            color: '#333333'.hexColor.withOpacity(0.5),
+                          )),
                     );
                   },
                 ),
               ),
-              GestureDetector(
-                onTap: () async {
-                  final result = await Get.toNamed(Routes.atUser);
-                  if (result != null) {
-                    controller.quillController.insertAtBlock(data: json.encode(result));
-                  }
-                },
-                child: Container(
-                  width: 36.w,
-                  height: 36.w,
-                  alignment: Alignment.center,
-                  child: Text(
-                    '@',
-                    style: TextStyle(
-                      fontSize: 20.sp,
+              SizedBox(height: 12.w,),
+              Row(
+                children: [
+                  if (controller.tagList.length < controller.tagMaxLength)
+                    GestureDetector(
+                      onTap: controller.toAddTag,
+                      child: Container(
+                        width: 58.w,
+                        height: 26.w,
+                        padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 6.w),
+                        margin: EdgeInsets.all(5.w),
+                        decoration:ShapeDecoration(
+                          color: const Color(0xFF333333).withOpacity(0.1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '#话题（${controller.tagList.length}/${controller.tagMaxLength}）',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                          ),
+                        ),
+                      ),
+                    ),
+                  GestureDetector(
+                    onTap: () async {
+                      final result = await Get.toNamed(Routes.atUser);
+                      if (result != null) {
+                        controller.quillController
+                            .insertAtBlock(data: json.encode(result));
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 58.w,
+                      height: 26.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 6.w),
+                      decoration:ShapeDecoration(
+                        color: const Color(0xFF333333).withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
+                      ),
+                      child: Text(
+                        '@ 用户',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
+          buildTagList(context),
+          pushWidget()
         ],
       ),
     );
   }
-
+  Widget pushWidget(){
+    return  GestureDetector(
+      onTap: controller.publishPosts,
+      child: Container(
+        height: 48.w,
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        margin: EdgeInsets.only(right: 10.w,top: 20.w,left: 10.w,bottom: 10.w),
+        alignment: Alignment.center,
+        decoration:  BoxDecoration(
+          borderRadius: BorderRadius.circular(24.w),
+          gradient: const LinearGradient(
+            begin: Alignment(1.00, 0.00),
+            end: Alignment(-1, 0),
+            colors: [
+              Color(0xFF84BCF9),
+              Color(0xFF557BF6),
+            ],
+          ),
+        ),
+        child: Text(
+          '确定发布',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
   Widget buildTagList(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical: 4.w),
+      padding: EdgeInsets.symmetric(vertical: 4.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -335,61 +389,35 @@ class FeedPostScreen extends GetView<FeedPostController> {
               controller.tagList.length,
               (index) {
                 final tag = controller.tagList[index];
-                return Stack(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
-                      margin: EdgeInsets.all(5.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: '#249CFC'.hexColor),
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
+                return Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                  decoration:ShapeDecoration(
+                    color: '#557BF6'.hexColor.withOpacity(0.1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)),
+                  ),
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      Text(
                         tag.name ?? '',
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: '#249CFC'.hexColor,
+                          fontSize: 10.sp,
+                          color: '#557BF6'.hexColor,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ),
-                    Positioned(
-                      right: 0.w,
-                      top: 0.w,
-                      child: GestureDetector(
+                      SizedBox(width: 4.w,),
+                      GestureDetector(
                         onTap: () => controller.removeTag(index),
-                        child: Assets.images.closeBlack.image(
-                          width: 12.w,
-                          height: 12.w,
-                        ),
-                      ),
-                    ),
-                  ],
+                        child:Icon(Icons.clear,size: 12.w,),
+                      )
+                    ],
+                  ),
                 );
               },
             ),
-            if (controller.tagList.length < controller.tagMaxLength)
-              GestureDetector(
-                onTap: controller.toAddTag,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 2.w),
-                  margin: EdgeInsets.all(5.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: '#249CFC'.hexColor),
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '+ 插入话题（${controller.tagList.length}/${controller.tagMaxLength}）',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: '#249CFC'.hexColor,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),

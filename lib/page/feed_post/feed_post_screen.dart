@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/tag_model.dart';
+import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/tag_list/tag_list_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/html_parse_util.dart';
@@ -289,6 +290,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
               ),
               SizedBox(height: 12.w,),
               Row(
+              mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (controller.tagList.length < controller.tagMaxLength)
                     GestureDetector(
@@ -314,7 +316,11 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     ),
                   GestureDetector(
                     onTap: () async {
-                      final result = await Get.toNamed(Routes.atUser);
+
+                      final result = await await Get.bottomSheet(
+                        const AtUserScreen(),
+                        isScrollControlled: true,
+                      );
                       if (result != null) {
                         controller.quillController
                             .insertAtBlock(data: json.encode(result));
@@ -342,7 +348,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
               ),
             ],
           ),
-          buildTagList(context),
+          buildTagList(controller),
           pushWidget()
         ],
       ),
@@ -378,48 +384,59 @@ class FeedPostScreen extends GetView<FeedPostController> {
       ),
     );
   }
-  Widget buildTagList(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.w),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            ...List.generate(
-              controller.tagList.length,
-              (index) {
-                final tag = controller.tagList[index];
-                return Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
-                  decoration:ShapeDecoration(
-                    color: '#557BF6'.hexColor.withOpacity(0.1),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                  ),
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      Text(
-                        tag.name ?? '',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: '#557BF6'.hexColor,
-                          fontWeight: FontWeight.w600,
+  Widget buildTagList(FeedPostController controller) {
+
+    return Container(
+      padding: EdgeInsets.only(bottom: 16.w),
+      margin: EdgeInsets.only(right: 16.w,top: 16.w),
+      alignment: Alignment.centerLeft,
+      decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),)
+      ),
+      child: Wrap(
+        spacing: 8.0, // 添加水平间距
+        runSpacing: 4.0,
+        children: [
+          ...List.generate(
+            controller.tagList.length,
+                (index) {
+              final tag = controller.tagList[index];
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                    decoration:ShapeDecoration(
+                      color: '#557BF6'.hexColor.withOpacity(0.1),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          tag.name ?? '',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: '#557BF6'.hexColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4.w,),
-                      GestureDetector(
-                        onTap: () => controller.removeTag(index),
-                        child:Icon(Icons.clear,size: 12.w,),
-                      )
-                    ],
+                        SizedBox(width: 4.w,),
+                        GestureDetector(
+                          onTap: () => controller.removeTag(index),
+                          child:Icon(Icons.clear,size: 12.w,),
+                        )
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
-          ],
-        ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }

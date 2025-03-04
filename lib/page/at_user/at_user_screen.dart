@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -7,6 +10,7 @@ import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../model/user.dart';
 import '../../model/userdata_list.dart';
 import '../../utils/app_theme.dart';
@@ -84,50 +88,17 @@ class _AtUserScreenState extends State<AtUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-        child: Scaffold(
-      appBar: AppBar(
-          titleSpacing: 0.0,
-          leading: IconButton(
-            icon: Image.asset(
-              'assets/images/back.png',
-              width: 22.px,
-              height: 22.px,
-            ),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          backgroundColor: Colors.transparent,
-          title: CSearchBar(
-            placeholder: "搜索用户",
-            onChanged: (value) {
-              setState(() {
-                key = value;
-              });
-            },
-          ),
-          // title: const Text(
-          //   '想@谁',
-          //   style: AppTheme.text333333Size17,
-          // ),
-          centerTitle: true,
-          actions: [
-            TextButton(
-                onPressed: () {
-                  if (key != null) {
-                    _userSearch(key);
-                    // StorageUtil().prefs!.setString('token', data['token']);
-                  }
-                },
-                child: Text('搜索',
-                    style: TextStyle(
-                        color: const Color(0xff249CFC), fontSize: 15.px)))
-            // GestureDetector(child: Text('搜索'),)
-          ]),
-      backgroundColor: Colors.transparent,
-      body: SafeArea(child: contentView()),
-    ));
+    return Container(
+      margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+      ),
+      child: contentView(),
+    );
   }
 
   Widget contentView() {
@@ -151,11 +122,106 @@ class _AtUserScreenState extends State<AtUserScreen> {
         //     )
         //   ],
         // ),
+        // CSearchBar(
+        //   placeholder: "搜索用户",
+        //   onChanged: (value) {
+        //     setState(() {
+        //       key = value;
+        //       _userSearch(key);
+        //     });
+        //   },
+        // ),
+        buildSearchInput(),
         SizedBox(
           height: 10,
         ),
         Expanded(child: listView())
       ],
+    );
+  }
+
+  Widget buildSearchInput() {
+    return Container(
+      margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.w, bottom: 16.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Container(
+              height: 32.w,
+              padding: EdgeInsets.only(left: 12.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100.r),
+                color: '#333333'.hexColor.withOpacity(0.05),
+              ),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    Assets.svg.iconSearchHistory,
+                    width: 16.w,
+                    height: 16.w,
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      keyboardType: TextInputType.text,
+                      autocorrect: false,
+                      onChanged: (value) {
+                        setState(() {
+                          key = value;
+                          _userSearch(key);
+                        });
+                      },
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: '#333333'.hexColor,
+                      ),
+                      decoration: InputDecoration(
+                        counterText: "",
+                        hintText: '搜索用户',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.zero,
+                        isCollapsed: true,
+                        isDense: true,
+                        hintStyle: TextStyle(
+                          fontSize: 12.sp,
+                          color: '#333333'.hexColor.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (searchController.text.isNotEmpty)
+                    GestureDetector(
+                      onTap: searchController.clear,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6.w),
+                        child: Assets.images.clear.image(
+                          width: 16.w,
+                          height: 16.w,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(width: 16.w),
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Text(
+              '取消',
+              style: TextStyle(
+                  color: '#557BF6'.hexColor,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -172,9 +238,8 @@ class _AtUserScreenState extends State<AtUserScreen> {
             } else {
               followOrFanUserList.addAll(userDataList.list!);
             }
-          }
-          else {
-            if (userDataList.list!.length==0){
+          } else {
+            if (userDataList.list!.length == 0) {
               ToastUtils.showToast("未搜到相关用户，请重新输入");
             }
           }
@@ -226,10 +291,6 @@ class _AtUserScreenState extends State<AtUserScreen> {
           height: 58.px,
           margin: EdgeInsets.symmetric(horizontal: 18.px),
           alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom:
-                      BorderSide(color: const Color(0xffE6E6E6), width: 1.px))),
           child: Row(children: [
             Container(
                 height: 34.px,
@@ -253,7 +314,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
               followOrFanUserList[index].nickname!.isNotEmpty
                   ? followOrFanUserList[index].nickname!
                   : '',
-              style: TextStyle(color: const Color(0xff2A2A2A), fontSize: 12.px),
+              style: TextStyle(color: '##333333'.hexColor, fontSize: 14.px,fontWeight: FontWeight.w600),
             ),
             const Spacer(),
             FollowBtn(

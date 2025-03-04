@@ -5,6 +5,7 @@ class TagListController extends GetxController with RefreshControllerMixin {
   late FocusNode searchFocusNode;
   List<TagModel> hotItems = [];
   List<TagModel> items = [];
+  List<TagModel> selectedItems = [];
 
   late final RefreshController searchRefreshController;
   bool showSearchResult = false;
@@ -29,7 +30,22 @@ class TagListController extends GetxController with RefreshControllerMixin {
     super.onReady();
     onRefresh();
   }
-
+  void addSelectTag(TagModel tag) {
+    if (selectedItems.length >= 5) {
+      showToast('最多只能选择5个标签');
+      return;
+    }
+    if (selectedItems.any((e) => e.id == tag.id)) {
+      ToastUtils.showToast('不可重复插入同一话题');
+      return;
+    }
+    selectedItems.add(tag);
+    safeUpdate();
+  }
+  void removeTag(int index) {
+    selectedItems.removeAt(index);
+    safeUpdate();
+  }
   @override
   Future<List?> loadData() async {
     if (page == 1) items.clear();

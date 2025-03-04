@@ -129,20 +129,15 @@ class FeedPostController extends GetxController {
   }
 
   Future<void> toAddTag() async {
-    final tag = await Get.bottomSheet<TagModel?>(
+     await Get.bottomSheet<TagModel?>(
       const TagListScreen(),
       isScrollControlled: true,
     );
-    if (tag != null) {
-      if (tagList.any((e) => e.id == tag.id)) {
-        ToastUtils.showToast('不可重复插入同一话题');
-        return;
-      }
-      tagList.add(tag);
-      safeUpdate();
-    }
   }
-
+  void addSelectTags(tags){
+      tagList=tags;
+      safeUpdate();
+  }
   void removeTag(int index) {
     tagList.removeAt(index);
     safeUpdate();

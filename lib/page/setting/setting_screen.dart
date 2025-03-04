@@ -294,10 +294,24 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void logout() {
-    NetRequest().logout((data) {
-      UserStore.of.clearUserStorage();
-      Get.until((route) => route.settings.name == Routes.main);
-      EventBusUtil.of.fire(EventResetMainTab());
-    });
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => CommonDialog(
+        title: '退出登录',
+        content: '退出登录您将无法查看个人中心等',
+        confirmText: '确认退出',
+        onConfirm: () {
+          Navigator.of(context).pop();
+          NetRequest().logout((data) {
+            UserStore.of.clearUserStorage();
+            Get.until((route) => route.settings.name == Routes.main);
+            EventBusUtil.of.fire(EventResetMainTab());
+          });
+        },
+        cancelText: '取消',
+      ),
+    );
+
   }
 }

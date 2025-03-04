@@ -314,7 +314,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                           ),
                         ],
                       ),
-                      SizedBox(height: 36.w),
+                      SizedBox(height: 26.w),
                       Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

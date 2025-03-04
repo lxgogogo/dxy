@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
+import 'close_image_button.dart';
+
 class CommonDialog extends StatelessWidget {
   final String title;
+  final String? content;
   final VoidCallback? onConfirm;
   final String confirmText;
   final String cancelText;
@@ -14,6 +18,7 @@ class CommonDialog extends StatelessWidget {
   const CommonDialog({
     super.key,
     required this.title,
+    this.content,
     this.onConfirm,
     this.confirmText = '确定',
     this.cancelText = '取消',
@@ -29,51 +34,117 @@ class CommonDialog extends StatelessWidget {
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.zero,
         child: ShadowWrapper(
-          borderRadius: 10.5.px,
-          margin: EdgeInsets.only(left: 18.px, right: 18.px),
+          borderRadius: 16.w,
+          margin: EdgeInsets.only(left: 18.w, right: 18.w),
           child: Container(
-            padding: EdgeInsets.only(top: 35.px, bottom: 20.px),
+            padding: EdgeInsets.only(bottom: 26.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.px),
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: const Color(0xff5f75a0),
+                Stack(
+                  children: [
+                    SizedBox(
+                      height: 72.w,
+                      width: double.infinity,
+                      child: Center(
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                            color: '#333333'.hexColor,
+                            fontSize: 16.px,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    Positioned(
+                      right: 0.w,
+                      top: 0.w,
+                      child: CloseImageButton(
+                        width: 16.w,
+                        height: 16.w,
+                        color: '#333333'.hexColor.withOpacity(0.5),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 36.px),
+                if (content?.isNotEmpty ?? false)
+                  Center(
+                    child: Text(
+                      content ?? '',
+                      style: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 14.px,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                SizedBox(height: 26.px),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 22.px),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (!onlyConfirm)...[
-                        Expanded(
-                          child: CustomButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            height: 42.px,
-                            title: cancelText,
-                            isCancel: true,
-                            textColor: const Color(0xff95a3c4),
+                      if (!onlyConfirm) ...[
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            width: 96.w,
+                            height: 33.w,
+                            decoration: ShapeDecoration(
+                              color: '#333333'.hexColor.withOpacity(0.1),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              cancelText,
+                              style: TextStyle(
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                                fontSize: 12.px,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
-                        SizedBox(width: 15.px),
-                      ],
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () {
-                            onConfirm?.call();
-                          },
-                          height: 42.px,
-                          title: confirmText,
+
+                      ],SizedBox(width: 24.px),
+                      InkWell(
+                        onTap: () {
+                          onConfirm?.call();
+                        },
+                        child: Container(
+                          width: 96.w,
+                          height: 33.w,
+                          decoration: ShapeDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment(1.00, 0.00),
+                              end: Alignment(-1, 0),
+                              colors: [
+                                Color(0xFF84BCF9),
+                                Color(0xFF557BF6),
+                              ],
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            confirmText,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.px,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
                     ],

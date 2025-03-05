@@ -1,0 +1,270 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/model/article.dart';
+import 'package:holdem/model/index_category.dart';
+import 'package:holdem/page/home/widgets/home_course_item.dart';
+import 'package:holdem/page/home/widgets/home_menu_animation.dart';
+import 'package:holdem/page/home/widgets/home_nemu_item.dart';
+import 'package:holdem/page/home/widgets/home_title.dart';
+import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/common_app_bar.dart';
+import 'package:holdem/widget/item_video.dart';
+import 'package:holdem/widget/three_d_book_item.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../model/course.dart';
+import '../../widget/item_course.dart';
+
+part 'course_controller.dart';
+
+class CourseScreen extends StatelessWidget {
+  const CourseScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<CourseController>(
+      init: CourseController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 48.w,
+                margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Image.asset(
+                        'assets/images/back.png',
+                        width: 22.w,
+                        height: 22.w,
+                      ),
+                      onPressed: Get.back,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.search);
+                      },
+                      child: Padding(
+                        padding:  EdgeInsets.only(right: 16.w),
+                        child: SvgPicture.asset(
+                          Assets.svg.iconSearch,
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: <Widget>[
+                    Assets.images.homeBanner.image(
+                      height: 272.w,
+                    ),
+                    NestedScrollView(
+                      controller: controller.scrollController,
+                      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                        return [
+                          SliverToBoxAdapter(
+                            child: SizedBox(
+                              height: 211.w,
+                            ),
+                          )
+                        ];
+                      },
+                      body: ClipRRect(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
+                        ),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 100),
+                            decoration: BoxDecoration(
+                              color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                            ),
+                            child: SmartRefresher(
+                              enablePullDown: false,
+                              enablePullUp: true,
+                              controller: controller.refreshController,
+                              onRefresh: controller.onRefresh,
+                              onLoading: controller.onLoading,
+                              child: CustomScrollView(
+                                physics: const ClampingScrollPhysics(),
+                                slivers: [
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(
+                                      height: 12.w,
+                                    ),
+                                  ),
+                                  SliverPersistentHeader(
+                                    pinned: true,
+                                    delegate: SimpleHeaderDelegate(
+                                      height: 56.w,
+                                      builder: (_, double offset) => ClipRRect(
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                                          child: Container(
+                                            color: controller.isShowHomeMenu ? '#F3F8FF'.hexColor : Colors.transparent ,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(width: 16.w),
+                                                  ...List.generate(
+                                                    controller.categories.length,
+                                                    (index) {
+                                                      return GestureDetector(
+                                                        onTap: () => controller.onTapTab(index),
+                                                        child: Container(
+                                                          height: 32.w,
+                                                          margin: EdgeInsets.symmetric(vertical: 12.w)
+                                                              .copyWith(right: 10.w),
+                                                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                                          alignment: Alignment.centerLeft,
+                                                          decoration: controller.categorySel == index
+                                                              ? BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(50.r),
+                                                                  gradient: const LinearGradient(
+                                                                    colors: [
+                                                                      Color(0xFF84BCF9),
+                                                                      Color(0xFF557BF6),
+                                                                    ],
+                                                                  ),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: '#0050FF'.hexColor.withOpacity(0.2),
+                                                                      offset: Offset(0, 6.w),
+                                                                      blurRadius: 12.r,
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              : BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(50.r),
+                                                                  gradient: LinearGradient(
+                                                                    colors: [
+                                                                      Colors.white,
+                                                                      Colors.white.withOpacity(0.5),
+                                                                    ],
+                                                                  ),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: '#0050FF'.hexColor.withOpacity(0.1),
+                                                                      offset: Offset(0, 3.27.w),
+                                                                      blurRadius: 6.54.r,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                          child: Text(
+                                                            controller.categories[index].name ?? '',
+                                                            style: TextStyle(
+                                                              color: controller.categorySel == index
+                                                                  ? Colors.white
+                                                                  : '#333333'.hexColor.withOpacity(0.7),
+                                                              fontSize: 12.sp,
+                                                              fontWeight: controller.categorySel == index
+                                                                  ? FontWeight.w600
+                                                                  : FontWeight.w400,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(
+                                      height: 12.w,
+                                    ),
+                                  ),
+                                  SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                        CourseBean bean = controller.courses[index];
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 3.w,
+                                                  height: 11.w,
+                                                  margin: EdgeInsets.only(right: 5.w, left: 18.w),
+                                                  decoration: BoxDecoration(
+                                                      color: const Color(0xff249CFC),
+                                                      borderRadius: BorderRadius.circular(1.5.w)),
+                                                ),
+                                                Text(
+                                                  bean.heading!,
+                                                  style: TextStyle(color: const Color(0xff424242), fontSize: 14.w),
+                                                )
+                                              ],
+                                            ),
+                                            CourseItem(article: bean)
+                                          ],
+                                        );
+                                      },
+                                      childCount: controller.courses.length,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class SimpleHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double height;
+  final Widget Function(BuildContext context, double offset) builder;
+
+  SimpleHeaderDelegate({required this.height, required this.builder});
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) =>
+      builder(context, shrinkOffset);
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(covariant SimpleHeaderDelegate oldDelegate) => true;
+}

@@ -137,6 +137,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 name: '德州教程',
                                                 nameEn: 'Tutorial',
                                                 imagePath: Assets.images.iconHomeCourse.path,
+                                                onTap: () => Get.toNamed(Routes.course),
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
@@ -285,6 +286,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       },
                                     ),
                                     SizedBox(height: 32.w),
+                                    SizedBox(
+                                      height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -294,15 +298,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       ),
                     ),
                     if (controller.isShowHomeMenu)
-                      HomeMenuSlideAnimation(
-                          child: const HomeMenu(),
-                          onEnd: () {
-                            // _userEnterList.removeAt(0);
-                            // if (_userEnterList.isNotEmpty) {
-                            //   _currentUserEnter = _getUserInfo();
-                            //   setState(() {});
-                            // }
-                          }),
+                      const HomeMenuSlideAnimation(
+                        child: HomeMenu(),
+                      ),
                   ],
                 ),
               ),

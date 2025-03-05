@@ -28,6 +28,8 @@ import 'package:holdem/page/setting/setting_screen.dart';
 import 'package:holdem/page/splash/splash_screen.dart';
 import 'package:holdem/services/index.dart';
 
+import '../page/course/course_screen.dart';
+
 part 'app_routes.dart';
 
 part 'route_observers.dart';
@@ -151,6 +153,10 @@ class AppPages {
     GetPage(
       name: Routes.competitionDetail,
       page: () => CompetitionDetailScreen(id: Get.arguments as int?),
+    ),
+    GetPage(
+      name: Routes.course,
+      page: () => const CourseScreen(),
     ),
   ];
 }

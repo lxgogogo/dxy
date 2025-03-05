@@ -19,6 +19,7 @@ import '../../../utils/log_util.dart';
 import '../../../utils/toast_utils.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/report_sheet.dart';
+import '../../../widget/special_classic_footer.dart';
 
 class FeedListChildView extends StatefulWidget {
   final int tabId;
@@ -162,7 +163,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
+      footer: const SpecialClassicFooter(),
       controller: _refreshController,
       onRefresh: () => _onRefresh(showLoading: false),
       onLoading: _onLoading,
@@ -194,6 +195,11 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
                       );
                     },
                     childCount: boardPostList.length,
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
                   ),
                 ),
               ],

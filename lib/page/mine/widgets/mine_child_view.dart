@@ -34,6 +34,7 @@ import '../../../model/user.dart';
 import '../../../utils/net_request.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/no_data.dart';
+import '../../../widget/special_classic_footer.dart';
 import '../login_helper.dart';
 
 class MineChildView extends StatefulWidget {
@@ -208,6 +209,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
             controller: _refreshController,
             onRefresh: _onRefresh,
             onLoading: _onLoading,
+            footer: const SpecialClassicFooter(),
             child: loaded &&
                     (widget.tabIndex == 0
                         ? boardPostList.isEmpty

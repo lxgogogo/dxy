@@ -11,6 +11,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../widget/special_classic_footer.dart';
 import 'item_common_message.dart';
 
 class MessageChildView extends StatefulWidget {
@@ -121,7 +122,7 @@ class MessageChildViewState extends State<MessageChildView> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
+      footer: const SpecialClassicFooter(),
       controller: _refreshController,
       scrollController: _listController,
       onRefresh: _onRefresh,

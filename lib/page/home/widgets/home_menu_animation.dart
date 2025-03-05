@@ -7,9 +7,8 @@ import 'package:holdem/gen/assets.gen.dart';
 
 class HomeMenuSlideAnimation extends StatefulWidget {
   final Widget child;
-  final Function onEnd;
 
-  const HomeMenuSlideAnimation({Key? key, required this.child, required this.onEnd}) : super(key: key);
+  const HomeMenuSlideAnimation({Key? key, required this.child}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _HomeMenuSlideAnimationState();
@@ -41,34 +40,42 @@ class HomeMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          MenuItem(
-            name: '精彩视频',
-            nameEn: 'Video',
-            imagePath: Assets.images.iconHomeVideo.path,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+        child: Container(
+          color: '#F3F8FF'.hexColor,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                MenuItem(
+                  name: '精彩视频',
+                  nameEn: 'Video',
+                  imagePath: Assets.images.iconHomeVideo.path,
+                ),
+                SizedBox(width: 6.w),
+                MenuItem(
+                  name: '德州教程',
+                  nameEn: 'Tutorial',
+                  imagePath: Assets.images.iconHomeCourse.path,
+                ),
+                SizedBox(width: 6.w),
+                MenuItem(
+                  name: '好书推荐',
+                  nameEn: 'Recommend',
+                  imagePath: Assets.images.iconHomeBook.path,
+                ),
+                SizedBox(width: 6.w),
+                MenuItem(
+                  name: '火爆论坛',
+                  nameEn: 'BBS',
+                  imagePath: Assets.images.iconHomeFeed.path,
+                ),
+              ],
+            ),
           ),
-          SizedBox(width: 6.w),
-          MenuItem(
-            name: '德州教程',
-            nameEn: 'Tutorial',
-            imagePath: Assets.images.iconHomeCourse.path,
-          ),
-          SizedBox(width: 6.w),
-          MenuItem(
-            name: '好书推荐',
-            nameEn: 'Recommend',
-            imagePath: Assets.images.iconHomeBook.path,
-          ),
-          SizedBox(width: 6.w),
-          MenuItem(
-            name: '火爆论坛',
-            nameEn: 'BBS',
-            imagePath: Assets.images.iconHomeFeed.path,
-          ),
-        ],
+        ),
       ),
     );
   }

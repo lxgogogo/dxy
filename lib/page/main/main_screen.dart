@@ -46,75 +46,84 @@ class _MainScreenState extends State<MainScreen> {
       init: MainController(),
       builder: (controller) {
         return Scaffold(
-          body: [
-            const HomeScreen(),
-            const FeedListScreen(),
-            const MessagePage(),
-            const MineScreen(),
-          ][controller.currentIndex],
-          backgroundColor: Colors.white,
-          bottomNavigationBar: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
-              child: Container(
-                padding: EdgeInsets.only(top: 4.w),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
+          body: Stack(
+            children: [
+              [
+                const HomeScreen(),
+                const FeedListScreen(),
+                const MessagePage(),
+                const MineScreen(),
+              ][controller.currentIndex],
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: ClipRRect(
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(18.r),
                   ),
-                ),
-                child: BottomNavigationBar(
-                  currentIndex: controller.currentIndex,
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.transparent,
-                  elevation: 0.0,
-                  selectedFontSize: 10.sp,
-                  unselectedFontSize: 10.sp,
-                  selectedItemColor: '#557BF6'.hexColor,
-                  unselectedItemColor: '#333333'.hexColor,
-                  showSelectedLabels: true,
-                  showUnselectedLabels: true,
-                  useLegacyColorScheme: false,
-                  onTap: controller.onTabBarItem,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        controller.currentIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
-                        width: 20.w,
-                        height: 20.w,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
+                    child: Container(
+                      padding: EdgeInsets.only(top: 4.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
                       ),
-                      label: '首页',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        controller.currentIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
-                        width: 20.w,
-                        height: 20.w,
+                      child: BottomNavigationBar(
+                        currentIndex: controller.currentIndex,
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Colors.transparent,
+                        elevation: 0.0,
+                        selectedFontSize: 10.sp,
+                        unselectedFontSize: 10.sp,
+                        selectedItemColor: '#557BF6'.hexColor,
+                        unselectedItemColor: '#333333'.hexColor,
+                        showSelectedLabels: true,
+                        showUnselectedLabels: true,
+                        useLegacyColorScheme: false,
+                        onTap: controller.onTabBarItem,
+                        items: [
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              controller.currentIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
+                              width: 20.w,
+                              height: 20.w,
+                            ),
+                            label: '首页',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              controller.currentIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                              width: 20.w,
+                              height: 20.w,
+                            ),
+                            label: '论坛',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              controller.currentIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
+                              width: 20.w,
+                              height: 20.w,
+                            ),
+                            label: '消息',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              controller.currentIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
+                              width: 20.w,
+                              height: 20.w,
+                            ),
+                            label: '我的',
+                          ),
+                        ],
                       ),
-                      label: '论坛',
                     ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        controller.currentIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
-                        width: 20.w,
-                        height: 20.w,
-                      ),
-                      label: '消息',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: SvgPicture.asset(
-                        controller.currentIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
-                        width: 20.w,
-                        height: 20.w,
-                      ),
-                      label: '我的',
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
+          backgroundColor: Colors.white,
         );
       },
     );

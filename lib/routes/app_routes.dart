@@ -31,5 +31,6 @@ abstract class Routes {
   static const personal = '/personal';
   static const competitionCalendar = '/competitionCalendar';
   static const competitionDetail = '/competitionDetail';
+  static const course = '/course';
 
 }

@@ -142,6 +142,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 24.w),
                       Expanded(
                         child: TabBarView(
                           controller: controller.tabController,

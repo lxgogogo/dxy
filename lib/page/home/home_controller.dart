@@ -6,11 +6,12 @@ class HomeController extends GetxController {
   List<ArticleBean> videoItems = [];
   List<IndexCategory> courseItems = [];
   List<ArticleBean> bookItems = [];
-
+  List<VideoBean> hotVideos = [];
   bool isShowHomeMenu = false;
 
   @override
   void onReady() {
+    loadHotVideos();
     loadVideos();
     loadCourses();
     loadBooks();
@@ -40,6 +41,28 @@ class HomeController extends GetxController {
         );
         if (items.isNotEmpty) {
           videoItems.assignAll(items);
+          safeUpdate();
+        }
+      },
+    );
+  }
+
+  Future<void> loadHotVideos() async {
+   final params = {"id":[0,0,0,0],"size":4};
+    if(hotVideos.isNotEmpty){
+      params['id'] = hotVideos.map((e) => e.id).toList();
+      params['size'] = hotVideos.length;
+    }
+    await NetRequest().hotVideo(
+      params,
+      showLoading: false,
+      (data) {
+        final items = List<VideoBean>.from(
+          data.map((article) => VideoBean.fromMap(article)),
+        );
+
+        if (items.isNotEmpty) {
+          hotVideos.assignAll(items);
           safeUpdate();
         }
       },

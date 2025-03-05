@@ -38,6 +38,17 @@ class NetRequest {
       }
     }
   }
+  Future hotVideo(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
+    Map<String, dynamic> response = await HttpUtils.post(Api.hotVideo,params: params, showLoading: showLoading);
+    util_response.Response resp = util_response.Response.fromJson(response);
+    if (resp.code == 200) {
+      onSuccess(response['data']);
+    } else {
+      if (resp.code != 402) {
+        ToastUtils.showToast(resp.message ?? '未知错误');
+      }
+    }
+  }
 
   Future competitionLoop(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
     Map<String, dynamic> response = await HttpUtils.post(Api.competitionLoop, params: params, showLoading: showLoading);

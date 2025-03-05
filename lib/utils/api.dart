@@ -6,6 +6,7 @@ class Api {
   static const String indexBanner = '/api/sectionData/list';
   static const String courseList = '/api/content/listCollectNew';
   static const String bookSuggest = '/api/content/bookSuggest';
+  static const String hotVideo = '/api/searchHistory/hotVideo';
 
   //赛事
   static const String competitionRelated = '/api/content/competition/related';

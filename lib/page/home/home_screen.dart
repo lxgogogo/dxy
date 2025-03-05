@@ -9,6 +9,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/index_category.dart';
+import 'package:holdem/model/video_bean.dart';
 import 'package:holdem/page/home/widgets/home_course_item.dart';
 import 'package:holdem/page/home/widgets/home_menu_animation.dart';
 import 'package:holdem/page/home/widgets/home_nemu_item.dart';
@@ -40,7 +41,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
   late final TabController tabController;
 
@@ -113,15 +115,20 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   ),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     SizedBox(height: 24.w),
                                     AnimatedOpacity(
-                                      opacity: controller.isShowHomeMenu ? 0 : 1,
-                                      duration: const Duration(milliseconds: 300),
+                                      opacity:
+                                          controller.isShowHomeMenu ? 0 : 1,
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       child: LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                        builder: (BuildContext context,
+                                            BoxConstraints constraints) {
+                                          final itemWidth =
+                                              (constraints.maxWidth - 12.w) / 2;
                                           return Wrap(
                                             spacing: 12.w,
                                             runSpacing: 24.w,
@@ -130,25 +137,29 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 itemWidth: itemWidth,
                                                 name: '精彩视频',
                                                 nameEn: 'Video',
-                                                imagePath: Assets.images.iconHomeVideo.path,
+                                                imagePath: Assets
+                                                    .images.iconHomeVideo.path,
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
                                                 name: '德州教程',
                                                 nameEn: 'Tutorial',
-                                                imagePath: Assets.images.iconHomeCourse.path,
+                                                imagePath: Assets
+                                                    .images.iconHomeCourse.path,
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
                                                 name: '好书推荐',
                                                 nameEn: 'Recommend',
-                                                imagePath: Assets.images.iconHomeBook.path,
+                                                imagePath: Assets
+                                                    .images.iconHomeBook.path,
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
                                                 name: '火爆论坛',
                                                 nameEn: 'BBS',
-                                                imagePath: Assets.images.iconHomeFeed.path,
+                                                imagePath: Assets
+                                                    .images.iconHomeFeed.path,
                                               ),
                                             ],
                                           );
@@ -159,12 +170,17 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     HomeTitle(
                                       title: '热门视频',
                                       subtitle: GestureDetector(
+                                        onTap: () {
+                                          controller.loadHotVideos();
+                                        },
                                         child: Row(
                                           children: [
                                             Text(
                                               '换一批',
                                               style: TextStyle(
-                                                color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                                                color: '#1E1E1E'
+                                                    .hexColor
+                                                    .withOpacity(0.5),
                                                 fontSize: 12.sp,
                                               ),
                                             ),
@@ -180,15 +196,27 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     ),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context, BoxConstraints constraints) {
-                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        final itemWidth =
+                                            (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,
-                                          children: controller.videoItems
+                                          children: controller.hotVideos
                                               .map((e) => SizedBox(
                                                     width: itemWidth,
-                                                    child: VideoItem(item: e),
+                                                    child: VideoItem(
+                                                        item: ArticleBean(
+                                                            id: e.id,
+                                                            title: e.title,
+                                                            cover: e.cover,
+                                                            description:
+                                                                e.description,
+                                                            type: e.type,
+                                                            commentCount: e.popularCount?.toInt(),
+                                                            createdAt:
+                                                                e.createdAt)),
                                                   ))
                                               .toList(),
                                         );
@@ -202,8 +230,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     Column(
                                       children: controller.videoItems
                                           .map((e) => Padding(
-                                                padding: EdgeInsets.only(top: 6.w),
-                                                child: VideoHorizontalItem(item: e),
+                                                padding:
+                                                    EdgeInsets.only(top: 6.w),
+                                                child: VideoHorizontalItem(
+                                                    item: e),
                                               ))
                                           .toList(),
                                     ),
@@ -214,15 +244,18 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     ),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context, BoxConstraints constraints) {
-                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        final itemWidth =
+                                            (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,
                                           children: [
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath: Assets.images.course0.path,
+                                              imagePath:
+                                                  Assets.images.course0.path,
                                               title: '菜鸟上路',
                                               subtitles: const [
                                                 'GTO上手',
@@ -232,7 +265,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             ),
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath: Assets.images.course1.path,
+                                              imagePath:
+                                                  Assets.images.course1.path,
                                               title: '新手指导',
                                               subtitles: const [
                                                 '基础策略',
@@ -242,7 +276,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             ),
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath: Assets.images.course2.path,
+                                              imagePath:
+                                                  Assets.images.course2.path,
                                               title: '进阶教程',
                                               subtitles: const [
                                                 '进阶升华',
@@ -252,7 +287,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             ),
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath: Assets.images.course3.path,
+                                              imagePath:
+                                                  Assets.images.course3.path,
                                               title: '职业打法',
                                               subtitles: const [
                                                 '多桌策略',
@@ -268,8 +304,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     const HomeTitle(title: '好书推荐'),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context, BoxConstraints constraints) {
-                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context,
+                                          BoxConstraints constraints) {
+                                        final itemWidth =
+                                            (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,

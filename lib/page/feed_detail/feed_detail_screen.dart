@@ -30,9 +30,13 @@ import 'package:video_player/video_player.dart';
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../routes/app_pages.dart';
+import '../../services/index.dart';
+import '../../stores/config_store.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/date_util.dart';
 import '../../widget/circle_image_with_text.dart';
+import '../../widget/feed_more_action.dart';
+import '../../widget/report_sheet.dart';
 import '../mine/login_helper.dart';
 
 part 'feed_detail_controller.dart';
@@ -60,17 +64,39 @@ class FeedDetailScreen extends StatelessWidget {
               : controller.detailBean == null
                   ? const SizedBox()
                   : SingleChildScrollView(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 124.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            controller.detailBean?.title ?? '',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                controller.detailBean?.title ?? '',
+                                style: TextStyle(
+                                  color: '#333333'.hexColor,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const Spacer(),
+                              FeedMoreAction(
+                                actions: {
+                                  '屏蔽该内容': () {
+                                    controller
+                                        ._onShield(controller.detailBean!.id!);
+                                  },
+                                  '屏蔽该用户': () {
+                                    controller._onShieldUser(
+                                        controller.detailBean!.user!.id!);
+                                  },
+                                  '举报该内容': () {
+                                    controller._onReport(
+                                        controller.detailBean!.id!,
+                                        controller.detailBean!.user!.id!);
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 16.w),
@@ -148,17 +174,16 @@ class FeedDetailScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 10.w),
                               GestureDetector(
-                                onTap: (){
-                                    UserStore.of.checkLogin(() {
-                                      Get.bottomSheet(
-                                        isScrollControlled: true,
-                                        CommentPublishScreen(
-                                          relType:  NetRequest.COMMENT_TYPE_THREAD,
-                                          relId: controller.id!,
-                                        ),
-                                      );
-                                    });
-
+                                onTap: () {
+                                  UserStore.of.checkLogin(() {
+                                    Get.bottomSheet(
+                                      isScrollControlled: true,
+                                      CommentPublishScreen(
+                                        relType: NetRequest.COMMENT_TYPE_THREAD,
+                                        relId: controller.id!,
+                                      ),
+                                    );
+                                  });
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: 16.w),
@@ -217,18 +242,17 @@ class FeedDetailScreen extends StatelessWidget {
           bottomNavigationBar: controller.detailBean != null
               ? FeedDetailBottomView(
                   viewParams: PostBottomViewParams(
-                    postId: controller.id,
-                    relId: controller.id,
-                    relType: NetRequest.COMMENT_TYPE_THREAD,
-                    favoriteState: controller.detailBean?.favorited!,
-                    liked: controller.detailBean?.liked!,
-                    shareLink: 'details/thread-${controller.id}',
-                    likeCount: controller.detailBean?.likeCount ?? 0,
-                    favoriteCount: controller.detailBean?.favoriteCount ?? 0,
-                    commentCount: controller.detailBean?.commentCount ?? 0,
-                    shareCount: controller.detailBean?.shareCount ?? 0,
-                    author: controller.detailBean?.user
-                  ),
+                      postId: controller.id,
+                      relId: controller.id,
+                      relType: NetRequest.COMMENT_TYPE_THREAD,
+                      favoriteState: controller.detailBean?.favorited!,
+                      liked: controller.detailBean?.liked!,
+                      shareLink: 'details/thread-${controller.id}',
+                      likeCount: controller.detailBean?.likeCount ?? 0,
+                      favoriteCount: controller.detailBean?.favoriteCount ?? 0,
+                      commentCount: controller.detailBean?.commentCount ?? 0,
+                      shareCount: controller.detailBean?.shareCount ?? 0,
+                      author: controller.detailBean?.user),
                 )
               : const SizedBox(),
         );

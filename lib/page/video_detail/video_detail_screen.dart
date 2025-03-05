@@ -25,6 +25,7 @@ import 'package:lottie/lottie.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../utils/date_util.dart';
 import '../../widget/background_container.dart';
 
 part 'video_detail_controller.dart';
@@ -64,18 +65,25 @@ class VideoDetailScreen extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                          SizedBox(height: 8.w),
+                          Text(
+                            '${DateUtil.formatDateAlias(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布',
+                            style: TextStyle(
+                                color: '#333333'.hexColor, fontSize: 12),
+                          ),
                           GestureDetector(
                             onTap: controller.playVideo,
                             child: Container(
                               height: 180.w,
-                              margin: EdgeInsets.symmetric(vertical: 16.w),
+                              margin: EdgeInsets.symmetric(vertical: 12.w),
                               clipBehavior: Clip.hardEdge,
                               decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(0xffa2b9d0).withOpacity(0.64),
+                                    color: const Color(0xffa2b9d0)
+                                        .withOpacity(0.64),
                                     offset: Offset(0, 1.w),
                                     blurRadius: 2.r,
                                     spreadRadius: -1.w,
@@ -88,13 +96,15 @@ class VideoDetailScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              child: controller.videoNotifier.chewieController != null
-                                  ? ChewieVideo(
-                                      notifier: controller.videoNotifier,
-                                    )
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
+                              child:
+                                  controller.videoNotifier.chewieController !=
+                                          null
+                                      ? ChewieVideo(
+                                          notifier: controller.videoNotifier,
+                                        )
+                                      : const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
                             ),
                           ),
                           Text(
@@ -106,14 +116,18 @@ class VideoDetailScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 12.w),
-                          if (controller.detailBean?.tagList?.isNotEmpty == true)
-                            TagListView(tagList: controller.detailBean?.tagList ?? []),
-                          if (controller.detailBean?.videoList?.isNotEmpty == true)
+                          if (controller.detailBean?.tagList?.isNotEmpty ==
+                              true)
+                            TagListView(
+                                tagList: controller.detailBean?.tagList ?? []),
+                          if (controller.detailBean?.videoList?.isNotEmpty ==
+                              true)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 4.w),
                                   decoration: BoxDecoration(
                                     color: '#D8E2ED'.hexColor,
                                     borderRadius: BorderRadius.circular(4.r),
@@ -122,7 +136,12 @@ class VideoDetailScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          controller.detailBean!.videoList![controller.playVideoIndex].title ?? '',
+                                          controller
+                                                  .detailBean!
+                                                  .videoList![
+                                                      controller.playVideoIndex]
+                                                  .title ??
+                                              '',
                                           style: TextStyle(
                                             fontSize: 12.sp,
                                             color: '#2a2a2a'.hexColor,
@@ -155,24 +174,34 @@ class VideoDetailScreen extends StatelessWidget {
                                   child: ListView.separated(
                                     controller: controller.autoScrollController,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: controller.detailBean!.videoList!.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      final video = controller.detailBean!.videoList![index];
-                                      final isSelected = controller.playVideoIndex == index;
+                                    itemCount: controller
+                                        .detailBean!.videoList!.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final video = controller
+                                          .detailBean!.videoList![index];
+                                      final isSelected =
+                                          controller.playVideoIndex == index;
                                       return AutoScrollTag(
                                         key: ValueKey(index),
-                                        controller: controller.autoScrollController,
+                                        controller:
+                                            controller.autoScrollController,
                                         index: index,
                                         child: GestureDetector(
-                                          onTap: () => controller.selectVide(index),
+                                          onTap: () =>
+                                              controller.selectVide(index),
                                           child: Container(
                                             width: 148.w,
-                                            padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 12.w),
                                             decoration: BoxDecoration(
                                               color: isSelected
-                                                  ? '#008EFF'.hexColor.withOpacity(0.1)
+                                                  ? '#008EFF'
+                                                      .hexColor
+                                                      .withOpacity(0.1)
                                                   : '#D8E2ED'.hexColor,
-                                              borderRadius: BorderRadius.circular(4.r),
+                                              borderRadius:
+                                                  BorderRadius.circular(4.r),
                                             ),
                                             alignment: Alignment.center,
                                             child: Row(
@@ -189,10 +218,13 @@ class VideoDetailScreen extends StatelessWidget {
                                                     video.title ?? '',
                                                     style: TextStyle(
                                                       fontSize: 12.sp,
-                                                      color: isSelected ? '#008EFF'.hexColor : '#9CACC9'.hexColor,
+                                                      color: isSelected
+                                                          ? '#008EFF'.hexColor
+                                                          : '#9CACC9'.hexColor,
                                                     ),
                                                     maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                               ],
@@ -201,7 +233,8 @@ class VideoDetailScreen extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                    separatorBuilder: (_, int index) => SizedBox(width: 8.w),
+                                    separatorBuilder: (_, int index) =>
+                                        SizedBox(width: 8.w),
                                   ),
                                 ),
                                 SizedBox(height: 16.w),
@@ -222,8 +255,10 @@ class VideoDetailScreen extends StatelessWidget {
                               if (controller.comments == null)
                                 const SizedBox()
                               else if (controller.comments?.isNotEmpty == true)
-                                ...List.generate(controller.comments!.length, (index) {
-                                  return CommentItem(commentBean: controller.comments![index]);
+                                ...List.generate(controller.comments!.length,
+                                    (index) {
+                                  return CommentItem(
+                                      commentBean: controller.comments![index]);
                                 })
                               else
                                 const Center(
@@ -267,7 +302,8 @@ class ChewieVideo extends StatelessWidget {
         listenable: _videoNotifier,
         builder: (context, child) {
           final orientation = MediaQuery.of(context).orientation;
-          _videoNotifier.chewieController!.isFullScreen = orientation == Orientation.landscape;
+          _videoNotifier.chewieController!.isFullScreen =
+              orientation == Orientation.landscape;
           return Scaffold(
             resizeToAvoidBottomInset: false,
             body: Container(
@@ -293,7 +329,8 @@ class VideoNotifier extends ChangeNotifier {
       autoPlay: true,
       showOptions: false,
       showControlsOnInitialize: false,
-      routePageBuilder: (context, animation, secondaryAnimation, controllerProvider) {
+      routePageBuilder:
+          (context, animation, secondaryAnimation, controllerProvider) {
         return ChewieVideo(notifier: this);
       },
     );

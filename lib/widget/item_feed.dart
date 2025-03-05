@@ -44,10 +44,11 @@ class FeedItem extends StatelessWidget {
         }
       },
       child: Container(
-        margin: EdgeInsets.only(left: 16.w,right: 16.w,bottom: 16.w),
+        margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w),
         padding: EdgeInsets.only(bottom: 16.w),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05))),
+          border: Border(
+              bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,9 +72,11 @@ class FeedItem extends StatelessWidget {
                 if ((onShield != null || onShieldUser != null) &&
                     !UserStore.of.isMe(item.user?.id))
                   FeedMoreAction(
-                    onShield: onShield,
-                    onShieldUser: onShieldUser,
-                    onReport: onReport,
+                    actions: {
+                      '屏蔽该内容': onShieldUser,
+                      '屏蔽该用户': onShield,
+                      '举报该内容': onReport
+                    },
                   ),
               ],
             ),

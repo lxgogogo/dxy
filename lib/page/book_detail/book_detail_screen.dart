@@ -24,6 +24,8 @@ import 'package:holdem/widget/no_network.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../utils/date_util.dart';
+
 part 'book_detail_controller.dart';
 
 class BookDetailScreen extends StatefulWidget {
@@ -116,6 +118,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.w600,
                               ),
+                            ),
+
+                            Text(
+                              '${DateUtil.formatDateAlias(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布',
+                              style: TextStyle(
+                                  color: '#333333'.hexColor, fontSize: 12),
                             ),
                             if (controller
                                     .detailBean?.description?.isNotEmpty ==

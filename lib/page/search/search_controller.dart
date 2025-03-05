@@ -11,18 +11,18 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
 
   @override
   void onInit() {
+    super.onInit();
     tabController = TabController(
       length: SearchType.values.length,
       vsync: this,
     );
-    super.onInit();
   }
 
   @override
   void onReady () {
+    super.onReady();
     historyItems = StorageUtil().prefs?.getStringList('search') ?? [];
     loadHotTags();
-    super.onReady();
   }
 
   Future<void> loadHotTags() async {

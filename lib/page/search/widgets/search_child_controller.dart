@@ -95,17 +95,17 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
             tagItems.addAll(dataList);
           }
           break;
-        case SearchType.competition:
-          await NetRequest().indexList(params, (data) {
-            final dataList =
-                List<CompetitionBean>.from(data['list'].map((article) => CompetitionBean.fromJson(article)));
-            recordsSize = dataList.length;
-            if (pageNum == 1) {
-              competitionItems.clear();
-            }
-            competitionItems.addAll(dataList);
-          });
-          break;
+        // case SearchType.competition:
+        //   await NetRequest().indexList(params, (data) {
+        //     final dataList =
+        //         List<CompetitionBean>.from(data['list'].map((article) => CompetitionBean.fromJson(article)));
+        //     recordsSize = dataList.length;
+        //     if (pageNum == 1) {
+        //       competitionItems.clear();
+        //     }
+        //     competitionItems.addAll(dataList);
+        //   });
+        //   break;
 
       }
       if (recordsSize < pageSize) {

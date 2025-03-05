@@ -25,8 +25,8 @@ enum SearchType {
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
   user('用户', categoryAlias: ''),
-  tag('话题', categoryAlias: ''),
-  competition('赛事', categoryAlias: 'competition');
+  tag('话题', categoryAlias: '');
+  // competition('赛事', categoryAlias: 'competition');
 
   final String title;
 
@@ -78,7 +78,7 @@ class SearchScreen extends GetView<SearchController> {
                 )
               ],
             ),
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             body: controller.showResult
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

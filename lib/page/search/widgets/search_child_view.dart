@@ -68,8 +68,8 @@ class SearchChildView extends GetView<SearchChildView> {
         return _buildUserView(controller);
       case SearchType.tag:
         return _buildTagView(controller);
-      case SearchType.competition:
-        return _buildCompetitionView(controller);
+      // case SearchType.competition:
+      //   return _buildCompetitionView(controller);
     }
   }
 

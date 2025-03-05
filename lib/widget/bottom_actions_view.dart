@@ -131,7 +131,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                               child: GestureDetector(
                                 onTap: () {
                                   Get.find<FeedDetailController>(
-                                          tag: Get.arguments)
+                                          tag: Get.arguments.toString())
                                       .followToggle();
                                 },
                                 child:

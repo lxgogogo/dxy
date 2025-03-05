@@ -44,7 +44,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w).copyWith(top: 0),
                 child: Row(
                   children: [
                     Expanded(
@@ -52,28 +52,23 @@ class SearchTagScreen extends GetView<SearchTagController> {
                         controller.tagModel?.name ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w600,
-                            color: '#333333'.hexColor),
+                        style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600, color: '#333333'.hexColor),
                       ),
                     ),
-
                     Text(
                       '阅读',
                       style: TextStyle(
-                        color: Color(0xFF333333).withOpacity(0.7),
-                        fontSize: 12,
+                        color: const Color(0xFF333333).withOpacity(0.7),
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     SizedBox(width: 12.w),
                     Text(
                       controller.tagModel?.viewCount?.abbreviateNumber ?? '0',
-                      style: const TextStyle(
-                        color: Color(0xFF333333),
-                        fontSize: 12,
-                        fontFamily: 'PingFang SC',
+                      style: TextStyle(
+                        color: const Color(0xFF333333),
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -81,76 +76,85 @@ class SearchTagScreen extends GetView<SearchTagController> {
                     Text(
                       '讨论',
                       style: TextStyle(
-                        color: Color(0xFF333333).withOpacity(0.7),
-                        fontSize: 12,
+                        color: const Color(0xFF333333).withOpacity(0.7),
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     SizedBox(width: 12.w),
                     Text(
-                      controller.tagModel?.commentCount?.abbreviateNumber ??
-                          '0',
-                      style: const TextStyle(
-                        color: Color(0xFF333333),
-                        fontSize: 12,
-                        fontFamily: 'PingFang SC',
+                      controller.tagModel?.commentCount?.abbreviateNumber ?? '0',
+                      style: TextStyle(
+                        color: const Color(0xFF333333),
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 24.w,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 6.w),
-                child: TabBar(
-                  controller: controller.tabController,
-                  tabs: SearchTagType.values
-                      .map((e) => Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 6.w),
-                            child: Tab(text: e.title),
-                          ))
-                      .toList(),
-                  isScrollable: true,
-                  tabAlignment: TabAlignment.start,
-                  labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
-                  indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                  indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      color: const Color(0xff6198f7),
-                      width: 2.w, // 选中线条宽度
-                    ),
-                    insets: EdgeInsets.symmetric(horizontal: 15.w),
-                    borderRadius: BorderRadius.circular(2.w),
-                  ),
-                  enableFeedback: false,
-                  overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                    return Colors.transparent;
-                  }),
-                  dividerHeight: 0,
-                  labelStyle: TextStyle(
-                    color: const Color(0xff2c2c2c),
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  unselectedLabelStyle: TextStyle(
-                    color: const Color(0xff666666),
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
               Expanded(
-                child: TabBarView(
-                  controller: controller.tabController,
-                  children: SearchTagType.values
-                      .map((e) => SearchTagChildView(
-                            type: e,
-                            tagModel: controller.tagModel,
-                          ).keepAlive)
-                      .toList(),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 6.w),
+                        child: TabBar(
+                          controller: controller.tabController,
+                          tabs: SearchTagType.values
+                              .map((e) => Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 6.w),
+                                    child: Tab(text: e.title),
+                                  ))
+                              .toList(),
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
+                          indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                              color: const Color(0xff6198f7),
+                              width: 2.w, // 选中线条宽度
+                            ),
+                            insets: EdgeInsets.symmetric(horizontal: 15.w),
+                            borderRadius: BorderRadius.circular(2.w),
+                          ),
+                          enableFeedback: false,
+                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                            return Colors.transparent;
+                          }),
+                          dividerHeight: 0,
+                          labelStyle: TextStyle(
+                            color: const Color(0xff2c2c2c),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: controller.tabController,
+                          children: SearchTagType.values
+                              .map((e) => SearchTagChildView(
+                                    type: e,
+                                    tagModel: controller.tagModel,
+                                  ).keepAlive)
+                              .toList(),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

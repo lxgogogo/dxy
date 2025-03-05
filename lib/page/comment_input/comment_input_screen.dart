@@ -33,7 +33,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.w).copyWith(bottom: ScreenUtil().bottomBarHeight),
           decoration: BoxDecoration(
-            color: const Color(0xffF2F8FD),
+            color:Colors.white,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(12.r),
             ),

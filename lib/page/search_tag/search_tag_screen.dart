@@ -13,7 +13,7 @@ import 'package:holdem/widget/keepalive_wrapper.dart';
 part 'search_tag_controller.dart';
 
 enum SearchTagType {
- // news('资讯', categoryAlias: 'news'),
+  // news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
@@ -38,21 +38,27 @@ class SearchTagScreen extends GetView<SearchTagController> {
         return Scaffold(
           appBar: CommonAppBar.arrowBack(
             context,
-            title: controller.tagModel?.name ?? '',
-            actions: [
-
-            ],
           ),
           backgroundColor: Colors.white,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: EdgeInsets.only(left:16.w,right: 16.w),
+                padding: EdgeInsets.only(left: 16.w, right: 16.w),
                 child: Row(
                   children: [
-                    Text(controller.tagModel?.name ?? '',style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.w600,color: '#333333'.hexColor),),
-                    const Spacer(),
+                    Expanded(
+                      child: Text(
+                        controller.tagModel?.name ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w600,
+                            color: '#333333'.hexColor),
+                      ),
+                    ),
+
                     Text(
                       '阅读',
                       style: TextStyle(
@@ -82,7 +88,8 @@ class SearchTagScreen extends GetView<SearchTagController> {
                     ),
                     SizedBox(width: 12.w),
                     Text(
-                      controller.tagModel?.commentCount?.abbreviateNumber ?? '0',
+                      controller.tagModel?.commentCount?.abbreviateNumber ??
+                          '0',
                       style: const TextStyle(
                         color: Color(0xFF333333),
                         fontSize: 12,
@@ -93,7 +100,9 @@ class SearchTagScreen extends GetView<SearchTagController> {
                   ],
                 ),
               ),
-              SizedBox(height: 24.w,),
+              SizedBox(
+                height: 24.w,
+              ),
               Padding(
                 padding: EdgeInsets.only(left: 6.w),
                 child: TabBar(

@@ -136,7 +136,7 @@ class MessageCommonItem extends StatelessWidget {
                     else
                       Text(
                         item.createdAt != null
-                            ? DateUtil.formatDateAlias(
+                            ? DateUtil.formatDateAlias3(
                                 item.createdAt!.millisecondsSinceEpoch)
                             : '',
                         style: TextStyle(
@@ -161,7 +161,7 @@ class MessageCommonItem extends StatelessWidget {
                     if (isFavorite)
                       Text(
                         item.createdAt != null
-                            ? DateUtil.formatDateAlias(
+                            ? DateUtil.formatDateAlias3(
                                 item.createdAt!.millisecondsSinceEpoch)
                             : '',
                         style: TextStyle(

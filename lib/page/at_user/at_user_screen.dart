@@ -132,7 +132,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
         //   },
         // ),
         buildSearchInput(),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Expanded(child: listView())
@@ -260,18 +260,6 @@ class _AtUserScreenState extends State<AtUserScreen> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.px),
-                topRight: Radius.circular(12.px)),
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFF6FBFF),
-                Color(0xFFE8F3FF),
-              ],
-            )),
         child: ListView.builder(
           itemBuilder: (c, i) => listDataItem(i),
           // itemExtent: 160.0,
@@ -297,7 +285,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
                 width: 34.px,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(17.px),
-                    color: Color(0xeeffffff)),
+                    color: Colors.white),
                 child: Center(
                     child: ClipOval(
                   child: LoginHelper().getUserAvatar(

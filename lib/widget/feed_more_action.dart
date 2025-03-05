@@ -116,7 +116,7 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
           alignment: Alignment.center,
           child: Icon(
             Icons.more_vert,
-            size: 14.sp,
+            size: 16.sp,
           ),
         ),
 

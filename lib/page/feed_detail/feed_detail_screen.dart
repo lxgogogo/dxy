@@ -70,15 +70,17 @@ class FeedDetailScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                controller.detailBean?.title ?? '',
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w600,
+                              Expanded(
+                                child: Text(
+                                  controller.detailBean?.title ?? '',
+                                  style: TextStyle(
+                                    color: '#333333'.hexColor,
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                              const Spacer(),
+                              SizedBox(width: 8.w,),
                               FeedMoreAction(
                                 actions: {
                                   '屏蔽该内容': () {
@@ -121,7 +123,7 @@ class FeedDetailScreen extends StatelessWidget {
                                     bottomText1: controller
                                                 .detailBean?.createdAt !=
                                             null
-                                        ? '${DateUtil.formatDateAlias(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布'
+                                        ? '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch,)}发布'
                                         : '',
                                     bottomText1Style: TextStyle(
                                         color: '#333333'.hexColor,

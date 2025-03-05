@@ -59,17 +59,9 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
           // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height/2+MediaQuery.of(context).viewInsets.bottom),
           decoration: const BoxDecoration(
-            color: Color(0xfff2f9ff),
+            color: Colors.white,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(12),
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFF6FBFF),
-                Color(0xFFE8F3FF),
-              ],
             ),
           ),
           child: Padding(

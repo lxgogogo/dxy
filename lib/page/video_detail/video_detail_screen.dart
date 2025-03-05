@@ -67,7 +67,7 @@ class VideoDetailScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 8.w),
                           Text(
-                            '${DateUtil.formatDateAlias(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasBefore: true)}发布',
+                            '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, )}发布',
                             style: TextStyle(
                                 color: '#333333'.hexColor, fontSize: 12),
                           ),

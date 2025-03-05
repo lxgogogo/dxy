@@ -271,7 +271,7 @@ class DateUtil {
       Duration diff = today.difference(time);
 
       if (diff.compareTo(Duration.zero) >= 0) {
-        if (diff.inMinutes <= 60) {
+        if (diff.inMinutes <= 60 * 5) {
           return "${diff.inMinutes}分钟前";
         } else if (diff.inHours <= 24) {
           return "${diff.inHours}小时前";
@@ -321,7 +321,7 @@ class DateUtil {
     final today = DateTime.now();
     final diff = today.difference(time);
     final week = getWeekday(time);
-    if (diff.inMinutes <= 2) {
+    if (diff.inMinutes <= 5) {
       return "刚刚";
     } else if (isToday(time)) {
       return formatDate(time, format: 'HH:mm');
@@ -332,6 +332,32 @@ class DateUtil {
     } else {
       final year = time.year == today.year ? '' : '${time.year}年';
       return '$year${formatDate(time, format: 'MM月dd日 HH:mm')}';
+    }
+  }
+
+  //5分钟内：刚刚
+//5分钟～1小时：1小时内
+//1～24小时： x小时前
+//大于24小时：xxxx-xx-xx xx:xx:xx
+
+  static String formatDateAlias3(int date) {
+    if (date == null || date == 0) return "";
+
+    final now = DateTime.now();
+    final target = DateTime.fromMillisecondsSinceEpoch(date);
+    final difference = now.difference(target);
+
+    if (difference.inMinutes <= 5) {
+      return "刚刚";
+    } else if (difference.inMinutes <= 60) {
+      // 5~60分钟
+      return "1小时内";
+    } else if (difference.inHours <= 24) {
+      // 1~24小时
+      return "${difference.inHours}小时前";
+    } else {
+      // 超过24小时
+      return formatDateMs(date, format: DateFormats.full);
     }
   }
 

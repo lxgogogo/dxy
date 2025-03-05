@@ -52,6 +52,45 @@ class FeedDetailController extends GetxController {
     super.onClose();
   }
 
+  Future<void> _onShield(int id) async {
+    final success = await NetRequest().shieldFeed(id);
+    if (success) {
+      ToastUtils.showToast('屏蔽成功');
+    }
+  }
+
+  Future<void> _onShieldUser(int id) async {
+    final success = await NetRequest().shieldUser(id);
+    if (success) {
+      ToastUtils.showToast('屏蔽成功');
+      ;
+    }
+  }
+
+  Future<void> _onReport(int id, int userId) async {
+    final reportTypes = await ConfigStore.of.getReportTypes();
+    Get.bottomSheet(
+      ReportSheet(
+        reportTypes: reportTypes,
+        onReport: (int index) async {
+          try {
+            final res = await CommonService.of.reportCreate(
+              'thread',
+              id,
+              userId,
+              reason: reportTypes[index].value,
+            );
+            if (res.isSuccess) {
+              ToastUtils.showToast('举报成功，我们将会在24小时内受理');
+            }
+          } finally {
+            Get.back();
+          }
+        },
+      ),
+    );
+  }
+
   requestDetail({
     bool showLoading = true,
   }) {
@@ -67,7 +106,8 @@ class FeedDetailController extends GetxController {
         detailBean = BoardBean.fromJson(data);
         safeUpdate();
         if (detailBean?.files?.isNotEmpty == true) {
-          final videoIndex = detailBean!.files!.indexWhere((e) => e.type == 'video');
+          final videoIndex =
+              detailBean!.files!.indexWhere((e) => e.type == 'video');
           if (videoIndex != -1) {
             final videoUrl = detailBean!.files![videoIndex].url ?? '';
             if (videoUrl.isNotEmpty) {

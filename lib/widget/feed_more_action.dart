@@ -5,16 +5,13 @@ import 'package:super_tooltip/super_tooltip.dart';
 
 import '../stores/user_store.dart';
 
-class FeedMoreAction extends StatefulWidget {
-  final VoidCallback? onShield;
-  final VoidCallback? onShieldUser;
-  final VoidCallback? onReport;
+typedef FeedMoreActions= Map<String, VoidCallback?>;
 
+class FeedMoreAction extends StatefulWidget {
+  final FeedMoreActions actions;
   const FeedMoreAction({
     super.key,
-    this.onShield,
-    this.onShieldUser,
-    this.onReport,
+    required this.actions
   });
 
   @override
@@ -23,14 +20,15 @@ class FeedMoreAction extends StatefulWidget {
 
 class _FeedMoreActionState extends State<FeedMoreAction> {
   final SuperTooltipController _tipController = SuperTooltipController();
-  List<String> actions = [
-    '屏蔽该内容',
-    '屏蔽该用户',
-    '举报该内容',
-  ];
+  // List<String> actions = [
+  //   '屏蔽该内容',
+  //   '屏蔽该用户',
+  //   '举报该内容',
+  // ];
 
   @override
   Widget build(BuildContext context) {
+    final actions= widget.actions.keys.toList();
     return SuperTooltip(
       showBarrier: true,
       controller: _tipController,
@@ -74,14 +72,16 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
             return GestureDetector(
               onTap: () {
                 _tipController.hideTooltip();
-                switch (index) {
-                  case 0:
-                    widget.onShield?.call();
-                  case 1:
-                    widget.onShieldUser?.call();
-                  case 2:
-                    widget.onReport?.call();
-                }
+
+               widget.actions[actions[index]]?.call();
+                // switch (index) {
+                //   case 0:
+                //     widget.onShield?.call();
+                //   case 1:
+                //     widget.onShieldUser?.call();
+                //   case 2:
+                //     widget.onReport?.call();
+                // }
               },
               child: Container(
                 height: 41.5.w,

@@ -90,7 +90,7 @@ class SearchChildView extends GetView<SearchChildView> {
             itemBuilder: (_, int index) => GestureDetector(
               onTap: () {
                 Get.toNamed(Routes.searchTag, arguments: {
-                  'tag': tag,
+                  'tag': controller.tagItems[index],
                 });
               },
               child: Container(

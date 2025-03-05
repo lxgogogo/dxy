@@ -39,7 +39,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
           appBar: CommonAppBar.arrowBack(
             context,
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: '#f7f8fc'.hexColor,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

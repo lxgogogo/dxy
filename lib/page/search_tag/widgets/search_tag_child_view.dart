@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/board_list.dart';
 import 'package:holdem/model/course.dart';
@@ -63,62 +64,38 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
 
   Widget _buildCourseView(SearchTagChildController controller) {
     return controller.courses.isNotEmpty
-        ? CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
-                sliver: DecoratedSliver(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      centerSlice: Rect.fromLTRB(30, 14, 35, 28),
-                      image: AssetImage('assets/images/commen_bg.png'),
-                    ),
-                  ),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
-                          },
-                          child: Container(
-                            height: 48.w,
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    color: index < controller.courses.length - 1
-                                        ? const Color(0xffe6e6e6)
-                                        : Colors.transparent),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    controller.courses[index].title ?? '',
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                Image.asset(
-                                  'assets/images/arrow.png',
-                                  width: 6.w,
-                                  height: 10.w,
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      childCount: controller.courses.length,
-                    ),
-                  ),
-                ),
+        ? ListView.separated(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+      itemBuilder: (_, int index) => GestureDetector(
+        onTap: () {
+          Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
+        },
+        child: Container(
+          padding: EdgeInsets.only(bottom: 16.w),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: index < controller.courses.length - 1
+                    ? '#000000'.hexColor.withOpacity(0.05)
+                    : Colors.transparent,
               ),
-            ],
-          )
+            ),
+          ),
+          child: Text(
+            controller.courses[index].title ?? '',
+            style: TextStyle(
+              color: '#333333'.hexColor,
+              fontSize: 16.sp,
+            ),
+            softWrap: true,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+      separatorBuilder: (_, int index) => SizedBox(height: 16.w),
+      itemCount: controller.courses.length,
+    )
         : const NoDataView();
   }
 

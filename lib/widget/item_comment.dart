@@ -193,21 +193,19 @@ class _CommentItemState extends State<CommentItem> {
                       usePlaceHolder: false,
                       likeWidget: widget.commentBean.liked ?? false
                           ? Container(
-padding: EdgeInsets.all(4.w),
-                            child: SvgPicture.asset(
+                              padding: EdgeInsets.all(5.w),
+                              child: SvgPicture.asset(
                                 Assets.svg.liked,
                                 color: '#567BF6'.hexColor.withOpacity(0.7),
-
                               ),
-                          )
+                            )
                           : Container(
-                        padding: EdgeInsets.all(4.w),
-                            child: SvgPicture.asset(
+                              padding: EdgeInsets.all(5.w),
+                              child: SvgPicture.asset(
                                 Assets.svg.like,
-
                                 color: '#333333'.hexColor.withOpacity(0.7),
                               ),
-                          ),
+                            ),
                       onToggleLike: () async {
                         final data = await NetRequest().newContentLike({
                           'relType': 'comment',
@@ -341,6 +339,25 @@ padding: EdgeInsets.all(4.w),
                                           count:
                                               reply.likeCount.abbreviateNumber,
                                           liked: reply.liked ?? false,
+                                          likeWidget: reply.liked ?? false
+                                              ? Container(
+                                                  padding: EdgeInsets.all(5.w),
+                                                  child: SvgPicture.asset(
+                                                    Assets.svg.liked,
+                                                    color: '#567BF6'
+                                                        .hexColor
+                                                        .withOpacity(0.7),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  padding: EdgeInsets.all(5.w),
+                                                  child: SvgPicture.asset(
+                                                    Assets.svg.like,
+                                                    color: '#333333'
+                                                        .hexColor
+                                                        .withOpacity(0.7),
+                                                  ),
+                                                ),
                                           usePlaceHolder: false,
                                           onToggleLike: () async {
                                             final data = await NetRequest()

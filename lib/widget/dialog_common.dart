@@ -100,7 +100,7 @@ class CommonDialog extends StatelessWidget {
                             decoration: ShapeDecoration(
                               color: '#333333'.hexColor.withOpacity(0.1),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(8.w),
                               ),
                             ),
                             alignment: Alignment.center,
@@ -133,7 +133,7 @@ class CommonDialog extends StatelessWidget {
                               ],
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
+                              borderRadius: BorderRadius.circular(8.w),
                             ),
                           ),
                           alignment: Alignment.center,

@@ -13,7 +13,7 @@ import 'package:holdem/widget/keepalive_wrapper.dart';
 part 'search_tag_controller.dart';
 
 enum SearchTagType {
-  news('资讯', categoryAlias: 'news'),
+ // news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
@@ -31,93 +31,123 @@ class SearchTagScreen extends GetView<SearchTagController> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-      child: GetBuilder<SearchTagController>(
-        global: false,
-        init: SearchTagController(),
-        builder: (controller) {
-          return Scaffold(
-            appBar: CommonAppBar.arrowBack(
-              context,
-              title: controller.tagModel?.name ?? '',
-              actions: [
-                Padding(
-                  padding: EdgeInsets.only(right: 16.w),
-                  child: Row(
-                    children: [
-                      CountView(
-                        count: controller.tagModel?.viewCount?.abbreviateNumber ?? '0',
-                        usePlaceHolder: false,
+    return GetBuilder<SearchTagController>(
+      global: false,
+      init: SearchTagController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: CommonAppBar.arrowBack(
+            context,
+            title: controller.tagModel?.name ?? '',
+            actions: [
+
+            ],
+          ),
+          backgroundColor: Colors.white,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left:16.w,right: 16.w),
+                child: Row(
+                  children: [
+                    Text(controller.tagModel?.name ?? '',style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.w600,color: '#333333'.hexColor),),
+                    const Spacer(),
+                    Text(
+                      '阅读',
+                      style: TextStyle(
+                        color: Color(0xFF333333).withOpacity(0.7),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
                       ),
-                      SizedBox(width: 4.w),
-                      CountComment(
-                        count: controller.tagModel?.commentCount?.abbreviateNumber ?? '0',
-                        usePlaceHolder: false,
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      controller.tagModel?.viewCount?.abbreviateNumber ?? '0',
+                      style: const TextStyle(
+                        color: Color(0xFF333333),
+                        fontSize: 12,
+                        fontFamily: 'PingFang SC',
+                        fontWeight: FontWeight.w600,
                       ),
-                    ],
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      '讨论',
+                      style: TextStyle(
+                        color: Color(0xFF333333).withOpacity(0.7),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      controller.tagModel?.commentCount?.abbreviateNumber ?? '0',
+                      style: const TextStyle(
+                        color: Color(0xFF333333),
+                        fontSize: 12,
+                        fontFamily: 'PingFang SC',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 24.w,),
+              Padding(
+                padding: EdgeInsets.only(left: 6.w),
+                child: TabBar(
+                  controller: controller.tabController,
+                  tabs: SearchTagType.values
+                      .map((e) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 6.w),
+                            child: Tab(text: e.title),
+                          ))
+                      .toList(),
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
+                  indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                  indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(
+                      color: const Color(0xff6198f7),
+                      width: 2.w, // 选中线条宽度
+                    ),
+                    insets: EdgeInsets.symmetric(horizontal: 15.w),
+                    borderRadius: BorderRadius.circular(2.w),
                   ),
-                )
-              ],
-            ),
-            backgroundColor: Colors.transparent,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 6.w),
-                  child: TabBar(
-                    controller: controller.tabController,
-                    tabs: SearchTagType.values
-                        .map((e) => Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 6.w),
-                              child: Tab(text: e.title),
-                            ))
-                        .toList(),
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.start,
-                    labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
-                    indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                    indicator: UnderlineTabIndicator(
-                      borderSide: BorderSide(
-                        color: const Color(0xff6198f7),
-                        width: 2.w, // 选中线条宽度
-                      ),
-                      insets: EdgeInsets.symmetric(horizontal: 8.w),
-                      borderRadius: BorderRadius.circular(2.w),
-                    ),
-                    enableFeedback: false,
-                    overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                      return Colors.transparent;
-                    }),
-                    dividerHeight: 0,
-                    labelStyle: TextStyle(
-                      color: const Color(0xff2c2c2c),
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    unselectedLabelStyle: TextStyle(
-                      color: const Color(0xff666666),
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
+                  enableFeedback: false,
+                  overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                    return Colors.transparent;
+                  }),
+                  dividerHeight: 0,
+                  labelStyle: TextStyle(
+                    color: const Color(0xff2c2c2c),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    color: const Color(0xff666666),
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-                Expanded(
-                  child: TabBarView(
-                    controller: controller.tabController,
-                    children: SearchTagType.values
-                        .map((e) => SearchTagChildView(
-                              type: e,
-                              tagModel: controller.tagModel,
-                            ).keepAlive)
-                        .toList(),
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: controller.tabController,
+                  children: SearchTagType.values
+                      .map((e) => SearchTagChildView(
+                            type: e,
+                            tagModel: controller.tagModel,
+                          ).keepAlive)
+                      .toList(),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

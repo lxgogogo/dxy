@@ -19,6 +19,8 @@ import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../widget/three_d_book_item.dart';
+
 part 'search_tag_child_controller.dart';
 
 class SearchTagChildView extends GetView<SearchTagChildView> {
@@ -46,8 +48,8 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
 
   Widget _buildView(SearchTagChildController controller) {
     switch (type) {
-      case SearchTagType.news:
-        return _buildNewsView(controller);
+      // case SearchTagType.news:
+      //   return _buildNewsView(controller);
       case SearchTagType.video:
         return _buildVideoView(controller);
       case SearchTagType.book:
@@ -120,12 +122,29 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
         : const NoDataView();
   }
 
+
   Widget _buildBookView(SearchTagChildController controller) {
     return controller.articles.isNotEmpty
-        ? ListView.builder(
-            itemBuilder: (c, i) => BookItem(article: controller.articles[i]),
-            itemCount: controller.articles.length,
-          )
+        ? Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final itemWidth = (constraints.maxWidth - 12.w) / 2;
+          return Wrap(
+            spacing: 12.w,
+            runSpacing: 12.w,
+            children: controller.articles
+                .map(
+                  (e) => ThreeDBookItem(
+                itemWidth: itemWidth,
+                item: e,
+              ),
+            )
+                .toList(),
+          );
+        },
+      ),
+    )
         : const NoDataView();
   }
 

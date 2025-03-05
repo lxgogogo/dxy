@@ -15,6 +15,8 @@ import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
+import '../../widget/dialog_common.dart';
+
 part 'search_controller.dart';
 
 enum SearchType {
@@ -67,8 +69,9 @@ class SearchScreen extends GetView<SearchController> {
                     child: Text(
                       '搜索',
                       style: TextStyle(
-                        color: const Color(0xff249CFC),
-                        fontSize: 15.w,
+                        color: '#557BF6'.hexColor,
+                        fontSize: 16.w,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -218,16 +221,20 @@ class SearchScreen extends GetView<SearchController> {
               ),
               GestureDetector(
                 onTap: () async {
-                  final isConfirm = await showDialog(
-                    barrierDismissible: true,
+                  showDialog(
+                    barrierDismissible: false,
                     context: context,
-                    builder: (context) => const DialogConfirm(
-                      title: '确定要删除全部历史吗？',
+                    builder: (context) => CommonDialog(
+                      title: '删除历史',
+                      content: '确定要删除全部历史吗？',
+                      confirmText: '确认删除',
+                      onConfirm: () {
+                        Navigator.of(context).pop();
+                        controller.deleteAllHistory();
+                      },
+                      cancelText: '取消',
                     ),
                   );
-                  if (isConfirm == true) {
-                    controller.deleteAllHistory();
-                  }
                 },
                 child: SvgPicture.asset(
                   Assets.svg.iconHistoryDelete,
@@ -255,16 +262,20 @@ class SearchScreen extends GetView<SearchController> {
                           controller.onSearch();
                         },
                         onLongPress: () async {
-                          final isConfirm = await showDialog(
-                            barrierDismissible: true,
+                          showDialog(
+                            barrierDismissible: false,
                             context: context,
-                            builder: (context) => const DialogConfirm(
-                              title: '确认删除当前搜索记录？',
+                            builder: (context) => CommonDialog(
+                              title: '删除历史',
+                              content: '确认删除当前搜索记录吗？',
+                              confirmText: '确认',
+                              onConfirm: () {
+                                Navigator.of(context).pop();
+                                controller.deleteItemHistory(index);
+                              },
+                              cancelText: '取消',
                             ),
                           );
-                          if (isConfirm == true) {
-                            controller.deleteItemHistory(index);
-                          }
                         },
                         child: Container(
                           width: itemWidth,

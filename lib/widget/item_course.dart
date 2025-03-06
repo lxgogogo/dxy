@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course.dart';
 import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -16,51 +20,55 @@ class CourseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LinearCard(
-      padding: EdgeInsets.only(bottom: 2.px),
-      margin: EdgeInsets.only(top: 10.px, left: 18.px, right: 18.px, bottom: 10.px),
-      child: Container(
-        // padding: EdgeInsets.only(left: 20.px,right: 12.px,top:5.px,bottom: 5.px),
-          decoration: BoxDecoration(
-            color: const Color(0xffF8FBFF),
-            borderRadius: BorderRadius.all(Radius.circular(13.px)),
-          ),
-          child: Column(
-            children: [
-              ...List.generate(article.sublist?.length ?? 0, (i) {
-                CollectBean collectBean = article.sublist![i];
-                return GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.articleDetail, arguments: collectBean.targetId ?? 0);
-                    },
-                    child: Container(
-                      height: 48.px,
-                      padding: EdgeInsets.symmetric(horizontal: 20.px),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: i < article.sublist!.length - 1
-                                      ? const Color(0xffe6e6e6)
-                                      : Colors.transparent))),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Text(
-                                collectBean.title!,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              )),
-                          Image.asset(
-                            'assets/images/arrow.png',
-                            width: 6.px,
-                            height: 10.px,
-                          )
-                        ],
+    return Column(
+      children: [
+        ...List.generate(
+          article.sublist?.length ?? 0,
+          (i) {
+            CollectBean collectBean = article.sublist![i];
+            return GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.articleDetail, arguments: collectBean.targetId ?? 0);
+              },
+              child: Container(
+                height: 44.w,
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                margin: EdgeInsets.only(bottom: 6.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: '#0050FF'.hexColor.withOpacity(0.1),
+                      offset: Offset(0, 5.w),
+                      blurRadius: 10.r,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        collectBean.title!,
+                        style: TextStyle(
+                          color: '#132449'.hexColor.withOpacity(0.7),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ));
-              }),
-            ],
-          )),
+                    ),
+                    SvgPicture.asset(
+                      Assets.svg.iconArrow,
+                      width: 14.w,
+                      height: 14.w,
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

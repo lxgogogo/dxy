@@ -200,26 +200,34 @@ class CourseScreen extends StatelessWidget {
                                     delegate: SliverChildBuilderDelegate(
                                       (BuildContext context, int index) {
                                         CourseBean bean = controller.courses[index];
-                                        return Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 3.w,
-                                                  height: 11.w,
-                                                  margin: EdgeInsets.only(right: 5.w, left: 18.w),
-                                                  decoration: BoxDecoration(
-                                                      color: const Color(0xff249CFC),
-                                                      borderRadius: BorderRadius.circular(1.5.w)),
-                                                ),
-                                                Text(
-                                                  bean.heading!,
-                                                  style: TextStyle(color: const Color(0xff424242), fontSize: 14.w),
-                                                )
-                                              ],
-                                            ),
-                                            CourseItem(article: bean)
-                                          ],
+                                        return Container(
+                                          padding:  EdgeInsets.symmetric(horizontal: 12.w),
+                                          margin: EdgeInsets.only(bottom: 18.w),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 4.w,
+                                                    height: 16.w,
+                                                    margin: EdgeInsets.only(right: 6.w),
+                                                    decoration: BoxDecoration(
+                                                        color: '#557BF6'.hexColor,
+                                                        borderRadius: BorderRadius.circular(100.r)),
+                                                  ),
+                                                  Text(
+                                                    bean.heading!,
+                                                    style: TextStyle(
+                                                      color: '#132449'.hexColor,
+                                                      fontSize: 16.sp,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(height: 9.w),
+                                              CourseItem(article: bean)
+                                            ],
+                                          ),
                                         );
                                       },
                                       childCount: controller.courses.length,

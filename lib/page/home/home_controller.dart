@@ -16,6 +16,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     loadBanners();
+    loadHotVideos();
     loadVideos();
     loadCourses();
     loadBooks();

@@ -39,6 +39,9 @@ class $AssetsImagesGen {
   AssetGenImage get backWhite =>
       const AssetGenImage('assets/images/back_white.png');
 
+  /// File path: assets/images/banner.png
+  AssetGenImage get banner => const AssetGenImage('assets/images/banner.png');
+
   /// File path: assets/images/change_avatar.png
   AssetGenImage get changeAvatar =>
       const AssetGenImage('assets/images/change_avatar.png');
@@ -517,6 +520,7 @@ class $AssetsImagesGen {
         arrowRight,
         back,
         backWhite,
+        banner,
         changeAvatar,
         clear,
         clock,

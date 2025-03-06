@@ -32,5 +32,6 @@ abstract class Routes {
   static const competitionCalendar = '/competitionCalendar';
   static const competitionDetail = '/competitionDetail';
   static const course = '/course';
+  static const videoList = '/videoList';
 
 }

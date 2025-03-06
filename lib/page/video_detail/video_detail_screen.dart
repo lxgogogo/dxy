@@ -60,7 +60,7 @@ class VideoDetailScreen extends StatelessWidget {
                           Text(
                             controller.detailBean?.title ?? '',
                             style: TextStyle(
-                              color: const Color(0xff2c2c2c),
+                              color: '#333333'.hexColor,
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w600,
                             ),

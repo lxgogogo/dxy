@@ -84,7 +84,9 @@ class HomeController extends GetxController {
     );
   }
 
-  void toVideoList() {}
+  void toVideoList() {
+    Get.toNamed(Routes.videoList);
+  }
 
   Future<void> loadCourses() async {
     await NetRequest().courseCategory(

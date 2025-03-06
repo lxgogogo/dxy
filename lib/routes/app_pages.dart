@@ -26,6 +26,7 @@ import 'package:holdem/page/reply_list/reply_list_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
 import 'package:holdem/page/setting/setting_screen.dart';
 import 'package:holdem/page/splash/splash_screen.dart';
+import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/services/index.dart';
 
 import '../page/course/course_screen.dart';
@@ -157,6 +158,10 @@ class AppPages {
     GetPage(
       name: Routes.course,
       page: () => const CourseScreen(),
+    ),
+    GetPage(
+      name: Routes.videoList,
+      page: () => const VideoListScreen(),
     ),
   ];
 }

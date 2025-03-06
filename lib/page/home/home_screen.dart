@@ -175,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 name: '精彩视频',
                                                 nameEn: 'Video',
                                                 imagePath: Assets.images.iconHomeVideo.path,
+                                                onTap: ()=>Get.toNamed(Routes.videoList),
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,

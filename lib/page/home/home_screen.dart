@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +20,9 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../model/banner.dart';
 
 part 'home_controller.dart';
 
@@ -91,16 +96,54 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    Assets.images.homeBanner.image(
-                      height: 272.w,
-                    ),
+                    if (controller.banners.isNotEmpty)
+                      SizedBox(
+                        height: 272.w,
+                        child: Builder(
+                          builder: (context) {
+                            for (final banner in controller.banners) {
+                              precacheImage(
+                                CachedNetworkImageProvider(banner.imgMobile ?? '', cacheKey: banner.imgMobile ?? ''),
+                                context,
+                              );
+                            }
+                            return SizedBox(
+                              height: 272.w,
+                              child: Swiper(
+                                itemCount: controller.banners.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: controller.banners[index].imgMobile ?? '',
+                                    fadeOutDuration: Duration.zero,
+                                    fadeInDuration: Duration.zero,
+                                    cacheKey: controller.banners[index].imgMobile ?? '',
+                                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+                                      fit: BoxFit.fill,
+                                    ),
+                                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                      fit: BoxFit.fill,
+                                    ),
+                                  );
+                                },
+                                autoplay: true,
+                                onIndexChanged: controller.onIndexChanged,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     SingleChildScrollView(
                       controller: controller.scrollController,
                       physics: const ClampingScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          SizedBox(height: 211.w),
+                          GestureDetector(
+                            onTap: controller.jumpPage,
+                            behavior: HitTestBehavior.translucent,
+                            child: SizedBox(height: 211.w),
+                          ),
                           ClipRRect(
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
@@ -169,9 +212,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             Text(
                                               '换一批',
                                               style: TextStyle(
-                                                color: '#1E1E1E'
-                                                    .hexColor
-                                                    .withOpacity(0.5),
+                                                color: '#1E1E1E'.hexColor.withOpacity(0.5),
                                                 fontSize: 12.sp,
                                               ),
                                             ),
@@ -187,10 +228,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     ),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints constraints) {
-                                        final itemWidth =
-                                            (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,
@@ -202,12 +241,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                             id: e.id,
                                                             title: e.title,
                                                             cover: e.cover,
-                                                            description:
-                                                                e.description,
+                                                            description: e.description,
                                                             type: e.type,
                                                             commentCount: e.popularCount?.toInt(),
-                                                            createdAt:
-                                                                e.createdAt)),
+                                                            createdAt: e.createdAt)),
                                                   ))
                                               .toList(),
                                         );

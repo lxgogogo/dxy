@@ -3,15 +3,19 @@ part of 'home_screen.dart';
 class HomeController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
+  List<BannerBean> banners = [];
   List<ArticleBean> videoItems = [];
   List<IndexCategory> courseItems = [];
   List<ArticleBean> bookItems = [];
   List<VideoBean> hotVideos = [];
+
   bool isShowHomeMenu = false;
+
+  int bannerIndex = 0;
 
   @override
   void onReady() {
-    loadHotVideos();
+    loadBanners();
     loadVideos();
     loadCourses();
     loadBooks();
@@ -22,6 +26,13 @@ class HomeController extends GetxController {
         isShowHomeMenu = isShow;
         safeUpdate();
       }
+    });
+  }
+
+  Future<void> loadBanners() async {
+    await NetRequest().indexBanner({'pos': 'index.banner', 'type': '1'}, showLoading: false, (data) {
+      banners = List<BannerBean>.from(data.map((banner) => BannerBean.fromJson(banner)));
+      safeUpdate();
     });
   }
 
@@ -48,8 +59,11 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadHotVideos() async {
-   final params = {"id":[0,0,0,0],"size":4};
-    if(hotVideos.isNotEmpty){
+    final params = {
+      "id": [0, 0, 0, 0],
+      "size": 4
+    };
+    if (hotVideos.isNotEmpty) {
       params['id'] = hotVideos.map((e) => e.id).toList();
       params['size'] = hotVideos.length;
     }
@@ -100,5 +114,31 @@ class HomeController extends GetxController {
         safeUpdate();
       }
     });
+  }
+
+  void jumpPage() {
+    final bean = banners[bannerIndex];
+    if (bean.jumpValue == null) return;
+    if (bean.jumpType == 'url') {
+      if (bean.jumpValue?.isNotEmpty == true) {
+        launchUrlString(bean.jumpValue!, mode: LaunchMode.externalApplication);
+      }
+      return;
+    }
+    var id = int.tryParse(bean.jumpValue!);
+    if (id == null) return;
+    if (bean.jumpType == 'book') {
+      Get.toNamed(Routes.bookDetail, arguments: id);
+    } else if (bean.jumpType == 'article') {
+      Get.toNamed(Routes.articleDetail, arguments: id);
+    } else if (bean.jumpType == 'video' || bean.jumpType == 'videoList') {
+      Get.toNamed(Routes.videoDetail, arguments: {'id': id});
+    } else if (bean.jumpType == 'thread') {
+      Get.toNamed(Routes.feedDetail, arguments: id);
+    }
+  }
+
+  void onIndexChanged(int value) {
+    bannerIndex = value;
   }
 }

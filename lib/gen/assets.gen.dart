@@ -96,6 +96,10 @@ class $AssetsImagesGen {
   AssetGenImage get course3 =>
       const AssetGenImage('assets/images/course_3.png');
 
+  /// File path: assets/images/course_banner.png
+  AssetGenImage get courseBanner =>
+      const AssetGenImage('assets/images/course_banner.png');
+
   /// File path: assets/images/course_card_bg.png
   AssetGenImage get courseCardBg =>
       const AssetGenImage('assets/images/course_card_bg.png');
@@ -528,6 +532,7 @@ class $AssetsImagesGen {
         course1,
         course2,
         course3,
+        courseBanner,
         courseCardBg,
         defaultAvatar,
         delete,
@@ -821,9 +826,16 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName);
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
+
+  final Size? size;
+  final Set<String> flavors;
 
   Image image({
     Key? key,
@@ -843,7 +855,7 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
     FilterQuality filterQuality = FilterQuality.low,

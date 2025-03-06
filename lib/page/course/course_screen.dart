@@ -7,17 +7,9 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
-import 'package:holdem/model/article.dart';
 import 'package:holdem/model/index_category.dart';
-import 'package:holdem/page/home/widgets/home_course_item.dart';
-import 'package:holdem/page/home/widgets/home_menu_animation.dart';
-import 'package:holdem/page/home/widgets/home_nemu_item.dart';
-import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/common_app_bar.dart';
-import 'package:holdem/widget/item_video.dart';
-import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/course.dart';
@@ -57,7 +49,7 @@ class CourseScreen extends StatelessWidget {
                         Get.toNamed(Routes.search);
                       },
                       child: Padding(
-                        padding:  EdgeInsets.only(right: 16.w),
+                        padding: EdgeInsets.only(right: 16.w),
                         child: SvgPicture.asset(
                           Assets.svg.iconSearch,
                           width: 24.w,
@@ -71,7 +63,7 @@ class CourseScreen extends StatelessWidget {
               Expanded(
                 child: Stack(
                   children: <Widget>[
-                    Assets.images.homeBanner.image(
+                    Assets.images.courseBanner.image(
                       height: 272.w,
                     ),
                     NestedScrollView(
@@ -118,72 +110,78 @@ class CourseScreen extends StatelessWidget {
                                         child: BackdropFilter(
                                           filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
                                           child: Container(
-                                            color: controller.isShowHomeMenu ? '#F3F8FF'.hexColor : Colors.transparent ,
+                                            color: controller.isShowHomeMenu ? '#F3F8FF'.hexColor : Colors.transparent,
                                             child: SingleChildScrollView(
                                               scrollDirection: Axis.horizontal,
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 16.w),
-                                                  ...List.generate(
-                                                    controller.categories.length,
-                                                    (index) {
-                                                      return GestureDetector(
-                                                        onTap: () => controller.onTapTab(index),
-                                                        child: Container(
-                                                          height: 32.w,
-                                                          margin: EdgeInsets.symmetric(vertical: 12.w)
-                                                              .copyWith(right: 10.w),
-                                                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                                          alignment: Alignment.centerLeft,
-                                                          decoration: controller.categorySel == index
-                                                              ? BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(50.r),
-                                                                  gradient: const LinearGradient(
-                                                                    colors: [
-                                                                      Color(0xFF84BCF9),
-                                                                      Color(0xFF557BF6),
-                                                                    ],
+                                                  Container(
+                                                    height: 32.w,
+                                                    margin: EdgeInsets.symmetric(vertical: 12.w),
+                                                    child: Row(
+                                                      children: [
+                                                        ...List.generate(
+                                                          controller.categories.length,
+                                                          (index) {
+                                                            return GestureDetector(
+                                                              onTap: () => controller.onTapTab(index),
+                                                              child: Container(
+                                                                margin: EdgeInsets.only(right: 10.w),
+                                                                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                                                alignment: Alignment.centerLeft,
+                                                                decoration: controller.categorySel == index
+                                                                    ? BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(50.r),
+                                                                        gradient: const LinearGradient(
+                                                                          colors: [
+                                                                            Color(0xFF84BCF9),
+                                                                            Color(0xFF557BF6),
+                                                                          ],
+                                                                        ),
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color: '#0050FF'.hexColor.withOpacity(0.2),
+                                                                            offset: Offset(0, 6.w),
+                                                                            blurRadius: 12.r,
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    : BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(50.r),
+                                                                        gradient: LinearGradient(
+                                                                          colors: [
+                                                                            Colors.white,
+                                                                            Colors.white.withOpacity(0.5),
+                                                                          ],
+                                                                        ),
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color: '#0050FF'.hexColor.withOpacity(0.1),
+                                                                            offset: Offset(0, 3.27.w),
+                                                                            blurRadius: 6.54.r,
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                child: Text(
+                                                                  controller.categories[index].name ?? '',
+                                                                  style: TextStyle(
+                                                                    color: controller.categorySel == index
+                                                                        ? Colors.white
+                                                                        : '#333333'.hexColor.withOpacity(0.7),
+                                                                    fontSize: 12.sp,
+                                                                    fontWeight: controller.categorySel == index
+                                                                        ? FontWeight.w600
+                                                                        : FontWeight.w400,
                                                                   ),
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: '#0050FF'.hexColor.withOpacity(0.2),
-                                                                      offset: Offset(0, 6.w),
-                                                                      blurRadius: 12.r,
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              : BoxDecoration(
-                                                                  borderRadius: BorderRadius.circular(50.r),
-                                                                  gradient: LinearGradient(
-                                                                    colors: [
-                                                                      Colors.white,
-                                                                      Colors.white.withOpacity(0.5),
-                                                                    ],
-                                                                  ),
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: '#0050FF'.hexColor.withOpacity(0.1),
-                                                                      offset: Offset(0, 3.27.w),
-                                                                      blurRadius: 6.54.r,
-                                                                    ),
-                                                                  ],
                                                                 ),
-                                                          child: Text(
-                                                            controller.categories[index].name ?? '',
-                                                            style: TextStyle(
-                                                              color: controller.categorySel == index
-                                                                  ? Colors.white
-                                                                  : '#333333'.hexColor.withOpacity(0.7),
-                                                              fontSize: 12.sp,
-                                                              fontWeight: controller.categorySel == index
-                                                                  ? FontWeight.w600
-                                                                  : FontWeight.w400,
-                                                            ),
-                                                          ),
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
-                                                      );
-                                                    },
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               ),

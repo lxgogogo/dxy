@@ -29,6 +29,7 @@ import '../../../model/board_list.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
 import '../../../model/user.dart';
+import '../../../utils/date_util.dart';
 import '../../../utils/net_request.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/no_data.dart';
@@ -57,14 +58,19 @@ class MyCommentItem extends StatelessWidget {
     //6.评论没删, 资源没删 -> 评论保留, 资源跳转;  ->  resourceId=17815(内容id或者帖子id) resourceType="video" delType=6
     String? cover;
     String? content;
+    String? title;
     if (item.relType == 'thread') {
       cover = item.thread?.files?.firstOrNull?.url;
-      content = item.thread?.title;
+      content = HtmlParseUtil.of.pureCommentText(item.comment);
+      title = item.thread?.title;
     } else if (item.relType == 'content') {
       cover = item.content?.cover;
-      content = item.content?.title;
+      title = item.content?.title;
+      content = item.content?.description;
     } else if (item.relType == 'comment') {
-      content = HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
+      content =
+          HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
+      title = item.parentComment?.thread?.title;
     }
 
     String typeName = '';
@@ -105,110 +111,156 @@ class MyCommentItem extends StatelessWidget {
           Get.toNamed(Routes.articleDetail, arguments: id);
         } else if (item.resourceType == 'book') {
           Get.toNamed(Routes.bookDetail, arguments: id);
-        } else if (item.resourceType == 'video' || item.resourceType == 'videoList') {
+        } else if (item.resourceType == 'video' ||
+            item.resourceType == 'videoList') {
           Get.toNamed(Routes.videoDetail, arguments: {'id': id});
         }
       },
       child: Container(
-        height: 56.w,
-        margin: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Row(
+        margin: EdgeInsets.symmetric(horizontal: 16.w,vertical: 16.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BorderAvatar(
-              avatar: userProfileInfo?.avatar ?? '',
-              avatarSize: 50.w,
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    userProfileInfo?.nickname ?? '',
-                    style: TextStyle(
-                      color: const Color(0xff2a2a2a),
-                      fontSize: 14.w,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+            Row(
+              children: [
+                BorderAvatar(
+                  avatar: userProfileInfo?.avatar ?? '',
+                  avatarSize: 20.w,
+                  borderWidth: 0,
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  '评论了${typeName}:',
+                  style: TextStyle(
+                      color: '#333333'.hexColor.withOpacity(0.7),
+                      fontSize: 12.sp),
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  content ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600),
+                ),
+                const Spacer(),
+                Text(
+                  DateUtil.formatDate(item.createdAt!, format: 'yyyy.MM.dd'),
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: '#333333'.hexColor.withOpacity(0.8),
                   ),
-                  SizedBox(height: 4.w),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: item.isDeleted
-                            ? Text(
-                                content ?? '',
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : AtText(
-                                text: content ?? '',
-                                maxLines: 1,
-                              ),
-                      ),
-                      if (item.createdAt != null)
-                        Padding(
-                          padding: EdgeInsets.only(left: 4.w),
-                          child: Text(
-                            CommonUtils.timeFromNow(item.createdAt!),
-                            style: TextStyle(
-                              color: '#333333'.hexColor.withOpacity(0.5),
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                // Expanded(
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                //     children: [
+                //       Text(
+                //         userProfileInfo?.nickname ?? '',
+                //         style: TextStyle(
+                //           color: const Color(0xff2a2a2a),
+                //           fontSize: 14.w,
+                //           fontWeight: FontWeight.w500,
+                //         ),
+                //         maxLines: 1,
+                //         overflow: TextOverflow.ellipsis,
+                //       ),
+                //       SizedBox(height: 4.w),
+                //       Row(
+                //         children: [
+                //           Expanded(
+                //             child: item.isDeleted
+                //                 ? Text(
+                //                     content ?? '',
+                //                     style: TextStyle(
+                //                       color: '#333333'.hexColor,
+                //                       fontSize: 12.sp,
+                //                       fontWeight: FontWeight.w600,
+                //                     ),
+                //                     maxLines: 1,
+                //                     overflow: TextOverflow.ellipsis,
+                //                   )
+                //                 : AtText(
+                //                     text: content ?? '',
+                //                     maxLines: 1,
+                //                   ),
+                //           ),
+                //           if (item.createdAt != null)
+                //             Padding(
+                //               padding: EdgeInsets.only(left: 4.w),
+                //               child: Text(
+                //                 CommonUtils.timeFromNow(item.createdAt!),
+                //                 style: TextStyle(
+                //                   color: '#333333'.hexColor.withOpacity(0.5),
+                //                   fontSize: 12.sp,
+                //                 ),
+                //               ),
+                //             ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(width: 8.w),
+                // if (cover?.isNotEmpty == true)
+                //   Padding(
+                //     padding: EdgeInsets.only(right: 10.w),
+                //     child: Stack(
+                //       children: [
+                //         ClipRRect(
+                //           borderRadius: BorderRadius.circular(4.r),
+                //           child: CachedNetworkImage(
+                //             fit: BoxFit.cover,
+                //             imageUrl: cover ?? '',
+                //             width: 74.w,
+                //             height: 56.w,
+                //             placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                //             errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                //           ),
+                //         ),
+                //         if (item.resourceType == 'videoList')
+                //           Positioned(
+                //             top: 0,
+                //             right: 0,
+                //             child: Container(
+                //               padding: EdgeInsets.symmetric(horizontal: 2.w),
+                //               decoration: BoxDecoration(
+                //                 color: Colors.red,
+                //                 borderRadius: BorderRadius.circular(4.r),
+                //               ),
+                //               child: Text(
+                //                 '合集',
+                //                 style: TextStyle(
+                //                   color: Colors.white,
+                //                   fontSize: 8.sp,
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //       ],
+                //     ),
+                //   ),
+              ],
             ),
-            SizedBox(width: 8.w),
-            if (cover?.isNotEmpty == true)
-              Padding(
-                padding: EdgeInsets.only(right: 10.w),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4.r),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: cover ?? '',
-                        width: 74.w,
-                        height: 56.w,
-                        placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                        errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      ),
-                    ),
-                    if (item.resourceType == 'videoList')
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 2.w),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          child: Text(
-                            '合集',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 8.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+            const SizedBox(
+              height: 18,
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 10.w),
+              child: Text(
+                title ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: '#333333'.hexColor.withOpacity(0.8),
                 ),
               ),
+            )
           ],
         ),
       ),

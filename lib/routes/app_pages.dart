@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/board_info.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
+import 'package:holdem/page/bool_list/book_list_screen.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/page/comment_list/comment_list_screen.dart';
 import 'package:holdem/page/comment_publish/comment_publish_screen.dart';
@@ -162,6 +163,10 @@ class AppPages {
     GetPage(
       name: Routes.videoList,
       page: () => const VideoListScreen(),
+    ),
+    GetPage(
+      name: Routes.boolList,
+      page: () => const BookListScreen(),
     ),
   ];
 }

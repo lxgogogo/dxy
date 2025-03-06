@@ -42,6 +42,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/banner.png
   AssetGenImage get banner => const AssetGenImage('assets/images/banner.png');
 
+  /// File path: assets/images/book_banner.png
+  AssetGenImage get bookBanner =>
+      const AssetGenImage('assets/images/book_banner.png');
+
   /// File path: assets/images/change_avatar.png
   AssetGenImage get changeAvatar =>
       const AssetGenImage('assets/images/change_avatar.png');
@@ -242,6 +246,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/image_loading_def.png
   AssetGenImage get imageLoadingDef =>
       const AssetGenImage('assets/images/image_loading_def.png');
+
+  /// File path: assets/images/img.png
+  AssetGenImage get img => const AssetGenImage('assets/images/img.png');
 
   /// File path: assets/images/input_a.png
   AssetGenImage get inputA => const AssetGenImage('assets/images/input_a.png');
@@ -521,6 +528,7 @@ class $AssetsImagesGen {
         back,
         backWhite,
         banner,
+        bookBanner,
         changeAvatar,
         clear,
         clock,
@@ -575,6 +583,7 @@ class $AssetsImagesGen {
         iconPostFeed,
         imageAdd,
         imageLoadingDef,
+        img,
         inputA,
         inputAdd,
         inputBg,
@@ -834,16 +843,9 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName);
 
   final String _assetName;
-
-  final Size? size;
-  final Set<String> flavors;
 
   Image image({
     Key? key,
@@ -863,7 +865,7 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = true,
+    bool gaplessPlayback = false,
     bool isAntiAlias = false,
     String? package,
     FilterQuality filterQuality = FilterQuality.low,

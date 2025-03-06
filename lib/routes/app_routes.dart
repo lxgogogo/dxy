@@ -33,5 +33,6 @@ abstract class Routes {
   static const competitionDetail = '/competitionDetail';
   static const course = '/course';
   static const videoList = '/videoList';
+  static const boolList = '/bookList';
 
 }

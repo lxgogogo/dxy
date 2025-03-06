@@ -67,7 +67,7 @@ class ThreeDBookItem extends StatelessWidget {
                         ),
                         SizedBox(height: 4.w),
                         Text(
-                          item.author ?? '',
+                          item.description ?? '',
                           style: TextStyle(
                             color: '#132449'.hexColor.withOpacity(0.7),
                             fontSize: 12.sp,

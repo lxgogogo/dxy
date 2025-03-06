@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/video_list/video_list_controller.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
@@ -60,88 +61,92 @@ class _VideoListScreenState extends State<VideoListScreen> {
   }
 
   Widget _buildContent(VideoListController controller) {
-    return Stack(
+    return Column(
       children: [
-        SizedBox(
-          height: 272.w,
-          child: Image.asset(
-            Assets.images.banner.path,
-            fit: BoxFit.cover,
+        Expanded(
+          child: Stack(
+            children: [
+              SizedBox(
+                height: 272.w,
+                child: Image.asset(
+                  Assets.images.banner.path,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              NestedScrollView(
+                  controller: controller.scrollController,
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 211.w,
+                        ),
+                      )
+                    ];
+                  },
+                  body: ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 100),
+                        decoration: BoxDecoration(
+                          color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                        ),
+                        child:SmartRefresher(
+                          enablePullDown: false,
+                          enablePullUp: true,
+                          controller: controller.refreshController,
+                          onLoading: controller.onLoading,
+                          child: controller.isLoaded
+                              ? _buildVideoView(controller)
+                              : const SizedBox(),
+                        ),
+                      ),
+                    ),
+                  )),
+
+            ],
           ),
         ),
-        NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 211.w,
-                  ),
-                )
-              ];
-            },
-            body: ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular( 12.r),
-              ),
-             child: BackdropFilter(
-               filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-               child:AnimatedContainer(
-                 duration: const Duration(milliseconds: 100),
-                 decoration: BoxDecoration(
-                   color: '#F3F8FF'.hexColor.withOpacity(0.7),
-                 ),
-               ) ,
-             ),
-            )),
-        SmartRefresher(
-          enablePullDown: false,
-          enablePullUp: true,
-          controller: controller.refreshController,
-          onLoading: controller.onLoading,
-          child: controller.isLoaded
-              ? _buildVideoView(controller)
-              : const SizedBox(),
-        )
-
       ],
     );
   }
 
- Widget _buildVideoView(VideoListController controller) {
-    return CustomScrollView(
-      physics: const ClampingScrollPhysics(),
-      slivers: [
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 215.w,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
+  Widget _buildVideoView(VideoListController controller) {
+    return Container(
+      child: CustomScrollView(
+        physics:const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        slivers: [
+          SliverToBoxAdapter(
+              child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
             child: controller.articles.isNotEmpty
                 ? LayoutBuilder(
-              builder:
-                  (BuildContext context, BoxConstraints constraints) {
-                final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                return Wrap(
-                  spacing: 12.w,
-                  runSpacing: 12.w,
-                  children: controller.articles
-                      .map((e) => SizedBox(
-                    width: itemWidth,
-                    child: VideoItem(item: e),
-                  ))
-                      .toList(),
-                );
-              },
-            )
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                      Log.d('itemWidth: ${controller.articles.length}');
+                      return Wrap(
+                        spacing: 12.w,
+                        runSpacing: 12.w,
+                        children: controller.articles
+                            .map((e) => SizedBox(
+                                  width: itemWidth,
+                                  child: VideoItem(item: e),
+                                ))
+                            .toList(),
+                      );
+                    },
+                  )
                 : const NoDataView(),
-          )
-        ),
-      ],
+          )),
+        ],
+      ),
     );
-
- }
+  }
 }

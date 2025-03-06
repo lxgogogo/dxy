@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:get/get.dart';
 import '../../model/article.dart';
@@ -15,11 +17,19 @@ class VideoListController extends GetxController {
   int pageSize = 20;
   bool noMore = false;
   bool isLoaded = false;
-
+  bool isShowHomeMenu = false;
+  final ScrollController scrollController = ScrollController();
   @override
   void onReady() {
     super.onReady();
     reqListData();
+    scrollController.addListener(() {
+      final isShow = scrollController.offset > (211.w - 12.w);
+      if (isShowHomeMenu != isShow) {
+        isShowHomeMenu = isShow;
+        safeUpdate();
+      }
+    });
   }
   Future<void> reqListData({bool showLoading = false}) async {
 

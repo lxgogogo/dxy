@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,21 +53,13 @@ class _VideoListScreenState extends State<VideoListScreen> {
       body: GetBuilder<VideoListController>(
         init: VideoListController(),
         builder: (controller) {
-          return SmartRefresher(
-            enablePullDown: false,
-            enablePullUp: true,
-            controller: controller.refreshController,
-            onLoading: controller.onLoading,
-            child: controller.isLoaded
-                ? _buildVideoView(controller)
-                : const SizedBox(),
-          );
+          return _buildContent(controller);
         },
       ),
     );
   }
 
-  Widget _buildVideoView(VideoListController controller) {
+  Widget _buildContent(VideoListController controller) {
     return Stack(
       children: [
         SizedBox(
@@ -75,41 +69,79 @@ class _VideoListScreenState extends State<VideoListScreen> {
             fit: BoxFit.cover,
           ),
         ),
-        Positioned.fill(
-          top: 218.w,
-          child: Expanded(
-            child: Container(
-              decoration:  BoxDecoration(
-                  color: '#F2F7FF'.hexColor,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24))),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-                child: controller.articles.isNotEmpty
-                    ? LayoutBuilder(
-                        builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                          return Wrap(
-                            spacing: 12.w,
-                            runSpacing: 12.w,
-                            children: controller.articles
-                                .map((e) => SizedBox(
-                                      width: itemWidth,
-                                      child: VideoItem(item: e),
-                                    ))
-                                .toList(),
-                          );
-                        },
-                      )
-                    : const NoDataView(),
+        NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 211.w,
+                  ),
+                )
+              ];
+            },
+            body: ClipRRect(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular( 12.r),
               ),
-            ),
-          ),
-        ),
+             child: BackdropFilter(
+               filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+               child:AnimatedContainer(
+                 duration: const Duration(milliseconds: 100),
+                 decoration: BoxDecoration(
+                   color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                 ),
+               ) ,
+             ),
+            )),
+        SmartRefresher(
+          enablePullDown: false,
+          enablePullUp: true,
+          controller: controller.refreshController,
+          onLoading: controller.onLoading,
+          child: controller.isLoaded
+              ? _buildVideoView(controller)
+              : const SizedBox(),
+        )
 
       ],
     );
   }
+
+ Widget _buildVideoView(VideoListController controller) {
+    return CustomScrollView(
+      physics: const ClampingScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: 215.w,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+            child: controller.articles.isNotEmpty
+                ? LayoutBuilder(
+              builder:
+                  (BuildContext context, BoxConstraints constraints) {
+                final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                return Wrap(
+                  spacing: 12.w,
+                  runSpacing: 12.w,
+                  children: controller.articles
+                      .map((e) => SizedBox(
+                    width: itemWidth,
+                    child: VideoItem(item: e),
+                  ))
+                      .toList(),
+                );
+              },
+            )
+                : const NoDataView(),
+          )
+        ),
+      ],
+    );
+
+ }
 }

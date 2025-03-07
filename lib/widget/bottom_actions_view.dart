@@ -275,6 +275,11 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
       widget.viewParams.likeCount = data;
       widget.viewParams.liked = !(widget.viewParams.liked ?? false);
+      if (widget.viewParams.liked == true) {
+        ToastUtils.showToast('点赞成功');
+      }else{
+        ToastUtils.showToast('取消点赞成功');
+      }
       setState(() {});
       return true;
     }

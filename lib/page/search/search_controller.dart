@@ -73,7 +73,7 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
       historyItems.insert(0, keyword);
       StorageUtil().prefs?.setStringList('search', historyItems);
     }
-
+    FocusManager.instance.primaryFocus?.unfocus();
     showResult = true;
     safeUpdate();
 

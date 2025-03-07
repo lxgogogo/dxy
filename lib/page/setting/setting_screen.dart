@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
@@ -55,27 +56,27 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(
-    leading: IconButton(
-      icon: Image.asset(
-        'assets/images/back.png',
-        width: 22.w,
-        height: 22.w,
-      ),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ),
-    backgroundColor: Colors.white,
-    title: const Text(
-      '设置',
-      style: AppTheme.text333333Size17,
-    ),
-    centerTitle: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Image.asset(
+            'assets/images/back.png',
+            width: 22.w,
+            height: 22.w,
           ),
-          backgroundColor: Colors.white,
-          body: SafeArea(child: contentView()),
-        );
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.white,
+        title: const Text(
+          '设置',
+          style: AppTheme.text333333Size17,
+        ),
+        centerTitle: true,
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(child: contentView()),
+    );
   }
 
   Widget contentView() {
@@ -161,7 +162,7 @@ class _SettingScreenState extends State<SettingScreen> {
           child: Container(
             margin: EdgeInsets.only(top: 24.w),
             child: Column(
-             mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
@@ -202,9 +203,12 @@ class _SettingScreenState extends State<SettingScreen> {
             child: Container(
               height: 45.w,
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 '退出登录',
-                style: AppTheme.text333333Size16,
+                style: TextStyle(
+                  color: '#333333'.hexColor.withOpacity(0.7),
+                  fontSize: 16.sp,
+                ),
               ),
             ),
           ),
@@ -224,7 +228,7 @@ class _SettingScreenState extends State<SettingScreen> {
       },
       behavior: HitTestBehavior.translucent,
       child: Padding(
-        padding: EdgeInsets.only(right:20.w),
+        padding: EdgeInsets.only(right: 20.w),
         child: Image.asset(
           asset,
           width: 48.w,
@@ -312,6 +316,5 @@ class _SettingScreenState extends State<SettingScreen> {
         cancelText: '取消',
       ),
     );
-
   }
 }

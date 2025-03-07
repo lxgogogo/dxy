@@ -159,7 +159,7 @@ class _LoginContentState extends State<LoginContent> {
             Padding(
               padding: EdgeInsets.only(left: 10.w, bottom: 10.w),
               child: Text(
-                isShowAccountTips ? '*请输入正确邮箱' : '',
+                isShowAccountTips ? '*请输入正确邮箱地址' : '',
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
@@ -216,7 +216,7 @@ class _LoginContentState extends State<LoginContent> {
               Padding(
                 padding: EdgeInsets.only(left: 10.w, bottom: 10.w, top: 10.w),
                 child: Text(
-                  isShowPwTips ? '*密码错误' : '',
+                  isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
                   style: TextStyle(
                     fontSize: 12.sp,
                     color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
@@ -236,13 +236,13 @@ class _LoginContentState extends State<LoginContent> {
             ],
           ),
           SizedBox(height: 48.w),
-          // Center(
-          //   child: UserTermsUncheck(
-          //     reviewTerms: reviewTerms,
-          //     reviewPrivacy: reviewPrivacy,
-          //   ),
-          // ),
-          // SizedBox(height: 12.w),
+          Center(
+            child: UserTermsUncheck(
+              reviewTerms: reviewTerms,
+              reviewPrivacy: reviewPrivacy,
+            ),
+          ),
+          SizedBox(height: 12.w),
           CustomButton(
             onPressed: login,
             disable: _isLoginDisable,

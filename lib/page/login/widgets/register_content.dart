@@ -7,12 +7,9 @@ import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/page/login/widgets/user_terms.dart';
 import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
-
-import '../../../utils/app_theme.dart';
 
 class RegisterContent extends StatefulWidget {
   const RegisterContent({Key? key, required this.goLogin}) : super(key: key);
@@ -84,8 +81,8 @@ class _RegisterContentState extends State<RegisterContent> {
           password.isEmpty ||
           isShowPwTips ||
           againPw.isEmpty ||
-          isShowAgainTips ;
-          // || !_didAgreeTerms.value;
+          isShowAgainTips ||
+          !_didAgreeTerms.value;
       // Log.d('account.isEmpty: ${account.isEmpty} isShowAccountTips: $isShowAccountTips '
       //     ' code.isEmpty: ${code.isEmpty} isShowCodeTips: $isShowCodeTips '
       //     'password.isEmpty: ${password.isEmpty} isShowPwTips: $isShowPwTips againPw.isEmpty: ${ againPw.isEmpty } '
@@ -205,7 +202,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 ? EdgeInsets.symmetric(vertical: 3.w)
                 : EdgeInsets.zero,
             child: Text(
-              isShowAccountTips ? '*请输入正确邮箱' : '',
+              isShowAccountTips ? '*请输入正确邮箱地址' : '',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
@@ -370,13 +367,13 @@ class _RegisterContentState extends State<RegisterContent> {
             ),
           ),
           SizedBox(height: 48.w),
-          // UserTerms(
-          //   onTermsCheck: onTermsCheck,
-          //   didAgreeTerms: didAgreeTerms,
-          //   reviewTerms: reviewTerms,
-          //   reviewPrivacy: reviewPrivacy,
-          // ),
-          // SizedBox(height: 12.w),
+          UserTerms(
+            onTermsCheck: onTermsCheck,
+            didAgreeTerms: didAgreeTerms,
+            reviewTerms: reviewTerms,
+            reviewPrivacy: reviewPrivacy,
+          ),
+          SizedBox(height: 12.w),
           CustomButton(
             onPressed: registerOrConfirm,
             disable: _isLoginDisable,

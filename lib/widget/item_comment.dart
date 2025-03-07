@@ -391,7 +391,7 @@ class _CommentItemState extends State<CommentItem> {
                     ),
                     if ((widget.commentBean.replyCount ?? 0) > 2)
                       Container(
-                        margin: EdgeInsets.only(top: 10.w),
+                        margin: EdgeInsets.only(left: 30.w, top: 10.w),
                         child: Row(
                           children: [
                             if ((widget.commentBean.replyCount ?? 0) >
@@ -401,8 +401,8 @@ class _CommentItemState extends State<CommentItem> {
                                   getReplyList();
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8.w, vertical: 5),
+                                  height: 22.w,
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: const Color(0xfff2f4f6),
@@ -412,13 +412,12 @@ class _CommentItemState extends State<CommentItem> {
                                     '查看全部${min(pageSize, (widget.commentBean.replyCount ?? 0) - (widget.commentBean.replies?.length ?? 0))}条回复>',
                                     style: TextStyle(
                                       color: '#333333'.hexColor,
-                                      fontSize: 14.w,
+                                      fontSize: 10.sp,
                                     ),
                                   ),
                                 ),
                               ),
                             ] else ...[
-                              const Spacer(),
                               GestureDetector(
                                 onTap: () {
                                   pageNum = 1;
@@ -427,17 +426,26 @@ class _CommentItemState extends State<CommentItem> {
                                           []);
                                   setState(() {});
                                 },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '收起',
-                                      style: TextStyle(
-                                        color: const Color(0xff3B5078),
-                                        fontSize: 12.w,
+                                child: Container(
+                                  height: 22.w,
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xfff2f4f6),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '收起',
+                                        style: TextStyle(
+                                          color: '#333333'.hexColor,
+                                          fontSize: 10.sp,
+                                        ),
                                       ),
-                                    ),
-                                    const Icon(Icons.keyboard_arrow_up),
-                                  ],
+                                      const Icon(Icons.keyboard_arrow_up),
+                                    ],
+                                  ),
                                 ),
                               )
                             ],

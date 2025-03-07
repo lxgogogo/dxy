@@ -6,6 +6,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/no_data.dart';
 
 import 'package:holdem/widget/search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -29,37 +30,31 @@ class AtUserScreen extends StatefulWidget {
 
 class _AtUserScreenState extends State<AtUserScreen> {
   int pageNum = 1;
-  int pageSize = 10;
-  late String key;
+  int pageSize = 20;
 
   List<UserProfile> followOrFanUserList = [];
   bool _isMounted = false;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  bool noMore = false;
+  final RefreshController _refreshController = RefreshController();
 
   final TextEditingController searchController = TextEditingController();
 
   void _onRefresh() async {
-    setState(() {
-      pageNum = 1;
-    });
-    reqListData();
+    pageNum = 1;
+    loadItems();
   }
 
   void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
-    reqListData();
+    pageNum++;
+    loadItems();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _isMounted = true;
-    reqListData();
+    _onRefresh();
   }
 
   @override
@@ -68,75 +63,30 @@ class _AtUserScreenState extends State<AtUserScreen> {
     super.dispose();
   }
 
-  reqListData() {
-    NetRequest().followedList(pageNum.toString(), pageSize.toString(), '',
-        (data) {
-      UserDataList followOrFan = UserDataList.fromJson(data);
-      if (_isMounted) {
-        setState(() {
-          if (pageNum == 1) {
-            followOrFanUserList = followOrFan.list!;
-          } else {
-            followOrFanUserList.addAll(followOrFan.list!);
-          }
-        });
-      }
-      _refreshController.loadComplete();
-      _refreshController.refreshCompleted();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-      ),
-      child: contentView(),
-    );
-  }
-
-  Widget contentView() {
-    return Column(
-      children: [
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Expanded(child: topSearchView()),
-        //     GestureDetector(
-        //       child: Container(
-        //           margin: EdgeInsets.only(right: 16),
-        //           child: Text(
-        //             '搜索',
-        //             style: TextStyle(
-        //                 color: const Color(0xff249CFC), fontSize: 15.px),
-        //           )),
-        //       onTap: () {
-        //         _userSearch(key);
-        //       },
-        //     )
-        //   ],
-        // ),
-        // CSearchBar(
-        //   placeholder: "搜索用户",
-        //   onChanged: (value) {
-        //     setState(() {
-        //       key = value;
-        //       _userSearch(key);
-        //     });
-        //   },
-        // ),
-        buildSearchInput(),
-        const SizedBox(
-          height: 10,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.7,
         ),
-        Expanded(child: listView())
-      ],
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+        ),
+        child: Column(
+          children: [
+            buildSearchInput(),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(child: listView())
+          ],
+        ),
+      ),
     );
   }
 
@@ -168,12 +118,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
                       controller: searchController,
                       keyboardType: TextInputType.text,
                       autocorrect: false,
-                      onChanged: (value) {
-                        setState(() {
-                          key = value;
-                          _userSearch(key);
-                        });
-                      },
+                      onChanged: onSearch,
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: '#333333'.hexColor,
@@ -194,7 +139,10 @@ class _AtUserScreenState extends State<AtUserScreen> {
                   ),
                   if (searchController.text.isNotEmpty)
                     GestureDetector(
-                      onTap: searchController.clear,
+                      onTap: () {
+                        searchController.clear();
+                        _onRefresh();
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 6.w),
                         child: Assets.images.clear.image(
@@ -214,10 +162,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
             },
             child: Text(
               '取消',
-              style: TextStyle(
-                  color: '#557BF6'.hexColor,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(color: '#557BF6'.hexColor, fontSize: 16.sp, fontWeight: FontWeight.w600),
             ),
           )
         ],
@@ -225,29 +170,55 @@ class _AtUserScreenState extends State<AtUserScreen> {
     );
   }
 
-  void _userSearch(keyword) {
-    //请求搜索关键字的用户列表   清空原有列表
-    NetRequest().userSearch(pageNum, pageSize, keyword, (data) {
-      UserDataList userDataList = UserDataList.fromJson(data);
-      if (_isMounted) {
-        setState(() {
-          followOrFanUserList.clear();
-          if (userDataList.list!.isNotEmpty && userDataList.list!.length > 0) {
-            if (pageNum == 1) {
-              followOrFanUserList = userDataList.list!;
-            } else {
-              followOrFanUserList.addAll(userDataList.list!);
-            }
+  Future<void> loadItems() async {
+    try {
+      int recordsSize = 0;
+      if (searchController.text.isNotEmpty) {
+        await NetRequest().userSearch(pageNum, pageSize, searchController.text, (data) {
+          UserDataList dataList = UserDataList.fromJson(data);
+          recordsSize = dataList.list?.length ?? 0;
+          if (pageNum == 1) {
+            followOrFanUserList = dataList.list ?? [];
           } else {
-            if (userDataList.list!.length == 0) {
-              ToastUtils.showToast("未搜到相关用户，请重新输入");
-            }
+            followOrFanUserList.addAll(dataList.list ?? []);
           }
         });
-        _refreshController.loadComplete();
-        _refreshController.refreshCompleted();
+      } else {
+        await NetRequest().followedList(pageNum.toString(), pageSize.toString(), '', (data) {
+          UserDataList dataList = UserDataList.fromJson(data);
+          recordsSize = dataList.list?.length ?? 0;
+          if (pageNum == 1) {
+            followOrFanUserList = dataList.list ?? [];
+          } else {
+            followOrFanUserList.addAll(dataList.list ?? []);
+          }
+        });
       }
-    });
+      if (pageNum == 1) {
+        _refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.resetNoData();
+        }
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.loadComplete();
+        }
+      }
+    } finally {
+      setState(() {});
+    }
+  }
+
+  void onSearch(String keyword) {
+    _onRefresh();
   }
 
   ///列表数据
@@ -255,61 +226,52 @@ class _AtUserScreenState extends State<AtUserScreen> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: WaterDropHeader(),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      child: Container(
-        child: ListView.builder(
-          itemBuilder: (c, i) => listDataItem(i),
-          // itemExtent: 160.0,
-          itemCount: followOrFanUserList.length,
-        ),
-      ),
+      child: followOrFanUserList.isNotEmpty
+          ? ListView.builder(
+              itemBuilder: (c, i) => listDataItem(i),
+              itemCount: followOrFanUserList.length,
+            )
+          : const NoDataView(),
     );
   }
 
   Widget listDataItem(int index) {
     return GestureDetector(
         onTap: () {
-          print('===================' + followOrFanUserList[index].nickname!);
           Get.back(result: followOrFanUserList[index]);
         },
         child: Container(
-          height: 58.px,
-          margin: EdgeInsets.symmetric(horizontal: 18.px),
+          height: 58.w,
+          margin: EdgeInsets.symmetric(horizontal: 18.w),
           alignment: Alignment.centerLeft,
           child: Row(children: [
             Container(
-                height: 34.px,
-                width: 34.px,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(17.px),
-                    color: Colors.white),
+                height: 34.w,
+                width: 34.w,
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(17.w), color: Colors.white),
                 child: Center(
                     child: ClipOval(
                   child: LoginHelper().getUserAvatar(
-                      followOrFanUserList[index].avatar!.isNotEmpty
-                          ? followOrFanUserList[index].avatar!
-                          : '',
-                      32.px,
-                      32.px),
+                      followOrFanUserList[index].avatar!.isNotEmpty ? followOrFanUserList[index].avatar! : '',
+                      32.w,
+                      32.w),
                 ))),
             SizedBox(
-              width: 10.px,
+              width: 10.w,
             ),
             Text(
-              followOrFanUserList[index].nickname!.isNotEmpty
-                  ? followOrFanUserList[index].nickname!
-                  : '',
-              style: TextStyle(color: '##333333'.hexColor, fontSize: 14.px,fontWeight: FontWeight.w600),
+              followOrFanUserList[index].nickname!.isNotEmpty ? followOrFanUserList[index].nickname! : '',
+              style: TextStyle(color: '##333333'.hexColor, fontSize: 14.w, fontWeight: FontWeight.w600),
             ),
             const Spacer(),
             FollowBtn(
                 isFollowed: followOrFanUserList[index].followed!,
                 onTap: () {
-                  NetRequest().followerToggle(followOrFanUserList[index].id!,
-                      !followOrFanUserList[index].followed!, (data) {
+                  NetRequest().followerToggle(followOrFanUserList[index].id!, !followOrFanUserList[index].followed!,
+                      (data) {
                     if (mounted) {
                       setState(() {
                         followOrFanUserList.remove(followOrFanUserList[index]);
@@ -319,59 +281,5 @@ class _AtUserScreenState extends State<AtUserScreen> {
                 })
           ]),
         ));
-  }
-
-  Widget topSearchView() {
-    return Container(
-        height: 40.px,
-        child: Center(
-            child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: '搜索用户',
-              contentPadding: EdgeInsets.fromLTRB(-3, 5, 0, 0),
-              prefixIcon: IconButton(
-                icon: Image.asset(
-                  'assets/images/search_icon.png',
-                  width: 15.px,
-                  height: 15.px,
-                ),
-                onPressed: () {},
-              ),
-              suffixIcon: IconButton(
-                icon: Image.asset(
-                  'assets/images/search_clear.png',
-                  width: 20,
-                  height: 20,
-                ),
-                onPressed: () {
-                  if (_isMounted) {
-                    setState(() {
-                      searchController.text = '';
-                    });
-                    //重新刷新原有未搜索列表
-                    if (followOrFanUserList.isNotEmpty) {
-                      followOrFanUserList.clear();
-                    }
-                    reqListData();
-                  }
-                },
-              ),
-              filled: true,
-              fillColor: AppTheme.color_EFEFEF,
-              hintStyle: AppTheme.text999999Size15,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-        )));
   }
 }

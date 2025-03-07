@@ -618,7 +618,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.userSearch, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.userSearch, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userSearch===>$response");

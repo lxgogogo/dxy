@@ -420,6 +420,100 @@ class SimpleCountText extends StatelessWidget {
   }
 }
 
+class SimpleCountTextReverse extends StatelessWidget {
+  const SimpleCountTextReverse({
+    super.key,
+    required this.count,
+    required this.desc,
+    this.descStyle,
+    this.usePlaceHolder = false,
+  });
+
+  final String count;
+  final String desc;
+  final TextStyle? descStyle;
+  final bool usePlaceHolder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        if (usePlaceHolder) ...[
+          Opacity(
+            opacity: 0,
+            child: Row(
+              children: [
+                Text(
+                  '000',
+                  style: TextStyle(
+                    color: const Color(0xff9CACC9),
+                    fontSize: 12.sp,
+                  ),
+                ),
+                SizedBox(width: 2.w),
+                Text(
+                  desc,
+                  style: descStyle ??
+                      TextStyle(
+                        color: const Color(0xff999999),
+                        fontSize: 12.sp,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          IgnorePointer(
+            child: Opacity(
+              opacity: 0,
+              child: Row(
+                children: [
+                  Text(
+                    '000.0M',
+                    style: TextStyle(
+                      color: '#333333'.hexColor.withOpacity(0.7),
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                  SizedBox(width: 2.w),
+                  Text(
+                    desc,
+                    style: descStyle ??
+                        TextStyle(
+                          color: const Color(0xff999999),
+                          fontSize: 12.sp,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              desc,
+              style: descStyle ??
+                  TextStyle(
+                    color: const Color(0xff999999),
+                    fontSize: 12.sp,
+                  ),
+            ),
+            SizedBox(width: 2.w),
+            Text(
+              count,
+              style: TextStyle(
+                color: const Color(0xff999999),
+                fontSize: 12.sp,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class SimpleDot extends StatelessWidget {
   const SimpleDot({
     super.key,

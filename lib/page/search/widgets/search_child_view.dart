@@ -119,7 +119,7 @@ class SearchChildView extends GetView<SearchChildView> {
                       ),
                     ),
                     SizedBox(width: 24.w),
-                    SimpleCountText(
+                    SimpleCountTextReverse(
                       count: controller.tagItems[index].viewCount?.abbreviateNumber ?? '0',
                       desc: '阅读',
                       descStyle: TextStyle(
@@ -129,7 +129,7 @@ class SearchChildView extends GetView<SearchChildView> {
                       ),
                       usePlaceHolder: true,
                     ),
-                    SimpleCountText(
+                    SimpleCountTextReverse(
                       count: controller.tagItems[index].commentCount?.abbreviateNumber ?? '0',
                       desc: '讨论',
                       descStyle: TextStyle(

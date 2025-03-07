@@ -16,6 +16,7 @@ class MediaHelper {
                 Navigator.pop(context); // 关闭当前路由，返回原页面
               },
               child: PhotoViewGallery(
+                pageController: PageController(initialPage: index),
                 pageOptions: imageUrlList
                     .map((url) => PhotoViewGalleryPageOptions(imageProvider: CachedNetworkImageProvider(url)))
                     .toList(),

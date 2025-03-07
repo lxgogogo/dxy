@@ -114,7 +114,7 @@ class ArticleDetailScreen extends StatelessWidget {
                                 })
                               else
                                 const Center(
-                                  child: NoDataView(),
+                                  child: NoCommentView(),
                                 ),
                             ],
                           ),

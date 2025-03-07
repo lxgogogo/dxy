@@ -69,8 +69,8 @@ class MyCommentItem extends StatelessWidget {
       content = item.content?.description;
     } else if (item.relType == 'comment') {
       content =
-          HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
-      title = item.parentComment?.thread?.title;
+          HtmlParseUtil.of.pureCommentText(item.comment);
+      title =  HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
     }
 
     String typeName = '';
@@ -137,16 +137,18 @@ class MyCommentItem extends StatelessWidget {
                       fontSize: 12.sp),
                 ),
                 SizedBox(width: 8.w),
-                Text(
-                  content ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: '#333333'.hexColor,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600),
+                Expanded(
+                  child: Text(
+                    content ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
-                const Spacer(),
+                SizedBox(width: 8.w),
                 Text(
                   DateUtil.formatDate(item.createdAt!, format: 'yyyy.MM.dd'),
                   style: TextStyle(
@@ -250,7 +252,13 @@ class MyCommentItem extends StatelessWidget {
               height: 18,
             ),
             Container(
+              width: double.infinity,
               margin: EdgeInsets.only(left: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.r),
+                color: '#557BF6'.hexColor.withOpacity(0.1),
+              ),
               child: Text(
                 title ?? '',
                 maxLines: 1,

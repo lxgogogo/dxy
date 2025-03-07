@@ -20,7 +20,7 @@ import '../../widget/dialog_common.dart';
 part 'search_controller.dart';
 
 enum SearchType {
-  news('资讯', categoryAlias: 'news'),
+  // news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),

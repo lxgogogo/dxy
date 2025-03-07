@@ -39,8 +39,6 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   ];
   int filterIndex = 0;
 
-  String get filterValue => filters[selIndex];
-
   final _pageKey = GlobalKey<FeedListChildViewState>();
 
   StreamSubscription? eventSubscription;
@@ -206,7 +204,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                 ),
               ),
             ),
-            Container(
+            Align(
               alignment: Alignment.centerRight,
               child: SuperTooltip(
                 showBarrier: true,
@@ -216,7 +214,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                 hasShadow: false,
                 borderColor: Colors.transparent,
                 arrowLength: 0,
-                arrowTipDistance: 10.w,
+                arrowTipDistance: 21.w,
                 bubbleDimensions: EdgeInsets.zero,
                 touchThroughAreaShape: ClipAreaShape.rectangle,
                 touchThroughAreaCornerRadius: 10,
@@ -268,7 +266,8 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                             item,
                             style: TextStyle(
                               color: '#333333'.hexColor,
-                              fontSize: 12,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -281,26 +280,28 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                     ),
                   ),
                 ),
-                child: UnconstrainedBox(
-                  child: GestureDetector(
-                    onTap: () {
-                      _tipController.showTooltip();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 16.w, top: 12.w),
-                      child: Row(
-                        children: [
-                          Text(
-                            filters[filterIndex],
-                            style: TextStyle(
-                                fontSize: 12, color: '#333333'.hexColor.withOpacity(0.8), fontWeight: FontWeight.w600),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down_outlined,
+                child: GestureDetector(
+                  onTap: () {
+                    _tipController.showTooltip();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          filters[filterIndex],
+                          style: TextStyle(
+                            fontSize: 12.sp,
                             color: '#333333'.hexColor.withOpacity(0.8),
+                            fontWeight: FontWeight.w600,
                           ),
-                        ],
-                      ),
+                        ),
+                        Icon(
+                          Icons.arrow_drop_down_outlined,
+                          color: '#333333'.hexColor.withOpacity(0.8),
+                        ),
+                      ],
                     ),
                   ),
                 ),

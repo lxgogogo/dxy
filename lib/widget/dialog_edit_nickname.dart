@@ -90,7 +90,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                       Row(
                         children: [
                           Text(
-                            "昵称",
+                            "新昵称",
                             style: TextStyle(
                               color:'#333333'.hexColor,
                               fontSize: 14.px,

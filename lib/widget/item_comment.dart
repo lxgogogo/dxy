@@ -521,9 +521,9 @@ class BorderAvatar extends StatelessWidget {
           width: avatarSize.w,
           height: avatarSize.w,
           fit: BoxFit.cover,
-          cacheKey: avatar,
-          memCacheWidth: avatarSize.toInt(),
-          memCacheHeight: avatarSize.toInt(),
+          // cacheKey: avatar,
+          // memCacheWidth: avatarSize.toInt(),
+          // memCacheHeight: avatarSize.toInt(),
           placeholder: (context, url) =>
               Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
           errorWidget: (context, url, error) =>

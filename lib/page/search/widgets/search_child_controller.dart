@@ -47,7 +47,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
     try {
       int recordsSize = 0;
       switch (type) {
-        case SearchType.news:
+        // case SearchType.news:
         case SearchType.video:
         case SearchType.book:
           await NetRequest().indexList(params, (data) {

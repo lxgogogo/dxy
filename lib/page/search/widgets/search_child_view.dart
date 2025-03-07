@@ -56,8 +56,8 @@ class SearchChildView extends GetView<SearchChildView> {
 
   Widget _buildView(SearchChildController controller) {
     switch (type) {
-      case SearchType.news:
-        return _buildNewsView(controller);
+      // case SearchType.news:
+      //   return _buildNewsView(controller);
       case SearchType.video:
         return _buildVideoView(controller);
       case SearchType.book:

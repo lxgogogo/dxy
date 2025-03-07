@@ -49,7 +49,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Get.toNamed(Routes.personal);
                           },
                           child: Center(
@@ -59,7 +59,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 height: 88.w,
                                 fit: BoxFit.cover,
                                 imageUrl: controller.userProfile?.avatar ?? '',
-                                errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                                errorWidget: (context, url, error) => const SizedBox(),
                               ),
                             ),
                           ),

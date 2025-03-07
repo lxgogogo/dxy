@@ -129,7 +129,7 @@ class _CommentListScreenState extends State<CommentListScreen> {
               // itemExtent: 160.0,
               itemCount: comments.length,
             )
-          : const NoDataView(),
+          : const NoCommentView(),
     );
   }
 

@@ -258,7 +258,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                   })
                                 else
                                   const Center(
-                                    child: NoDataView(),
+                                    child: NoCommentView(),
                                   ),
                               ],
                             ),

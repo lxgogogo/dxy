@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
@@ -24,6 +25,7 @@ import 'package:holdem/widget/no_network.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../routes/app_pages.dart';
 import '../../utils/date_util.dart';
 
 part 'book_detail_controller.dart';
@@ -46,6 +48,21 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           appBar: CommonAppBar.arrowBack(
             context,
             title: '',
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.search);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(right: 16.w),
+                  child: SvgPicture.asset(
+                    Assets.svg.iconSearch,
+                    width: 24.w,
+                    height: 24.w,
+                  ),
+                ),
+              ),
+            ],
           ),
           backgroundColor: Colors.white,
           body: controller.noNetwork

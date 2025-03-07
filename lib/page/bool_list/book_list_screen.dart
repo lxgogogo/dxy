@@ -136,7 +136,7 @@ _buildContentView(BookListController controller) {
       ),
       SliverToBoxAdapter(
         child: SizedBox(
-          height: 550,
+          height: 500,
           child: PageView.builder(
             physics: const ClampingScrollPhysics(),
             controller: controller.pageController,

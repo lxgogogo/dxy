@@ -288,6 +288,8 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
         !(widget.viewParams.favoriteState ?? false), (data) {
       if (widget.viewParams.favoriteState != true) {
         ToastUtils.showToast('收藏成功');
+      }else{
+        ToastUtils.showToast('取消收藏成功');
       }
       if (widget.viewParams.favoriteState == true) {
         widget.viewParams.favoriteState = false;

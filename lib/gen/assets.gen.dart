@@ -247,9 +247,6 @@ class $AssetsImagesGen {
   AssetGenImage get imageLoadingDef =>
       const AssetGenImage('assets/images/image_loading_def.png');
 
-  /// File path: assets/images/img.png
-  AssetGenImage get img => const AssetGenImage('assets/images/img.png');
-
   /// File path: assets/images/input_a.png
   AssetGenImage get inputA => const AssetGenImage('assets/images/input_a.png');
 
@@ -323,6 +320,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/navi_search.png
   AssetGenImage get naviSearch =>
       const AssetGenImage('assets/images/navi_search.png');
+
+  /// File path: assets/images/no_comment.png
+  AssetGenImage get noComment =>
+      const AssetGenImage('assets/images/no_comment.png');
 
   /// File path: assets/images/no_data.png
   AssetGenImage get noData => const AssetGenImage('assets/images/no_data.png');
@@ -583,7 +584,6 @@ class $AssetsImagesGen {
         iconPostFeed,
         imageAdd,
         imageLoadingDef,
-        img,
         inputA,
         inputAdd,
         inputBg,
@@ -604,6 +604,7 @@ class $AssetsImagesGen {
         more,
         naviBack,
         naviSearch,
+        noComment,
         noData,
         noResult,
         order,
@@ -843,9 +844,16 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName);
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
+
+  final Size? size;
+  final Set<String> flavors;
 
   Image image({
     Key? key,
@@ -865,7 +873,7 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
     FilterQuality filterQuality = FilterQuality.low,

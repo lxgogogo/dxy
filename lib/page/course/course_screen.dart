@@ -26,7 +26,7 @@ class CourseScreen extends StatelessWidget {
       init: CourseController(),
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

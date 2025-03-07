@@ -19,7 +19,7 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
   }
 
   @override
-  void onReady () {
+  void onReady() {
     super.onReady();
     historyItems = StorageUtil().prefs?.getStringList('search') ?? [];
     loadHotTags();
@@ -70,6 +70,20 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
       return;
     }
     FocusScope.of(context).requestFocus(FocusNode());
+    if (historyItems.length < 30) {
+      if (historyItems.contains(keyword)) {
+        historyItems.remove(keyword);
+      }
+      historyItems.insert(0, keyword);
+    } else {
+      if (historyItems.contains(keyword)) {
+        historyItems.remove(keyword);
+      } else {
+        historyItems.removeLast();
+      }
+      historyItems.insert(0, keyword);
+    }
+
     if (!historyItems.contains(keyword)) {
       historyItems.insert(0, keyword);
       StorageUtil().prefs?.setStringList('search', historyItems);

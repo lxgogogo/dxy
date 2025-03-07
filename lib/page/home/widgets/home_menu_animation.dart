@@ -2,8 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+
+import '../../../routes/app_pages.dart';
+import '../../main/main_screen.dart';
 
 class HomeMenuSlideAnimation extends StatefulWidget {
   final Widget child;
@@ -46,6 +50,7 @@ class HomeMenu extends StatelessWidget {
         child: Container(
           color: '#F3F8FF'.hexColor,
           child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
@@ -53,24 +58,28 @@ class HomeMenu extends StatelessWidget {
                   name: '精彩视频',
                   nameEn: 'Video',
                   imagePath: Assets.images.iconHomeVideo.path,
+                  onTap: () => Get.toNamed(Routes.videoList),
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
                   name: '德州教程',
                   nameEn: 'Tutorial',
                   imagePath: Assets.images.iconHomeCourse.path,
+                  onTap: () => Get.toNamed(Routes.course),
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
                   name: '好书推荐',
                   nameEn: 'Recommend',
                   imagePath: Assets.images.iconHomeBook.path,
+                  onTap: () => Get.toNamed(Routes.boolList),
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
                   name: '火爆论坛',
                   nameEn: 'BBS',
                   imagePath: Assets.images.iconHomeFeed.path,
+                  onTap: () => Get.find<MainController>().onTabBarItem(1),
                 ),
               ],
             ),

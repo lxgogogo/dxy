@@ -76,8 +76,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
         leading: IconButton(
           icon: Image.asset(
             'assets/images/back.png',
-            width: 22.px,
-            height: 22.px,
+            width: 22.w,
+            height: 22.w,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -100,22 +100,22 @@ class _PersonalScreenState extends State<PersonalScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
-          height: 23.5.px,
+          height: 23.5.w,
         ),
         Center(
           child: Container(
-            width: 88.px,
-            height: 88.px,
+            width: 88.w,
+            height: 88.w,
             alignment: Alignment.center,
             // decoration: BoxDecoration(
             //   color: Colors.white,
-            //   borderRadius: BorderRadius.circular(69.px),
+            //   borderRadius: BorderRadius.circular(69.w),
             //   boxShadow: [
             //     BoxShadow(
             //       color: const Color(0xff6d85b5).withOpacity(0.16),
             //       // inset 0 1px 2px 1px #FFFFFF
-            //       offset: Offset(0, 3.px),
-            //       blurRadius: 4.px,
+            //       offset: Offset(0, 3.w),
+            //       blurRadius: 4.w,
             //     ),
             //   ],
             // ),
@@ -123,8 +123,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
               child: CachedNetworkImage(
                 imageUrl: _userProfile?.avatar ?? '',
                 fit: BoxFit.cover,
-                width: 88.px,
-                height: 88.px,
+                width: 88.w,
+                height: 88.w,
                 placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(color: Colors.black12)),
                 errorWidget: (context, url, error) =>
@@ -134,7 +134,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ),
         ),
         SizedBox(
-          height: 12.px,
+          height: 12.w,
         ),
         Center(
           child: GestureDetector(
@@ -160,7 +160,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 '修改头像',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 12.px,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -168,7 +168,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 16.px, right: 16.px,top: 16.px),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w,top: 16.w),
           child: Column(
             children: [
               GestureDetector(
@@ -182,38 +182,39 @@ class _PersonalScreenState extends State<PersonalScreen> {
                   );
                 },
                 child: Container(
-                  height: 48.5.px,
+                  height: 48.5.w,
                   alignment: Alignment.center,
                   child: Row(
                     children: [
                       Text(
                         '昵称',
                         style: TextStyle(
-                          fontSize: 16.px,
+                          fontSize: 16.sp,
                           color:'#333333'.hexColor,
                         ),
                       ),
-                      SizedBox(width: 14.px),
-                      Expanded(
+                      SizedBox(width: 14.w),
+                      Flexible(
                         child: Text(
                           _userProfile?.nickname ?? '',
                           style: TextStyle(
                             color:'#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Image.asset('assets/images/edit_password.png', width: 24.px),
+                      SizedBox(width: 16.w),
+                      Image.asset('assets/images/edit_password.png', width: 24.w),
                     ],
                   ),
                 ),
               ),
               Container(
                 color: const Color(0xffe6e6e6),
-                height: 0.5.px,
+                height: 0.5.w,
               ),
               GestureDetector(
                 onTap: () {
@@ -226,7 +227,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                   );
                 },
                 child: Container(
-                  height: 48.5.px,
+                  height: 48.5.w,
                   alignment: Alignment.center,
                   child: Row(
                     children: [
@@ -234,23 +235,24 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         '邮箱',
                         style: TextStyle(
                           color:'#333333'.hexColor,
-                          fontSize: 16.px,
+                          fontSize: 16.sp,
                         ),
                       ),
-                      SizedBox(width: 14.px),
-                      Expanded(
+                      SizedBox(width: 14.w),
+                      Flexible(
                         child: Text(
                           _userProfile?.account ?? '',
                           style: TextStyle(
                             color:'#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Image.asset('assets/images/edit_password.png', width: 24.px),
+                      SizedBox(width: 16.w),
+                      Image.asset('assets/images/edit_password.png', width: 24.w),
                     ],
                   ),
                 ),
@@ -269,18 +271,18 @@ class _PersonalScreenState extends State<PersonalScreen> {
           },
           behavior: HitTestBehavior.translucent,
           child: Container(
-            height: 48.5.px,
+            height: 48.5.w,
             alignment: Alignment.center,
             child: Text(
               '注销账号',
               style: TextStyle(
-                fontSize: 14.px,
+                fontSize: 14.sp,
                 color: Colors.red,
               ),
             ),
           ),
         ),
-        SizedBox(height: 26.px)
+        SizedBox(height: 26.w)
       ],
     );
   }
@@ -335,7 +337,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
         isDismissible: true,
         builder: (BuildContext context) {
           return SizedBox(
-            height: 200.px, // 设置弹窗高度
+            height: 200.w, // 设置弹窗高度
             child: Column(
               children: [
                 Expanded(
@@ -344,7 +346,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 Column(
                   children: [
                     SizedBox(
-                      height: 52.px,
+                      height: 52.w,
                       child: GestureDetector(
                         onTap: () {
                           _takePicture();
@@ -364,7 +366,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       width: MediaQuery.of(context).size.width, // 宽度与屏幕宽度相同
                     ),
                     SizedBox(
-                        height: 52.px,
+                        height: 52.w,
                         child: Center(
                             child: GestureDetector(
                           onTap: () {
@@ -384,7 +386,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       width: MediaQuery.of(context).size.width, // 宽度与屏幕宽度相同
                     ),
                     SizedBox(
-                      height: 82.px,
+                      height: 82.w,
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).pop(); //关闭弹窗

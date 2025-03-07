@@ -366,7 +366,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                       },
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.only(left: 12.w),
-                                        hintText: '请再次输入密码',
+                                        hintText: '请再次输入新密码',
                                         hintStyle: TextStyle(
                                           color: '#3333334D'.hexColor,
                                           fontSize: 12.sp,

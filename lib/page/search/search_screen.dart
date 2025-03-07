@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -40,99 +41,102 @@ class SearchScreen extends GetView<SearchController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SearchController>(
-        init: SearchController(),
-        builder: (controller) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              automaticallyImplyLeading: false,
-              titleSpacing: 0.0,
-              leading: UnconstrainedBox(
-                child: GestureDetector(
-                  onTap: Get.back,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 8.w, right: 4.w),
-                    child: Image.asset(
-                      'assets/images/navi_back.png',
-                      width: 24.w,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      child: GetBuilder<SearchController>(
+          init: SearchController(),
+          builder: (controller) {
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+                titleSpacing: 0.0,
+                leading: UnconstrainedBox(
+                  child: GestureDetector(
+                    onTap: Get.back,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 8.w, right: 4.w),
+                      child: Image.asset(
+                        'assets/images/navi_back.png',
+                        width: 24.w,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              title: buildSearchInput(),
-              actions: [
-                GestureDetector(
-                  onTap: () => controller.onSearch(context),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 12.w, right: 16.w),
-                    child: Text(
-                      '搜索',
-                      style: TextStyle(
-                        color: '#557BF6'.hexColor,
-                        fontSize: 16.w,
-                        fontWeight: FontWeight.w600,
+                title: buildSearchInput(),
+                actions: [
+                  GestureDetector(
+                    onTap: () => controller.onSearch(context),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 12.w, right: 16.w),
+                      child: Text(
+                        '搜索',
+                        style: TextStyle(
+                          color: '#557BF6'.hexColor,
+                          fontSize: 16.w,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-            backgroundColor: Colors.white,
-            body: controller.showResult
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 6.w),
-                        child: TabBar(
-                          controller: controller.tabController,
-                          tabs: SearchType.values
-                              .map((e) => Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 6.w),
-                                    child: Tab(text: e.title),
-                                  ))
-                              .toList(),
-                          isScrollable: true,
-                          tabAlignment: TabAlignment.start,
-                          labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
-                          indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                          indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                              color: const Color(0xff6198f7),
-                              width: 2.w,
-                            ),
-                            insets: EdgeInsets.symmetric(horizontal: 8.w),
-                            borderRadius: BorderRadius.circular(2.w),
-                          ),
-                          enableFeedback: false,
-                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                            return Colors.transparent;
-                          }),
-                          dividerHeight: 0,
-                          labelStyle: TextStyle(
-                            color: const Color(0xff2c2c2c),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            color: const Color(0xff666666),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: controller.tabController,
-                          children: SearchType.values.map((e) => SearchChildView(type: e).keepAlive).toList(),
-                        ),
-                      )
-                    ],
                   )
-                : buildSearchHistory(context),
-          );
-        });
+                ],
+              ),
+              backgroundColor: Colors.white,
+              body: controller.showResult
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 6.w),
+                          child: TabBar(
+                            controller: controller.tabController,
+                            tabs: SearchType.values
+                                .map((e) => Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 6.w),
+                                      child: Tab(text: e.title),
+                                    ))
+                                .toList(),
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start,
+                            labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
+                            indicatorPadding: EdgeInsets.only(bottom: 4.w),
+                            indicator: UnderlineTabIndicator(
+                              borderSide: BorderSide(
+                                color: const Color(0xff6198f7),
+                                width: 2.w,
+                              ),
+                              insets: EdgeInsets.symmetric(horizontal: 8.w),
+                              borderRadius: BorderRadius.circular(2.w),
+                            ),
+                            enableFeedback: false,
+                            overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                              return Colors.transparent;
+                            }),
+                            dividerHeight: 0,
+                            labelStyle: TextStyle(
+                              color: const Color(0xff2c2c2c),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            unselectedLabelStyle: TextStyle(
+                              color: const Color(0xff666666),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: controller.tabController,
+                            children: SearchType.values.map((e) => SearchChildView(type: e).keepAlive).toList(),
+                          ),
+                        )
+                      ],
+                    )
+                  : buildSearchHistory(context),
+            );
+          }),
+    );
   }
 
   Widget buildSearchInput() {
@@ -161,6 +165,9 @@ class SearchScreen extends GetView<SearchController> {
                 fontSize: 12.sp,
                 color: '#333333'.hexColor,
               ),
+              inputFormatters: <TextInputFormatter>[
+                LengthLimitingTextInputFormatter(20),
+              ],
               decoration: InputDecoration(
                 counterText: "",
                 hintText: '请输入你想搜索的内容',
@@ -192,7 +199,7 @@ class SearchScreen extends GetView<SearchController> {
   }
 
   Widget buildSearchHistory(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.all(16.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,

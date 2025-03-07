@@ -194,7 +194,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
-                                        color: Color(0xff2eacfb)),
+                                        color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                 ),
@@ -296,7 +296,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
-                                            color: Color(0xff2eacfb)),
+                                            color: Colors.transparent),
                                         borderRadius:
                                             BorderRadius.circular(10.w),
                                       ),

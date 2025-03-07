@@ -15,7 +15,7 @@ class Env {
   static bool get isDistribute =>
       kReleaseMode && _kApiEnv == ApiEnv.prod1 || _kApiEnv == ApiEnv.prod2;
 
-  static bool isProxy = true;
+  static bool isProxy = false;
   static String httpProxyHost = '192.168.0.107';
   static String httpProxyPort = '9090';
 

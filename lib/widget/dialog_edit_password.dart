@@ -18,8 +18,7 @@ class DialogEditPassword extends StatefulWidget {
   State<DialogEditPassword> createState() => _DialogEditPasswordState();
 }
 
-class _DialogEditPasswordState extends State<DialogEditPassword>
-    with SingleTickerProviderStateMixin {
+class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
   final TextEditingController _controllerOriginalPw = TextEditingController();
@@ -38,7 +37,8 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
   final FocusNode _focusAgainPw = FocusNode();
   bool _confirmPwdObscureText = true;
 
-  RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
+  RegExp passwordRegExp = RegExp(
+      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
 
   @override
   void initState() {
@@ -81,8 +81,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
     final originalPassword = _controllerOriginalPw.text;
     // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips =
-        !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
@@ -164,58 +163,61 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                                   width: 1.px,
                                 ),
                               ),
-                              child: TextField(
-                                controller: _controllerOriginalPw,
-                                // focusNode: _focusOriginalPw,
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                obscureText: _originalPwdObscureText,
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 12.px),
-                                  hintText: '请输入原密码',
-                                  hintStyle: TextStyle(
-                                    color: '#3333334D'.hexColor,
-                                    fontSize: 12.sp,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _controllerOriginalPw,
+                                      // focusNode: _focusOriginalPw,
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      obscureText: _originalPwdObscureText,
+                                      onChanged: (_) {
+                                        onChangeCheckValid();
+                                      },
+                                      decoration: InputDecoration(
+                                        isCollapsed: true,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.only(left: 12.w),
+                                        hintText: '请输入原密码',
+                                        hintStyle: TextStyle(
+                                          color: '#3333334D'.hexColor,
+                                          fontSize: 12.sp,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  suffix: UnconstrainedBox(
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                                     child: CustomObscure(
                                       onTap: () {
-                                        _originalPwdObscureText =
-                                            !_originalPwdObscureText;
+                                        _originalPwdObscureText = !_originalPwdObscureText;
                                         setState(() {});
                                       },
                                       obscureText: _originalPwdObscureText,
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
@@ -248,58 +250,61 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                                   width: 1.px,
                                 ),
                               ),
-                              child: TextField(
-                                controller: _controllerPw,
-                                focusNode: _focusPw,
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                obscureText: _newPwdObscureText,
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 12.px),
-                                  hintText: '请输入新密码',
-                                  hintStyle: TextStyle(
-                                    color: '#3333334D'.hexColor,
-                                    fontSize: 12.sp,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _controllerPw,
+                                      focusNode: _focusPw,
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      obscureText: _newPwdObscureText,
+                                      onChanged: (_) {
+                                        onChangeCheckValid();
+                                      },
+                                      decoration: InputDecoration(
+                                        isCollapsed: true,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.only(left: 12.w),
+                                        hintText: '请输入新密码',
+                                        hintStyle: TextStyle(
+                                          color: '#3333334D'.hexColor,
+                                          fontSize: 12.sp,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  suffix: UnconstrainedBox(
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                                     child: CustomObscure(
                                       onTap: () {
-                                        _newPwdObscureText =
-                                            !_newPwdObscureText;
+                                        _newPwdObscureText = !_newPwdObscureText;
                                         setState(() {});
                                       },
                                       obscureText: _newPwdObscureText,
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
@@ -317,9 +322,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                                   isShowPwTips ? '*请输入8-12位，须包含大小写字母+数字' : '',
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: isShowPwTips
-                                        ? Colors.red
-                                        : '#95A3C4'.hexColor,
+                                    color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
                                   ),
                                 ),
                               ),
@@ -345,58 +348,59 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                                   width: 1.px,
                                 ),
                               ),
-                              child: TextField(
-                                controller: _controllerAgainPw,
-                                focusNode: _focusAgainPw,
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                obscureText: _confirmPwdObscureText,
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 12.px),
-                                  hintText: '请再次输入密码',
-                                  hintStyle: TextStyle(
-                                    color: '#3333334D'.hexColor,
-                                    fontSize: 12.sp,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _controllerAgainPw,
+                                      focusNode: _focusAgainPw,
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      obscureText: _confirmPwdObscureText,
+                                      onChanged: (_) {
+                                        onChangeCheckValid();
+                                      },
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(left: 12.w),
+                                        hintText: '请再次输入密码',
+                                        hintStyle: TextStyle(
+                                          color: '#3333334D'.hexColor,
+                                          fontSize: 12.sp,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Color(0xff2eacfb)),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  suffix: UnconstrainedBox(
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                                     child: CustomObscure(
                                       onTap: () {
-                                        _confirmPwdObscureText =
-                                            !_confirmPwdObscureText;
+                                        _confirmPwdObscureText = !_confirmPwdObscureText;
                                         setState(() {});
                                       },
                                       obscureText: _confirmPwdObscureText,
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
@@ -407,15 +411,13 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                           const Spacer(),
                           Expanded(
                             flex: 4,
-                            child:Padding(
+                            child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
                               child: Text(
                                 isShowAgainTips ? '*两次密码输入不一致' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowAgainTips
-                                      ? Colors.red
-                                      : '#95A3C4'.hexColor,
+                                  color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -429,13 +431,12 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.of(context).pop();
                               },
                               child: Container(
                                 width: 96.w,
                                 height: 33.w,
-
                                 decoration: ShapeDecoration(
                                   color: '#333333'.hexColor.withOpacity(0.1),
                                   shape: RoundedRectangleBorder(
@@ -459,12 +460,14 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                               child: Container(
                                 width: 96.w,
                                 height: 33.w,
-
                                 decoration: ShapeDecoration(
                                   gradient: const LinearGradient(
                                     begin: Alignment(1.00, 0.00),
                                     end: Alignment(-1, 0),
-                                    colors: [ Color(0xFF84BCF9),Color(0xFF557BF6),],
+                                    colors: [
+                                      Color(0xFF84BCF9),
+                                      Color(0xFF557BF6),
+                                    ],
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -484,7 +487,6 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -514,8 +516,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword>
     if (_isDisable) {
       return;
     }
-    NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text,
-        (data) {
+    NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text, (data) {
       ToastUtils.showToast('修改密码成功');
       Navigator.of(context).pop();
     });
@@ -534,10 +535,8 @@ class CustomObscure extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Image.asset(
-        obscureText
-            ? 'assets/images/eye_open.png'
-            : 'assets/images/eye_close.png',
-        width: 18.px,
+        obscureText ?  'assets/images/eye_close.png' : 'assets/images/eye_open.png',
+        width: 18.w,
       ),
     );
   }

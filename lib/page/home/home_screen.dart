@@ -16,6 +16,7 @@ import 'package:holdem/page/home/widgets/home_course_item.dart';
 import 'package:holdem/page/home/widgets/home_menu_animation.dart';
 import 'package:holdem/page/home/widgets/home_nemu_item.dart';
 import 'package:holdem/page/home/widgets/home_title.dart';
+import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
@@ -46,8 +47,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   final List<String> tabs = ['资讯', '视频', '书籍', '教程'];
   late final TabController tabController;
 
@@ -104,9 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
                           builder: (context) {
                             for (final banner in controller.banners) {
                               precacheImage(
-                                CachedNetworkImageProvider(
-                                    banner.imgMobile ?? '',
-                                    cacheKey: banner.imgMobile ?? ''),
+                                CachedNetworkImageProvider(banner.imgMobile ?? '', cacheKey: banner.imgMobile ?? ''),
                                 context,
                               );
                             }
@@ -117,20 +115,14 @@ class _HomeScreenState extends State<HomeScreen>
                                 itemBuilder: (BuildContext context, int index) {
                                   return CachedNetworkImage(
                                     fit: BoxFit.cover,
-                                    imageUrl:
-                                        controller.banners[index].imgMobile ??
-                                            '',
+                                    imageUrl: controller.banners[index].imgMobile ?? '',
                                     fadeOutDuration: Duration.zero,
                                     fadeInDuration: Duration.zero,
-                                    cacheKey:
-                                        controller.banners[index].imgMobile ??
-                                            '',
-                                    placeholder: (context, url) =>
-                                        Assets.images.imageLoadingDef.image(
+                                    cacheKey: controller.banners[index].imgMobile ?? '',
+                                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(
                                       fit: BoxFit.fill,
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        Assets.images.imageLoadingDef.image(
+                                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
                                       fit: BoxFit.fill,
                                     ),
                                   );
@@ -166,20 +158,15 @@ class _HomeScreenState extends State<HomeScreen>
                                   ),
                                 ),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     SizedBox(height: 24.w),
                                     AnimatedOpacity(
-                                      opacity:
-                                          controller.isShowHomeMenu ? 0 : 1,
-                                      duration:
-                                          const Duration(milliseconds: 300),
+                                      opacity: controller.isShowHomeMenu ? 0 : 1,
+                                      duration: const Duration(milliseconds: 300),
                                       child: LayoutBuilder(
-                                        builder: (BuildContext context,
-                                            BoxConstraints constraints) {
-                                          final itemWidth =
-                                              (constraints.maxWidth - 12.w) / 2;
+                                        builder: (BuildContext context, BoxConstraints constraints) {
+                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                           return Wrap(
                                             spacing: 12.w,
                                             runSpacing: 24.w,
@@ -188,35 +175,29 @@ class _HomeScreenState extends State<HomeScreen>
                                                 itemWidth: itemWidth,
                                                 name: '精彩视频',
                                                 nameEn: 'Video',
-                                                imagePath: Assets
-                                                    .images.iconHomeVideo.path,
-                                                onTap: () => Get.toNamed(
-                                                    Routes.videoList),
+                                                imagePath: Assets.images.iconHomeVideo.path,
+                                                onTap: () => Get.toNamed(Routes.videoList),
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
                                                 name: '德州教程',
                                                 nameEn: 'Tutorial',
-                                                imagePath: Assets
-                                                    .images.iconHomeCourse.path,
-                                                onTap: () =>
-                                                    Get.toNamed(Routes.course),
+                                                imagePath: Assets.images.iconHomeCourse.path,
+                                                onTap: () => Get.toNamed(Routes.course),
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
                                                 name: '好书推荐',
                                                 nameEn: 'Recommend',
-                                                imagePath: Assets
-                                                    .images.iconHomeBook.path,
-                                                onTap: () => Get.toNamed(
-                                                    Routes.boolList),
+                                                imagePath: Assets.images.iconHomeBook.path,
+                                                onTap: () => Get.toNamed(Routes.boolList),
                                               ),
                                               HomeMenuItem(
                                                 itemWidth: itemWidth,
                                                 name: '火爆论坛',
                                                 nameEn: 'BBS',
-                                                imagePath: Assets
-                                                    .images.iconHomeFeed.path,
+                                                imagePath: Assets.images.iconHomeFeed.path,
+                                                onTap: () => controller.changeMainTab(1),
                                               ),
                                             ],
                                           );
@@ -235,9 +216,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             Text(
                                               '换一批',
                                               style: TextStyle(
-                                                color: '#1E1E1E'
-                                                    .hexColor
-                                                    .withOpacity(0.5),
+                                                color: '#1E1E1E'.hexColor.withOpacity(0.5),
                                                 fontSize: 12.sp,
                                               ),
                                             ),
@@ -253,10 +232,8 @@ class _HomeScreenState extends State<HomeScreen>
                                     ),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints constraints) {
-                                        final itemWidth =
-                                            (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,
@@ -268,14 +245,10 @@ class _HomeScreenState extends State<HomeScreen>
                                                             id: e.id,
                                                             title: e.title,
                                                             cover: e.cover,
-                                                            description:
-                                                                e.description,
+                                                            description: e.description,
                                                             type: e.type,
-                                                            commentCount: e
-                                                                .popularCount
-                                                                ?.toInt(),
-                                                            createdAt:
-                                                                e.createdAt)),
+                                                            commentCount: e.popularCount?.toInt(),
+                                                            createdAt: e.createdAt)),
                                                   ))
                                               .toList(),
                                         );
@@ -289,10 +262,8 @@ class _HomeScreenState extends State<HomeScreen>
                                     Column(
                                       children: controller.videoItems
                                           .map((e) => Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 6.w),
-                                                child: VideoHorizontalItem(
-                                                    item: e),
+                                                padding: EdgeInsets.only(top: 6.w),
+                                                child: VideoHorizontalItem(item: e),
                                               ))
                                           .toList(),
                                     ),
@@ -303,18 +274,15 @@ class _HomeScreenState extends State<HomeScreen>
                                     ),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints constraints) {
-                                        final itemWidth =
-                                            (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,
                                           children: [
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath:
-                                                  Assets.images.course0.path,
+                                              imagePath: Assets.images.course0.path,
                                               title: '菜鸟上路',
                                               subtitles: const [
                                                 'GTO上手',
@@ -324,8 +292,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath:
-                                                  Assets.images.course1.path,
+                                              imagePath: Assets.images.course1.path,
                                               title: '新手指导',
                                               subtitles: const [
                                                 '基础策略',
@@ -335,8 +302,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath:
-                                                  Assets.images.course2.path,
+                                              imagePath: Assets.images.course2.path,
                                               title: '进阶教程',
                                               subtitles: const [
                                                 '进阶升华',
@@ -346,8 +312,7 @@ class _HomeScreenState extends State<HomeScreen>
                                             ),
                                             HomeCourseItem(
                                               itemWidth: itemWidth,
-                                              imagePath:
-                                                  Assets.images.course3.path,
+                                              imagePath: Assets.images.course3.path,
                                               title: '职业打法',
                                               subtitles: const [
                                                 '多桌策略',
@@ -360,16 +325,11 @@ class _HomeScreenState extends State<HomeScreen>
                                       },
                                     ),
                                     SizedBox(height: 24.w),
-                                    HomeTitle(
-                                        title: '好书推荐',
-                                        onTap: () =>
-                                            Get.toNamed(Routes.boolList)),
+                                    HomeTitle(title: '好书推荐', onTap: () => Get.toNamed(Routes.boolList)),
                                     SizedBox(height: 12.w),
                                     LayoutBuilder(
-                                      builder: (BuildContext context,
-                                          BoxConstraints constraints) {
-                                        final itemWidth =
-                                            (constraints.maxWidth - 12.w) / 2;
+                                      builder: (BuildContext context, BoxConstraints constraints) {
+                                        final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                         return Wrap(
                                           spacing: 12.w,
                                           runSpacing: 12.w,
@@ -386,8 +346,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     ),
                                     SizedBox(height: 32.w),
                                     SizedBox(
-                                      height: kBottomNavigationBarHeight +
-                                          ScreenUtil().bottomBarHeight,
+                                      height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
                                     ),
                                   ],
                                 ),

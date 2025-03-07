@@ -60,6 +60,8 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 fit: BoxFit.cover,
                                 imageUrl: controller.userProfile?.avatar ?? '',
                                 errorWidget: (context, url, error) => const SizedBox(),
+                                fadeOutDuration: Duration.zero,
+                                fadeInDuration: Duration.zero,
                               ),
                             ),
                           ),

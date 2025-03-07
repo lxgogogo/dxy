@@ -185,7 +185,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Color(0xff2eacfb)),
+                                    borderSide: const BorderSide(color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                 ),
@@ -275,7 +275,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                         borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Color(0xff2eacfb)),
+                                        borderSide: const BorderSide(color: Colors.transparent),
                                         borderRadius: BorderRadius.circular(10.w),
                                       ),
                                     ),

@@ -128,6 +128,9 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                 ),
                                 maxLines: 1,
                                 inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.deny(
+                                    RegExp('[\\s]'),
+                                  ),
                                   LengthLimitingTextInputFormatter(10),
                                 ],
                                 decoration: InputDecoration(
@@ -150,12 +153,12 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                     borderRadius: BorderRadius.circular(8.px),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Color(0xff2eacfb)),
+                                    borderSide: const BorderSide(color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.px),
                                   ),
                                 ),
                                 onChanged: (value) {
-                                  _isDisable = value.isEmpty;
+                                  _isDisable = value.isEmpty || value == widget.editContent;
                                   setState(() {});
                                 },
                               ),

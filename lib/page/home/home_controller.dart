@@ -144,4 +144,8 @@ class HomeController extends GetxController {
   void onIndexChanged(int value) {
     bannerIndex = value;
   }
+
+  changeMainTab(int i) {
+    Get.find<MainController>().onTabBarItem(1);
+  }
 }

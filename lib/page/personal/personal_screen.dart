@@ -157,7 +157,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
               ),
               alignment: Alignment.center,
               child: Text(
-                '更换头像',
+                '修改头像',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 12.px,

@@ -63,7 +63,7 @@ class SearchScreen extends GetView<SearchController> {
               title: buildSearchInput(),
               actions: [
                 GestureDetector(
-                  onTap: controller.onSearch,
+                  onTap: () => controller.onSearch(context),
                   child: Padding(
                     padding: EdgeInsets.only(left: 12.w, right: 16.w),
                     child: Text(
@@ -170,7 +170,7 @@ class SearchScreen extends GetView<SearchController> {
                 isDense: true,
                 hintStyle: TextStyle(
                   fontSize: 12.sp,
-                  color: '#333333'.hexColor,
+                  color: '#333333'.hexColor.withOpacity(0.5),
                 ),
               ),
             ),
@@ -198,106 +198,108 @@ class SearchScreen extends GetView<SearchController> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    Assets.svg.clubs,
-                    width: 12.w,
-                    height: 12.w,
-                  ),
-                  SizedBox(width: 8.w),
-                  Text(
-                    '历史搜索',
-                    style: TextStyle(
-                      color: '#333333'.hexColor,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
+          if (controller.historyItems.isNotEmpty) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      Assets.svg.clubs,
+                      width: 12.w,
+                      height: 12.w,
                     ),
-                  ),
-                ],
-              ),
-              GestureDetector(
-                onTap: () async {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) => CommonDialog(
-                      title: '删除历史',
-                      content: '确定要删除全部历史吗？',
-                      confirmText: '确认删除',
-                      onConfirm: () {
-                        Navigator.of(context).pop();
-                        controller.deleteAllHistory();
-                      },
-                      cancelText: '取消',
+                    SizedBox(width: 8.w),
+                    Text(
+                      '历史搜索',
+                      style: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  );
-                },
-                child: SvgPicture.asset(
-                  Assets.svg.iconHistoryDelete,
-                  width: 14.w,
-                  height: 14.w,
+                  ],
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12.w),
-          LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              final itemWidth = (constraints.maxWidth - 24.w) / 2;
-              return Wrap(
-                spacing: 24.w,
-                runSpacing: 12.w,
-                alignment: WrapAlignment.start,
-                children: [
-                  ...List.generate(
-                    controller.historyItems.length,
-                    (index) {
-                      return GestureDetector(
-                        onTap: () {
-                          controller.controller.text = controller.historyItems[index];
-                          controller.onSearch();
+                GestureDetector(
+                  onTap: () async {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) => CommonDialog(
+                        title: '删除历史',
+                        content: '确定要删除全部历史吗？',
+                        confirmText: '确认删除',
+                        onConfirm: () {
+                          Navigator.of(context).pop();
+                          controller.deleteAllHistory();
                         },
-                        onLongPress: () async {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) => CommonDialog(
-                              title: '删除历史',
-                              content: '确认删除当前搜索记录吗？',
-                              confirmText: '确认',
-                              onConfirm: () {
-                                Navigator.of(context).pop();
-                                controller.deleteItemHistory(index);
-                              },
-                              cancelText: '取消',
+                        cancelText: '取消',
+                      ),
+                    );
+                  },
+                  child: SvgPicture.asset(
+                    Assets.svg.iconHistoryDelete,
+                    width: 14.w,
+                    height: 14.w,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12.w),
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final itemWidth = (constraints.maxWidth - 24.w) / 2;
+                return Wrap(
+                  spacing: 24.w,
+                  runSpacing: 12.w,
+                  alignment: WrapAlignment.start,
+                  children: [
+                    ...List.generate(
+                      controller.historyItems.length,
+                      (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.controller.text = controller.historyItems[index];
+                            controller.onSearch(context);
+                          },
+                          onLongPress: () async {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => CommonDialog(
+                                title: '删除历史',
+                                content: '确认删除当前搜索记录吗？',
+                                confirmText: '确认',
+                                onConfirm: () {
+                                  Navigator.of(context).pop();
+                                  controller.deleteItemHistory(index);
+                                },
+                                cancelText: '取消',
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: itemWidth,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              controller.historyItems[index],
+                              style: TextStyle(
+                                color: '#333333'.hexColor,
+                                fontSize: 14.sp,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          );
-                        },
-                        child: Container(
-                          width: itemWidth,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            controller.historyItems[index],
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 14.sp,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      );
-                    },
-                  )
-                ],
-              );
-            },
-          ),
-          SizedBox(height: 16.w),
+                        );
+                      },
+                    )
+                  ],
+                );
+              },
+            ),
+            SizedBox(height: 16.w),
+          ],
           Row(
             children: [
               SvgPicture.asset(

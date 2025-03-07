@@ -119,301 +119,297 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
               children: [
-                Stack(
-                  children: [
-                    Image.asset('assets/images/login_bg.png'),
-                    Positioned(
-                      child: SafeArea(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10.w),
-                          width: context.width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Image.asset(
-                                'assets/images/logo.png',
-                                height: 23.w,
-                              ),
-                              CloseImageButton(
-                                width: 16.w,
-                                height: 16.w,
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
+                Image.asset('assets/images/login_bg.png'),
+                Positioned(
+                  child: SafeArea(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 10.w),
+                      width: context.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Image.asset(
+                            'assets/images/logo.png',
+                            height: 23.w,
                           ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 16.w, top: 24.w),
-                  child: Column(
-                    children: [
-                      Text(
-                        '忘记密码',
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w600,
-                          color: '#333333'.hexColor,
-                        ),
-                      ),
-                      Container(
-                        width: 21.w,
-                        height: 4.w,
-                        margin: EdgeInsets.only(top: 4.w),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(1.5.r),
+                          CloseImageButton(
+                            width: 16.w,
+                            height: 16.w,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(
-                        height: 30.w,
-                      ),
-                      Container(
-                        height: 44.w,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                        // 水平内边距
-                        decoration: BoxDecoration(
-                          color: '#f5f5f5'.hexColor,
-                          borderRadius: BorderRadius.circular(12.w),),
-                        child: Row(
-                          children: <Widget>[
-
-                            Expanded(
-                              child: TextField(
-                                focusNode: _focusEmail,
-                                keyboardType: TextInputType.text,
-                                controller: _controllerEmail,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.deny(
-                                    RegExp('[\\s]'),
-                                  )
-                                ],
-                                decoration: InputDecoration(
-                                  border: InputBorder.none, // 没有边框
-                                  hintText: '请输入邮箱',
-                                  hintStyle:
-                                  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
-                                  contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
-                                ),
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: isShowAccountTips
-                            ? EdgeInsets.symmetric(vertical: 3.w)
-                            : EdgeInsets.zero,
-                        child: Text(
-                          isShowAccountTips ? '*请输入正确邮箱' : '',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 44.w,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                        // 水平内边距
-                        // 水平内边距
-                        decoration: BoxDecoration(
-                          color: '#f5f5f5'.hexColor,
-                          borderRadius: BorderRadius.circular(12.w),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextField(
-                                controller: _controllerCode,
-                                focusNode: _focusCode,
-                                keyboardType: TextInputType.number,
-                                // maxLength: 8,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none, // 没有边框
-                                  hintText: '请输入验证码',
-                                  hintStyle:
-                                  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
-                                  contentPadding:
-                                      EdgeInsets.fromLTRB(0, 0, 10.w, 0),
-                                ),
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                              ),
-                            ),
-                            CountDownView(
-                              type: NetRequest.SEND_CODE_TYPE_RESET_PW,
-                              email: _controllerEmail.text,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: isShowCodeTips
-                            ? EdgeInsets.symmetric(vertical: 3.w)
-                            : EdgeInsets.zero,
-                        child: Text(
-                          isShowCodeTips ? '*验证码错误' : '',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 44.w,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                        // 水平内边距
-                        decoration: BoxDecoration(
-                          color: '#f5f5f5'.hexColor,
-                          borderRadius: BorderRadius.circular(12.w),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextField(
-                                controller: _controllerPw,
-                                focusNode: _focusPw,
-                                obscureText: !_isVisible,
-                                // 输入内容显示为密文
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '请输入密码',
-                                  hintStyle:
-                                  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
-                                  contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
-                                ),
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Image.asset(
-                                _isVisible
-                                    ? 'assets/images/eye_open.png'
-                                    : 'assets/images/eye_close.png',
-                                width: 18.w,
-                                height: 18.w,
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  _isVisible = !_isVisible;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 6.w),
-                        child: Text(
-                          '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 40.w,
-                        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                        // 水平内边距
-                        decoration: BoxDecoration(
-                          color: '#f5f5f5'.hexColor,
-                          borderRadius: BorderRadius.circular(12.w),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextField(
-                                controller: _controllerAgainPw,
-                                focusNode: _focusAgainPw,
-                                obscureText: !_isVisibleAgain,
-                                // 输入内容显示为密文
-                                decoration: InputDecoration(
-                                  border: InputBorder.none, // 没有边框
-                                  hintText: '再次输入新密码',
-                                  hintStyle:
-                                  TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
-                                  contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
-                                ),
-                                onChanged: (_) {
-                                  onChangeCheckValid();
-                                },
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Image.asset(
-                                _isVisibleAgain
-                                    ? 'assets/images/eye_open.png'
-                                    : 'assets/images/eye_close.png',
-                                width: 18.w,
-                                height: 18.w,
-                              ),
-                              onTap: () {
-                                if (mounted) {
-                                  setState(() {
-                                    _isVisibleAgain = !_isVisibleAgain;
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 6.w),
-                        child: Text(
-                          isShowAgainTips ? '两次输入的密码不一致' : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowAgainTips
-                                ? Colors.red
-                                : '#95A3C4'.hexColor,
-                          ),
-                        )
-                      ),
-                      SizedBox(height: 48.w),
-                      CustomButton(
-                        onPressed: registerOrConfirm,
-                        disable: _isLoginDisable,
-                        textColor: Colors.white,
-                        height: 48.w,
-                        title: '找回密码',
-                      ),
-                    ],
+                    ),
                   ),
                 )
               ],
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.only(left: 16.w, top: 24.w),
+              child: Column(
+                children: [
+                  Text(
+                    '忘记密码',
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w600,
+                      color: '#333333'.hexColor,
+                    ),
+                  ),
+                  Container(
+                    width: 21.w,
+                    height: 4.w,
+                    margin: EdgeInsets.only(top: 4.w),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(1.5.r),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(
+                    height: 30.w,
+                  ),
+                  Container(
+                    height: 44.w,
+                    padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                    // 水平内边距
+                    decoration: BoxDecoration(
+                      color: '#f5f5f5'.hexColor,
+                      borderRadius: BorderRadius.circular(12.w),),
+                    child: Row(
+                      children: <Widget>[
+
+                        Expanded(
+                          child: TextField(
+                            focusNode: _focusEmail,
+                            keyboardType: TextInputType.text,
+                            controller: _controllerEmail,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(
+                                RegExp('[\\s]'),
+                              )
+                            ],
+                            decoration: InputDecoration(
+                              border: InputBorder.none, // 没有边框
+                              hintText: '请输入邮箱',
+                              hintStyle:
+                              TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                            ),
+                            onChanged: (_) {
+                              onChangeCheckValid();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: isShowAccountTips
+                        ? EdgeInsets.symmetric(vertical: 3.w)
+                        : EdgeInsets.zero,
+                    child: Text(
+                      isShowAccountTips ? '*请输入正确邮箱' : '',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 44.w,
+                    padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                    // 水平内边距
+                    // 水平内边距
+                    decoration: BoxDecoration(
+                      color: '#f5f5f5'.hexColor,
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: _controllerCode,
+                            focusNode: _focusCode,
+                            keyboardType: TextInputType.number,
+                            // maxLength: 8,
+                            decoration: InputDecoration(
+                              border: InputBorder.none, // 没有边框
+                              hintText: '请输入验证码',
+                              hintStyle:
+                              TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                            ),
+                            onChanged: (_) {
+                              onChangeCheckValid();
+                            },
+                          ),
+                        ),
+                        CountDownView(
+                          type: NetRequest.SEND_CODE_TYPE_RESET_PW,
+                          email: _controllerEmail.text,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: isShowCodeTips
+                        ? EdgeInsets.symmetric(vertical: 3.w)
+                        : EdgeInsets.zero,
+                    child: Text(
+                      isShowCodeTips ? '*验证码错误' : '',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 44.w,
+                    padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                    // 水平内边距
+                    decoration: BoxDecoration(
+                      color: '#f5f5f5'.hexColor,
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: _controllerPw,
+                            focusNode: _focusPw,
+                            obscureText: !_isVisible,
+                            // 输入内容显示为密文
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '请输入密码',
+                              hintStyle:
+                              TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                            ),
+                            onChanged: (_) {
+                              onChangeCheckValid();
+                            },
+                          ),
+                        ),
+                        GestureDetector(
+                          child: Image.asset(
+                            _isVisible
+                                ? 'assets/images/eye_open.png'
+                                : 'assets/images/eye_close.png',
+                            width: 18.w,
+                            height: 18.w,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _isVisible = !_isVisible;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6.w),
+                    child: Text(
+                      isShowAgainTips ? '两次输入的密码不一致' : '8-12位，须包含大小写字母+数字',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 40.w,
+                    padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                    // 水平内边距
+                    decoration: BoxDecoration(
+                      color: '#f5f5f5'.hexColor,
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: _controllerAgainPw,
+                            focusNode: _focusAgainPw,
+                            obscureText: !_isVisibleAgain,
+                            // 输入内容显示为密文
+                            decoration: InputDecoration(
+                              border: InputBorder.none, // 没有边框
+                              hintText: '再次输入新密码',
+                              hintStyle:
+                              TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                            ),
+                            onChanged: (_) {
+                              onChangeCheckValid();
+                            },
+                          ),
+                        ),
+                        GestureDetector(
+                          child: Image.asset(
+                            _isVisibleAgain
+                                ? 'assets/images/eye_open.png'
+                                : 'assets/images/eye_close.png',
+                            width: 18.w,
+                            height: 18.w,
+                          ),
+                          onTap: () {
+                            if (mounted) {
+                              setState(() {
+                                _isVisibleAgain = !_isVisibleAgain;
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6.w),
+                    child: Text(
+                      isShowAgainTips ? '两次输入的密码不一致' : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowAgainTips
+                            ? Colors.red
+                            : '#95A3C4'.hexColor,
+                      ),
+                    )
+                  ),
+                  SizedBox(height: 48.w),
+                  CustomButton(
+                    onPressed: registerOrConfirm,
+                    disable: _isLoginDisable,
+                    textColor: Colors.white,
+                    height: 48.w,
+                    title: '找回密码',
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

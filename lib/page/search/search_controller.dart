@@ -63,12 +63,13 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
     safeUpdate();
   }
 
-  void onSearch() {
+  void onSearch(BuildContext context) {
     String keyword = controller.text;
     if (keyword.isEmpty) {
       ToastUtils.showToast("请输入搜索内容");
       return;
     }
+    FocusScope.of(context).requestFocus(FocusNode());
     if (!historyItems.contains(keyword)) {
       historyItems.insert(0, keyword);
       StorageUtil().prefs?.setStringList('search', historyItems);

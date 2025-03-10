@@ -48,8 +48,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
             ),
           ),
         Container(
-          height: 88.w,
-          padding: EdgeInsets.only(top: 10.w),
+          padding: EdgeInsets.only(top: 10.w, bottom: 12.w),
           decoration: BoxDecoration(
               color: Colors.white,
               // borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
@@ -59,61 +58,55 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
           alignment: Alignment.topCenter,
           child: Row(
             children: <Widget>[
-              SizedBox(width: 17.w),
+              SizedBox(width: 16.w),
               if (widget.viewParams.relType == NetRequest.COMMENT_TYPE_CONTENT)
-                Expanded(
-                  flex: 2,
-                  child: GestureDetector(
-                    onTap: () {
-                      UserStore.of.checkLogin(() {
-                        Get.bottomSheet(
-                          isScrollControlled: true,
-                          CommentPublishScreen(
-                            relType: widget.viewParams.relType!,
-                            relId: widget.viewParams.relId!,
-                          ),
-                        );
-                      });
-                    },
-                    child: Container(
-                      height: 30.w,
-                      padding: EdgeInsets.only(left: 12.w),
-                      decoration: BoxDecoration(
-                        color: '#333333'.hexColor.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '说点什么吧...',
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: '#333333'.hexColor.withOpacity(0.5)),
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    UserStore.of.checkLogin(() {
+                      Get.bottomSheet(
+                        isScrollControlled: true,
+                        CommentPublishScreen(
+                          relType: widget.viewParams.relType!,
+                          relId: widget.viewParams.relId!,
+                        ),
+                      );
+                    });
+                  },
+                  child: Container(
+                    height: 32.w,
+                    constraints: BoxConstraints(maxWidth: 101.w),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    decoration: BoxDecoration(
+                      color: '#333333'.hexColor.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '说点什么吧...',
+                      style: TextStyle(fontSize: 12, color: '#333333'.hexColor.withOpacity(0.5)),
                     ),
                   ),
                 )
               else
-                SizedBox(
-                  // width: 100.w,
-                  child: GestureDetector(
-                    onTap: _pushComment,
-                    child: Container(
-                      height: 32.w,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                        color: '#333333'.hexColor.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      child: Row(
-                        children: [
-                          ClipOval(
-                              child: LoginHelper().getUserAvatar(
-                                  widget.viewParams.author?.avatar ?? '',
-                                  30.w,
-                                  30.w)),
-                          Container(
-                            margin: EdgeInsets.only(left: 4.w, right: 4.w),
-                            width: 30.w,
+                GestureDetector(
+                  onTap: _pushComment,
+                  child: Container(
+                    height: 32.w,
+                    constraints: BoxConstraints(maxWidth: 101.w),
+                    padding: EdgeInsets.only(right: 12.w),
+                    decoration: BoxDecoration(
+                      color: '#333333'.hexColor.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipOval(
+                          child: LoginHelper().getUserAvatar(widget.viewParams.author?.avatar ?? '', 30.w, 30.w),
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
                             child: Text(
                               widget.viewParams.author?.nickname ?? '',
                               style: TextStyle(
@@ -124,49 +117,43 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if ((widget.viewParams.author?.id ?? 0) != 0)
-                            Visibility(
-                              visible: !UserStore.of
-                                  .isMe(widget.viewParams.author?.id),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Get.find<FeedDetailController>(
-                                          tag: Get.arguments.toString())
-                                      .followToggle();
-                                },
-                                child:
-                                    widget.viewParams.author?.followed == true
-                                        ? Container(
-                                            alignment: Alignment.center,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10.w),
-                                            child: Text(
-                                              '已关注',
-                                              style: TextStyle(
-                                                color: '#557BF6'.hexColor,
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            height: 28.w,
-                                            alignment: Alignment.center,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 10.w),
-                                            child: Text(
-                                              '+关注',
-                                              style: TextStyle(
-                                                color: '#557BF6'.hexColor,
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                              ),
+                        ),
+                        if ((widget.viewParams.author?.id ?? 0) != 0)
+                          Visibility(
+                            visible: !UserStore.of.isMe(widget.viewParams.author?.id),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                              },
+                              child: widget.viewParams.author?.followed == true
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                      child: Text(
+                                        '已关注',
+                                        style: TextStyle(
+                                          color: '#557BF6'.hexColor,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 28.w,
+                                      alignment: Alignment.center,
+                                      margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                      child: Text(
+                                        '+关注',
+                                        style: TextStyle(
+                                          color: '#557BF6'.hexColor,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
                             ),
-                        ],
-                      ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
@@ -188,72 +175,73 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
               //     ),
               //   ),
               // ),
-              const Spacer(),
               SizedBox(width: 8.w),
-              // if (widget.viewParams.relType == 'thread')
-              GestureDetector(
-                onTap: _likeToggle,
-                child: CountCommentBadge(
-                  count: widget.viewParams.likeCount.abbreviateNumber,
-                  iconWidget: Container(
-                    padding: EdgeInsets.all(3.w),
-                    child: widget.viewParams.liked == true
-                        ? SvgPicture.asset(
-                            Assets.svg.liked,
-                      width: 20.w,
-                      height: 20.w,
-                            color: '#567BF6'.hexColor.withOpacity(0.7),
-                          )
-                        : SvgPicture.asset(
-                            Assets.svg.like,
-                            color: '#333333'.hexColor.withOpacity(0.7),
-                      width: 20.w,
-                      height: 20.w,
-                          ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: _favoriteToggle,
-                child: CountCommentBadge(
-                  count: widget.viewParams.favoriteCount.abbreviateNumber,
-                  iconWidget: Container(
-                    padding: EdgeInsets.all(3.w),
-                    child: widget.viewParams.favoriteState == true
-                        ? SvgPicture.asset(
-                            Assets.svg.stared,
-                            color: '#567BF6'.hexColor.withOpacity(0.7),
-                          )
-                        : SvgPicture.asset(
-                            Assets.svg.star,
-                            color: '#333333'.hexColor.withOpacity(0.7),
-                          ),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: _toCommentList,
-                child: CountCommentBadge(
-                    iconWidget: Padding(
-                      padding: EdgeInsets.all(3.w),
-                      child: SvgPicture.asset(
-                        Assets.svg.comment,
-                        color: '#333333'.hexColor,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: _likeToggle,
+                      child: CountCommentBadge(
+                        count: widget.viewParams.likeCount.abbreviateNumber,
+                        iconWidget: widget.viewParams.liked == true
+                            ? SvgPicture.asset(
+                                Assets.svg.liked,
+                                width: 24.w,
+                                height: 24.w,
+                                color: '#567BF6'.hexColor.withOpacity(0.7),
+                              )
+                            : SvgPicture.asset(
+                                Assets.svg.like,
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                                width: 24.w,
+                                height: 24.w,
+                              ),
                       ),
                     ),
-                    count: widget.viewParams.commentCount.abbreviateNumber),
-              ),
-              GestureDetector(
-                onTap: _toShare,
-                child: CountCommentBadge(
-                    iconWidget: Padding(
-                      padding: EdgeInsets.all(3.w),
-                      child: SvgPicture.asset(
-                        Assets.svg.share,
-                        color: '#333333'.hexColor,
+                    GestureDetector(
+                      onTap: _favoriteToggle,
+                      child: CountCommentBadge(
+                        count: widget.viewParams.favoriteCount.abbreviateNumber,
+                        iconWidget: widget.viewParams.favoriteState == true
+                            ? SvgPicture.asset(
+                                Assets.svg.stared,
+                                color: '#567BF6'.hexColor.withOpacity(0.7),
+                                width: 24.w,
+                                height: 24.w,
+                              )
+                            : SvgPicture.asset(
+                                Assets.svg.star,
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                                width: 24.w,
+                                height: 24.w,
+                              ),
                       ),
                     ),
-                    count: ''),
+                    GestureDetector(
+                      onTap: _toCommentList,
+                      child: CountCommentBadge(
+                          iconWidget: SvgPicture.asset(
+                            Assets.svg.comment,
+                            color: '#333333'.hexColor,
+                            width: 24.w,
+                            height: 24.w,
+                          ),
+                          count: widget.viewParams.commentCount.abbreviateNumber),
+                    ),
+                    GestureDetector(
+                      onTap: _toShare,
+                      child: CountCommentBadge(
+                          iconWidget: SvgPicture.asset(
+                            Assets.svg.share,
+                            color: '#333333'.hexColor,
+                            width: 24.w,
+                            height: 24.w,
+                          ),
+                          count: ''),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 width: 6.w,
@@ -277,7 +265,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       widget.viewParams.liked = !(widget.viewParams.liked ?? false);
       if (widget.viewParams.liked == true) {
         ToastUtils.showToast('点赞成功');
-      }else{
+      } else {
         ToastUtils.showToast('取消点赞成功');
       }
       setState(() {});
@@ -288,12 +276,10 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
 
   void _favoriteToggle() {
     NetRequest().favoriteToggle(
-        widget.viewParams.relType,
-        widget.viewParams.relId,
-        !(widget.viewParams.favoriteState ?? false), (data) {
+        widget.viewParams.relType, widget.viewParams.relId, !(widget.viewParams.favoriteState ?? false), (data) {
       if (widget.viewParams.favoriteState != true) {
         ToastUtils.showToast('收藏成功');
-      }else{
+      } else {
         ToastUtils.showToast('取消收藏成功');
       }
       if (widget.viewParams.favoriteState == true) {
@@ -311,16 +297,14 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   void _toShare() {
     if (widget.viewParams.relType == 'thread') {
       NetRequest().threadUpCount(widget.viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(
-            text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
       });
     } else {
       NetRequest().upCount(widget.viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(
-            text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});

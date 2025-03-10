@@ -86,7 +86,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
         },
         child: ShadowWrapper(
           borderRadius: 10.5.w,
-          margin: EdgeInsets.only(left: 18.w, right: 18.w),
+          margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
             child: Column(
@@ -100,7 +100,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                       width: double.infinity,
                       child: Center(
                         child: Text(
-                          "注销账户",
+                          "注销账号",
                           style: TextStyle(
                             color: '#333333'.hexColor,
                             fontSize: 16.px,
@@ -212,7 +212,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
                               child: Text(
-                                isShowAccountTips ? '*请输入正确邮箱' : '',
+                                isShowAccountTips ? '*请输入正确邮箱地址' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: isShowAccountTips
@@ -340,66 +340,64 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                         ],
                       ),
                       SizedBox(height: 26.w),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                width: 96.w,
-                                height: 33.w,
-                                decoration: ShapeDecoration(
-                                  color: '#333333'.hexColor.withOpacity(0.1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              width: 96.w,
+                              height: 33.w,
+                              decoration: ShapeDecoration(
+                                color: '#333333'.hexColor.withOpacity(0.1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '取消',
-                                  style: TextStyle(
-                                    color: '#333333'.hexColor.withOpacity(0.7),
-                                    fontSize: 12.px,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '取消',
+                                style: TextStyle(
+                                  color: '#333333'.hexColor.withOpacity(0.7),
+                                  fontSize: 12.px,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 24.w),
-                            InkWell(
-                              onTap: _isDisable ? null : _submit,
-                              child: Container(
-                                width: 96.w,
-                                height: 33.w,
-                                decoration: ShapeDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment(1.00, 0.00),
-                                    end: Alignment(-1, 0),
-                                    colors: [
-                                      Color(0xFF84BCF9),
-                                      Color(0xFF557BF6),
-                                    ],
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                          ),
+                          SizedBox(width: 24.w),
+                          InkWell(
+                            onTap: _isDisable ? null : _submit,
+                            child: Container(
+                              width: 96.w,
+                              height: 33.w,
+                              decoration: ShapeDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment(1.00, 0.00),
+                                  end: Alignment(-1, 0),
+                                  colors: [
+                                    Color(0xFF84BCF9),
+                                    Color(0xFF557BF6),
+                                  ],
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '确定注销',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.px,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '确定注销',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.px,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

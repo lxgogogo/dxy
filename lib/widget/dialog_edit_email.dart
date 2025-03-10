@@ -83,7 +83,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
         },
         child: ShadowWrapper(
           borderRadius: 16.w,
-          margin: EdgeInsets.only(left: 18.w, right: 18.w),
+          margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
             child: Column(
@@ -127,22 +127,16 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "邮箱",
-                                style: TextStyle(
-                                  color:'#333333'.hexColor,
-                                  fontSize: 14.px,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                          Text(
+                            "新邮箱",
+                            style: TextStyle(
+                              color:'#333333'.hexColor,
+                              fontSize: 14.px,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 8.px),
                           Expanded(
-                            flex: 5,
                             child: Container(
                               height: 30.w,
                               decoration: BoxDecoration(
@@ -199,11 +193,23 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                       ),
                       Row(
                         children: [
+                          Opacity(
+                            opacity: 0,
+                            child: Text(
+                              "三个字",
+                              style: TextStyle(
+                                color:'#333333'.hexColor,
+                                fontSize: 14.px,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
                               child: Text(
-                                isShowAccountTips ? '*请输入正确邮箱' : '',
+                                isShowAccountTips ? '*请输入正确邮箱地址' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
@@ -215,21 +221,16 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                       ),
                       Row(
                         children: [
-                          Expanded(
-                            child: SizedBox(
-                              child: Text(
-                                "验证码",
-                                style: TextStyle(
-                                  color:'#333333'.hexColor,
-                                  fontSize: 14.px,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                          Text(
+                            "验证码",
+                            style: TextStyle(
+                              color:'#333333'.hexColor,
+                              fontSize: 14.px,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 8.w),
                           Expanded(
-                            flex: 5,
                             child: Container(
                               height: 30.px,
                               decoration: BoxDecoration(
@@ -298,7 +299,17 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                       ),
                       Row(
                         children: [
-                          SizedBox(width: 68.5.w),
+                          Opacity(
+                            opacity: 0,
+                            child: Text(
+                              "三个字",
+                              style: TextStyle(
+                                color:'#333333'.hexColor,
+                                fontSize: 14.px,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Padding(

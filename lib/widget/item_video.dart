@@ -124,7 +124,7 @@ class VideoItem extends StatelessWidget {
                 item.createdAt != null ? DateFormat('yyyy-MM-dd').format(item.createdAt!) : '',
                 style: TextStyle(
                   color: '#333333'.hexColor.withOpacity(0.3),
-                  fontSize: 10.sp,
+                  fontSize: 9.sp,
                 ),
               ),
               const Spacer(),
@@ -175,7 +175,7 @@ class VideoHorizontalItem extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 160.w,
+              width: 154.w,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -212,10 +212,9 @@ class VideoHorizontalItem extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 12.w),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(14.w, 8.w, 14.w, 12.w),
+                padding: EdgeInsets.fromLTRB(8.w, 8.w, 8.w, 12.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -230,14 +229,17 @@ class VideoHorizontalItem extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text(
-                          item.createdAt != null ? DateFormat('yyyy-MM-dd').format(item.createdAt!) : '',
-                          style: TextStyle(
-                            color: '#333333'.hexColor.withOpacity(0.3),
-                            fontSize: 10.sp,
+                        Expanded(
+                          child: Text(
+                            item.createdAt != null ? DateFormat('yyyy-MM-dd').format(item.createdAt!) : '',
+                            style: TextStyle(
+                              color: '#333333'.hexColor.withOpacity(0.3),
+                              fontSize: 9.sp,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const Spacer(),
                         CountLike(
                           count: item.favoriteCount.abbreviateNumber,
                           usePlaceHolder: false,

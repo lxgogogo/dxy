@@ -93,7 +93,7 @@ class HttpUtils {
     FailureCallback? onFail,
   }) async {
     if (showLoading) {
-      EasyLoading.show(status: 'loading...');
+      EasyLoading.show(status: 'loading...', maskType: EasyLoadingMaskType.clear);
     }
     var ret = await Http().postFile(
       path,

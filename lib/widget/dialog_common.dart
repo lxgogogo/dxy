@@ -35,7 +35,7 @@ class CommonDialog extends StatelessWidget {
         insetPadding: EdgeInsets.zero,
         child: ShadowWrapper(
           borderRadius: 16.w,
-          margin: EdgeInsets.only(left: 18.w, right: 18.w),
+          margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
             child: Column(

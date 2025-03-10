@@ -44,8 +44,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
     _isMounted = true;
     getUserInfo();
     EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() ==
-          EventBusAction.refreshPersonalProfile.eventBusTypeName) {
+      if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
         getUserInfo();
       }
     });
@@ -125,10 +124,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 fit: BoxFit.cover,
                 width: 88.w,
                 height: 88.w,
-                placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(color: Colors.black12)),
-                errorWidget: (context, url, error) =>
-                    Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
+                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
               ),
             ),
           ),
@@ -144,12 +141,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
             child: Container(
               width: 72.w,
               height: 30.w,
-
               decoration: ShapeDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment(1.00, 0.00),
                   end: Alignment(-1, 0),
-                  colors: [ Color(0xFF84BCF9),Color(0xFF557BF6),],
+                  colors: [
+                    Color(0xFF84BCF9),
+                    Color(0xFF557BF6),
+                  ],
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
@@ -168,7 +167,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w,top: 16.w),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.w),
           child: Column(
             children: [
               GestureDetector(
@@ -190,7 +189,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         '昵称',
                         style: TextStyle(
                           fontSize: 16.sp,
-                          color:'#333333'.hexColor,
+                          color: '#333333'.hexColor,
                         ),
                       ),
                       SizedBox(width: 14.w),
@@ -198,7 +197,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         child: Text(
                           _userProfile?.nickname ?? '',
                           style: TextStyle(
-                            color:'#333333'.hexColor,
+                            color: '#333333'.hexColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
@@ -234,7 +233,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       Text(
                         '邮箱',
                         style: TextStyle(
-                          color:'#333333'.hexColor,
+                          color: '#333333'.hexColor,
                           fontSize: 16.sp,
                         ),
                       ),
@@ -243,7 +242,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                         child: Text(
                           _userProfile?.account ?? '',
                           style: TextStyle(
-                            color:'#333333'.hexColor,
+                            color: '#333333'.hexColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                           ),
@@ -300,22 +299,20 @@ class _PersonalScreenState extends State<PersonalScreen> {
         return;
       }
       imageUrl = picked.path;
-    }
-    if (imageUrl.isNotEmpty) {
-      NetRequest().updateAvatar(imageUrl, (data) {
-        ToastUtils.showToast('上传成功');
-        EventBusManager.eventBus
-            .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
-      }, (errMsg) {
-        ToastUtils.showToast('上传文件失败，请重新上传');
-      }, (int sent, int total) {});
+      if (imageUrl.isNotEmpty) {
+        NetRequest().updateAvatar(imageUrl, (data) {
+          ToastUtils.showToast('上传成功');
+          EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+        }, (errMsg) {
+          ToastUtils.showToast('上传文件失败，请重新上传');
+        }, (int sent, int total) {}).whenComplete(() {});
+      }
     }
   }
 
   Future<void> _takePicture() async {
     final imagePicker = ImagePicker();
-    final XFile? image =
-        await imagePicker.pickImage(source: ImageSource.camera);
+    final XFile? image = await imagePicker.pickImage(source: ImageSource.camera);
 
     if (_isMounted) {
       setState(() {

@@ -105,10 +105,10 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 10.5.px,
-          margin: EdgeInsets.only(left: 18.px, right: 18.px),
+          borderRadius: 10.5.w,
+          margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
-            padding: EdgeInsets.only(bottom: 26.px),
+            padding: EdgeInsets.only(bottom: 26.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -116,14 +116,14 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                 Stack(
                   children: [
                     SizedBox(
-                      height: 72.px,
+                      height: 72.w,
                       width: double.infinity,
                       child: Center(
                         child: Text(
                           "修改密码",
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.w,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -144,23 +144,23 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 21.5.px),
+                  padding: EdgeInsets.symmetric(horizontal: 21.5.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(
                         children: [
-                          Expanded(child: buildTitleText('原密码')),
-                          SizedBox(width: 8.px),
+                          buildTitleText('原密码'),
+                          SizedBox(width: 8.w),
                           Expanded(
                             flex: 4,
                             child: Container(
                               height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
+                                borderRadius: BorderRadius.circular(8.w),
                                 border: Border.all(
                                   color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
+                                  width: 1.w,
                                 ),
                               ),
                               child: Row(
@@ -190,19 +190,19 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                         ),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         disabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                       ),
                                     ),
@@ -234,20 +234,19 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                       //     ),
                       //   ),
                       // ),
-                      SizedBox(height: 12.px),
+                      SizedBox(height: 12.w),
                       Row(
                         children: [
-                          Expanded(child: buildTitleText('新密码')),
-                          SizedBox(width: 8.px),
+                          buildTitleText('新密码'),
+                          SizedBox(width: 8.w),
                           Expanded(
-                            flex: 4,
                             child: Container(
                               height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
+                                borderRadius: BorderRadius.circular(8.w),
                                 border: Border.all(
                                   color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
+                                  width: 1.w,
                                 ),
                               ),
                               child: Row(
@@ -277,19 +276,19 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                         ),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         disabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                       ),
                                     ),
@@ -313,9 +312,9 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                       if (isShowPwTips)
                         Row(
                           children: [
-                            const Spacer(),
+                            buildTitleText(''),
+                            SizedBox(width: 8.w),
                             Expanded(
-                              flex: 4,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 4.w),
                                 child: Text(
@@ -335,17 +334,16 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                         ),
                       Row(
                         children: [
-                          Expanded(child: buildTitleText('再次输入')),
-                          SizedBox(width: 8.px),
+                          buildTitleText('再次输入'),
+                          SizedBox(width: 8.w),
                           Expanded(
-                            flex: 4,
                             child: Container(
                               height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
+                                borderRadius: BorderRadius.circular(8.w),
                                 border: Border.all(
                                   color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
+                                  width: 1.w,
                                 ),
                               ),
                               child: Row(
@@ -373,19 +371,19 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                         ),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         disabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                       ),
                                     ),
@@ -408,84 +406,79 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                       ),
                       Row(
                         children: [
-                          const Spacer(),
-                          Expanded(
-                            flex: 4,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 4.w),
-                              child: Text(
-                                isShowAgainTips ? '*两次密码输入不一致' : '',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
-                                ),
+                          buildTitleText(''),
+                          SizedBox(width: 8.w),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 4.w),
+                            child: Text(
+                              isShowAgainTips ? '*两次密码输入不一致' : '',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                               ),
                             ),
                           ),
                         ],
                       ),
-
-                      SizedBox(height: 18.5.px),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                width: 96.w,
-                                height: 33.w,
-                                decoration: ShapeDecoration(
-                                  color: '#333333'.hexColor.withOpacity(0.1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                      SizedBox(height: 18.5.w),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              width: 96.w,
+                              height: 33.w,
+                              decoration: ShapeDecoration(
+                                color: '#333333'.hexColor.withOpacity(0.1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '取消',
-                                  style: TextStyle(
-                                    color: '#333333'.hexColor.withOpacity(0.7),
-                                    fontSize: 12.px,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '取消',
+                                style: TextStyle(
+                                  color: '#333333'.hexColor.withOpacity(0.7),
+                                  fontSize: 12.w,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 24.w),
-                            InkWell(
-                              onTap: _submitUpdate,
-                              child: Container(
-                                width: 96.w,
-                                height: 33.w,
-                                decoration: ShapeDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment(1.00, 0.00),
-                                    end: Alignment(-1, 0),
-                                    colors: [
-                                      Color(0xFF84BCF9),
-                                      Color(0xFF557BF6),
-                                    ],
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                          ),
+                          SizedBox(width: 24.w),
+                          InkWell(
+                            onTap: _submitUpdate,
+                            child: Container(
+                              width: 96.w,
+                              height: 33.w,
+                              decoration: ShapeDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment(1.00, 0.00),
+                                  end: Alignment(-1, 0),
+                                  colors: [
+                                    Color(0xFF84BCF9),
+                                    Color(0xFF557BF6),
+                                  ],
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '确定修改',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.px,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '确定修改',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.w,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -499,16 +492,29 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
   }
 
   Widget buildTitleText(String title) {
-    return Container(
+    return Stack(
       alignment: Alignment.centerRight,
-      child: Text(
-        title,
-        style: TextStyle(
-          color: '#333333'.hexColor,
-          fontSize: 14.px,
-          fontWeight: FontWeight.w500,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: '#333333'.hexColor,
+            fontSize: 14.w,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-      ),
+        Opacity(
+          opacity: 0,
+          child: Text(
+            '四字占位',
+            style: TextStyle(
+              color: '#333333'.hexColor,
+              fontSize: 14.w,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -535,7 +541,7 @@ class CustomObscure extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Image.asset(
-        obscureText ?  'assets/images/eye_close.png' : 'assets/images/eye_open.png',
+        obscureText ? 'assets/images/eye_close.png' : 'assets/images/eye_open.png',
         width: 18.w,
       ),
     );

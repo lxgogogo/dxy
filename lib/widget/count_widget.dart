@@ -28,7 +28,7 @@ class CountComment extends StatelessWidget {
             Assets.svg.iconComment,
             width: 12.w,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 3.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -82,6 +82,32 @@ class CountCommentBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Row(
+          children: [
+            iconWidget,
+            Transform.translate(
+              offset: Offset(-8.w, -12.w),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 2.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                ),
+                child: Text(
+                  count,
+                  style: TextStyle(
+                    color: '##333333'.hexColor.withOpacity(0.7),
+                    fontSize: 10.sp,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
     return badges.Badge(
       position: badges.BadgePosition.topEnd(top: -10, end: -12),
       showBadge: true,
@@ -181,7 +207,7 @@ class CountLike extends StatelessWidget {
             liked ? Assets.svg.iconLike : Assets.svg.iconLike,
             width: 12.w,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 3.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -315,7 +341,7 @@ class CountText extends StatelessWidget {
           ),
         ],
         Text(
-          count,
+          '000.0M',
           style: TextStyle(
             color: '#333333'.hexColor.withOpacity(0.7),
             fontSize: 12.sp,

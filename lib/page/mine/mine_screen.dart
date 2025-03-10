@@ -48,7 +48,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        InkWell(
+                        GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.personal);
                           },

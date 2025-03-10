@@ -272,10 +272,9 @@ class _AtUserScreenState extends State<AtUserScreen> {
                 onTap: () {
                   NetRequest().followerToggle(followOrFanUserList[index].id!, !followOrFanUserList[index].followed!,
                       (data) {
+                    followOrFanUserList[index].followed = !followOrFanUserList[index].followed!;
                     if (mounted) {
-                      setState(() {
-                        followOrFanUserList.remove(followOrFanUserList[index]);
-                      });
+                      setState(() {});
                     }
                   });
                 })

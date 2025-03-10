@@ -60,7 +60,7 @@ class HomeMenuItem extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            color: '#C9C9C9'.hexColor,
+                            color: '#C9C9C9'.hexColor.withOpacity(0.5),
                             margin: EdgeInsets.symmetric(vertical: 2.5.w),
                             width: 83.33,
                             height: 0.42.w,

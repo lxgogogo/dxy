@@ -37,74 +37,65 @@ class FeedPostScreen extends GetView<FeedPostController> {
     return GetBuilder<FeedPostController>(
       init: FeedPostController(),
       builder: (_) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          resizeToAvoidBottomInset: false,
-          appBar: CommonAppBar.arrowBack(
-            context,
-            title: '发帖',
-            titleStyle: TextStyle(
-                fontSize: 14.sp,
-                color: '#333333'.hexColor,
-                fontWeight: FontWeight.w600),
-            actions: [
-
-            ],
-          ),
-          body: Container(
-            margin: EdgeInsets.only(top: 12.w),
-            // padding: EdgeInsets.only(
-            //   bottom: ScreenUtil().bottomBarHeight,
-            // ),
-
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  buildTitleInput(),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 16.w),
-                      child: QuillEditor.basic(
-                        controller: controller.quillController,
-                        focusNode: controller.focusNode,
-                        config: QuillEditorConfig(
-                          showCursor: true,
-                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                          placeholder: '请输入正文（建议10-2000字）',
-                          customStyles: DefaultStyles(
-                            paragraph: DefaultTextBlockStyle(
-                              TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
-                                color: '#333333'.hexColor,
-                                height: 1.5,
+        return GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          behavior: HitTestBehavior.opaque,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: false,
+            appBar: CommonAppBar.arrowBack(context, title: '发帖'),
+            body: Container(
+              margin: EdgeInsets.only(top: 12.w),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    buildTitleInput(),
+                    Flexible(
+                      child: Container(
+                        constraints: BoxConstraints(minHeight: 130.w),
+                        padding: EdgeInsets.symmetric(vertical: 16.w),
+                        child: QuillEditor.basic(
+                          controller: controller.quillController,
+                          focusNode: controller.focusNode,
+                          config: QuillEditorConfig(
+                            showCursor: true,
+                            embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                            placeholder: '请输入正文（建议10-2000字）',
+                            customStyles: DefaultStyles(
+                              paragraph: DefaultTextBlockStyle(
+                                TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.sp,
+                                  color: '#333333'.hexColor,
+                                  height: 1.5,
+                                ),
+                                const HorizontalSpacing(0, 0),
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
                               ),
-                              const HorizontalSpacing(0, 0),
-                              VerticalSpacing.zero,
-                              VerticalSpacing.zero,
-                              null,
-                            ),
-                            placeHolder: DefaultTextBlockStyle(
-                              TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.sp,
-                                color: '#333333'.hexColor.withOpacity(0.7),
-                                height: 1.5,
+                              placeHolder: DefaultTextBlockStyle(
+                                TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.sp,
+                                  color: '#333333'.hexColor.withOpacity(0.7),
+                                  height: 1.5,
+                                ),
+                                const HorizontalSpacing(0, 0),
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
                               ),
-                              const HorizontalSpacing(0, 0),
-                              VerticalSpacing.zero,
-                              VerticalSpacing.zero,
-                              null,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  buildBottomToolbar(context),
-                ],
+                    buildBottomToolbar(context),
+                  ],
+                ),
               ),
             ),
           ),
@@ -116,8 +107,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
   Widget buildTitleInput() {
     return Container(
       decoration: BoxDecoration(
-        border:
-            Border(bottom: BorderSide(color: 'e6e6e6'.hexColor, width: 0.5)),
+        border: Border(bottom: BorderSide(color: 'e6e6e6'.hexColor, width: 0.5)),
       ),
       child: Row(
         children: [
@@ -160,9 +150,10 @@ class FeedPostScreen extends GetView<FeedPostController> {
             barrierColor: Colors.transparent,
             content: Container(
               width: 90.w,
+              constraints: BoxConstraints(maxHeight: 300.w),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                borderRadius: BorderRadius.all(Radius.circular(6.r)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -192,15 +183,12 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       }
                     },
                     child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
                       alignment: Alignment.center,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
                       child: Text(
                         item.name ?? '',
                         style: TextStyle(
-                          color: controller.prefixIndex == index
-                              ? const Color(0xff249cfc)
-                              : '#333333'.hexColor,
+                          color: controller.prefixIndex == index ? const Color(0xff249cfc) : '#333333'.hexColor,
                           fontSize: 12.sp,
                         ),
                         textAlign: TextAlign.center,
@@ -209,8 +197,9 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   );
                 },
                 separatorBuilder: (_, __) => Container(
-                  color: const Color(0xffe7f0fa),
-                  height: 0.5,
+                  margin: EdgeInsets.symmetric(horizontal: 12.w),
+                  color: '#333333'.hexColor.withOpacity(0.1),
+                  height: 1.w,
                 ),
               ),
             ),
@@ -220,25 +209,28 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   controller.tipController.showTooltip();
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    controller.prefixIndex != -1 &&
-                            controller.prefixIndex <
-                                controller.boardInfoList.length
-                        ? (controller
-                                .boardInfoList[controller.prefixIndex].name ??
-                            '')
-                        : '选择板块',
-                    style: TextStyle(
-                      color: '#333333'.hexColor,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
+              child: SizedBox(
+                width: 90.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        controller.prefixIndex != -1 && controller.prefixIndex < controller.boardInfoList.length
+                            ? (controller.boardInfoList[controller.prefixIndex].name ?? '')
+                            : '选择板块',
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                  Icon(Icons.arrow_drop_down, color: '#2a2a2a'.hexColor),
-                ],
+                    Icon(Icons.arrow_drop_down, color: '#2a2a2a'.hexColor),
+                  ],
+                ),
               ),
             ),
           ),
@@ -250,8 +242,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
   Widget buildBottomToolbar(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.w),
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
@@ -276,8 +268,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                           alignment: Alignment.center,
                           decoration: ShapeDecoration(
                             color: const Color(0xFF333333).withOpacity(0.1),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           child: Icon(
                             Icons.add,
@@ -288,58 +279,56 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   },
                 ),
               ),
-              SizedBox(height: 12.w,),
+              SizedBox(
+                height: 12.w,
+              ),
               Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (controller.tagList.length < controller.tagMaxLength)
                     GestureDetector(
                       onTap: controller.toAddTag,
                       child: Container(
-                        width: 58.w,
                         height: 26.w,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 6.w),
-                        margin: EdgeInsets.all(5.w),
-                        decoration:ShapeDecoration(
-                          color: const Color(0xFF333333).withOpacity(0.1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)),
-                        ),
+                        margin: EdgeInsets.only(right: 8.w),
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
                         alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: '#557BF6'.hexColor),
+                        ),
                         child: Text(
-                          '#话题（${controller.tagList.length}/${controller.tagMaxLength}）',
+                          '#话题${controller.tagList.isNotEmpty ? '（${controller.tagList.length}/${controller.tagMaxLength}）' : ''}',
                           style: TextStyle(
                             fontSize: 10.sp,
+                            color: '#557BF6'.hexColor,
                           ),
                         ),
                       ),
                     ),
                   GestureDetector(
                     onTap: () async {
-
                       final result = await await Get.bottomSheet(
                         const AtUserScreen(),
                         isScrollControlled: true,
                       );
                       if (result != null) {
-                        controller.quillController
-                            .insertAtBlock(data: json.encode(result));
+                        controller.quillController.insertAtBlock(data: json.encode(result));
                       }
                     },
                     child: Container(
-                      alignment: Alignment.center,
-                      width: 58.w,
                       height: 26.w,
-                      padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 6.w),
-                      decoration:ShapeDecoration(
-                        color: const Color(0xFF333333).withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)),
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(color: '#557BF6'.hexColor),
                       ),
                       child: Text(
                         '@ 用户',
                         style: TextStyle(
                           fontSize: 10.sp,
+                          color: '#557BF6'.hexColor,
                         ),
                       ),
                     ),
@@ -354,15 +343,16 @@ class FeedPostScreen extends GetView<FeedPostController> {
       ),
     );
   }
-  Widget pushWidget(){
-    return  GestureDetector(
+
+  Widget pushWidget() {
+    return GestureDetector(
       onTap: controller.publishPosts,
       child: Container(
         height: 48.w,
         padding: EdgeInsets.symmetric(horizontal: 12.w),
-        margin: EdgeInsets.only(right: 10.w,top: 20.w,left: 10.w,bottom: 10.w),
+        margin: EdgeInsets.only(right: 10.w, top: 20.w, left: 10.w, bottom: 10.w),
         alignment: Alignment.center,
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24.w),
           gradient: const LinearGradient(
             begin: Alignment(1.00, 0.00),
@@ -384,33 +374,32 @@ class FeedPostScreen extends GetView<FeedPostController> {
       ),
     );
   }
-  Widget buildTagList(FeedPostController controller) {
 
+  Widget buildTagList(FeedPostController controller) {
     return Container(
       padding: EdgeInsets.only(bottom: 16.w),
-      margin: EdgeInsets.only(right: 16.w,top: 16.w),
+      margin: EdgeInsets.only(right: 16.w, top: 16.w),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),)
-      ),
+          border: Border(
+        bottom: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
+      )),
       child: Wrap(
         spacing: 8.0, // 添加水平间距
         runSpacing: 4.0,
         children: [
           ...List.generate(
             controller.tagList.length,
-                (index) {
+            (index) {
               final tag = controller.tagList[index];
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
-                    decoration:ShapeDecoration(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                    decoration: ShapeDecoration(
                       color: '#557BF6'.hexColor.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                     ),
                     alignment: Alignment.center,
                     child: Row(
@@ -424,10 +413,15 @@ class FeedPostScreen extends GetView<FeedPostController> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(width: 4.w,),
+                        SizedBox(
+                          width: 4.w,
+                        ),
                         GestureDetector(
                           onTap: () => controller.removeTag(index),
-                          child:Icon(Icons.clear,size: 12.w,),
+                          child: Icon(
+                            Icons.clear,
+                            size: 12.w,
+                          ),
                         )
                       ],
                     ),

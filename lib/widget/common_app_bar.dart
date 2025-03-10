@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 
 class CommonAppBar {
   static AppBar arrowBack(
@@ -24,9 +25,9 @@ class CommonAppBar {
         title: Text(
           title,
           style: titleStyle??TextStyle(
-            color: const Color(0xff2c2c2c),
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
+            fontSize: 14.sp,
+            color: '#333333'.hexColor,
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,

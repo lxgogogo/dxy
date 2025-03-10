@@ -18,7 +18,7 @@ class TagListController extends GetxController with RefreshControllerMixin {
     searchRefreshController = RefreshController();
     searchController = TextEditingController();
     searchFocusNode = FocusNode()
-      ..requestFocus()
+      // ..requestFocus()
       ..addListener(() {
         safeUpdate();
       });

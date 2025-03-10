@@ -267,7 +267,6 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -276,7 +275,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                     separatorBuilder: (_, __) => Container(
                       margin: EdgeInsets.symmetric(horizontal: 12.w),
                       color: '#333333'.hexColor.withOpacity(0.1),
-                      height: 1,
+                      height: 1.w,
                     ),
                   ),
                 ),

@@ -119,67 +119,67 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Image.asset('assets/images/login_bg.png'),
-                Positioned(
-                  child: SafeArea(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 10.w),
-                      width: context.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Image.asset(
-                            'assets/images/logo.png',
-                            height: 23.w,
-                          ),
-                          CloseImageButton(
-                            width: 16.w,
-                            height: 16.w,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Image.asset('assets/images/login_bg.png'),
+              Positioned(
+                child: SafeArea(
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10.w),
+                    width: context.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Image.asset(
+                          'assets/images/logo.png',
+                          height: 23.w,
+                        ),
+                        CloseImageButton(
+                          width: 16.w,
+                          height: 16.w,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                )
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16.w, top: 24.w),
+            child: Column(
+              children: [
+                Text(
+                  '忘记密码',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w600,
+                    color: '#333333'.hexColor,
+                  ),
+                ),
+                Container(
+                  width: 21.w,
+                  height: 4.w,
+                  margin: EdgeInsets.only(top: 4.w),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(1.5.r),
+                    ),
+                  ),
+                ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 16.w, top: 24.w),
-              child: Column(
-                children: [
-                  Text(
-                    '忘记密码',
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.w600,
-                      color: '#333333'.hexColor,
-                    ),
-                  ),
-                  Container(
-                    width: 21.w,
-                    height: 4.w,
-                    margin: EdgeInsets.only(top: 4.w),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(1.5.r),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
+          ),
+          Expanded(
+            child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -407,9 +407,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ),
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

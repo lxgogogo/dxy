@@ -42,6 +42,26 @@
                 <data android:host="school-pc-web-dev.dx252.com" />
                 <data android:host="dpoker.club" />
                 <data android:host="m.dpoker.club" />
+                <data android:host="dxpokers.com" />
+                <data android:host="m.dxpokers.com" />
+                <data android:host="dpk360.com" />
+                <data android:host="m.dpk360.com" />
+                <data android:host="dx-poker.com" />
+                <data android:host="m.dx-poker.com" />
+                <data android:host="dpokers.com" />
+                <data android:host="m.dpokers.com" />
+                <data android:host="dpkclub.com" />
+                <data android:host="m.dpkclub.com" />
+                <data android:host="depokers.com" />
+                <data android:host="m.depokers.com" />
+                <data android:host="dpk.world" />
+                <data android:host="m.dpk.world" />
+                <data android:host="pokerdx.com" />
+                <data android:host="m.pokerdx.com" />
+                <data android:host="dpkstar.com" />
+                <data android:host="m.dpkstar.com" />
+                <data android:host="dpk001.com" />
+                <data android:host="m.dpk001.com" />
             </intent-filter>
 
             <!-- Deep Link sample -->

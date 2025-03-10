@@ -153,7 +153,7 @@ class MessageCommonItem extends StatelessWidget {
                     Text(
                       tipTitle ?? '',
                       style: TextStyle(
-                        color: '##333333'.hexColor.withOpacity(0.7),
+                        color: '##333333'.hexColor,
                         fontSize: 10.sp,
                       ),
                     ),
@@ -165,9 +165,9 @@ class MessageCommonItem extends StatelessWidget {
                                 item.createdAt!.millisecondsSinceEpoch)
                             : '',
                         style: TextStyle(
-                          color: '#333333'.hexColor.withOpacity(0.7),
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
+                          color: '#333333'.hexColor,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                       )
                     else

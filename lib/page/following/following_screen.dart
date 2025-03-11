@@ -164,6 +164,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             (data) {
                               if (isFollowPage) {
                                 items.removeAt(index);
+                                ToastUtils.showToast('取消关注成功');
                                 if (_isMounted) {
                                   setState(() {});
                                 }

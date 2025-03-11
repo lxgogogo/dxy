@@ -13,6 +13,7 @@ import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
+import 'custom_input_length_formatter.dart';
 
 class DialogEditNickname extends StatefulWidget {
   final String editContent; //
@@ -131,7 +132,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                   FilteringTextInputFormatter.deny(
                                     RegExp('[\\s]'),
                                   ),
-                                  LengthLimitingTextInputFormatter(10),
+                                  CodePointLengthLimitingTextInputFormatter(10,),
                                 ],
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 12.px),

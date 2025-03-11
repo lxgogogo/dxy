@@ -93,7 +93,7 @@ class MyFeedItem extends StatelessWidget {
                           item.pureText ?? '',
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: '#333333'.hexColor,
+                            color: '#333333'.hexColor.withOpacity(0.7),
                           ),
                           softWrap: true,
                           maxLines: 2,

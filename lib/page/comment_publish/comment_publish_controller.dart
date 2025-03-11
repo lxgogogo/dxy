@@ -62,7 +62,7 @@ class CommentPublishController extends GetxController {
       imageUrlList.clear();
     }
 
-    if (content == '<p><br/></p>') {
+    if (content == '<p><br/></p>'&&imageData.isEmpty) {
       ToastUtils.showToast('评论内容不能为空');
       return;
     }

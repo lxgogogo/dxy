@@ -341,7 +341,7 @@ class CountText extends StatelessWidget {
           ),
         ],
         Text(
-          '000.0M',
+          count,
           style: TextStyle(
             color: '#333333'.hexColor.withOpacity(0.7),
             fontSize: 12.sp,

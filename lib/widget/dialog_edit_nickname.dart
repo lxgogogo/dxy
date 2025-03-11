@@ -100,69 +100,82 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                           ),
                           SizedBox(width: 8.px),
                           Expanded(
-                            child: Container(
-                              height: 30.px,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
-                                border: Border.all(
-                                  color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 30.px,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.px),
+                                      border: Border.all(
+                                        color: '#333333'.hexColor.withOpacity(0.2),
+                                        width: 1.px,
+                                      ),
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //     color: const Color(0xff709ac8).withOpacity(0.22),
+                                      //   ),
+                                      //   BoxShadow(
+                                      //     color: const Color(0xffebf6ff),
+                                      //     spreadRadius: -2.px,
+                                      //     blurRadius: 5.px,
+                                      //     offset: const Offset(1, 1),
+                                      //   ),
+                                      // ],
+                                    ),
+                                    child: TextField(
+                                      controller: controller,
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.px,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.deny(
+                                          RegExp('[\\s]'),
+                                        ),
+                                        CodePointLengthLimitingTextInputFormatter(10,),
+                                      ],
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                        hintText: '请输入昵称',
+                                        hintStyle: TextStyle(
+                                          color: const Color(0xffa3b4d3),
+                                          fontSize: 12.px,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.transparent),
+                                          borderRadius: BorderRadius.circular(8.px),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        _isDisable = value.isEmpty || value == widget.editContent;
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
                                 ),
-                                // boxShadow: [
-                                //   BoxShadow(
-                                //     color: const Color(0xff709ac8).withOpacity(0.22),
-                                //   ),
-                                //   BoxShadow(
-                                //     color: const Color(0xffebf6ff),
-                                //     spreadRadius: -2.px,
-                                //     blurRadius: 5.px,
-                                //     offset: const Offset(1, 1),
-                                //   ),
-                                // ],
-                              ),
-                              child: TextField(
-                                controller: controller,
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
+                                
+                                SizedBox(width: 8.w),
+                                Text('${controller.text.characters.length}/10', style: TextStyle(
+                                  color:'#333333'.hexColor,
                                   fontSize: 12.px,
                                   fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.deny(
-                                    RegExp('[\\s]'),
-                                  ),
-                                  CodePointLengthLimitingTextInputFormatter(10,),
-                                ],
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
-                                  hintText: '请输入昵称',
-                                  hintStyle: TextStyle(
-                                    color: const Color(0xffa3b4d3),
-                                    fontSize: 12.px,
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.px),
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  _isDisable = value.isEmpty || value == widget.editContent;
-                                  setState(() {});
-                                },
-                              ),
+                                ),)
+                              ],
                             ),
                           ),
                         ],

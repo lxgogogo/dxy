@@ -17,7 +17,7 @@ class VideoDetailController extends GetxController {
 
   String get shareLink {
     String shareUrlSuffix = '';
-    if (detailBean?.type == 'videoList') {
+    if (detailBean?.type == 'videoList'&&(detailBean?.videoList?.isNotEmpty??false)) {
       shareUrlSuffix = '?id=${detailBean?.videoList?[playVideoIndex].id}';
     }
     return 'details/${detailBean?.type}-$id$shareUrlSuffix';

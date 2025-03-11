@@ -80,7 +80,9 @@ class FeedDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 8.w,),
+                              SizedBox(
+                                width: 8.w,
+                              ),
                               FeedMoreAction(
                                 actions: {
                                   '屏蔽该内容': () {
@@ -106,31 +108,51 @@ class FeedDetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: CircleImageWithText(
-                                    imageUrl: (controller.detailBean != null &&
-                                            controller.detailBean!.user != null)
-                                        ? controller.detailBean!.user!.avatar!
-                                        : '',
-                                    imageWidth: 20,
-                                    imageHeight: 20,
-                                    topText:
-                                        controller.detailBean?.user?.nickname ??
-                                            '',
-                                    topTextStyle: TextStyle(
-                                        color: '#535861'.hexColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600),
-                                    bottomText1: controller
-                                                .detailBean?.createdAt !=
-                                            null
-                                        ? '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch,)}发布'
-                                        : '',
-                                    bottomText1Style: TextStyle(
-                                        color: '#333333'.hexColor,
-                                        fontSize: 12),
-                                    bottomText2: '',
-                                    bottomText2Style: const TextStyle(),
-                                  ),
+                                  child: (controller.detailBean?.sign
+                                              ?.contains('office') ??
+                                          false)
+                                      ? Text(
+                                          '${DateUtil.formatDateAlias3(
+                                            controller.detailBean!.createdAt!
+                                                .millisecondsSinceEpoch,
+                                          )}发布',
+                                          style: TextStyle(
+                                              color: '#333333'.hexColor,
+                                              fontSize: 12),
+                                        )
+                                      : CircleImageWithText(
+                                          imageUrl: (controller.detailBean !=
+                                                      null &&
+                                                  controller.detailBean!.user !=
+                                                      null)
+                                              ? controller
+                                                  .detailBean!.user!.avatar!
+                                              : '',
+                                          imageWidth: 20,
+                                          imageHeight: 20,
+                                          topText: controller
+                                                  .detailBean?.user?.nickname ??
+                                              '',
+                                          topTextStyle: TextStyle(
+                                              color: '#535861'.hexColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                          bottomText1: controller
+                                                      .detailBean?.createdAt !=
+                                                  null
+                                              ? '${DateUtil.formatDateAlias3(
+                                                  controller
+                                                      .detailBean!
+                                                      .createdAt!
+                                                      .millisecondsSinceEpoch,
+                                                )}发布'
+                                              : '',
+                                          bottomText1Style: TextStyle(
+                                              color: '#333333'.hexColor,
+                                              fontSize: 12),
+                                          bottomText2: '',
+                                          bottomText2Style: const TextStyle(),
+                                        ),
                                 ),
                               ],
                             ),

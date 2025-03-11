@@ -83,103 +83,103 @@ class MessageCommonItem extends StatelessWidget {
         typeName = '书籍';
       }
     }
-
     if (item.isDeleted) {
       title = '该$typeName已被删除';
     }
     final isFavorite = item.type == 'favorite';
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 36.w,
-            height: 36.w,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                BorderAvatar(avatar: item.fromUser?.avatar ?? ''),
-                // if (smallIcon?.isNotEmpty == true)
-                //   Positioned(
-                //     right: 0,
-                //     bottom: 0,
-                //     child: Image.asset(
-                //       smallIcon!,
-                //       width: 12.w,
-                //       height: 12.w,
-                //     ),
-                //   )
-              ],
+    return GestureDetector(
+      onTap: () {
+        if (item.isDeleted) {
+          ToastUtils.showToast('该$typeName已被删除');
+          return;
+        }
+        onTap?.call();
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 36.w,
+              height: 36.w,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  BorderAvatar(avatar: item.fromUser?.avatar ?? ''),
+                  // if (smallIcon?.isNotEmpty == true)
+                  //   Positioned(
+                  //     right: 0,
+                  //     bottom: 0,
+                  //     child: Image.asset(
+                  //       smallIcon!,
+                  //       width: 12.w,
+                  //       height: 12.w,
+                  //     ),
+                  //   )
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      item.fromUser?.nickname ?? '',
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(width: 6.w),
-                    if (isFavorite)
-                      const SizedBox()
-                    else
+            SizedBox(width: 8.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
                       Text(
-                        item.createdAt != null
-                            ? DateUtil.formatDateAlias3(
-                                item.createdAt!.millisecondsSinceEpoch)
-                            : '',
-                        style: TextStyle(
-                          color: '#333333'.hexColor.withOpacity(0.7),
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                  ],
-                ),
-                SizedBox(height: 4.w),
-                Row(
-                  children: [
-                    Text(
-                      tipTitle ?? '',
-                      style: TextStyle(
-                        color: '##333333'.hexColor,
-                        fontSize: 10.sp,
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    if (isFavorite)
-                      Text(
-                        item.createdAt != null
-                            ? DateUtil.formatDateAlias3(
-                                item.createdAt!.millisecondsSinceEpoch)
-                            : '',
+                        item.fromUser?.nickname ?? '',
                         style: TextStyle(
                           color: '#333333'.hexColor,
-                          fontSize: 10.sp,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
-                      )
-                    else
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            if (item.isDeleted) {
-                              ToastUtils.showToast('该$typeName已被删除');
-                              return;
-                            }
-                            onTap?.call();
-                          },
+                      ),
+                      SizedBox(width: 6.w),
+                      if (isFavorite)
+                        const SizedBox()
+                      else
+                        Text(
+                          item.createdAt != null
+                              ? DateUtil.formatDateAlias3(
+                                  item.createdAt!.millisecondsSinceEpoch)
+                              : '',
+                          style: TextStyle(
+                            color: '#333333'.hexColor.withOpacity(0.7),
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                    ],
+                  ),
+                  SizedBox(height: 4.w),
+                  Row(
+                    children: [
+                      Text(
+                        tipTitle ?? '',
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10.sp,
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      if (isFavorite)
+                        Text(
+                          item.createdAt != null
+                              ? DateUtil.formatDateAlias3(
+                                  item.createdAt!.millisecondsSinceEpoch)
+                              : '',
+                          style: TextStyle(
+                            color: '#333333'.hexColor,
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      else
+                        Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -189,6 +189,7 @@ class MessageCommonItem extends StatelessWidget {
                               Text(
                                 title ?? '',
                                 maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: '##333333'.hexColor,
                                   fontSize: 10.sp,
@@ -198,36 +199,36 @@ class MessageCommonItem extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ),
-                  ],
-                ),
-                //  SizedBox(height: 8.w),
-              ],
+                    ],
+                  ),
+                  //  SizedBox(height: 8.w),
+                ],
+              ),
             ),
-          ),
-          // if(isFavorite)
-          // Container(
-          //   width: 70,
-          //   height: 28,
-          //   decoration: ShapeDecoration(
-          //     shape: RoundedRectangleBorder(
-          //       side: const BorderSide(width: 1, color: Color(0xFF557BF6)),
-          //       borderRadius: BorderRadius.circular(4),
-          //     ),
-          //   ),
-          //   child:const Center(
-          //     child: Text(
-          //       '回关',
-          //       style: TextStyle(
-          //         color: Color(0xFF557BF6),
-          //         fontSize: 12,
-          //         fontFamily: 'PingFang SC',
-          //         fontWeight: FontWeight.w600,
-          //       ),
-          //     ),
-          //   ) ,
-          // )
-        ],
+            // if(isFavorite)
+            // Container(
+            //   width: 70,
+            //   height: 28,
+            //   decoration: ShapeDecoration(
+            //     shape: RoundedRectangleBorder(
+            //       side: const BorderSide(width: 1, color: Color(0xFF557BF6)),
+            //       borderRadius: BorderRadius.circular(4),
+            //     ),
+            //   ),
+            //   child:const Center(
+            //     child: Text(
+            //       '回关',
+            //       style: TextStyle(
+            //         color: Color(0xFF557BF6),
+            //         fontSize: 12,
+            //         fontFamily: 'PingFang SC',
+            //         fontWeight: FontWeight.w600,
+            //       ),
+            //     ),
+            //   ) ,
+            // )
+          ],
+        ),
       ),
     );
   }

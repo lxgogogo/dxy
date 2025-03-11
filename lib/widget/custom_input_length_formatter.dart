@@ -1,3 +1,6 @@
+
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class CodePointLengthLimitingTextInputFormatter extends TextInputFormatter {
@@ -14,6 +17,9 @@ class CodePointLengthLimitingTextInputFormatter extends TextInputFormatter {
     return newValue;
   }
   int getCodePointLength(String str) {
-    return str.codeUnits.map((unit) => unit < 0xD800 || unit > 0xDFFF ? 1 : 2).reduce((value, element) => value + element);
+    if (str.codeUnits.isEmpty) {
+      return str.length;
+    }
+    return str.characters.length;
   }
 }

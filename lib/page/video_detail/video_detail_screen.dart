@@ -67,7 +67,10 @@ class VideoDetailScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 8.w),
                           Text(
-                            '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, )}发布',
+                            '${DateUtil.formatDateAlias3(
+                              controller.detailBean!.createdAt!
+                                  .millisecondsSinceEpoch,
+                            )}发布',
                             style: TextStyle(
                                 color: '#333333'.hexColor, fontSize: 12),
                           ),
@@ -127,44 +130,50 @@ class VideoDetailScreen extends StatelessWidget {
                               children: [
                                 Container(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 8.w, vertical: 4.w),
-                                  decoration: BoxDecoration(
-                                    color: '#D8E2ED'.hexColor,
-                                    borderRadius: BorderRadius.circular(4.r),
-                                  ),
+                                      horizontal: 0.w, vertical: 4.w),
+
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          controller
-                                                  .detailBean!
-                                                  .videoList![
-                                                      controller.playVideoIndex]
-                                                  .title ??
-                                              '',
+                                          '选集',
                                           style: TextStyle(
                                             fontSize: 12.sp,
-                                            color: '#2a2a2a'.hexColor,
+                                            color: '#333333'.hexColor,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       SizedBox(width: 8.w),
-                                      Image.asset(
-                                        Assets.images.collection.path,
-                                        width: 12.w,
-                                        height: 12.w,
-                                        color: '#2a2a2a'.hexColor,
-                                      ),
-                                      SizedBox(width: 8.w),
+                                      // Image.asset(
+                                      //   Assets.images.collection.path,
+                                      //   width: 12.w,
+                                      //   height: 12.w,
+                                      //   color: '#2a2a2a'.hexColor,
+                                      // ),
                                       Text(
-                                        '${controller.playVideoIndex + 1}/${controller.detailBean!.videoList!.length}',
+                                        '正在播放',
                                         style: TextStyle(
                                           fontSize: 12.sp,
-                                          color: '#2a2a2a'.hexColor,
+                                          color: '#333333'
+                                              .hexColor
+                                              .withOpacity(0.5),
                                         ),
                                       ),
+                                      Text(
+                                          '【${controller.playVideoIndex + 1}】/全${controller.detailBean!.videoList!.length}集',
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: '#333333'
+                                                .hexColor
+                                                .withOpacity(0.5),
+                                          )),
+                                      Icon(
+                                        Icons.keyboard_arrow_right_rounded,
+                                        color:
+                                            '#333333'.hexColor.withOpacity(0.5),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -195,13 +204,8 @@ class VideoDetailScreen extends StatelessWidget {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 12.w),
                                             decoration: BoxDecoration(
-                                              color: isSelected
-                                                  ? '#008EFF'
-                                                      .hexColor
-                                                      .withOpacity(0.1)
-                                                  : '#D8E2ED'.hexColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(4.r),
+                                              color: '#333333'.hexColor.withOpacity(0.05),
+                                              borderRadius: BorderRadius.circular(12.r),
                                             ),
                                             alignment: Alignment.center,
                                             child: Row(
@@ -217,10 +221,10 @@ class VideoDetailScreen extends StatelessWidget {
                                                   child: Text(
                                                     video.title ?? '',
                                                     style: TextStyle(
-                                                      fontSize: 12.sp,
+                                                      fontSize: 10.sp,
                                                       color: isSelected
-                                                          ? '#008EFF'.hexColor
-                                                          : '#9CACC9'.hexColor,
+                                                          ? '#557BF6'.hexColor
+                                                          : '#333333'.hexColor,
                                                     ),
                                                     maxLines: 2,
                                                     overflow:

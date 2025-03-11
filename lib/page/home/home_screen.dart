@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       fit: BoxFit.fill,
                                     ),
                                     errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                     ),
                                   );
                                 },

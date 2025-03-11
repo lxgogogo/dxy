@@ -183,7 +183,7 @@ class MyCollectItem extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                DateUtil.formatDate(createdAt, format: 'yyyy.MM.dd'),
+                                DateUtil.formatDateAlias3(createdAt!.millisecondsSinceEpoch,),
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: '#333333'.hexColor.withOpacity(0.5),

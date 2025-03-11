@@ -190,6 +190,10 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
     if (_isDisable) {
       return;
     }
+      if(nickname.characters.length>10){
+        ToastUtils.showToast('昵称不能超过10个字');
+        return;
+      }
     NetRequest().userUpdate(nickname, (data) {
       ToastUtils.showToast('修改成功');
       EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);

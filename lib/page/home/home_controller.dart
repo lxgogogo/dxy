@@ -28,6 +28,9 @@ class HomeController extends GetxController {
         safeUpdate();
       }
     });
+    EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
+      scrollController.jumpTo(0);
+    });
   }
 
   Future<void> loadBanners() async {

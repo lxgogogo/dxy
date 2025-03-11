@@ -24,6 +24,7 @@ import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/banner.dart';
+import '../../utils/event_bus_util.dart';
 
 part 'home_controller.dart';
 

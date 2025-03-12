@@ -73,9 +73,8 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
 
   Widget getTabView() {
     return DynamicTabBarWidget(
-      nextIcon: Icon(Icons.cleaning_services_outlined,color: '#333333'.hexColor,size: 20,),
       dynamicTabs: parentTabs,
-      isScrollable: true,
+      isScrollable: false,
       showBackIcon: false,
       showNextIcon: false,
       padding: EdgeInsets.only(bottom: 12.w),
@@ -83,7 +82,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       indicatorColor: '#557BF6'.hexColor,
       indicatorPadding: const EdgeInsets.symmetric(horizontal:35,vertical:5),
       indicatorSize: TabBarIndicatorSize.tab,
-      tabAlignment: TabAlignment.start,
+     // tabAlignment: TabAlignment.start,
       //底部下标颜色
       enableFeedback: true,
       dividerHeight: 0,
@@ -96,13 +95,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
           selIndex = index!;
         });
       },
-      trailing: GestureDetector(
-        onTap: (){},
-        child: Container(
-          margin: EdgeInsets.only(right: 16.w,bottom: 15.w),
-          alignment: Alignment.centerRight,
-            child: SvgPicture.asset(Assets.svg.messageClean)),
-      ),
+      trailing: SizedBox(),
       onTabControllerUpdated: (TabController) {},
     );
   }

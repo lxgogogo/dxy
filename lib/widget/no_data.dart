@@ -12,14 +12,14 @@ class NoDataView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset('assets/images/no_result.png', height: 102.w),
+        Image.asset('assets/images/no_result.png', height: 204.w),
         SizedBox(
           height: 10.w,
         ),
         Text(
           text,
           style: TextStyle(
-            color: const Color(0xff3b5078),
+            color: '#333333'.hexColor.withOpacity(0.7),
             fontSize: 14.sp,
           ),
         )

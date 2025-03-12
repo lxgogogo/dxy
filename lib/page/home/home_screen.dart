@@ -18,6 +18,7 @@ import 'package:holdem/page/home/widgets/home_nemu_item.dart';
 import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
@@ -248,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                             cover: e.cover,
                                                             description: e.description,
                                                             type: e.type,
-                                                            commentCount: e.popularCount?.toInt(),
+                                                            viewCount: e.popularCount?.toInt(),
                                                             createdAt: e.createdAt)),
                                                   ))
                                               .toList(),

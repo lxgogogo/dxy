@@ -73,13 +73,18 @@ class _FollowingScreenState extends State<FollowingScreen> {
           setState(() {
             if (pageNum == 1) {
               items = followOrFan.list!;
+              if(items.length<pageSize){
+                _refreshController.loadNoData();
+              }
+              _refreshController.refreshCompleted();
             } else {
               items.addAll(followOrFan.list!);
+              _refreshController.loadComplete();
+
             }
           });
         }
-        _refreshController.loadComplete();
-        _refreshController.refreshCompleted();
+
       });
     } else {
       NetRequest().fansList(pageNum.toString(), pageSize.toString(), '', (data) {
@@ -88,13 +93,17 @@ class _FollowingScreenState extends State<FollowingScreen> {
           setState(() {
             if (pageNum == 1) {
               items = followOrFan.list!;
+              if(items.length<pageSize){
+                _refreshController.loadNoData();
+              }
+              _refreshController.refreshCompleted();
             } else {
               items.addAll(followOrFan.list!);
+              _refreshController.loadComplete();
+
             }
           });
         }
-        _refreshController.loadComplete();
-        _refreshController.refreshCompleted();
       });
     }
   }

@@ -93,8 +93,13 @@ class MyCommentItem extends StatelessWidget {
     }
 
     if (item.isDeleted) {
-      content = '该$typeName已被删除';
+      if(item.resourceType != 'videoList'){
+        title = '该$typeName已被删除';
+      }else {
+        content = '该$typeName已被删除';
+      }
     }
+
 
     return GestureDetector(
       onTap: () {

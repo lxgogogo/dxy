@@ -110,15 +110,6 @@ class MessageChildViewState extends State<MessageChildView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(
-        minHeight: MediaQuery.sizeOf(context).height,
-      ),
-      child: content(),
-    );
-  }
-
-  Widget content() {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
@@ -129,24 +120,24 @@ class MessageChildViewState extends State<MessageChildView> {
       onLoading: _onLoading,
       child: loaded && messages.isEmpty
           ? const Center(
-              child: NoDataView(),
-            )
+        child: NoDataView(),
+      )
           : ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 12.w),
-              itemBuilder: (c, i) => MessageCommonItem(
-                item: messages[i],
-                onTap: () => jumpPage(messages[i]),
-              ),
-              // itemExtent: 160.0,
-              itemCount: messages.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 12.w,horizontal: 16.w),
-                  color: '#000000'.hexColor.withOpacity(0.05),
-                  height: 1.w,
-                );
-              },
-            ),
+        padding: EdgeInsets.symmetric(vertical: 12.w),
+        itemBuilder: (c, i) => MessageCommonItem(
+          item: messages[i],
+          onTap: () => jumpPage(messages[i]),
+        ),
+        // itemExtent: 160.0,
+        itemCount: messages.length,
+        separatorBuilder: (BuildContext context, int index) {
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 12.w,horizontal: 16.w),
+            color: '#000000'.hexColor.withOpacity(0.05),
+            height: 1.w,
+          );
+        },
+      ),
     );
   }
 

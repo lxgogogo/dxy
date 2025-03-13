@@ -32,10 +32,10 @@ class MessageCommonItem extends StatelessWidget {
       tipTitle = '在帖子中@了你';
       smallIcon = 'assets/images/aite.png';
     } else if (item.type == 'comment') {
-      tipTitle = '评论了你的贴子';
+      tipTitle = item.itemType == 'comment' ? '回复了你的评论' : '评论了你的贴子';
       smallIcon = 'assets/images/comment_small.png';
     } else if (item.type == 'like') {
-      tipTitle = '点赞了你的帖子';
+      tipTitle = item.itemType == 'comment' ? '点赞了你的评论' : '点赞了你的帖子';
       smallIcon = 'assets/images/zan.png';
     } else if (item.type == 'favorite') {
       tipTitle = '收藏了你的帖子';
@@ -143,8 +143,7 @@ class MessageCommonItem extends StatelessWidget {
                       else
                         Text(
                           item.createdAt != null
-                              ? DateUtil.formatDateAlias3(
-                                  item.createdAt!.millisecondsSinceEpoch)
+                              ? DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor.withOpacity(0.7),
@@ -169,8 +168,7 @@ class MessageCommonItem extends StatelessWidget {
                       if (isFavorite)
                         Text(
                           item.createdAt != null
-                              ? DateUtil.formatDateAlias3(
-                                  item.createdAt!.millisecondsSinceEpoch)
+                              ? DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor,

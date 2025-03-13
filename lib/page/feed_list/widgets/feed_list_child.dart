@@ -197,11 +197,6 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
                     childCount: boardPostList.length,
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
-                  ),
-                ),
               ],
             ),
     );

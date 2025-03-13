@@ -199,28 +199,28 @@ class FeedDetailScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 10.w),
-                              GestureDetector(
-                                onTap: () {
-                                  UserStore.of.checkLogin(() {
-                                    Get.bottomSheet(
-                                      isScrollControlled: true,
-                                      CommentPublishScreen(
-                                        relType: NetRequest.COMMENT_TYPE_THREAD,
-                                        relId: controller.id!,
-                                      ),
-                                    );
-                                  });
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom: 16.w),
-                                  child: Row(
-                                    children: [
-                                      ClipOval(
-                                          child: LoginHelper().getUserAvatar(
-                                              UserStore.of.user?.avatar ?? '',
-                                              30.w,
-                                              30.w)),
-                                      Expanded(
+                              Container(
+                                margin: EdgeInsets.only(bottom: 16.w),
+                                child: Row(
+                                  children: [
+                                    ClipOval(
+                                        child: LoginHelper().getUserAvatar(
+                                            UserStore.of.user?.avatar ?? '',
+                                            30.w,
+                                            30.w)),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          UserStore.of.checkLogin(() {
+                                            Get.bottomSheet(
+                                              isScrollControlled: true,
+                                              CommentPublishScreen(
+                                                relType: NetRequest.COMMENT_TYPE_THREAD,
+                                                relId: controller.id!,
+                                              ),
+                                            );
+                                          });
+                                        },
                                         child: Container(
                                           height: 30.w,
                                           margin: EdgeInsets.only(left: 12.w),
@@ -234,16 +234,16 @@ class FeedDetailScreen extends StatelessWidget {
                                           ),
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            '说点什么吧',
+                                            '说点什么吧...',
                                             style: TextStyle(
                                                 color: '#333333'
                                                     .hexColor
                                                     .withOpacity(0.5)),
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                               if (controller.comments == null)

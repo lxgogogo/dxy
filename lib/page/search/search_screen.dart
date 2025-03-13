@@ -54,7 +54,13 @@ class SearchScreen extends GetView<SearchController> {
                 titleSpacing: 0.0,
                 leading: UnconstrainedBox(
                   child: GestureDetector(
-                    onTap: Get.back,
+                    onTap: () {
+                      if (controller.showResult) {
+                        controller.onClear();
+                        return;
+                      }
+                      Get.back();
+                    },
                     child: Padding(
                       padding: EdgeInsets.only(left: 8.w, right: 4.w),
                       child: Image.asset(
@@ -106,7 +112,7 @@ class SearchScreen extends GetView<SearchController> {
                                 color: const Color(0xff6198f7),
                                 width: 2.w,
                               ),
-                              insets: EdgeInsets.symmetric(horizontal: 8.w),
+                              insets: EdgeInsets.symmetric(horizontal: 16.w),
                               borderRadius: BorderRadius.circular(2.w),
                             ),
                             enableFeedback: false,
@@ -161,6 +167,7 @@ class SearchScreen extends GetView<SearchController> {
               controller: controller.controller,
               keyboardType: TextInputType.text,
               autocorrect: false,
+              autofocus: true,
               onChanged: controller.onChanged,
               style: TextStyle(
                 fontSize: 12.sp,
@@ -340,7 +347,7 @@ class SearchScreen extends GetView<SearchController> {
                       // Get.toNamed(Routes.searchTag, arguments: {
                       //   'tag': controller.hotTagItems[index],
                       // });
-                      final item= controller.hotTagItems[index];
+                      final item = controller.hotTagItems[index];
                       final id = item.id;
                       if (item.type == 'book') {
                         Get.toNamed(Routes.bookDetail, arguments: id);
@@ -351,9 +358,9 @@ class SearchScreen extends GetView<SearchController> {
                       } else if (item.type == 'thread') {
                         Get.toNamed(Routes.feedDetail, arguments: id);
                       }
-                    }, child: Container(
-
-                      padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 5.w),
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
                       decoration: BoxDecoration(
                         color: '#557BF6'.hexColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(40.r),

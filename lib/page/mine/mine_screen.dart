@@ -158,7 +158,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                   color: const Color(0xff557BF6),
                                   width: 2.w, // 选中线条宽度
                                 ),
-                                insets: EdgeInsets.symmetric(horizontal: 10.w),
+                                insets: EdgeInsets.symmetric(horizontal: 16.w),
                                 borderRadius: BorderRadius.circular(2.w),
                               ),
                               //底部下标颜色

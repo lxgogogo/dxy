@@ -122,7 +122,7 @@ class SearchTagScreen extends GetView<SearchTagController> {
                               color: const Color(0xff6198f7),
                               width: 2.w, // 选中线条宽度
                             ),
-                            insets: EdgeInsets.symmetric(horizontal: 15.w),
+                            insets: EdgeInsets.symmetric(horizontal: 16.w),
                             borderRadius: BorderRadius.circular(2.w),
                           ),
                           enableFeedback: false,

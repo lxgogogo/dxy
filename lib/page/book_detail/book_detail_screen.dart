@@ -255,7 +255,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  '评论(${controller.detailBean?.commentCount.abbreviateNumber})',
+                                  '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
                                   style: TextStyle(
                                     color: const Color(0xff2a2a2a),
                                     fontSize: 12.sp,

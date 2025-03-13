@@ -7,7 +7,7 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
   List<String> historyItems = [];
   late TabController tabController;
   bool showResult = false;
-  List<TagModel> hotTagItems = [];
+  List<SearchTop> hotTagItems = [];
 
   @override
   void onInit() {
@@ -36,8 +36,8 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
       pageSize: 20,
     );
     if (res.isSuccess) {
-      final listRes = res.data['list'] as List? ?? [];
-      final records = listRes.map((e) => TagModel.fromJson(e as Map? ?? {})).toList();
+      final listRes = res.data as List;
+      final records = listRes.map((e) => SearchTop.fromMap(e )).toList();
       if (records.isNotEmpty) {
         hotTagItems.assignAll(records);
         safeUpdate();

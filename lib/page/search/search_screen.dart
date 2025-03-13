@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/model/search_top.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/search/widgets/search_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -316,7 +317,7 @@ class SearchScreen extends GetView<SearchController> {
               ),
               SizedBox(width: 8.w),
               Text(
-                '热门话题',
+                '热搜推荐',
                 style: TextStyle(
                   color: '#333333'.hexColor,
                   fontSize: 14.sp,
@@ -336,29 +337,36 @@ class SearchScreen extends GetView<SearchController> {
                 (index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.searchTag, arguments: {
-                        'tag': controller.hotTagItems[index],
-                      });
-                    },
-                    child: Container(
-                      height: 32.w,
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      // Get.toNamed(Routes.searchTag, arguments: {
+                      //   'tag': controller.hotTagItems[index],
+                      // });
+                      final item= controller.hotTagItems[index];
+                      final id = item.id;
+                      if (item.type == 'book') {
+                        Get.toNamed(Routes.bookDetail, arguments: id);
+                      } else if (item.type == 'article') {
+                        Get.toNamed(Routes.articleDetail, arguments: id);
+                      } else if (item.type == 'video' || item.type == 'videoList') {
+                        Get.toNamed(Routes.videoDetail, arguments: {'id': id});
+                      } else if (item.type == 'thread') {
+                        Get.toNamed(Routes.feedDetail, arguments: id);
+                      }
+                    }, child: Container(
+
+                      padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 5.w),
                       decoration: BoxDecoration(
                         color: '#557BF6'.hexColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(40.r),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            controller.hotTagItems[index].name ?? '',
-                            style: TextStyle(
-                              color: '#557BF6'.hexColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        controller.hotTagItems[index].title ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: '#557BF6'.hexColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   );

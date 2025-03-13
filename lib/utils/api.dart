@@ -67,4 +67,5 @@ class Api {
   static const String tagIndex = '/api/tag/index';
   static const String reportDefined = '/api/report/defined';
   static const String reportCreate = '/api/report/create';
+  static const String searchTop = '/api/searchHistory/top';
 }

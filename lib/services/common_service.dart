@@ -32,7 +32,7 @@ class CommonService {
     if (isShowLoading) {
       EasyLoading.show(status: 'loading...');
     }
-    final res = await HttpUtils.postNew(Api.tagIndex, params: {
+    final res = await HttpUtils.postNew(Api.searchTop, params: {
       'pageNum': pageNum,
       'pageSize': pageSize,
       'filters': {

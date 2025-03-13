@@ -208,7 +208,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
 
   void _submitUpdate() {
     String nickname = controller.text;
-    if (_isDisable) {
+    if (_isDisable.value) {
       return;
     }
     if (nickname.characters.length > 10) {

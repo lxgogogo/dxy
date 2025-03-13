@@ -66,7 +66,7 @@ class MyCommentItem extends StatelessWidget {
     } else if (item.relType == 'content') {
       cover = item.content?.cover;
       title = item.content?.title;
-      content = item.content?.description;
+      content = HtmlParseUtil.of.pureCommentText(item.comment);
     } else if (item.relType == 'comment') {
       content =
           HtmlParseUtil.of.pureCommentText(item.comment);

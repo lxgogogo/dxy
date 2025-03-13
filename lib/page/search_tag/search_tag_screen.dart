@@ -13,7 +13,7 @@ import 'package:holdem/widget/keepalive_wrapper.dart';
 part 'search_tag_controller.dart';
 
 enum SearchTagType {
-  // news('资讯', categoryAlias: 'news'),
+  news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
@@ -142,7 +142,6 @@ class SearchTagScreen extends GetView<SearchTagController> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 24.w),
                       Expanded(
                         child: TabBarView(
                           controller: controller.tabController,

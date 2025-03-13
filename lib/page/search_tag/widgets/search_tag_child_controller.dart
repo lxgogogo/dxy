@@ -29,6 +29,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   void onInit() {
   eventSubscription = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
     final type=event.type;
+    Log.d('EventRefreshNum ${event.id} $type  ${event.likeCount}');
     if(type==SearchTagType.feed){
       updateFeedNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount);
     }else if(type==SearchTagType.video||type==SearchTagType.book){

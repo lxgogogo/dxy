@@ -92,11 +92,7 @@ class VideoDetailController extends GetxController {
           return;
         }
         detailBean = ArticleDetailBean.fromJson(data);
-        EventBusUtil.of.fire(EventRefreshNum(
-            SearchTagType.video, detailBean!.id!,
-            commentCount: detailBean?.commentCount,
-            likeCount: detailBean?.likeCount,
-            favoriteCount: detailBean?.favoriteCount));
+
         safeUpdate();
         if (videoController == null) {
           if (detailBean?.videoList?.isNotEmpty == true) {
@@ -112,6 +108,11 @@ class VideoDetailController extends GetxController {
             _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           }
         }
+        EventBusUtil.of.fire(EventRefreshNum(
+            SearchTagType.video, detailBean!.id!,
+            commentCount: detailBean?.commentCount,
+            likeCount: detailBean?.likeCount,
+            favoriteCount: detailBean?.favoriteCount));
       },
     );
   }

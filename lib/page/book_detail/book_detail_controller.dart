@@ -58,6 +58,11 @@ class BookDetailController extends GetxController {
       detailBean = ArticleDetailBean.fromJson(data);
       loaded = true;
       safeUpdate();
+      EventBusUtil.of.fire(EventRefreshNum(
+          SearchTagType.book, detailBean!.id!,
+          commentCount: detailBean?.commentCount,
+          likeCount: detailBean?.likeCount,
+          favoriteCount: detailBean?.favoriteCount));
     });
 
     NetRequest().commentList({

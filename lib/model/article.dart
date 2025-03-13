@@ -6,6 +6,7 @@ class ArticleBean {
   int? commentCount;
   int? viewCount;
   String? cover;
+  String? stereoCover;
   DateTime? createdAt;
   String? description;
   String? pureText;
@@ -24,6 +25,7 @@ class ArticleBean {
       this.commentCount,
       this.viewCount,
       this.cover,
+      this.stereoCover,
       this.createdAt,
       this.description,
       this.pureText,
@@ -53,6 +55,9 @@ class ArticleBean {
     }
     if (json["cover"] is String) {
       cover = json["cover"];
+    }
+    if (json["stereoCover"] is String) {
+      stereoCover = json["stereoCover"];
     }
     if (json["createdAt"] is String) {
       createdAt = DateTime.parse(json["createdAt"]).toLocal();

@@ -98,6 +98,6 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
     showResult = true;
     safeUpdate();
 
-    EventBusUtil.of.fire(EventRefreshSearchResult());
+    EventBusUtil.of.fire(EventRefreshSearchResult(SearchType.values[tabController.index]));
   }
 }

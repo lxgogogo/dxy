@@ -607,7 +607,7 @@ class NetRequest {
   }
 
   ///用户搜索
-  Future userSearch(int pageNum, int pageSize, String q, SuccessCallback onSuccess) async {
+  Future userSearch(int pageNum, int pageSize, String q, SuccessCallback onSuccess, {bool showLoading = false}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -618,7 +618,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.userSearch, params: params, showLoading: false);
+    Map<String, dynamic> response = await HttpUtils.post(Api.userSearch, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userSearch===>$response");

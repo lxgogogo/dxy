@@ -85,7 +85,7 @@ class ThreeDBookItem extends StatelessWidget {
             Positioned(
               top: 0,
               child: CachedNetworkImage(
-                imageUrl: item.cover ?? '',
+                imageUrl: item.stereoCover ?? '',
                 width: 95.25.w,
                 height: 122.27.w,
                 fit: BoxFit.cover,

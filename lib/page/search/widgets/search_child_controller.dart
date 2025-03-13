@@ -23,7 +23,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
     super.onReady();
     eventSubscription = EventBusUtil.of.on<EventRefreshSearchResult>().listen((event) {
       pageNum = 1;
-      reqListData(showLoading: true);
+      reqListData(showLoading: event.searchType == type);
     });
     reqListData();
   }
@@ -50,7 +50,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
         // case SearchType.news:
         case SearchType.video:
         case SearchType.book:
-          await NetRequest().indexList(params, (data) {
+          await NetRequest().indexList(params, showLoading: showLoading, (data) {
             final dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
             recordsSize = dataList.length;
             if (pageNum == 1) {
@@ -60,7 +60,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
           });
           break;
         case SearchType.course:
-          await NetRequest().courseList(params, (data) {
+          await NetRequest().courseList(params, showLoading: showLoading, (data) {
             final dataList = List<CollectBean>.from(data['list'].map((article) => CollectBean.fromJson(article)));
             recordsSize = dataList.length;
             if (pageNum == 1) {
@@ -70,7 +70,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
           });
           break;
         case SearchType.user:
-          await NetRequest().userSearch(pageNum, pageSize, SearchController.of.controller.text, (data) {
+          await NetRequest().userSearch(pageNum, pageSize, SearchController.of.controller.text, showLoading: showLoading, (data) {
             final userPageData = UserDataList.fromJson(data);
             recordsSize = userPageData.list?.length ?? 0;
             if (pageNum == 1) {
@@ -84,7 +84,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
             pageNum: pageNum,
             pageSize: pageSize,
             keyword: keyword,
-            isShowLoading: true,
+            isShowLoading: showLoading,
           );
           if (res.isSuccess) {
             final dataList = List<TagModel>.from(res.data['list'].map((e) => TagModel.fromJson(e)));

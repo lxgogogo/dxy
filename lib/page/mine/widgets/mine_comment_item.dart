@@ -66,8 +66,7 @@ class MyCommentItem extends StatelessWidget {
       title = item.content?.title;
       content = HtmlParseUtil.of.pureCommentText(item.comment);
     } else if (item.relType == 'comment') {
-      content =
-          HtmlParseUtil.of.pureCommentText(item.comment);
+      content = HtmlParseUtil.of.pureCommentText(item.comment);
       title = HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
     }
 
@@ -98,7 +97,6 @@ class MyCommentItem extends StatelessWidget {
       }
     }
 
-
     return GestureDetector(
       onTap: () {
         if (item.id == null) return;
@@ -114,13 +112,16 @@ class MyCommentItem extends StatelessWidget {
           Get.toNamed(Routes.articleDetail, arguments: id);
         } else if (item.resourceType == 'book') {
           Get.toNamed(Routes.bookDetail, arguments: id);
-        } else if (item.resourceType == 'video' ||
-            item.resourceType == 'videoList') {
+        } else if (item.resourceType == 'video' || item.resourceType == 'videoList') {
           Get.toNamed(Routes.videoDetail, arguments: {'id': id});
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
+        margin: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 12.w),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: '#F2F2F2'.hexColor)),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,9 +138,7 @@ class MyCommentItem extends StatelessWidget {
                 SizedBox(width: 8.w),
                 Text(
                   '评论了${typeName}:',
-                  style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
-                      fontSize: 12.sp),
+                  style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7), fontSize: 12.sp),
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
@@ -147,18 +146,17 @@ class MyCommentItem extends StatelessWidget {
                     content ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(color: '#333333'.hexColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
                   ),
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch,),
+                  DateUtil.formatDateAlias3(
+                    item.createdAt!.millisecondsSinceEpoch,
+                  ),
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: '#333333'.hexColor.withOpacity(0.8),
+                    color: '#333333'.hexColor.withOpacity(0.5),
                   ),
                 ),
                 // Expanded(
@@ -253,12 +251,9 @@ class MyCommentItem extends StatelessWidget {
                 //   ),
               ],
             ),
-            const SizedBox(
-              height: 18,
-            ),
+            SizedBox(height: 12.w),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(left: 10.w),
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.r),
@@ -270,7 +265,8 @@ class MyCommentItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: '#333333'.hexColor.withOpacity(0.8),
+                  color: '#333333'.hexColor.withOpacity(0.7),
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             )

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -403,7 +404,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     String code = _controllerCode.text;
     NetRequest().updateEmail(email, code, (data) {
       ToastUtils.showToast('修改成功');
-      EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      UserStore.of.getUserInfo();
       Get.back();
       Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
     });

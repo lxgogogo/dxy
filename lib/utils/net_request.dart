@@ -488,9 +488,9 @@ class NetRequest {
 
   ///获取用户本人信息
   Future getUserInfo(SuccessCallback onSuccess, FailureCallback onFailure) async {
-    final id = UserStore.of.user.id;
+    final id = UserStore.of.user?.id;
     if (id == null) return;
-    Map<String, dynamic> response = await HttpUtils.post(Api.user, params: {'id': id});
+    Map<String, dynamic> response = await HttpUtils.post(Api.user, params: {'id': id}, showLoading: false);
     LogUtils.printAll("getUserInfo===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {

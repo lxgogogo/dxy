@@ -3,20 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/model/user.dart';
-import 'package:holdem/page/mine/login_helper.dart';
+import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../stores/user_store.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/size_fit.dart';
 import '../../utils/toast_utils.dart';
-import '../../widget/follow_btn.dart';
 
 part 'following_controller.dart';
 
@@ -31,15 +28,13 @@ class FollowingScreen extends StatefulWidget {
 
 class _FollowingScreenState extends State<FollowingScreen> {
   int pageNum = 1;
-  int pageSize = 10;
-  bool isFollowPage = true;
+  int pageSize = 20;
 
   List<UserProfile> items = [];
   bool _isMounted = false;
 
+  bool noMore = false;
   final RefreshController _refreshController = RefreshController();
-
-  final TextEditingController searchController = TextEditingController();
 
   void _onRefresh() async {
     pageNum = 1;
@@ -55,7 +50,6 @@ class _FollowingScreenState extends State<FollowingScreen> {
   void initState() {
     super.initState();
     _isMounted = true;
-    isFollowPage = widget.isFollowPage;
     reqListData();
   }
 
@@ -65,46 +59,56 @@ class _FollowingScreenState extends State<FollowingScreen> {
     super.dispose();
   }
 
-  reqListData() {
-    if (isFollowPage) {
-      NetRequest().followedList(pageNum.toString(), pageSize.toString(), '', (data) {
-        UserDataList followOrFan = UserDataList.fromJson(data);
-        if (_isMounted) {
-          setState(() {
+  reqListData() async {
+    int recordsSize = 0;
+    try {
+      if (widget.isFollowPage) {
+        await NetRequest().followedList(pageNum.toString(), pageSize.toString(), '', (data) {
+          UserDataList dataList = UserDataList.fromJson(data);
+          recordsSize = dataList.list?.length ?? 0;
+          if (_isMounted) {
             if (pageNum == 1) {
-              items = followOrFan.list!;
-              if(items.length<pageSize){
-                _refreshController.loadNoData();
-              }
-              _refreshController.refreshCompleted();
+              items = dataList.list!;
             } else {
-              items.addAll(followOrFan.list!);
-              _refreshController.loadComplete();
-
+              items.addAll(dataList.list!);
             }
-          });
-        }
-
-      });
-    } else {
-      NetRequest().fansList(pageNum.toString(), pageSize.toString(), '', (data) {
-        UserDataList followOrFan = UserDataList.fromJson(data);
-        if (_isMounted) {
-          setState(() {
-            if (pageNum == 1) {
-              items = followOrFan.list!;
-              if(items.length<pageSize){
-                _refreshController.loadNoData();
+          }
+        });
+      } else {
+        await NetRequest().fansList(pageNum.toString(), pageSize.toString(), '', (data) {
+          UserDataList dataList = UserDataList.fromJson(data);
+          recordsSize = dataList.list?.length ?? 0;
+          if (_isMounted) {
+            setState(() {
+              if (pageNum == 1) {
+                items = dataList.list!;
+              } else {
+                items.addAll(dataList.list!);
               }
-              _refreshController.refreshCompleted();
-            } else {
-              items.addAll(followOrFan.list!);
-              _refreshController.loadComplete();
-
-            }
-          });
+            });
+          }
+        });
+      }
+      if (pageNum == 1) {
+        _refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.resetNoData();
         }
-      });
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.loadComplete();
+        }
+      }
+    } finally {
+      setState(() {});
     }
   }
 
@@ -119,13 +123,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
             height: 22.w,
           ),
           onPressed: () {
-            EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+            UserStore.of.getUserInfo();
             Get.back();
           },
         ),
         backgroundColor: Colors.transparent,
         title: Text(
-          isFollowPage ? '我的关注' : '我的粉丝',
+          widget.isFollowPage ? '我的关注' : '我的粉丝',
           style: AppTheme.text333333Size17,
         ),
         centerTitle: true,
@@ -171,7 +175,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             items[index].id!,
                             !items[index].followed!,
                             (data) {
-                              if (isFollowPage) {
+                              if (widget.isFollowPage) {
                                 items.removeAt(index);
                                 ToastUtils.showToast('取消关注成功');
                                 if (_isMounted) {

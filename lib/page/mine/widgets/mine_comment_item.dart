@@ -39,11 +39,9 @@ class MyCommentItem extends StatelessWidget {
   const MyCommentItem({
     super.key,
     required this.item,
-    this.userProfileInfo,
   });
 
   final CommentBean item;
-  final UserProfile? userProfileInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +68,7 @@ class MyCommentItem extends StatelessWidget {
     } else if (item.relType == 'comment') {
       content =
           HtmlParseUtil.of.pureCommentText(item.comment);
-      title =  HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
+      title = HtmlParseUtil.of.pureCommentText(item.parentComment?.contentStr);
     }
 
     String typeName = '';
@@ -93,9 +91,9 @@ class MyCommentItem extends StatelessWidget {
     }
 
     if (item.isDeleted) {
-      if(item.resourceType != 'videoList'){
+      if (item.resourceType != 'videoList') {
         title = '该$typeName已被删除';
-      }else {
+      } else {
         content = '该$typeName已被删除';
       }
     }
@@ -122,18 +120,20 @@ class MyCommentItem extends StatelessWidget {
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.w,vertical: 16.w),
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                BorderAvatar(
-                  avatar: userProfileInfo?.avatar ?? '',
-                  avatarSize: 20.w,
-                  borderWidth: 0,
-                ),
+                Obx(() {
+                  return BorderAvatar(
+                    avatar: UserStore.of.user?.avatar ?? '',
+                    avatarSize: 20.w,
+                    borderWidth: 0,
+                  );
+                }),
                 SizedBox(width: 8.w),
                 Text(
                   '评论了${typeName}:',

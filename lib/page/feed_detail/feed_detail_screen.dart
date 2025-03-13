@@ -217,7 +217,7 @@ class FeedDetailScreen extends StatelessWidget {
                                     children: [
                                       ClipOval(
                                           child: LoginHelper().getUserAvatar(
-                                              UserStore.of.user.avatar ?? '',
+                                              UserStore.of.user?.avatar ?? '',
                                               30.w,
                                               30.w)),
                                       Expanded(

@@ -8,6 +8,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
+import '../stores/user_store.dart';
 import '../utils/app_theme.dart';
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
@@ -24,7 +25,7 @@ class DialogEditNickname extends StatefulWidget {
 }
 
 class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTickerProviderStateMixin {
-  bool _isDisable = true;
+  ValueNotifier<bool> _isDisable = ValueNotifier(true);
 
   final TextEditingController controller = TextEditingController();
 
@@ -72,7 +73,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                     Positioned(
                       right: 10.px,
                       top: 10.px,
-                      child:  CloseImageButton(
+                      child: CloseImageButton(
                         width: 16.w,
                         height: 16.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
@@ -93,7 +94,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                           Text(
                             "新昵称",
                             style: TextStyle(
-                              color:'#333333'.hexColor,
+                              color: '#333333'.hexColor,
                               fontSize: 14.px,
                               fontWeight: FontWeight.w500,
                             ),
@@ -135,7 +136,9 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                         FilteringTextInputFormatter.deny(
                                           RegExp('[\\s]'),
                                         ),
-                                        CodePointLengthLimitingTextInputFormatter(10,),
+                                        CodePointLengthLimitingTextInputFormatter(
+                                          10,
+                                        ),
                                       ],
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
@@ -162,31 +165,36 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                         ),
                                       ),
                                       onChanged: (value) {
-                                        _isDisable = value.isEmpty || value == widget.editContent;
-                                        setState(() {});
+                                        _isDisable.value = value.isEmpty || value == widget.editContent;
                                       },
                                     ),
                                   ),
                                 ),
-                                
                                 SizedBox(width: 8.w),
-                                Text('${controller.text.characters.length}/10', style: TextStyle(
-                                  color:'#333333'.hexColor,
-                                  fontSize: 12.px,
-                                  fontWeight: FontWeight.w500,
-                                ),)
+                                Text(
+                                  '${controller.text.characters.length}/10',
+                                  style: TextStyle(
+                                    color: '#333333'.hexColor,
+                                    fontSize: 12.px,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )
                               ],
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 42.px),
-                      CustomButton(
-                        onPressed: _submitUpdate,
-                        disable: _isDisable,
-                        height: 42.px,
-                        title: '确认',
-                      ),
+                      ValueListenableBuilder<bool>(
+                          valueListenable: _isDisable,
+                          builder: (BuildContext context, bool value, Widget? child) {
+                            return CustomButton(
+                              onPressed: _submitUpdate,
+                              disable: value,
+                              height: 42.px,
+                              title: '确认',
+                            );
+                          }),
                     ],
                   ),
                 ),
@@ -203,13 +211,13 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
     if (_isDisable) {
       return;
     }
-      if(nickname.characters.length>10){
-        ToastUtils.showToast('昵称不能超过10个字');
-        return;
-      }
+    if (nickname.characters.length > 10) {
+      ToastUtils.showToast('昵称不能超过10个字');
+      return;
+    }
     NetRequest().userUpdate(nickname, (data) {
       ToastUtils.showToast('修改成功');
-      EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      UserStore.of.getUserInfo();
       Navigator.pop(context);
     });
   }

@@ -245,26 +245,33 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                         : widget.tabIndex == 1
                                         ? '确定要删除这个收藏吗？'
                                         : '确定要删除这个评论吗？',
+                                    confirmText: '确认删除',
                                     onConfirm: (){
                                       if (widget.tabIndex == 0) {
                                         NetRequest().threadDelete(boardPostList[i].id, (data) {
                                           if (_isMounted) {
                                             ToastUtils.showToast('删除成功');
-                                            reqListData();
+                                            boardPostList.removeAt(i);
+                                            setState(() {
+                                            });
                                           }
                                         });
                                       } else if (widget.tabIndex == 1) {
                                         NetRequest().favoriteDelete(collectList[i].id, (data) {
                                           if (_isMounted) {
                                             ToastUtils.showToast('删除成功');
-                                            reqListData();
+                                           collectList.removeAt(i);
+                                            setState(() {
+                                            });
                                           }
                                         });
                                       } else if (widget.tabIndex == 2) {
                                         NetRequest().commentDelete(commentDataList[i].id, (data) {
                                           if (_isMounted) {
                                             ToastUtils.showToast('删除成功');
-                                            reqListData();
+                                            commentDataList.removeAt(i);
+                                            setState(() {
+                                            });
                                           }
                                         });
                                       }

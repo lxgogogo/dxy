@@ -83,6 +83,65 @@ class BoardBean {
       this.contentBean,
       this.cover,
       this.comment});
+//copywith
+  BoardBean copyWith({
+    int? id,
+    int? orignalId,
+    UserProfile? user,
+    BoardInfo? board,
+    String? title,
+    String? content,
+    String? pureText,
+    DateTime? createdAt,
+    int? commentCount,
+    int? favoriteCount,
+    int? likeCount,
+    int? shareCount,
+    bool? liked,
+    bool? favorited,
+    List<TagModel>? tagList,
+    List<String>? sign,
+    List<String>? pics,
+    List<UploadFile>? files,
+    String? relType,
+    String? cover,
+    String? comment,
+    ArticleBean? contentBean,
+
+  }) =>
+      BoardBean(
+        id: id ?? this.id,
+        orignalId: orignalId ?? this.orignalId,
+        user: user ?? this.user,
+        board: board ?? this.board,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        pureText: pureText ?? this.pureText,
+        createdAt: createdAt ?? this.createdAt,
+        commentCount: commentCount ?? this.commentCount,
+        favoriteCount: favoriteCount ?? this.favoriteCount,
+        likeCount: likeCount ?? this.likeCount,
+        shareCount: shareCount ?? this.shareCount,
+        liked: liked ?? this.liked,
+        favorited: favorited ?? this.favorited,
+        tagList: tagList ?? this.tagList,
+        sign: sign ?? this.sign,
+        pics: pics ?? this.pics,
+        files: files ?? this.files,
+        relType: relType ?? this.relType,
+        cover: cover ?? this.cover,
+        comment: comment ?? this.comment,
+        contentBean: contentBean ?? this.contentBean,
+      );
+
+
+
+
+
+
+
+
+
 
   BoardBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {

@@ -13,6 +13,7 @@ class FeedDetailController extends GetxController {
   StreamSubscription? eventSubscription;
 
   bool noNetwork = false;
+  late SearchTagChildController searchTagChildController;
 
   @override
   void onInit() async {
@@ -115,6 +116,11 @@ class FeedDetailController extends GetxController {
             }
           }
         }
+        EventBusUtil.of.fire(EventRefreshNum(
+            SearchTagType.feed, detailBean!.id!,
+            commentCount: detailBean?.commentCount,
+            likeCount: detailBean?.likeCount,
+            favoriteCount: detailBean?.favoriteCount));
       },
     );
 

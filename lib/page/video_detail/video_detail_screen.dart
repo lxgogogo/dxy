@@ -27,6 +27,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../utils/date_util.dart';
 import '../../widget/background_container.dart';
+import '../search_tag/search_tag_screen.dart';
 
 part 'video_detail_controller.dart';
 

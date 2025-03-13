@@ -12,6 +12,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/comment_publish/comment_publish_screen.dart';
 import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
+import 'package:holdem/page/search_tag/search_tag_screen.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -38,6 +39,7 @@ import '../../widget/circle_image_with_text.dart';
 import '../../widget/feed_more_action.dart';
 import '../../widget/report_sheet.dart';
 import '../mine/login_helper.dart';
+import '../search_tag/widgets/search_tag_child_view.dart';
 
 part 'feed_detail_controller.dart';
 

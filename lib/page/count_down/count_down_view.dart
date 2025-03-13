@@ -50,7 +50,7 @@ class CountDownView extends GetView<CountDownController> {
             return;
           }
           if (!GetUtils.isEmail(email)) {
-            ToastUtils.showToast('请输入正确格式邮箱');
+            ToastUtils.showToast('请输入正确邮箱地址');
             return;
           }
           controller.startCountdown(type, email);

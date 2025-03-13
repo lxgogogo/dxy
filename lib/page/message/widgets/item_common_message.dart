@@ -160,7 +160,6 @@ class MessageCommonItem extends StatelessWidget {
                         tipTitle ?? '',
                         style: TextStyle(
                           color: '#333333'.hexColor,
-                          fontWeight: FontWeight.w500,
                           fontSize: 10.sp,
                         ),
                       ),

@@ -233,7 +233,7 @@ class VideoHorizontalItem extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            item.createdAt != null ? DateFormat('yy-MM-dd').format(item.createdAt!) : '',
+                            item.createdAt != null ? DateFormat('yy.MM.dd').format(item.createdAt!) : '',
                             style: TextStyle(
                               color: '#333333'.hexColor.withOpacity(0.3),
                               fontSize: 9.sp,

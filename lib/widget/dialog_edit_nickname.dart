@@ -8,6 +8,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
+import '../stores/user_store.dart';
 import '../utils/app_theme.dart';
 import '../utils/eventbus/EventBusAction.dart';
 import '../utils/eventbus/EventBusManager.dart';
@@ -209,7 +210,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
       }
     NetRequest().userUpdate(nickname, (data) {
       ToastUtils.showToast('修改成功');
-      EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      UserStore.of.getUserInfo();
       Navigator.pop(context);
     });
   }

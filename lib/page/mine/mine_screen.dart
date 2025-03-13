@@ -9,6 +9,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/user_store.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
@@ -45,71 +46,73 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                 ),
                 child: Stack(
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.personal);
-                          },
-                          child: Center(
-                            child: ClipOval(
-                              child: CachedNetworkImage(
-                                width: 88.w,
-                                height: 88.w,
-                                fit: BoxFit.cover,
-                                imageUrl: controller.userProfile?.avatar ?? '',
-                                errorWidget: (context, url, error) => const SizedBox(),
-                                fadeOutDuration: Duration.zero,
-                                fadeInDuration: Duration.zero,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8.w),
-                        Text(
-                          controller.userProfile?.nickname ?? '',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xff333333),
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 4.w),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.following, arguments: true);
-                              },
-                              child: Text(
-                                '关注 ${controller.userProfile?.followedCount.abbreviateNumber ?? '0'}',
-                                style: TextStyle(
-                                  color: const Color(0xff6B6D70),
-                                  fontSize: 12.sp,
+                    Obx(() {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.personal);
+                            },
+                            child: Center(
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  width: 88.w,
+                                  height: 88.w,
+                                  fit: BoxFit.cover,
+                                  imageUrl: UserStore.of.user?.avatar ?? '',
+                                  errorWidget: (context, url, error) => const SizedBox(),
+                                  fadeOutDuration: Duration.zero,
+                                  fadeInDuration: Duration.zero,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 24.w),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.following, arguments: false);
-                              },
-                              child: Text(
-                                '粉丝 ${controller.userProfile?.fansCount.abbreviateNumber ?? '0'}',
-                                style: TextStyle(
-                                  color: const Color(0xff6B6D70),
-                                  fontSize: 12.sp,
+                          ),
+                          SizedBox(height: 8.w),
+                          Text(
+                            UserStore.of.user?.nickname ?? '',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xff333333),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 4.w),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.following, arguments: true);
+                                },
+                                child: Text(
+                                  '关注 ${UserStore.of.user?.followedCount.abbreviateNumber ?? '0'}',
+                                  style: TextStyle(
+                                    color: const Color(0xff6B6D70),
+                                    fontSize: 12.sp,
+                                  ),
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 24.w + 268.w - 239.w),
-                      ],
-                    ),
+                              SizedBox(width: 24.w),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.following, arguments: false);
+                                },
+                                child: Text(
+                                  '粉丝 ${UserStore.of.user?.fansCount.abbreviateNumber ?? '0'}',
+                                  style: TextStyle(
+                                    color: const Color(0xff6B6D70),
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 24.w + 268.w - 239.w),
+                        ],
+                      );
+                    }),
                     Positioned(
                       top: ScreenUtil().statusBarHeight + 4.w,
                       right: 0,
@@ -182,7 +185,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               physics: const NeverScrollableScrollPhysics(),
                               children: List.generate(
                                 controller.tabs.length,
-                                (index) => MineChildView(tabIndex: index),
+                                    (index) => MineChildView(tabIndex: index),
                               ),
                             ),
                           ),

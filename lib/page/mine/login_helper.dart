@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/stores/storage.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 
 import '../../model/user.dart';
@@ -23,10 +24,7 @@ class LoginHelper {
       UserProfile userProfile = UserProfile.fromJson(data['user']);
       ToastUtils.showToast('登录成功');
       StorageService.of.putToken(data['token']);
-      StorageService.of.putLocalUserStr(userProfile.toRawJson());
-      //通知个人信息页面刷新
-      EventBusManager.eventBus
-          .fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+      UserStore.of.putUserInfo(userProfile);
       EventBusUtil.of.fire(EventLoginSuccess());
       loginSuccessCallBack(data);
     });

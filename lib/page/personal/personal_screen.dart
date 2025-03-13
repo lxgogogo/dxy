@@ -17,6 +17,7 @@ import 'package:holdem/widget/linear_card.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../model/user.dart';
+import '../../stores/user_store.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
@@ -35,36 +36,19 @@ class PersonalScreen extends StatefulWidget {
 
 class _PersonalScreenState extends State<PersonalScreen> {
   String imageUrl = ""; //本地图片地址
-  UserProfile? _userProfile;
   bool _isMounted = false;
 
   @override
   void initState() {
     super.initState();
     _isMounted = true;
-    getUserInfo();
-    EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshPersonalProfile.eventBusTypeName) {
-        getUserInfo();
-      }
-    });
+    UserStore.of.getUserInfo();
   }
 
   @override
   void dispose() {
     super.dispose();
     _isMounted = false;
-  }
-
-  void getUserInfo() {
-    EasyLoading.show(status: 'loading...');
-    LoginHelper().getUserInfo((data) {
-      EasyLoading.dismiss();
-      if (_isMounted) {
-        _userProfile = data;
-        setState(() {});
-      }
-    });
   }
 
   @override
@@ -95,195 +79,199 @@ class _PersonalScreenState extends State<PersonalScreen> {
   }
 
   Widget contentView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: 23.5.w,
-        ),
-        Center(
-          child: Container(
-            width: 88.w,
-            height: 88.w,
-            alignment: Alignment.center,
-            // decoration: BoxDecoration(
-            //   color: Colors.white,
-            //   borderRadius: BorderRadius.circular(69.w),
-            //   boxShadow: [
-            //     BoxShadow(
-            //       color: const Color(0xff6d85b5).withOpacity(0.16),
-            //       // inset 0 1px 2px 1px #FFFFFF
-            //       offset: Offset(0, 3.w),
-            //       blurRadius: 4.w,
-            //     ),
-            //   ],
-            // ),
-            child: ClipOval(
-              child: CachedNetworkImage(
-                imageUrl: _userProfile?.avatar ?? '',
-                fit: BoxFit.cover,
-                width: 88.w,
-                height: 88.w,
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
-                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 23.5.w,
+          ),
+          Center(
+            child: Container(
+              width: 88.w,
+              height: 88.w,
+              alignment: Alignment.center,
+              // decoration: BoxDecoration(
+              //   color: Colors.white,
+              //   borderRadius: BorderRadius.circular(69.w),
+              //   boxShadow: [
+              //     BoxShadow(
+              //       color: const Color(0xff6d85b5).withOpacity(0.16),
+              //       // inset 0 1px 2px 1px #FFFFFF
+              //       offset: Offset(0, 3.w),
+              //       blurRadius: 4.w,
+              //     ),
+              //   ],
+              // ),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: UserStore.of.user?.avatar ?? '',
+                  fit: BoxFit.cover,
+                  width: 88.w,
+                  height: 88.w,
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
+                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 12.w,
-        ),
-        Center(
-          child: GestureDetector(
-            onTap: () {
-              _phoneSelectImage();
-            },
-            child: Container(
-              width: 72.w,
-              height: 30.w,
-              decoration: ShapeDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment(1.00, 0.00),
-                  end: Alignment(-1, 0),
-                  colors: [
-                    Color(0xFF84BCF9),
-                    Color(0xFF557BF6),
-                  ],
+          SizedBox(
+            height: 12.w,
+          ),
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                _phoneSelectImage();
+              },
+              child: Container(
+                width: 72.w,
+                height: 30.w,
+                decoration: ShapeDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment(1.00, 0.00),
+                    end: Alignment(-1, 0),
+                    colors: [
+                      Color(0xFF84BCF9),
+                      Color(0xFF557BF6),
+                    ],
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                alignment: Alignment.center,
+                child: Text(
+                  '修改头像',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.w),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) =>
+                          DialogEditNickname(
+                            editContent: UserStore.of.user?.nickname ?? '',
+                          ),
+                    );
+                  },
+                  child: Container(
+                    height: 48.5.w,
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        Text(
+                          '昵称',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: '#333333'.hexColor,
+                          ),
+                        ),
+                        SizedBox(width: 14.w),
+                        Flexible(
+                          child: Text(
+                            UserStore.of.user?.nickname ?? '',
+                            style: TextStyle(
+                              color: '#333333'.hexColor,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Image.asset('assets/images/edit_password.png', width: 24.w),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  color: const Color(0xffe6e6e6),
+                  height: 0.5.w,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) =>
+                          DialogEditEmail(
+                            editContent: UserStore.of.user?.account ?? '',
+                          ),
+                    );
+                  },
+                  child: Container(
+                    height: 48.5.w,
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        Text(
+                          '邮箱',
+                          style: TextStyle(
+                            color: '#333333'.hexColor,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        SizedBox(width: 14.w),
+                        Flexible(
+                          child: Text(
+                            UserStore.of.user?.account ?? '',
+                            style: TextStyle(
+                              color: '#333333'.hexColor,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Image.asset('assets/images/edit_password.png', width: 24.w),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                barrierDismissible: true,
+                context: context,
+                builder: (context) => const DialogDeleteAccount(),
+              );
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              height: 48.5.w,
               alignment: Alignment.center,
               child: Text(
-                '修改头像',
+                '注销账号',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp,
+                  color: Colors.red,
                 ),
               ),
             ),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.w),
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) => DialogEditNickname(
-                      editContent: _userProfile?.nickname ?? '',
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 48.5.w,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      Text(
-                        '昵称',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: '#333333'.hexColor,
-                        ),
-                      ),
-                      SizedBox(width: 14.w),
-                      Flexible(
-                        child: Text(
-                          _userProfile?.nickname ?? '',
-                          style: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Image.asset('assets/images/edit_password.png', width: 24.w),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                color: const Color(0xffe6e6e6),
-                height: 0.5.w,
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) => DialogEditEmail(
-                      editContent: _userProfile?.account ?? '',
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 48.5.w,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      Text(
-                        '邮箱',
-                        style: TextStyle(
-                          color: '#333333'.hexColor,
-                          fontSize: 16.sp,
-                        ),
-                      ),
-                      SizedBox(width: 14.w),
-                      Flexible(
-                        child: Text(
-                          _userProfile?.account ?? '',
-                          style: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Image.asset('assets/images/edit_password.png', width: 24.w),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Spacer(),
-        GestureDetector(
-          onTap: () {
-            showDialog(
-              barrierDismissible: true,
-              context: context,
-              builder: (context) => const DialogDeleteAccount(),
-            );
-          },
-          behavior: HitTestBehavior.translucent,
-          child: Container(
-            height: 48.5.w,
-            alignment: Alignment.center,
-            child: Text(
-              '注销账号',
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: Colors.red,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 26.w)
-      ],
-    );
+          SizedBox(height: 26.w)
+        ],
+      );
+    });
   }
 
   _phoneSelectImage() async {
@@ -302,7 +290,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
       if (imageUrl.isNotEmpty) {
         NetRequest().updateAvatar(imageUrl, (data) {
           ToastUtils.showToast('上传成功');
-          EventBusManager.eventBus.fire(EventBusAction.refreshPersonalProfile.eventBusTypeName);
+          UserStore.of.getUserInfo();
         }, (errMsg) {
           ToastUtils.showToast('上传文件失败，请重新上传');
         }, (int sent, int total) {}).whenComplete(() {});
@@ -360,27 +348,33 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     Container(
                       color: AppTheme.color_F3F3F3,
                       height: 1.0,
-                      width: MediaQuery.of(context).size.width, // 宽度与屏幕宽度相同
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width, // 宽度与屏幕宽度相同
                     ),
                     SizedBox(
                         height: 52.w,
                         child: Center(
                             child: GestureDetector(
-                          onTap: () {
-                            _phoneSelectImage();
-                            Navigator.of(context).pop();
-                          },
-                          child: Center(
-                            child: Text(
-                              '选择图片',
-                              style: AppTheme.text333333Size15,
-                            ),
-                          ),
-                        ))),
+                              onTap: () {
+                                _phoneSelectImage();
+                                Navigator.of(context).pop();
+                              },
+                              child: Center(
+                                child: Text(
+                                  '选择图片',
+                                  style: AppTheme.text333333Size15,
+                                ),
+                              ),
+                            ))),
                     Container(
                       color: AppTheme.color_F3F3F3,
                       height: 8.0,
-                      width: MediaQuery.of(context).size.width, // 宽度与屏幕宽度相同
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width, // 宽度与屏幕宽度相同
                     ),
                     SizedBox(
                       height: 82.w,

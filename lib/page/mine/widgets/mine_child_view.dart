@@ -52,7 +52,6 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
   int pageSize = 10;
 
   bool _isMounted = false;
-  UserProfile? userProfileInfo;
 
   List<BoardBean> boardPostList = [];
   List<CollectModel> collectList = [];
@@ -62,15 +61,6 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
 
   bool loaded = false;
 
-  getUserInfo() {
-    LoginHelper().getUserInfo((data) {
-      if (_isMounted) {
-        userProfileInfo = data;
-        setState(() {});
-      }
-    });
-  }
-
   reqListData({bool showLoading = true}) {
     if (widget.tabIndex == 0) {
       Map<String, dynamic> params = {};
@@ -79,7 +69,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
       params['ordered'] = NetRequest.BOARD_SORT_TIME;
 
       Map<String, dynamic> filters = {};
-      var ownerId = UserStore.of.user.id;
+      var ownerId = UserStore.of.user?.id;
       filters['ownerId'] = ownerId;
       params['filters'] = filters;
       NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
@@ -178,7 +168,6 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
   void initState() {
     super.initState();
     _isMounted = true;
-    getUserInfo();
     reqListData();
 
     eventSub1 = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
@@ -293,7 +282,6 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                 ? MyCollectItem(item: collectList[i])
                                 : MyCommentItem(
                                     item: commentDataList[i],
-                                    userProfileInfo: userProfileInfo,
                                   ),
                       );
                     },

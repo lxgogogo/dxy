@@ -1,5 +1,7 @@
 import 'package:event_bus/event_bus.dart';
 
+import '../page/search_tag/search_tag_screen.dart';
+
 class EventBusUtil {
   static final EventBusUtil of = EventBusUtil._();
   EventBusUtil._();
@@ -29,7 +31,14 @@ class EventRefreshPage {
   final String relType;
   EventRefreshPage(this.relType);
 }
-
+class EventRefreshNum {
+  final int? commentCount;
+  final int? likeCount;
+  final int? favoriteCount;
+  final SearchTagType type;
+  final int id;
+  EventRefreshNum(this.type,this.id,{this.commentCount, this.likeCount, this.favoriteCount});
+}
 /// event
 class EventRefreshSearchResult {}
 

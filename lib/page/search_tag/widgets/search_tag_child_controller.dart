@@ -1,6 +1,7 @@
 part of 'search_tag_child_view.dart';
 
 class SearchTagChildController extends GetxController with GetSingleTickerProviderStateMixin {
+
   final SearchTagType type;
   final TagModel? tagModel;
 
@@ -18,13 +19,85 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   int pageSize = 20;
   bool noMore = false;
   bool isLoaded = false;
-
+  StreamSubscription? eventSubscription;
   @override
   void onReady() {
     super.onReady();
     reqListData();
   }
+@override
+  void onInit() {
+  eventSubscription = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
+    final type=event.type;
+    Log.d('EventRefreshNum ${event.id} $type  ${event.likeCount}');
+    if(type==SearchTagType.feed){
+      updateFeedNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount);
+    }else if(type==SearchTagType.video||type==SearchTagType.book){
+      updateArticleNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount);
+    }
+  });
+    super.onInit();
+  }
+ @override
+  void onClose() {
+   eventSubscription?.cancel();
+    super.onClose();
+  }
+  // void updateCoursesNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
+  //   //找出id在courses，并修改favoriteCount，likeCount，commentCount
+  //   for (var element in courses) {
+  //     if (element.id == id) {
+  //       if (favoriteCount != null) {
+  //         element.favoriteCount = favoriteCount;
+  //       }
+  //       if (likeCount != null) {
+  //         element.likeCount = likeCount;
+  //       }
+  //       if (commentCount != null) {
+  //        element.commentCount = commentCount;
+  //       }
+  //     }
+  //   }
+  // }
+  void updateArticleNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
+    //找出id在articles，并修改favoriteCount，likeCount，commentCount
+    for (var element in articles) {
+      if (element.id == id) {
+        if (favoriteCount != null&&element.favoriteCount!=favoriteCount ) {
+          element.favoriteCount = favoriteCount;
+        }
+        if (likeCount != null &&element.likeCount!=likeCount) {
+          element.likeCount = likeCount;
+        }
+        if (commentCount != null&& element.commentCount!=commentCount) {
+          element.commentCount = commentCount;
+        }
+        safeUpdate();
+        return;
+      }
+    }
 
+  }
+  void updateFeedNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
+    //找出id在feeds，并修改favoriteCount，likeCount，commentCount
+    Log.d('updateFeedNum: $id');
+    for (var element in feeds) {
+      if (element.id == id) {
+        if (favoriteCount != null&&element.favoriteCount!=favoriteCount) {
+          element.favoriteCount = favoriteCount;
+        }
+        if (likeCount != null &&element.likeCount!=likeCount) {
+          element.likeCount = likeCount;
+        }
+        if (commentCount != null && element.commentCount!=commentCount) {
+          element.commentCount = commentCount;
+        }
+        safeUpdate();
+        return;
+      }
+    }
+
+  }
   Future<void> reqListData({bool showLoading = false}) async {
     Map<String, dynamic> params = {
       'pageNum': pageNum,

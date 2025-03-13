@@ -131,7 +131,7 @@ class VideoItem extends StatelessWidget {
               ),
               const Spacer(),
               CountLike(
-                count: item.favoriteCount.abbreviateNumber,
+                count: item.likeCount.abbreviateNumber,
                 usePlaceHolder: false,
               ),
               CountComment(

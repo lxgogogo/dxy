@@ -27,6 +27,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../routes/app_pages.dart';
 import '../../utils/date_util.dart';
+import '../search_tag/search_tag_screen.dart';
 
 part 'book_detail_controller.dart';
 

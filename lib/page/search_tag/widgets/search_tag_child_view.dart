@@ -12,6 +12,7 @@ import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/search_tag/search_tag_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_book.dart';

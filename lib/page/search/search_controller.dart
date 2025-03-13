@@ -77,7 +77,6 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
       ToastUtils.showToast("请输入搜索内容");
       return;
     }
-    FocusScope.of(context).requestFocus(FocusNode());
     if (historyItems.length < 30) {
       if (historyItems.contains(keyword)) {
         historyItems.remove(keyword);

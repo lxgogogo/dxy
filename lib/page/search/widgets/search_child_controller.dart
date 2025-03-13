@@ -15,7 +15,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
   int pageSize = 20;
   bool noMore = false;
   bool isLoaded = false;
-
+  ScrollController scrollController = ScrollController();
   StreamSubscription? eventSubscription;
 
   @override
@@ -119,6 +119,9 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
       refreshController.loadFailed();
     } finally {
       isLoaded = true;
+      if(pageNum==1){
+        scrollController.jumpTo(0);
+      }
       safeUpdate();
     }
   }

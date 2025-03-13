@@ -20,6 +20,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/at_text.dart';
 import 'package:holdem/widget/count_widget.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/my_item_feed.dart';
@@ -230,41 +231,46 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                final isConfirm = await showDialog(
+                                await showDialog(
                                   barrierDismissible: true,
                                   context: context,
-                                  builder: (context) => DialogConfirm(
+                                  builder: (context) => CommonDialog(
                                     title: widget.tabIndex == 0
+                                        ? '删除帖子'
+                                        : widget.tabIndex == 1
+                                            ? '删除收藏'
+                                            : '删除评论',
+                                    content:widget.tabIndex == 0
                                         ? '确定要删除这个帖子吗？'
                                         : widget.tabIndex == 1
-                                            ? '确定要删除这个收藏吗？'
-                                            : '确定要删除这个评论吗？',
+                                        ? '确定要删除这个收藏吗？'
+                                        : '确定要删除这个评论吗？',
+                                    onConfirm: (){
+                                      if (widget.tabIndex == 0) {
+                                        NetRequest().threadDelete(boardPostList[i].id, (data) {
+                                          if (_isMounted) {
+                                            ToastUtils.showToast('删除成功');
+                                            reqListData();
+                                          }
+                                        });
+                                      } else if (widget.tabIndex == 1) {
+                                        NetRequest().favoriteDelete(collectList[i].id, (data) {
+                                          if (_isMounted) {
+                                            ToastUtils.showToast('删除成功');
+                                            reqListData();
+                                          }
+                                        });
+                                      } else if (widget.tabIndex == 2) {
+                                        NetRequest().commentDelete(commentDataList[i].id, (data) {
+                                          if (_isMounted) {
+                                            ToastUtils.showToast('删除成功');
+                                            reqListData();
+                                          }
+                                        });
+                                      }
+                                    },
                                   ),
                                 );
-                                if (isConfirm == true) {
-                                  if (widget.tabIndex == 0) {
-                                    NetRequest().threadDelete(boardPostList[i].id, (data) {
-                                      if (_isMounted) {
-                                        ToastUtils.showToast('删除成功');
-                                        reqListData();
-                                      }
-                                    });
-                                  } else if (widget.tabIndex == 1) {
-                                    NetRequest().favoriteDelete(collectList[i].id, (data) {
-                                      if (_isMounted) {
-                                        ToastUtils.showToast('删除成功');
-                                        reqListData();
-                                      }
-                                    });
-                                  } else if (widget.tabIndex == 2) {
-                                    NetRequest().commentDelete(commentDataList[i].id, (data) {
-                                      if (_isMounted) {
-                                        ToastUtils.showToast('删除成功');
-                                        reqListData();
-                                      }
-                                    });
-                                  }
-                                }
                               },
                               child: SvgPicture.asset(
                                 'assets/svg/icon_delete.svg',

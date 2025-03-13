@@ -40,7 +40,7 @@ class ArticleDetailScreen extends StatelessWidget {
         return Scaffold(
           appBar: CommonAppBar.arrowBack(
             context,
-            title: '',
+            title: '详情',
           ),
           backgroundColor: Colors.white,
           extendBody: true,

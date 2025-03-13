@@ -9,6 +9,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/duration_text.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,7 @@ class VideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Get.toNamed(

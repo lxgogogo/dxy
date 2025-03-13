@@ -47,6 +47,7 @@ class SearchChildView extends GetView<SearchChildView> {
           enablePullDown: false,
           enablePullUp: true,
           controller: controller.refreshController,
+          scrollController: controller.scrollController,
           onLoading: controller.onLoading,
           child: controller.isLoaded ? _buildView(controller) : const SizedBox(),
         );

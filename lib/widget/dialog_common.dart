@@ -119,6 +119,7 @@ class CommonDialog extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           onConfirm?.call();
+                          Navigator.of(context).pop();
                         },
                         child: Container(
                           width: 96.w,

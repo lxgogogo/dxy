@@ -37,219 +37,224 @@ class FeedDetailBottomView extends StatefulWidget {
 class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (widget.tagList.isNotEmpty)
-          Padding(
-            padding: EdgeInsets.only(left: 12.w),
-            child: TagListView(
-              tagList: widget.tagList,
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: 16.w),
+      child: Column(
+
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.tagList.isNotEmpty)
+            Padding(
+              padding: EdgeInsets.only(left: 12.w),
+              child: TagListView(
+                tagList: widget.tagList,
+              ),
+            ),
+          Container(
+            padding: EdgeInsets.only(top: 10.w, bottom: 12.w),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                // borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
+                border: Border(
+                  top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),
+                )),
+            alignment: Alignment.topCenter,
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 16.w),
+                if (widget.viewParams.relType == NetRequest.COMMENT_TYPE_CONTENT)
+                  GestureDetector(
+                    onTap: () {
+                      UserStore.of.checkLogin(() {
+                        Get.bottomSheet(
+                          isScrollControlled: true,
+                          CommentPublishScreen(
+                            relType: widget.viewParams.relType!,
+                            relId: widget.viewParams.relId!,
+                          ),
+                        );
+                      });
+                    },
+                    child: Container(
+                      height: 32.w,
+                      constraints: BoxConstraints(maxWidth: 101.w),
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      decoration: BoxDecoration(
+                        color: '#333333'.hexColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '说点什么吧...',
+                        style: TextStyle(fontSize: 12, color: '#333333'.hexColor.withOpacity(0.5)),
+                      ),
+                    ),
+                  )
+                else
+                  GestureDetector(
+                    onTap: _pushComment,
+                    child: Container(
+                      height: 32.w,
+                      constraints: BoxConstraints(maxWidth: 101.w),
+                      padding: EdgeInsets.only(right: 12.w),
+                      decoration: BoxDecoration(
+                        color: '#333333'.hexColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ClipOval(
+                            child: LoginHelper().getUserAvatar(widget.viewParams.author?.avatar ?? '', 30.w, 30.w),
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: Text(
+                                widget.viewParams.author?.nickname ?? '',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: '##333333'.hexColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          if ((widget.viewParams.author?.id ?? 0) != 0)
+                            Visibility(
+                              visible: !UserStore.of.isMe(widget.viewParams.author?.id),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                                },
+                                child: widget.viewParams.author?.followed == true
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                        child: Text(
+                                          '已关注',
+                                          style: TextStyle(
+                                            color: '#557BF6'.hexColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 28.w,
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.symmetric(horizontal: 10.w),
+                                        child: Text(
+                                          '+关注',
+                                          style: TextStyle(
+                                            color: '#557BF6'.hexColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                //  if (widget.viewParams.relType == 'thread')
+                // CountCommentBadge(
+                //   count: widget.viewParams.likeCount.abbreviateNumber,
+                //   iconWidget: SizedBox(
+                //     child: CountLikeAni(
+                //       count: '',
+                //       liked: widget.viewParams.liked == true,
+                //       likeWidget: SizedBox(
+                //         width: 20.w,
+                //         child: widget.viewParams.liked == true
+                //             ? SvgPicture.asset(Assets.svg.liked)
+                //             : SvgPicture.asset(Assets.svg.like),
+                //       ),
+                //       onToggleLike: _likeToggle,
+                //       usePlaceHolder: false,
+                //     ),
+                //   ),
+                // ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: _likeToggle,
+                        child: CountCommentBadge(
+                          count: widget.viewParams.likeCount.abbreviateNumber,
+                          iconWidget: widget.viewParams.liked == true
+                              ? SvgPicture.asset(
+                                  Assets.svg.liked,
+                                  width: 24.w,
+                                  height: 24.w,
+                                  color: '#567BF6'.hexColor.withOpacity(0.7),
+                                )
+                              : SvgPicture.asset(
+                                  Assets.svg.like,
+                                  color: '#333333'.hexColor.withOpacity(0.7),
+                                  width: 24.w,
+                                  height: 24.w,
+                                ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: _favoriteToggle,
+                        child: CountCommentBadge(
+                          count: widget.viewParams.favoriteCount.abbreviateNumber,
+                          iconWidget: widget.viewParams.favoriteState == true
+                              ? SvgPicture.asset(
+                                  Assets.svg.stared,
+                                  color: '#567BF6'.hexColor.withOpacity(0.7),
+                                  width: 24.w,
+                                  height: 24.w,
+                                )
+                              : SvgPicture.asset(
+                                  Assets.svg.star,
+                                  color: '#333333'.hexColor.withOpacity(0.7),
+                                  width: 24.w,
+                                  height: 24.w,
+                                ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: _toCommentList,
+                        child: CountCommentBadge(
+                            iconWidget: SvgPicture.asset(
+                              Assets.svg.comment,
+                              color: '#333333'.hexColor,
+                              width: 24.w,
+                              height: 24.w,
+                            ),
+                            count: widget.viewParams.commentCount.abbreviateNumber),
+                      ),
+                      GestureDetector(
+                        onTap: _toShare,
+                        child: CountCommentBadge(
+                            iconWidget: SvgPicture.asset(
+                              Assets.svg.share,
+                              color: '#333333'.hexColor,
+                              width: 24.w,
+                              height: 24.w,
+                            ),
+                            count: widget.viewParams.shareCount.abbreviateNumber),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 6.w,
+                )
+              ],
             ),
           ),
-        Container(
-          padding: EdgeInsets.only(top: 10.w, bottom: 12.w),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              // borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
-              border: Border(
-                top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),
-              )),
-          alignment: Alignment.topCenter,
-          child: Row(
-            children: <Widget>[
-              SizedBox(width: 16.w),
-              if (widget.viewParams.relType == NetRequest.COMMENT_TYPE_CONTENT)
-                GestureDetector(
-                  onTap: () {
-                    UserStore.of.checkLogin(() {
-                      Get.bottomSheet(
-                        isScrollControlled: true,
-                        CommentPublishScreen(
-                          relType: widget.viewParams.relType!,
-                          relId: widget.viewParams.relId!,
-                        ),
-                      );
-                    });
-                  },
-                  child: Container(
-                    height: 32.w,
-                    constraints: BoxConstraints(maxWidth: 101.w),
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '说点什么吧...',
-                      style: TextStyle(fontSize: 12, color: '#333333'.hexColor.withOpacity(0.5)),
-                    ),
-                  ),
-                )
-              else
-                GestureDetector(
-                  onTap: _pushComment,
-                  child: Container(
-                    height: 32.w,
-                    constraints: BoxConstraints(maxWidth: 101.w),
-                    padding: EdgeInsets.only(right: 12.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ClipOval(
-                          child: LoginHelper().getUserAvatar(widget.viewParams.author?.avatar ?? '', 30.w, 30.w),
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Text(
-                              widget.viewParams.author?.nickname ?? '',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: '##333333'.hexColor,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                        if ((widget.viewParams.author?.id ?? 0) != 0)
-                          Visibility(
-                            visible: !UserStore.of.isMe(widget.viewParams.author?.id),
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
-                              },
-                              child: widget.viewParams.author?.followed == true
-                                  ? Container(
-                                      alignment: Alignment.center,
-                                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                      child: Text(
-                                        '已关注',
-                                        style: TextStyle(
-                                          color: '#557BF6'.hexColor,
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      height: 28.w,
-                                      alignment: Alignment.center,
-                                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                      child: Text(
-                                        '+关注',
-                                        style: TextStyle(
-                                          color: '#557BF6'.hexColor,
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              //  if (widget.viewParams.relType == 'thread')
-              // CountCommentBadge(
-              //   count: widget.viewParams.likeCount.abbreviateNumber,
-              //   iconWidget: SizedBox(
-              //     child: CountLikeAni(
-              //       count: '',
-              //       liked: widget.viewParams.liked == true,
-              //       likeWidget: SizedBox(
-              //         width: 20.w,
-              //         child: widget.viewParams.liked == true
-              //             ? SvgPicture.asset(Assets.svg.liked)
-              //             : SvgPicture.asset(Assets.svg.like),
-              //       ),
-              //       onToggleLike: _likeToggle,
-              //       usePlaceHolder: false,
-              //     ),
-              //   ),
-              // ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: _likeToggle,
-                      child: CountCommentBadge(
-                        count: widget.viewParams.likeCount.abbreviateNumber,
-                        iconWidget: widget.viewParams.liked == true
-                            ? SvgPicture.asset(
-                                Assets.svg.liked,
-                                width: 24.w,
-                                height: 24.w,
-                                color: '#567BF6'.hexColor.withOpacity(0.7),
-                              )
-                            : SvgPicture.asset(
-                                Assets.svg.like,
-                                color: '#333333'.hexColor.withOpacity(0.7),
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _favoriteToggle,
-                      child: CountCommentBadge(
-                        count: widget.viewParams.favoriteCount.abbreviateNumber,
-                        iconWidget: widget.viewParams.favoriteState == true
-                            ? SvgPicture.asset(
-                                Assets.svg.stared,
-                                color: '#567BF6'.hexColor.withOpacity(0.7),
-                                width: 24.w,
-                                height: 24.w,
-                              )
-                            : SvgPicture.asset(
-                                Assets.svg.star,
-                                color: '#333333'.hexColor.withOpacity(0.7),
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _toCommentList,
-                      child: CountCommentBadge(
-                          iconWidget: SvgPicture.asset(
-                            Assets.svg.comment,
-                            color: '#333333'.hexColor,
-                            width: 24.w,
-                            height: 24.w,
-                          ),
-                          count: widget.viewParams.commentCount.abbreviateNumber),
-                    ),
-                    GestureDetector(
-                      onTap: _toShare,
-                      child: CountCommentBadge(
-                          iconWidget: SvgPicture.asset(
-                            Assets.svg.share,
-                            color: '#333333'.hexColor,
-                            width: 24.w,
-                            height: 24.w,
-                          ),
-                          count: ''),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 6.w,
-              )
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -48,7 +48,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         return Scaffold(
           appBar: CommonAppBar.arrowBack(
             context,
-            title: '书籍详情',
+            title: '详情',
             actions: [
               GestureDetector(
                 onTap: () {

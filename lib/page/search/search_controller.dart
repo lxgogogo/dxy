@@ -27,9 +27,12 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
 
   Future<void> loadHistory() async {
     historyItems = StorageUtil().prefs?.getStringList('search') ?? [];
+    historyItems = getLimitedHistoryItems(historyItems);
     safeUpdate();
   }
-
+  List<String> getLimitedHistoryItems(List<String> items) {
+    return items.take(6).toList();
+  }
   Future<void> loadHotTags() async {
     final res = await CommonService.of.tagIndex(
       pageNum: 1,

@@ -2,28 +2,20 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
-import 'package:holdem/main.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
-import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/linear_card.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../model/user.dart';
 import '../../stores/user_store.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../utils/size_fit.dart';
-import '../mine/login_helper.dart';
 
 part 'personal_controller.dart';
 
@@ -104,13 +96,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
               //   ],
               // ),
               child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: UserStore.of.user?.avatar ?? '',
-                  fit: BoxFit.cover,
+                child: SizedBox(
                   width: 88.w,
                   height: 88.w,
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
-                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                  child: CachedNetworkImage(
+                          imageUrl: UserStore.of.user?.avatar ?? '',
+                          placeholder: (context, url) =>
+                              const Center(child: CircularProgressIndicator(color: Colors.black12)),
+                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                        ),
                 ),
               ),
             ),
@@ -160,10 +154,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     showDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) =>
-                          DialogEditNickname(
-                            editContent: UserStore.of.user?.nickname ?? '',
-                          ),
+                      builder: (context) => DialogEditNickname(
+                        editContent: UserStore.of.user?.nickname ?? '',
+                      ),
                     );
                   },
                   child: Container(
@@ -206,10 +199,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     showDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) =>
-                          DialogEditEmail(
-                            editContent: UserStore.of.user?.account ?? '',
-                          ),
+                      builder: (context) => DialogEditEmail(
+                        editContent: UserStore.of.user?.account ?? '',
+                      ),
                     );
                   },
                   child: Container(
@@ -290,7 +282,10 @@ class _PersonalScreenState extends State<PersonalScreen> {
       if (imageUrl.isNotEmpty) {
         NetRequest().updateAvatar(imageUrl, (data) {
           ToastUtils.showToast('上传成功');
-          UserStore.of.getUserInfo();
+          final url = data?['url'];
+          if (url is String) {
+            UserStore.of.updateUserInfo({'avatar': url});
+          }
         }, (errMsg) {
           ToastUtils.showToast('上传文件失败，请重新上传');
         }, (int sent, int total) {}).whenComplete(() {});
@@ -348,33 +343,27 @@ class _PersonalScreenState extends State<PersonalScreen> {
                     Container(
                       color: AppTheme.color_F3F3F3,
                       height: 1.0,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width, // 宽度与屏幕宽度相同
+                      width: MediaQuery.of(context).size.width, // 宽度与屏幕宽度相同
                     ),
                     SizedBox(
                         height: 52.w,
                         child: Center(
                             child: GestureDetector(
-                              onTap: () {
-                                _phoneSelectImage();
-                                Navigator.of(context).pop();
-                              },
-                              child: Center(
-                                child: Text(
-                                  '选择图片',
-                                  style: AppTheme.text333333Size15,
-                                ),
-                              ),
-                            ))),
+                          onTap: () {
+                            _phoneSelectImage();
+                            Navigator.of(context).pop();
+                          },
+                          child: Center(
+                            child: Text(
+                              '选择图片',
+                              style: AppTheme.text333333Size15,
+                            ),
+                          ),
+                        ))),
                     Container(
                       color: AppTheme.color_F3F3F3,
                       height: 8.0,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width, // 宽度与屏幕宽度相同
+                      width: MediaQuery.of(context).size.width, // 宽度与屏幕宽度相同
                     ),
                     SizedBox(
                       height: 82.w,

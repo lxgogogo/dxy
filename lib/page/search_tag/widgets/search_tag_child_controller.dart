@@ -115,7 +115,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
     try {
       int recordsSize = 0;
       switch (type) {
-       // case SearchTagType.news:
+       case SearchTagType.news:
         case SearchTagType.video:
         case SearchTagType.book:
           await NetRequest().indexList(params, (data) {

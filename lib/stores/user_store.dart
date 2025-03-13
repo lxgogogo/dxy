@@ -49,4 +49,12 @@ class UserStore extends GetxController {
       _user.value = user;
     }, (errorMsg) {});
   }
+
+  Future<void> updateUserInfo(Map<String, dynamic> json) async {
+    _user.value = UserProfile.fromJson({
+      ..._user.value?.toJson() ?? {},
+      ...json,
+    });
+    await StorageService.of.putLocalUserStr(_user.value!.toRawJson());
+  }
 }

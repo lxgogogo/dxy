@@ -50,8 +50,8 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
 
   Widget _buildView(SearchTagChildController controller) {
     switch (type) {
-      // case SearchTagType.news:
-      //   return _buildNewsView(controller);
+      case SearchTagType.news:
+        return _buildNewsView(controller);
       case SearchTagType.video:
         return _buildVideoView(controller);
       case SearchTagType.book:
@@ -66,84 +66,92 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
   Widget _buildCourseView(SearchTagChildController controller) {
     return controller.courses.isNotEmpty
         ? ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
-      itemBuilder: (_, int index) => GestureDetector(
-        onTap: () {
-          Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
-        },
-        child: Container(
-          padding: EdgeInsets.only(bottom: 16.w),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: index < controller.courses.length - 1
-                    ? '#000000'.hexColor.withOpacity(0.05)
-                    : Colors.transparent,
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            itemBuilder: (_, int index) => GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
+              },
+              child: Container(
+                padding: EdgeInsets.only(bottom: 16.w),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: index < controller.courses.length - 1
+                          ? '#000000'.hexColor.withOpacity(0.05)
+                          : Colors.transparent,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  controller.courses[index].title ?? '',
+                  style: TextStyle(
+                    color: '#333333'.hexColor,
+                    fontSize: 16.sp,
+                  ),
+                  softWrap: true,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-          ),
-          child: Text(
-            controller.courses[index].title ?? '',
-            style: TextStyle(
-              color: '#333333'.hexColor,
-              fontSize: 16.sp,
-            ),
-            softWrap: true,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ),
-      separatorBuilder: (_, int index) => SizedBox(height: 16.w),
-      itemCount: controller.courses.length,
-    )
+            separatorBuilder: (_, int index) => SizedBox(height: 16.w),
+            itemCount: controller.courses.length,
+          )
         : const NoDataView();
   }
-
 
   Widget _buildBookView(SearchTagChildController controller) {
     return controller.articles.isNotEmpty
         ? Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-          return Wrap(
-            spacing: 12.w,
-            runSpacing: 12.w,
-            children: controller.articles
-                .map(
-                  (e) => ThreeDBookItem(
-                itemWidth: itemWidth,
-                item: e,
-              ),
-            )
-                .toList(),
-          );
-        },
-      ),
-    )
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                return Wrap(
+                  spacing: 12.w,
+                  runSpacing: 12.w,
+                  children: controller.articles
+                      .map(
+                        (e) => ThreeDBookItem(
+                          itemWidth: itemWidth,
+                          item: e,
+                        ),
+                      )
+                      .toList(),
+                );
+              },
+            ),
+          )
         : const NoDataView();
   }
 
   Widget _buildVideoView(SearchTagChildController controller) {
-    return controller.articles.isNotEmpty
-        ? GridView.builder(
-            padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.w,
-              mainAxisSpacing: 8.w,
-            ),
-            itemCount: controller.articles.length,
-            itemBuilder: (c, i) => VideoItem(item: controller.articles[i]),
-          )
-        : const NoDataView();
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      child: controller.articles.isNotEmpty
+          ? LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                return Wrap(
+                  spacing: 12.w,
+                  runSpacing: 12.w,
+                  children: controller.articles
+                      .map((e) => SizedBox(
+                            width: itemWidth,
+                            child: VideoItem(item: e),
+                          ))
+                      .toList(),
+                );
+              },
+            )
+          : const NoDataView(),
+    );
   }
 
   Widget _buildNewsView(SearchTagChildController controller) {
     return controller.articles.isNotEmpty
         ? ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
             itemBuilder: (c, i) => NewsItem(item: controller.articles[i]),
             itemCount: controller.articles.length,
           )
@@ -153,6 +161,7 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
   Widget _buildFeedView(SearchTagChildController controller) {
     return controller.feeds.isNotEmpty
         ? ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 24.w),
             itemBuilder: (c, i) => FeedItem(controller.feeds[i]),
             itemCount: controller.feeds.length,
           )

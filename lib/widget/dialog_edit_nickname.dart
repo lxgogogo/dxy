@@ -208,9 +208,6 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
 
   void _submitUpdate() {
     String nickname = controller.text;
-    if (_isDisable.value) {
-      return;
-    }
     if (nickname.characters.length > 10) {
       ToastUtils.showToast('昵称不能超过10个字');
       return;

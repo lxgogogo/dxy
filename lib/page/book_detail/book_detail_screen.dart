@@ -49,21 +49,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           appBar: CommonAppBar.arrowBack(
             context,
             title: '详情',
-            actions: [
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.search);
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 16.w),
-                  child: SvgPicture.asset(
-                    Assets.svg.iconSearch,
-                    width: 24.w,
-                    height: 24.w,
-                  ),
-                ),
-              ),
-            ],
           ),
           backgroundColor: Colors.white,
           body: controller.noNetwork

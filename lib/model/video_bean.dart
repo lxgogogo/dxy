@@ -54,45 +54,36 @@ class VideoBean {
   final String? title;
   final String? description;
   final String? cover;
+  final int? commentCount;
+  final int? likeCount;
+  final int? viewCount;
+  final int? duration;
   final double? popularCount;
   final String? type;
   final DateTime? createdAt;
-
   VideoBean({
     this.id,
     this.title,
     this.description,
     this.cover,
+    this.commentCount,
+    this.likeCount,
+    this.viewCount,
+    this.duration,
     this.popularCount,
     this.type,
     this.createdAt,
   });
-
-  VideoBean copyWith({
-    int? id,
-    String? title,
-    String? description,
-    String? cover,
-    double? popularCount,
-    String? type,
-    DateTime? createdAt,
-  }) =>
-      VideoBean(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        cover: cover ?? this.cover,
-        popularCount: popularCount ?? this.popularCount,
-        type: type ?? this.type,
-        createdAt: createdAt ?? this.createdAt,
-      );
-
   factory VideoBean.fromMap(Map<String, dynamic> json) => VideoBean(
     id: json["id"],
     title: json["title"],
     description: json["description"],
     cover: json["cover"],
-    popularCount: json["popularCount"]?.toDouble(),
+    commentCount: json["commentCount"],
+    likeCount: json["likeCount"],
+    viewCount: json["viewCount"],
+    duration: json["duration"],
+    popularCount: json["popularCount"],
     type: json["type"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
   );
@@ -102,6 +93,10 @@ class VideoBean {
     "title": title,
     "description": description,
     "cover": cover,
+    "commentCount": commentCount,
+    "likeCount": likeCount,
+    "viewCount": viewCount,
+    "duration": duration,
     "popularCount": popularCount,
     "type": type,
     "createdAt": createdAt?.toIso8601String(),

@@ -29,6 +29,7 @@ class ArticleBean {
       this.createdAt,
       this.description,
       this.pureText,
+      this.duration,
       this.favoriteCount,
       this.id,
       this.likeCount,

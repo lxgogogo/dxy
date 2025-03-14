@@ -244,13 +244,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     width: itemWidth,
                                                     child: VideoItem(
                                                         item: ArticleBean(
-                                                            id: e.id,
-                                                            title: e.title,
-                                                            cover: e.cover,
-                                                            description: e.description,
-                                                            type: e.type,
-                                                            viewCount: e.popularCount?.toInt(),
-                                                            createdAt: e.createdAt)),
+                                                      id: e.id,
+                                                      cover: e.cover,
+                                                      viewCount: e.viewCount?.toInt(),
+                                                      duration: e.duration,
+                                                      title: e.title,
+                                                      createdAt: e.createdAt,
+                                                      type: e.type,
+                                                      likeCount: e.likeCount,
+                                                      commentCount: e.commentCount,
+                                                    )),
                                                   ))
                                               .toList(),
                                         );

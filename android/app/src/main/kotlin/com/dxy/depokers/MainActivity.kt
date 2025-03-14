@@ -1,4 +1,4 @@
-package com.dxy.holdem
+package com.dxy.depokers
 
 import io.flutter.embedding.android.FlutterActivity
 

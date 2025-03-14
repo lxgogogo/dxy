@@ -96,15 +96,13 @@ class _PersonalScreenState extends State<PersonalScreen> {
               //   ],
               // ),
               child: ClipOval(
-                child: SizedBox(
+                child: CachedNetworkImage(
                   width: 88.w,
                   height: 88.w,
-                  child: CachedNetworkImage(
-                          imageUrl: UserStore.of.user?.avatar ?? '',
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator(color: Colors.black12)),
-                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                        ),
+                  fit: BoxFit.cover,
+                  imageUrl: UserStore.of.user?.avatar ?? '',
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
+                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                 ),
               ),
             ),

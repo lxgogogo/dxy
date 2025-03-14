@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "io.github.qq549631030.android-junk-code"
 }
 
 def localProperties = new Properties()
@@ -84,6 +85,29 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+androidJunkCode {
+    debug true
+    /**
+     * 生成逻辑由插件完成
+     */
+    def config = {
+        packageBase = "cn.hx.plugin.ui"
+        packageCount = 30
+        activityCountPerPackage = 30
+        excludeActivityJavaFile = false
+        otherCountPerPackage = 50
+        methodCountPerClass = 20
+        resPrefix = "junk_"
+        drawableCount = 300
+        stringCount = 300
+    }
+
+    variantConfig {
+        debug config
+        release config
     }
 }
 

@@ -333,7 +333,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 6.w),
                       child: Text(
-                        isShowAgainTips ? '两次输入的密码不一致' : '8-12位，须包含大小写字母+数字',
+                        isShowAgainTips ? '两次输入的密码不一致' : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
                         style: TextStyle(
                           fontSize: 10.sp,
                           color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,

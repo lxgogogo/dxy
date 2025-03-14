@@ -309,7 +309,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                     right: 12.w,
                                     child: CountDownView(
                                       type: NetRequest
-                                          .SEND_CODE_TYPE_CHANGE_EMAIL,
+                                          .SEND_CODE_DELETE_ACCOUNT,
                                       email: _controllerEmail.text,
                                     ),
                                   ),

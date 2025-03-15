@@ -215,6 +215,7 @@ class FeedDetailScreen extends StatelessWidget {
                                           UserStore.of.checkLogin(() {
                                             Get.bottomSheet(
                                               isScrollControlled: true,
+                                              enableDrag: false,
                                               CommentPublishScreen(
                                                 relType: NetRequest.COMMENT_TYPE_THREAD,
                                                 relId: controller.id!,

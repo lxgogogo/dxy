@@ -59,7 +59,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
         return Container(
           margin: EdgeInsets.only(top: 12.w,),
           // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height/2+MediaQuery.of(context).viewInsets.bottom),
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height/2),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(
@@ -71,26 +71,28 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  constraints: BoxConstraints(minHeight: 150.w),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.w),
-                    child: QuillEditor.basic(
-                      controller: controller.quillController,
-                      focusNode: controller.focusNode,
-                      config: QuillEditorConfig(
-                        showCursor: true,
-                        embedBuilders: FlutterQuillEmbeds.editorBuilders(),
-                        placeholder: '说点什么吧...',
-                        customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
-                            TextStyle(
-                              fontSize: 14,
-                              color: '#333333'.hexColor.withOpacity(0.7),
-                            ),
-                            HorizontalSpacing.zero,
-                            VerticalSpacing.zero,
-                            VerticalSpacing.zero,
-                            null))),
+                Flexible(
+                  child: Container(
+                    constraints: BoxConstraints(minHeight: 150.w),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.w),
+                      child: QuillEditor.basic(
+                        controller: controller.quillController,
+                        focusNode: controller.focusNode,
+                        config: QuillEditorConfig(
+                          showCursor: true,
+                          embedBuilders: FlutterQuillEmbeds.editorBuilders(),
+                          placeholder: '说点什么吧...',
+                          customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
+                              TextStyle(
+                                fontSize: 14,
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                              ),
+                              HorizontalSpacing.zero,
+                              VerticalSpacing.zero,
+                              VerticalSpacing.zero,
+                              null))),
+                        ),
                       ),
                     ),
                   ),

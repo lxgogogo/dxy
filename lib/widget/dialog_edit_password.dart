@@ -318,7 +318,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 4.w),
                                 child: Text(
-                                  isShowPwTips ? '*请输入8-12位，须包含大小写字母+数字' : '',
+                                  isShowPwTips ? '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写' : '',
                                   style: TextStyle(
                                     fontSize: 12.sp,
                                     color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,

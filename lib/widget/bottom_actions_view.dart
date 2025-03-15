@@ -97,7 +97,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                     onTap: _pushComment,
                     child: Container(
                       height: 32.w,
-                      constraints: BoxConstraints(maxWidth: 101.w),
+                      constraints: BoxConstraints(maxWidth: 131.w),
                       padding: EdgeInsets.only(right: 12.w),
                       decoration: BoxDecoration(
                         color: '#333333'.hexColor.withOpacity(0.05),
@@ -130,32 +130,33 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                                 onTap: () {
                                   Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
                                 },
-                                child: widget.viewParams.author?.followed == true
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                        child: Text(
-                                          '已关注',
-                                          style: TextStyle(
-                                            color: '#557BF6'.hexColor,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w500,
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 10.w),
+                                  child: widget.viewParams.author?.followed == true
+                                      ? Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '已关注',
+                                            style: TextStyle(
+                                              color: '#557BF6'.hexColor,
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          height: 28.w,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '+关注',
+                                            style: TextStyle(
+                                              color: '#557BF6'.hexColor,
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
-                                      )
-                                    : Container(
-                                        height: 28.w,
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.symmetric(horizontal: 10.w),
-                                        child: Text(
-                                          '+关注',
-                                          style: TextStyle(
-                                            color: '#557BF6'.hexColor,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
+                                ),
                               ),
                             ),
                         ],

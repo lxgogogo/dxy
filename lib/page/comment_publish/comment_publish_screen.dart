@@ -16,6 +16,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
@@ -41,6 +42,7 @@ import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/upload_file.dart';
 import '../../utils/common_utils.dart';
+import '../../utils/html_parse_util.dart';
 import '../../utils/net_request.dart';
 
 part 'comment_publish_controller.dart';

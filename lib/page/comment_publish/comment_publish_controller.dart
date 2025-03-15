@@ -56,13 +56,14 @@ class CommentPublishController extends GetxController {
       }
       return '';
     });
+
     final content = converter.convert();
 
     if (imageUrlList.isNotEmpty) {
       imageUrlList.clear();
     }
-
-    if (content == '<p><br/></p>'&&imageData.isEmpty) {
+   final isEmpty = HtmlParseUtil.of.isEmptyText(content);;
+    if (isEmpty&&imageData.isEmpty) {
       ToastUtils.showToast('评论内容不能为空');
       return;
     }

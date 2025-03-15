@@ -34,6 +34,18 @@ class HtmlParseUtil {
     return '';
   }
 
+  bool isEmptyText(String htmlText) {
+
+    final RegExp emptyContentPattern =
+        RegExp(r'^<p>\s*<br\s*/>?\s*</p>$|^<p>\s*</p>$');
+
+    // 使用正则表达式匹配空内容，并检查 imageData 是否为空
+    if (emptyContentPattern.hasMatch(htmlText )) {
+      return true;
+    }
+    return false;
+  }
+
   String parseText(Node node) {
     if (node.nodeType == Node.TEXT_NODE) {
       return node.text!;

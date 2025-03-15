@@ -11,6 +11,7 @@ class NoDataView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset('assets/images/no_result.png', height: 204.w),
         SizedBox(

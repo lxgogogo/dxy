@@ -206,7 +206,9 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                         : widget.tabIndex == 1
                             ? collectList.isEmpty
                             : commentDataList.isEmpty)
-                ? const NoDataView()
+                ? Container(
+                  height: constraints.maxHeight*0.6,
+                child: const NoDataView())
                 : ListView.builder(
                     itemBuilder: (c, i) {
                       return Slidable(

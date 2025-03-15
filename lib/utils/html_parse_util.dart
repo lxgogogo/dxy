@@ -17,12 +17,13 @@ class HtmlParseUtil {
   String pureCommentText(String? comment) {
     if (comment?.isNotEmpty != true) return '';
     final regExp = RegExp(r"(<span.*?>)(@([\u4e00-\u9fa5\w]+))(.*?</span>)");
+
     try {
       final formatComment = comment!.replaceAllMapped(regExp, (match) {
         String prefix = match[1] ?? '';
         String user = match[2] ?? '';
         String suffix = match[4] ?? '';
-        return '$prefix\$$user \$$suffix';
+        return '$prefix$user$suffix';
       });
       if (parse(formatComment).body != null) {
         return parseText(parse(formatComment).body!);

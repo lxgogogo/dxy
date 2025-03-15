@@ -29,7 +29,7 @@ class MessageCommonItem extends StatelessWidget {
     String? tipTitle;
     String? smallIcon;
     if (item.type == 'at') {
-      tipTitle = '在帖子中@了你';
+      tipTitle = item.itemType == 'comment' ? '在评论中@了你' :'在帖子中@了你';
       smallIcon = 'assets/images/aite.png';
     } else if (item.type == 'comment') {
       tipTitle = item.itemType == 'comment' ? '回复了你的评论' : '评论了你的贴子';

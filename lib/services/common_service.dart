@@ -32,6 +32,28 @@ class CommonService {
     if (isShowLoading) {
       EasyLoading.show(status: 'loading...');
     }
+    final res = await HttpUtils.postNew(Api.tagIndex, params: {
+      'pageNum': pageNum,
+      'pageSize': pageSize,
+      'filters': {
+        'q': keyword,
+      }
+    }).whenComplete(() {
+      if (isShowLoading) {
+        EasyLoading.dismiss();
+      }
+    });
+    return res ?? ResBaseModel.defaultRes;
+  }
+  Future<ResBaseModel> searchTop({
+    required int pageNum,
+    int pageSize = 20,
+    String keyword = '',
+    bool isShowLoading = false,
+  }) async {
+    if (isShowLoading) {
+      EasyLoading.show(status: 'loading...');
+    }
     final res = await HttpUtils.postNew(Api.searchTop, params: {
       'pageNum': pageNum,
       'pageSize': pageSize,

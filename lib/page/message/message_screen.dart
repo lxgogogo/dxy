@@ -27,13 +27,13 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
   int selIndex = 0;
 
   final List<Tab> myTabs = const <Tab>[
-    Tab(text: '评论了我'),
-    Tab(text: '点赞了我'),
-    Tab(text: '收藏了我'),
-    Tab(text: '提到了我'),
+    Tab(text: '@我的'),
+    Tab(text: '评论我的'),
+    Tab(text: '点赞我的'),
+    Tab(text: '收藏我的'),
   ];
   final List<String> tabs = ['@我的', '评论我的', '赞我的', '收藏'];
-  final List<String> types = [ 'comment', 'like', 'favorite','at',];
+  final List<String> types = [ 'at','comment', 'like', 'favorite',];
   final _pageKey = GlobalKey<MessageChildViewState>();
 
   @override
@@ -74,15 +74,15 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
   Widget getTabView() {
     return DynamicTabBarWidget(
       dynamicTabs: parentTabs,
-      isScrollable: false,
+      isScrollable: true,
       showBackIcon: false,
       showNextIcon: false,
-      padding: EdgeInsets.only(bottom: 12.w),
-      labelPadding: const EdgeInsets.fromLTRB(16, 0, 10, 0),
+      padding: EdgeInsets.only(bottom: 8.w),
+      labelPadding:  EdgeInsets.fromLTRB(16.w, 0, 10, 0),
       indicatorColor: '#557BF6'.hexColor,
       indicatorPadding: const EdgeInsets.symmetric(horizontal:35,vertical:5),
       indicatorSize: TabBarIndicatorSize.tab,
-     // tabAlignment: TabAlignment.start,
+      tabAlignment: TabAlignment.start,
       //底部下标颜色
       enableFeedback: true,
       dividerHeight: 0,

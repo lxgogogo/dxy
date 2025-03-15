@@ -219,9 +219,11 @@ class VideoHorizontalItem extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(8.w, 8.w, 8.w, 12.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       item.title ?? '',
+                      textAlign: TextAlign.left,
                       style: TextStyle(
                         color: '#333333'.hexColor,
                         fontSize: 12.sp,

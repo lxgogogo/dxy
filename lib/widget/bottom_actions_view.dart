@@ -11,6 +11,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
 
@@ -42,7 +43,6 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       color: Colors.white,
       padding: EdgeInsets.only(bottom: 16.w),
       child: Column(
-
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.tagList.isNotEmpty)

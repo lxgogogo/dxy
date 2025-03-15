@@ -95,7 +95,11 @@ class MessageCommonItem extends StatelessWidget {
       }
     }
     if (item.isDeleted) {
-      title = '该$typeName已被删除';
+      if (item.resourceType != 'videoList') {
+        title = '该$typeName已被删除';
+      } else {
+        title = '该$typeName已被删除';
+      }
     }
     final isFavorite = item.type == 'favorite';
     return GestureDetector(

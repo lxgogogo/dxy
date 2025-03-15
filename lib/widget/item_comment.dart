@@ -178,7 +178,7 @@ class _CommentItemState extends State<CommentItem> {
                 children: [
                   Text(
                     widget.commentBean.createdAt != null
-                        ? '${DateUtil.formatDateAlias3(widget.commentBean.createdAt!.millisecondsSinceEpoch)}发布'
+                        ? '${DateUtil.formatDateAlias3(widget.commentBean.createdAt!.millisecondsSinceEpoch,hasHM: true)}发布'
                         : '',
                     style: TextStyle(
                       color: const Color(0xff9CACC9),

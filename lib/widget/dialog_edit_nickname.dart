@@ -166,6 +166,9 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       ),
                                       onChanged: (value) {
                                         _isDisable.value = value.isEmpty || value == widget.editContent;
+                                        setState(() {
+
+                                        });
                                       },
                                     ),
                                   ),

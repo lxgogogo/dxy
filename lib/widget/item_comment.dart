@@ -12,6 +12,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
@@ -217,6 +218,11 @@ class _CommentItemState extends State<CommentItem> {
                           int count = widget.commentBean.likeCount!;
                           widget.commentBean.likeCount =
                               widget.commentBean.liked! ? count + 1 : count - 1;
+                          if (  widget.commentBean.liked== true) {
+                            ToastUtils.showToast('点赞成功');
+                          } else {
+                            ToastUtils.showToast('取消点赞成功');
+                          }
                           setState(() {});
                           return true;
                         }
@@ -373,6 +379,11 @@ class _CommentItemState extends State<CommentItem> {
                                               reply.likeCount = reply.liked!
                                                   ? count + 1
                                                   : count - 1;
+                                              if (reply.liked== true) {
+                                                ToastUtils.showToast('点赞成功');
+                                              } else {
+                                                ToastUtils.showToast('取消点赞成功');
+                                              }
                                               setState(() {});
                                               return true;
                                             }

@@ -340,7 +340,7 @@ class DateUtil {
 //1～24小时： x小时前
 //大于24小时：xxxx-xx-xx xx:xx:xx
 
-  static String formatDateAlias3(int date) {
+  static String formatDateAlias3(int date,{bool hasHM = false}) {
     if (date == null || date == 0) return "";
 
     final now = DateTime.now();
@@ -357,7 +357,7 @@ class DateUtil {
       return "${difference.inHours}小时前";
     } else {
       // 超过24小时
-      return formatDateMs(date, format: DateFormats.full);
+      return formatDateMs(date, format:hasHM? 'yyyy.MM.dd HH:mm:ss':'yyyy.MM.dd');
     }
   }
 

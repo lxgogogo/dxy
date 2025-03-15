@@ -19,6 +19,7 @@ import '../page/comment_publish/comment_publish_screen.dart';
 import '../page/feed_detail/feed_detail_screen.dart';
 import '../page/mine/login_helper.dart';
 import '../utils/toast_utils.dart';
+import 'like_button/src/like_button.dart';
 
 class FeedDetailBottomView extends StatefulWidget {
   final List<TagModel> tagList;
@@ -184,23 +185,26 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: _likeToggle,
-                        child: CountCommentBadge(
-                          count: widget.viewParams.likeCount.abbreviateNumber,
-                          iconWidget: widget.viewParams.liked == true
-                              ? SvgPicture.asset(
-                                  Assets.svg.liked,
-                                  width: 24.w,
-                                  height: 24.w,
-                                  color: '#567BF6'.hexColor.withOpacity(0.7),
-                                )
-                              : SvgPicture.asset(
-                                  Assets.svg.like,
-                                  color: '#333333'.hexColor.withOpacity(0.7),
-                                  width: 24.w,
-                                  height: 24.w,
-                                ),
+                      CountCommentBadge(
+                        count: widget.viewParams.likeCount.abbreviateNumber,
+                        iconWidget:    LikeButton(
+                            isLiked: widget.viewParams.liked,
+                            size: 24.w,
+                            padding: EdgeInsets.zero,
+                            onTap: onLikeButtonTapped,
+                            likeBuilder: (bool isLiked) {
+                              return isLiked ?? false
+                                  ? SvgPicture.asset(
+                                    Assets.svg.liked,
+                                    color: '#567BF6'.hexColor.withOpacity(0.7),
+                                  )
+                                  : SvgPicture.asset(
+                                    Assets.svg.like,
+                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                  );
+                            },
+                            likeCountPadding: EdgeInsets.only(left: 0.w),
+                            countBuilder: (_, __, ___) => const SizedBox()
                         ),
                       ),
                       GestureDetector(
@@ -257,7 +261,10 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       ),
     );
   }
-
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    final success = await _likeToggle.call();
+    return success ? !isLiked : isLiked;
+  }
   Future<bool> _likeToggle() async {
     final data = await NetRequest().newContentLike({
       'relType': widget.viewParams.relType,

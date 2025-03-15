@@ -117,6 +117,7 @@ class FeedDetailScreen extends StatelessWidget {
                                           '${DateUtil.formatDateAlias3(
                                             controller.detailBean!.createdAt!
                                                 .millisecondsSinceEpoch,
+                                              hasHM:true
                                           )}发布',
                                           style: TextStyle(
                                               color: '#333333'.hexColor,

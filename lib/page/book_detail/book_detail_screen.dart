@@ -124,7 +124,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             ),
 
                             Text(
-                              '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, )}发布',
+                              '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch,hasHM:true  )}发布',
                               style: TextStyle(
                                   color: '#333333'.hexColor, fontSize: 12),
                             ),

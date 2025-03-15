@@ -34,7 +34,7 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
     return items.take(6).toList();
   }
   Future<void> loadHotTags() async {
-    final res = await CommonService.of.tagIndex(
+    final res = await CommonService.of.searchTop(
       pageNum: 1,
       pageSize: 20,
     );

@@ -120,7 +120,10 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
     } finally {
       isLoaded = true;
       if(pageNum==1){
-        scrollController.jumpTo(0);
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(0);
+        }
+
       }
       safeUpdate();
     }

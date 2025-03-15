@@ -29,7 +29,18 @@ class MessageCommonItem extends StatelessWidget {
     String? tipTitle;
     String? smallIcon;
     if (item.type == 'at') {
-      tipTitle = item.itemType == 'comment' ? '在评论中@了你' :'在帖子中@了你';
+      var resourceType = '';
+      if (item.resourceType == 'book') {
+        resourceType = '书籍';
+      } else if (item.resourceType == 'video') {
+        resourceType = '视频';
+      } else if (item.resourceType == 'videoList') {
+        resourceType = '视频合集';
+      } else {
+        resourceType = item.itemType == 'comment' ? '评论中' : '帖子中';
+      }
+      tipTitle = '在$resourceType@了你';
+
       smallIcon = 'assets/images/aite.png';
     } else if (item.type == 'comment') {
       tipTitle = item.itemType == 'comment' ? '回复了你的评论' : '评论了你的贴子';
@@ -143,7 +154,8 @@ class MessageCommonItem extends StatelessWidget {
                       else
                         Text(
                           item.createdAt != null
-                              ? DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)
+                              ? DateUtil.formatDateAlias3(
+                                  item.createdAt!.millisecondsSinceEpoch)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor.withOpacity(0.7),
@@ -167,7 +179,8 @@ class MessageCommonItem extends StatelessWidget {
                       if (isFavorite)
                         Text(
                           item.createdAt != null
-                              ? DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)
+                              ? DateUtil.formatDateAlias3(
+                                  item.createdAt!.millisecondsSinceEpoch)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor,

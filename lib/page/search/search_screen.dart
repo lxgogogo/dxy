@@ -26,8 +26,9 @@ enum SearchType {
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
-  user('用户', categoryAlias: ''),
-  tag('话题', categoryAlias: '');
+  tag('话题', categoryAlias: ''),
+  user('用户', categoryAlias: '');
+
   // competition('赛事', categoryAlias: 'competition');
 
   final String title;

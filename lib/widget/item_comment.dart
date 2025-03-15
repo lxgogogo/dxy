@@ -409,7 +409,7 @@ class _CommentItemState extends State<CommentItem> {
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: Text(
-                                    '查看全部${min(pageSize, (widget.commentBean.replyCount ?? 0) - (widget.commentBean.replies?.length ?? 0))}条回复>',
+                                    '查看全部条回复>',
                                     style: TextStyle(
                                       color: '#333333'.hexColor,
                                       fontSize: 10.sp,

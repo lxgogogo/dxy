@@ -172,7 +172,7 @@ class FeedDetailScreen extends StatelessWidget {
                                   return const SizedBox();
                                 }
                                 // if(element.localName=='p'){
-                                //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor),);
+                                //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7)),);
                                 // }
                                 return null;
                               },

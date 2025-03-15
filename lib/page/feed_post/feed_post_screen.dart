@@ -42,7 +42,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
           behavior: HitTestBehavior.opaque,
           child: Scaffold(
             backgroundColor: Colors.white,
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             appBar: CommonAppBar.arrowBack(context, title: '发帖'),
             body: Container(
               margin: EdgeInsets.only(top: 12.w),

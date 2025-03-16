@@ -5,6 +5,7 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/message.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/item_comment.dart';
@@ -36,7 +37,10 @@ class MessageCommonItem extends StatelessWidget {
         resourceType = '视频';
       } else if (item.resourceType == 'videoList') {
         resourceType = '视频合集';
-      } else {
+      } else if(item.resourceType=='article'){
+        resourceType = '教程';
+      }
+      else {
         resourceType = item.itemType == 'comment' ? '评论中' : '帖子中';
       }
       tipTitle = '在$resourceType@了你';
@@ -77,29 +81,24 @@ class MessageCommonItem extends StatelessWidget {
     }
 
     String typeName = '';
-    if (item.delType == 1 || item.delType == 2) {
-      typeName = '评论';
-    } else if (item.delType == 4) {
-      typeName = '资源';
-    } else {
+
       if (item.resourceType == 'thread') {
         typeName = '帖子';
       } else if (item.resourceType == 'article') {
-        typeName = '资讯';
+        typeName = '教程';
       } else if (item.resourceType == 'video') {
         typeName = '视频';
       } else if (item.resourceType == 'videoList') {
         typeName = '视频合集';
       } else if (item.resourceType == 'book') {
         typeName = '书籍';
+      }else{
+        typeName = '资源';
       }
-    }
+
+    Log.d('resourceType: ${item.resourceType} ${item.delType}');
     if (item.isDeleted) {
-      if (item.resourceType != 'videoList') {
-        title = '该$typeName已被删除';
-      } else {
-        title = '该$typeName已被删除';
-      }
+      title = '该$typeName已被删除';
     }
     final isFavorite = item.type == 'favorite';
     return GestureDetector(

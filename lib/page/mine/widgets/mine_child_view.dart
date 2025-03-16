@@ -79,11 +79,11 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
           if (pageNum == 1) {
             boardPostList = boardList.list!;
             _refreshController.refreshCompleted();
-            if (boardPostList.length >= total) {
-              _refreshController.loadNoData();
-            } else {
-              _refreshController.resetNoData();
-            }
+            // if (boardPostList.length >= total) {
+            //   _refreshController.loadNoData();
+            // } else {
+            //   _refreshController.resetNoData();
+            // }
           } else {
             boardPostList.addAll(boardList.list!);
             if (boardPostList.length >= total) {

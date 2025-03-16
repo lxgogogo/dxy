@@ -110,7 +110,11 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
       }
       if (recordsSize < pageSize) {
         noMore = true;
-        refreshController.loadNoData();
+        if(pageNum==1&&recordsSize==0){
+          refreshController.refreshCompleted();
+        }else {
+          refreshController.loadNoData();
+        }
       } else {
         noMore = false;
         refreshController.loadComplete();

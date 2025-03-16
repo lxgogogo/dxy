@@ -29,11 +29,10 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   void onInit() {
   eventSubscription = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
     final type=event.type;
-    Log.d('EventRefreshNum ${event.id} $type  ${event.likeCount}');
     if(type==SearchTagType.feed){
-      updateFeedNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount);
+      updateFeedNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount,favoriteCount: event.favoriteCount);
     }else if(type==SearchTagType.video||type==SearchTagType.book){
-      updateArticleNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount);
+      updateArticleNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount,favoriteCount: event.favoriteCount);
     }
   });
     super.onInit();
@@ -80,7 +79,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   }
   void updateFeedNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
     //找出id在feeds，并修改favoriteCount，likeCount，commentCount
-    Log.d('updateFeedNum: $id');
+   // Log.d('updateFeedNum: $id $favoriteCount $likeCount $commentCount');
     for (var element in feeds) {
       if (element.id == id) {
         if (favoriteCount != null&&element.favoriteCount!=favoriteCount) {
@@ -149,7 +148,11 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
       }
       if (recordsSize < pageSize) {
         noMore = true;
-        refreshController.loadNoData();
+        if(pageNum==1&&recordsSize==0){
+          refreshController.refreshCompleted();
+        }else {
+          refreshController.loadNoData();
+        }
       } else {
         noMore = false;
         refreshController.loadComplete();

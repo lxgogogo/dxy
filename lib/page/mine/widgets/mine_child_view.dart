@@ -79,16 +79,18 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
           if (pageNum == 1) {
             boardPostList = boardList.list!;
             _refreshController.refreshCompleted();
+            _refreshController.loadComplete();
             // if (boardPostList.length >= total) {
             //   _refreshController.loadNoData();
             // } else {
             //   _refreshController.resetNoData();
             // }
           } else {
-            boardPostList.addAll(boardList.list!);
-            if (boardPostList.length >= total) {
+
+            if (boardList.list?.isEmpty??true) {
               _refreshController.loadNoData();
             } else {
+              boardPostList.addAll(boardList.list!);
               _refreshController.loadComplete();
             }
           }
@@ -104,17 +106,14 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
           final total = collectPageModel.pager?.total ?? 0;
           if (pageNum == 1) {
             collectList = collectPageModel.list!;
+
             _refreshController.refreshCompleted();
-            if (collectList.length >= total) {
-              _refreshController.loadNoData();
-            } else {
-              _refreshController.resetNoData();
-            }
+            _refreshController.loadComplete();
           } else {
-            collectList.addAll(collectPageModel.list!);
-            if (collectList.length >= total) {
+            if (collectPageModel.list?.isEmpty??true) {
               _refreshController.loadNoData();
             } else {
+              collectList.addAll(collectPageModel.list!);
               _refreshController.loadComplete();
             }
           }

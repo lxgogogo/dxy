@@ -24,7 +24,7 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  final List<String> tabs = ['@我的', '评论我的', '赞我的', '收藏'];
+  final List<String> tabs = ['@我的', '评论我的', '点赞我的', '收藏我的'];
   final List<String> types = ['at', 'comment', 'like', 'favorite'];
 
   late TabController tabController;
@@ -49,34 +49,32 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 6.w),
+              padding: EdgeInsets.only(left: 4.w),
               child: TabBar(
                 controller: tabController,
                 tabs: tabs
-                    .map((e) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 6.w),
-                          child: Tab(
-                            child: Stack(
-                              children: [
-                                Container(padding: EdgeInsets.only(right: 4.w), child: Center(child: Text(e))),
-                                Visibility(
-                                  visible: false,
-                                  child: Positioned(
-                                      right: 1,
-                                      top: 10,
-                                      child: Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: const ShapeDecoration(
-                                          color: Color(0xFFFF3232),
-                                          shape: OvalBorder(),
-                                        ),
-                                      )),
-                                )
-                              ],
-                            ),
-                            // child: Text(myTabs[i].text.toString()),
+                    .map((e) => Tab(
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Text(e),
+                              Visibility(
+                                visible: false,
+                                child: Positioned(
+                                    right: -4.w,
+                                    top: -4.w,
+                                    child: Container(
+                                      width: 8.w,
+                                      height: 8.w,
+                                      decoration: const ShapeDecoration(
+                                        color: Color(0xFFFF3232),
+                                        shape: OvalBorder(),
+                                      ),
+                                    )),
+                              )
+                            ],
                           ),
+                          // child: Text(myTabs[i].text.toString()),
                         ))
                     .toList(),
                 isScrollable: true,
@@ -92,12 +90,12 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                 dividerHeight: 0,
                 labelStyle: TextStyle(
                   color: const Color(0xff2c2c2c),
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
                 ),
                 unselectedLabelStyle: TextStyle(
                   color: const Color(0xff666666),
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
                 ),
               ),

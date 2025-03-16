@@ -313,7 +313,7 @@ class NetRequest {
     params['userId'] = userId;
     params['state'] = state;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.followerToggle, params: params);
+    Map<String, dynamic> response = await HttpUtils.post(Api.followerToggle, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     LogUtils.printAll("followerToggle params===>$params");
     if (resp.code == 200) {

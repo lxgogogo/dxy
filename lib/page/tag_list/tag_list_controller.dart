@@ -22,6 +22,7 @@ class TagListController extends GetxController with RefreshControllerMixin {
       ..addListener(() {
         safeUpdate();
       });
+
     super.onInit();
   }
 
@@ -29,6 +30,14 @@ class TagListController extends GetxController with RefreshControllerMixin {
   void onReady() {
     super.onReady();
     onRefresh();
+    intTagList();
+  }
+  void intTagList(){
+    final selectTags = Get.find<FeedPostController>().tagList;
+    if(selectTags.isNotEmpty){
+      selectedItems.addAll(selectTags);
+      safeUpdate();
+    }
   }
   void addSelectTag(TagModel tag) {
     if (selectedItems.length >= 5) {

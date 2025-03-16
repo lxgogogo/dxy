@@ -338,7 +338,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       child: Text(
                         isShowPwTips
                             ? (isContainsInvalidChars
-                            ? '*包含了不允许的字符：仅允许英文字母、数字及特殊字符如 @#%!~'
+                            ? '*仅允许英文字母、数字及特殊字符如 @#%!~'
                             : '*至少包含一位大小写字母+数字')
                             : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
                         style: TextStyle(

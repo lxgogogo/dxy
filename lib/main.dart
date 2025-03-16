@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         return RefreshConfiguration(
           headerBuilder: () => const ClassicHeader(),
           footerBuilder: () => const ClassicFooter(
-            noDataText: '没有更多内容',
+            noDataText: '—— 已经到底啦 ——',
           ),
           child: OKToast(
             child: GetMaterialApp(

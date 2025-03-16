@@ -9,10 +9,11 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/duration_text.dart';
 import 'package:intl/intl.dart';
+
+import '../utils/date_util.dart';
 
 class VideoItem extends StatelessWidget {
   final ArticleBean item;
@@ -123,7 +124,7 @@ class VideoItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                item.createdAt != null ? DateFormat('yyyy-MM-dd').format(item.createdAt!) : '',
+                item.createdAt != null ?DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch) : '',
                 style: TextStyle(
                   color: '#333333'.hexColor.withOpacity(0.3),
                   fontSize: 9.sp,

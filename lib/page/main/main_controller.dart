@@ -11,7 +11,7 @@ class MainController extends GetxController {
   void onTabBarItem(int index) {
     if (index == 2 || index == 3) {
       if (!UserStore.of.isLogin) {
-        ToastUtils.showToast('请先登录');
+        //ToastUtils.showToast('请先登录');
         Get.toNamed(Routes.login);
         return;
       }

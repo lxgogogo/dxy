@@ -13,6 +13,7 @@ import 'package:holdem/stores/user_store.dart';
 
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
+import '../../widget/custom_underline_tab_indicator.dart';
 import 'login_helper.dart';
 
 part 'mine_controller.dart';
@@ -152,16 +153,11 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               controller: controller.tabController,
                               tabs: controller.tabs.map((e) => Tab(text: e)).toList(),
                               isScrollable: false,
-                              indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                              indicator: UnderlineTabIndicator(
-                                borderSide: BorderSide(
-                                  color: const Color(0xff557BF6),
-                                  width: 2.w, // 选中线条宽度
-                                ),
-                                insets: EdgeInsets.symmetric(horizontal: 10.w),
-                                borderRadius: BorderRadius.circular(2.w),
+                              indicator: RoundUnderlineTabIndicator(
+                                borderSide:
+                                BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                                wantToWith: 12.w,
                               ),
-                              //底部下标颜色
                               enableFeedback: false,
                               overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
                                 return Colors.transparent;

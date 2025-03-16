@@ -10,6 +10,8 @@ import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
+import '../../widget/custom_underline_tab_indicator.dart';
+
 part 'search_tag_controller.dart';
 
 enum SearchTagType {
@@ -115,15 +117,10 @@ class SearchTagScreen extends GetView<SearchTagController> {
                               .toList(),
                           isScrollable: true,
                           tabAlignment: TabAlignment.start,
-                          labelPadding: EdgeInsets.fromLTRB(6.w, 0, 6.w, 0),
-                          indicatorPadding: EdgeInsets.only(bottom: 4.w),
-                          indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                              color: const Color(0xff6198f7),
-                              width: 2.w, // 选中线条宽度
-                            ),
-                            insets: EdgeInsets.symmetric(horizontal: 16.w),
-                            borderRadius: BorderRadius.circular(2.w),
+                          indicator: RoundUnderlineTabIndicator(
+                            borderSide:
+                            BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                            wantToWith: 12.w,
                           ),
                           enableFeedback: false,
                           overlayColor: WidgetStateProperty.resolveWith<Color>((_) {

@@ -47,15 +47,30 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
   RegExp containsInvalidChars=RegExp(r'^[A-Za-z0-9@#%!~]+$');
   bool isContainsInvalidChars=false;
+  bool isValidLength=false;
   void checkValid() {
     final account = _controllerEmail.text;
     isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final code = _controllerCode.text;
     isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
+    isValidLength = password.length >= 8 && password.length <= 12;
     isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
     bool isValidPassword = passwordRegExp.hasMatch(password);
-    isShowPwTips = password.isNotEmpty && (!isValidPassword || isContainsInvalidChars);
+
+    if (password.isNotEmpty) {
+      if (!isValidLength) {
+        isShowPwTips = true; // 长度不符合要求
+      } else if (isContainsInvalidChars) {
+        isShowPwTips = true; // 包含非法字符
+      } else if (!isValidPassword) {
+        isShowPwTips = true; // 不满足复杂度要求
+      } else {
+        isShowPwTips = false; // 所有条件均满足
+      }
+    } else {
+      isShowPwTips = false; // 密码为空时不显示提示
+    }
     final againPw = _controllerAgainPw.text;
     isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
@@ -337,9 +352,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       padding: EdgeInsets.symmetric(vertical: 6.w),
                       child: Text(
                         isShowPwTips
-                            ? (isContainsInvalidChars
-                            ? '*仅允许英文字母、数字及特殊字符如 @#%!~'
-                            : '*至少包含一位大小写字母+数字')
+                            ? (!isValidLength
+                            ? '*限制8-12位字符' // 长度不符合要求
+                            : isContainsInvalidChars
+                            ? '*仅允许英文字母、数字及特殊字符如 @#%!~' // 包含非法字符
+                            : '*至少包含一位大小写字母+数字') // 不满足复杂度要求
                             : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
                         style: TextStyle(
                           fontSize: 10.sp,

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/utils/input_limit_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
@@ -25,14 +26,19 @@ class DialogEditNickname extends StatefulWidget {
 }
 
 class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTickerProviderStateMixin {
-  ValueNotifier<bool> _isDisable = ValueNotifier(true);
+  final ValueNotifier<bool> _isDisable = ValueNotifier(true);
+  final ValueNotifier<int> _textLength = ValueNotifier(0);
 
   final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    controller.text = widget.editContent.length > 10 ? widget.editContent.substring(0, 10) : widget.editContent;
+    controller.text = widget.editContent;
+    controller.addListener(() {
+      _textLength.value = controller.text.length;
+      _isDisable.value = controller.text.isEmpty || controller.text == widget.editContent;
+    });
   }
 
   @override
@@ -46,10 +52,10 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 10.5.px,
-          margin: EdgeInsets.only(left: 18.px, right: 18.px),
+          borderRadius: 10.5.w,
+          margin: EdgeInsets.only(left: 18.w, right: 18.w),
           child: Container(
-            padding: EdgeInsets.only(bottom: 26.px),
+            padding: EdgeInsets.only(bottom: 26.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,22 +63,22 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                 Stack(
                   children: [
                     SizedBox(
-                      height: 72.px,
+                      height: 72.w,
                       width: double.infinity,
                       child: Center(
                         child: Text(
                           "修改昵称",
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.w,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
                     Positioned(
-                      right: 10.px,
-                      top: 10.px,
+                      right: 10.w,
+                      top: 10.w,
                       child: CloseImageButton(
                         width: 16.w,
                         height: 16.w,
@@ -85,7 +91,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 21.5.px),
+                  padding: EdgeInsets.symmetric(horizontal: 21.5.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -95,22 +101,22 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                             "新昵称",
                             style: TextStyle(
                               color: '#333333'.hexColor,
-                              fontSize: 14.px,
+                              fontSize: 14.w,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(width: 8.px),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Row(
                               children: [
                                 Expanded(
                                   child: Container(
-                                    height: 30.px,
+                                    height: 30.w,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.px),
+                                      borderRadius: BorderRadius.circular(8.w),
                                       border: Border.all(
                                         color: '#333333'.hexColor.withOpacity(0.2),
-                                        width: 1.px,
+                                        width: 1.w,
                                       ),
                                       // boxShadow: [
                                       //   BoxShadow(
@@ -118,8 +124,8 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       //   ),
                                       //   BoxShadow(
                                       //     color: const Color(0xffebf6ff),
-                                      //     spreadRadius: -2.px,
-                                      //     blurRadius: 5.px,
+                                      //     spreadRadius: -2.w,
+                                      //     blurRadius: 5.w,
                                       //     offset: const Offset(1, 1),
                                       //   ),
                                       // ],
@@ -128,73 +134,67 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       controller: controller,
                                       style: TextStyle(
                                         color: '#333333'.hexColor,
-                                        fontSize: 12.px,
+                                        fontSize: 12.w,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       maxLines: 1,
                                       inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.deny(
-                                          RegExp('[\\s]'),
-                                        ),
-                                        CodePointLengthLimitingTextInputFormatter(
-                                          10,
-                                        ),
+                                        FilteringTextInputFormatter.deny(RegExp('[\\s]')),
+                                        CustomizedLengthTextInputFormatter(10),
                                       ],
                                       decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 12.px),
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
                                         hintText: '请输入昵称',
                                         hintStyle: TextStyle(
                                           color: const Color(0xffa3b4d3),
-                                          fontSize: 12.px,
+                                          fontSize: 12.w,
                                         ),
                                         border: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         disabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.px),
+                                          borderRadius: BorderRadius.circular(8.w),
                                         ),
                                       ),
-                                      onChanged: (value) {
-                                        _isDisable.value = value.isEmpty || value == widget.editContent;
-                                        setState(() {
-
-                                        });
-                                      },
                                     ),
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
-                                Text(
-                                  '${controller.text.characters.length}/10',
-                                  style: TextStyle(
-                                    color: '#333333'.hexColor,
-                                    fontSize: 12.px,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                )
+                                ValueListenableBuilder<int>(
+                                    valueListenable: _textLength,
+                                    builder: (BuildContext context, int value, Widget? child) {
+                                      return Text(
+                                        '${controller.text.characters.length}/10',
+                                        style: TextStyle(
+                                          color: '#333333'.hexColor,
+                                          fontSize: 12.w,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      );
+                                    })
                               ],
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 42.px),
+                      SizedBox(height: 42.w),
                       ValueListenableBuilder<bool>(
                           valueListenable: _isDisable,
                           builder: (BuildContext context, bool value, Widget? child) {
                             return CustomButton(
                               onPressed: _submitUpdate,
                               disable: value,
-                              height: 42.px,
+                              height: 42.w,
                               title: '确认',
                             );
                           }),

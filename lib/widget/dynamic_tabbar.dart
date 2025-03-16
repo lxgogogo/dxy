@@ -6,6 +6,9 @@ library dynamic_tabbar;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'custom_underline_tab_indicator.dart';
 
 class TabData {
   final int index;
@@ -120,7 +123,6 @@ class DynamicTabBarWidget extends TabBar {
   /// By default [clipBehavior] is Clip.hardEdge.
   final Clip clipBehaviorTabBarView;
 
-
   DynamicTabBarWidget({
     super.key,
     required this.dynamicTabs,
@@ -171,8 +173,7 @@ class DynamicTabBarWidget extends TabBar {
   _DynamicTabBarWidgetState createState() => _DynamicTabBarWidgetState();
 }
 
-class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
-    with TickerProviderStateMixin {
+class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget> with TickerProviderStateMixin {
   // Tab Controller
   TabController? _tabController;
 
@@ -209,8 +210,7 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
       }
       _tabController = getTabController(initialIndex: activeTabIndex);
 
-      var tabIndex = widget.onAddTabMoveToIndex ??
-          getOnAddMoveToTab(widget.onAddTabMoveTo);
+      var tabIndex = widget.onAddTabMoveToIndex ?? getOnAddMoveToTab(widget.onAddTabMoveTo);
 
       if (tabIndex != null) {
         Future.delayed(const Duration(milliseconds: 50), () {
@@ -325,17 +325,13 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
                       : TabBar(
                           isScrollable: widget.isScrollable,
                           controller: _tabController,
-                          tabs: widget.dynamicTabs
-                              .map((tab) => tab.title)
-                              .toList(),
+                          tabs: widget.dynamicTabs.map((tab) => tab.title).toList(),
                           // Default Tab properties :---------------------------------------
                           padding: widget.padding,
-                          indicatorColor: widget.indicatorColor,
-                          automaticIndicatorColorAdjustment:
-                              widget.automaticIndicatorColorAdjustment,
-                          indicatorWeight: widget.indicatorWeight,
-                          indicatorPadding: widget.indicatorPadding,
-                          indicator: widget.indicator,
+                          indicator: RoundUnderlineTabIndicator(
+                            borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                            wantToWith: 12.w,
+                          ),
                           indicatorSize: widget.indicatorSize,
                           dividerColor: widget.dividerColor,
                           dividerHeight: widget.dividerHeight,
@@ -355,7 +351,7 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
                           tabAlignment: widget.tabAlignment,
                         ),
                 ),
-                if (widget.showNextIcon == true&&widget.isScrollable)
+                if (widget.showNextIcon == true && widget.isScrollable)
                   IconButton(
                     icon: widget.nextIcon ??
                         const Icon(
@@ -383,8 +379,7 @@ class _DynamicTabBarWidgetState extends State<DynamicTabBarWidget>
   }
 
   _moveToNextTab() {
-    if (_tabController != null &&
-        _tabController!.index + 1 < _tabController!.length) {
+    if (_tabController != null && _tabController!.index + 1 < _tabController!.length) {
       _tabController!.animateTo(_tabController!.index + 1);
     } else {
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(

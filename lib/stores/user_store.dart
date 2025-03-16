@@ -24,7 +24,7 @@ class UserStore extends GetxController {
 
   void checkLogin(VoidCallback callback) async {
     if (!isLogin) {
-      ToastUtils.showToast('请先登录');
+      //ToastUtils.showToast('请先登录');
       Get.toNamed(Routes.login);
       return;
     }

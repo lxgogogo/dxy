@@ -420,7 +420,7 @@ class _CommentItemState extends State<CommentItem> {
                                     borderRadius: BorderRadius.circular(50),
                                   ),
                                   child: Text(
-                                    '查看全部条回复>',
+                                    '查看全部回复>',
                                     style: TextStyle(
                                       color: '#333333'.hexColor,
                                       fontSize: 10.sp,

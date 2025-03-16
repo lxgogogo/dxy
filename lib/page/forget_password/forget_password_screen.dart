@@ -45,14 +45,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   bool _isLoginDisable = true;
   RegExp codeRegExp = RegExp(r'^\d{6}$');
   RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
-
+  RegExp containsInvalidChars=RegExp(r'^[A-Za-z0-9@#%!~]+$');
+  bool isContainsInvalidChars=false;
   void checkValid() {
     final account = _controllerEmail.text;
     isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final code = _controllerCode.text;
     isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
+    bool isValidPassword = passwordRegExp.hasMatch(password);
+    isShowPwTips = password.isNotEmpty && (!isValidPassword || isContainsInvalidChars);
     final againPw = _controllerAgainPw.text;
     isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
@@ -333,7 +336,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 6.w),
                       child: Text(
-                        isShowAgainTips ? '两次输入的密码不一致' : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
+                        isShowPwTips
+                            ? (isContainsInvalidChars
+                            ? '*包含了不允许的字符：仅允许英文字母、数字及特殊字符如 @#%!~'
+                            : '*至少包含一位大小写字母+数字')
+                            : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
                         style: TextStyle(
                           fontSize: 10.sp,
                           color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,

@@ -223,7 +223,7 @@ class SearchScreen extends GetView<SearchController> {
                     ),
                     SizedBox(width: 8.w),
                     Text(
-                      '历史搜索',
+                      '历史记录',
                       style: TextStyle(
                         color: '#333333'.hexColor,
                         fontSize: 14.sp,

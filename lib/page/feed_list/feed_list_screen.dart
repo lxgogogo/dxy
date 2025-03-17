@@ -33,7 +33,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
 
   SuperTooltipController _tipController = SuperTooltipController();
   List<String> filters = [
-    '时间最新',
+    '最近更新',
     '回帖最多',
     '点赞最多',
   ];

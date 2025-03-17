@@ -95,7 +95,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                   Container(
                     height: 32.w,
                     constraints: BoxConstraints(maxWidth: 131.w),
-                    padding: EdgeInsets.only(right: 12.w),
+                    padding: EdgeInsets.only(right: 8.w),
                     decoration: BoxDecoration(
                       color: '#333333'.hexColor.withOpacity(0.05),
                       borderRadius: BorderRadius.circular(16.r),

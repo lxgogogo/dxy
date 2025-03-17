@@ -113,7 +113,6 @@ class MessageChildViewState extends State<MessageChildView> {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      footer: const SpecialClassicFooter(),
       controller: _refreshController,
       scrollController: _listController,
       onRefresh: _onRefresh,

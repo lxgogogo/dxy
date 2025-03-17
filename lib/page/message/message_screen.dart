@@ -105,7 +105,10 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                 controller: tabController,
                 children: types.map((e) => MessageChildView(type: e).keepAlive).toList(),
               ),
-            )
+            ),
+            SizedBox(
+              height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
+            ),
           ],
         ),
       ),

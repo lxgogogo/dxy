@@ -34,7 +34,11 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadBanners() async {
-    await NetRequest().indexBanner({'pos': 'index.banner', 'type': '1'}, showLoading: false, (data) {
+    await NetRequest().indexBanner({
+      'pos': 'index.banner',
+      'type': '1',
+      'version': 202503,
+    }, showLoading: false, (data) {
       banners = List<BannerBean>.from(data.map((banner) => BannerBean.fromJson(banner)));
       safeUpdate();
     });

@@ -35,6 +35,8 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
 
   int pageNum = 1;
   int pageSize = 20;
+  bool noMore = false;
+
   int pageId = 0;
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
@@ -51,6 +53,10 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   }
 
   void _onLoading() async {
+    if (noMore) {
+      _refreshController.loadNoData();
+      return;
+    }
     pageNum++;
     reqListData(showLoading: false);
   }
@@ -88,7 +94,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     super.dispose();
   }
 
-  reqListData({bool showLoading = true}) {
+  reqListData({bool showLoading = true}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -101,20 +107,40 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     }
     params['filters'] = filters;
     //tabIdValue = 0全部板块,不传boardId
-    NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
-      BoardList boardList = BoardList.fromJson(data);
-      if (mounted) {
-        setState(() {
-          if (pageNum == 1) {
-            boardPostList = boardList.list!;
-          } else {
-            boardPostList.addAll(boardList.list!);
-          }
-        });
+    try {
+      int recordsSize = 0;
+      await NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
+        BoardList boardList = BoardList.fromJson(data);
+        recordsSize = boardList.list?.length ?? 0;
+        if (pageNum == 1) {
+          boardPostList.clear();
+        }
+        boardPostList.addAll(boardList.list ?? []);
+      });
+      if (pageNum == 1) {
+        _refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.resetNoData();
+        }
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.loadComplete();
+        }
       }
-      _refreshController.loadComplete();
-      _refreshController.refreshCompleted();
-    });
+    } catch (e){
+      _refreshController.loadFailed();
+    } finally {
+      setState(() {});
+    }
+
   }
 
   Future<void> _onShield(int id) async {

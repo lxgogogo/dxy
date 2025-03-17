@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/comment_publish/comment_publish_screen.dart';
 import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/page/search_tag/search_tag_screen.dart';
@@ -17,29 +16,24 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
-import '../../routes/app_pages.dart';
 import '../../services/index.dart';
 import '../../stores/config_store.dart';
-import '../../utils/app_theme.dart';
 import '../../utils/date_util.dart';
 import '../../widget/circle_image_with_text.dart';
 import '../../widget/feed_more_action.dart';
 import '../../widget/report_sheet.dart';
-import '../mine/login_helper.dart';
 import '../search_tag/widgets/search_tag_child_view.dart';
 
 part 'feed_detail_controller.dart';
@@ -185,47 +179,7 @@ class FeedDetailScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  SizedBox(height: 10.w),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 16.w),
-                                    child: Row(
-                                      children: [
-                                        ClipOval(
-                                            child: LoginHelper()
-                                                .getUserAvatar(UserStore.of.user?.avatar ?? '', 30.w, 30.w)),
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              UserStore.of.checkLogin(() {
-                                                Get.bottomSheet(
-                                                  isScrollControlled: true,
-                                                  enableDrag: false,
-                                                  CommentPublishScreen(
-                                                    relType: NetRequest.COMMENT_TYPE_THREAD,
-                                                    relId: controller.id!,
-                                                  ),
-                                                );
-                                              });
-                                            },
-                                            child: Container(
-                                              height: 30.w,
-                                              margin: EdgeInsets.only(left: 12.w),
-                                              padding: EdgeInsets.only(left: 12.w),
-                                              decoration: BoxDecoration(
-                                                color: '#333333'.hexColor.withOpacity(0.05),
-                                                borderRadius: BorderRadius.circular(15),
-                                              ),
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                '说点什么吧...',
-                                                style: TextStyle(color: '#333333'.hexColor.withOpacity(0.5)),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  SizedBox(height: 16.w),
                                 ],
                               ),
                             ),

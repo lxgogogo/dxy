@@ -11,7 +11,6 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
 
@@ -21,7 +20,6 @@ import '../page/feed_detail/feed_detail_screen.dart';
 import '../page/mine/login_helper.dart';
 import '../utils/toast_utils.dart';
 import 'like_button/like_button.dart';
-import 'like_button/src/like_button.dart';
 
 class FeedDetailBottomView extends StatefulWidget {
   final List<TagModel> tagList;
@@ -65,7 +63,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
             child: Row(
               children: <Widget>[
                 SizedBox(width: 16.w),
-                if (widget.viewParams.relType == NetRequest.COMMENT_TYPE_CONTENT)
+                if (widget.viewParams.relType != NetRequest.COMMENT_TYPE_THREAD)
                   GestureDetector(
                     onTap: () {
                       UserStore.of.checkLogin(() {
@@ -94,74 +92,71 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                     ),
                   )
                 else
-                  GestureDetector(
-                    onTap: _pushComment,
-                    child: Container(
-                      height: 32.w,
-                      constraints: BoxConstraints(maxWidth: 131.w),
-                      padding: EdgeInsets.only(right: 12.w),
-                      decoration: BoxDecoration(
-                        color: '#333333'.hexColor.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ClipOval(
-                            child: LoginHelper().getUserAvatar(widget.viewParams.author?.avatar ?? '', 30.w, 30.w),
-                          ),
-                          Flexible(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 4.w),
-                              child: Text(
-                                widget.viewParams.author?.nickname ?? '',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: '##333333'.hexColor,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                  Container(
+                    height: 32.w,
+                    constraints: BoxConstraints(maxWidth: 131.w),
+                    padding: EdgeInsets.only(right: 12.w),
+                    decoration: BoxDecoration(
+                      color: '#333333'.hexColor.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipOval(
+                          child: LoginHelper().getUserAvatar(widget.viewParams.author?.avatar ?? '', 30.w, 30.w),
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            child: Text(
+                              widget.viewParams.author?.nickname ?? '',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: '##333333'.hexColor,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if ((widget.viewParams.author?.id ?? 0) != 0)
-                            Visibility(
-                              visible: !UserStore.of.isMe(widget.viewParams.author?.id),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 10.w),
-                                  child: widget.viewParams.author?.followed == true
-                                      ? Container(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            '已关注',
-                                            style: TextStyle(
-                                              color: '#557BF6'.hexColor,
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        )
-                                      : Container(
-                                          height: 28.w,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            '+关注',
-                                            style: TextStyle(
-                                              color: '#557BF6'.hexColor,
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                        ),
+                        if ((widget.viewParams.author?.id ?? 0) != 0)
+                          Visibility(
+                            visible: !UserStore.of.isMe(widget.viewParams.author?.id),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(right: 10.w),
+                                child: widget.viewParams.author?.followed == true
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '已关注',
+                                          style: TextStyle(
+                                            color: '#557BF6'.hexColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                ),
+                                      )
+                                    : Container(
+                                        height: 28.w,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          '+关注',
+                                          style: TextStyle(
+                                            color: '#557BF6'.hexColor,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
-                        ],
-                      ),
+                          ),
+                      ],
                     ),
                   ),
                 //  if (widget.viewParams.relType == 'thread')
@@ -347,9 +342,15 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   }
 
   void _toCommentList() {
-    Get.toNamed(Routes.commentList, arguments: {
-      'relId': widget.viewParams.relId!,
-      'relType': widget.viewParams.relType!,
+    UserStore.of.checkLogin(() {
+      Get.bottomSheet(
+        isScrollControlled: true,
+        enableDrag: false,
+        CommentPublishScreen(
+          relType: widget.viewParams.relType!,
+          relId: widget.viewParams.relId!,
+        ),
+      );
     });
   }
 }

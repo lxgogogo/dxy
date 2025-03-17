@@ -58,15 +58,22 @@ class _CommentListScreenState extends State<CommentListScreen> {
             List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
         if (pageNum == 1) {
           comments = dataList;
+          _refreshController.refreshCompleted();
+          _refreshController.loadComplete();
         } else {
           comments.addAll(dataList);
+          if(dataList.isEmpty){
+            _refreshController.loadNoData();
+          }else {
+            _refreshController.loadComplete();
+          }
         }
         commentCountsText = '(${comments.length})';
         loaded = true;
         setState(() {});
       }
-      _refreshController.loadComplete();
-      _refreshController.refreshCompleted();
+
+
     });
   }
 
@@ -86,40 +93,37 @@ class _CommentListScreenState extends State<CommentListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BackgroundContainer(
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              '评论',
-              style: TextStyle(
-                color: const Color(0xff2c2c2c),
-                fontSize: 16.px,
-                fontWeight: FontWeight.w500,
-              ),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            '评论',
+            style: TextStyle(
+              color: const Color(0xff2c2c2c),
+              fontSize: 16.px,
+              fontWeight: FontWeight.w500,
             ),
-            centerTitle: true,
-            leading: IconButton(
-              icon: Image.asset(
-                'assets/images/back.png',
-                width: 22.px,
-                height: 22.px,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Image.asset(
+              'assets/images/back.png',
+              width: 22.px,
+              height: 22.px,
             ),
-            backgroundColor: Colors.transparent,
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           backgroundColor: Colors.transparent,
-          body: content()),
-    );
+        ),
+        backgroundColor: Colors.transparent,
+        body: content());
   }
 
   content() {
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: true,
-      header: const WaterDropHeader(waterDropColor: Color(0xff008EFF)),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,

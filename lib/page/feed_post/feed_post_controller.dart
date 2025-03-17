@@ -20,10 +20,32 @@ class FeedPostController extends GetxController {
 
   final int tagMaxLength = 5;
 
+  bool get isDisable {
+    final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
+      List.castFrom(quillController.document.toDelta().toJson()),
+      ConverterOptions.forEmail(),
+    );
+    final content = converter.convert();
+    final richText = content.replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
+    final pureText = HtmlParseUtil.of.pureText(richText);
+    return currentBord == null ||
+        currentBord?.id == -1 ||
+        titleInput.text.isEmpty ||
+        titleInput.text.length < 5 ||
+        content == '<p><br/></p>' ||
+        pureText.length < 10;
+  }
+
   @override
   void onInit() {
     boardInfoList = Get.arguments as List<BoardInfo>? ?? [];
     super.onInit();
+    titleInput.addListener(() {
+      safeUpdate();
+    });
+    quillController.addListener(() {
+      safeUpdate();
+    });
   }
 
   @override
@@ -42,9 +64,6 @@ class FeedPostController extends GetxController {
     );
     final atList = [];
     converter.renderCustomWith = ((customOp, contextOp) {
-      // if (customOp.insert.type == 'divider') {
-      //   return '<hr/>';
-      // }
       if (customOp.insert.type == 'at') {
         final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
         atList.add(dataMap['id']);
@@ -52,7 +71,9 @@ class FeedPostController extends GetxController {
       }
       return '';
     });
-    final richText = converter.convert().replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
+    final content = converter.convert();
+
+    final richText = content.replaceAllMapped(RegExp(r'\$\$(.*?)\$\$'), (match) => '');
 
     final pureText = HtmlParseUtil.of.pureText(richText);
 
@@ -68,7 +89,11 @@ class FeedPostController extends GetxController {
       return;
     }
 
-    if (richText.isEmpty || richText.length < 10) {
+    if (content == '<p><br/></p>') {
+      ToastUtils.showToast('帖子内容不能为空');
+      return;
+    }
+    if (pureText.length < 10) {
       ToastUtils.showToast('帖子内容长度不能小于10个字符');
       return;
     }
@@ -129,15 +154,17 @@ class FeedPostController extends GetxController {
   }
 
   Future<void> toAddTag() async {
-     await Get.bottomSheet<TagModel?>(
+    await Get.bottomSheet<TagModel?>(
       const TagListScreen(),
       isScrollControlled: true,
     );
   }
-  void addSelectTags(tags){
-      tagList=tags;
-      safeUpdate();
+
+  void addSelectTags(tags) {
+    tagList = tags;
+    safeUpdate();
   }
+
   void removeTag(int index) {
     tagList.removeAt(index);
     safeUpdate();

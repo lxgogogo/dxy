@@ -43,7 +43,41 @@ class FeedPostScreen extends GetView<FeedPostController> {
           child: Scaffold(
             backgroundColor: Colors.white,
             resizeToAvoidBottomInset: true,
-            appBar: CommonAppBar.arrowBack(context, title: '发帖'),
+            appBar: CommonAppBar.arrowBack(
+              context,
+              title: '发帖',
+              actions: [
+                GestureDetector(
+                  onTap: controller.publishPosts,
+                  child: Container(
+                    height: 28.w,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    margin: EdgeInsets.only(right: 16.w),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24.r),
+                      color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.5) : null,
+                      gradient: controller.isDisable
+                          ? null
+                          : LinearGradient(
+                              colors: [
+                                '#84BCF9'.hexColor,
+                                '#557BF6'.hexColor,
+                              ],
+                            ),
+                    ),
+                    child: Text(
+                      '发布',
+                      style: TextStyle(
+                        color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.5) : Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             body: Container(
               margin: EdgeInsets.only(top: 12.w),
               child: Padding(
@@ -338,39 +372,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
             ],
           ),
           buildTagList(controller),
-          pushWidget()
         ],
-      ),
-    );
-  }
-
-  Widget pushWidget() {
-    return GestureDetector(
-      onTap: controller.publishPosts,
-      child: Container(
-        height: 48.w,
-        padding: EdgeInsets.symmetric(horizontal: 12.w),
-        margin: EdgeInsets.only(right: 10.w, top: 20.w, left: 10.w, bottom: 10.w),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.w),
-          gradient: const LinearGradient(
-            begin: Alignment(1.00, 0.00),
-            end: Alignment(-1, 0),
-            colors: [
-              Color(0xFF84BCF9),
-              Color(0xFF557BF6),
-            ],
-          ),
-        ),
-        child: Text(
-          '确定发布',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ),
     );
   }

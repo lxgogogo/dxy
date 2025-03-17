@@ -143,13 +143,11 @@ class _CommentItemState extends State<CommentItem> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        // MediaHelper().imagePerView(
-                        //   context,
-                        //   widget.commentBean.files!
-                        //       .map((e) => e.url ?? '')
-                        //       .toList(),
-                        //   index,
-                        // );
+                        MediaHelper().imagePerView(
+                          context,
+                          widget.commentBean.files?.map((e) => e.url ?? '').toList() ?? [],
+                          index,
+                        );
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),

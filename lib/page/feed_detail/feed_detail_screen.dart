@@ -25,6 +25,7 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
@@ -65,206 +66,188 @@ class FeedDetailScreen extends StatelessWidget {
                 )
               : controller.detailBean == null
                   ? const SizedBox()
-                  : SingleChildScrollView(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 124.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  controller.detailBean?.title ?? '',
-                                  style: TextStyle(
-                                    color: '#333333'.hexColor,
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8.w,
-                              ),
-                              FeedMoreAction(
-                                actions: {
-                                  '屏蔽该内容': () {
-                                    controller
-                                        ._onShield(controller.detailBean!.id!);
-                                  },
-                                  '屏蔽该用户': () {
-                                    controller._onShieldUser(
-                                        controller.detailBean!.user!.id!);
-                                  },
-                                  '举报该内容': () {
-                                    controller._onReport(
-                                        controller.detailBean!.id!,
-                                        controller.detailBean!.user!.id!);
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: (controller.detailBean?.sign
-                                              ?.contains('office') ??
-                                          false)
-                                      ? Text(
-                                          '${DateUtil.formatDateAlias3(
-                                            controller.detailBean!.createdAt!
-                                                .millisecondsSinceEpoch,
-                                              hasHM:true
-                                          )}发布',
-                                          style: TextStyle(
-                                              color: '#333333'.hexColor,
-                                              fontSize: 12),
-                                        )
-                                      : CircleImageWithText(
-                                          imageUrl: (controller.detailBean !=
-                                                      null &&
-                                                  controller.detailBean!.user !=
-                                                      null)
-                                              ? controller
-                                                  .detailBean!.user!.avatar!
-                                              : '',
-                                          imageWidth: 20,
-                                          imageHeight: 20,
-                                          topText: controller
-                                                  .detailBean?.user?.nickname ??
-                                              '',
-                                          topTextStyle: TextStyle(
-                                              color: '#535861'.hexColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600),
-                                          bottomText1: controller
-                                                      .detailBean?.createdAt !=
-                                                  null
-                                              ? '${DateUtil.formatDateAlias3(
-                                                  controller
-                                                      .detailBean!
-                                                      .createdAt!
-                                                      .millisecondsSinceEpoch,
-                                                )}发布'
-                                              : '',
-                                          bottomText1Style: TextStyle(
-                                              color: '#333333'.hexColor,
-                                              fontSize: 12),
-                                          bottomText2: '',
-                                          bottomText2Style: const TextStyle(),
-                                        ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (controller.detailBean?.content?.isNotEmpty ==
-                              true)
-                            HtmlWidget(
-                              controller.detailBean!.content!,
-                              customStylesBuilder: htmlCustomStyles,
-                              factoryBuilder: () => HtmlFactoryBuilder(context,
-                                  content: controller.detailBean!.content!),
-                              customWidgetBuilder: (dom.Element element) {
-                                if (element.localName == 'table') {
-                                  return const SizedBox();
-                                }
-                                // if(element.localName=='p'){
-                                //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7)),);
-                                // }
-                                return null;
-                              },
-                              onTapUrl: (String url) async {
-                                return launchUrlString(url,
-                                    mode: LaunchMode.externalApplication);
-                              },
-                            ),
-                          // _buildMediaView(),
-                          if (controller.detailBean?.tagList?.isNotEmpty ==
-                              true)
-                            TagListView(
-                                tagList: controller.detailBean?.tagList ?? [])
-                          else
-                            SizedBox(height: 16.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(height: 10.w),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 16.w),
-                                child: Row(
-                                  children: [
-                                    ClipOval(
-                                        child: LoginHelper().getUserAvatar(
-                                            UserStore.of.user?.avatar ?? '',
-                                            30.w,
-                                            30.w)),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          UserStore.of.checkLogin(() {
-                                            Get.bottomSheet(
-                                              isScrollControlled: true,
-                                              enableDrag: false,
-                                              CommentPublishScreen(
-                                                relType: NetRequest.COMMENT_TYPE_THREAD,
-                                                relId: controller.id!,
-                                              ),
-                                            );
-                                          });
-                                        },
-                                        child: Container(
-                                          height: 30.w,
-                                          margin: EdgeInsets.only(left: 12.w),
-                                          padding: EdgeInsets.only(left: 12.w),
-                                          decoration: BoxDecoration(
-                                            color: '#333333'
-                                                .hexColor
-                                                .withOpacity(0.05),
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            '说点什么吧...',
-                                            style: TextStyle(
-                                                color: '#333333'
-                                                    .hexColor
-                                                    .withOpacity(0.5)),
-                                          ),
-                                        ),
+                  : Padding(
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 0),
+                      child: SmartRefresher(
+                        enablePullDown: false,
+                        enablePullUp: true,
+                        controller: controller.refreshController,
+                        onLoading: controller.onLoading,
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      controller.detailBean?.title ?? '',
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  FeedMoreAction(
+                                    actions: {
+                                      '屏蔽该内容': () {
+                                        controller._onShield(controller.detailBean!.id!);
+                                      },
+                                      '屏蔽该用户': () {
+                                        controller._onShieldUser(controller.detailBean!.user!.id!);
+                                      },
+                                      '举报该内容': () {
+                                        controller._onReport(
+                                            controller.detailBean!.id!, controller.detailBean!.user!.id!);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.w),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: (controller.detailBean?.sign?.contains('office') ?? false)
+                                          ? Text(
+                                              '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
+                                              style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
+                                            )
+                                          : CircleImageWithText(
+                                              imageUrl:
+                                                  (controller.detailBean != null && controller.detailBean!.user != null)
+                                                      ? controller.detailBean!.user!.avatar!
+                                                      : '',
+                                              imageWidth: 20,
+                                              imageHeight: 20,
+                                              topText: controller.detailBean?.user?.nickname ?? '',
+                                              topTextStyle: TextStyle(
+                                                  color: '#535861'.hexColor, fontSize: 12, fontWeight: FontWeight.w600),
+                                              bottomText1: controller.detailBean?.createdAt != null
+                                                  ? '${DateUtil.formatDateAlias3(
+                                                      controller.detailBean!.createdAt!.millisecondsSinceEpoch,
+                                                    )}发布'
+                                                  : '',
+                                              bottomText1Style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
+                                              bottomText2: '',
+                                              bottomText2Style: const TextStyle(),
+                                            ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              if (controller.comments == null)
-                                const SizedBox()
-                              else if (controller.comments?.isNotEmpty == true)
-                                ...List.generate(controller.comments!.length,
-                                    (index) {
+                            ),
+                            if (controller.detailBean?.content?.isNotEmpty == true)
+                              SliverToBoxAdapter(
+                                child: HtmlWidget(
+                                  controller.detailBean!.content!,
+                                  customStylesBuilder: htmlCustomStyles,
+                                  factoryBuilder: () =>
+                                      HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                                  customWidgetBuilder: (dom.Element element) {
+                                    if (element.localName == 'table') {
+                                      return const SizedBox();
+                                    }
+                                    // if(element.localName=='p'){
+                                    //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7)),);
+                                    // }
+                                    return null;
+                                  },
+                                  onTapUrl: (String url) async {
+                                    return launchUrlString(url, mode: LaunchMode.externalApplication);
+                                  },
+                                ),
+                              ),
+                            if (controller.detailBean?.tagList?.isNotEmpty == true)
+                              SliverToBoxAdapter(
+                                child: TagListView(tagList: controller.detailBean?.tagList ?? []),
+                              )
+                            else
+                              SliverToBoxAdapter(
+                                child: SizedBox(height: 16.w),
+                              ),
+                            SliverToBoxAdapter(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
+                                    style: TextStyle(
+                                      color: '#333333'.hexColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.w),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 16.w),
+                                    child: Row(
+                                      children: [
+                                        ClipOval(
+                                            child: LoginHelper()
+                                                .getUserAvatar(UserStore.of.user?.avatar ?? '', 30.w, 30.w)),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              UserStore.of.checkLogin(() {
+                                                Get.bottomSheet(
+                                                  isScrollControlled: true,
+                                                  enableDrag: false,
+                                                  CommentPublishScreen(
+                                                    relType: NetRequest.COMMENT_TYPE_THREAD,
+                                                    relId: controller.id!,
+                                                  ),
+                                                );
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 30.w,
+                                              margin: EdgeInsets.only(left: 12.w),
+                                              padding: EdgeInsets.only(left: 12.w),
+                                              decoration: BoxDecoration(
+                                                color: '#333333'.hexColor.withOpacity(0.05),
+                                                borderRadius: BorderRadius.circular(15),
+                                              ),
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                '说点什么吧...',
+                                                style: TextStyle(color: '#333333'.hexColor.withOpacity(0.5)),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (controller.comments == null)
+                              const SliverToBoxAdapter()
+                            else if (controller.comments?.isNotEmpty == true)
+                              SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
                                     relType: 'thread',
                                   );
-                                })
-                              else
-                                const Center(
-                                  child: NoCommentView(),
-                                ),
-                            ],
-                          ),
-                        ],
+                                },
+                                childCount: controller.comments!.length,
+                              ))
+                            else
+                              const SliverToBoxAdapter(
+                                child: NoCommentView(),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
           bottomNavigationBar: controller.detailBean != null

@@ -15,6 +15,11 @@ class FeedDetailController extends GetxController {
   bool noNetwork = false;
   late SearchTagChildController searchTagChildController;
 
+  final RefreshController refreshController = RefreshController();
+  int pageNum = 1;
+  int pageSize = 10;
+  bool noMore = false;
+
   @override
   void onInit() async {
     id = Get.arguments as int?;
@@ -64,7 +69,6 @@ class FeedDetailController extends GetxController {
     final success = await NetRequest().shieldUser(id);
     if (success) {
       ToastUtils.showToast('屏蔽成功');
-      ;
     }
   }
 
@@ -107,8 +111,7 @@ class FeedDetailController extends GetxController {
         detailBean = BoardBean.fromJson(data);
         safeUpdate();
         if (detailBean?.files?.isNotEmpty == true) {
-          final videoIndex =
-              detailBean!.files!.indexWhere((e) => e.type == 'video');
+          final videoIndex = detailBean!.files!.indexWhere((e) => e.type == 'video');
           if (videoIndex != -1) {
             final videoUrl = detailBean!.files![videoIndex].url ?? '';
             if (videoUrl.isNotEmpty) {
@@ -117,32 +120,79 @@ class FeedDetailController extends GetxController {
           }
         }
         EventBusUtil.of.fire(EventRefreshNum(
-            SearchTagType.feed, detailBean!.id!,
-            commentCount: detailBean?.commentCount,
-            likeCount: detailBean?.likeCount,
-            favoriteCount: detailBean?.favoriteCount));
+          SearchTagType.feed,
+          detailBean!.id!,
+          commentCount: detailBean?.commentCount,
+          likeCount: detailBean?.likeCount,
+          favoriteCount: detailBean?.favoriteCount,
+        ));
       },
     );
+    onRefresh();
+  }
 
-    NetRequest().commentList(
-      {
-        'pageNum': 1,
-        'pageSize': 10,
-        'filters': {
-          'relType': 'Thread',
-          'relId': id,
+  void onRefresh() async {
+    pageNum = 1;
+    loadComments();
+  }
+
+  void onLoading() async {
+    if (noMore) {
+      refreshController.loadNoData();
+      return;
+    }
+    pageNum++;
+    loadComments();
+  }
+
+  loadComments() async {
+    try {
+      int recordsSize = 0;
+      await NetRequest().commentList(
+        {
+          'pageNum': pageNum,
+          'pageSize': pageSize,
+          'filters': {
+            'relType': 'Thread',
+            'relId': id,
+          },
         },
-      },
-      showLoading: showLoading,
-      (data) {
-        comments = List<CommentBean>.from(
-          data['list'].map(
-            (comment) => CommentBean.fromJson(comment),
-          ),
-        );
-        safeUpdate();
-      },
-    );
+        showLoading: false,
+        (data) {
+          final dataList = List<CommentBean>.from(
+            data['list'].map((comment) => CommentBean.fromJson(comment)),
+          );
+          recordsSize = dataList.length;
+          if (pageNum == 1) {
+            comments = dataList;
+          }
+          comments?.addAll(dataList);
+          safeUpdate();
+        },
+      );
+      if (pageNum == 1) {
+        refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.resetNoData();
+        }
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.loadComplete();
+        }
+      }
+    } catch (e) {
+      refreshController.loadFailed();
+    } finally {
+      safeUpdate();
+    }
   }
 
   Future<void> _startVideoPlayer(String link) async {

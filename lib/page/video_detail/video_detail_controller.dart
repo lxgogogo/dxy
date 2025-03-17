@@ -27,6 +27,11 @@ class VideoDetailController extends GetxController {
 
   final VideoNotifier videoNotifier = VideoNotifier();
 
+  final RefreshController refreshController = RefreshController();
+  int pageNum = 1;
+  int pageSize = 10;
+  bool noMore = false;
+
   @override
   void onInit() {
     id = Get.arguments['id'] as int?;
@@ -73,7 +78,7 @@ class VideoDetailController extends GetxController {
     }
     Future.wait([
       requestDetail(),
-      requestCommentList(),
+      loadComments(),
     ]).whenComplete(() {
       if (showLoading) {
         EasyLoading.dismiss();
@@ -117,22 +122,6 @@ class VideoDetailController extends GetxController {
     );
   }
 
-  Future<void> requestCommentList() async {
-    await NetRequest().commentList(
-      {
-        'pageNum': 1,
-        'pageSize': 10,
-        'filters': {'relType': 'content', 'relId': id}
-      },
-      showLoading: false,
-      (data) {
-        List<CommentBean> dataList =
-            List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
-        comments = dataList;
-        safeUpdate();
-      },
-    );
-  }
 
   void _initController(String link) {
     isInitialize = false;
@@ -202,5 +191,69 @@ class VideoDetailController extends GetxController {
     playVideoIndex = index;
     safeUpdate();
     _startVideoPlayer(detailBean!.videoList![index].sourceUrl ?? '');
+  }
+
+  void onRefresh() async {
+    pageNum = 1;
+    loadComments();
+  }
+
+  void onLoading() async {
+    if (noMore) {
+      refreshController.loadNoData();
+      return;
+    }
+    pageNum++;
+    loadComments();
+  }
+
+  Future<void> loadComments() async {
+    try {
+      int recordsSize = 0;
+      await NetRequest().commentList(
+        {
+          'pageNum': pageNum,
+          'pageSize': pageSize,
+          'filters': {
+            'relType': 'content',
+            'relId': id,
+          },
+        },
+        showLoading: false,
+            (data) {
+          final dataList = List<CommentBean>.from(
+            data['list'].map((comment) => CommentBean.fromJson(comment)),
+          );
+          recordsSize = dataList.length;
+          if (pageNum == 1) {
+            comments = dataList;
+          }
+          comments?.addAll(dataList);
+          safeUpdate();
+        },
+      );
+      if (pageNum == 1) {
+        refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.resetNoData();
+        }
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.loadComplete();
+        }
+      }
+    } catch (e) {
+      refreshController.loadFailed();
+    } finally {
+      safeUpdate();
+    }
   }
 }

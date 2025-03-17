@@ -18,7 +18,6 @@ import 'package:holdem/page/home/widgets/home_nemu_item.dart';
 import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
@@ -102,38 +101,61 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     if (controller.banners.isNotEmpty)
                       SizedBox(
                         height: 272.w,
-                        child: Builder(
-                          builder: (context) {
-                            for (final banner in controller.banners) {
-                              precacheImage(
-                                CachedNetworkImageProvider(banner.imgMobile ?? '', cacheKey: banner.imgMobile ?? ''),
-                                context,
-                              );
-                            }
-                            return SizedBox(
-                              height: 272.w,
-                              child: Swiper(
-                                itemCount: controller.banners.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: controller.banners[index].imgMobile ?? '',
-                                    fadeOutDuration: Duration.zero,
-                                    fadeInDuration: Duration.zero,
-                                    cacheKey: controller.banners[index].imgMobile ?? '',
-                                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(
-                                      fit: BoxFit.fill,
-                                    ),
-                                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
-                                      fit: BoxFit.cover,
-                                    ),
+                        child: Stack(
+                          children: [
+                            Builder(
+                              builder: (context) {
+                                for (final banner in controller.banners) {
+                                  precacheImage(
+                                    CachedNetworkImageProvider(banner.imgMobile ?? '',
+                                        cacheKey: banner.imgMobile ?? ''),
+                                    context,
                                   );
-                                },
-                                autoplay: true,
-                                onIndexChanged: controller.onIndexChanged,
+                                }
+                                return SizedBox(
+                                  height: 272.w,
+                                  child: Swiper(
+                                    itemCount: controller.banners.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl: controller.banners[index].imgMobile ?? '',
+                                        fadeOutDuration: Duration.zero,
+                                        fadeInDuration: Duration.zero,
+                                        cacheKey: controller.banners[index].imgMobile ?? '',
+                                        placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+                                          fit: BoxFit.fill,
+                                        ),
+                                        errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                                    },
+                                    autoplay: true,
+                                    onIndexChanged: controller.onIndexChanged,
+                                  ),
+                                );
+                              },
+                            ),
+                            Positioned.fill(
+                              child: AnimatedOpacity(
+                                opacity: controller.isShowHomeMenu ? 1 : 0,
+                                duration: const Duration(milliseconds: 300),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        '#DCE8FE'.hexColor,
+                                        '#F3F8FF'.hexColor,
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
                       ),
                     SingleChildScrollView(

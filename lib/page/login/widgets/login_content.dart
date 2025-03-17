@@ -252,7 +252,8 @@ class _LoginContentState extends State<LoginContent> {
             title: '登录',
           ),
           SizedBox(height: 24.w),
-          goRegister()
+          goRegister(),
+          SizedBox(height: 24.w),
         ],
       ),
     );

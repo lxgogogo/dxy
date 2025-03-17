@@ -57,13 +57,7 @@ class CountReply extends StatelessWidget {
                 width: 14.w,
               ),
           SizedBox(width: 4.w),
-          Text(
-            '回复',
-            style: TextStyle(
-              color: '#333333'.hexColor.withOpacity(0.7),
-            ),
-          )
-          //  CountText(count: count, usePlaceHolder: usePlaceHolder),
+           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
     );

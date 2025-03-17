@@ -139,7 +139,6 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       ),
                                       maxLines: 1,
                                       inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.deny(RegExp('[\\s]')),
                                         CustomizedLengthTextInputFormatter(10),
                                       ],
                                       decoration: InputDecoration(
@@ -166,6 +165,13 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                           borderRadius: BorderRadius.circular(8.w),
                                         ),
                                       ),
+                                      onChanged: (text) {
+                                        if (text.contains(' ')) {
+                                          String newText = text.replaceAll(' ', '');
+                                          controller.text = newText;
+                                          controller.selection = TextSelection.collapsed(offset: newText.length);
+                                        }
+                                      },
                                     ),
                                   ),
                                 ),

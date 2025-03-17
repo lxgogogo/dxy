@@ -407,7 +407,8 @@ class _RegisterContentState extends State<RegisterContent> {
             title: '注册',
           ),
           SizedBox(height: 24.w),
-          goLogin()
+          goLogin(),
+          SizedBox(height: 24.w),
         ],
       ),
     );

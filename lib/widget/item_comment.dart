@@ -87,9 +87,7 @@ class _CommentItemState extends State<CommentItem> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         BorderAvatar(
-          avatar: widget.commentBean.user != null
-              ? widget.commentBean.user!.avatar!
-              : '',
+          avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : '',
           borderWidth: 0,
         ),
         SizedBox(width: 7.w),
@@ -100,9 +98,7 @@ class _CommentItemState extends State<CommentItem> {
               Row(
                 children: [
                   Text(
-                    widget.commentBean.user != null
-                        ? widget.commentBean.user!.nickname!
-                        : '',
+                    widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
                     style: TextStyle(
                       color: '#333333'.hexColor,
                       fontSize: 12.w,
@@ -113,11 +109,9 @@ class _CommentItemState extends State<CommentItem> {
                   if (showReport)
                     GestureDetector(
                         onTap: () {
-                          if (widget.commentBean.id != null &&
-                              widget.commentBean.user?.id != null) {
+                          if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
                             UserStore.of.checkLogin(() {
-                              _onReport(widget.commentBean.id!,
-                                  widget.commentBean.user!.id!);
+                              _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
                             });
                           }
                         },
@@ -149,25 +143,21 @@ class _CommentItemState extends State<CommentItem> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        MediaHelper().imagePerView(
-                          context,
-                          widget.commentBean.files!
-                              .map((e) => e.url ?? '')
-                              .toList(),
-                          index,
-                        );
+                        // MediaHelper().imagePerView(
+                        //   context,
+                        //   widget.commentBean.files!
+                        //       .map((e) => e.url ?? '')
+                        //       .toList(),
+                        //   index,
+                        // );
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: widget.commentBean.files?[index].url ?? '',
-                          placeholder: (context, url) => Assets
-                              .images.imageLoadingDef
-                              .image(fit: BoxFit.fill),
-                          errorWidget: (context, url, error) => Assets
-                              .images.imageLoadingDef
-                              .image(fit: BoxFit.fill),
+                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                         ),
                       ),
                     );
@@ -178,7 +168,7 @@ class _CommentItemState extends State<CommentItem> {
                 children: [
                   Text(
                     widget.commentBean.createdAt != null
-                        ? '${DateUtil.formatDateAlias3(widget.commentBean.createdAt!.millisecondsSinceEpoch,hasHM: true)}发布'
+                        ? '${DateUtil.formatDateAlias3(widget.commentBean.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布'
                         : '',
                     style: TextStyle(
                       color: const Color(0xff9CACC9),
@@ -188,8 +178,7 @@ class _CommentItemState extends State<CommentItem> {
                   const Spacer(),
                   if (!widget.isReply) ...[
                     CountLikeAni(
-                      count:
-                          widget.commentBean.likeCount?.abbreviateNumber ?? '0',
+                      count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
                       liked: widget.commentBean.liked ?? false,
                       usePlaceHolder: false,
                       likeWidget: widget.commentBean.liked ?? false
@@ -216,9 +205,8 @@ class _CommentItemState extends State<CommentItem> {
                         if (data is int) {
                           widget.commentBean.liked = !widget.commentBean.liked!;
                           int count = widget.commentBean.likeCount!;
-                          widget.commentBean.likeCount =
-                              widget.commentBean.liked! ? count + 1 : count - 1;
-                          if (  widget.commentBean.liked== true) {
+                          widget.commentBean.likeCount = widget.commentBean.liked! ? count + 1 : count - 1;
+                          if (widget.commentBean.liked == true) {
                             ToastUtils.showToast('点赞成功');
                           } else {
                             ToastUtils.showToast('取消点赞成功');
@@ -243,17 +231,36 @@ class _CommentItemState extends State<CommentItem> {
                           );
                         });
                       },
-                      child: CountReply(
-                        count:
-                            widget.commentBean.replyCount?.abbreviateNumber ??
-                                '0',
-                        usePlaceHolder: false,
-                        iconWidget: SvgPicture.asset(
-                          Assets.svg.feedComment,
-                          color: '#333333'.hexColor.withOpacity(0.7),
-                          width: 14.w,
-                        ),
-                      ),
+                      child: (widget.commentBean.replyCount ?? 0) > 0
+                          ? CountReply(
+                              count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
+                              usePlaceHolder: false,
+                              iconWidget: SvgPicture.asset(
+                                Assets.svg.feedComment,
+                                color: '#333333'.hexColor.withOpacity(0.7),
+                                width: 14.w,
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 3.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    Assets.svg.feedComment,
+                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                    width: 14.w,
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Text(
+                                    '回复',
+                                    style: TextStyle(
+                                      color: '#333333'.hexColor.withOpacity(0.7),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                     ),
                   ],
                 ],
@@ -281,8 +288,7 @@ class _CommentItemState extends State<CommentItem> {
                               SizedBox(width: 7.w),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
                                     Row(
                                       children: [
@@ -298,24 +304,16 @@ class _CommentItemState extends State<CommentItem> {
                                         if (showReplyReport)
                                           GestureDetector(
                                               onTap: () {
-                                                if (widget.commentBean.id !=
-                                                        null &&
-                                                    widget.commentBean.user
-                                                            ?.id !=
-                                                        null) {
+                                                if (widget.commentBean.id != null &&
+                                                    widget.commentBean.user?.id != null) {
                                                   UserStore.of.checkLogin(() {
-                                                    _onReport(
-                                                        widget.commentBean.id!,
-                                                        widget.commentBean.user!
-                                                            .id!);
+                                                    _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
                                                   });
                                                 }
                                               },
                                               child: Icon(
                                                 Icons.more_horiz,
-                                                color: '#333333'
-                                                    .hexColor
-                                                    .withOpacity(0.7),
+                                                color: '#333333'.hexColor.withOpacity(0.7),
                                               )),
                                       ],
                                     ),
@@ -323,8 +321,7 @@ class _CommentItemState extends State<CommentItem> {
                                     HtmlWidget(
                                       reply.contentStr ?? '',
                                       textStyle: TextStyle(
-                                        color:
-                                            '#333333'.hexColor.withOpacity(0.7),
+                                        color: '#333333'.hexColor.withOpacity(0.7),
                                         fontSize: 12.sp,
                                       ),
                                     ),
@@ -342,44 +339,35 @@ class _CommentItemState extends State<CommentItem> {
                                         ),
                                         const Spacer(),
                                         CountLikeAni(
-                                          count:
-                                              reply.likeCount.abbreviateNumber,
+                                          count: reply.likeCount.abbreviateNumber,
                                           liked: reply.liked ?? false,
                                           likeWidget: reply.liked ?? false
                                               ? Container(
                                                   padding: EdgeInsets.all(5.w),
                                                   child: SvgPicture.asset(
                                                     Assets.svg.liked,
-                                                    color: '#567BF6'
-                                                        .hexColor
-                                                        .withOpacity(0.7),
+                                                    color: '#567BF6'.hexColor.withOpacity(0.7),
                                                   ),
                                                 )
                                               : Container(
                                                   padding: EdgeInsets.all(5.w),
                                                   child: SvgPicture.asset(
                                                     Assets.svg.like,
-                                                    color: '#333333'
-                                                        .hexColor
-                                                        .withOpacity(0.7),
+                                                    color: '#333333'.hexColor.withOpacity(0.7),
                                                   ),
                                                 ),
                                           usePlaceHolder: false,
                                           onToggleLike: () async {
-                                            final data = await NetRequest()
-                                                .newContentLike({
+                                            final data = await NetRequest().newContentLike({
                                               'relType': 'comment',
                                               'relId': reply.id!,
-                                              'state':
-                                                  reply.liked! ? false : true
+                                              'state': reply.liked! ? false : true
                                             });
                                             if (data is int) {
                                               reply.liked = !reply.liked!;
                                               int count = reply.likeCount!;
-                                              reply.likeCount = reply.liked!
-                                                  ? count + 1
-                                                  : count - 1;
-                                              if (reply.liked== true) {
+                                              reply.likeCount = reply.liked! ? count + 1 : count - 1;
+                                              if (reply.liked == true) {
                                                 ToastUtils.showToast('点赞成功');
                                               } else {
                                                 ToastUtils.showToast('取消点赞成功');
@@ -405,8 +393,7 @@ class _CommentItemState extends State<CommentItem> {
                         margin: EdgeInsets.only(left: 30.w, top: 10.w),
                         child: Row(
                           children: [
-                            if ((widget.commentBean.replyCount ?? 0) >
-                                (widget.commentBean.replies?.length ?? 0)) ...[
+                            if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
                               GestureDetector(
                                 onTap: () {
                                   getReplyList();
@@ -432,9 +419,7 @@ class _CommentItemState extends State<CommentItem> {
                               GestureDetector(
                                 onTap: () {
                                   pageNum = 1;
-                                  widget.commentBean.replies = List.of(
-                                      widget.commentBean.replies?.take(2) ??
-                                          []);
+                                  widget.commentBean.replies = List.of(widget.commentBean.replies?.take(2) ?? []);
                                   setState(() {});
                                 },
                                 child: Container(
@@ -535,10 +520,8 @@ class BorderAvatar extends StatelessWidget {
           // cacheKey: avatar,
           // memCacheWidth: avatarSize.toInt(),
           // memCacheHeight: avatarSize.toInt(),
-          placeholder: (context, url) =>
-              Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-          errorWidget: (context, url, error) =>
-              Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
         ),
       ),
     );

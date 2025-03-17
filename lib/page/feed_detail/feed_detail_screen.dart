@@ -67,10 +67,10 @@ class FeedDetailScreen extends StatelessWidget {
               : controller.detailBean == null
                   ? const SizedBox()
                   : Padding(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 0),
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 8.w),
                       child: SmartRefresher(
                         enablePullDown: false,
-                        enablePullUp: true,
+                        enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
                         controller: controller.refreshController,
                         onLoading: controller.onLoading,
                         child: CustomScrollView(

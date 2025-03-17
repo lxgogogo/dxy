@@ -12,6 +12,11 @@ class ArticleDetailController extends GetxController {
 
   bool noNetwork = false;
 
+  final RefreshController refreshController = RefreshController();
+  int pageNum = 1;
+  int pageSize = 10;
+  bool noMore = false;
+
   @override
   void onInit() {
     id = Get.arguments as int?;
@@ -59,15 +64,70 @@ class ArticleDetailController extends GetxController {
       loaded = true;
       safeUpdate();
     });
+    onRefresh();
+  }
 
-    NetRequest().commentList({
-      'pageNum': 1,
-      'pageSize': 10,
-      'filters': {'relType': 'content', 'relId': id}
-    }, showLoading: showLoading, (data) {
-      List<CommentBean> dataList = List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
-      comments = dataList;
+  void onRefresh() async {
+    pageNum = 1;
+    loadComments();
+  }
+
+  void onLoading() async {
+    if (noMore) {
+      refreshController.loadNoData();
+      return;
+    }
+    pageNum++;
+    loadComments();
+  }
+
+  loadComments() async {
+    try {
+      int recordsSize = 0;
+      await NetRequest().commentList(
+        {
+          'pageNum': pageNum,
+          'pageSize': pageSize,
+          'filters': {
+            'relType': 'content',
+            'relId': id,
+          },
+        },
+        showLoading: false,
+        (data) {
+          final dataList = List<CommentBean>.from(
+            data['list'].map((comment) => CommentBean.fromJson(comment)),
+          );
+          recordsSize = dataList.length;
+          if (pageNum == 1) {
+            comments = dataList;
+          }
+          comments?.addAll(dataList);
+          safeUpdate();
+        },
+      );
+      if (pageNum == 1) {
+        refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.resetNoData();
+        }
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.loadComplete();
+        }
+      }
+    } catch (e) {
+      refreshController.loadFailed();
+    } finally {
       safeUpdate();
-    });
+    }
   }
 }

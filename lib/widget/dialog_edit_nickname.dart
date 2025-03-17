@@ -139,7 +139,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       ),
                                       maxLines: 1,
                                       inputFormatters: <TextInputFormatter>[
-                                        CustomizedLengthTextInputFormatter(10),
+                                        NickNameCustomizedLengthTextInputFormatter(10),
                                       ],
                                       decoration: InputDecoration(
                                         contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -180,7 +180,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                     valueListenable: _textLength,
                                     builder: (BuildContext context, int value, Widget? child) {
                                       return Text(
-                                        '${controller.text.characters.length}/10',
+                                        '${controller.text.length}/10',
                                         style: TextStyle(
                                           color: '#333333'.hexColor,
                                           fontSize: 12.w,

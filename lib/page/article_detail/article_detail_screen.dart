@@ -21,7 +21,9 @@ import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
+import 'package:holdem/widget/special_classic_footer.dart';
 import 'package:html/dom.dart' as dom;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/date_util.dart';
@@ -50,75 +52,88 @@ class ArticleDetailScreen extends StatelessWidget {
                 )
               : controller.detailBean == null
                   ? const SizedBox()
-                  : SingleChildScrollView(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 18.w, 124.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            controller.detailBean?.title ?? '',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 8.w),
-                          Text(
-                            '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM:true )}发布',
-                            style: TextStyle(
-                                color: '#333333'.hexColor, fontSize: 12),
-                          ),
-                          SizedBox(height: 5.w),
-                          if (controller.detailBean?.article?.content?.isNotEmpty == true)
-                            HtmlWidget(
-                              controller.detailBean!.article!.content!,
-                              customStylesBuilder: htmlCustomStyles,
-                              factoryBuilder: () => HtmlFactoryBuilder(
-                                context,
-                                content: controller.detailBean!.article!.content!,
+                  : Padding(
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 8.w),
+                      child: SmartRefresher(
+                        enablePullDown: false,
+                        enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
+                        controller: controller.refreshController,
+                        onLoading: controller.onLoading,
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    controller.detailBean?.title ?? '',
+                                    style: TextStyle(
+                                      color: '#333333'.hexColor,
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.w),
+                                  Text(
+                                    '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
+                                    style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
+                                  ),
+                                  SizedBox(height: 5.w),
+                                  if (controller.detailBean?.article?.content?.isNotEmpty == true)
+                                    HtmlWidget(
+                                      controller.detailBean!.article!.content!,
+                                      customStylesBuilder: htmlCustomStyles,
+                                      factoryBuilder: () => HtmlFactoryBuilder(
+                                        context,
+                                        content: controller.detailBean!.article!.content!,
+                                      ),
+                                      customWidgetBuilder: (dom.Element element) {
+                                        if (element.localName == 'table') {
+                                          return const SizedBox();
+                                        }
+                                        return null;
+                                      },
+                                      onTapUrl: (String url) async {
+                                        return launchUrlString(url, mode: LaunchMode.externalApplication);
+                                      },
+                                    ),
+                                  if (controller.detailBean?.tagList?.isNotEmpty == true)
+                                    TagListView(tagList: controller.detailBean?.tagList ?? [])
+                                  else
+                                    SizedBox(height: 16.w),
+                                  Text(
+                                    '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
+                                    style: TextStyle(
+                                      color: '#333333'.hexColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 16.w),
+                                ],
                               ),
-                              customWidgetBuilder: (dom.Element element) {
-                                if (element.localName == 'table') {
-                                  return const SizedBox();
-                                }
-                                return null;
-                              },
-                              onTapUrl: (String url) async {
-                                return launchUrlString(url, mode: LaunchMode.externalApplication);
-                              },
                             ),
-                          if (controller.detailBean?.tagList?.isNotEmpty == true)
-                            TagListView(tagList: controller.detailBean?.tagList ?? [])
-                          else
-                            SizedBox(height: 16.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(height: 16.w),
-                              if (controller.comments == null)
-                                const SizedBox()
-                              else if (controller.comments?.isNotEmpty == true)
-                                ...List.generate(controller.comments?.length ?? 0, (index) {
+                            if (controller.comments == null)
+                              const SliverToBoxAdapter()
+                            else if (controller.comments?.isNotEmpty == true)
+                              SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
                                   );
-                                })
-                              else
-                                const Center(
-                                  child: NoCommentView(),
-                                ),
-                            ],
-                          ),
-                        ],
+                                },
+                                childCount: controller.comments!.length,
+                              ))
+                            else
+                              const SliverToBoxAdapter(
+                                child: NoCommentView(),
+                              ),
+                            SliverToBoxAdapter(
+                              child: SizedBox(height: 86.w),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
           bottomNavigationBar: controller.detailBean != null

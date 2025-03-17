@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/comment_list.dart';
-import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/background_container.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -26,6 +25,8 @@ class CommentListScreen extends StatefulWidget {
 class _CommentListScreenState extends State<CommentListScreen> {
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   int pageNum = 1;
+  int pageSize = 20;
+  bool noMore = false;
   List<CommentBean> comments = [];
   bool loaded = false;
   String commentCountsText = '';
@@ -47,47 +48,62 @@ class _CommentListScreenState extends State<CommentListScreen> {
     super.dispose();
   }
 
-  reqListData() {
-    NetRequest().commentList({
-      'pageNum': pageNum,
-      'pageSize': 10,
-      'filters': {'relType': widget.relType, 'relId': widget.relId}
-    }, (data) {
-      if (mounted) {
-        List<CommentBean> dataList =
-            List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
-        if (pageNum == 1) {
-          comments = dataList;
-          _refreshController.refreshCompleted();
-          _refreshController.loadComplete();
-        } else {
+  reqListData() async {
+    try {
+      int recordsSize = 0;
+      await NetRequest().commentList({
+        'pageNum': pageNum,
+        'pageSize': pageSize,
+        'filters': {'relType': widget.relType, 'relId': widget.relId}
+      }, (data) {
+        if (mounted) {
+          List<CommentBean> dataList =
+              List<CommentBean>.from(data['list'].map((comment) => CommentBean.fromJson(comment)));
+          recordsSize = dataList.length;
+          if (pageNum == 1) {
+            comments.clear();
+          }
           comments.addAll(dataList);
-          if(dataList.isEmpty){
+          commentCountsText = '(${comments.length})';
+        }
+        if (pageNum == 1) {
+          _refreshController.refreshCompleted();
+          if (recordsSize < pageSize) {
+            noMore = true;
             _refreshController.loadNoData();
-          }else {
+          } else {
+            noMore = false;
+            _refreshController.resetNoData();
+          }
+        } else {
+          if (recordsSize < pageSize) {
+            noMore = true;
+            _refreshController.loadNoData();
+          } else {
+            noMore = false;
             _refreshController.loadComplete();
           }
         }
-        commentCountsText = '(${comments.length})';
-        loaded = true;
-        setState(() {});
-      }
-
-
-    });
+      });
+    } catch (e) {
+      _refreshController.loadFailed();
+    } finally {
+      loaded = true;
+      setState(() {});
+    }
   }
 
   void _onRefresh() async {
-    setState(() {
-      pageNum = 1;
-    });
+    pageNum = 1;
     reqListData();
   }
 
   void _onLoading() async {
-    setState(() {
-      pageNum++;
-    });
+    if (noMore) {
+      _refreshController.loadNoData();
+      return;
+    }
+    pageNum++;
     reqListData();
   }
 

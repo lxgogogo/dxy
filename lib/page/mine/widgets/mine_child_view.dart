@@ -1,42 +1,24 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:holdem/extensions/num_extensions.dart';
-import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/mine/widgets/mine_collect_item.dart';
 import 'package:holdem/page/mine/widgets/mine_comment_item.dart';
-import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/html_parse_util.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/at_text.dart';
-import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/dialog_common.dart';
-import 'package:holdem/widget/dialog_confirm.dart';
-import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/my_item_feed.dart';
-import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/board_list.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
-import '../../../model/user.dart';
 import '../../../utils/net_request.dart';
-import '../../../widget/item_feed.dart';
 import '../../../widget/no_data.dart';
 import '../../../widget/special_classic_footer.dart';
-import '../login_helper.dart';
 
 class MineChildView extends StatefulWidget {
   final int tabIndex;
@@ -49,8 +31,8 @@ class MineChildView extends StatefulWidget {
 
 class _MineChildViewState extends State<MineChildView> with TickerProviderStateMixin {
   int pageNum = 1;
-  int pageSize = 10;
-
+  int pageSize = 20;
+  bool noMore = false;
   bool _isMounted = false;
 
   List<BoardBean> boardPostList = [];
@@ -61,92 +43,76 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
 
   bool loaded = false;
 
-  reqListData({bool showLoading = true}) {
-    if (widget.tabIndex == 0) {
-      Map<String, dynamic> params = {};
-      params['pageNum'] = pageNum;
-      params['pageSize'] = pageSize;
-      params['ordered'] = NetRequest.BOARD_SORT_TIME;
+  reqListData({bool showLoading = true}) async {
+    int recordsSize = 0;
+    try {
+      if (widget.tabIndex == 0) {
+        Map<String, dynamic> params = {};
+        params['pageNum'] = pageNum;
+        params['pageSize'] = pageSize;
+        params['ordered'] = NetRequest.BOARD_SORT_TIME;
 
-      Map<String, dynamic> filters = {};
-      var ownerId = UserStore.of.user?.id;
-      filters['ownerId'] = ownerId;
-      params['filters'] = filters;
-      NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
-        BoardList boardList = BoardList.fromJson(data);
-        if (_isMounted) {
-          final total = boardList.pager?.total ?? 0;
+        Map<String, dynamic> filters = {};
+        var ownerId = UserStore.of.user?.id;
+        filters['ownerId'] = ownerId;
+        params['filters'] = filters;
+        await NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
+          BoardList dataList = BoardList.fromJson(data);
+          recordsSize = (dataList.list ?? []).length;
           if (pageNum == 1) {
-            boardPostList = boardList.list!;
-            _refreshController.refreshCompleted();
-            _refreshController.loadComplete();
-            // if (boardPostList.length >= total) {
-            //   _refreshController.loadNoData();
-            // } else {
-            //   _refreshController.resetNoData();
-            // }
-          } else {
-
-            if (boardList.list?.isEmpty??true) {
-              _refreshController.loadNoData();
-            } else {
-              boardPostList.addAll(boardList.list!);
-              _refreshController.loadComplete();
-            }
+            boardPostList.clear();
           }
-          loaded = true;
-          setState(() {});
-        }
-      });
-    } else if (widget.tabIndex == 1) {
-      //收藏
-      NetRequest().userFavoriteList(pageNum, pageSize, '', showLoading: showLoading, (data) {
-        CollectPageModel collectPageModel = CollectPageModel.fromJson(data);
-        if (_isMounted) {
-          final total = collectPageModel.pager?.total ?? 0;
+          boardPostList.addAll(dataList.list ?? []);
+        });
+      } else if (widget.tabIndex == 1) {
+        //收藏
+        await NetRequest().userFavoriteList(pageNum, pageSize, '', showLoading: showLoading, (data) {
+          CollectPageModel dataList = CollectPageModel.fromJson(data);
+          recordsSize = (dataList.list ?? []).length;
           if (pageNum == 1) {
-            collectList = collectPageModel.list!;
-
-            _refreshController.refreshCompleted();
-            _refreshController.loadComplete();
-          } else {
-            if (collectPageModel.list?.isEmpty??true) {
-              _refreshController.loadNoData();
-            } else {
-              collectList.addAll(collectPageModel.list!);
-              _refreshController.loadComplete();
-            }
+            collectList.clear();
           }
-          loaded = true;
-          setState(() {});
-        }
-      });
-    } else if (widget.tabIndex == 2) {
-      //评论
-      NetRequest().userCommentList(pageNum, pageSize, '', showLoading: showLoading, (data) {
-        CommentList commentList = CommentList.fromJson(data);
-        if (_isMounted) {
-          final total = commentList.pager?.total ?? 0;
+          collectList.addAll(dataList.list ?? []);
+        });
+      } else if (widget.tabIndex == 2) {
+        //评论
+        await NetRequest().userCommentList(pageNum, pageSize, '', showLoading: showLoading, (data) {
+          CommentList dataList = CommentList.fromJson(data);
+          recordsSize = (dataList.list ?? []).length;
           if (pageNum == 1) {
-            commentDataList = commentList.list!;
-            _refreshController.refreshCompleted();
-            if (commentDataList.length >= total) {
-              _refreshController.loadNoData();
-            } else {
-              _refreshController.resetNoData();
-            }
-          } else {
-            commentDataList.addAll(commentList.list!);
-            if (commentDataList.length >= total) {
-              _refreshController.loadNoData();
-            } else {
-              _refreshController.loadComplete();
-            }
+            commentDataList.clear();
           }
-          loaded = true;
-          setState(() {});
+          commentDataList.addAll(dataList.list ?? []);
+        });
+      }
+      if (pageNum == 1) {
+        _refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.resetNoData();
         }
-      });
+      } else {
+        if (recordsSize < pageSize) {
+          noMore = true;
+          _refreshController.loadNoData();
+        } else {
+          noMore = false;
+          _refreshController.loadComplete();
+        }
+      }
+    } catch (e) {
+      _refreshController.loadFailed();
+    } finally {
+      loaded = true;
+      if (pageNum == 1) {
+        if (_listController.hasClients) {
+          _listController.jumpTo(0);
+        }
+      }
+      setState(() {});
     }
   }
 
@@ -156,6 +122,10 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
   }
 
   void _onLoading() async {
+    if (noMore) {
+      _refreshController.loadNoData();
+      return;
+    }
     pageNum++;
     reqListData(showLoading: false);
   }
@@ -198,16 +168,13 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
             controller: _refreshController,
             onRefresh: _onRefresh,
             onLoading: _onLoading,
-            footer: const SpecialClassicFooter(),
             child: loaded &&
                     (widget.tabIndex == 0
                         ? boardPostList.isEmpty
                         : widget.tabIndex == 1
                             ? collectList.isEmpty
                             : commentDataList.isEmpty)
-                ? Container(
-                  height: constraints.maxHeight*0.6,
-                child: const NoDataView())
+                ? Container(height: constraints.maxHeight * 0.6, child: const NoDataView())
                 : ListView.builder(
                     itemBuilder: (c, i) {
                       return Slidable(
@@ -230,29 +197,27 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                         : widget.tabIndex == 1
                                             ? '删除收藏'
                                             : '删除评论',
-                                    content:widget.tabIndex == 0
+                                    content: widget.tabIndex == 0
                                         ? '确定要删除这个帖子吗？'
                                         : widget.tabIndex == 1
-                                        ? '确定要删除这个收藏吗？'
-                                        : '确定要删除这个评论吗？',
+                                            ? '确定要删除这个收藏吗？'
+                                            : '确定要删除这个评论吗？',
                                     confirmText: '确认删除',
-                                    onConfirm: (){
+                                    onConfirm: () {
                                       if (widget.tabIndex == 0) {
                                         NetRequest().threadDelete(boardPostList[i].id, (data) {
                                           if (_isMounted) {
                                             ToastUtils.showToast('删除成功');
                                             boardPostList.removeAt(i);
-                                            setState(() {
-                                            });
+                                            setState(() {});
                                           }
                                         });
                                       } else if (widget.tabIndex == 1) {
                                         NetRequest().favoriteDelete(collectList[i].id, (data) {
                                           if (_isMounted) {
                                             ToastUtils.showToast('删除成功');
-                                           collectList.removeAt(i);
-                                            setState(() {
-                                            });
+                                            collectList.removeAt(i);
+                                            setState(() {});
                                           }
                                         });
                                       } else if (widget.tabIndex == 2) {
@@ -260,8 +225,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                           if (_isMounted) {
                                             ToastUtils.showToast('删除成功');
                                             commentDataList.removeAt(i);
-                                            setState(() {
-                                            });
+                                            setState(() {});
                                           }
                                         });
                                       }

@@ -185,6 +185,9 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
+                          ),
                         ],
                       ),
                     ),

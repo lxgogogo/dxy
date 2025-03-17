@@ -148,7 +148,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
       }
       if (recordsSize < pageSize) {
         noMore = true;
-        if(pageNum==1&&recordsSize==0){
+        if(pageNum==1){
           refreshController.refreshCompleted();
         }else {
           refreshController.loadNoData();

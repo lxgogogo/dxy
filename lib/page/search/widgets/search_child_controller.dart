@@ -108,16 +108,23 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
         //   break;
 
       }
-      if (recordsSize < pageSize) {
-        noMore = true;
-        if(pageNum==1&&recordsSize==0){
-          refreshController.refreshCompleted();
-        }else {
+      if (pageNum == 1) {
+        refreshController.refreshCompleted();
+        if (recordsSize < pageSize) {
+          noMore = true;
           refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.resetNoData();
         }
       } else {
-        noMore = false;
-        refreshController.loadComplete();
+        if (recordsSize < pageSize) {
+          noMore = true;
+          refreshController.loadNoData();
+        } else {
+          noMore = false;
+          refreshController.loadComplete();
+        }
       }
     } catch (e) {
       refreshController.loadFailed();

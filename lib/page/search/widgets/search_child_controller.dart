@@ -5,6 +5,25 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
 
   SearchChildController(this.type);
 
+  List<dynamic> get items {
+    switch (type) {
+    // case SearchType.news:
+    //   return _buildNewsView(controller);
+      case SearchType.video:
+        return articles;
+      case SearchType.book:
+        return articles;
+      case SearchType.course:
+        return courses;
+      case SearchType.tag:
+        return tagItems;
+      case SearchType.user:
+        return userItems;
+    // case SearchType.competition:
+    //   return _buildCompetitionView(controller);
+    }
+  }
+
   List<ArticleBean> articles = [];
   List<CollectBean> courses = [];
   List<UserProfile> userItems = [];

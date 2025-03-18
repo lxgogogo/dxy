@@ -203,6 +203,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                             : '确定要删除这个评论吗？',
                                     confirmText: '确认删除',
                                     onConfirm: () {
+                                      Navigator.of(context).pop();
                                       if (widget.tabIndex == 0) {
                                         NetRequest().threadDelete(boardPostList[i].id, (data) {
                                           if (_isMounted) {

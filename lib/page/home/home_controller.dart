@@ -1,6 +1,6 @@
 part of 'home_screen.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
 
   List<BannerBean> banners = [];
@@ -12,6 +12,18 @@ class HomeController extends GetxController {
   bool isShowHomeMenu = false;
 
   int bannerIndex = 0;
+
+  bool isHotVideosLoading = false;
+  late AnimationController animationController;
+
+  @override
+  void onInit() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+    super.onInit();
+  }
 
   @override
   void onReady() {
@@ -33,6 +45,12 @@ class HomeController extends GetxController {
         scrollController.jumpTo(0);
       }
     });
+  }
+
+  @override
+  void onClose() {
+    animationController.dispose();
+    super.onClose();
   }
 
   Future<void> loadBanners() async {
@@ -69,6 +87,10 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadHotVideos() async {
+    if (isHotVideosLoading) return;
+    isHotVideosLoading = true;
+    safeUpdate();
+    animationController.repeat();
     final params = {
       "id": [0, 0, 0, 0],
       "size": 4
@@ -77,20 +99,25 @@ class HomeController extends GetxController {
       params['id'] = hotVideos.map((e) => e.id).toList();
       params['size'] = hotVideos.length;
     }
-    await NetRequest().hotVideo(
-      params,
-      showLoading: false,
-      (data) {
-        final items = List<VideoBean>.from(
-          data.map((article) => VideoBean.fromMap(article)),
-        );
-
-        if (items.isNotEmpty) {
-          hotVideos.assignAll(items);
-          safeUpdate();
-        }
-      },
-    );
+    await Future.wait([
+      NetRequest().hotVideo(
+        params,
+        showLoading: false,
+        (data) {
+          final items = List<VideoBean>.from(
+            data.map((article) => VideoBean.fromMap(article)),
+          );
+          if (items.isNotEmpty) {
+            hotVideos.assignAll(items);
+          }
+        },
+      ),
+      Future.delayed(const Duration(milliseconds: 500)),
+    ]).whenComplete(() {
+      isHotVideosLoading = false;
+      safeUpdate();
+      animationController.stop();
+    });
   }
 
   void toVideoList() {

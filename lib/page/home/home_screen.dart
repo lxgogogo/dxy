@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -232,9 +233,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     HomeTitle(
                                       title: '热门视频',
                                       subtitle: GestureDetector(
-                                        onTap: () {
-                                          controller.loadHotVideos();
-                                        },
+                                        onTap: controller.loadHotVideos,
                                         child: Row(
                                           children: [
                                             Text(
@@ -245,10 +244,20 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                               ),
                                             ),
                                             SizedBox(width: 3.w),
-                                            SvgPicture.asset(
-                                              Assets.svg.iconRefresh,
-                                              width: 12.w,
-                                              height: 12.w,
+                                            AnimatedBuilder(
+                                              animation: controller.animationController,
+                                              builder: (context, child) {
+                                                return Transform.rotate(
+                                                  angle: controller.isHotVideosLoading
+                                                      ? controller.animationController.value * 2 * pi
+                                                      : 0,
+                                                  child: SvgPicture.asset(
+                                                    Assets.svg.iconRefresh,
+                                                    width: 12.w,
+                                                    height: 12.w,
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ],
                                         ),

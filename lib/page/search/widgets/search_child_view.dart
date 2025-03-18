@@ -45,7 +45,7 @@ class SearchChildView extends GetView<SearchChildView> {
       builder: (controller) {
         return SmartRefresher(
           enablePullDown: false,
-          enablePullUp: true,
+          enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
           controller: controller.refreshController,
           scrollController: controller.scrollController,
           onLoading: controller.onLoading,
@@ -82,7 +82,7 @@ class SearchChildView extends GetView<SearchChildView> {
             itemBuilder: (context, index) => CompetitionItem(item: controller.competitionItems[index]),
             itemCount: controller.competitionItems.length,
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 
   Widget _buildTagView(SearchChildController controller) {
@@ -148,7 +148,7 @@ class SearchChildView extends GetView<SearchChildView> {
             separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.tagItems.length,
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 
   Widget _buildUserView(SearchChildController controller) {
@@ -207,7 +207,7 @@ class SearchChildView extends GetView<SearchChildView> {
             itemCount: controller.userItems.length,
             separatorBuilder: (_, __) => SizedBox(height: 16.w),
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 
   Widget _buildCourseView(SearchChildController controller) {
@@ -244,7 +244,7 @@ class SearchChildView extends GetView<SearchChildView> {
             separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.courses.length,
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 
   Widget _buildBookView(SearchChildController controller) {
@@ -269,7 +269,7 @@ class SearchChildView extends GetView<SearchChildView> {
               },
             ),
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 
   Widget _buildVideoView(SearchChildController controller) {
@@ -301,7 +301,7 @@ class SearchChildView extends GetView<SearchChildView> {
           //     itemCount: controller.articles.length,
           //     itemBuilder: (c, i) => VideoItem(item: controller.articles[i]),
           //   )
-          : const NoDataView(),
+          : const Center(child: NoDataView()),
     );
   }
 
@@ -313,6 +313,6 @@ class SearchChildView extends GetView<SearchChildView> {
             separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.articles.length,
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 }

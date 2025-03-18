@@ -13,11 +13,14 @@ class VideoDetailController extends GetxController {
 
   StreamSubscription? _eventSubscription;
 
-  final autoScrollController = AutoScrollController(axis: Axis.horizontal);
+  final autoScrollController = AutoScrollController(
+    axis: Axis.horizontal,
+    suggestedRowHeight: 148.w,
+  );
 
   String get shareLink {
     String shareUrlSuffix = '';
-    if (detailBean?.type == 'videoList'&&(detailBean?.videoList?.isNotEmpty??false)) {
+    if (detailBean?.type == 'videoList' && (detailBean?.videoList?.isNotEmpty ?? false)) {
       shareUrlSuffix = '?id=${detailBean?.videoList?[playVideoIndex].id}';
     }
     return 'details/${detailBean?.type}-$id$shareUrlSuffix';
@@ -105,7 +108,11 @@ class VideoDetailController extends GetxController {
               final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
               if (index != -1) {
                 playVideoIndex = index;
-                autoScrollController.scrollToIndex(playVideoIndex, preferPosition: AutoScrollPosition.end);
+                autoScrollController.scrollToIndex(
+                  playVideoIndex,
+                  duration: const Duration(microseconds: 1),
+                  preferPosition: AutoScrollPosition.end,
+                );
               }
             }
             _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
@@ -113,15 +120,13 @@ class VideoDetailController extends GetxController {
             _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           }
         }
-        EventBusUtil.of.fire(EventRefreshNum(
-            SearchTagType.video, detailBean!.id!,
+        EventBusUtil.of.fire(EventRefreshNum(SearchTagType.video, detailBean!.id!,
             commentCount: detailBean?.commentCount,
             likeCount: detailBean?.likeCount,
             favoriteCount: detailBean?.favoriteCount));
       },
     );
   }
-
 
   void _initController(String link) {
     isInitialize = false;
@@ -145,7 +150,11 @@ class VideoDetailController extends GetxController {
       } else {
         playVideoIndex += 1;
       }
-      autoScrollController.scrollToIndex(playVideoIndex, preferPosition: AutoScrollPosition.end);
+      autoScrollController.scrollToIndex(
+        playVideoIndex,
+        duration: const Duration(microseconds: 1),
+        preferPosition: AutoScrollPosition.end,
+      );
       safeUpdate();
       _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
     }
@@ -187,7 +196,11 @@ class VideoDetailController extends GetxController {
 
   Future<void> selectVide(int index) async {
     if (playVideoIndex == index) return;
-    autoScrollController.scrollToIndex(index, preferPosition: AutoScrollPosition.end);
+    autoScrollController.scrollToIndex(
+      index,
+      duration: const Duration(microseconds: 1),
+      preferPosition: AutoScrollPosition.end,
+    );
     playVideoIndex = index;
     safeUpdate();
     _startVideoPlayer(detailBean!.videoList![index].sourceUrl ?? '');
@@ -220,7 +233,7 @@ class VideoDetailController extends GetxController {
           },
         },
         showLoading: false,
-            (data) {
+        (data) {
           final dataList = List<CommentBean>.from(
             data['list'].map((comment) => CommentBean.fromJson(comment)),
           );

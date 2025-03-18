@@ -200,6 +200,9 @@ class FeedDetailScreen extends StatelessWidget {
                               const SliverToBoxAdapter(
                                 child: NoCommentView(),
                               ),
+                            SliverToBoxAdapter(
+                              child: SizedBox(height: 86.w),
+                            ),
                           ],
                         ),
                       ),

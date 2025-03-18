@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,7 +12,12 @@ import '../../../model/board_list.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
 import '../../../utils/net_request.dart';
+import '../../../utils/toast_utils.dart';
+import '../../../widget/dialog_common.dart';
+import '../../../widget/my_item_feed.dart';
 import '../../../widget/no_data.dart';
+import 'mine_collect_item.dart';
+import 'mine_comment_item.dart';
 
 class MineChildView extends StatefulWidget {
   final int tabIndex;
@@ -167,7 +174,87 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                             ? collectList.isEmpty
                             : commentDataList.isEmpty)
                 ? const Center(child: NoDataView())
-                : const Center(child: NoDataView()),
+                : ListView.builder(
+                    itemBuilder: (c, i) {
+                      return Slidable(
+                        groupTag: '${widget.tabIndex}-list',
+                        key: ValueKey(
+                          '${widget.tabIndex}-${widget.tabIndex == 0 ? boardPostList[i].id : widget.tabIndex == 1 ? collectList[i].id : commentDataList[i].id}',
+                        ),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          extentRatio: 42 / maxWidth,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                await showDialog(
+                                  barrierDismissible: true,
+                                  context: context,
+                                  builder: (context) => CommonDialog(
+                                    title: widget.tabIndex == 0
+                                        ? '删除帖子'
+                                        : widget.tabIndex == 1
+                                            ? '删除收藏'
+                                            : '删除评论',
+                                    content: widget.tabIndex == 0
+                                        ? '确定要删除这个帖子吗？'
+                                        : widget.tabIndex == 1
+                                            ? '确定要删除这个收藏吗？'
+                                            : '确定要删除这个评论吗？',
+                                    confirmText: '确认删除',
+                                    onConfirm: () {
+                                      if (widget.tabIndex == 0) {
+                                        NetRequest().threadDelete(boardPostList[i].id, (data) {
+                                          if (_isMounted) {
+                                            ToastUtils.showToast('删除成功');
+                                            boardPostList.removeAt(i);
+                                            setState(() {});
+                                          }
+                                        });
+                                      } else if (widget.tabIndex == 1) {
+                                        NetRequest().favoriteDelete(collectList[i].id, (data) {
+                                          if (_isMounted) {
+                                            ToastUtils.showToast('删除成功');
+                                            collectList.removeAt(i);
+                                            setState(() {});
+                                          }
+                                        });
+                                      } else if (widget.tabIndex == 2) {
+                                        NetRequest().commentDelete(commentDataList[i].id, (data) {
+                                          if (_isMounted) {
+                                            ToastUtils.showToast('删除成功');
+                                            commentDataList.removeAt(i);
+                                            setState(() {});
+                                          }
+                                        });
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                'assets/svg/icon_delete.svg',
+                                width: 22.w,
+                                height: 22.w,
+                              ),
+                            ),
+                          ],
+                        ),
+                        child: widget.tabIndex == 0
+                            ? MyFeedItem(boardPostList[i])
+                            : widget.tabIndex == 1
+                                ? MyCollectItem(item: collectList[i])
+                                : MyCommentItem(
+                                    item: commentDataList[i],
+                                  ),
+                      );
+                    },
+                    itemCount: widget.tabIndex == 0
+                        ? boardPostList.length
+                        : widget.tabIndex == 1
+                            ? collectList.length
+                            : commentDataList.length,
+                  ),
           ),
         );
       },

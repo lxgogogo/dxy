@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/input_limit_helper.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../stores/user_store.dart';
-import '../utils/app_theme.dart';
-import '../utils/eventbus/EventBusAction.dart';
-import '../utils/eventbus/EventBusManager.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
-import 'custom_input_length_formatter.dart';
 
 class DialogEditNickname extends StatefulWidget {
   final String editContent; //

@@ -24,11 +24,7 @@ class CommentPublishController extends GetxController {
 
   openFilePicker() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile> files = await picker.pickMultiImage(limit: 9);
-    if (files.length > 9 || files.length + imageData.length > 9) {
-      ToastUtils.showToast('最多9张图片');
-      return;
-    }
+    final List<XFile> files = await picker.pickMultiImage(limit: 9 - imageData.length);
     for (var file in files) {
       imageData.add(file.path);
     }

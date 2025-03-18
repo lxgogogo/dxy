@@ -228,7 +228,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
           GestureDetector(
             onTap: () async {
               if (!controller.isCanOpenPicker()) {
-                ToastUtils.showToast('单个视频或者最多9张图片');
+                ToastUtils.showToast('最多只可上传9张图片');
                 return;
               }
               controller.openFilePicker();

@@ -58,7 +58,7 @@ class FeedPostController extends GetxController {
   }
 
   void publishPosts() async {
-    String title = titleInput.text;
+    final title = titleInput.text;
     final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
       List.castFrom(quillController.document.toDelta().toJson()),
       ConverterOptions.forEmail(),

@@ -29,7 +29,9 @@ class HomeController extends GetxController {
       }
     });
     EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
-      scrollController.jumpTo(0);
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
     });
   }
 

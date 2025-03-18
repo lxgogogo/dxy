@@ -225,7 +225,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
   Widget listView() {
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
+      enablePullUp: followOrFanUserList.isNotEmpty == true || !noMore,
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,

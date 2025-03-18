@@ -61,7 +61,7 @@ class FeedDetailScreen extends StatelessWidget {
               : controller.detailBean == null
                   ? const SizedBox()
                   : Padding(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 8.w),
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 86.w),
                       child: SmartRefresher(
                         enablePullDown: false,
                         enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
@@ -200,9 +200,6 @@ class FeedDetailScreen extends StatelessWidget {
                               const SliverToBoxAdapter(
                                 child: NoCommentView(),
                               ),
-                            SliverToBoxAdapter(
-                              child: SizedBox(height: 86.w),
-                            ),
                           ],
                         ),
                       ),

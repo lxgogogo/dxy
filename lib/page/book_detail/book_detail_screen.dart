@@ -49,206 +49,182 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             title: '详情',
           ),
           backgroundColor: Colors.white,
+          extendBody: true,
           body: controller.noNetwork
               ? NoNetworkView(
                   onRefresh: controller.refreshData,
                 )
               : controller.detailBean == null
                   ? const SizedBox()
-                  : Container(
-                      margin: EdgeInsets.only(top: 12.w),
-                      constraints: BoxConstraints(
-                        minHeight: MediaQuery.sizeOf(context).height,
-                      ),
-                      decoration: BoxDecoration(
-                          color: const Color(0xfff8fbff),
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xffa2b9d0).withOpacity(0.64),
-                              offset: Offset(0, 1.w),
-                              blurRadius: 2.rpx,
-                              spreadRadius: -1.w,
-                            ),
-                            BoxShadow(
-                              color: const Color(0xffffffff),
-                              offset: Offset(0, -1.w),
-                              blurRadius: 2.rpx,
-                              spreadRadius: 0,
-                            ),
-                          ]),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 8.w),
-                        child: SmartRefresher(
-                          enablePullDown: false,
-                          enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
-                          controller: controller.refreshController,
-                          onLoading: controller.onLoading,
-                          child: CustomScrollView(
-                            slivers: [
-                              SliverToBoxAdapter(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Center(
-                                      child: AnimatedOpacity(
-                                        opacity: controller.detailBean?.cover?.isNotEmpty == true ? 1 : 0,
-                                        duration: const Duration(milliseconds: 50),
-                                        child: SizedBox(
-                                          width: context.width * 0.6,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(4),
-                                            child: CachedNetworkImage(
-                                              imageUrl: controller.detailBean?.cover ?? '',
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                              errorWidget: (context, url, error) =>
-                                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                            ),
+                  : Padding(
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 86.w),
+                      child: SmartRefresher(
+                        enablePullDown: false,
+                        enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
+                        controller: controller.refreshController,
+                        onLoading: controller.onLoading,
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Center(
+                                    child: AnimatedOpacity(
+                                      opacity: controller.detailBean?.cover?.isNotEmpty == true ? 1 : 0,
+                                      duration: const Duration(milliseconds: 50),
+                                      child: SizedBox(
+                                        width: context.width * 0.6,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(4),
+                                          child: CachedNetworkImage(
+                                            imageUrl: controller.detailBean?.cover ?? '',
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                            errorWidget: (context, url, error) =>
+                                                Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10.w),
-                                    Text(
-                                      controller.detailBean?.title ?? '',
-                                      style: TextStyle(
-                                        color: '#1E1E1E'.hexColor,
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w600,
+                                  ),
+                                  SizedBox(height: 10.w),
+                                  Text(
+                                    controller.detailBean?.title ?? '',
+                                    style: TextStyle(
+                                      color: '#1E1E1E'.hexColor,
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
+                                    style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
+                                  ),
+                                  if (controller.detailBean?.description?.isNotEmpty == true)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 6.w),
+                                      child: Text(
+                                        controller.detailBean?.description ?? '',
+                                        style: TextStyle(
+                                          color: const Color(0xFF333333).withOpacity(0.7),
+                                          fontSize: 12.sp,
+                                        ),
+                                        maxLines: 100,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    Text(
-                                      '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
-                                      style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
-                                    ),
-                                    if (controller.detailBean?.description?.isNotEmpty == true)
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 6.w),
-                                        child: Text(
-                                          controller.detailBean?.description ?? '',
-                                          style: TextStyle(
-                                            color: const Color(0xFF333333).withOpacity(0.7),
-                                            fontSize: 12.sp,
-                                          ),
-                                          maxLines: 100,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    const SizedBox(height: 6),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Opacity(
-                                          opacity: 0.70,
-                                          child: Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: '作者： ',
-                                                  style: TextStyle(
-                                                    color: Color(0xFF1E1E1E),
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: '${controller.detailBean?.author ?? ''}',
-                                                  style: TextStyle(
-                                                    color: Color(0xFF1E1E1E),
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w400,
-                                                    decoration: TextDecoration.underline,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 6.w),
-                                        Text(
-                                          '出版社：${controller.detailBean?.book?.publisher ?? ''}',
-                                          style: TextStyle(
-                                              color: Color(0xFF1E1E1E).withOpacity(0.7),
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12.sp),
-                                        ),
-                                        SizedBox(height: 6.w),
-                                        Text(
-                                          '出版日期：${DateFormat('yyyy-MM-dd').format(controller.detailBean?.book?.publishDate ?? DateTime.now())}',
-                                          style: TextStyle(color: Color(0xFF1E1E1E).withOpacity(0.7), fontSize: 12.sp),
-                                        ),
-                                        if (controller.detailBean?.tagList?.isNotEmpty == true)
-                                          TagListView(tagList: controller.detailBean?.tagList ?? []),
-                                        SizedBox(height: 16.w),
-                                        GestureDetector(
-                                          onTap: () {
-                                            if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
-                                              launchUrlString(controller.detailBean!.book!.downloadUrl!);
-                                            }
-                                          },
-                                          child: Center(
-                                            child: Container(
-                                              width: 160.w,
-                                              height: 46.w,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(50.w),
-                                                gradient: const LinearGradient(
-                                                  begin: Alignment(1.00, 0.00),
-                                                  end: Alignment(-1, 0),
-                                                  colors: [
-                                                    Color(0xFF84BCF9),
-                                                    Color(0xFF557BF6),
-                                                  ],
-                                                ),
-                                              ),
-                                              child: Text(
-                                                '下载资源',
+                                  const SizedBox(height: 6),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Opacity(
+                                        opacity: 0.70,
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: '作者： ',
                                                 style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16.sp,
+                                                  color: Color(0xFF1E1E1E),
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
+                                              ),
+                                              TextSpan(
+                                                text: '${controller.detailBean?.author ?? ''}',
+                                                style: TextStyle(
+                                                  color: Color(0xFF1E1E1E),
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w400,
+                                                  decoration: TextDecoration.underline,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 6.w),
+                                      Text(
+                                        '出版社：${controller.detailBean?.book?.publisher ?? ''}',
+                                        style: TextStyle(
+                                            color: Color(0xFF1E1E1E).withOpacity(0.7),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12.sp),
+                                      ),
+                                      SizedBox(height: 6.w),
+                                      Text(
+                                        '出版日期：${DateFormat('yyyy-MM-dd').format(controller.detailBean?.book?.publishDate ?? DateTime.now())}',
+                                        style: TextStyle(color: Color(0xFF1E1E1E).withOpacity(0.7), fontSize: 12.sp),
+                                      ),
+                                      if (controller.detailBean?.tagList?.isNotEmpty == true)
+                                        TagListView(tagList: controller.detailBean?.tagList ?? []),
+                                      SizedBox(height: 16.w),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                            launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                          }
+                                        },
+                                        child: Center(
+                                          child: Container(
+                                            width: 160.w,
+                                            height: 46.w,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50.w),
+                                              gradient: const LinearGradient(
+                                                begin: Alignment(1.00, 0.00),
+                                                end: Alignment(-1, 0),
+                                                colors: [
+                                                  Color(0xFF84BCF9),
+                                                  Color(0xFF557BF6),
+                                                ],
+                                              ),
+                                            ),
+                                            child: Text(
+                                              '下载资源',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16.sp,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 16.w),
-                                    Text(
-                                      '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
-                                      style: TextStyle(
-                                        color: '#333333'.hexColor,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w700,
                                       ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16.w),
+                                  Text(
+                                    '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
+                                    style: TextStyle(
+                                      color: '#333333'.hexColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                                    SizedBox(height: 16.w),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(height: 16.w),
+                                ],
                               ),
-                              if (controller.comments == null)
-                                const SliverToBoxAdapter()
-                              else if (controller.comments?.isNotEmpty == true)
-                                SliverList(
-                                    delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return CommentItem(
-                                      commentBean: controller.comments![index],
-                                    );
-                                  },
-                                  childCount: controller.comments!.length,
-                                ))
-                              else
-                                const SliverToBoxAdapter(
-                                  child: NoCommentView(),
-                                ),
-                            ],
-                          ),
+                            ),
+                            if (controller.comments == null)
+                              const SliverToBoxAdapter()
+                            else if (controller.comments?.isNotEmpty == true)
+                              SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return CommentItem(
+                                    commentBean: controller.comments![index],
+                                  );
+                                },
+                                childCount: controller.comments!.length,
+                              ))
+                            else
+                              const SliverToBoxAdapter(
+                                child: NoCommentView(),
+                              ),
+                          ],
                         ),
                       ),
                     ),

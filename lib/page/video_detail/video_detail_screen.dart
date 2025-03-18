@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/utils/event_bus_util.dart';
@@ -27,7 +25,6 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../utils/date_util.dart';
-import '../../widget/background_container.dart';
 import '../search_tag/search_tag_screen.dart';
 
 part 'video_detail_controller.dart';
@@ -55,7 +52,7 @@ class VideoDetailScreen extends StatelessWidget {
               : controller.detailBean == null
                   ? const SizedBox()
                   : Padding(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 8.w),
+                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 86.w),
                       child: SmartRefresher(
                         enablePullDown: false,
                         enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
@@ -261,9 +258,6 @@ class VideoDetailScreen extends StatelessWidget {
                               const SliverToBoxAdapter(
                                 child: NoCommentView(),
                               ),
-                            SliverToBoxAdapter(
-                              child: SizedBox(height: 86.w),
-                            ),
                           ],
                         ),
                       ),

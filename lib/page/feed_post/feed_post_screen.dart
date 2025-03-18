@@ -420,6 +420,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                           child: Icon(
                             Icons.clear,
                             size: 12.w,
+                            color: '#557BF6'.hexColor,
                           ),
                         )
                       ],

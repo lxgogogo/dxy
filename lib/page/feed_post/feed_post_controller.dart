@@ -39,6 +39,7 @@ class FeedPostController extends GetxController {
   @override
   void onInit() {
     boardInfoList = Get.arguments as List<BoardInfo>? ?? [];
+    boardInfoList.removeWhere((e) => e.name == '德州资讯');
     super.onInit();
     titleInput.addListener(() {
       safeUpdate();

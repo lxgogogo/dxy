@@ -38,24 +38,23 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   bool _isLoginDisable = true;
   RegExp codeRegExp = RegExp(r'^\d{6}$');
-  RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
-  RegExp containsInvalidChars=RegExp(r'^[A-Za-z0-9@#%!~]+$');
-  bool isContainsInvalidChars=false;
-  bool isValidLength=false;
+  RegExp containsInvalidChars = RegExp(
+      r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
+  bool isContainsInvalidChars = false;
+  RegExp passwordRegExp = RegExp(
+      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
+
   void checkValid() {
     final account = _controllerEmail.text;
     isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
     final code = _controllerCode.text;
     isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    isValidLength = password.length >= 8 && password.length <= 12;
     isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
     bool isValidPassword = passwordRegExp.hasMatch(password);
 
     if (password.isNotEmpty) {
-      if (!isValidLength) {
-        isShowPwTips = true; // 长度不符合要求
-      } else if (isContainsInvalidChars) {
+      if (isContainsInvalidChars) {
         isShowPwTips = true; // 包含非法字符
       } else if (!isValidPassword) {
         isShowPwTips = true; // 不满足复杂度要求
@@ -85,8 +84,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     final code = _controllerCode.text;
     final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips =
-        !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
@@ -207,10 +205,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       // 水平内边距
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
-                        borderRadius: BorderRadius.circular(12.w),),
+                        borderRadius: BorderRadius.circular(12.w),
+                      ),
                       child: Row(
                         children: <Widget>[
-
                           Expanded(
                             child: TextField(
                               focusNode: _focusEmail,
@@ -224,8 +222,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '请输入邮箱',
-                                hintStyle:
-                                TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -237,9 +234,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: isShowAccountTips
-                          ? EdgeInsets.symmetric(vertical: 3.w)
-                          : EdgeInsets.zero,
+                      padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
                       child: Text(
                         isShowAccountTips ? '*请输入正确邮箱地址' : '',
                         style: TextStyle(
@@ -268,10 +263,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '请输入验证码',
-                                hintStyle:
-                                TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
                                 onChangeCheckValid();
@@ -286,9 +279,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: isShowCodeTips
-                          ? EdgeInsets.symmetric(vertical: 3.w)
-                          : EdgeInsets.zero,
+                      padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
                       child: Text(
                         isShowCodeTips ? '*验证码错误' : '',
                         style: TextStyle(
@@ -316,8 +307,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '请输入密码',
-                                hintStyle:
-                                TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -327,9 +317,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           ),
                           GestureDetector(
                             child: Image.asset(
-                              _isVisible
-                                  ? 'assets/images/eye_open.png'
-                                  : 'assets/images/eye_close.png',
+                              _isVisible ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                               width: 18.w,
                               height: 18.w,
                             ),
@@ -346,12 +334,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       padding: EdgeInsets.symmetric(vertical: 6.w),
                       child: Text(
                         isShowPwTips
-                            ? (!isValidLength
-                            ? '*限制8-12位字符' // 长度不符合要求
-                            : isContainsInvalidChars
-                            ? '*仅允许英文字母、数字及特殊字符如 @#%!~' // 包含非法字符
-                            : '*至少包含一位大小写字母+数字') // 不满足复杂度要求
-                            : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
+                            ? isContainsInvalidChars
+                                ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
+                                : '*至少包含一位大小写字母+数字'
+                            : '*8-12字符，至少包含大小写字母+数字',
                         style: TextStyle(
                           fontSize: 10.sp,
                           color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
@@ -377,8 +363,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '再次输入新密码',
-                                hintStyle:
-                                TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -388,9 +373,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           ),
                           GestureDetector(
                             child: Image.asset(
-                              _isVisibleAgain
-                                  ? 'assets/images/eye_open.png'
-                                  : 'assets/images/eye_close.png',
+                              _isVisibleAgain ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                               width: 18.w,
                               height: 18.w,
                             ),
@@ -406,17 +389,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6.w),
-                      child: Text(
-                        isShowAgainTips ? '两次输入的密码不一致' : '*限制8-12位字符，须包含英数字，且有1个以上的英文大小写',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowAgainTips
-                              ? Colors.red
-                              : '#95A3C4'.hexColor,
-                        ),
-                      )
-                    ),
+                        padding: EdgeInsets.symmetric(vertical: 6.w),
+                        child: Text(
+                          isShowAgainTips ? '两次输入的密码不一致' : '*8-12字符，至少包含大小写字母+数字',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
+                          ),
+                        )),
                     SizedBox(height: 48.w),
                     CustomButton(
                       onPressed: registerOrConfirm,
@@ -466,8 +446,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     NetRequest().resetPassword(email, password, code, (data) {
       ToastUtils.showToast('重置密码成功');
       Get.back();
-      Get.delete<CountDownController>(
-          tag: NetRequest.SEND_CODE_TYPE_RESET_PW, force: true);
+      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW, force: true);
     });
   }
 }

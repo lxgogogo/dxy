@@ -10,15 +10,12 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/tag_list/tag_list_screen.dart';
-import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/html_parse_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
-import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/eventbus/EventBusAction.dart';
@@ -56,7 +53,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24.r),
-                      color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.5) : null,
+                      color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.1) : null,
                       gradient: controller.isDisable
                           ? null
                           : LinearGradient(
@@ -70,7 +67,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       '发布',
                       style: TextStyle(
                         color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.5) : Colors.white,
-                        fontSize: 16.sp,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

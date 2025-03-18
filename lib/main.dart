@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
           footerBuilder: () => const ClassicFooter(
             noDataText: '—— 已经到底啦 ——',
           ),
-          shouldFooterFollowWhenNotFull: (state) {
-            // If you want load more with noMoreData state ,may be you should return false
-            return false;
-          },
+          // shouldFooterFollowWhenNotFull: (state) {
+          //   // If you want load more with noMoreData state ,may be you should return false
+          //   return false;
+          // },
           child: OKToast(
             child: GetMaterialApp(
               title: '德学院',

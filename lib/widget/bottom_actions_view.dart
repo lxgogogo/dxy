@@ -78,16 +78,34 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
                     },
                     child: Container(
                       height: 32.w,
-                      constraints: BoxConstraints(maxWidth: 101.w),
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      constraints: BoxConstraints(maxWidth: 131.w),
+                      padding: EdgeInsets.only(right: 8.w),
                       decoration: BoxDecoration(
                         color: '#333333'.hexColor.withOpacity(0.05),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '说点什么吧...',
-                        style: TextStyle(fontSize: 12, color: '#333333'.hexColor.withOpacity(0.5)),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Assets.images.logoDxy.image(
+                            width: 30.w,
+                            height: 30.w,
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: Text(
+                                '德学院官方',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: '##333333'.hexColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )

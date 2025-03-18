@@ -291,6 +291,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
+  /// File path: assets/images/logo_dxy.png
+  AssetGenImage get logoDxy =>
+      const AssetGenImage('assets/images/logo_dxy.png');
+
   /// File path: assets/images/logo_text.png
   AssetGenImage get logoText =>
       const AssetGenImage('assets/images/logo_text.png');
@@ -596,6 +600,7 @@ class $AssetsImagesGen {
         loginBg,
         loginBtn,
         logo,
+        logoDxy,
         logoText,
         logout,
         logoutBtn,

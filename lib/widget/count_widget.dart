@@ -57,7 +57,7 @@ class CountReply extends StatelessWidget {
                 width: 14.w,
               ),
           SizedBox(width: 4.w),
-           CountText(count: count, usePlaceHolder: usePlaceHolder),
+          CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
     );
@@ -210,13 +210,14 @@ class CountLike extends StatelessWidget {
 }
 
 class CountLikeAni extends StatefulWidget {
-  const CountLikeAni(
-      {super.key,
-      required this.count,
-      this.liked = false,
-      this.usePlaceHolder = true,
-      this.onToggleLike,
-      this.likeWidget});
+  const CountLikeAni({
+    super.key,
+    required this.count,
+    this.liked = false,
+    this.usePlaceHolder = true,
+    this.onToggleLike,
+    this.likeWidget,
+  });
 
   final String count;
   final bool liked;
@@ -252,13 +253,28 @@ class _CountLikeAniState extends State<CountLikeAni> {
                     isLiked ? 'assets/images/praised.png' : 'assets/images/praise.png',
                   );
             },
-            likeCountPadding: EdgeInsets.only(left: 0.w),
-            countBuilder: (_, __, ___) => widget.count.isEmpty
-                ? const SizedBox()
+            likeCountPadding: EdgeInsets.zero,
+            countBuilder: (_, __, ___) => widget.count == '0'
+                ? Text(
+                    '点赞',
+                    style: TextStyle(
+                      color: '#333333'.hexColor.withOpacity(0.7),
+                    ),
+                  )
                 : CountText(
                     count: widget.count,
                     usePlaceHolder: widget.usePlaceHolder,
                   ),
+            bubblesColor: const BubblesColor(
+              dotPrimaryColor: Color(0xFF557BF6),
+              dotSecondaryColor: Color(0xFF557BF6),
+              dotThirdColor: Color(0xFF557BF6),
+              dotLastColor: Color(0xFF557BF6),
+            ),
+            circleColor: const CircleColor(
+              start: Color(0xFF557BF6),
+              end: Color(0xFF557BF6),
+            ),
           ),
         ],
       ),

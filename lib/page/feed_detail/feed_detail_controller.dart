@@ -120,7 +120,6 @@ class FeedDetailController extends GetxController {
           }
         }
         EventBusUtil.of.fire(EventRefreshNum(
-          SearchTagType.feed,
           detailBean!.id!,
           commentCount: detailBean?.commentCount,
           likeCount: detailBean?.likeCount,

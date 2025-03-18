@@ -9,13 +9,10 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 
 part 'feed_list_controller.dart';
 

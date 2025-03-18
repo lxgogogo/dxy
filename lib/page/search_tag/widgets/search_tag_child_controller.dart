@@ -1,7 +1,6 @@
 part of 'search_tag_child_view.dart';
 
 class SearchTagChildController extends GetxController with GetSingleTickerProviderStateMixin {
-
   final SearchTagType type;
   final TagModel? tagModel;
 
@@ -20,28 +19,33 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   bool noMore = false;
   bool isLoaded = false;
   StreamSubscription? eventSubscription;
+
   @override
   void onReady() {
     super.onReady();
     reqListData();
   }
-@override
+
+  @override
   void onInit() {
-  eventSubscription = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
-    final type=event.type;
-    if(type==SearchTagType.feed){
-      updateFeedNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount,favoriteCount: event.favoriteCount);
-    }else if(type==SearchTagType.video||type==SearchTagType.book){
-      updateArticleNum(event.id,likeCount: event.likeCount, commentCount: event.commentCount,favoriteCount: event.favoriteCount);
-    }
-  });
+    eventSubscription = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
+      if (type == SearchTagType.feed) {
+        updateFeedNum(event.id,
+            likeCount: event.likeCount, commentCount: event.commentCount, favoriteCount: event.favoriteCount);
+      } else if (type == SearchTagType.video || type == SearchTagType.book) {
+        updateArticleNum(event.id,
+            likeCount: event.likeCount, commentCount: event.commentCount, favoriteCount: event.favoriteCount);
+      }
+    });
     super.onInit();
   }
- @override
+
+  @override
   void onClose() {
-   eventSubscription?.cancel();
+    eventSubscription?.cancel();
     super.onClose();
   }
+
   // void updateCoursesNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
   //   //找出id在courses，并修改favoriteCount，likeCount，commentCount
   //   for (var element in courses) {
@@ -58,45 +62,45 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   //     }
   //   }
   // }
-  void updateArticleNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
+  void updateArticleNum(int id, {int? favoriteCount, int? likeCount, int? commentCount}) {
     //找出id在articles，并修改favoriteCount，likeCount，commentCount
     for (var element in articles) {
       if (element.id == id) {
-        if (favoriteCount != null&&element.favoriteCount!=favoriteCount ) {
+        if (favoriteCount != null && element.favoriteCount != favoriteCount) {
           element.favoriteCount = favoriteCount;
         }
-        if (likeCount != null &&element.likeCount!=likeCount) {
+        if (likeCount != null && element.likeCount != likeCount) {
           element.likeCount = likeCount;
         }
-        if (commentCount != null&& element.commentCount!=commentCount) {
+        if (commentCount != null && element.commentCount != commentCount) {
           element.commentCount = commentCount;
         }
         safeUpdate();
         return;
       }
     }
-
   }
-  void updateFeedNum(int id,{int? favoriteCount,int? likeCount ,int? commentCount }) {
+
+  void updateFeedNum(int id, {int? favoriteCount, int? likeCount, int? commentCount}) {
     //找出id在feeds，并修改favoriteCount，likeCount，commentCount
-   // Log.d('updateFeedNum: $id $favoriteCount $likeCount $commentCount');
+    // Log.d('updateFeedNum: $id $favoriteCount $likeCount $commentCount');
     for (var element in feeds) {
       if (element.id == id) {
-        if (favoriteCount != null&&element.favoriteCount!=favoriteCount) {
+        if (favoriteCount != null && element.favoriteCount != favoriteCount) {
           element.favoriteCount = favoriteCount;
         }
-        if (likeCount != null &&element.likeCount!=likeCount) {
+        if (likeCount != null && element.likeCount != likeCount) {
           element.likeCount = likeCount;
         }
-        if (commentCount != null && element.commentCount!=commentCount) {
+        if (commentCount != null && element.commentCount != commentCount) {
           element.commentCount = commentCount;
         }
         safeUpdate();
         return;
       }
     }
-
   }
+
   Future<void> reqListData({bool showLoading = false}) async {
     Map<String, dynamic> params = {
       'pageNum': pageNum,
@@ -114,7 +118,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
     try {
       int recordsSize = 0;
       switch (type) {
-      // case SearchTagType.news:
+        // case SearchTagType.news:
         case SearchTagType.video:
         case SearchTagType.book:
           await NetRequest().indexList(params, (data) {
@@ -148,9 +152,9 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
       }
       if (recordsSize < pageSize) {
         noMore = true;
-        if(pageNum==1){
+        if (pageNum == 1) {
           refreshController.refreshCompleted();
-        }else {
+        } else {
           refreshController.loadNoData();
         }
       } else {

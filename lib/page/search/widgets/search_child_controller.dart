@@ -7,8 +7,8 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
 
   List<dynamic> get items {
     switch (type) {
-    // case SearchType.news:
-    //   return _buildNewsView(controller);
+      // case SearchType.news:
+      //   return _buildNewsView(controller);
       case SearchType.video:
         return articles;
       case SearchType.book:
@@ -19,8 +19,8 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
         return tagItems;
       case SearchType.user:
         return userItems;
-    // case SearchType.competition:
-    //   return _buildCompetitionView(controller);
+      // case SearchType.competition:
+      //   return _buildCompetitionView(controller);
     }
   }
 
@@ -36,6 +36,7 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
   bool isLoaded = false;
   ScrollController scrollController = ScrollController();
   StreamSubscription? eventSubscription;
+  StreamSubscription? refreshNumEventObs;
 
   @override
   void onReady() {
@@ -45,11 +46,33 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
       reqListData(showLoading: event.searchType == type);
     });
     reqListData();
+    refreshNumEventObs = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
+      switch (type) {
+        case SearchType.video:
+          final index = articles.indexWhere((e) => e.id == event.id);
+          if (index != -1) {
+            articles[index].favoriteCount = event.favoriteCount;
+            articles[index].likeCount = event.likeCount;
+            articles[index].commentCount = event.commentCount;
+            safeUpdate();
+          }
+          break;
+        case SearchType.book:
+        // TODO: Handle this case.
+        case SearchType.course:
+        // TODO: Handle this case.
+        case SearchType.tag:
+        // TODO: Handle this case.
+        case SearchType.user:
+        // TODO: Handle this case.
+      }
+    });
   }
 
   @override
   void onClose() {
     eventSubscription?.cancel();
+    refreshNumEventObs?.cancel();
     super.dispose();
   }
 
@@ -89,7 +112,8 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
           });
           break;
         case SearchType.user:
-          await NetRequest().userSearch(pageNum, pageSize, SearchController.of.controller.text, showLoading: showLoading, (data) {
+          await NetRequest()
+              .userSearch(pageNum, pageSize, SearchController.of.controller.text, showLoading: showLoading, (data) {
             final userPageData = UserDataList.fromJson(data);
             recordsSize = userPageData.list?.length ?? 0;
             if (pageNum == 1) {
@@ -125,7 +149,6 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
         //     competitionItems.addAll(dataList);
         //   });
         //   break;
-
       }
       if (pageNum == 1) {
         refreshController.refreshCompleted();
@@ -149,11 +172,10 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
       refreshController.loadFailed();
     } finally {
       isLoaded = true;
-      if(pageNum==1){
+      if (pageNum == 1) {
         if (scrollController.hasClients) {
           scrollController.jumpTo(0);
         }
-
       }
       safeUpdate();
     }

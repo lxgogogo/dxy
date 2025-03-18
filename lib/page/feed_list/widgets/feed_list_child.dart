@@ -45,6 +45,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   final ScrollController _listController = ScrollController();
 
   StreamSubscription? eventSubscription;
+  StreamSubscription? refreshNumEventObs;
 
   void _onRefresh({bool showLoading = true}) async {
     EventBusUtil.of.fire(EventRefreshFeedTabs());
@@ -83,6 +84,15 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
         boardSort = NetRequest.BOARD_SORT_TIME;
         pageNum = 1;
         reqListData();
+      }
+    });
+    refreshNumEventObs = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
+      final index = boardPostList.indexWhere((e) => e.id == event.id);
+      if (index != -1) {
+        boardPostList[index].favoriteCount = event.favoriteCount;
+        boardPostList[index].likeCount = event.likeCount;
+        boardPostList[index].commentCount = event.commentCount;
+        setState(() {});
       }
     });
   }
@@ -135,12 +145,11 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
           _refreshController.loadComplete();
         }
       }
-    } catch (e){
+    } catch (e) {
       _refreshController.loadFailed();
     } finally {
       setState(() {});
     }
-
   }
 
   Future<void> _onShield(int id) async {

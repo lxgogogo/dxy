@@ -5,6 +5,7 @@ import '../page/search_tag/search_tag_screen.dart';
 
 class EventBusUtil {
   static final EventBusUtil of = EventBusUtil._();
+
   EventBusUtil._();
 
   final EventBus _eventBus = EventBus();
@@ -30,19 +31,23 @@ class EventBusUtil {
 /// event
 class EventRefreshPage {
   final String relType;
+
   EventRefreshPage(this.relType);
 }
+
 class EventRefreshNum {
   final int? commentCount;
   final int? likeCount;
   final int? favoriteCount;
-  final SearchTagType type;
   final int id;
-  EventRefreshNum(this.type,this.id,{this.commentCount, this.likeCount, this.favoriteCount});
+
+  EventRefreshNum(this.id, {this.commentCount, this.likeCount, this.favoriteCount});
 }
+
 /// event
 class EventRefreshSearchResult {
   final SearchType searchType;
+
   EventRefreshSearchResult(this.searchType);
 }
 
@@ -53,4 +58,4 @@ class EventResetMainTab {}
 class EventRefreshFeedTabs {}
 
 /// event
-class EventLoginSuccess{}
+class EventLoginSuccess {}

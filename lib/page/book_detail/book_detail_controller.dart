@@ -64,7 +64,7 @@ class BookDetailController extends GetxController {
       loaded = true;
       safeUpdate();
       EventBusUtil.of.fire(EventRefreshNum(
-          SearchTagType.book, detailBean!.id!,
+          detailBean!.id!,
           commentCount: detailBean?.commentCount,
           likeCount: detailBean?.likeCount,
           favoriteCount: detailBean?.favoriteCount));

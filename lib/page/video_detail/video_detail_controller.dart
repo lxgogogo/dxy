@@ -120,7 +120,7 @@ class VideoDetailController extends GetxController {
             _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           }
         }
-        EventBusUtil.of.fire(EventRefreshNum(SearchTagType.video, detailBean!.id!,
+        EventBusUtil.of.fire(EventRefreshNum(detailBean!.id!,
             commentCount: detailBean?.commentCount,
             likeCount: detailBean?.likeCount,
             favoriteCount: detailBean?.favoriteCount));

@@ -341,7 +341,7 @@ class DateUtil {
 //大于24小时：xxxx-xx-xx xx:xx:xx
 
   static String formatDateAlias3(int date,{bool hasHM = false}) {
-    if (date == null || date == 0) return "";
+    if (date == 0) return "";
 
     final now = DateTime.now();
     final target = DateTime.fromMillisecondsSinceEpoch(date);

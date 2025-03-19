@@ -75,11 +75,11 @@ class VideoDetailScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      SizedBox(height: 8.w),
-                                      Text(
-                                        '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
-                                        style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
-                                      ),
+                                      // SizedBox(height: 8.w),
+                                      // Text(
+                                      //   '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
+                                      //   style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
+                                      // ),
                                       GestureDetector(
                                         onTap: controller.playVideo,
                                         child: Container(

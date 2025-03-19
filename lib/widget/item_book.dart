@@ -103,7 +103,10 @@ class _BookItemState extends State<BookItem> {
                   Row(
                     children: [
                       Text(
-                        DateUtil.formatDate(widget.article.createdAt!, format: 'yyyy.MM.dd'),
+                        widget.article.createdAt != null
+                            ? DateUtil.formatDateAlias3(widget
+                                .article.createdAt!.millisecondsSinceEpoch)
+                            : '',
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: '#333333'.hexColor.withOpacity(0.8),

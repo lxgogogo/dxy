@@ -19,7 +19,7 @@ class CourseController extends GetxController {
 
   @override
   void onInit() {
-    selectedTitle = Get.arguments?['title'] as String ?? '';
+    selectedTitle = Get.arguments?['title'] as String? ?? '';
     super.onInit();
   }
 

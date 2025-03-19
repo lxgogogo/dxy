@@ -124,7 +124,7 @@ class VideoItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                item.createdAt != null ?DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch) : '',
+                item.createdAt != null ? DateFormat('yy.MM.dd').format(item.createdAt!) : '',
                 style: TextStyle(
                   color: '#333333'.hexColor.withOpacity(0.3),
                   fontSize: 9.sp,

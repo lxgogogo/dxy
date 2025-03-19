@@ -22,7 +22,7 @@ class BookListController extends GetxController{
   bool isLoaded = false;
   bool isShowHomeMenu = false;
   final ScrollController scrollController = ScrollController();
-  List<List<ArticleBean>> bookItems = [];
+  List<ArticleBean> bookItems = [];
   @override
   void onReady() {
     super.onReady();
@@ -37,19 +37,12 @@ class BookListController extends GetxController{
     });
   }
   Future<void> loadBooks() async {
-    await NetRequest().bookRecommend({"pageSize": 12}, showLoading: false, (data) {
+    await NetRequest().bookRecommend({"pageSize": 4}, showLoading: false, (data) {
       final items = List<ArticleBean>.from(
         data.map((article) => ArticleBean.fromJson(article)),
       );
       if (items.isNotEmpty) {
-        bookItems.clear();
-        for (int i = 0; i < items.length; i += 4) {
-          final List<ArticleBean> item = [];
-          for (int j = i; j < i + 4 && j < items.length; j++) {
-            item.add(items[j]);
-          }
-          bookItems.add(item);
-        }
+        bookItems = items;
         safeUpdate();
       }
     });

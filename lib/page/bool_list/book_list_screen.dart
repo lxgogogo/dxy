@@ -15,6 +15,7 @@ import '../../widget/common_app_bar.dart';
 import '../../widget/item_book.dart';
 import '../../widget/three_d_book_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 /**
  * Created on 2025/3/6
  * Description:
@@ -72,7 +73,6 @@ Widget _buildContent(BookListController controller) {
             ),
           ),
           NestedScrollView(
-              controller: controller.scrollController,
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
@@ -118,14 +118,17 @@ _buildContentView(BookListController controller) {
     slivers: [
       SliverToBoxAdapter(
         child: Container(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w,top: 22.w),
+          padding:
+              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
           child: Row(
             children: [
               Text(
                 '好书推荐',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400),
               ),
-              SizedBox(width: 6.w,),
+              SizedBox(
+                width: 6.w,
+              ),
               SvgPicture.asset(
                 Assets.svg.homeTag,
                 width: 34.w,
@@ -135,35 +138,26 @@ _buildContentView(BookListController controller) {
         ),
       ),
       SliverToBoxAdapter(
-        child: Container(
-          height: 450,
-          margin: EdgeInsets.only(left: 16.w, right: 16.w),
-          child: PageView.builder(
-            physics: const ClampingScrollPhysics(),
-            controller: controller.pageController,
-            itemCount: controller.bookItems.length,
-            itemBuilder: (context, index) {
-              return LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                  return Wrap(
-                    spacing: 12.w,
-                    runSpacing: 12.w,
-                    children: controller.bookItems[index]
-                        .map(
-                          (e) => ThreeDBookItem(
-                        itemWidth: itemWidth,
-                        item: e,
-                      ),
-                    )
-                        .toList(),
-                  );
-                },
-              );
-            },
-          ),
-        )
-      ),
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+            return Wrap(
+              spacing: 12.w,
+              runSpacing: 12.w,
+              children: controller.bookItems
+                  .map(
+                    (e) => ThreeDBookItem(
+                      itemWidth: itemWidth,
+                      item: e,
+                    ),
+                  )
+                  .toList(),
+            );
+          },
+        ),
+      )),
 
       // SliverToBoxAdapter(
       //   child: Container(
@@ -183,7 +177,8 @@ _buildContentView(BookListController controller) {
       // ),
       SliverToBoxAdapter(
         child: Container(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w,top: 22.w),
+          padding:
+              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
           child: Row(
             children: [
               Text(
@@ -194,17 +189,18 @@ _buildContentView(BookListController controller) {
           ),
         ),
       ),
-      SliverList(delegate: SliverChildBuilderDelegate(
+      SliverList(
+          delegate: SliverChildBuilderDelegate(
         childCount: controller.articles.length,
-            (context, index) {
+        (context, index) {
           return Container(
             margin: EdgeInsets.only(bottom: 12.w),
             child: BookItem(
               article: controller.articles[index],
             ),
           );
-
-      },))
+        },
+      ))
     ],
   );
 }

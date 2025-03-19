@@ -15,10 +15,17 @@ class CourseController extends GetxController {
   final RefreshController refreshController = RefreshController();
   final ScrollController listController = ScrollController();
 
+  String selectedTitle = '';
+
+  @override
+  void onInit() {
+    selectedTitle = Get.arguments?['title'] as String ?? '';
+    super.onInit();
+  }
+
   @override
   void onReady() {
     loadCourseTabs();
-    loadCourses();
     super.onReady();
     scrollController.addListener(() {
       final isShow = scrollController.offset > (211.w - 12.w);
@@ -35,7 +42,14 @@ class CourseController extends GetxController {
           List<IndexCategory>.from(data.map((category) => IndexCategory.fromJson(category)));
       categoryList.insert(0, IndexCategory(name: '全部'));
       categories = categoryList;
-      safeUpdate();
+      if (selectedTitle.isNotEmpty) {
+        final index = categories.indexWhere((e) => e.name == selectedTitle);
+        if (index != -1) {
+          categorySel = index;
+          categoryId = categories[index].id;
+        }
+      }
+      loadCourses();
     });
   }
 

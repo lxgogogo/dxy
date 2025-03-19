@@ -25,7 +25,7 @@ class HomeCourseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed(Routes.course),
+      onTap: () => Get.toNamed(Routes.course, arguments: {'title': title}),
       child: Container(
         width: itemWidth,
         height: itemWidth / (170 / 205),

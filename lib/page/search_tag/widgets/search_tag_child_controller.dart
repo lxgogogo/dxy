@@ -23,7 +23,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   @override
   void onReady() {
     super.onReady();
-    reqListData();
+    reqListData(showLoading: true);
   }
 
   @override
@@ -121,7 +121,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
         // case SearchTagType.news:
         case SearchTagType.video:
         case SearchTagType.book:
-          await NetRequest().indexList(params, (data) {
+          await NetRequest().indexList(params, showLoading: showLoading, (data) {
             final dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
             recordsSize = dataList.length;
             if (pageNum == 1) {
@@ -131,7 +131,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
           });
           break;
         case SearchTagType.course:
-          await NetRequest().courseList(params, (data) {
+          await NetRequest().courseList(params, showLoading: showLoading, (data) {
             final dataList = List<CollectBean>.from(data['list'].map((article) => CollectBean.fromJson(article)));
             recordsSize = dataList.length;
             if (pageNum == 1) {
@@ -140,7 +140,7 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
             courses.addAll(dataList);
           });
         case SearchTagType.feed:
-          await NetRequest().getThreadListByBoard(params, (data) {
+          await NetRequest().getThreadListByBoard(params, showLoading: showLoading, (data) {
             final dataList = List<BoardBean>.from(data['list'].map((article) => BoardBean.fromJson(article)));
             recordsSize = dataList.length;
             if (pageNum == 1) {

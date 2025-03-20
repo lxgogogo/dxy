@@ -97,54 +97,89 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
             separatorBuilder: (_, int index) => SizedBox(height: 16.w),
             itemCount: controller.courses.length,
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 
   Widget _buildBookView(SearchTagChildController controller) {
-    return controller.articles.isNotEmpty
-        ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                return Wrap(
-                  spacing: 12.w,
-                  runSpacing: 12.w,
-                  children: controller.articles
-                      .map(
-                        (e) => ThreeDBookItem(
-                          itemWidth: itemWidth,
-                          item: e,
-                        ),
-                      )
-                      .toList(),
-                );
-              },
-            ),
-          )
-        : const NoDataView();
+    if (controller.articles.isEmpty) {
+      return const Center(
+        child: NoDataView(),
+      );
+    }
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      itemCount: (controller.articles.length / 2).ceil(),
+      itemBuilder: (BuildContext context, int index) {
+        final int firstIndex = index * 2;
+        final int secondIndex = firstIndex + 1;
+        final bool hasSecond = secondIndex < controller.articles.length;
+
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+            return Padding(
+              padding: EdgeInsets.only(bottom: 12.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ThreeDBookItem(
+                      item: controller.articles[firstIndex],
+                      itemWidth: itemWidth,
+                    ),
+                  ),
+                  if (hasSecond) ...[
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: ThreeDBookItem(
+                        item: controller.articles[secondIndex],
+                        itemWidth: itemWidth,
+                      ),
+                    ),
+                  ] else
+                    const Expanded(child: SizedBox()),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildVideoView(SearchTagChildController controller) {
-    return Padding(
+    if (controller.articles.isEmpty) {
+      return const Center(
+        child: NoDataView(),
+      );
+    }
+    return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-      child: controller.articles.isNotEmpty
-          ? LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                return Wrap(
-                  spacing: 12.w,
-                  runSpacing: 12.w,
-                  children: controller.articles
-                      .map((e) => SizedBox(
-                            width: itemWidth,
-                            child: VideoItem(item: e),
-                          ))
-                      .toList(),
-                );
-              },
-            )
-          : const NoDataView(),
+      itemCount: (controller.articles.length / 2).ceil(),
+      itemBuilder: (BuildContext context, int index) {
+        final int firstIndex = index * 2;
+        final int secondIndex = firstIndex + 1;
+        final bool hasSecond = secondIndex < controller.articles.length;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: 12.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: VideoItem(item: controller.articles[firstIndex]),
+              ),
+              if (hasSecond) ...[
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: VideoItem(item: controller.articles[secondIndex]),
+                ),
+              ] else
+                const Expanded(child: SizedBox()),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -165,6 +200,6 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
             itemBuilder: (c, i) => FeedItem(controller.feeds[i]),
             itemCount: controller.feeds.length,
           )
-        : const NoDataView();
+        : const Center(child: NoDataView());
   }
 }

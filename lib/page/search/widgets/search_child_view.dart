@@ -248,60 +248,85 @@ class SearchChildView extends GetView<SearchChildView> {
   }
 
   Widget _buildBookView(SearchChildController controller) {
-    return controller.articles.isNotEmpty
-        ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                return Wrap(
-                  spacing: 12.w,
-                  runSpacing: 12.w,
-                  children: controller.articles
-                      .map(
-                        (e) => ThreeDBookItem(
-                          itemWidth: itemWidth,
-                          item: e,
-                        ),
-                      )
-                      .toList(),
-                );
-              },
-            ),
-          )
-        : const Center(child: NoDataView());
+    if (controller.articles.isEmpty) {
+      return const Center(
+        child: NoDataView(),
+      );
+    }
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      itemCount: (controller.articles.length / 2).ceil(),
+      itemBuilder: (BuildContext context, int index) {
+        final int firstIndex = index * 2;
+        final int secondIndex = firstIndex + 1;
+        final bool hasSecond = secondIndex < controller.articles.length;
+
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+            return Padding(
+              padding: EdgeInsets.only(bottom: 12.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ThreeDBookItem(
+                      item: controller.articles[firstIndex],
+                      itemWidth: itemWidth,
+                    ),
+                  ),
+                  if (hasSecond) ...[
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: ThreeDBookItem(
+                        item: controller.articles[secondIndex],
+                        itemWidth: itemWidth,
+                      ),
+                    ),
+                  ] else
+                    const Expanded(child: SizedBox()),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildVideoView(SearchChildController controller) {
-    return Padding(
+    if (controller.articles.isEmpty) {
+      return const Center(
+        child: NoDataView(),
+      );
+    }
+    return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-      child: controller.articles.isNotEmpty
-          ? LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                return Wrap(
-                  spacing: 12.w,
-                  runSpacing: 12.w,
-                  children: controller.articles
-                      .map((e) => SizedBox(
-                            width: itemWidth,
-                            child: VideoItem(item: e),
-                          ))
-                      .toList(),
-                );
-              },
-            )
-          // ? GridView.builder(
-          //     padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 12.w),
-          //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //       crossAxisCount: 2,
-          //       crossAxisSpacing: 8.w,
-          //       mainAxisSpacing: 8.w,
-          //     ),
-          //     itemCount: controller.articles.length,
-          //     itemBuilder: (c, i) => VideoItem(item: controller.articles[i]),
-          //   )
-          : const Center(child: NoDataView()),
+      itemCount: (controller.articles.length / 2).ceil(),
+      itemBuilder: (BuildContext context, int index) {
+        final int firstIndex = index * 2;
+        final int secondIndex = firstIndex + 1;
+        final bool hasSecond = secondIndex < controller.articles.length;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: 12.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: VideoItem(item: controller.articles[firstIndex]),
+              ),
+              if (hasSecond) ...[
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: VideoItem(item: controller.articles[secondIndex]),
+                ),
+              ] else
+                const Expanded(child: SizedBox()),
+            ],
+          ),
+        );
+      },
     );
   }
 

@@ -17,12 +17,12 @@ import '../utils/date_util.dart';
 
 class VideoItem extends StatelessWidget {
   final ArticleBean item;
+  final BorderRadiusGeometry? borderRadius;
 
-  const VideoItem({super.key, required this.item});
+  const VideoItem({super.key, required this.item, this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         Get.toNamed(
@@ -94,7 +94,11 @@ class VideoItem extends StatelessWidget {
                               '#84BCF9'.hexColor,
                             ],
                           ),
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(6.r)),
+                          borderRadius: borderRadius ??
+                              BorderRadius.only(
+                                bottomLeft: Radius.circular(6.r),
+                                topRight: Radius.circular(6.r),
+                              ),
                         ),
                         child: Text(
                           '合集',

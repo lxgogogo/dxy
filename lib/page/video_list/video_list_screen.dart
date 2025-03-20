@@ -117,36 +117,34 @@ class _VideoListScreenState extends State<VideoListScreen> {
   }
 
   Widget _buildVideoView(VideoListController controller) {
-    return Container(
-      child: CustomScrollView(
-        physics:const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        slivers: [
-          SliverToBoxAdapter(
-              child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-            child: controller.articles.isNotEmpty
-                ? LayoutBuilder(
-                    builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                      Log.d('itemWidth: ${controller.articles.length}');
-                      return Wrap(
-                        spacing: 12.w,
-                        runSpacing: 12.w,
-                        children: controller.articles
-                            .map((e) => SizedBox(
-                                  width: itemWidth,
-                                  child: VideoItem(item: e),
-                                ))
-                            .toList(),
-                      );
-                    },
-                  )
-                : const NoDataView(),
-          )),
-        ],
-      ),
+    return CustomScrollView(
+      physics:const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      slivers: [
+        SliverToBoxAdapter(
+            child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+          child: controller.articles.isNotEmpty
+              ? LayoutBuilder(
+                  builder:
+                      (BuildContext context, BoxConstraints constraints) {
+                    final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                    Log.d('itemWidth: ${controller.articles.length}');
+                    return Wrap(
+                      spacing: 12.w,
+                      runSpacing: 12.w,
+                      children: controller.articles
+                          .map((e) => SizedBox(
+                                width: itemWidth,
+                                child: VideoItem(item: e),
+                              ))
+                          .toList(),
+                    );
+                  },
+                )
+              : const NoDataView(),
+        )),
+      ],
     );
   }
 }

@@ -246,7 +246,7 @@ class VideoHorizontalItem extends StatelessWidget {
                           ),
                         ),
                         CountLike(
-                          count: item.favoriteCount.abbreviateNumber,
+                          count: item.likeCount.abbreviateNumber,
                           usePlaceHolder: false,
                         ),
                         CountComment(

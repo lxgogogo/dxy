@@ -173,225 +173,228 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             SizedBox(height: 211.w),
-                            ClipRRect(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 100),
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                  decoration: BoxDecoration(
-                                    color: '#F3F8FF'.hexColor.withOpacity(0.7),
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(12.r),
+                            GestureDetector(
+                              onTap: () {},
+                              child: ClipRRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 100),
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                    decoration: BoxDecoration(
+                                      color: '#F3F8FF'.hexColor,
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(12.r),
+                                      ),
                                     ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      SizedBox(height: 24.w),
-                                      AnimatedOpacity(
-                                        opacity: controller.isShowHomeMenu ? 0 : 1,
-                                        duration: const Duration(milliseconds: 300),
-                                        child: LayoutBuilder(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        SizedBox(height: 24.w),
+                                        AnimatedOpacity(
+                                          opacity: controller.isShowHomeMenu ? 0 : 1,
+                                          duration: const Duration(milliseconds: 300),
+                                          child: LayoutBuilder(
+                                            builder: (BuildContext context, BoxConstraints constraints) {
+                                              final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                              return Wrap(
+                                                spacing: 12.w,
+                                                runSpacing: 24.w,
+                                                children: [
+                                                  HomeMenuItem(
+                                                    itemWidth: itemWidth,
+                                                    name: '精彩视频',
+                                                    nameEn: 'Video',
+                                                    imagePath: Assets.images.iconHomeVideo.path,
+                                                    onTap: () => Get.toNamed(Routes.videoList),
+                                                  ),
+                                                  HomeMenuItem(
+                                                    itemWidth: itemWidth,
+                                                    name: '德州教程',
+                                                    nameEn: 'Tutorial',
+                                                    imagePath: Assets.images.iconHomeCourse.path,
+                                                    onTap: () => Get.toNamed(Routes.course),
+                                                  ),
+                                                  HomeMenuItem(
+                                                    itemWidth: itemWidth,
+                                                    name: '好书推荐',
+                                                    nameEn: 'Recommend',
+                                                    imagePath: Assets.images.iconHomeBook.path,
+                                                    onTap: () => Get.toNamed(Routes.boolList),
+                                                  ),
+                                                  HomeMenuItem(
+                                                    itemWidth: itemWidth,
+                                                    name: '火爆论坛',
+                                                    nameEn: 'BBS',
+                                                    imagePath: Assets.images.iconHomeFeed.path,
+                                                    onTap: () => controller.changeMainTab(1),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        SizedBox(height: 24.w),
+                                        HomeTitle(
+                                          title: '热门视频',
+                                          subtitle: GestureDetector(
+                                            onTap: controller.loadHotVideos,
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  '换一批',
+                                                  style: TextStyle(
+                                                    color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                                                    fontSize: 12.sp,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                AnimatedBuilder(
+                                                  animation: controller.animationController,
+                                                  builder: (context, child) {
+                                                    return Transform.rotate(
+                                                      angle: controller.isHotVideosLoading
+                                                          ? controller.animationController.value * 2 * pi
+                                                          : 0,
+                                                      child: SvgPicture.asset(
+                                                        Assets.svg.iconRefresh,
+                                                        width: 12.w,
+                                                        height: 12.w,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 12.w),
+                                        LayoutBuilder(
                                           builder: (BuildContext context, BoxConstraints constraints) {
                                             final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                             return Wrap(
                                               spacing: 12.w,
-                                              runSpacing: 24.w,
+                                              runSpacing: 12.w,
+                                              children: controller.hotVideos
+                                                  .map((e) => SizedBox(
+                                                        width: itemWidth,
+                                                        child: VideoItem(
+                                                            item: ArticleBean(
+                                                          id: e.id,
+                                                          cover: e.cover,
+                                                          viewCount: e.viewCount?.toInt(),
+                                                          duration: e.duration,
+                                                          title: e.title,
+                                                          createdAt: e.createdAt,
+                                                          type: e.type,
+                                                          likeCount: e.likeCount,
+                                                          commentCount: e.commentCount,
+                                                        )),
+                                                      ))
+                                                  .toList(),
+                                            );
+                                          },
+                                        ),
+                                        SizedBox(height: 12.w),
+                                        HomeTitle(
+                                          title: '精彩视频',
+                                          onTap: controller.toVideoList,
+                                        ),
+                                        Column(
+                                          children: controller.videoItems
+                                              .map((e) => Padding(
+                                                    padding: EdgeInsets.only(top: 6.w),
+                                                    child: VideoHorizontalItem(item: e),
+                                                  ))
+                                              .toList(),
+                                        ),
+                                        SizedBox(height: 24.w),
+                                        const HomeTitle(
+                                          title: '德州教程',
+                                          subtitle: SizedBox(),
+                                        ),
+                                        SizedBox(height: 12.w),
+                                        LayoutBuilder(
+                                          builder: (BuildContext context, BoxConstraints constraints) {
+                                            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                            return Wrap(
+                                              spacing: 12.w,
+                                              runSpacing: 12.w,
                                               children: [
-                                                HomeMenuItem(
+                                                // 菜鸟上路：基础术语、牌桌礼仪、牌型计算
+                                                // 新手指导：基础策略、算牌技巧、位置意识
+                                                // 进阶教程：GTO上手、诈唬策略、下注尺度
+                                                // 职业打法：多桌牌局、进阶诈唬、GTO策略
+                                                HomeCourseItem(
                                                   itemWidth: itemWidth,
-                                                  name: '精彩视频',
-                                                  nameEn: 'Video',
-                                                  imagePath: Assets.images.iconHomeVideo.path,
-                                                  onTap: () => Get.toNamed(Routes.videoList),
+                                                  imagePath: Assets.images.course0.path,
+                                                  title: '菜鸟上路',
+                                                  subtitles: const [
+                                                    '基础术语',
+                                                    '牌桌礼仪',
+                                                    '牌型计算',
+                                                  ],
                                                 ),
-                                                HomeMenuItem(
+                                                HomeCourseItem(
                                                   itemWidth: itemWidth,
-                                                  name: '德州教程',
-                                                  nameEn: 'Tutorial',
-                                                  imagePath: Assets.images.iconHomeCourse.path,
-                                                  onTap: () => Get.toNamed(Routes.course),
+                                                  imagePath: Assets.images.course1.path,
+                                                  title: '新手指导',
+                                                  subtitles: const [
+                                                    '基础策略',
+                                                    '算牌技巧',
+                                                    '位置意识',
+                                                  ],
                                                 ),
-                                                HomeMenuItem(
+                                                HomeCourseItem(
                                                   itemWidth: itemWidth,
-                                                  name: '好书推荐',
-                                                  nameEn: 'Recommend',
-                                                  imagePath: Assets.images.iconHomeBook.path,
-                                                  onTap: () => Get.toNamed(Routes.boolList),
+                                                  imagePath: Assets.images.course2.path,
+                                                  title: '进阶教程',
+                                                  subtitles: const [
+                                                    'GTO上手',
+                                                    '诈唬策略',
+                                                    '下注尺度',
+                                                  ],
                                                 ),
-                                                HomeMenuItem(
+                                                HomeCourseItem(
                                                   itemWidth: itemWidth,
-                                                  name: '火爆论坛',
-                                                  nameEn: 'BBS',
-                                                  imagePath: Assets.images.iconHomeFeed.path,
-                                                  onTap: () => controller.changeMainTab(1),
+                                                  imagePath: Assets.images.course3.path,
+                                                  title: '职业打法',
+                                                  subtitles: const [
+                                                    '多桌牌局',
+                                                    '进阶诈唬',
+                                                    'GTO策略',
+                                                  ],
                                                 ),
                                               ],
                                             );
                                           },
                                         ),
-                                      ),
-                                      SizedBox(height: 24.w),
-                                      HomeTitle(
-                                        title: '热门视频',
-                                        subtitle: GestureDetector(
-                                          onTap: controller.loadHotVideos,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '换一批',
-                                                style: TextStyle(
-                                                  color: '#1E1E1E'.hexColor.withOpacity(0.5),
-                                                  fontSize: 12.sp,
-                                                ),
-                                              ),
-                                              SizedBox(width: 3.w),
-                                              AnimatedBuilder(
-                                                animation: controller.animationController,
-                                                builder: (context, child) {
-                                                  return Transform.rotate(
-                                                    angle: controller.isHotVideosLoading
-                                                        ? controller.animationController.value * 2 * pi
-                                                        : 0,
-                                                    child: SvgPicture.asset(
-                                                      Assets.svg.iconRefresh,
-                                                      width: 12.w,
-                                                      height: 12.w,
+                                        SizedBox(height: 24.w),
+                                        HomeTitle(title: '好书推荐', onTap: () => Get.toNamed(Routes.boolList)),
+                                        SizedBox(height: 12.w),
+                                        LayoutBuilder(
+                                          builder: (BuildContext context, BoxConstraints constraints) {
+                                            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                            return Wrap(
+                                              spacing: 12.w,
+                                              runSpacing: 12.w,
+                                              children: controller.bookItems
+                                                  .map(
+                                                    (e) => ThreeDBookItem(
+                                                      itemWidth: itemWidth,
+                                                      item: e,
                                                     ),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          ),
+                                                  )
+                                                  .toList(),
+                                            );
+                                          },
                                         ),
-                                      ),
-                                      SizedBox(height: 12.w),
-                                      LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                                          return Wrap(
-                                            spacing: 12.w,
-                                            runSpacing: 12.w,
-                                            children: controller.hotVideos
-                                                .map((e) => SizedBox(
-                                                      width: itemWidth,
-                                                      child: VideoItem(
-                                                          item: ArticleBean(
-                                                        id: e.id,
-                                                        cover: e.cover,
-                                                        viewCount: e.viewCount?.toInt(),
-                                                        duration: e.duration,
-                                                        title: e.title,
-                                                        createdAt: e.createdAt,
-                                                        type: e.type,
-                                                        likeCount: e.likeCount,
-                                                        commentCount: e.commentCount,
-                                                      )),
-                                                    ))
-                                                .toList(),
-                                          );
-                                        },
-                                      ),
-                                      SizedBox(height: 12.w),
-                                      HomeTitle(
-                                        title: '精彩视频',
-                                        onTap: controller.toVideoList,
-                                      ),
-                                      Column(
-                                        children: controller.videoItems
-                                            .map((e) => Padding(
-                                                  padding: EdgeInsets.only(top: 6.w),
-                                                  child: VideoHorizontalItem(item: e),
-                                                ))
-                                            .toList(),
-                                      ),
-                                      SizedBox(height: 24.w),
-                                      const HomeTitle(
-                                        title: '德州教程',
-                                        subtitle: SizedBox(),
-                                      ),
-                                      SizedBox(height: 12.w),
-                                      LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                                          return Wrap(
-                                            spacing: 12.w,
-                                            runSpacing: 12.w,
-                                            children: [
-                                              // 菜鸟上路：基础术语、牌桌礼仪、牌型计算
-                                              // 新手指导：基础策略、算牌技巧、位置意识
-                                              // 进阶教程：GTO上手、诈唬策略、下注尺度
-                                              // 职业打法：多桌牌局、进阶诈唬、GTO策略
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course0.path,
-                                                title: '菜鸟上路',
-                                                subtitles: const [
-                                                  '基础术语',
-                                                  '牌桌礼仪',
-                                                  '牌型计算',
-                                                ],
-                                              ),
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course1.path,
-                                                title: '新手指导',
-                                                subtitles: const [
-                                                  '基础策略',
-                                                  '算牌技巧',
-                                                  '位置意识',
-                                                ],
-                                              ),
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course2.path,
-                                                title: '进阶教程',
-                                                subtitles: const [
-                                                  'GTO上手',
-                                                  '诈唬策略',
-                                                  '下注尺度',
-                                                ],
-                                              ),
-                                              HomeCourseItem(
-                                                itemWidth: itemWidth,
-                                                imagePath: Assets.images.course3.path,
-                                                title: '职业打法',
-                                                subtitles: const [
-                                                  '多桌牌局',
-                                                  '进阶诈唬',
-                                                  'GTO策略',
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                      SizedBox(height: 24.w),
-                                      HomeTitle(title: '好书推荐', onTap: () => Get.toNamed(Routes.boolList)),
-                                      SizedBox(height: 12.w),
-                                      LayoutBuilder(
-                                        builder: (BuildContext context, BoxConstraints constraints) {
-                                          final itemWidth = (constraints.maxWidth - 12.w) / 2;
-                                          return Wrap(
-                                            spacing: 12.w,
-                                            runSpacing: 12.w,
-                                            children: controller.bookItems
-                                                .map(
-                                                  (e) => ThreeDBookItem(
-                                                    itemWidth: itemWidth,
-                                                    item: e,
-                                                  ),
-                                                )
-                                                .toList(),
-                                          );
-                                        },
-                                      ),
-                                      SizedBox(height: 32.w),
-                                      SizedBox(
-                                        height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
-                                      ),
-                                    ],
+                                        SizedBox(height: 32.w),
+                                        SizedBox(
+                                          height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

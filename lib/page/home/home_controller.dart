@@ -45,6 +45,21 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         scrollController.jumpTo(0);
       }
     });
+    EventBusUtil.of.on<EventRefreshNum>().listen((event) {
+      final videoIndex = videoItems.indexWhere((e) => e.id == event.id);
+      if (videoIndex != -1) {
+        videoItems[videoIndex].likeCount = event.likeCount;
+        videoItems[videoIndex].favoriteCount = event.favoriteCount;
+        videoItems[videoIndex].commentCount = event.commentCount;
+        safeUpdate();
+      }
+      final hotVideoIndex = hotVideos.indexWhere((e) => e.id == event.id);
+      if (hotVideoIndex != -1) {
+        hotVideos[hotVideoIndex].likeCount = event.likeCount;
+        hotVideos[hotVideoIndex].commentCount = event.commentCount;
+        safeUpdate();
+      }
+    });
   }
 
   @override

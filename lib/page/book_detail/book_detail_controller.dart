@@ -64,10 +64,11 @@ class BookDetailController extends GetxController {
       loaded = true;
       safeUpdate();
       EventBusUtil.of.fire(EventRefreshNum(
-          detailBean!.id!,
-          commentCount: detailBean?.commentCount,
-          likeCount: detailBean?.likeCount,
-          favoriteCount: detailBean?.favoriteCount));
+        detailBean!.id!,
+        commentCount: detailBean?.commentCount,
+        likeCount: detailBean?.likeCount,
+        favoriteCount: detailBean?.favoriteCount,
+      ));
     });
 
     onRefresh();
@@ -100,7 +101,7 @@ class BookDetailController extends GetxController {
           },
         },
         showLoading: false,
-            (data) {
+        (data) {
           final dataList = List<CommentBean>.from(
             data['list'].map((comment) => CommentBean.fromJson(comment)),
           );

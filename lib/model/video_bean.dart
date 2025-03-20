@@ -54,8 +54,8 @@ class VideoBean {
   final String? title;
   final String? description;
   final String? cover;
-  final int? commentCount;
-  final int? likeCount;
+  int? commentCount;
+  int? likeCount;
   final int? viewCount;
   final int? duration;
   final double? popularCount;

@@ -137,7 +137,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
       backgroundColor: '#F7F8FC'.hexColor,
       body: SmartRefresher(
         enablePullDown: true,
-        enablePullUp: true,
+        enablePullUp: items.isNotEmpty == true || !noMore,
         controller: _refreshController,
         onRefresh: _onRefresh,
         onLoading: _onLoading,
@@ -175,15 +175,14 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             items[index].id!,
                             !items[index].followed!,
                             (data) {
-                              if (widget.isFollowPage) {
-                                items.removeAt(index);
+                              if (items[index].followed == true) {
                                 ToastUtils.showToast('取消关注成功');
-                                if (_isMounted) {
-                                  setState(() {});
-                                }
                               } else {
-                                pageNum = 1;
-                                reqListData();
+                                ToastUtils.showToast('关注成功');
+                              }
+                              items[index].followed = !items[index].followed!;
+                              if (_isMounted) {
+                                setState(() {});
                               }
                             },
                           );
@@ -214,7 +213,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                 itemCount: items.length,
                 separatorBuilder: (_, __) => SizedBox(height: 16.w),
               )
-            : const NoDataView(),
+            : const Center(child: NoDataView()),
       ),
     );
   }

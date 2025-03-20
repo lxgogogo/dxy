@@ -319,14 +319,18 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             spacing: 12.w,
                                             runSpacing: 12.w,
                                             children: [
+                                              // 菜鸟上路：基础术语、牌桌礼仪、牌型计算
+                                              // 新手指导：基础策略、算牌技巧、位置意识
+                                              // 进阶教程：GTO上手、诈唬策略、下注尺度
+                                              // 职业打法：多桌牌局、进阶诈唬、GTO策略
                                               HomeCourseItem(
                                                 itemWidth: itemWidth,
                                                 imagePath: Assets.images.course0.path,
                                                 title: '菜鸟上路',
                                                 subtitles: const [
-                                                  'GTO上手',
                                                   '基础术语',
                                                   '牌桌礼仪',
+                                                  '牌型计算',
                                                 ],
                                               ),
                                               HomeCourseItem(
@@ -344,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 imagePath: Assets.images.course2.path,
                                                 title: '进阶教程',
                                                 subtitles: const [
-                                                  '进阶升华',
+                                                  'GTO上手',
                                                   '诈唬策略',
                                                   '下注尺度',
                                                 ],
@@ -354,8 +358,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 imagePath: Assets.images.course3.path,
                                                 title: '职业打法',
                                                 subtitles: const [
-                                                  '多桌策略',
-                                                  '诈唬进阶',
+                                                  '多桌牌局',
+                                                  '进阶诈唬',
                                                   'GTO策略',
                                                 ],
                                               ),

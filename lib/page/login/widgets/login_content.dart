@@ -152,20 +152,16 @@ class _LoginContentState extends State<LoginContent> {
               ],
             ),
           ),
-          SizedBox(
-            height: 12.w,
-          ),
-          if (isShowAccountTips)
-            Padding(
-              padding: EdgeInsets.only(left: 10.w, bottom: 10.w),
-              child: Text(
-                isShowAccountTips ? '*请输入正确邮箱地址' : '',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
-                ),
+          Padding(
+            padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+            child: Text(
+              isShowAccountTips ? '*请输入正确邮箱地址' : '',
+              style: TextStyle(
+                fontSize: 10.sp,
+                color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
+          ),
           Container(
             height: 44.w,
             padding: EdgeInsets.symmetric(horizontal: 10.0.w),

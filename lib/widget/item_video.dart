@@ -97,7 +97,7 @@ class VideoItem extends StatelessWidget {
                           borderRadius: borderRadius ??
                               BorderRadius.only(
                                 bottomLeft: Radius.circular(6.r),
-                                topRight: Radius.circular(6.r),
+                                topRight: Radius.circular(12.r),
                               ),
                         ),
                         child: Text(

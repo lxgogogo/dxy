@@ -64,7 +64,7 @@ class CourseScreen extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Assets.images.courseBanner.image(
-                      height: 272.w,
+                      height: 234.w,
                     ),
                     NestedScrollView(
                       controller: controller.scrollController,

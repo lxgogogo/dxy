@@ -39,9 +39,6 @@ class $AssetsImagesGen {
   AssetGenImage get backWhite =>
       const AssetGenImage('assets/images/back_white.png');
 
-  /// File path: assets/images/banner.png
-  AssetGenImage get banner => const AssetGenImage('assets/images/banner.png');
-
   /// File path: assets/images/book_banner.png
   AssetGenImage get bookBanner =>
       const AssetGenImage('assets/images/book_banner.png');
@@ -110,6 +107,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/course_card_bg.png
   AssetGenImage get courseCardBg =>
       const AssetGenImage('assets/images/course_card_bg.png');
+
+  /// File path: assets/images/courser_banner.png
+  AssetGenImage get courserBanner =>
+      const AssetGenImage('assets/images/courser_banner.png');
 
   /// File path: assets/images/default_avatar.png
   AssetGenImage get defaultAvatar =>
@@ -519,6 +520,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/video.png
   AssetGenImage get video => const AssetGenImage('assets/images/video.png');
 
+  /// File path: assets/images/video_banner.png
+  AssetGenImage get videoBanner =>
+      const AssetGenImage('assets/images/video_banner.png');
+
   /// File path: assets/images/zan.png
   AssetGenImage get zan => const AssetGenImage('assets/images/zan.png');
 
@@ -532,7 +537,6 @@ class $AssetsImagesGen {
         arrowRight,
         back,
         backWhite,
-        banner,
         bookBanner,
         changeAvatar,
         clear,
@@ -551,6 +555,7 @@ class $AssetsImagesGen {
         course3,
         courseBanner,
         courseCardBg,
+        courserBanner,
         defaultAvatar,
         delete,
         delete2,
@@ -662,6 +667,7 @@ class $AssetsImagesGen {
         titleLogo,
         versionUpdate,
         video,
+        videoBanner,
         zan
       ];
 }

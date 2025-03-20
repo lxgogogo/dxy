@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   children: <Widget>[
                     if (controller.banners.isNotEmpty)
                       SizedBox(
-                        height: 272.w,
+                        height: 234.w,
                         child: Stack(
                           children: [
                             Builder(
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   );
                                 }
                                 return SizedBox(
-                                  height: 272.w,
+                                  height: 234.w,
                                   child: Swiper(
                                     itemCount: controller.banners.length,
                                     itemBuilder: (BuildContext context, int index) {

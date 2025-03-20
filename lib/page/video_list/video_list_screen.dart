@@ -67,9 +67,9 @@ class _VideoListScreenState extends State<VideoListScreen> {
           child: Stack(
             children: [
               SizedBox(
-                height: 272.w,
+                height: 234.w,
                 child: Image.asset(
-                  Assets.images.banner.path,
+                  Assets.images.videoBanner.path,
                   fit: BoxFit.cover,
                 ),
               ),

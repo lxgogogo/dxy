@@ -66,7 +66,7 @@ Widget _buildContent(BookListController controller) {
           child: Stack(
         children: [
           SizedBox(
-            height: 272.w,
+            height: 234.w,
             child: Image.asset(
               Assets.images.bookBanner.path,
               fit: BoxFit.cover,

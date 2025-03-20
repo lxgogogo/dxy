@@ -96,12 +96,12 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: 54.w,
-                color: '#f7f8fc'.hexColor,
-                alignment: Alignment.bottomLeft,
+            Container(
+              height: 54.w,
+              color: '#f7f8fc'.hexColor,
+              alignment: Alignment.centerLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     SizedBox(
@@ -122,7 +122,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                       child: Container(
                         height: 30.w,
                         padding: EdgeInsets.symmetric(horizontal: 17.w),
-                        margin: EdgeInsets.only(right: 12.w, bottom: 12.w),
+                        margin: EdgeInsets.only(right: 12.w),
                         alignment: Alignment.center,
                         decoration: selIndex != 0
                             ? ShapeDecoration(
@@ -167,7 +167,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                         child: Container(
                           height: 30.w,
                           padding: EdgeInsets.symmetric(horizontal: 17.w),
-                          margin: EdgeInsets.only(right: 12.w, bottom: 12.w),
+                          margin: EdgeInsets.only(right: 12.w),
                           alignment: Alignment.center,
                           decoration: selIndex != index + 1
                               ? ShapeDecoration(
@@ -203,125 +203,124 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
             ),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.r),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SuperTooltip(
-                        showBarrier: true,
-                        controller: _tipController,
-                        popupDirection: TooltipDirection.down,
-                        backgroundColor: Colors.transparent,
-                        hasShadow: false,
-                        borderColor: Colors.transparent,
-                        arrowLength: 0,
-                        arrowTipDistance: 21.w,
-                        bubbleDimensions: EdgeInsets.zero,
-                        touchThroughAreaShape: ClipAreaShape.rectangle,
-                        touchThroughAreaCornerRadius: 10,
-                        minimumOutsideMargin: 0,
-                        barrierColor: Colors.transparent,
-                        right: 18.w,
-                        content: Container(
-                          width: 72.w,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(6.r)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10.r,
-                                offset: Offset(0, 5.w),
-                              ),
-                              BoxShadow(
-                                color: const Color(0xfffafcff),
-                                blurRadius: 1.r,
-                                spreadRadius: -1.r,
-                                offset: Offset(0, -1.w),
-                              ),
-                            ],
-                          ),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            itemCount: filters.length,
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (BuildContext context, int index) {
-                              final item = filters[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  _tipController.hideTooltip();
-                                  if (filterIndex != index) {
-                                    filterIndex = index;
-                                    String order = filterIndex == 0
-                                        ? 'time'
-                                        : filterIndex == 1
-                                        ? 'comment'
-                                        : 'like';
-                                    _pageKey.currentState?.refreshData(0, order);
-                                  }
-                                },
-                                child: Container(
-                                  height: 41.5.w,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      color: '#333333'.hexColor,
-                                      fontSize: 12.sp,
-                                    ),
-                                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.r),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: SuperTooltip(
+                          showBarrier: true,
+                          controller: _tipController,
+                          popupDirection: TooltipDirection.down,
+                          backgroundColor: Colors.transparent,
+                          hasShadow: false,
+                          borderColor: Colors.transparent,
+                          arrowLength: 0,
+                          arrowTipDistance: 21.w,
+                          bubbleDimensions: EdgeInsets.zero,
+                          touchThroughAreaShape: ClipAreaShape.rectangle,
+                          touchThroughAreaCornerRadius: 10,
+                          minimumOutsideMargin: 0,
+                          barrierColor: Colors.transparent,
+                          right: 18.w,
+                          content: Container(
+                            width: 72.w,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(6.r)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10.r,
+                                  offset: Offset(0, 5.w),
                                 ),
-                              );
-                            },
-                            separatorBuilder: (_, __) => Container(
-                              margin: EdgeInsets.symmetric(horizontal: 12.w),
-                              color: '#333333'.hexColor.withOpacity(0.1),
-                              height: 1.w,
-                            ),
-                          ),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            _tipController.showTooltip();
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  filters[filterIndex],
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: '#333333'.hexColor.withOpacity(0.8),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  color: '#333333'.hexColor.withOpacity(0.8),
+                                BoxShadow(
+                                  color: const Color(0xfffafcff),
+                                  blurRadius: 1.r,
+                                  spreadRadius: -1.r,
+                                  offset: Offset(0, -1.w),
                                 ),
                               ],
+                            ),
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              itemCount: filters.length,
+                              padding: EdgeInsets.zero,
+                              itemBuilder: (BuildContext context, int index) {
+                                final item = filters[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    _tipController.hideTooltip();
+                                    if (filterIndex != index) {
+                                      filterIndex = index;
+                                      String order = filterIndex == 0
+                                          ? 'time'
+                                          : filterIndex == 1
+                                              ? 'comment'
+                                              : 'like';
+                                      _pageKey.currentState?.refreshData(0, order);
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 41.5.w,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (_, __) => Container(
+                                margin: EdgeInsets.symmetric(horizontal: 12.w),
+                                color: '#333333'.hexColor.withOpacity(0.1),
+                                height: 1.w,
+                              ),
+                            ),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              _tipController.showTooltip();
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    filters[filterIndex],
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: '#333333'.hexColor.withOpacity(0.8),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    color: '#333333'.hexColor.withOpacity(0.8),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 12.w,
-                    ),
-                    Expanded(
-                        child: FeedListChildView(
-                          tabId: tabId,
-                          key: _pageKey,
-                        )),
-                  ],
-                )
-              ),
+                      SizedBox(
+                        height: 12.w,
+                      ),
+                      Expanded(
+                          child: FeedListChildView(
+                        tabId: tabId,
+                        key: _pageKey,
+                      )),
+                    ],
+                  )),
             )
           ],
         ),

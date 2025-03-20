@@ -50,7 +50,6 @@ class _BookItemState extends State<BookItem> {
           ],
         ),
         clipBehavior: Clip.antiAlias,
-        width: 88.w,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,7 +61,6 @@ class _BookItemState extends State<BookItem> {
               child: CachedNetworkImage(
                 imageUrl: widget.article.cover ?? '',
                 width: 88.w,
-                height: 132.w,
                 fit: BoxFit.cover,
                 placeholder: (context, url) =>
                     Assets.images.imageLoadingDef.image(fit: BoxFit.fill),

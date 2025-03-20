@@ -81,19 +81,22 @@ class CountCommentBadge extends StatelessWidget {
         Row(
           children: [
             iconWidget,
-            Transform.translate(
-              offset: Offset(-8.w, -12.w),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 2.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Text(
-                  count,
-                  style: TextStyle(
-                    color: '##333333'.hexColor.withOpacity(0.7),
-                    fontSize: 10.sp,
+            Opacity(
+              opacity: count != '0' ? 1 : 0,
+              child: Transform.translate(
+                offset: Offset(-8.w, -12.w),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Text(
+                    count,
+                    style: TextStyle(
+                      color: '##333333'.hexColor.withOpacity(0.7),
+                      fontSize: 10.sp,
+                    ),
                   ),
                 ),
               ),

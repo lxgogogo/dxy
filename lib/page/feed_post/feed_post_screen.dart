@@ -16,6 +16,7 @@ import 'package:holdem/widget/common_app_bar.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
 import '../../utils/eventbus/EventBusAction.dart';
@@ -124,7 +125,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         ),
                       ),
                     ),
-                    buildBottomToolbar(context),
+                    buildBottomToolbar(context)
                   ],
                 ),
               ),
@@ -271,84 +272,56 @@ class FeedPostScreen extends GetView<FeedPostController> {
   }
 
   Widget buildBottomToolbar(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.w),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              QuillToolbarImageButton(
-                controller: controller.quillController,
-                options: QuillToolbarImageButtonOptions(
-                  imageButtonConfig: QuillToolbarImageConfig(
-                    onImageInsertCallback: controller.onImageInsertCallback,
-                  ),
-                  childBuilder: (dynamic options, dynamic extraOptions) {
-                    QuillToolbarImageButtonExtraOptions? buttonExtraOptions;
-                    if (extraOptions is QuillToolbarImageButtonExtraOptions) {
-                      buttonExtraOptions = extraOptions;
-                    }
-                    return GestureDetector(
-                      onTap: buttonExtraOptions?.onPressed,
-                      child: Container(
-                          width: 75.w,
-                          height: 75.w,
-                          alignment: Alignment.center,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFF333333).withOpacity(0.1),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            size: 26.w,
-                            color: '#333333'.hexColor.withOpacity(0.5),
-                          )),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 12.w,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  if (controller.tagList.length < controller.tagMaxLength)
-                    GestureDetector(
-                      onTap: controller.toAddTag,
-                      child: Container(
-                        height: 26.w,
-                        margin: EdgeInsets.only(right: 8.w),
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: '#557BF6'.hexColor),
-                        ),
-                        child: Text(
-                          '#话题${controller.tagList.isNotEmpty ? '（${controller.tagList.length}/${controller.tagMaxLength}）' : ''}',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: '#557BF6'.hexColor,
-                          ),
-                        ),
-                      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                QuillToolbarImageButton(
+                  controller: controller.quillController,
+                  options: QuillToolbarImageButtonOptions(
+                    imageButtonConfig: QuillToolbarImageConfig(
+                      onImageInsertCallback: controller.onImageInsertCallback,
                     ),
-                  GestureDetector(
-                    onTap: () async {
-                      final result = await await Get.bottomSheet(
-                        const AtUserScreen(),
-                        isScrollControlled: true,
-                      );
-                      if (result != null) {
-                        controller.quillController.insertAtBlock(data: json.encode(result));
+                    childBuilder: (dynamic options, dynamic extraOptions) {
+                      QuillToolbarImageButtonExtraOptions? buttonExtraOptions;
+                      if (extraOptions is QuillToolbarImageButtonExtraOptions) {
+                        buttonExtraOptions = extraOptions;
                       }
+                      return GestureDetector(
+                        onTap: buttonExtraOptions?.onPressed,
+                        child: Container(
+                          height: 26.w,
+                          margin: EdgeInsets.only(right: 8.w),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(color: '#557BF6'.hexColor),
+                          ),
+                          child: Text(
+                            '+添加图片',
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              color: '#557BF6'.hexColor,
+                            ),
+                          ),
+                        ),
+                      );
                     },
+                  ),
+                ),
+                if (controller.tagList.length < controller.tagMaxLength)
+                  GestureDetector(
+                    onTap: controller.toAddTag,
                     child: Container(
                       height: 26.w,
+                      margin: EdgeInsets.only(right: 8.w),
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -356,7 +329,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         border: Border.all(color: '#557BF6'.hexColor),
                       ),
                       child: Text(
-                        '@ 用户',
+                        '#话题${controller.tagList.isNotEmpty ? '（${controller.tagList.length}/${controller.tagMaxLength}）' : ''}',
                         style: TextStyle(
                           fontSize: 10.sp,
                           color: '#557BF6'.hexColor,
@@ -364,13 +337,39 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-          buildTagList(controller),
-        ],
-      ),
+                GestureDetector(
+                  onTap: () async {
+                    final result = await await Get.bottomSheet(
+                      const AtUserScreen(),
+                      isScrollControlled: true,
+                    );
+                    if (result != null) {
+                      controller.quillController.insertAtBlock(data: json.encode(result));
+                    }
+                  },
+                  child: Container(
+                    height: 26.w,
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: '#557BF6'.hexColor),
+                    ),
+                    child: Text(
+                      '@ 用户',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: '#557BF6'.hexColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        if (controller.tagList.isNotEmpty) buildTagList(controller),
+      ],
     );
   }
 

@@ -151,6 +151,7 @@ class TagListScreen extends StatelessWidget {
       onTap: () {
         controller.addSelectTag(item);
       },
+      behavior: HitTestBehavior.translucent,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.w),
         child: Row(

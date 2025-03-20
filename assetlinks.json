@@ -1,9 +1,14 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.dxy.depokers",
-    "sha256_cert_fingerprints":
-    ["CA:6A:9B:69:E4:40:EE:A4:A6:6F:D2:DF:3F:55:C6:CF:15:39:D7:0D:33:61:9C:62:A5:18:64:03:34:08:D2:78"]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.dxy.depokers",
+      "sha256_cert_fingerprints": [
+        "F6:B0:30:C5:7A:41:BA:AC:83:78:ED:8D:44:5C:72:EF:72:5A:15:BA:29:48:14:A8:5B:D4:6C:5B:1F:EA:8F:D9"
+      ]
+    }
   }
-}]
+]

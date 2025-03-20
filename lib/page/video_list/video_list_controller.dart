@@ -6,6 +6,7 @@ import '../../model/article.dart';
 import '../../utils/net_request.dart';
 import '../home/home_screen.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
+
 /**
  * Created on 2025/3/6
  * Description:
@@ -19,6 +20,7 @@ class VideoListController extends GetxController {
   bool isLoaded = false;
   bool isShowHomeMenu = false;
   final ScrollController scrollController = ScrollController();
+
   @override
   void onReady() {
     super.onReady();
@@ -31,8 +33,8 @@ class VideoListController extends GetxController {
       }
     });
   }
-  Future<void> reqListData({bool showLoading = false}) async {
 
+  Future<void> reqListData({bool showLoading = false}) async {
     Map<String, Object> params = {
       'pageNum': pageNum,
       'pageSize': pageSize,
@@ -42,7 +44,7 @@ class VideoListController extends GetxController {
     };
     try {
       int recordsSize = 0;
-      await NetRequest().indexList(params, (data) {
+      await NetRequest().indexList(params, showLoading: false, (data) {
         final dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
         recordsSize = dataList.length;
         if (pageNum == 1) {
@@ -64,6 +66,7 @@ class VideoListController extends GetxController {
       safeUpdate();
     }
   }
+
   void onLoading() async {
     if (noMore) {
       refreshController.loadNoData();

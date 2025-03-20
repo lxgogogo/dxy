@@ -194,7 +194,7 @@ _buildContentView(BookListController controller) {
         childCount: controller.articles.length,
         (context, index) {
           return Container(
-            margin: EdgeInsets.only(bottom: 12.w),
+            margin: EdgeInsets.fromLTRB(12.w, 0, 12.w, 12.w),
             child: BookItem(
               article: controller.articles[index],
             ),

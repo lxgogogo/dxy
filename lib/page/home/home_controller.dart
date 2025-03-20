@@ -72,7 +72,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     await NetRequest().indexBanner({
       'pos': 'index.banner',
       'type': '1',
-      'version': 202503,
+      'version': '202503',
     }, showLoading: false, (data) {
       banners = List<BannerBean>.from(data.map((banner) => BannerBean.fromJson(banner)));
       safeUpdate();

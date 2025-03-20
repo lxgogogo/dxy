@@ -108,10 +108,6 @@ class $AssetsImagesGen {
   AssetGenImage get courseCardBg =>
       const AssetGenImage('assets/images/course_card_bg.png');
 
-  /// File path: assets/images/courser_banner.png
-  AssetGenImage get courserBanner =>
-      const AssetGenImage('assets/images/courser_banner.png');
-
   /// File path: assets/images/default_avatar.png
   AssetGenImage get defaultAvatar =>
       const AssetGenImage('assets/images/default_avatar.png');
@@ -555,7 +551,6 @@ class $AssetsImagesGen {
         course3,
         courseBanner,
         courseCardBg,
-        courserBanner,
         defaultAvatar,
         delete,
         delete2,

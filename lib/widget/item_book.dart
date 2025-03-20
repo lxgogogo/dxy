@@ -27,7 +27,6 @@ class BookItem extends StatefulWidget {
 class _BookItemState extends State<BookItem> {
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.bookDetail, arguments: widget.article.id ?? 0)
@@ -37,9 +36,21 @@ class _BookItemState extends State<BookItem> {
         });
       },
       child: Container(
-        margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w),
-        width: 88.w,
         height: 132.w,
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.r),
+          boxShadow: [
+            BoxShadow(
+              color: '#58A5FF'.hexColor.withOpacity(0.1),
+              blurRadius: 4.r,
+              offset: Offset(0, 4.w),
+            )
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        width: 88.w,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

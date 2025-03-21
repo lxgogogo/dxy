@@ -37,10 +37,9 @@ class MessageCommonItem extends StatelessWidget {
         resourceType = '视频';
       } else if (item.resourceType == 'videoList') {
         resourceType = '视频合集';
-      } else if(item.resourceType=='article'){
+      } else if (item.resourceType == 'article') {
         resourceType = '教程';
-      }
-      else {
+      } else {
         resourceType = item.itemType == 'comment' ? '评论中' : '帖子中';
       }
       tipTitle = '在$resourceType@了你';
@@ -82,19 +81,19 @@ class MessageCommonItem extends StatelessWidget {
 
     String typeName = '';
 
-      if (item.resourceType == 'thread') {
-        typeName = '帖子';
-      } else if (item.resourceType == 'article') {
-        typeName = '教程';
-      } else if (item.resourceType == 'video') {
-        typeName = '视频';
-      } else if (item.resourceType == 'videoList') {
-        typeName = '视频合集';
-      } else if (item.resourceType == 'book') {
-        typeName = '书籍';
-      }else{
-        typeName = '资源';
-      }
+    if (item.resourceType == 'thread') {
+      typeName = '帖子';
+    } else if (item.resourceType == 'article') {
+      typeName = '教程';
+    } else if (item.resourceType == 'video') {
+      typeName = '视频';
+    } else if (item.resourceType == 'videoList') {
+      typeName = '视频合集';
+    } else if (item.resourceType == 'book') {
+      typeName = '书籍';
+    } else {
+      typeName = '资源';
+    }
 
     Log.d('resourceType: ${item.resourceType} ${item.delType}');
     if (item.isDeleted) {
@@ -109,8 +108,14 @@ class MessageCommonItem extends StatelessWidget {
         }
         onTap?.call();
       },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+        decoration: BoxDecoration(
+          color: item.readStatus == 1 ? Colors.transparent : '#557BF6'.hexColor.withOpacity(0.05),
+          border: Border(
+            bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 1.w),
+          ),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -157,8 +162,7 @@ class MessageCommonItem extends StatelessWidget {
                       else
                         Text(
                           item.createdAt != null
-                              ? DateUtil.formatDateAlias3(
-                                  item.createdAt!.millisecondsSinceEpoch)
+                              ? DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor.withOpacity(0.7),
@@ -182,8 +186,7 @@ class MessageCommonItem extends StatelessWidget {
                       if (isFavorite)
                         Text(
                           item.createdAt != null
-                              ? DateUtil.formatDateAlias3(
-                                  item.createdAt!.millisecondsSinceEpoch)
+                              ? DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor,

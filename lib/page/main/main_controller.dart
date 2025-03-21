@@ -1,6 +1,6 @@
 part of 'main_screen.dart';
 
-class MainController extends GetxController {
+class MainController extends GetxController with WidgetsBindingObserver {
   static MainController get of => Get.find<MainController>();
 
   int tabIndex = 0;
@@ -11,7 +11,8 @@ class MainController extends GetxController {
   final AppLinks _appLinks = AppLinks();
 
   /// badge
-  Rx<MessageBadgeModel?>  badgeModel = Rx(null);
+  Timer? timer;
+  Rx<MessageBadgeModel?> badgeModel = Rx(null);
 
   void onTabBarItem(int index) {
     if (index == 2 || index == 3) {
@@ -24,7 +25,30 @@ class MainController extends GetxController {
     safeUpdate();
 
     saveReview();
-    loadMessageBadge();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (timer?.isActive != true) {
+          timer?.cancel();
+          timer = Timer.periodic(
+            const Duration(seconds: 5),
+            loadMessageBadge,
+          );
+        }
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.hidden:
+        break;
+      case AppLifecycleState.paused:
+        timer?.cancel();
+        break;
+      case AppLifecycleState.detached:
+        break;
+    }
   }
 
   @override
@@ -36,11 +60,16 @@ class MainController extends GetxController {
       tabIndex = 0;
       safeUpdate();
     });
+    timer = Timer.periodic(
+      const Duration(seconds: 5),
+      loadMessageBadge,
+    );
   }
 
   @override
   void onClose() {
     eventSubscription?.cancel();
+    timer?.cancel();
     super.onClose();
   }
 
@@ -164,7 +193,7 @@ class MainController extends GetxController {
     }
   }
 
-  Future<void> loadMessageBadge() async {
+  Future<void> loadMessageBadge(timer) async {
     if (UserStore.of.isLogin) {
       try {
         final res = await CommonService.of.getMessageBadge();

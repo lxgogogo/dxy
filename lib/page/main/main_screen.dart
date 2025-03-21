@@ -23,7 +23,6 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/dialog_common.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../model/message_badge_model.dart';
 import '../../utils/event_bus_util.dart';
@@ -45,82 +44,74 @@ class _MainScreenState extends State<MainScreen> {
     return GetBuilder<MainController>(
       init: MainController(),
       builder: (controller) {
-        return VisibilityDetector(
-          key: const ValueKey('MainScreen'),
-          onVisibilityChanged: (VisibilityInfo info) {
-            if (info.visibleFraction == 1.0) {
-              controller.loadMessageBadge();
-            }
-          },
-          child: Scaffold(
-            body: Stack(
-              children: [
-                [
-                  const HomeScreen(),
-                  const FeedListScreen(),
-                  const MessagePage(),
-                  const MineScreen(),
-                ][controller.tabIndex],
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(18.r),
-                    ),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
-                      child: Container(
-                        padding: EdgeInsets.only(top: 4.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        child: Obx(() {
-                          return BottomNavigationBar(
-                            currentIndex: controller.tabIndex,
-                            type: BottomNavigationBarType.fixed,
-                            backgroundColor: Colors.transparent,
-                            elevation: 0.0,
-                            selectedFontSize: 10.sp,
-                            unselectedFontSize: 10.sp,
-                            selectedItemColor: '#557BF6'.hexColor,
-                            unselectedItemColor: '#333333'.hexColor,
-                            showSelectedLabels: true,
-                            showUnselectedLabels: true,
-                            useLegacyColorScheme: false,
-                            onTap: controller.onTabBarItem,
-                            items: [
-                              _buildBarItem(
-                                icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
-                                label: '首页',
-                              ),
-                              _buildBarItem(
-                                icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
-                                label: '论坛',
-                              ),
-                              _buildBarItem(
-                                icon: controller.tabIndex == 2
-                                    ? Assets.svg.navIconMessageAct
-                                    : Assets.svg.navIconMessage,
-                                label: '消息',
-                                badgeCount: controller.badgeModel.value?.total ?? 0,
-                              ),
-                              _buildBarItem(
-                                icon: controller.tabIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
-                                label: '我的',
-                              ),
-                            ],
-                          );
-                        }),
+        return Scaffold(
+          body: Stack(
+            children: [
+              [
+                const HomeScreen(),
+                const FeedListScreen(),
+                const MessagePage(),
+                const MineScreen(),
+              ][controller.tabIndex],
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(18.r),
+                  ),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
+                    child: Container(
+                      padding: EdgeInsets.only(top: 4.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
                       ),
+                      child: Obx(() {
+                        return BottomNavigationBar(
+                          currentIndex: controller.tabIndex,
+                          type: BottomNavigationBarType.fixed,
+                          backgroundColor: Colors.transparent,
+                          elevation: 0.0,
+                          selectedFontSize: 10.sp,
+                          unselectedFontSize: 10.sp,
+                          selectedItemColor: '#557BF6'.hexColor,
+                          unselectedItemColor: '#333333'.hexColor,
+                          showSelectedLabels: true,
+                          showUnselectedLabels: true,
+                          useLegacyColorScheme: false,
+                          onTap: controller.onTabBarItem,
+                          items: [
+                            _buildBarItem(
+                              icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
+                              label: '首页',
+                            ),
+                            _buildBarItem(
+                              icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                              label: '论坛',
+                            ),
+                            _buildBarItem(
+                              icon: controller.tabIndex == 2
+                                  ? Assets.svg.navIconMessageAct
+                                  : Assets.svg.navIconMessage,
+                              label: '消息',
+                              badgeCount: controller.badgeModel.value?.total ?? 0,
+                            ),
+                            _buildBarItem(
+                              icon: controller.tabIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
+                              label: '我的',
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                   ),
                 ),
-              ],
-            ),
-            backgroundColor: Colors.white,
+              ),
+            ],
           ),
+          backgroundColor: Colors.white,
         );
       },
     );

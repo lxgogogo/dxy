@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 
 part 'message_controller.dart';
@@ -52,75 +54,94 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 4.w),
-              child: Obx(() {
-                return TabBar(
-                  controller: tabController,
-                  tabs: MessageType.values.map((e) {
-                    int? unReadCount;
-                    switch (e) {
-                      case MessageType.at:
-                        unReadCount = MainController.of.badgeModel.value?.at;
-                      case MessageType.comment:
-                        unReadCount = MainController.of.badgeModel.value?.comment;
-                      case MessageType.like:
-                        unReadCount = MainController.of.badgeModel.value?.like;
-                      case MessageType.favorite:
-                        unReadCount = MainController.of.badgeModel.value?.favorite;
-                    }
-                    return Tab(
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Text(e.title),
-                          Visibility(
-                            visible: (unReadCount ?? 0) > 0,
-                            child: Positioned(
-                                right: -4.w,
-                                top: -4.w,
-                                child: Container(
-                                  width: 8.w,
-                                  height: 8.w,
-                                  decoration: const ShapeDecoration(
-                                    color: Color(0xFFFF3232),
-                                    shape: OvalBorder(),
-                                  ),
-                                )),
-                          )
-                        ],
-                      ),
-                      // child: Text(myTabs[i].text.toString()),
-                    );
-                  }).toList(),
-                  isScrollable: true,
-                  tabAlignment: TabAlignment.start,
-                  indicator: RoundUnderlineTabIndicator(
-                    borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
-                    wantToWith: 12.w,
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 4.w),
+                    child: Obx(() {
+                      return TabBar(
+                        controller: tabController,
+                        tabs: MessageType.values.map((e) {
+                          int? unReadCount;
+                          switch (e) {
+                            case MessageType.at:
+                              unReadCount = MainController.of.badgeModel.value?.at;
+                            case MessageType.comment:
+                              unReadCount = MainController.of.badgeModel.value?.comment;
+                            case MessageType.like:
+                              unReadCount = MainController.of.badgeModel.value?.like;
+                            case MessageType.favorite:
+                              unReadCount = MainController.of.badgeModel.value?.favorite;
+                          }
+                          return Tab(
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Text(e.title),
+                                Visibility(
+                                  visible: (unReadCount ?? 0) > 0,
+                                  child: Positioned(
+                                      right: -4.w,
+                                      top: -4.w,
+                                      child: Container(
+                                        width: 8.w,
+                                        height: 8.w,
+                                        decoration: const ShapeDecoration(
+                                          color: Color(0xFFFF3232),
+                                          shape: OvalBorder(),
+                                        ),
+                                      )),
+                                )
+                              ],
+                            ),
+                            // child: Text(myTabs[i].text.toString()),
+                          );
+                        }).toList(),
+                        isScrollable: true,
+                        tabAlignment: TabAlignment.start,
+                        indicator: RoundUnderlineTabIndicator(
+                          borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                          wantToWith: 12.w,
+                        ),
+                        enableFeedback: false,
+                        overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                          return Colors.transparent;
+                        }),
+                        dividerHeight: 0,
+                        labelStyle: TextStyle(
+                          color: const Color(0xff2c2c2c),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                          color: const Color(0xff666666),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      );
+                    }),
                   ),
-                  enableFeedback: false,
-                  overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                    return Colors.transparent;
-                  }),
-                  dividerHeight: 0,
-                  labelStyle: TextStyle(
-                    color: const Color(0xff2c2c2c),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 16.w),
+                    child: SvgPicture.asset(
+                      Assets.svg.messageClean,
+                    ),
                   ),
-                  unselectedLabelStyle: TextStyle(
-                    color: const Color(0xff666666),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                );
-              }),
+                ),
+              ],
             ),
             Expanded(
               child: TabBarView(
                 controller: tabController,
-                children: MessageType.values.map((e) => MessageChildView(type: e.type).keepAlive).toList(),
+                children: MessageType.values
+                    .map((e) => MessageChildView(
+                          type: e.type,
+                        ).keepAlive)
+                    .toList(),
               ),
             ),
             SizedBox(

@@ -121,7 +121,7 @@ class MessageChildViewState extends State<MessageChildView> {
           ? const Center(
         child: NoDataView(),
       )
-          : ListView.separated(
+          : ListView.builder(
         padding: EdgeInsets.symmetric(vertical: 12.w),
         itemBuilder: (c, i) => MessageCommonItem(
           item: messages[i],
@@ -129,13 +129,6 @@ class MessageChildViewState extends State<MessageChildView> {
         ),
         // itemExtent: 160.0,
         itemCount: messages.length,
-        separatorBuilder: (BuildContext context, int index) {
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 12.w,horizontal: 16.w),
-            color: '#000000'.hexColor.withOpacity(0.05),
-            height: 1.w,
-          );
-        },
       ),
     );
   }

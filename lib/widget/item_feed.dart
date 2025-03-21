@@ -153,7 +153,7 @@ class FeedItem extends StatelessWidget {
             SizedBox(height: 8.w),
             Text(
               [
-                '${item.createdAt != null ? '' : '${DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)}发布    '}'
+                '${item.createdAt != null ?  '' : '${DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)}发布    '}'
                     '${item.likeCount?.abbreviateNumber ?? '0'}点赞',
                 '${item.commentCount?.abbreviateNumber ?? '0'}评论',
                 '${item.favoriteCount?.abbreviateNumber ?? '0'}收藏',

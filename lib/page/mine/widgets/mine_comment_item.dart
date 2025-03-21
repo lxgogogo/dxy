@@ -153,7 +153,7 @@ class MyCommentItem extends StatelessWidget {
                 Text(
                   item.createdAt != null
                       ? DateUtil.formatDateAlias3(
-                          item.createdAt!.millisecondsSinceEpoch,
+                          item.createdAt?.millisecondsSinceEpoch ?? 0,
                         )
                       : '',
                   style: TextStyle(

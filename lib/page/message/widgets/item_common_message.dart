@@ -158,7 +158,7 @@ class MessageCommonItem extends StatelessWidget {
                         Text(
                           item.createdAt != null
                               ? DateUtil.formatDateAlias3(
-                                  item.createdAt!.millisecondsSinceEpoch)
+                                  item.createdAt?.millisecondsSinceEpoch ?? 0)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor.withOpacity(0.7),
@@ -183,7 +183,7 @@ class MessageCommonItem extends StatelessWidget {
                         Text(
                           item.createdAt != null
                               ? DateUtil.formatDateAlias3(
-                                  item.createdAt!.millisecondsSinceEpoch)
+                                  item.createdAt?.millisecondsSinceEpoch ?? 0)
                               : '',
                           style: TextStyle(
                             color: '#333333'.hexColor,

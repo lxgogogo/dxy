@@ -151,18 +151,32 @@ class FeedItem extends StatelessWidget {
                 ),
               ),
             SizedBox(height: 8.w),
-            Text(
-              [
-                '${item.createdAt != null ?  '' : '${DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)}发布    '}'
+            Row(
+              children: [
+                if (item.createdAt != null)
+                  Padding(
+                    padding: EdgeInsets.only(right: 16.w),
+                    child: Text(
+                      '${DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)}发布',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: '#333333'.hexColor.withOpacity(0.8),
+                      ),
+                    ),
+                  ),
+                Text(
+                  [
                     '${item.likeCount?.abbreviateNumber ?? '0'}点赞',
-                '${item.commentCount?.abbreviateNumber ?? '0'}评论',
-                '${item.favoriteCount?.abbreviateNumber ?? '0'}收藏',
-              ].join(' · '),
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: '#333333'.hexColor.withOpacity(0.8),
-              ),
-            ),
+                    '${item.commentCount?.abbreviateNumber ?? '0'}评论',
+                    '${item.favoriteCount?.abbreviateNumber ?? '0'}收藏',
+                  ].join(' · '),
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: '#333333'.hexColor.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

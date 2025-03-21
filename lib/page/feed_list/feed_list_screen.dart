@@ -28,7 +28,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   List<BoardInfo> boardInfoList = [];
   int selIndex = 0;
 
-  SuperTooltipController _tipController = SuperTooltipController();
+  final SuperTooltipController _tipController = SuperTooltipController();
   List<String> filters = [
     '最近更新',
     '回帖最多',
@@ -261,7 +261,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                                           : filterIndex == 1
                                               ? 'comment'
                                               : 'like';
-                                      _pageKey.currentState?.refreshData(0, order);
+                                      _pageKey.currentState?.refreshFilter(order);
                                     }
                                   },
                                   child: Container(

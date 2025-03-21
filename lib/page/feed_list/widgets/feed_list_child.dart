@@ -68,6 +68,14 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     _onRefresh();
   }
 
+  void refreshFilter(String order) {
+    if (_listController.hasClients) {
+      _listController.jumpTo(0.0);
+    }
+    boardSort = order;
+    _onRefresh();
+  }
+
   @override
   void initState() {
     tabIdValue = pageId; //widget.tabId;
@@ -193,7 +201,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     super.build(context);
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
+      enablePullUp: boardPostList.isNotEmpty == true || !noMore,
       footer: const SpecialClassicFooter(),
       controller: _refreshController,
       onRefresh: () => _onRefresh(showLoading: false),

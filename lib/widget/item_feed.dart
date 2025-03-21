@@ -47,8 +47,7 @@ class FeedItem extends StatelessWidget {
         margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w),
         padding: EdgeInsets.only(bottom: 16.w),
         decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05))),
+          border: Border(bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,14 +68,9 @@ class FeedItem extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 4.w),
-                if ((onShield != null || onShieldUser != null) &&
-                    !UserStore.of.isMe(item.user?.id))
+                if ((onShield != null || onShieldUser != null) && !UserStore.of.isMe(item.user?.id))
                   FeedMoreAction(
-                    actions: {
-                      '屏蔽该内容': onShield,
-                      '屏蔽该用户': onShieldUser,
-                      '举报该内容': onReport
-                    },
+                    actions: {'屏蔽该内容': onShield, '屏蔽该用户': onShieldUser, '举报该内容': onReport},
                   ),
               ],
             ),
@@ -138,12 +132,9 @@ class FeedItem extends StatelessWidget {
                               imageUrl: getFilesUrl(fileItem),
                               fit: BoxFit.cover,
                               width: double.infinity,
-                              placeholder: (context, url) => Assets
-                                  .images.imageLoadingDef
-                                  .image(fit: BoxFit.fill),
-                              errorWidget: (context, url, error) => Assets
-                                  .images.imageLoadingDef
-                                  .image(fit: BoxFit.fill),
+                              placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                              errorWidget: (context, url, error) =>
+                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                             ),
                             if (fileItem.type == 'video')
                               Center(
@@ -162,7 +153,7 @@ class FeedItem extends StatelessWidget {
             SizedBox(height: 8.w),
             Text(
               [
-                '${DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch,)}发布    '
+                '${item.createdAt != null ? '' : '${DateUtil.formatDateAlias3(item.createdAt!.millisecondsSinceEpoch)}发布    '}'
                     '${item.likeCount?.abbreviateNumber ?? '0'}点赞',
                 '${item.commentCount?.abbreviateNumber ?? '0'}评论',
                 '${item.favoriteCount?.abbreviateNumber ?? '0'}收藏',

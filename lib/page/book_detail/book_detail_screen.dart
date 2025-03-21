@@ -99,7 +99,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
+                                    controller.detailBean!.createdAt != null
+                                        ? '${DateUtil.formatDateAlias3(
+                                            controller.detailBean!.createdAt!.millisecondsSinceEpoch,
+                                            hasHM: true,
+                                          )}发布'
+                                        : '',
                                     style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
                                   ),
                                   if (controller.detailBean?.description?.isNotEmpty == true)

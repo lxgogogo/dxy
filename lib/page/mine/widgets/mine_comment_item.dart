@@ -151,9 +151,11 @@ class MyCommentItem extends StatelessWidget {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  DateUtil.formatDateAlias3(
-                    item.createdAt!.millisecondsSinceEpoch,
-                  ),
+                  item.createdAt != null
+                      ? DateUtil.formatDateAlias3(
+                          item.createdAt!.millisecondsSinceEpoch,
+                        )
+                      : '',
                   style: TextStyle(
                     fontSize: 12.sp,
                     color: '#333333'.hexColor.withOpacity(0.5),

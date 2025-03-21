@@ -111,7 +111,12 @@ class FeedDetailScreen extends StatelessWidget {
                                     Expanded(
                                       child: (controller.detailBean?.sign?.contains('office') ?? false)
                                           ? Text(
-                                              '${DateUtil.formatDateAlias3(controller.detailBean!.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布',
+                                              controller.detailBean!.createdAt != null
+                                                  ? '${DateUtil.formatDateAlias3(
+                                                      controller.detailBean!.createdAt?.millisecondsSinceEpoch ?? 0,
+                                                      hasHM: true,
+                                                    )}发布'
+                                                  : '',
                                               style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
                                             )
                                           : CircleImageWithText(

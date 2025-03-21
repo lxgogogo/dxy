@@ -73,8 +73,8 @@ class FeedItem extends StatelessWidget {
                     !UserStore.of.isMe(item.user?.id))
                   FeedMoreAction(
                     actions: {
-                      '屏蔽该内容': onShieldUser,
-                      '屏蔽该用户': onShield,
+                      '屏蔽该内容': onShield,
+                      '屏蔽该用户': onShieldUser,
                       '举报该内容': onReport
                     },
                   ),

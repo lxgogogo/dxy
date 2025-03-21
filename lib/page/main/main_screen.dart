@@ -20,12 +20,12 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/widget/dialog_common.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../model/message_badge_model.dart';
 import '../../utils/event_bus_util.dart';
 import '../mine/mine_screen.dart';
 
@@ -45,87 +45,127 @@ class _MainScreenState extends State<MainScreen> {
     return GetBuilder<MainController>(
       init: MainController(),
       builder: (controller) {
-        return Scaffold(
-          body: Stack(
-            children: [
-              [
-                const HomeScreen(),
-                const FeedListScreen(),
-                const MessagePage(),
-                const MineScreen(),
-              ][controller.currentIndex],
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(18.r),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
-                    child: Container(
-                      padding: EdgeInsets.only(top: 4.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                      child: BottomNavigationBar(
-                        currentIndex: controller.currentIndex,
-                        type: BottomNavigationBarType.fixed,
-                        backgroundColor: Colors.transparent,
-                        elevation: 0.0,
-                        selectedFontSize: 10.sp,
-                        unselectedFontSize: 10.sp,
-                        selectedItemColor: '#557BF6'.hexColor,
-                        unselectedItemColor: '#333333'.hexColor,
-                        showSelectedLabels: true,
-                        showUnselectedLabels: true,
-                        useLegacyColorScheme: false,
-                        onTap: controller.onTabBarItem,
-                        items: [
-                          BottomNavigationBarItem(
-                            icon: SvgPicture.asset(
-                              controller.currentIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
-                              width: 20.w,
-                              height: 20.w,
-                            ),
-                            label: '首页',
-                          ),
-                          BottomNavigationBarItem(
-                            icon: SvgPicture.asset(
-                              controller.currentIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
-                              width: 20.w,
-                              height: 20.w,
-                            ),
-                            label: '论坛',
-                          ),
-                          BottomNavigationBarItem(
-                            icon: SvgPicture.asset(
-                              controller.currentIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
-                              width: 20.w,
-                              height: 20.w,
-                            ),
-                            label: '消息',
-                          ),
-                          BottomNavigationBarItem(
-                            icon: SvgPicture.asset(
-                              controller.currentIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
-                              width: 20.w,
-                              height: 20.w,
-                            ),
-                            label: '我的',
-                          ),
-                        ],
+        return VisibilityDetector(
+          key: const ValueKey('MainScreen'),
+          onVisibilityChanged: (VisibilityInfo info) {
+            if (info.visibleFraction == 1.0) {
+              controller.loadMessageBadge();
+            }
+          },
+          child: Scaffold(
+            body: Stack(
+              children: [
+                [
+                  const HomeScreen(),
+                  const FeedListScreen(),
+                  const MessagePage(),
+                  const MineScreen(),
+                ][controller.tabIndex],
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(18.r),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
+                      child: Container(
+                        padding: EdgeInsets.only(top: 4.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                        child: Obx(() {
+                          return BottomNavigationBar(
+                            currentIndex: controller.tabIndex,
+                            type: BottomNavigationBarType.fixed,
+                            backgroundColor: Colors.transparent,
+                            elevation: 0.0,
+                            selectedFontSize: 10.sp,
+                            unselectedFontSize: 10.sp,
+                            selectedItemColor: '#557BF6'.hexColor,
+                            unselectedItemColor: '#333333'.hexColor,
+                            showSelectedLabels: true,
+                            showUnselectedLabels: true,
+                            useLegacyColorScheme: false,
+                            onTap: controller.onTabBarItem,
+                            items: [
+                              _buildBarItem(
+                                icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
+                                label: '首页',
+                              ),
+                              _buildBarItem(
+                                icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                                label: '论坛',
+                              ),
+                              _buildBarItem(
+                                icon: controller.tabIndex == 2
+                                    ? Assets.svg.navIconMessageAct
+                                    : Assets.svg.navIconMessage,
+                                label: '消息',
+                                badgeCount: controller.badgeModel.value?.total ?? 0,
+                              ),
+                              _buildBarItem(
+                                icon: controller.tabIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
+                                label: '我的',
+                              ),
+                            ],
+                          );
+                        }),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            backgroundColor: Colors.white,
           ),
-          backgroundColor: Colors.white,
         );
       },
+    );
+  }
+
+  BottomNavigationBarItem _buildBarItem({
+    required String icon,
+    required String label,
+    int badgeCount = 0,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          SvgPicture.asset(
+            icon,
+            width: 20.w,
+            height: 20.w,
+          ),
+          if (badgeCount > 0)
+            Positioned(
+              top: -7.5.w,
+              right: -7.5.w,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SvgPicture.asset(
+                    Assets.svg.badge,
+                    width: 15.w,
+                    height: 15.w,
+                  ),
+                  Text(
+                    '${badgeCount > 99 ? 99 : badgeCount}',
+                    style: TextStyle(
+                      fontSize: 9.sp,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+      label: label,
     );
   }
 }

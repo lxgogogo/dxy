@@ -45,6 +45,7 @@ class CommonService {
     });
     return res ?? ResBaseModel.defaultRes;
   }
+
   Future<ResBaseModel> searchTop({
     required int pageNum,
     int pageSize = 20,
@@ -86,6 +87,15 @@ class CommonService {
     }).whenComplete(() {
       EasyLoading.dismiss();
     });
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> getMessageBadge() async {
+    final res = await HttpUtils.getNew(Api.messageBadge);
+    return res ?? ResBaseModel.defaultRes;
+  }
+  Future<ResBaseModel> messageReadAll(String type) async {
+    final res = await HttpUtils.postNew(Api.messageReadAll);
     return res ?? ResBaseModel.defaultRes;
   }
 }

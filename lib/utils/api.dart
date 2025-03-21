@@ -20,6 +20,7 @@ class Api {
   //消息
   static const String messageList = '/api/message/list';
   static const String messageBadge = '/api/message/badge';
+  static const String messageReadAll = '/api/message/readAll';
 
   static const String threadCreate = '/api/thread/create';
   static const String threadShield = '/api/thread/shield';

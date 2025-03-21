@@ -7,14 +7,12 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/search_top.dart';
-import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/search/widgets/search_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../widget/custom_underline_tab_indicator.dart';

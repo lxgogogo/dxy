@@ -4,7 +4,7 @@ class CommentPublishController extends GetxController {
   late String relType;
   late int relId;
 
-  CommentPublishController(this.relType,this.relId);
+  CommentPublishController(this.relType, this.relId);
 
   // @override
   // void onInit() {
@@ -24,7 +24,16 @@ class CommentPublishController extends GetxController {
 
   openFilePicker() async {
     final ImagePicker picker = ImagePicker();
-    final List<XFile> files = await picker.pickMultiImage(limit: 9 - imageData.length);
+    final limit = 9 - imageData.length;
+    List<XFile> files = [];
+    if (limit < 2) {
+      final XFile? file = await picker.pickImage(source: ImageSource.gallery);
+      if (file != null) {
+        files.add(file);
+      }
+    } else {
+      files = await picker.pickMultiImage(limit: 9 - imageData.length);
+    }
     for (var file in files) {
       imageData.add(file.path);
     }
@@ -58,8 +67,9 @@ class CommentPublishController extends GetxController {
     if (imageUrlList.isNotEmpty) {
       imageUrlList.clear();
     }
-   final isEmpty = HtmlParseUtil.of.isEmptyText(content);;
-    if (isEmpty&&imageData.isEmpty) {
+    final isEmpty = HtmlParseUtil.of.isEmptyText(content);
+    ;
+    if (isEmpty && imageData.isEmpty) {
       ToastUtils.showToast('评论内容不能为空');
       return;
     }

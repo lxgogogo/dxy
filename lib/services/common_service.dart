@@ -94,8 +94,14 @@ class CommonService {
     final res = await HttpUtils.getNew(Api.messageBadge);
     return res ?? ResBaseModel.defaultRes;
   }
+
   Future<ResBaseModel> messageReadAll(String type) async {
-    final res = await HttpUtils.postNew(Api.messageReadAll);
+    final res = await HttpUtils.postNew(
+      Api.messageReadAll,
+      params: {
+        'type': type,
+      },
+    );
     return res ?? ResBaseModel.defaultRes;
   }
 }

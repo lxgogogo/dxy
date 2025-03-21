@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -11,125 +12,46 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../services/index.dart';
+import '../../../stores/user_store.dart';
 import '../../../widget/special_classic_footer.dart';
+import '../message_screen.dart';
 import 'item_common_message.dart';
 
-class MessageChildView extends StatefulWidget {
-  final String type;
+part 'message_child_controller.dart';
 
-  const MessageChildView({super.key, required this.type});
+class MessageChildView extends StatefulWidget {
+  final MessageChildController controller;
+
+  const MessageChildView({super.key, required this.controller});
 
   @override
   State<MessageChildView> createState() => MessageChildViewState();
 }
 
 class MessageChildViewState extends State<MessageChildView> {
-  bool loaded = false;
-  int pageNum = 1;
-  int pageSize = 20;
-  String strType = '';
-
-  List<MessageBean> messages = [];
-  final RefreshController _refreshController = RefreshController();
-  final ScrollController _listController = ScrollController();
-
-  StreamSubscription? eventSubscription;
-
-  void _onRefresh() async {
-    pageNum = 1;
-    reqListData(showLoading: false);
-  }
-
-  void _onLoading() async {
-    pageNum++;
-    reqListData(showLoading: false);
-  }
-
-  void refreshData(String type) {
-    if (_listController.hasClients) {
-      _listController.jumpTo(0.0);
-    }
-    strType = type;
-    pageNum = 1;
-    reqListData();
-  }
-
-  @override
-  void initState() {
-    strType = widget.type;
-    super.initState();
-    reqListData();
-    eventSubscription = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
-      reqListData(showLoading: false);
-    });
-  }
-
-  @override
-  void dispose() {
-    eventSubscription?.cancel();
-    _listController.dispose();
-    super.dispose();
-  }
-
-  reqListData({bool showLoading = true}) {
-    NetRequest().messageList(
-      {
-        'pageNum': pageNum,
-        'pageSize': pageSize,
-        'filters': {
-          'type': strType,
-        },
-      },
-      showLoading: false,
-      (data) {
-        MessageList boardList = MessageList.fromJson(data);
-        if (mounted) {
-          final total = boardList.pager?.total ?? 0;
-          if (pageNum == 1) {
-            messages = boardList.list!;
-            _refreshController.refreshCompleted();
-            if (messages.length >= total) {
-              _refreshController.loadNoData();
-            } else {
-              _refreshController.resetNoData();
-            }
-          } else {
-            messages.addAll(boardList.list!);
-            if (messages.length >= total) {
-              _refreshController.loadNoData();
-            } else {
-              _refreshController.loadComplete();
-            }
-          }
-          loaded = true;
-          setState(() {});
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
       enablePullDown: true,
-      enablePullUp: true,
-      controller: _refreshController,
-      scrollController: _listController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: loaded && messages.isEmpty
+      enablePullUp: widget.controller.items.isNotEmpty || !widget.controller.noMore,
+      controller: widget.controller.refreshController,
+      scrollController: widget.controller.scrollController,
+      onRefresh: widget.controller._onRefresh,
+      onLoading: widget.controller._onLoading,
+      child: widget.controller.loaded && widget.controller.items.isEmpty
           ? const Center(
-        child: NoDataView(),
-      )
+              child: NoDataView(),
+            )
           : ListView.builder(
-        padding: EdgeInsets.symmetric(vertical: 12.w),
-        itemBuilder: (c, i) => MessageCommonItem(
-          item: messages[i],
-          onTap: () => jumpPage(messages[i]),
-        ),
-        // itemExtent: 160.0,
-        itemCount: messages.length,
-      ),
+              padding: EdgeInsets.symmetric(vertical: 12.w),
+              itemBuilder: (c, i) => MessageCommonItem(
+                item: widget.controller.items[i],
+                onTap: () => jumpPage(widget.controller.items[i]),
+              ),
+              // itemExtent: 160.0,
+              itemCount: widget.controller.items.length,
+            ),
     );
   }
 

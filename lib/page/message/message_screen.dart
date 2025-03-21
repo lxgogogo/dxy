@@ -32,18 +32,7 @@ class MessagePage extends StatefulWidget {
   State<MessagePage> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  late TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(
-      length: MessageType.values.length,
-      vsync: this,
-    );
-  }
-
+class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -51,103 +40,97 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
       backgroundColor: '#F7F8FC'.hexColor,
       body: SafeArea(
         bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
+        child: GetBuilder<MessageController>(
+          init: MessageController(),
+          builder: (controller) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 4.w),
-                    child: Obx(() {
-                      return TabBar(
-                        controller: tabController,
-                        tabs: MessageType.values.map((e) {
-                          int? unReadCount;
-                          switch (e) {
-                            case MessageType.at:
-                              unReadCount = MainController.of.badgeModel.value?.at;
-                            case MessageType.comment:
-                              unReadCount = MainController.of.badgeModel.value?.comment;
-                            case MessageType.like:
-                              unReadCount = MainController.of.badgeModel.value?.like;
-                            case MessageType.favorite:
-                              unReadCount = MainController.of.badgeModel.value?.favorite;
-                          }
-                          return Tab(
-                            child: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Text(e.title),
-                                Visibility(
-                                  visible: (unReadCount ?? 0) > 0,
-                                  child: Positioned(
-                                      right: -4.w,
-                                      top: -4.w,
-                                      child: Container(
-                                        width: 8.w,
-                                        height: 8.w,
-                                        decoration: const ShapeDecoration(
-                                          color: Color(0xFFFF3232),
-                                          shape: OvalBorder(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 4.w),
+                        child: Obx(() {
+                          return TabBar(
+                            controller: controller.tabController,
+                            tabs: MessageType.values.map((e) {
+                              return Tab(
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Text(e.title),
+                                    if ((controller.unReadCount ?? 0) > 0)
+                                      Positioned(
+                                        right: -4.w,
+                                        top: -4.w,
+                                        child: Container(
+                                          width: 8.w,
+                                          height: 8.w,
+                                          decoration: const ShapeDecoration(
+                                            color: Color(0xFFFF3232),
+                                            shape: OvalBorder(),
+                                          ),
                                         ),
-                                      )),
-                                )
-                              ],
+                                      ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                            isScrollable: true,
+                            tabAlignment: TabAlignment.start,
+                            indicator: RoundUnderlineTabIndicator(
+                              borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                              wantToWith: 12.w,
                             ),
-                            // child: Text(myTabs[i].text.toString()),
+                            enableFeedback: false,
+                            overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                              return Colors.transparent;
+                            }),
+                            dividerHeight: 0,
+                            labelStyle: TextStyle(
+                              color: const Color(0xff2c2c2c),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            unselectedLabelStyle: TextStyle(
+                              color: const Color(0xff666666),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
                           );
-                        }).toList(),
-                        isScrollable: true,
-                        tabAlignment: TabAlignment.start,
-                        indicator: RoundUnderlineTabIndicator(
-                          borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
-                          wantToWith: 12.w,
-                        ),
-                        enableFeedback: false,
-                        overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                          return Colors.transparent;
                         }),
-                        dividerHeight: 0,
-                        labelStyle: TextStyle(
-                          color: const Color(0xff2c2c2c),
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: controller.messageReadAll,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 16.w),
+                        child: SvgPicture.asset(
+                          Assets.svg.messageClean,
                         ),
-                        unselectedLabelStyle: TextStyle(
-                          color: const Color(0xff666666),
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: controller.tabController,
+                    children: List.generate(controller.childControllers.length, (index) {
+                      return GetBuilder<MessageChildController>(
+                        init: controller.childControllers[index],
+                        global: false,
+                        builder: (childController) => MessageChildView(controller: childController).keepAlive,
                       );
                     }),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 16.w),
-                    child: SvgPicture.asset(
-                      Assets.svg.messageClean,
-                    ),
-                  ),
+                SizedBox(
+                  height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
                 ),
               ],
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: MessageType.values
-                    .map((e) => MessageChildView(
-                          type: e.type,
-                        ).keepAlive)
-                    .toList(),
-              ),
-            ),
-            SizedBox(
-              height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

@@ -686,6 +686,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_right.svg
   String get arrowRight => 'assets/svg/arrow_right.svg';
 
+  /// File path: assets/svg/badge.svg
+  String get badge => 'assets/svg/badge.svg';
+
   /// File path: assets/svg/close_black.svg
   String get closeBlack => 'assets/svg/close_black.svg';
 
@@ -801,6 +804,7 @@ class $AssetsSvgGen {
   List<String> get values => [
         arrowLeft,
         arrowRight,
+        badge,
         closeBlack,
         clubs,
         comment,

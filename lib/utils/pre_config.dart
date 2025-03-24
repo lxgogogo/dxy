@@ -16,7 +16,7 @@ class PreConfig {
   static Future<void> init() async {
     if (!_didInit) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+      // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
       await Get.putAsync<StorageService>(
         () => StorageService().init(),
         permanent: true,

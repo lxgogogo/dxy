@@ -55,12 +55,18 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                           return TabBar(
                             controller: controller.tabController,
                             tabs: MessageType.values.map((e) {
+                              final unReadCount = switch (e) {
+                                MessageType.at => MainController.of.badgeModel.value?.at,
+                                MessageType.comment => MainController.of.badgeModel.value?.comment,
+                                MessageType.like => MainController.of.badgeModel.value?.like,
+                                MessageType.favorite => MainController.of.badgeModel.value?.favorite,
+                              };
                               return Tab(
                                 child: Stack(
                                   clipBehavior: Clip.none,
                                   children: [
                                     Text(e.title),
-                                    if ((controller.unReadCount ?? 0) > 0)
+                                    if ((unReadCount ?? 0) > 0)
                                       Positioned(
                                         right: -4.w,
                                         top: -4.w,

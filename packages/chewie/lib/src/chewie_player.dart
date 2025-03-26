@@ -584,10 +584,6 @@ class ChewieController extends ChangeNotifier {
 
   bool _isFullScreen = false;
 
-  set isFullScreen(bool value) {
-    _isFullScreen = value;
-  }
-
   bool get isFullScreen => _isFullScreen;
 
   bool get isPlaying => videoPlayerController.value.isPlaying;

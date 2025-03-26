@@ -145,7 +145,7 @@ class VideoDetailController extends GetxController {
   void videoListener() {
     if (detailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
-    if (videoController!.value.isPlaying &&
+    if (videoController!.value.position.inSeconds > 0 &&
         videoController!.value.position.inSeconds >= videoController!.value.duration.inSeconds) {
       if (playVideoIndex == detailBean!.videoList!.length - 1) {
         playVideoIndex = 0;

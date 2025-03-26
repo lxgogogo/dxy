@@ -294,8 +294,8 @@ class ChewieVideo extends StatelessWidget {
     return ListenableBuilder(
         listenable: _videoNotifier,
         builder: (context, child) {
-          final orientation = MediaQuery.of(context).orientation;
-          _videoNotifier.chewieController!.isFullScreen = orientation == Orientation.landscape;
+          // final orientation = MediaQuery.of(context).orientation;
+          // _videoNotifier.chewieController!.isFullScreen = orientation != Orientation.landscape;
           return Scaffold(
             resizeToAvoidBottomInset: false,
             body: Container(

@@ -53,7 +53,9 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24.r),
-                      color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.1) : null,
+                      color: controller.isDisable
+                          ? '#333333'.hexColor.withOpacity(0.1)
+                          : null,
                       gradient: controller.isDisable
                           ? null
                           : LinearGradient(
@@ -66,7 +68,9 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     child: Text(
                       '发布',
                       style: TextStyle(
-                        color: controller.isDisable ? '#333333'.hexColor.withOpacity(0.5) : Colors.white,
+                        color: controller.isDisable
+                            ? '#333333'.hexColor.withOpacity(0.5)
+                            : Colors.white,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                       ),
@@ -138,7 +142,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
   Widget buildTitleInput() {
     return Container(
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: 'e6e6e6'.hexColor, width: 0.5)),
+        border:
+            Border(bottom: BorderSide(color: 'e6e6e6'.hexColor, width: 0.5)),
       ),
       child: Row(
         children: [
@@ -214,12 +219,15 @@ class FeedPostScreen extends GetView<FeedPostController> {
                       }
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.w, horizontal: 10.w),
                       alignment: Alignment.center,
                       child: Text(
                         item.name ?? '',
                         style: TextStyle(
-                          color: controller.prefixIndex == index ? const Color(0xff249cfc) : '#333333'.hexColor,
+                          color: controller.prefixIndex == index
+                              ? const Color(0xff249cfc)
+                              : '#333333'.hexColor,
                           fontSize: 12.sp,
                         ),
                         textAlign: TextAlign.center,
@@ -247,8 +255,12 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   children: [
                     Flexible(
                       child: Text(
-                        controller.prefixIndex != -1 && controller.prefixIndex < controller.boardInfoList.length
-                            ? (controller.boardInfoList[controller.prefixIndex].name ?? '')
+                        controller.prefixIndex != -1 &&
+                                controller.prefixIndex <
+                                    controller.boardInfoList.length
+                            ? (controller.boardInfoList[controller.prefixIndex]
+                                    .name ??
+                                '')
                             : '选择板块',
                         style: TextStyle(
                           color: '#333333'.hexColor,
@@ -290,7 +302,26 @@ class FeedPostScreen extends GetView<FeedPostController> {
                     buttonExtraOptions = extraOptions;
                   }
                   return GestureDetector(
-                    onTap: buttonExtraOptions?.onPressed,
+                    onTap: () {
+                      int count = 0;
+                      final operations = controller.quillController.document
+                          .toDelta()
+                          .toJson();
+                      for (final data in operations) {
+                        if (data.containsKey('insert')) {
+                          if (data['insert'] is Map) {
+                            if (data['insert'].containsKey('image')) {
+                              count++;
+                            }
+                          }
+                        }
+                      }
+                      if (count == 9) {
+                        ToastUtils.showToast('最多只可上传9张图片');
+                        return;
+                      }
+                      buttonExtraOptions?.onPressed?.call();
+                    },
                     child: Container(
                       height: 26.w,
                       margin: EdgeInsets.only(right: 8.w),
@@ -340,7 +371,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   isScrollControlled: true,
                 );
                 if (result != null) {
-                  controller.quillController.insertAtBlock(data: json.encode(result));
+                  controller.quillController
+                      .insertAtBlock(data: json.encode(result));
                 }
               },
               child: Container(
@@ -362,7 +394,10 @@ class FeedPostScreen extends GetView<FeedPostController> {
             ),
           ],
         ),
-        if (controller.tagList.isNotEmpty) buildTagList(controller) else SizedBox(height: 12.w),
+        if (controller.tagList.isNotEmpty)
+          buildTagList(controller)
+        else
+          SizedBox(height: 12.w),
       ],
     );
   }
@@ -375,7 +410,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
             border: Border(
-          bottom: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
+          bottom: BorderSide(
+              color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
         )),
         child: Wrap(
           spacing: 8.0, // 添加水平间距
@@ -389,10 +425,12 @@ class FeedPostScreen extends GetView<FeedPostController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
                       decoration: ShapeDecoration(
                         color: '#557BF6'.hexColor.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
                       ),
                       alignment: Alignment.center,
                       child: Row(

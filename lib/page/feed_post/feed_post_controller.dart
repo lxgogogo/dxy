@@ -124,21 +124,7 @@ class FeedPostController extends GetxController {
   }
 
   Future<void> onImageInsertCallback(String image, QuillController controller) async {
-    int count = 0;
-    final operations = quillController.document.toDelta().toJson();
-    for (final data in operations) {
-      if (data.containsKey('insert')) {
-        if (data['insert'] is Map) {
-          if (data['insert'].containsKey('image')) {
-            count++;
-          }
-        }
-      }
-    }
-    if (count == 9) {
-      ToastUtils.showToast('最多只可上传9张图片');
-      return;
-    }
+
     final fileLength = await File(image).length();
     if (fileLength > 10 * 1024 * 1024) {
       ToastUtils.showToast('上传图片不得超过10M');

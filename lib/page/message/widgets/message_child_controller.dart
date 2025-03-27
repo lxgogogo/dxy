@@ -16,22 +16,21 @@ class MessageChildController extends GetxController {
 
   StreamSubscription? refreshEvent;
 
-  void _onRefresh() async {
+  void onRefresh() async {
     pageNum = 1;
-    reqListData(showLoading: false);
+    loadData();
   }
 
-  void _onLoading() async {
+  void onLoading() async {
     pageNum++;
-    reqListData(showLoading: false);
+    loadData();
   }
 
   @override
   void onReady() {
     super.onReady();
-    reqListData();
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
-      reqListData(showLoading: false);
+      onRefresh();
     });
   }
 
@@ -43,7 +42,7 @@ class MessageChildController extends GetxController {
     super.onClose();
   }
 
-  Future<void> reqListData({bool showLoading = false}) async {
+  Future<void> loadData() async {
     try {
       int recordsSize = 0;
       await Future.wait(

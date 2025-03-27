@@ -37,8 +37,8 @@ class MessageChildViewState extends State<MessageChildView> {
       enablePullUp: widget.controller.items.isNotEmpty || !widget.controller.noMore,
       controller: widget.controller.refreshController,
       scrollController: widget.controller.scrollController,
-      onRefresh: widget.controller._onRefresh,
-      onLoading: widget.controller._onLoading,
+      onRefresh: widget.controller.onRefresh,
+      onLoading: widget.controller.onLoading,
       child: widget.controller.loaded && widget.controller.items.isEmpty
           ? const Center(
               child: NoDataView(),

@@ -3,13 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../stores/user_store.dart';
-import '../../utils/toast_utils.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 
 part 'message_controller.dart';
@@ -110,27 +108,30 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                         }),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: controller.messageReadAll,
-                      child: Opacity(
-                        opacity: controller.unReadCount > 0 ? 1 : 0.5,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 16.w),
-                          child: SvgPicture.asset(
-                            Assets.svg.messageClean,
+                    Obx(() {
+                      return GestureDetector(
+                        onTap: controller.messageReadAll,
+                        child: Opacity(
+                          opacity: controller.unReadCount > 0 ? 1 : 0.3,
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 16.w),
+                            child: SvgPicture.asset(
+                              Assets.svg.messageClean,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
                 Expanded(
                   child: TabBarView(
                     controller: controller.tabController,
-                    children: List.generate(controller.childControllers.length, (index) {
+                    children: List.generate(MessageType.values.length, (index) {
+                      final messageType = MessageType.values[index];
                       return GetBuilder<MessageChildController>(
-                        init: controller.childControllers[index],
-                        global: false,
+                        init: MessageChildController(messageType),
+                        tag: messageType.type,
                         builder: (childController) => MessageChildView(controller: childController).keepAlive,
                       );
                     }),

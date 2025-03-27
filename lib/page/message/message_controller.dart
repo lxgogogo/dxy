@@ -32,6 +32,8 @@ class MessageController extends GetxController with GetSingleTickerProviderState
     if ((unReadCount ?? 0) > 0) {
       final childController = childControllers[tabController.index];
       childController.messageReadAll();
+    } else {
+      ToastUtils.showToast('全部已读');
     }
   }
 }

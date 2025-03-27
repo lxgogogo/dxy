@@ -92,7 +92,9 @@ class _MainScreenState extends State<MainScreen> {
                               label: '论坛',
                             ),
                             _buildBarItem(
-                              icon: controller.tabIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
+                              icon: controller.tabIndex == 2
+                                  ? Assets.svg.navIconMessageAct
+                                  : Assets.svg.navIconMessage,
                               label: '消息',
                               badgeCount: controller.badgeModel.value?.total ?? 0,
                             ),
@@ -142,7 +144,7 @@ class _MainScreenState extends State<MainScreen> {
                     height: 15.w,
                   ),
                   Text(
-                    badgeCount > 99 ? '99+' : '$badgeCount',
+                    '${badgeCount > 99 ? 99 : badgeCount}',
                     style: TextStyle(
                       fontSize: 9.sp,
                       fontWeight: FontWeight.w500,

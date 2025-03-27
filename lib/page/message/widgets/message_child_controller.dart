@@ -98,7 +98,13 @@ class MessageChildController extends GetxController {
   Future<void> messageReadAll() async {
     try {
       final res = await CommonService.of.messageReadAll(messageType.type);
-      if (res.isSuccess) {}
+      if (res.isSuccess) {
+        ToastUtils.showToast('全部已读');
+        for (final item in items) {
+          item.readStatus = 1;
+        }
+        safeUpdate();
+      }
     } catch (e) {}
   }
 }

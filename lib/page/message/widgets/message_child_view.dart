@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
-import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/message.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
@@ -13,8 +12,7 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
-import '../../../stores/user_store.dart';
-import '../../../widget/special_classic_footer.dart';
+import '../../../utils/toast_utils.dart';
 import '../message_screen.dart';
 import 'item_common_message.dart';
 

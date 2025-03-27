@@ -96,15 +96,12 @@ class CommonService {
   }
 
   Future<ResBaseModel> messageReadAll(String type) async {
-    EasyLoading.show(status: 'loading...');
     final res = await HttpUtils.postNew(
       Api.messageReadAll,
       params: {
         'type': type,
       },
-    ).whenComplete(() {
-      EasyLoading.dismiss();
-    });
+    );
     return res ?? ResBaseModel.defaultRes;
   }
 }

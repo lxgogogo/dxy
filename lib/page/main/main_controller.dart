@@ -10,10 +10,6 @@ class MainController extends GetxController with WidgetsBindingObserver {
   ///deeplink
   final AppLinks _appLinks = AppLinks();
 
-  /// badge
-  Timer? timer;
-  Rx<MessageBadgeModel?> badgeModel = Rx(null);
-
   void onTabBarItem(int index) {
     if (index == 2 || index == 3) {
       if (!UserStore.of.isLogin) {
@@ -25,26 +21,31 @@ class MainController extends GetxController with WidgetsBindingObserver {
     safeUpdate();
 
     saveReview();
+
+    /// 消息内部自己去刷
+    if (index != 2) {
+      UserStore.of.refreshBadge();
+    }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (timer?.isActive != true) {
-          timer?.cancel();
-          timer = Timer.periodic(
-            const Duration(seconds: 5),
-            loadMessageBadge,
-          );
-        }
+        // if (timer?.isActive != true) {
+        //   timer?.cancel();
+        //   timer = Timer.periodic(
+        //     const Duration(seconds: 5),
+        //     loadMessageBadge,
+        //   );
+        // }
         break;
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.hidden:
         break;
       case AppLifecycleState.paused:
-        timer?.cancel();
+        // timer?.cancel();
         break;
       case AppLifecycleState.detached:
         break;
@@ -54,22 +55,23 @@ class MainController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() {
     super.onReady();
-    _initAppLinks();
-    _checkAppVersion();
     eventSubscription = EventBusUtil.of.on<EventResetMainTab>().listen((event) {
       tabIndex = 0;
       safeUpdate();
     });
-    timer = Timer.periodic(
-      const Duration(seconds: 5),
-      loadMessageBadge,
-    );
+    _initAppLinks();
+    _checkAppVersion();
+    UserStore.of.refreshBadge();
+    // timer = Timer.periodic(
+    //   const Duration(seconds: 5),
+    //   loadMessageBadge,
+    // );
   }
 
   @override
   void onClose() {
     eventSubscription?.cancel();
-    timer?.cancel();
+    // timer?.cancel();
     super.onClose();
   }
 
@@ -189,18 +191,6 @@ class MainController extends GetxController with WidgetsBindingObserver {
     if (UserStore.of.isLogin) {
       try {
         await CommonService.of.saveReview();
-      } catch (e) {}
-    }
-  }
-
-  Future<void> loadMessageBadge(timer) async {
-    if (UserStore.of.isLogin) {
-      try {
-        final res = await CommonService.of.getMessageBadge();
-        if (res.isSuccess) {
-          badgeModel.value = MessageBadgeModel.fromJson(res.data);
-          safeUpdate(['badge']);
-        }
       } catch (e) {}
     }
   }

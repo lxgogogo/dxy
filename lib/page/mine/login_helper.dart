@@ -13,6 +13,7 @@ import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../utils/storage.dart';
 import '../../utils/toast_utils.dart';
+import '../main/main_screen.dart';
 
 typedef LoginSuccess = void Function(dynamic data);
 typedef GetUserInfoSuccess = void Function(dynamic data);

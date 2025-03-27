@@ -8,6 +8,7 @@ import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../stores/user_store.dart';
 import '../../utils/toast_utils.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 
@@ -57,10 +58,10 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                             controller: controller.tabController,
                             tabs: MessageType.values.map((e) {
                               final unReadCount = switch (e) {
-                                MessageType.at => MainController.of.badgeModel.value?.at,
-                                MessageType.comment => MainController.of.badgeModel.value?.comment,
-                                MessageType.like => MainController.of.badgeModel.value?.like,
-                                MessageType.favorite => MainController.of.badgeModel.value?.favorite,
+                                MessageType.at => UserStore.of.badgeModel.value?.at,
+                                MessageType.comment => UserStore.of.badgeModel.value?.comment,
+                                MessageType.like => UserStore.of.badgeModel.value?.like,
+                                MessageType.favorite => UserStore.of.badgeModel.value?.favorite,
                               };
                               return Tab(
                                 child: Stack(
@@ -111,10 +112,13 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
                     ),
                     GestureDetector(
                       onTap: controller.messageReadAll,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 16.w),
-                        child: SvgPicture.asset(
-                          Assets.svg.messageClean,
+                      child: Opacity(
+                        opacity: controller.unReadCount > 0 ? 1 : 0.5,
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 16.w),
+                          child: SvgPicture.asset(
+                            Assets.svg.messageClean,
+                          ),
                         ),
                       ),
                     ),

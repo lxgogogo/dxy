@@ -46,23 +46,28 @@ class MessageChildController extends GetxController {
   Future<void> reqListData({bool showLoading = false}) async {
     try {
       int recordsSize = 0;
-      await NetRequest().messageList(
-        {
-          'pageNum': pageNum,
-          'pageSize': pageSize,
-          'filters': {
-            'type': messageType.type,
-          },
-        },
-        showLoading: false,
-        (data) {
-          MessageList dataList = MessageList.fromJson(data);
-          recordsSize = dataList.list?.length ?? 0;
-          if (pageNum == 1) {
-            items.clear();
-          }
-          items.addAll(dataList.list ?? []);
-        },
+      await Future.wait(
+        [
+          NetRequest().messageList(
+            {
+              'pageNum': pageNum,
+              'pageSize': pageSize,
+              'filters': {
+                'type': messageType.type,
+              },
+            },
+            showLoading: false,
+            (data) {
+              MessageList dataList = MessageList.fromJson(data);
+              recordsSize = dataList.list?.length ?? 0;
+              if (pageNum == 1) {
+                items.clear();
+              }
+              items.addAll(dataList.list ?? []);
+            },
+          ),
+          if (pageNum == 1) UserStore.of.refreshBadge(),
+        ],
       );
       if (pageNum == 1) {
         refreshController.refreshCompleted();
@@ -99,11 +104,12 @@ class MessageChildController extends GetxController {
     try {
       final res = await CommonService.of.messageReadAll(messageType.type);
       if (res.isSuccess) {
-        ToastUtils.showToast('全部已读');
+        ToastUtils.showToast('消息已变更为已读！');
         for (final item in items) {
           item.readStatus = 1;
         }
         safeUpdate();
+        UserStore.of.refreshBadge();
       }
     } catch (e) {}
   }

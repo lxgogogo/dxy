@@ -12,12 +12,14 @@ class MessageController extends GetxController with GetSingleTickerProviderState
 
   MessageType get messageType => MessageType.values[tabController.index];
 
-  int? get unReadCount => switch (messageType) {
-        MessageType.at => MainController.of.badgeModel.value?.at,
-        MessageType.comment => MainController.of.badgeModel.value?.comment,
-        MessageType.like => MainController.of.badgeModel.value?.like,
-        MessageType.favorite => MainController.of.badgeModel.value?.favorite,
-      };
+  int get unReadCount =>
+      switch (messageType) {
+        MessageType.at => UserStore.of.badgeModel.value?.at,
+        MessageType.comment => UserStore.of.badgeModel.value?.comment,
+        MessageType.like => UserStore.of.badgeModel.value?.like,
+        MessageType.favorite => UserStore.of.badgeModel.value?.favorite,
+      } ??
+      0;
 
   @override
   void onInit() {
@@ -29,11 +31,7 @@ class MessageController extends GetxController with GetSingleTickerProviderState
   }
 
   void messageReadAll() {
-    if ((unReadCount ?? 0) > 0) {
-      final childController = childControllers[tabController.index];
-      childController.messageReadAll();
-    } else {
-      ToastUtils.showToast('全部已读');
-    }
+    final childController = childControllers[tabController.index];
+    childController.messageReadAll();
   }
 }

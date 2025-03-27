@@ -5,6 +5,8 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
 import 'package:holdem/utils/toast_utils.dart';
 
+import '../model/message_badge_model.dart';
+import '../services/index.dart';
 import '../utils/net_request.dart';
 
 class UserStore extends GetxController {
@@ -35,11 +37,13 @@ class UserStore extends GetxController {
     await StorageService.of.putLocalUserStr('');
     await StorageService.of.putToken('');
     _user.value = null;
+    refreshBadge();
   }
 
   Future<void> putUserInfo(UserProfile user) async {
     await StorageService.of.putLocalUserStr(user.toRawJson());
     _user.value = user;
+    refreshBadge();
   }
 
   Future<void> getUserInfo() async {
@@ -56,5 +60,21 @@ class UserStore extends GetxController {
       ...json,
     });
     await StorageService.of.putLocalUserStr(_user.value!.toRawJson());
+  }
+
+  /// badge
+  Rx<MessageBadgeModel?> badgeModel = Rx(null);
+
+  Future<void> refreshBadge() async {
+    if (UserStore.of.isLogin) {
+      try {
+        final res = await CommonService.of.getMessageBadge();
+        if (res.isSuccess) {
+          badgeModel.value = MessageBadgeModel.fromJson(res.data);
+        }
+      } catch (e) {}
+    } else {
+      badgeModel.value = null;
+    }
   }
 }

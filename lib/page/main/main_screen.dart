@@ -68,43 +68,66 @@ class _MainScreenState extends State<MainScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.9),
                       ),
-                      child: Obx(() {
-                        return BottomNavigationBar(
-                          currentIndex: controller.tabIndex,
-                          type: BottomNavigationBarType.fixed,
-                          backgroundColor: Colors.transparent,
-                          elevation: 0.0,
-                          selectedFontSize: 10.sp,
-                          unselectedFontSize: 10.sp,
-                          selectedItemColor: '#557BF6'.hexColor,
-                          unselectedItemColor: '#333333'.hexColor,
-                          showSelectedLabels: true,
-                          showUnselectedLabels: true,
-                          useLegacyColorScheme: false,
-                          onTap: controller.onTabBarItem,
-                          items: [
-                            _buildBarItem(
-                              icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
-                              label: '首页',
-                            ),
-                            _buildBarItem(
-                              icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
-                              label: '论坛',
-                            ),
-                            _buildBarItem(
-                              icon: controller.tabIndex == 2
-                                  ? Assets.svg.navIconMessageAct
-                                  : Assets.svg.navIconMessage,
-                              label: '消息',
-                              badgeCount: controller.badgeModel.value?.total ?? 0,
-                            ),
-                            _buildBarItem(
-                              icon: controller.tabIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
-                              label: '我的',
-                            ),
-                          ],
-                        );
-                      }),
+                      child: BottomNavigationBar(
+                        currentIndex: controller.tabIndex,
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Colors.transparent,
+                        elevation: 0.0,
+                        selectedFontSize: 10.sp,
+                        unselectedFontSize: 10.sp,
+                        selectedItemColor: '#557BF6'.hexColor,
+                        unselectedItemColor: '#333333'.hexColor,
+                        showSelectedLabels: true,
+                        showUnselectedLabels: true,
+                        useLegacyColorScheme: false,
+                        onTap: controller.onTabBarItem,
+                        items: [
+                          _buildBarItem(
+                            icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
+                            label: '首页',
+                          ),
+                          _buildBarItem(
+                            icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                            label: '论坛',
+                          ),
+                          _buildBarItem(
+                            icon: controller.tabIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
+                            label: '消息',
+                            badge: Obx(() {
+                              final badgeCount = UserStore.of.badgeModel.value?.total ?? 0;
+                              if (badgeCount > 0) {
+                                return Positioned(
+                                  top: -7.5.w,
+                                  right: -7.5.w,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        Assets.svg.badge,
+                                        width: 15.w,
+                                        height: 15.w,
+                                      ),
+                                      Text(
+                                        '${badgeCount > 99 ? 99 : badgeCount}',
+                                        style: TextStyle(
+                                          fontSize: 9.sp,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              return const SizedBox();
+                            }),
+                          ),
+                          _buildBarItem(
+                            icon: controller.tabIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
+                            label: '我的',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -120,7 +143,7 @@ class _MainScreenState extends State<MainScreen> {
   BottomNavigationBarItem _buildBarItem({
     required String icon,
     required String label,
-    int badgeCount = 0,
+    Widget? badge,
   }) {
     return BottomNavigationBarItem(
       icon: Stack(
@@ -131,29 +154,7 @@ class _MainScreenState extends State<MainScreen> {
             width: 20.w,
             height: 20.w,
           ),
-          if (badgeCount > 0)
-            Positioned(
-              top: -7.5.w,
-              right: -7.5.w,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  SvgPicture.asset(
-                    Assets.svg.badge,
-                    width: 15.w,
-                    height: 15.w,
-                  ),
-                  Text(
-                    '${badgeCount > 99 ? 99 : badgeCount}',
-                    style: TextStyle(
-                      fontSize: 9.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          if (badge != null) badge,
         ],
       ),
       label: label,

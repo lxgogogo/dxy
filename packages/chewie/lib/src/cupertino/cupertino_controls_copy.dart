@@ -103,13 +103,12 @@ class _CupertinoControlsState extends State<CupertinoControls>
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  if (chewieController.isFullScreen)
-                    _buildTopBar(
-                      backgroundColor,
-                      iconColor,
-                      barHeight,
-                      buttonPadding,
-                    ),
+                  _buildTopBar(
+                    backgroundColor,
+                    iconColor,
+                    barHeight,
+                    buttonPadding,
+                  ),
                   const Spacer(),
                   if (_subtitleOn)
                     Transform.translate(
@@ -119,7 +118,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
                       ),
                       child: _buildSubtitles(chewieController.subtitle!),
                     ),
-                  _buildBottomBar(backgroundColor, iconColor, barHeight, buttonPadding),
+                  _buildBottomBar(backgroundColor, iconColor, barHeight),
                 ],
               ),
             ],
@@ -245,7 +244,6 @@ class _CupertinoControlsState extends State<CupertinoControls>
     Color backgroundColor,
     Color iconColor,
     double barHeight,
-    double buttonPadding,
   ) {
     return SafeArea(
       bottom: chewieController.isFullScreen,
@@ -277,26 +275,15 @@ class _CupertinoControlsState extends State<CupertinoControls>
                       )
                     : Row(
                         children: <Widget>[
-                          if (chewieController.isFullScreen)
-                            _buildSkipBack(iconColor, barHeight),
+                          _buildSkipBack(iconColor, barHeight),
                           _buildPlayPause(controller, iconColor, barHeight),
-                          if (chewieController.isFullScreen)
-                            _buildSkipForward(iconColor, barHeight),
+                          _buildSkipForward(iconColor, barHeight),
                           _buildPosition(iconColor),
                           _buildProgressBar(),
                           _buildRemaining(iconColor),
                           _buildSubtitleToggle(iconColor, barHeight),
                           if (chewieController.allowPlaybackSpeedChanging)
-                            if (chewieController.isFullScreen)
-                            _buildSpeedButton(controller, iconColor, barHeight)
-                          else
-                            if (chewieController.allowFullScreen)
-                              _buildExpandButton(
-                                Colors.transparent,
-                                iconColor,
-                                barHeight,
-                                buttonPadding,
-                              ),
+                            _buildSpeedButton(controller, iconColor, barHeight),
                           if (chewieController.additionalOptions != null &&
                               chewieController
                                   .additionalOptions!(context).isNotEmpty)

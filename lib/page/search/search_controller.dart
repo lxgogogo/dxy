@@ -30,9 +30,11 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
     historyItems = getLimitedHistoryItems(historyItems);
     safeUpdate();
   }
+
   List<String> getLimitedHistoryItems(List<String> items) {
     return items.take(6).toList();
   }
+
   Future<void> loadHotTags() async {
     final res = await CommonService.of.searchTop(
       pageNum: 1,
@@ -40,7 +42,7 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
     );
     if (res.isSuccess) {
       final listRes = res.data as List;
-      final records = listRes.map((e) => SearchTop.fromMap(e )).toList();
+      final records = listRes.map((e) => SearchTop.fromMap(e)).toList();
       if (records.isNotEmpty) {
         hotTagItems.assignAll(records);
         safeUpdate();
@@ -49,6 +51,10 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
   }
 
   void onChanged(String value) {
+    if (controller.text.isEmpty) {
+      FocusManager.instance.primaryFocus?.unfocus();
+      showResult = false;
+    }
     safeUpdate();
   }
 

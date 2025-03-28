@@ -146,31 +146,26 @@ class MessageCommonItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        item.fromUser?.nickname ?? '',
-                        style: TextStyle(
-                          color: '#333333'.hexColor,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      SizedBox(width: 6.w),
-                      if (isFavorite)
-                        const SizedBox()
-                      else
-                        Text(
-                          item.createdAt != null
-                              ? DateUtil.formatDateAlias3(
-                                  item.createdAt?.millisecondsSinceEpoch ?? 0)
-                              : '',
+                      Expanded(
+                        child: Text(
+                          item.fromUser?.nickname ?? '',
                           style: TextStyle(
-                            color: '#333333'.hexColor.withOpacity(0.7),
+                            color: '#333333'.hexColor,
                             fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
+                      ),
+                      Text(
+                        item.createdAt != null
+                            ? DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)
+                            : '',
+                        style: TextStyle(
+                          color: '#333333'.hexColor.withOpacity(0.7),
+                          fontSize: 12.sp,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 4.w),
@@ -184,39 +179,15 @@ class MessageCommonItem extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 8.w),
-                      if (isFavorite)
-                        Text(
-                          item.createdAt != null
-                              ? DateUtil.formatDateAlias3(
-                                  item.createdAt?.millisecondsSinceEpoch ?? 0)
-                              : '',
-                          style: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      else
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              // if (item.description?.isNotEmpty == true)
-                              //   AtText(text: HtmlParseUtil.of.pureCommentText(item.description)),
-                              Text(
-                                title ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: '##333333'.hexColor,
-                                  fontSize: 10.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              )
-                            ],
-                          ),
+                      Text(
+                        title ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: '##333333'.hexColor,
+                          fontSize: 10.sp,
                         ),
+                      ),
                     ],
                   ),
                   //  SizedBox(height: 8.w),

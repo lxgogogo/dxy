@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -16,10 +17,6 @@ import '../../widget/item_book.dart';
 import '../../widget/three_d_book_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-/**
- * Created on 2025/3/6
- * Description:
- */
 class BookListScreen extends StatefulWidget {
   const BookListScreen({Key? key}) : super(key: key);
 
@@ -53,63 +50,51 @@ class _BookListScreenState extends State<BookListScreen> {
       ),
       body: GetBuilder<BookListController>(
         init: BookListController(),
-        builder: (controller) => _buildContent(controller),
+        builder: (controller) => Stack(
+          children: [
+            SizedBox(
+              height: 234.w,
+              child: Image.asset(
+                Assets.images.bookBanner.path,
+                fit: BoxFit.cover,
+              ),
+            ),
+            NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 211.w,
+                      ),
+                    )
+                  ];
+                },
+                body: ClipRRect(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
+                  ),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 100),
+                      decoration: BoxDecoration(
+                        color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                      ),
+                      child: SmartRefresher(
+                        enablePullDown: false,
+                        enablePullUp: true,
+                        controller: controller.refreshController,
+                        onLoading: controller.onLoading,
+                        child: controller.isLoaded ? _buildContentView(controller) : const SizedBox(),
+                      ),
+                    ),
+                  ),
+                )),
+          ],
+        ),
       ),
     );
   }
-}
-
-Widget _buildContent(BookListController controller) {
-  return Column(
-    children: [
-      Expanded(
-          child: Stack(
-        children: [
-          SizedBox(
-            height: 234.w,
-            child: Image.asset(
-              Assets.images.bookBanner.path,
-              fit: BoxFit.cover,
-            ),
-          ),
-          NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 211.w,
-                    ),
-                  )
-                ];
-              },
-              body: ClipRRect(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 100),
-                    decoration: BoxDecoration(
-                      color: '#F3F8FF'.hexColor.withOpacity(0.7),
-                    ),
-                    child: SmartRefresher(
-                      enablePullDown: false,
-                      enablePullUp: true,
-                      controller: controller.refreshController,
-                      onLoading: controller.onLoading,
-                      child: controller.isLoaded
-                          ? _buildContentView(controller)
-                          : const SizedBox(),
-                    ),
-                  ),
-                ),
-              )),
-        ],
-      )),
-    ],
-  );
 }
 
 _buildContentView(BookListController controller) {
@@ -117,9 +102,8 @@ _buildContentView(BookListController controller) {
     physics: const NeverScrollableScrollPhysics(),
     slivers: [
       SliverToBoxAdapter(
-        child: Container(
-          padding:
-              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
           child: Row(
             children: [
               Text(
@@ -133,6 +117,35 @@ _buildContentView(BookListController controller) {
                 Assets.svg.homeTag,
                 width: 34.w,
               ),
+              const Spacer(),
+              GestureDetector(
+                onTap: controller.loadBooks,
+                child: Row(
+                  children: [
+                    Text(
+                      '换一批',
+                      style: TextStyle(
+                        color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    SizedBox(width: 3.w),
+                    AnimatedBuilder(
+                      animation: controller.animationController,
+                      builder: (context, child) {
+                        return Transform.rotate(
+                          angle: controller.isSwitching ? controller.animationController.value * 2 * pi : 0,
+                          child: SvgPicture.asset(
+                            Assets.svg.iconRefresh,
+                            width: 12.w,
+                            height: 12.w,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -177,8 +190,7 @@ _buildContentView(BookListController controller) {
       // ),
       SliverToBoxAdapter(
         child: Container(
-          padding:
-              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
           child: Row(
             children: [
               Text(

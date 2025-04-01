@@ -73,72 +73,67 @@ class _PersonalScreenState extends State<PersonalScreen> {
   Widget contentView() {
     return Obx(() {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
             height: 23.5.w,
           ),
-          Center(
-            child: Container(
-              width: 88.w,
-              height: 88.w,
-              alignment: Alignment.center,
-              // decoration: BoxDecoration(
-              //   color: Colors.white,
-              //   borderRadius: BorderRadius.circular(69.w),
-              //   boxShadow: [
-              //     BoxShadow(
-              //       color: const Color(0xff6d85b5).withOpacity(0.16),
-              //       // inset 0 1px 2px 1px #FFFFFF
-              //       offset: Offset(0, 3.w),
-              //       blurRadius: 4.w,
-              //     ),
-              //   ],
-              // ),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  width: 88.w,
-                  height: 88.w,
-                  fit: BoxFit.cover,
-                  imageUrl: UserStore.of.user?.avatar ?? '',
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.black12)),
-                  errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                ),
+          SizedBox(
+            width: 88.w,
+            height: 88.w,
+            child: ClipOval(
+              child: IndexedStack(
+                index: imageUrl.isNotEmpty ? 0 : 1,
+
+                /// 保留新netImage渲染,返回后也能加快加载
+                sizing: StackFit.expand,
+                children: [
+                  Image.file(
+                    File(imageUrl),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: UserStore.of.user?.avatar ?? '',
+                    cacheKey: UserStore.of.user?.avatar ?? '',
+                    placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.white,
+                    )),
+                    errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          SizedBox(
-            height: 12.w,
-          ),
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                _phoneSelectImage();
-              },
-              child: Container(
-                width: 72.w,
-                height: 30.w,
-                decoration: ShapeDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment(1.00, 0.00),
-                    end: Alignment(-1, 0),
-                    colors: [
-                      Color(0xFF84BCF9),
-                      Color(0xFF557BF6),
-                    ],
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+          SizedBox(height: 12.w),
+          GestureDetector(
+            onTap: _phoneSelectImage,
+            child: Container(
+              width: 72.w,
+              height: 30.w,
+              decoration: ShapeDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF557BF6),
+                    Color(0xFF84BCF9),
+                  ],
                 ),
-                alignment: Alignment.center,
-                child: Text(
-                  '修改头像',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                '修改头像',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

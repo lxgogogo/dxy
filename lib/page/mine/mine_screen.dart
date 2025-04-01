@@ -56,15 +56,24 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               Get.toNamed(Routes.personal);
                             },
                             child: Center(
-                              child: ClipOval(
-                                child: CachedNetworkImage(
-                                  width: 88.w,
-                                  height: 88.w,
-                                  fit: BoxFit.cover,
-                                  imageUrl: UserStore.of.user?.avatar ?? '',
-                                  errorWidget: (context, url, error) => const SizedBox(),
-                                  fadeOutDuration: Duration.zero,
-                                  fadeInDuration: Duration.zero,
+                              child: SizedBox(
+                                width: 88.w,
+                                height: 88.w,
+                                child: ClipOval(
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: UserStore.of.user?.avatar ?? '',
+                                    cacheKey: UserStore.of.user?.avatar ?? '',
+                                    placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )),
+                                    errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                                      fit: BoxFit.fill,
+                                    ),
+                                    fadeOutDuration: Duration.zero,
+                                    fadeInDuration: Duration.zero,
+                                  ),
                                 ),
                               ),
                             ),
@@ -154,8 +163,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               tabs: controller.tabs.map((e) => Tab(text: e)).toList(),
                               isScrollable: false,
                               indicator: RoundUnderlineTabIndicator(
-                                borderSide:
-                                BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                                borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
                                 wantToWith: 12.w,
                               ),
                               enableFeedback: false,
@@ -181,7 +189,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               physics: const NeverScrollableScrollPhysics(),
                               children: List.generate(
                                 controller.tabs.length,
-                                    (index) => MineChildView(tabIndex: index),
+                                (index) => MineChildView(tabIndex: index),
                               ),
                             ),
                           ),

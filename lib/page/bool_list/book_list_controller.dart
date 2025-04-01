@@ -8,13 +8,8 @@ import '../../model/article.dart';
 import '../../utils/net_request.dart';
 import '../home/home_screen.dart';
 
-/**
- * Created on 2025/3/6
- * Description:
- */
-class BookListController extends GetxController{
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
-  final pageController = PageController(viewportFraction: 1, keepPage: true);
+class BookListController extends GetxController with GetSingleTickerProviderStateMixin {
+  final RefreshController refreshController = RefreshController();
   List<ArticleBean> articles = [];
   int pageNum = 1;
   int pageSize = 20;
@@ -23,6 +18,19 @@ class BookListController extends GetxController{
   bool isShowHomeMenu = false;
   final ScrollController scrollController = ScrollController();
   List<ArticleBean> bookItems = [];
+
+  bool isSwitching = false;
+  late AnimationController animationController;
+
+  @override
+  void onInit() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+    super.onInit();
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -36,7 +44,18 @@ class BookListController extends GetxController{
       }
     });
   }
+
+  @override
+  void onClose() {
+    animationController.dispose();
+    super.onClose();
+  }
+
   Future<void> loadBooks() async {
+    if (isSwitching) return;
+    isSwitching = true;
+    safeUpdate();
+    animationController.repeat();
     await NetRequest().bookRecommend({"pageSize": 4}, showLoading: false, (data) {
       final items = List<ArticleBean>.from(
         data.map((article) => ArticleBean.fromJson(article)),
@@ -45,10 +64,14 @@ class BookListController extends GetxController{
         bookItems = items;
         safeUpdate();
       }
+    }).whenComplete(() {
+      isSwitching = false;
+      safeUpdate();
+      animationController.stop();
     });
   }
-  Future<void> reqListData({bool showLoading = false}) async {
 
+  Future<void> reqListData({bool showLoading = false}) async {
     Map<String, Object> params = {
       'pageNum': pageNum,
       'pageSize': pageSize,
@@ -58,7 +81,7 @@ class BookListController extends GetxController{
     };
     try {
       int recordsSize = 0;
-      await NetRequest().indexList(params, showLoading: false,(data) {
+      await NetRequest().indexList(params, showLoading: false, (data) {
         final dataList = List<ArticleBean>.from(data['list'].map((article) => ArticleBean.fromJson(article)));
         recordsSize = dataList.length;
         if (pageNum == 1) {
@@ -80,6 +103,7 @@ class BookListController extends GetxController{
       safeUpdate();
     }
   }
+
   void onLoading() async {
     if (noMore) {
       refreshController.loadNoData();

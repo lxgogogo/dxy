@@ -18,7 +18,7 @@ class FeedPostController extends GetxController {
 
   List<TagModel> tagList = [];
 
-  final int tagMaxLength = 5;
+  final int tagMaxLength = 10;
 
   bool get isDisable {
     final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(

@@ -14,6 +14,7 @@ import 'package:holdem/widget/duration_text.dart';
 import 'package:intl/intl.dart';
 
 import '../utils/date_util.dart';
+import '../utils/log_utils.dart';
 
 class VideoItem extends StatelessWidget {
   final ArticleBean item;
@@ -25,6 +26,8 @@ class VideoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // case ：增加权限 跳转视频详情
+        LogUtils.printAll("跳转视频详情====");
         Get.toNamed(
           Routes.videoDetail,
           arguments: {'id': item.id},
@@ -160,6 +163,8 @@ class VideoHorizontalItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // case ：增加权限 跳转视频详情
+        LogUtils.printAll("跳转视频详情====");
         Get.toNamed(
           Routes.videoDetail,
           arguments: {'id': item.id},

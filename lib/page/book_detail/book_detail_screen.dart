@@ -168,6 +168,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       SizedBox(height: 16.w),
                                       GestureDetector(
                                         onTap: () {
+                                          // case：添加用户权限不足弹窗
                                           if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
                                             launchUrlString(controller.detailBean!.book!.downloadUrl!);
                                           }

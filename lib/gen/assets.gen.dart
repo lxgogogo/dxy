@@ -707,6 +707,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_arrow.svg
   String get iconArrow => 'assets/svg/icon_arrow.svg';
 
+  /// File path: assets/svg/icon_arrow_down.svg
+  String get iconArrowDown => 'assets/svg/icon_arrow_down.svg';
+
   /// File path: assets/svg/icon_close.svg
   String get iconClose => 'assets/svg/icon_close.svg';
 
@@ -811,6 +814,7 @@ class $AssetsSvgGen {
         feedComment,
         homeTag,
         iconArrow,
+        iconArrowDown,
         iconClose,
         iconComment,
         iconDelete,

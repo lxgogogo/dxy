@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/login/widgets/user_terms.dart';
@@ -10,6 +11,11 @@ import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/button.dart';
+import 'package:super_tooltip/super_tooltip.dart';
+
+import '../../../constants.dart';
+import '../../../gen/assets.gen.dart';
+import 'type_selector.dart';
 
 class LoginContent extends StatefulWidget {
   const LoginContent({Key? key, required this.goRegister}) : super(key: key);
@@ -20,8 +26,39 @@ class LoginContent extends StatefulWidget {
 }
 
 class _LoginContentState extends State<LoginContent> {
+  final List<String> typeList = ['邮箱登录', '账号登录', '手机登录'];
+  int typeIndex = 0;
+  String get type => typeList[typeIndex];
+  bool get isMobile => typeIndex == 2;
+
   final TextEditingController _controllerAccount = TextEditingController();
   bool isShowAccountTips = false;
+  String get accountTips {
+    switch (typeIndex) {
+      case 0: // 邮箱登录
+        return '*请输入正确邮箱地址';
+      case 1: // 账号登录
+        return '*6~15位英数字，大小写不同';
+      case 2: // 手机登录
+        return '*手机号格式错误';
+      default:
+        return '';
+    }
+  }
+
+  String get accountHint {
+    switch (typeIndex) {
+      case 0: // 邮箱登录
+        return '请输入邮箱';
+      case 1: // 账号登录
+        return '请输入账号';
+      case 2: // 手机登录
+        return '请输入手机号';
+      default:
+        return '';
+    }
+  }
+
   final TextEditingController _controllerPw = TextEditingController();
   bool isShowPwTips = false;
   bool isLogin = true;
@@ -32,30 +69,44 @@ class _LoginContentState extends State<LoginContent> {
 
   bool _isLoginDisable = true;
 
-  RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
-
   void checkValid() {
     final account = _controllerAccount.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    switch (typeIndex) {
+      case 0: // 邮箱登录
+        isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+        break;
+      case 1: // 账号登录
+        isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case 2: // 手机登录
+        isShowAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+    }
     final password = _controllerPw.text;
-    isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
-    _isLoginDisable = account.isEmpty ||
-        isShowAccountTips ||
-        password.isEmpty ||
-        isShowPwTips;
+    isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
     setState(() {});
   }
 
   void onChangeCheckValid() {
     final account = _controllerAccount.text;
-    final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    bool showAccountTips = false;
+    switch (typeIndex) {
+      case 0: // 邮箱登录
+        showAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+        break;
+      case 1: // 账号登录
+        showAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case 2: // 手机登录
+        showAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+    }
+
     final password = _controllerPw.text;
-    final isShowPwTips =
-        !passwordRegExp.hasMatch(password) && password.isNotEmpty;
-    _isLoginDisable = account.isEmpty ||
-        isShowAccountTips ||
-        password.isEmpty ||
-        isShowPwTips;
+    final showPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    _isLoginDisable = account.isEmpty || showAccountTips || password.isEmpty || showPwTips;
+
     setState(() {});
   }
 
@@ -108,43 +159,48 @@ class _LoginContentState extends State<LoginContent> {
           SizedBox(
             height: 30.w,
           ),
+          TypeSelector(
+            typeList: typeList,
+            typeIndex: typeIndex,
+            onTypeSelected: (index) {
+              typeIndex = index;
+              checkValid();
+            },
+          ),
+          SizedBox(height: 12.w),
           Container(
             height: 44.w,
-            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-            // 水平内边距
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
               borderRadius: BorderRadius.circular(12.w),
-              // border: Border.all(
-              //     color: _focusEmail.hasFocus
-              //         ? Color(0xff249CFC)
-              //         : Color(0xffCCD7F0))
             ),
             child: Row(
-              children: <Widget>[
-                // Image.asset(
-                //   'assets/images/email.png',
-                //   width: 14.w,
-                //   height: 14.w,
-                // ),
+              children: [
+                if (isMobile)
+                  Text(
+                    '+86 丨 ',
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                  ),
                 Expanded(
                   child: TextField(
                     focusNode: _focusEmail,
-                    keyboardType: TextInputType.text,
+                    keyboardType: isMobile ? TextInputType.phone : TextInputType.text,
                     controller: _controllerAccount,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(
-                        RegExp('[\\s]'),
-                      )
-                    ],
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                    inputFormatters: [if (isMobile) FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
-                      hintText: '账号',
-                      hintStyle:
-                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintText: accountHint,
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
-                    onChanged: (_) {
+                    onChanged: (text) {
+                      if (text.contains(' ')) {
+                        String newText = text.replaceAll(' ', '');
+                        _controllerAccount.text = newText;
+                        _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
+                      }
                       onChangeCheckValid();
                     },
                   ),
@@ -155,7 +211,7 @@ class _LoginContentState extends State<LoginContent> {
           Padding(
             padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
             child: Text(
-              isShowAccountTips ? '*请输入正确邮箱地址' : '',
+              isShowAccountTips ? accountTips : '',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
@@ -164,8 +220,7 @@ class _LoginContentState extends State<LoginContent> {
           ),
           Container(
             height: 44.w,
-            padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-            // 水平内边距
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
               borderRadius: BorderRadius.circular(12.w),
@@ -177,11 +232,11 @@ class _LoginContentState extends State<LoginContent> {
                     controller: _controllerPw,
                     focusNode: _focusPwd,
                     obscureText: !isOpen,
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: '密码',
-                      hintStyle:
-                          TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
@@ -196,9 +251,7 @@ class _LoginContentState extends State<LoginContent> {
                     });
                   },
                   child: Image.asset(
-                    isOpen
-                        ? 'assets/images/eye_open.png'
-                        : 'assets/images/eye_close.png',
+                    isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                     width: 18.w,
                     height: 18.w,
                   ),
@@ -206,7 +259,6 @@ class _LoginContentState extends State<LoginContent> {
               ],
             ),
           ),
-
           Row(
             children: [
               Padding(
@@ -214,7 +266,7 @@ class _LoginContentState extends State<LoginContent> {
                 child: Text(
                   isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                     color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
                   ),
                 ),

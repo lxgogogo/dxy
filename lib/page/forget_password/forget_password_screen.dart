@@ -8,6 +8,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
+import '../../constants.dart';
 import '../../widget/close_image_button.dart';
 
 part 'forget_password_controller.dart';
@@ -41,8 +42,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   RegExp containsInvalidChars = RegExp(
       r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
   bool isContainsInvalidChars = false;
-  RegExp passwordRegExp = RegExp(
-      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
 
   void checkValid() {
     final account = _controllerEmail.text;
@@ -51,7 +50,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
     isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
-    bool isValidPassword = passwordRegExp.hasMatch(password);
+    bool isValidPassword = Constants.passwordRegExp.hasMatch(password);
 
     if (password.isNotEmpty) {
       if (isContainsInvalidChars) {
@@ -84,7 +83,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     final code = _controllerCode.text;
     final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 

@@ -8,6 +8,7 @@ import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
+import '../constants.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
 
@@ -39,8 +40,6 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
   RegExp containsInvalidChars = RegExp(
       r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
   bool isContainsInvalidChars = false;
-  RegExp passwordRegExp = RegExp(
-      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
 
   @override
   void initState() {
@@ -67,7 +66,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
     // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
     final password = _controllerPw.text;
     isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
-    bool isValidPassword = passwordRegExp.hasMatch(password);
+    bool isValidPassword = Constants.passwordRegExp.hasMatch(password);
 
     if (password.isNotEmpty) {
       if (isContainsInvalidChars) {
@@ -96,7 +95,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
     final originalPassword = _controllerOriginalPw.text;
     // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 

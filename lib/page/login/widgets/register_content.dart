@@ -11,6 +11,9 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
+import '../../../constants.dart';
+import 'type_selector.dart';
+
 class RegisterContent extends StatefulWidget {
   const RegisterContent({Key? key, required this.goLogin}) : super(key: key);
   final Function goLogin;
@@ -20,11 +23,42 @@ class RegisterContent extends StatefulWidget {
 }
 
 class _RegisterContentState extends State<RegisterContent> {
+  final List<String> typeList = ['邮箱注册', '账号注册', '手机注册'];
+  int typeIndex = 0;
+  String get type => typeList[typeIndex];
+  bool get isMobile => typeIndex == 2;
+
   bool _isVisible = false;
   bool _isVisibleAgain = false;
 
   final TextEditingController _controllerEmail = TextEditingController();
   bool isShowAccountTips = false;
+  String get accountTips {
+    switch (typeIndex) {
+      case 0: // 邮箱注册
+        return '*请输入正确邮箱地址';
+      case 1: // 账号注册
+        return '*6~15位英数字，大小写不同';
+      case 2: // 手机注册
+        return '*手机号格式错误';
+      default:
+        return '';
+    }
+  }
+
+  String get accountHint {
+    switch (typeIndex) {
+      case 0: // 邮箱注册
+        return '请输入邮箱';
+      case 1: // 账号注册
+        return '请输入账号';
+      case 2: // 手机注册
+        return '请输入手机号';
+      default:
+        return '';
+    }
+  }
+
   final FocusNode _focusEmail = FocusNode();
   final TextEditingController _controllerCode = TextEditingController();
   bool isShowCodeTips = false;
@@ -37,40 +71,43 @@ class _RegisterContentState extends State<RegisterContent> {
   final FocusNode _focusAgainPw = FocusNode();
 
   bool _isLoginDisable = true;
-  RegExp codeRegExp = RegExp(r'^\d{6}$');
-  RegExp containsInvalidChars = RegExp(
-      r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
   bool isContainsInvalidChars = false;
-  RegExp passwordRegExp = RegExp(
-      r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');
 
   void checkValid() {
     final account = _controllerEmail.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    switch (typeIndex) {
+      case 0: // 邮箱注册
+        isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+        break;
+      case 1: // 账号注册
+        isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case 2: // 手机注册
+        isShowAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+    }
     final code = _controllerCode.text;
-    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    isShowCodeTips = typeIndex != 1 && !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
-    bool isValidPassword = passwordRegExp.hasMatch(password);
+    isContainsInvalidChars = !Constants.containsInvalidChars.hasMatch(password);
+    bool isValidPassword = Constants.passwordRegExp.hasMatch(password);
     if (password.isNotEmpty) {
       if (isContainsInvalidChars) {
         isShowPwTips = true; // 包含非法字符
       } else if (!isValidPassword) {
         isShowPwTips = true; // 不满足复杂度要求
       } else {
-        isShowPwTips = false; // 所有条件均满
+        isShowPwTips = false; // 所有条件均满足
       }
     } else {
       isShowPwTips = false; // 密码为空时不显示提示
     }
-    // isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
     _isLoginDisable = account.isEmpty ||
         isShowAccountTips ||
-        code.isEmpty ||
-        isShowCodeTips ||
+        (typeIndex != 1 && (code.isEmpty || isShowCodeTips)) ||
         password.isEmpty ||
         isShowPwTips ||
         againPw.isEmpty ||
@@ -81,28 +118,35 @@ class _RegisterContentState extends State<RegisterContent> {
 
   void onChangeCheckValid() {
     final account = _controllerEmail.text;
-    final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    bool showAccountTips = false;
+    switch (typeIndex) {
+      case 0: // 邮箱注册
+        showAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+        break;
+      case 1: // 账号注册
+        showAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case 2: // 手机注册
+        showAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+    }
     final code = _controllerCode.text;
-    final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    final isShowCodeTips = typeIndex != 1 && !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    final isShowPwTips = !passwordRegExp.hasMatch(password) && password.isNotEmpty;
+    final isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
     setState(() {
+      isShowAccountTips = showAccountTips;
       _isLoginDisable = account.isEmpty ||
-          isShowAccountTips ||
-          code.isEmpty ||
-          isShowCodeTips ||
+          showAccountTips ||
+          (typeIndex != 1 && (code.isEmpty || isShowCodeTips)) ||
           password.isEmpty ||
           isShowPwTips ||
           againPw.isEmpty ||
           isShowAgainTips ||
           !_didAgreeTerms.value;
-      // Log.d('account.isEmpty: ${account.isEmpty} isShowAccountTips: $isShowAccountTips '
-      //     ' code.isEmpty: ${code.isEmpty} isShowCodeTips: $isShowCodeTips '
-      //     'password.isEmpty: ${password.isEmpty} isShowPwTips: $isShowPwTips againPw.isEmpty: ${ againPw.isEmpty } '
-      //     'isShowAgainTips: $isShowAgainTips');
     });
   }
 
@@ -178,33 +222,50 @@ class _RegisterContentState extends State<RegisterContent> {
           SizedBox(
             height: 30.w,
           ),
+          TypeSelector(
+            typeList: typeList,
+            typeIndex: typeIndex,
+            onTypeSelected: (index) {
+              setState(() {
+                typeIndex = index;
+                checkValid();
+              });
+            },
+          ),
+          SizedBox(height: 12.w),
           Container(
             height: 44.w,
             padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-            // 水平内边距
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
               borderRadius: BorderRadius.circular(12.w),
             ),
             child: Row(
-              children: <Widget>[
+              children: [
+                if (isMobile)
+                  Text(
+                    '+86 丨 ',
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                  ),
                 Expanded(
                   child: TextField(
                     focusNode: _focusEmail,
                     keyboardType: TextInputType.text,
                     controller: _controllerEmail,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(
-                        RegExp('[\\s]'),
-                      )
-                    ],
+                    inputFormatters: [if (isMobile) FilteringTextInputFormatter.digitsOnly],
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                     decoration: InputDecoration(
-                      border: InputBorder.none, // 没有边框
-                      hintText: '请输入邮箱',
-                      hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      border: InputBorder.none,
+                      hintText: accountHint,
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
-                    onChanged: (_) {
+                    onChanged: (text) {
+                      if (text.contains(' ')) {
+                        String newText = text.replaceAll(' ', '');
+                        _controllerEmail.text = newText;
+                        _controllerEmail.selection = TextSelection.collapsed(offset: newText.length);
+                      }
                       onChangeCheckValid();
                     },
                   ),
@@ -215,56 +276,58 @@ class _RegisterContentState extends State<RegisterContent> {
           Padding(
             padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
             child: Text(
-              isShowAccountTips ? '*请输入正确邮箱地址' : '',
+              isShowAccountTips ? accountTips : '',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
           ),
-          Container(
-            height: 44.w,
-            padding: EdgeInsets.symmetric(horizontal: 10.0.w), // 水平内边距
-            decoration: BoxDecoration(
-              color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _controllerCode,
-                    focusNode: _focusCode,
-                    keyboardType: TextInputType.number,
-                    // maxLength: 8,
-                    decoration: InputDecoration(
-                      border: InputBorder.none, // 没有边框
-                      hintText: '请输入验证码',
-                      hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
-                      contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+          if (typeIndex != 1) ...[
+            Container(
+              height: 44.w,
+              padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+              decoration: BoxDecoration(
+                color: '#f5f5f5'.hexColor,
+                borderRadius: BorderRadius.circular(12.w),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: _controllerCode,
+                      focusNode: _focusCode,
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '请输入验证码',
+                        hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
+                        contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                      ),
+                      onChanged: (_) {
+                        onChangeCheckValid();
+                      },
                     ),
-                    onChanged: (_) {
-                      onChangeCheckValid();
-                    },
                   ),
-                ),
-                CountDownView(
-                  type: NetRequest.SEND_CODE_TYPE_REGISTER,
-                  email: _controllerEmail.text,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-            child: Text(
-              isShowCodeTips ? '*验证码错误' : '',
-              style: TextStyle(
-                fontSize: 10.sp,
-                color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                  CountDownView(
+                    type: NetRequest.SEND_CODE_TYPE_REGISTER,
+                    email: _controllerEmail.text,
+                  ),
+                ],
               ),
             ),
-          ),
+            Padding(
+              padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+              child: Text(
+                isShowCodeTips ? '*验证码错误' : '',
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                ),
+              ),
+            ),
+          ],
           Container(
             height: 44.w,
             padding: EdgeInsets.symmetric(horizontal: 10.0.w),
@@ -280,10 +343,11 @@ class _RegisterContentState extends State<RegisterContent> {
                     controller: _controllerPw,
                     focusNode: _focusPw,
                     obscureText: !_isVisible,
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: '请输入密码',
-                      hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {
@@ -335,11 +399,11 @@ class _RegisterContentState extends State<RegisterContent> {
                     controller: _controllerAgainPw,
                     focusNode: _focusAgainPw,
                     obscureText: !_isVisibleAgain,
-                    // 输入内容显示为密文
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                     decoration: InputDecoration(
                       border: InputBorder.none, // 没有边框
                       hintText: '请再次输入密码',
-                      hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                       contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                     ),
                     onChanged: (_) {

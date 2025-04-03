@@ -63,7 +63,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
     int recordsSize = 0;
     try {
       if (widget.isFollowPage) {
-        await NetRequest().followedList(pageNum.toString(), pageSize.toString(), '', (data) {
+        await NetRequest()
+            .followedList(pageNum.toString(), pageSize.toString(), '', (data) {
           UserDataList dataList = UserDataList.fromJson(data);
           recordsSize = dataList.list?.length ?? 0;
           if (_isMounted) {
@@ -75,7 +76,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
           }
         });
       } else {
-        await NetRequest().fansList(pageNum.toString(), pageSize.toString(), '', (data) {
+        await NetRequest().fansList(pageNum.toString(), pageSize.toString(), '',
+            (data) {
           UserDataList dataList = UserDataList.fromJson(data);
           recordsSize = dataList.list?.length ?? 0;
           if (_isMounted) {
@@ -153,7 +155,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
                           height: 36.w,
                           fit: BoxFit.cover,
                           imageUrl: items[index].avatar ?? '',
-                          errorWidget: (context, url, error) => Image.asset('assets/images/default_avatar.png'),
+                          errorWidget: (context, url, error) =>
+                              Image.asset('assets/images/default_avatar.png'),
                         ),
                       ),
                       Expanded(
@@ -195,21 +198,35 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
     return GestureDetector(
       onTap: () {
-        NetRequest().followerToggle(
-          items[index].id!,
-          !items[index].followed!,
-              (data) {
-            if (items[index].followed == true) {
+        if (widget.isFollowPage) {
+          NetRequest().followerToggle(
+            items[index].id!,
+            false,
+            (data) {
+              items.removeAt(index);
               ToastUtils.showToast('取消关注成功');
-            } else {
-              ToastUtils.showToast('关注成功');
-            }
-            items[index].followed = !items[index].followed!;
-            if (_isMounted) {
-              setState(() {});
-            }
-          },
-        );
+              if (_isMounted) {
+                setState(() {});
+              }
+            },
+          );
+        } else {
+          NetRequest().followerToggle(
+            items[index].id!,
+            !items[index].followed!,
+            (data) {
+              if (items[index].followed ?? false) {
+                ToastUtils.showToast('取消关注成功');
+              } else {
+                ToastUtils.showToast('关注成功');
+              }
+              items[index].followed = !items[index].followed!;
+              if (_isMounted) {
+                setState(() {});
+              }
+            },
+          );
+        }
       },
       child: Container(
         width: 70.w,
@@ -224,7 +241,9 @@ class _FollowingScreenState extends State<FollowingScreen> {
         child: Text(
           title,
           style: TextStyle(
-            color: items[index].followed == true ? '#333333'.hexColor : '#557BF6'.hexColor,
+            color: items[index].followed == true
+                ? '#333333'.hexColor
+                : '#557BF6'.hexColor,
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
           ),

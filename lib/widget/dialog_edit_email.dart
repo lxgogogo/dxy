@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
-import '../utils/eventbus/EventBusAction.dart';
-import '../utils/eventbus/EventBusManager.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
 
@@ -101,7 +96,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                           "修改邮箱",
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -110,7 +105,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                     Positioned(
                       right: 0.w,
                       top: 0.w,
-                      child:  CloseImageButton(
+                      child: CloseImageButton(
                         width: 16.w,
                         height: 16.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
@@ -131,21 +126,22 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                           Text(
                             "新邮箱",
                             style: TextStyle(
-                              color:'#333333'.hexColor,
-                              fontSize: 14.px,
+                              color: '#333333'.hexColor,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(width: 8.px),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: Container(
                               height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
+                                borderRadius: BorderRadius.circular(8.w),
                                 border: Border.all(
                                   color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
-                                ),),
+                                  width: 1.w,
+                                ),
+                              ),
                               child: TextField(
                                 controller: _controllerEmail,
                                 focusNode: _focusEmail,
@@ -155,11 +151,6 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                   fontWeight: FontWeight.w500,
                                 ),
                                 maxLines: 1,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.deny(
-                                    RegExp('[\\s]'),
-                                  )
-                                ],
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
                                   hintText: '请输入邮箱',
@@ -167,24 +158,25 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                     color: '#3333334D'.hexColor,
                                     fontSize: 12.sp,
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
                                   ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
                                   ),
                                 ),
-                                onChanged: (_) {
+                                onChanged: (text) {
+                                  if (text.contains(' ')) {
+                                    String newText = text.replaceAll(' ', '');
+                                    _controllerEmail.text = newText;
+                                    _controllerEmail.selection = TextSelection.collapsed(offset: newText.length);
+                                  }
                                   onChangeCheckValid();
                                 },
                               ),
@@ -199,8 +191,8 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                             child: Text(
                               "三个字",
                               style: TextStyle(
-                                color:'#333333'.hexColor,
-                                fontSize: 14.px,
+                                color: '#333333'.hexColor,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -225,21 +217,22 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                           Text(
                             "验证码",
                             style: TextStyle(
-                              color:'#333333'.hexColor,
-                              fontSize: 14.px,
+                              color: '#333333'.hexColor,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Container(
-                              height: 30.px,
+                              height: 30.w,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
+                                borderRadius: BorderRadius.circular(8.w),
                                 border: Border.all(
                                   color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
-                                ),),
+                                  width: 1.w,
+                                ),
+                              ),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -248,7 +241,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                     focusNode: _focusCode,
                                     style: TextStyle(
                                       color: const Color(0xff3b5078),
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                     maxLines: 1,
@@ -264,21 +257,17 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                         color: '#3333334D'.hexColor,
                                         fontSize: 12.sp,
                                       ),
-                                      border: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.w),
+                                      border: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
                                       ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.w),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
                                       ),
-                                      disabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.w),
+                                      disabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(10.w),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
                                       ),
                                     ),
                                     onChanged: (_) {
@@ -305,8 +294,8 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                             child: Text(
                               "三个字",
                               style: TextStyle(
-                                color:'#333333'.hexColor,
-                                fontSize: 14.px,
+                                color: '#333333'.hexColor,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -332,13 +321,12 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.of(context).pop();
                               },
                               child: Container(
                                 width: 96.w,
                                 height: 33.w,
-
                                 decoration: ShapeDecoration(
                                   color: '#333333'.hexColor.withOpacity(0.1),
                                   shape: RoundedRectangleBorder(
@@ -350,7 +338,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                   '取消',
                                   style: TextStyle(
                                     color: '#333333'.hexColor.withOpacity(0.7),
-                                    fontSize: 12.px,
+                                    fontSize: 12.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -362,12 +350,14 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                               child: Container(
                                 width: 96.w,
                                 height: 33.w,
-
                                 decoration: ShapeDecoration(
                                   gradient: const LinearGradient(
                                     begin: Alignment(1.00, 0.00),
                                     end: Alignment(-1, 0),
-                                    colors: [ Color(0xFF84BCF9),Color(0xFF557BF6),],
+                                    colors: [
+                                      Color(0xFF84BCF9),
+                                      Color(0xFF557BF6),
+                                    ],
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -378,7 +368,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                   '确定修改',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 12.px,
+                                    fontSize: 12.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),

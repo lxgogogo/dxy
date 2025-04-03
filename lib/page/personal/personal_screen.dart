@@ -8,6 +8,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
+import 'package:holdem/widget/dialog_edit_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +17,7 @@ import '../../stores/user_store.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/net_request.dart';
 import '../../utils/size_fit.dart';
+import '../../widget/dialog_edit_mobile.dart';
 
 part 'personal_controller.dart';
 
@@ -142,7 +144,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
             padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.w),
             child: Column(
               children: [
-                GestureDetector(
+                _buildRowItem(
+                  label: '昵称',
+                  value: UserStore.of.user?.nickname ?? '',
                   onTap: () {
                     showDialog(
                       barrierDismissible: true,
@@ -152,42 +156,31 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       ),
                     );
                   },
-                  child: Container(
-                    height: 48.5.w,
-                    alignment: Alignment.center,
-                    child: Row(
-                      children: [
-                        Text(
-                          '昵称',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: '#333333'.hexColor,
-                          ),
-                        ),
-                        SizedBox(width: 14.w),
-                        Flexible(
-                          child: Text(
-                            UserStore.of.user?.nickname ?? '',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Image.asset('assets/images/edit_password.png', width: 24.w),
-                      ],
-                    ),
-                  ),
                 ),
                 Container(
                   color: const Color(0xffe6e6e6),
                   height: 0.5.w,
                 ),
-                GestureDetector(
+                _buildRowItem(
+                  label: '账号',
+                  value: UserStore.of.user?.account ?? '',
+                  onTap: () {
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) => DialogEditAccount(
+                        editContent: UserStore.of.user?.account ?? '',
+                      ),
+                    );
+                  },
+                ),
+                Container(
+                  color: const Color(0xffe6e6e6),
+                  height: 0.5.w,
+                ),
+                _buildRowItem(
+                  label: '邮箱',
+                  value: UserStore.of.user?.account ?? '',
                   onTap: () {
                     showDialog(
                       barrierDismissible: true,
@@ -197,36 +190,23 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       ),
                     );
                   },
-                  child: Container(
-                    height: 48.5.w,
-                    alignment: Alignment.center,
-                    child: Row(
-                      children: [
-                        Text(
-                          '邮箱',
-                          style: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        SizedBox(width: 14.w),
-                        Flexible(
-                          child: Text(
-                            UserStore.of.user?.account ?? '',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Image.asset('assets/images/edit_password.png', width: 24.w),
-                      ],
-                    ),
-                  ),
+                ),
+                Container(
+                  color: const Color(0xffe6e6e6),
+                  height: 0.5.w,
+                ),
+                _buildRowItem(
+                  label: '手机号',
+                  value: UserStore.of.user?.account ?? '',
+                  onTap: () {
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) => DialogEditMobile(
+                        editContent: UserStore.of.user?.account ?? '',
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -257,6 +237,46 @@ class _PersonalScreenState extends State<PersonalScreen> {
         ],
       );
     });
+  }
+
+  GestureDetector _buildRowItem({
+    required String label,
+    required String value,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 48.5.w,
+        alignment: Alignment.center,
+        child: Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: '#333333'.hexColor,
+                fontSize: 16.sp,
+              ),
+            ),
+            SizedBox(width: 14.w),
+            Flexible(
+              child: Text(
+                value,
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            SizedBox(width: 16.w),
+            Image.asset('assets/images/edit_password.png', width: 24.w),
+          ],
+        ),
+      ),
+    );
   }
 
   _phoneSelectImage() async {

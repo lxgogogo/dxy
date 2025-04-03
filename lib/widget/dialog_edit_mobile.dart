@@ -1,69 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
-import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
-import '../utils/event_bus_util.dart';
+import '../constants.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
 
-class DialogDeleteAccount extends StatefulWidget {
-  const DialogDeleteAccount({super.key});
+class DialogEditMobile extends StatefulWidget {
+  final String editContent; //
+  const DialogEditMobile({super.key, required this.editContent});
 
   @override
-  State<DialogDeleteAccount> createState() => _DialogDeleteAccountState();
+  State<DialogEditMobile> createState() => _DialogEditMobileState();
 }
 
-class _DialogDeleteAccountState extends State<DialogDeleteAccount>
-    with SingleTickerProviderStateMixin {
+class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
-  final TextEditingController _controllerEmail = TextEditingController();
-  bool isShowAccountTips = false;
-  final FocusNode _focusEmail = FocusNode();
+  final TextEditingController _controllerMobile = TextEditingController();
+  bool isShowMobileTips = false;
+  final FocusNode _focusMobile = FocusNode();
   final TextEditingController _controllerCode = TextEditingController();
   bool isShowCodeTips = false;
   final FocusNode _focusCode = FocusNode();
 
-  RegExp codeRegExp = RegExp(r'^\d{6}$');
-
   void checkValid() {
-    final account = _controllerEmail.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final mobile = _controllerMobile.text;
+    isShowMobileTips = !Constants.phoneRegExp.hasMatch(mobile) && mobile.isNotEmpty;
     final code = _controllerCode.text;
-    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    isShowCodeTips = !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
 
-    _isDisable =
-        account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
+    _isDisable = mobile.isEmpty || isShowMobileTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
 
   void onChangeCheckValid() {
-    final account = _controllerEmail.text;
-    final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final mobile = _controllerMobile.text;
+    final isShowMobileTips = !Constants.phoneRegExp.hasMatch(mobile) && mobile.isNotEmpty;
     final code = _controllerCode.text;
-    final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    final isShowCodeTips = !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
 
-    _isDisable =
-        account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
+    _isDisable = mobile.isEmpty || isShowMobileTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(() {
-      if (!_focusEmail.hasFocus) {
+    _focusMobile.addListener(() {
+      if (!_focusMobile.hasFocus) {
         checkValid();
       }
     });
@@ -85,7 +76,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 10.5.w,
+          borderRadius: 16.w,
           margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
@@ -100,10 +91,10 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                       width: double.infinity,
                       child: Center(
                         child: Text(
-                          "注销账号",
+                          "修改手机号",
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -126,191 +117,74 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 21.5.w),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "邮箱",
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 14.px,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                          Text(
+                            "手机号",
+                            style: TextStyle(
+                              color: '#333333'.hexColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(width: 8.w),
                           Expanded(
-                            flex: 5,
                             child: Container(
                               height: 30.w,
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
+                                borderRadius: BorderRadius.circular(8.w),
                                 border: Border.all(
                                   color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
+                                  width: 1.w,
                                 ),
                               ),
-                              child: TextField(
-                                controller: _controllerEmail,
-                                focusNode: _focusEmail,
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                maxLines: 1,
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 12.w),
-                                  hintText: '请输入邮箱',
-                                  hintStyle: TextStyle(
-                                    color: '#3333334D'.hexColor,
-                                    fontSize: 12.sp,
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
-                                    borderRadius: BorderRadius.circular(8.w),
-                                  ),
-                                ),
-                                onChanged: (text) {
-                                  if (text.contains(' ')) {
-                                    String newText = text.replaceAll(' ', '');
-                                    _controllerEmail.text = newText;
-                                    _controllerEmail.selection = TextSelection.collapsed(offset: newText.length);
-                                  }
-                                  onChangeCheckValid();
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 4.w),
-                              child: Text(
-                                isShowAccountTips ? '*请输入正确邮箱地址' : '',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: isShowAccountTips
-                                      ? Colors.red
-                                      : '#95A3C4'.hexColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              child: Text(
-                                "验证码",
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 14.px,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            flex: 5,
-                            child: Container(
-                              height: 30.px,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.px),
-                                border: Border.all(
-                                  color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.px,
-                                ),
-                              ),
-                              child: Stack(
-                                alignment: Alignment.center,
+                              child: Row(
                                 children: [
-                                  TextField(
-                                    controller: _controllerCode,
-                                    focusNode: _focusCode,
-                                    style: TextStyle(
-                                      color: const Color(0xff3b5078),
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    maxLines: 1,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]')),
-                                      LengthLimitingTextInputFormatter(6),
-                                    ],
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 12.w),
-                                      hintText: '请输入验证码',
-                                      hintStyle: TextStyle(
-                                        color: '#3333334D'.hexColor,
-                                        fontSize: 12.sp,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
-                                      ),
-                                      disabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
-                                      ),
-                                    ),
-                                    onChanged: (_) {
-                                      onChangeCheckValid();
-                                    },
+                                  Text(
+                                    '+86 丨 ',
+                                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                                   ),
-                                  Positioned(
-                                    right: 12.w,
-                                    child: CountDownView(
-                                      type: NetRequest
-                                          .SEND_CODE_DELETE_ACCOUNT,
-                                      email: _controllerEmail.text,
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _controllerMobile,
+                                      focusNode: _focusMobile,
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      maxLines: 1,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        hintText: '请输入手机号',
+                                        hintStyle: TextStyle(
+                                          color: '#3333334D'.hexColor,
+                                          fontSize: 12.sp,
+                                        ),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
+                                        ),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
+                                        ),
+                                        disabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
+                                        ),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
+                                        ),
+                                      ),
+                                      onChanged: (text) {
+                                        if (text.contains(' ')) {
+                                          String newText = text.replaceAll(' ', '');
+                                          _controllerMobile.text = newText;
+                                          _controllerMobile.selection = TextSelection.collapsed(offset: newText.length);
+                                        }
+                                        onChangeCheckValid();
+                                      },
                                     ),
                                   ),
                                 ],
@@ -321,7 +195,120 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                       ),
                       Row(
                         children: [
-                          SizedBox(width: 68.5.w),
+                          Opacity(
+                            opacity: 0,
+                            child: Text(
+                              "三个字",
+                              style: TextStyle(
+                                color: '#333333'.hexColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.w),
+                              child: Text(
+                                isShowMobileTips ? '*手机号格式错误' : '',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: isShowMobileTips ? Colors.red : '#95A3C4'.hexColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "验证码",
+                            style: TextStyle(
+                              color: '#333333'.hexColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Container(
+                              height: 30.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.w),
+                                border: Border.all(
+                                  color: '#333333'.hexColor.withOpacity(0.2),
+                                  width: 1.w,
+                                ),
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  TextField(
+                                    controller: _controllerCode,
+                                    focusNode: _focusCode,
+                                    style: TextStyle(
+                                      color: const Color(0xff3b5078),
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                                      LengthLimitingTextInputFormatter(6),
+                                    ],
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                                      hintText: '请输入验证码',
+                                      hintStyle: TextStyle(
+                                        color: '#3333334D'.hexColor,
+                                        fontSize: 12.sp,
+                                      ),
+                                      border: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
+                                      ),
+                                      disabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.transparent),
+                                      ),
+                                    ),
+                                    onChanged: (_) {
+                                      onChangeCheckValid();
+                                    },
+                                  ),
+                                  Positioned(
+                                    right: 12.w,
+                                    child: CountDownView(
+                                      type: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL,
+                                      email: _controllerMobile.text,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Opacity(
+                            opacity: 0,
+                            child: Text(
+                              "三个字",
+                              style: TextStyle(
+                                color: '#333333'.hexColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Padding(
@@ -330,9 +317,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                 isShowCodeTips ? '请输入6位数字验证码' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowCodeTips
-                                      ? Colors.red
-                                      : '#95A3C4'.hexColor,
+                                  color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -361,7 +346,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                 '取消',
                                 style: TextStyle(
                                   color: '#333333'.hexColor.withOpacity(0.7),
-                                  fontSize: 12.px,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -369,7 +354,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                           ),
                           SizedBox(width: 24.w),
                           InkWell(
-                            onTap: _isDisable ? null : _submit,
+                            onTap: _submitUpdate,
                             child: Container(
                               width: 96.w,
                               height: 33.w,
@@ -388,10 +373,10 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                '确定注销',
+                                '确定修改',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12.px,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -410,17 +395,15 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
     );
   }
 
-  void _submit() {
+  void _submitUpdate() {
     if (_isDisable) return;
-    String email = _controllerEmail.text;
+    String email = _controllerMobile.text;
     String code = _controllerCode.text;
-    NetRequest().deleteAccount(email, code, (data) {
-      ToastUtils.showToast('注销成功');
-      EventBusUtil.of.fire(EventResetMainTab());
-      UserStore.of.clearUserStorage();
-      Get.until((route) => route.settings.name == Routes.main);
-      Get.delete<CountDownController>(
-          tag: NetRequest.SEND_CODE_DELETE_ACCOUNT, force: true);
+    NetRequest().updateEmail(email, code, (data) {
+      ToastUtils.showToast('修改成功');
+      UserStore.of.getUserInfo();
+      Get.back();
+      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
     });
   }
 }

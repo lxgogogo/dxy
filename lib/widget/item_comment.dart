@@ -101,7 +101,7 @@ class _CommentItemState extends State<CommentItem> {
                     widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
                     style: TextStyle(
                       color: '#333333'.hexColor,
-                      fontSize: 12.w,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -294,7 +294,7 @@ class _CommentItemState extends State<CommentItem> {
                                           reply.user?.nickname ?? '',
                                           style: TextStyle(
                                             color: '#333333'.hexColor,
-                                            fontSize: 12.w,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),

@@ -64,7 +64,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                           "修改昵称",
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.w,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -128,7 +128,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       controller: controller,
                                       style: TextStyle(
                                         color: '#333333'.hexColor,
-                                        fontSize: 12.w,
+                                        fontSize: 12.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       maxLines: 1,
@@ -140,24 +140,20 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                         hintText: '请输入昵称',
                                         hintStyle: TextStyle(
                                           color: const Color(0xffa3b4d3),
-                                          fontSize: 12.w,
+                                          fontSize: 12.sp,
                                         ),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
-                                        ),
-                                        disabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
-                                        ),
+                                        border: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.transparent),
+                                  ),
                                       ),
                                       onChanged: (text) {
                                         if (text.contains(' ')) {
@@ -177,7 +173,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                         '${controller.text.characters.length}/10',
                                         style: TextStyle(
                                           color: '#333333'.hexColor,
-                                          fontSize: 12.w,
+                                          fontSize: 12.sp,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       );

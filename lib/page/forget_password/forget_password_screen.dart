@@ -213,18 +213,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               focusNode: _focusEmail,
                               keyboardType: TextInputType.text,
                               controller: _controllerEmail,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.deny(
-                                  RegExp('[\\s]'),
-                                )
-                              ],
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '请输入邮箱',
                                 hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
-                              onChanged: (_) {
+                              onChanged: (text) {
+                                if (text.contains(' ')) {
+                                  String newText = text.replaceAll(' ', '');
+                                  _controllerEmail.text = newText;
+                                  _controllerEmail.selection = TextSelection.collapsed(offset: newText.length);
+                                }
                                 onChangeCheckValid();
                               },
                             ),

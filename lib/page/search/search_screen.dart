@@ -80,7 +80,7 @@ class SearchScreen extends GetView<SearchController> {
                         '搜索',
                         style: TextStyle(
                           color: '#557BF6'.hexColor,
-                          fontSize: 16.w,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

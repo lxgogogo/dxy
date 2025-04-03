@@ -37,8 +37,6 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
   bool isShowAgainTips = false;
   final FocusNode _focusAgainPw = FocusNode();
   bool _confirmPwdObscureText = true;
-  RegExp containsInvalidChars = RegExp(
-      r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
   bool isContainsInvalidChars = false;
 
   @override
@@ -65,7 +63,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
     final originalPassword = _controllerOriginalPw.text;
     // isShowOriginalPwTips = !passwordRegExp.hasMatch(originalPassword) && originalPassword.isNotEmpty;
     final password = _controllerPw.text;
-    isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
+    isContainsInvalidChars = !Constants.containsInvalidChars.hasMatch(password);
     bool isValidPassword = Constants.passwordRegExp.hasMatch(password);
 
     if (password.isNotEmpty) {
@@ -137,7 +135,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                           "修改密码",
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.w,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -202,21 +200,17 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                           color: '#3333334D'.hexColor,
                                           fontSize: 12.sp,
                                         ),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        disabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        disabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
                                       ),
                                     ),
@@ -288,21 +282,17 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                           color: '#3333334D'.hexColor,
                                           fontSize: 12.sp,
                                         ),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        disabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        disabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
                                       ),
                                     ),
@@ -387,21 +377,17 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                           color: '#3333334D'.hexColor,
                                           fontSize: 12.sp,
                                         ),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        disabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        disabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.transparent),
-                                          borderRadius: BorderRadius.circular(8.w),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.transparent),
                                         ),
                                       ),
                                     ),
@@ -431,7 +417,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                             child: Text(
                               isShowAgainTips ? '*两次密码输入不一致' : '',
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: 10.sp,
                                 color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                               ),
                             ),
@@ -460,7 +446,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                 '取消',
                                 style: TextStyle(
                                   color: '#333333'.hexColor.withOpacity(0.7),
-                                  fontSize: 12.w,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -490,7 +476,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                 '确定修改',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12.w,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

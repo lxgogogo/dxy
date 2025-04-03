@@ -160,7 +160,7 @@ class HomeChildView extends StatelessWidget {
                         opacity: 0,
                         child: Text(
                           controller.loops.firstOrNull?.title ?? '',
-                          style: TextStyle(fontSize: 12.w, color: const Color(0xff36B3F4)),
+                          style: TextStyle(fontSize: 12.sp, color: const Color(0xff36B3F4)),
                         ),
                       ),
                       Positioned.fill(
@@ -175,7 +175,7 @@ class HomeChildView extends StatelessWidget {
                                 behavior: HitTestBehavior.translucent,
                                 child: Text(
                                   controller.loops[index].title ?? '',
-                                  style: TextStyle(fontSize: 12.w, color: const Color(0xff36B3F4)),
+                                  style: TextStyle(fontSize: 12.sp, color: const Color(0xff36B3F4)),
                                 ),
                               ),
                             );

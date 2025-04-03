@@ -56,7 +56,12 @@ class BookListController extends GetxController with GetSingleTickerProviderStat
     isSwitching = true;
     safeUpdate();
     animationController.repeat();
-    await NetRequest().bookRecommend({"pageSize": 4}, showLoading: false, (data) {
+    await NetRequest().bookRecommend({
+      "pageSize": 4,
+      "filters": {
+        "ids": bookItems.map((e) => e.id).toList(),
+      },
+    }, showLoading: false, (data) {
       final items = List<ArticleBean>.from(
         data.map((article) => ArticleBean.fromJson(article)),
       );

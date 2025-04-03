@@ -20,10 +20,10 @@ part 'following_controller.dart';
 class FollowingScreen extends StatefulWidget {
   final bool isFollowPage;
 
-  const FollowingScreen({Key? key, required this.isFollowPage}) : super(key: key);
+  const FollowingScreen({super.key, required this.isFollowPage});
 
   @override
-  _FollowingScreenState createState() => _FollowingScreenState();
+  createState() => _FollowingScreenState();
 }
 
 class _FollowingScreenState extends State<FollowingScreen> {
@@ -169,44 +169,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          NetRequest().followerToggle(
-                            items[index].id!,
-                            !items[index].followed!,
-                            (data) {
-                              if (items[index].followed == true) {
-                                ToastUtils.showToast('取消关注成功');
-                              } else {
-                                ToastUtils.showToast('关注成功');
-                              }
-                              items[index].followed = !items[index].followed!;
-                              if (_isMounted) {
-                                setState(() {});
-                              }
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: 70.w,
-                          height: 28.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: items[index].followed == true
-                                ? '#EBEBEB'.hexColor
-                                : '#557BF6'.hexColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          child: Text(
-                            items[index].followed == true ? '已关注' : '关注',
-                            style: TextStyle(
-                              color: items[index].followed == true ? '#333333'.hexColor : '#557BF6'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
+                      _buildFollowBtnWidget(index)
                     ],
                   );
                 },
@@ -214,6 +177,58 @@ class _FollowingScreenState extends State<FollowingScreen> {
                 separatorBuilder: (_, __) => SizedBox(height: 16.w),
               )
             : const Center(child: NoDataView()),
+      ),
+    );
+  }
+
+  Widget _buildFollowBtnWidget(int index) {
+    String title = '';
+    bool followed = items[index].followed ?? false;
+    if (widget.isFollowPage) {
+      title = '已关注';
+    } else {
+      title = '回关';
+    }
+    if (followed) {
+      title = '互相关注';
+    }
+
+    return GestureDetector(
+      onTap: () {
+        NetRequest().followerToggle(
+          items[index].id!,
+          !items[index].followed!,
+              (data) {
+            if (items[index].followed == true) {
+              ToastUtils.showToast('取消关注成功');
+            } else {
+              ToastUtils.showToast('关注成功');
+            }
+            items[index].followed = !items[index].followed!;
+            if (_isMounted) {
+              setState(() {});
+            }
+          },
+        );
+      },
+      child: Container(
+        width: 70.w,
+        height: 28.w,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: items[index].followed == true
+              ? '#EBEBEB'.hexColor
+              : '#557BF6'.hexColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(4.r),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            color: items[index].followed == true ? '#333333'.hexColor : '#557BF6'.hexColor,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "302206761540-j0udll8imi95gqifp70nr5l6sitkmc6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dxy.depokers",
+            "certificate_hash": "a25f6359d1faeea49f238e0fafc0600643f6ad05"
+          }
+        },
+        {
           "client_id": "302206761540-r0abbp2qqtd0sg5huaibf42a2qfccihe.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -32,6 +32,14 @@
 				<string>holdem</string>
 			</array>
 		</dict>
+		<dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+            	<string>com.googleusercontent.apps.302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq</string>
+            </array>
+        </dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -70,5 +78,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>GIDClientID</key>
+    <string>302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq.apps.googleusercontent.com</string>
 </dict>
 </plist>

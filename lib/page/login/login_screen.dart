@@ -1,24 +1,17 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/login/widgets/register_content.dart';
-import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/close_image_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/login/widgets/user_terms_uncheck.dart';
+import 'package:holdem/page/login/widgets/register_content.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/widget/button.dart';
+import 'package:holdem/widget/close_image_button.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import '../../gen/assets.gen.dart';
 import '../../model/user.dart';
 import '../../services/index.dart';
@@ -218,21 +211,19 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
         final idTokenResult = await userCredential.user?.getIdTokenResult(true);
-        if (idTokenResult != null) {
-          final res = await LoginService.of.thirdLogin(
-            type: 'GOOGLE',
-            token: idTokenResult.token ?? '',
-          );
-          if (res.isSuccess) {
-            ToastUtils.showToast('登录成功');
-            StorageService.of.putToken(res.data['token']);
-            final userProfile = UserProfile.fromJson(res.data['user']);
-            UserStore.of.putUserInfo(userProfile);
-            EventBusUtil.of.fire(EventLoginSuccess());
-            Get.until((route) => route.settings.name == Routes.main);
-          } else {
-            ToastUtils.showToast(res.msg ?? '');
-          }
+        final res = await LoginService.of.thirdLogin(
+          type: 'GOOGLE',
+          token: idTokenResult?.token ?? '',
+        );
+        if (res.isSuccess) {
+          ToastUtils.showToast('登录成功');
+          StorageService.of.putToken(res.data['token']);
+          final userProfile = UserProfile.fromJson(res.data['user']);
+          UserStore.of.putUserInfo(userProfile);
+          EventBusUtil.of.fire(EventLoginSuccess());
+          Get.until((route) => route.settings.name == Routes.main);
+        } else {
+          ToastUtils.showToast(res.msg);
         }
       } catch (e) {
         ToastUtils.showToast('登录失败');
@@ -243,18 +234,26 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithApple() async {
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-    EasyLoading.show(status: 'loading...');
+    // final credential = await SignInWithApple.getAppleIDCredential(
+    //   scopes: [
+    //     AppleIDAuthorizationScopes.email,
+    //     AppleIDAuthorizationScopes.fullName,
+    //   ],
+    // );
+    // EasyLoading.show(status: 'loading...');
     try {
+      final appleProvider = AppleAuthProvider();
+      final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
+      EasyLoading.show(status: 'loading...');
+      final idTokenResult = await auth.user?.getIdTokenResult(true);
       final res = await LoginService.of.thirdLogin(
         type: 'APPLE',
-        token: credential.identityToken ?? '',
+        token: idTokenResult?.token ?? '',
       );
+      // final res = await LoginService.of.thirdLogin(
+      //   type: 'APPLE',
+      //   token: credential.identityToken ?? '',
+      // );
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);
@@ -263,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
         EventBusUtil.of.fire(EventLoginSuccess());
         Get.until((route) => route.settings.name == Routes.main);
       } else {
-        ToastUtils.showToast(res.msg ?? '');
+        ToastUtils.showToast(res.msg);
       }
     } catch (e) {
       ToastUtils.showToast('登录失败');

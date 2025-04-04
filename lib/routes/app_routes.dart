@@ -34,5 +34,7 @@ abstract class Routes {
   static const course = '/course';
   static const videoList = '/videoList';
   static const boolList = '/bookList';
+  static const scan = '/scan';
+  static const scanResult = '/scanResult';
 
 }

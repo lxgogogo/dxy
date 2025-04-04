@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:holdem/model/board_info.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/page/bool_list/book_list_screen.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/page/comment_list/comment_list_screen.dart';
-import 'package:holdem/page/comment_publish/comment_publish_screen.dart';
 import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
 import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
+import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/feed_post/feed_post_screen.dart';
 import 'package:holdem/page/following/following_screen.dart';
 import 'package:holdem/page/forget_password/forget_password_screen.dart';
-import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
-import 'package:holdem/page/personal/personal_screen.dart';
-import 'package:holdem/page/search_tag/search_tag_screen.dart';
-import 'package:holdem/page/terms_privacy/terms_privacy_screen.dart';
-import 'package:holdem/page/video_detail/video_detail_screen.dart';
-import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/login/login_screen.dart';
+import 'package:holdem/page/main/main_screen.dart';
+import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/reply_list/reply_list_screen.dart';
+import 'package:holdem/page/scan/scan_screen.dart';
+import 'package:holdem/page/scan_result/scan_result_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
+import 'package:holdem/page/search_tag/search_tag_screen.dart';
 import 'package:holdem/page/setting/setting_screen.dart';
 import 'package:holdem/page/splash/splash_screen.dart';
+import 'package:holdem/page/terms_privacy/terms_privacy_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/page/video_list/video_list_screen.dart';
 import 'package:holdem/services/index.dart';
 
 import '../page/course/course_screen.dart';
 
 part 'app_routes.dart';
-
 part 'route_observers.dart';
 
 class AppPages {
@@ -167,6 +166,14 @@ class AppPages {
     GetPage(
       name: Routes.boolList,
       page: () => const BookListScreen(),
+    ),
+    GetPage(
+      name: Routes.scan,
+      page: () => const ScanScreen(),
+    ),
+    GetPage(
+      name: Routes.scanResult,
+      page: () => const ScanResultScreen(),
     ),
   ];
 }

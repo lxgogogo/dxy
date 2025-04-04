@@ -707,8 +707,21 @@ class $AssetsLottieGen {
   List<String> get values => [playVideo];
 }
 
+class $AssetsSoundsGen {
+  const $AssetsSoundsGen();
+
+  /// File path: assets/sounds/di.mp3
+  String get di => 'assets/sounds/di.mp3';
+
+  /// List of all assets
+  List<String> get values => [di];
+}
+
 class $AssetsSvgGen {
   const $AssetsSvgGen();
+
+  /// File path: assets/svg/arrow_back.svg
+  String get arrowBack => 'assets/svg/arrow_back.svg';
 
   /// File path: assets/svg/arrow_left.svg
   String get arrowLeft => 'assets/svg/arrow_left.svg';
@@ -733,6 +746,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/home_tag.svg
   String get homeTag => 'assets/svg/home_tag.svg';
+
+  /// File path: assets/svg/ic_scan_area.svg
+  String get icScanArea => 'assets/svg/ic_scan_area.svg';
 
   /// File path: assets/svg/icon_arrow.svg
   String get iconArrow => 'assets/svg/icon_arrow.svg';
@@ -763,6 +779,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_refresh.svg
   String get iconRefresh => 'assets/svg/icon_refresh.svg';
+
+  /// File path: assets/svg/icon_scan.svg
+  String get iconScan => 'assets/svg/icon_scan.svg';
 
   /// File path: assets/svg/icon_search.svg
   String get iconSearch => 'assets/svg/icon_search.svg';
@@ -835,6 +854,7 @@ class $AssetsSvgGen {
 
   /// List of all assets
   List<String> get values => [
+        arrowBack,
         arrowLeft,
         arrowRight,
         badge,
@@ -843,6 +863,7 @@ class $AssetsSvgGen {
         comment,
         feedComment,
         homeTag,
+        icScanArea,
         iconArrow,
         iconArrowDown,
         iconClose,
@@ -853,6 +874,7 @@ class $AssetsSvgGen {
         iconLikeWhite,
         iconMore,
         iconRefresh,
+        iconScan,
         iconSearch,
         iconSearchHistory,
         iconSetting,
@@ -884,6 +906,7 @@ class Assets {
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsSoundsGen sounds = $AssetsSoundsGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
 }
 

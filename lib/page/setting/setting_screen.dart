@@ -5,6 +5,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/widget/dialog_edit_password.dart';
 import 'package:holdem/page/mine/login_helper.dart';
@@ -56,24 +57,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.w,
-            height: 22.w,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          '设置',
-          style: AppTheme.text333333Size17,
-        ),
-        centerTitle: true,
-      ),
+      appBar: CommonAppBar.arrowBack(context, title: '设置'),
       backgroundColor: Colors.white,
       body: SafeArea(child: contentView()),
     );

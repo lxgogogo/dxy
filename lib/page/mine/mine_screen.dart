@@ -126,18 +126,35 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                     Positioned(
                       top: ScreenUtil().statusBarHeight + 4.w,
                       right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.setting);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(16.w),
-                          child: SvgPicture.asset(
-                            Assets.svg.iconSetting,
-                            width: 24.w,
-                            height: 24.w,
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.scan);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(16.w).copyWith(right: 6.w),
+                              child: SvgPicture.asset(
+                                Assets.svg.iconScan,
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                            ),
                           ),
-                        ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.setting);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(16.w).copyWith(left: 6.w),
+                              child: SvgPicture.asset(
+                                Assets.svg.iconSetting,
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],

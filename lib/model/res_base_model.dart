@@ -12,7 +12,7 @@ class ResBaseModel {
 
   factory ResBaseModel.fromJson(dynamic json) => ResBaseModel(
     code: json['code'] ?? -1,
-    msg: json['msg']?.toString() ?? 'Unknown error',
+    msg: json['message']?.toString() ?? 'Unknown error',
     data: json['data'],
   );
 
@@ -38,7 +38,7 @@ class ResBaseModel {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['code'] = code;
-    map['msg'] = msg;
+    map['message'] = msg;
     map['data'] = data;
     return map;
   }

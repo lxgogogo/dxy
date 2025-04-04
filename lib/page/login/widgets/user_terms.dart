@@ -21,7 +21,6 @@ class UserTerms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ValueListenableBuilder(
           valueListenable: didAgreeTerms,
@@ -65,7 +64,7 @@ class UserTerms extends StatelessWidget {
                   text: '我同意德学院',
                   style: TextStyle(
                     color: '#3b5078'.hexColor,
-                    fontSize: 14.sp,
+                    fontSize: 12.sp,
                   ),
                 ),
                 TextSpan(
@@ -73,14 +72,14 @@ class UserTerms extends StatelessWidget {
                   recognizer: TapGestureRecognizer()..onTap = reviewTerms,
                   style: TextStyle(
                     color: '#249cfc'.hexColor,
-                    fontSize: 14.sp,
+                    fontSize: 12.sp,
                   ),
                 ),
                 TextSpan(
                   text: '和',
                   style: TextStyle(
                     color: '#3b5078'.hexColor,
-                    fontSize: 14.sp,
+                    fontSize: 12.sp,
                   ),
                 ),
                 TextSpan(
@@ -88,7 +87,7 @@ class UserTerms extends StatelessWidget {
                   recognizer: TapGestureRecognizer()..onTap = reviewPrivacy,
                   style: TextStyle(
                     color: '#249cfc'.hexColor,
-                    fontSize: 14.sp,
+                    fontSize: 12.sp,
                   ),
                 ),
               ],

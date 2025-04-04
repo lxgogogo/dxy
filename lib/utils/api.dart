@@ -69,4 +69,7 @@ class Api {
   static const String reportDefined = '/api/report/defined';
   static const String reportCreate = '/api/report/create';
   static const String searchTop = '/api/searchHistory/top';
+
+  static const String thirdLogin = '/api/thirdLogin/thirdLogin';
+
 }

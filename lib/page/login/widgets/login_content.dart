@@ -1,24 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/login/widgets/user_terms.dart';
 import 'package:holdem/page/login/widgets/user_terms_uncheck.dart';
-import 'package:holdem/page/mine/login_helper.dart';
-import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/button.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../../constants.dart';
-import '../../../gen/assets.gen.dart';
+import '../../../model/user.dart';
+import '../../../services/index.dart';
+import '../../../stores/storage.dart';
+import '../../../stores/user_store.dart';
+import '../../../utils/event_bus_util.dart';
+import '../../../utils/toast_utils.dart';
 import 'type_selector.dart';
 
 class LoginContent extends StatefulWidget {
@@ -163,147 +159,146 @@ class _LoginContentState extends State<LoginContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SizedBox(
-            height: 30.w,
-          ),
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TypeSelector(
-                  typeList: typeList,
-                  typeIndex: typeIndex,
-                  onTypeSelected: (index) {
-                    typeIndex = index;
-                    checkValid();
-                  },
-                ),
-                SizedBox(height: 12.w),
-                Container(
-                  height: 44.w,
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  decoration: BoxDecoration(
-                    color: '#f5f5f5'.hexColor,
-                    borderRadius: BorderRadius.circular(12.w),
+          SizedBox(height: 24.w),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TypeSelector(
+                    typeList: typeList,
+                    typeIndex: typeIndex,
+                    onTypeSelected: (index) {
+                      typeIndex = index;
+                      checkValid();
+                    },
                   ),
-                  child: Row(
-                    children: [
-                      if (isMobile)
-                        Text(
-                          '+86 丨 ',
-                          style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                        ),
-                      Expanded(
-                        child: TextField(
-                          focusNode: _focusEmail,
-                          keyboardType: isMobile ? TextInputType.phone : TextInputType.text,
-                          controller: _controllerAccount,
-                          style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                          inputFormatters: [if (isMobile) FilteringTextInputFormatter.digitsOnly],
-                          decoration: InputDecoration(
-                            border: InputBorder.none, // 没有边框
-                            hintText: accountHint,
-                            hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
-                            contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                  SizedBox(height: 12.w),
+                  Container(
+                    height: 40.w,
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    decoration: BoxDecoration(
+                      color: '#f5f5f5'.hexColor,
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                    child: Row(
+                      children: [
+                        if (isMobile)
+                          Text(
+                            '+86 丨 ',
+                            style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                           ),
-                          onChanged: (text) {
-                            if (text.contains(' ')) {
-                              String newText = text.replaceAll(' ', '');
-                              _controllerAccount.text = newText;
-                              _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
-                            }
-                            onChangeCheckValid();
-                          },
+                        Expanded(
+                          child: TextField(
+                            focusNode: _focusEmail,
+                            keyboardType: isMobile ? TextInputType.phone : TextInputType.text,
+                            controller: _controllerAccount,
+                            style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                            inputFormatters: [if (isMobile) FilteringTextInputFormatter.digitsOnly],
+                            decoration: InputDecoration(
+                              border: InputBorder.none, // 没有边框
+                              hintText: accountHint,
+                              hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
+                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                            ),
+                            onChanged: (text) {
+                              if (text.contains(' ')) {
+                                String newText = text.replaceAll(' ', '');
+                                _controllerAccount.text = newText;
+                                _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
+                              }
+                              onChangeCheckValid();
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                  child: Text(
-                    isShowAccountTips ? accountTips : '',
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                      ],
                     ),
                   ),
-                ),
-                Container(
-                  height: 44.w,
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  decoration: BoxDecoration(
-                    color: '#f5f5f5'.hexColor,
-                    borderRadius: BorderRadius.circular(12.w),
+                  Padding(
+                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+                    child: Text(
+                      isShowAccountTips ? accountTips : '',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                      ),
+                    ),
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          controller: _controllerPw,
-                          focusNode: _focusPwd,
-                          obscureText: !isOpen,
-                          style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: '密码',
-                            hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
-                            contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                  Container(
+                    height: 40.w,
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    decoration: BoxDecoration(
+                      color: '#f5f5f5'.hexColor,
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: _controllerPw,
+                            focusNode: _focusPwd,
+                            obscureText: !isOpen,
+                            style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '密码',
+                              hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
+                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                            ),
+                            onChanged: (_) {
+                              onChangeCheckValid();
+                            },
                           ),
-                          onChanged: (_) {
-                            onChangeCheckValid();
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isOpen = !isOpen;
+                            });
                           },
+                          child: Image.asset(
+                            isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+                            width: 18.w,
+                            height: 18.w,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+                    child: Text(
+                      isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: UserTermsUncheck(
+                          reviewTerms: reviewTerms,
+                          reviewPrivacy: reviewPrivacy,
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            isOpen = !isOpen;
-                          });
+                          Get.toNamed(Routes.forgetPassword);
                         },
-                        child: Image.asset(
-                          isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
-                          width: 18.w,
-                          height: 18.w,
+                        child: Text(
+                          '忘记密码?',
+                          style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                ),
-                Padding(
-                  padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                  child: Text(
-                    isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          SizedBox(height: 8.w),
-          Row(
-            children: [
-              Expanded(
-                child: UserTermsUncheck(
-                  reviewTerms: reviewTerms,
-                  reviewPrivacy: reviewPrivacy,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.forgetPassword);
-                },
-                child: Text(
-                  '忘记密码?',
-                  style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 36.w),
+          SizedBox(height: 24.w),
           CustomButton(
             onPressed: login,
             disable: _isLoginDisable,
@@ -315,34 +310,6 @@ class _LoginContentState extends State<LoginContent> {
           SizedBox(height: 20.w),
           goRegister(),
           SizedBox(height: 24.w),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: signInWithGoogle,
-                child: Assets.images.iconGoogleCircle.image(
-                  width: 36.w,
-                  height: 36.w,
-                ),
-              ),
-              SizedBox(width: 36.w),
-              GestureDetector(
-                onTap: signInWithApple,
-                child: Assets.images.iconAppleCircle.image(
-                  width: 36.w,
-                  height: 36.w,
-                ),
-              ),
-              SizedBox(width: 36.w),
-              GestureDetector(
-                child: Assets.images.iconTelegramCircle.image(
-                  width: 36.w,
-                  height: 36.w,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(width: 36.w),
         ],
       ),
     );
@@ -371,91 +338,24 @@ class _LoginContentState extends State<LoginContent> {
     );
   }
 
-  void login() {
-    var account = _controllerAccount.text;
-    var password = _controllerPw.text;
-    LoginHelper().userLogin(account, password, (data) {
-      Get.until((route) => route.settings.name == Routes.main);
-    });
-  }
-
-  Future<void> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
-    if (googleUser != null) {
-      EasyLoading.show(status: 'loading...');
-      try {
-        final googleAuth = await googleUser.authentication;
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-        final idTokenResult = await userCredential.user?.getIdTokenResult(true);
-        if (idTokenResult != null) {
-          final userId = idTokenResult.claims?['user_id'] as String? ?? '';
-          final name = idTokenResult.claims?['name'] as String? ?? '';
-          final email = idTokenResult.claims?['email'] as String? ?? '';
-          final picture = idTokenResult.claims?['picture'] as String? ?? '';
-          final token = idTokenResult.token ?? '';
-          // final res = await AccountAPI.otherLogin(
-          //   type: OtherLoginType.google,
-          //   userId: userId,
-          //   name: name,
-          //   email: email,
-          //   picture: picture,
-          //   token: token,
-          // );
-          // if (res.code == 0 && res.data != null) {
-          //   final tokenModel =
-          //   TokenModel.fromJson(res.data as Map<String, dynamic>? ?? {});
-          //   await UserStore.to.setTokenModel(tokenModel);
-          //   await UserStore.to.setUserInfo();
-          //   Get.offAllNamed(Routes.main);
-          //   CustomToast.success(res.msg ?? '');
-          // } else {
-          //   CustomToast.fail(res.msg ?? '');
-          // }
-        }
-      } catch (e) {
-        // CustomToast.fail(e.toString());
-      } finally {
-        EasyLoading.dismiss();
-      }
-    }
-  }
-
-  Future<void> signInWithApple() async {
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+  Future<void> login() async {
+    final account = _controllerAccount.text;
+    final password = _controllerPw.text;
     EasyLoading.show(status: 'loading...');
     try {
-      final userId = credential.userIdentifier ?? '';
-      final name = credential.givenName ?? '';
-      final email = credential.email ?? '';
-      final token = credential.identityToken ?? '';
-      // final res = await AccountAPI.otherLogin(
-      //   type: OtherLoginType.apple,
-      //   userId: userId,
-      //   name: name,
-      //   email: email,
-      //   token: token,
-      // );
-      // if (res.code == 0 && res.data != null) {
-      //   final tokenModel =
-      //   TokenModel.fromJson(res.data as Map<String, dynamic>? ?? {});
-      //   await UserStore.to.setTokenModel(tokenModel);
-      //   await UserStore.to.setUserInfo();
-      //   Get.offAllNamed(Routes.main);
-      //   CustomToast.success(res.msg ?? '');
-      // } else {
-      //   CustomToast.fail(res.msg ?? '');
-      // }
+      final res = await LoginService.of.login(account: account, password: password);
+      if (res.isSuccess) {
+        ToastUtils.showToast('登录成功');
+        StorageService.of.putToken(res.data['token']);
+        final userProfile = UserProfile.fromJson(res.data['user']);
+        UserStore.of.putUserInfo(userProfile);
+        EventBusUtil.of.fire(EventLoginSuccess());
+        Get.until((route) => route.settings.name == Routes.main);
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
     } catch (e) {
-      // CustomToast.fail(e.toString());
+      ToastUtils.showToast('登录失败');
     } finally {
       EasyLoading.dismiss();
     }

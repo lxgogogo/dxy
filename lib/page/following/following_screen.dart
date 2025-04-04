@@ -187,15 +187,18 @@ class _FollowingScreenState extends State<FollowingScreen> {
   Widget _buildFollowBtnWidget(int index) {
     String title = '';
     bool followed = items[index].followed ?? false;
+    bool isfans = items[index].isfans ?? false;
     if (widget.isFollowPage) {
       title = '已关注';
+      if (isfans) {
+        title = '互相关注';
+      }
     } else {
       title = '回关';
+      if (followed) {
+        title = '互相关注';
+      }
     }
-    if (followed) {
-      title = '互相关注';
-    }
-
     return GestureDetector(
       onTap: () {
         if (widget.isFollowPage) {

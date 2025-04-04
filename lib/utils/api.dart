@@ -70,6 +70,6 @@ class Api {
   static const String reportCreate = '/api/report/create';
   static const String searchTop = '/api/searchHistory/top';
 
-  static const String thirdLogin = '/api/thirdLogin/thirdLogin';
+  static const String thirdLogin = '/api/passport/thirdLogin';
 
 }

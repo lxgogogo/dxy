@@ -229,6 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
             final userProfile = UserProfile.fromJson(res.data['user']);
             UserStore.of.putUserInfo(userProfile);
             EventBusUtil.of.fire(EventLoginSuccess());
+            Get.until((route) => route.settings.name == Routes.main);
           } else {
             ToastUtils.showToast(res.msg ?? '');
           }
@@ -260,6 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
         EventBusUtil.of.fire(EventLoginSuccess());
+        Get.until((route) => route.settings.name == Routes.main);
       } else {
         ToastUtils.showToast(res.msg ?? '');
       }

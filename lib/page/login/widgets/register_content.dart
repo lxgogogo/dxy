@@ -473,11 +473,11 @@ class _RegisterContentState extends State<RegisterContent> {
           children: [
             Text(
               '已有账号？',
-              style: TextStyle(fontSize: 12, color: '#333333'.hexColor),
+              style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
             ),
             Text(
               '去登录',
-              style: TextStyle(fontSize: 12, color: '#557BF6'.hexColor),
+              style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
             ),
           ],
         ),

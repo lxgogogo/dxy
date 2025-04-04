@@ -68,10 +68,10 @@ class MyApp extends StatelessWidget {
                 hintColor: Colors.transparent,
                 hoverColor: Colors.transparent,
                 splashColor: Colors.transparent,
-                appBarTheme: const AppBarTheme(
+                appBarTheme: AppBarTheme(
                   scrolledUnderElevation: 0.0,
                   titleTextStyle: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     color: Color(0xff2C2C2C),
                   ),
                 ),

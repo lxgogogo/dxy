@@ -1,18 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/utils/storage.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
-import 'package:oktoast/oktoast.dart';
-
-import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../utils/toast_utils.dart';
 
 class DialogConfirm extends StatelessWidget {
   final String title;
@@ -44,8 +34,8 @@ class DialogConfirm extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: TextStyle(
+                    fontSize: 14.sp,
                     color: Color(0xff5f75a0),
                   ),
                   textAlign: TextAlign.center,

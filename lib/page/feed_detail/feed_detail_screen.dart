@@ -128,7 +128,7 @@ class FeedDetailScreen extends StatelessWidget {
                                               imageHeight: 20,
                                               topText: controller.detailBean?.user?.nickname ?? '',
                                               topTextStyle: TextStyle(
-                                                  color: '#535861'.hexColor, fontSize: 12, fontWeight: FontWeight.w600),
+                                                  color: '#535861'.hexColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
                                               bottomText1: controller.detailBean?.createdAt != null
                                                   ? '${DateUtil.formatDateAlias3(
                                                       controller.detailBean!.createdAt!.millisecondsSinceEpoch,

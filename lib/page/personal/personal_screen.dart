@@ -220,7 +220,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 height: 0.5.w,
                               ),
                               _buildRowButtonItem(
-                                genImage: Assets.images.iconGoogle,
+                                genImage: Assets.images.iconTelegram,
                                 label: 'Telegram',
                                 onTap: () {
                                   launchUrl(Uri.parse('https://telegram.org/blog/login'), mode: LaunchMode.externalApplication);

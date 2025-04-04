@@ -1,11 +1,15 @@
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_api_availability/google_api_availability.dart';
+import 'package:holdem/firebase_options.dart';
 import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/storage.dart';
-
 import '../stores/config_store.dart';
 import 'env.dart';
 import 'interceptors.dart';
@@ -30,6 +34,13 @@ class PreConfig {
           LogsInterceptors(),
         ],
       );
+      GooglePlayServicesAvailability? availability;
+      if (Platform.isAndroid) {
+        availability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
+      }
+      if (availability?.value != 5) {
+        await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      }
       StorageUtil().init();
       Get.put<UserStore>(
         UserStore(),

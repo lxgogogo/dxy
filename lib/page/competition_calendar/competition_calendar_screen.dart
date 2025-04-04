@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/competition_bean.dart';
-import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
-import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/utils.dart';
@@ -223,7 +222,7 @@ class _CompetitionCalendarScreenState extends State<CompetitionCalendarScreen> {
                                   DateFormat('d').format(day),
                                   style: TextStyle(
                                     color: textColor,
-                                    fontSize: 16,
+                                    fontSize: 16.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -258,11 +257,11 @@ class _CompetitionCalendarScreenState extends State<CompetitionCalendarScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     alignment: Alignment.center,
-                    child: const Text(
+                    child:  Text(
                       '赛事详情',
                       style: TextStyle(
                         color: Color(0xff2c2c2c),
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

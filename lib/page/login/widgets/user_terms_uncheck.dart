@@ -26,31 +26,31 @@ class UserTermsUncheck extends StatelessWidget {
               TextSpan(
                 text: '德学院',
                 style: TextStyle(
-                  color: '#3b5078'.hexColor,
-                  fontSize: 14.sp,
+                  color: '#333333'.hexColor,
+                  fontSize: 12.sp,
                 ),
               ),
               TextSpan(
                 text: ' 用户协议 ',
                 recognizer: TapGestureRecognizer()..onTap = reviewTerms,
                 style: TextStyle(
-                  color: '#249cfc'.hexColor,
-                  fontSize: 14.sp,
+                  color: '#557BF6'.hexColor,
+                  fontSize: 12.sp,
                 ),
               ),
               TextSpan(
                 text: '和',
                 style: TextStyle(
-                  color: '#3b5078'.hexColor,
-                  fontSize: 14.sp,
+                  color: '#333333'.hexColor,
+                  fontSize: 12.sp,
                 ),
               ),
               TextSpan(
                 text: ' 隐私政策 ',
                 recognizer: TapGestureRecognizer()..onTap = reviewPrivacy,
                 style: TextStyle(
-                  color: '#249cfc'.hexColor,
-                  fontSize: 14.sp,
+                  color: '#557BF6'.hexColor,
+                  fontSize: 12.sp,
                 ),
               ),
             ],

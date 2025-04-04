@@ -216,7 +216,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '请输入邮箱',
-                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (text) {
@@ -262,7 +262,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '请输入验证码',
-                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -306,7 +306,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: '请输入密码',
-                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -362,7 +362,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               decoration: InputDecoration(
                                 border: InputBorder.none, // 没有边框
                                 hintText: '再次输入新密码',
-                                hintStyle: TextStyle(fontSize: 14, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {

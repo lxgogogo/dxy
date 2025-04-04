@@ -216,9 +216,17 @@ class $AssetsImagesGen {
   AssetGenImage get iconApple =>
       const AssetGenImage('assets/images/icon_apple.png');
 
+  /// File path: assets/images/icon_apple_circle.png
+  AssetGenImage get iconAppleCircle =>
+      const AssetGenImage('assets/images/icon_apple_circle.png');
+
   /// File path: assets/images/icon_google.png
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
+
+  /// File path: assets/images/icon_google_circle.png
+  AssetGenImage get iconGoogleCircle =>
+      const AssetGenImage('assets/images/icon_google_circle.png');
 
   /// File path: assets/images/icon_home_book.png
   AssetGenImage get iconHomeBook =>
@@ -247,6 +255,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/icon_telegram.png
   AssetGenImage get iconTelegram =>
       const AssetGenImage('assets/images/icon_telegram.png');
+
+  /// File path: assets/images/icon_telegram_circle.png
+  AssetGenImage get iconTelegramCircle =>
+      const AssetGenImage('assets/images/icon_telegram_circle.png');
 
   /// File path: assets/images/image_add.png
   AssetGenImage get imageAdd =>
@@ -593,7 +605,9 @@ class $AssetsImagesGen {
         icTiktok,
         icTwitter,
         iconApple,
+        iconAppleCircle,
         iconGoogle,
+        iconGoogleCircle,
         iconHomeBook,
         iconHomeCourse,
         iconHomeFeed,
@@ -601,6 +615,7 @@ class $AssetsImagesGen {
         iconPlay,
         iconPostFeed,
         iconTelegram,
+        iconTelegramCircle,
         imageAdd,
         imageLoadingDef,
         inputA,

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "302206761540",
+    "project_id": "dexueyuan-68769",
+    "storage_bucket": "dexueyuan-68769.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302206761540:android:d5f91fd78f1b0c7f9ada11",
+        "android_client_info": {
+          "package_name": "com.dxy.depokers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302206761540-r0abbp2qqtd0sg5huaibf42a2qfccihe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqv_vYAQkd6-pLXrNIdJUKvA-YbVrwzEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302206761540-r0abbp2qqtd0sg5huaibf42a2qfccihe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dxy.holdem"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

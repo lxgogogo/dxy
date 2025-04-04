@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/competition_bean.dart';
@@ -8,11 +9,10 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_feed.dart';
+import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:video_player/video_player.dart';
 
 part 'competition_detail_controller.dart';
@@ -114,9 +114,9 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                     children: [
                       Text(
                         competitionBean?.title ?? '',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xff2a2a2a),
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -132,11 +132,11 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                               color: const Color(0xff249cfc),
                             ),
                           ),
-                          const Text(
+                           Text(
                             '赛事期间',
                             style: TextStyle(
                               color: Color(0xff2a2a2a),
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -145,9 +145,9 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                       SizedBox(height: 4.px),
                       Text(
                         '${competitionBean?.competition?.dayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(competitionBean!.competition!.dayBegin!) : ''}至${competitionBean?.competition?.dayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(competitionBean!.competition!.dayEnd!) : ''}',
-                        style: const TextStyle(
+                        style:  TextStyle(
                           color: Color(0xff2a2a2a),
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                       ),
                       SizedBox(height: 10.px),
@@ -162,11 +162,11 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                               color: const Color(0xff249cfc),
                             ),
                           ),
-                          const Text(
+                          Text(
                             '主赛事期间',
                             style: TextStyle(
                               color: Color(0xff2a2a2a),
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -175,9 +175,9 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                       SizedBox(height: 4.px),
                       Text(
                         '${competitionBean?.competition?.mainDayBegin != null ? DateFormat('yyyy-MM-dd-HH:mm').format(competitionBean!.competition!.mainDayBegin!) : ''}至${competitionBean?.competition?.mainDayEnd != null ? DateFormat('yyyy-MM-dd-HH:mm').format(competitionBean!.competition!.mainDayEnd!) : ''}',
-                        style: const TextStyle(
+                        style:  TextStyle(
                           color: Color(0xff2a2a2a),
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                       ),
                       SizedBox(height: 10.px),
@@ -192,11 +192,11 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                               color: const Color(0xff249cfc),
                             ),
                           ),
-                          const Text(
+                           Text(
                             '地点',
                             style: TextStyle(
                               color: Color(0xff2a2a2a),
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -205,9 +205,9 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
                       SizedBox(height: 4.px),
                       Text(
                         competitionBean?.competition?.place ?? '',
-                        style: const TextStyle(
+                        style:  TextStyle(
                           color: Color(0xff2a2a2a),
-                          fontSize: 12,
+                          fontSize: 12.sp,
                         ),
                       ),
                       if (competitionBean?.competition?.sourceUrl?.isNotEmpty == true) _buildVideoView(),
@@ -219,11 +219,11 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.only(left: 16.px, top: 12.px),
-                  child: const Text(
+                  child: Text(
                     '相关资讯',
                     style: TextStyle(
                       color: Color(0xff2c2c2c),
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -243,11 +243,11 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.only(left: 16.px, top: 12.px),
-                  child: const Text(
+                  child: Text(
                     '相关视频',
                     style: TextStyle(
                       color: Color(0xff2c2c2c),
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -273,11 +273,11 @@ class _CompetitionDetailScreenState extends State<CompetitionDetailScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.only(left: 16.px, top: 12.px),
-                  child: const Text(
+                  child: Text(
                     '相关帖子',
                     style: TextStyle(
                       color: Color(0xff2c2c2c),
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

@@ -57,7 +57,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
                           placeholder: '说点什么吧...',
                           customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
                               TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: '#333333'.hexColor.withOpacity(0.7),
                               ),
                               HorizontalSpacing.zero,

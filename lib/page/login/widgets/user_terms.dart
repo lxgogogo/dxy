@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,15 +32,15 @@ class UserTerms extends StatelessWidget {
               onTap: onTermsCheck,
               child: Container(
                 margin: EdgeInsets.only(right: 8.w),
-                width: 20.w,
-                height: 20.w,
+                width: 16.w,
+                height: 16.w,
                 decoration: BoxDecoration(
                   color: didAgreeTerms ? '#249cfc'.hexColor : null,
                   border: didAgreeTerms
                       ? null
                       : Border.all(
-                          color: const Color(0xFFD3D5DA),
-                          width: 1.5.w,
+                          color: '#333333'.hexColor.withOpacity(0.3),
+                          width: 1.w,
                         ),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
@@ -49,7 +48,7 @@ class UserTerms extends StatelessWidget {
                     ? Icon(
                         Icons.check,
                         color: Colors.white,
-                        size: 16.sp,
+                        size: 12.sp,
                       )
                     : null,
               ),

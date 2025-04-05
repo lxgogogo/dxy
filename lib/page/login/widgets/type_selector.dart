@@ -5,6 +5,9 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
+import '../login_screen.dart';
+import 'login_content.dart';
+
 class TypeSelector extends StatefulWidget {
   final List<String> typeList;
   final int typeIndex;
@@ -23,6 +26,7 @@ class TypeSelector extends StatefulWidget {
 
 class _TypeSelectorState extends State<TypeSelector> {
   final SuperTooltipController _tipController = SuperTooltipController();
+
   @override
   Widget build(BuildContext context) {
     return SuperTooltip(

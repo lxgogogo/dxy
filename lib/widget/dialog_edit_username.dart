@@ -8,16 +8,16 @@ import '../constants.dart';
 import 'close_image_button.dart';
 import 'dialog_edit_password.dart';
 
-class DialogEditAccount extends StatefulWidget {
+class DialogEditUsername extends StatefulWidget {
   final String editContent;
 
-  const DialogEditAccount({super.key, required this.editContent});
+  const DialogEditUsername({super.key, required this.editContent});
 
   @override
-  State<DialogEditAccount> createState() => _DialogEditAccountState();
+  State<DialogEditUsername> createState() => _DialogEditUsernameState();
 }
 
-class _DialogEditAccountState extends State<DialogEditAccount> with SingleTickerProviderStateMixin {
+class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
   final TextEditingController _controllerAccount = TextEditingController();

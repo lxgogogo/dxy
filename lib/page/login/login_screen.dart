@@ -23,6 +23,26 @@ import 'widgets/login_content.dart';
 
 part 'login_controller.dart';
 
+enum LoginType {
+  email('邮箱登录', '邮箱注册', 'EMAIL', '*请输入正确邮箱地址', '请输入邮箱'),
+  username('账号登录', '账号注册', 'PHONE', '*6~15位英数字，大小写不同', '请输入账号'),
+  phone('手机登录', '手机注册', 'USERNAME', '*手机号格式错误', '请输入手机号');
+
+  final String typeName;
+  final String typeOtherName;
+  final String typeValue;
+  final String tips;
+  final String hint;
+
+  const LoginType(
+    this.typeName,
+    this.typeOtherName,
+    this.typeValue,
+    this.tips,
+    this.hint,
+  );
+}
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -146,56 +166,72 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Expanded(
                   child: isLogin
-                      ? LoginContent(
-                          goRegister: () {
-                            setState(() {
-                              isLogin = false;
-                            });
-                          },
+                      ? SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              LoginContent(
+                                goRegister: () {
+                                  isLogin = false;
+                                  setState(() {});
+                                },
+                              ),
+                              _buildThirdLogin(),
+                              SizedBox(height: 36.w),
+                            ],
+                          ),
                         )
-                      : RegisterContent(
-                          goLogin: () {
-                            setState(() {
-                              isLogin = true;
-                            });
-                          },
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              RegisterContent(
+                                goLogin: () {
+                                  isLogin = true;
+                                  setState(() {});
+                                },
+                              ),
+                              _buildThirdLogin(),
+                              SizedBox(height: 36.w),
+                            ],
+                          ),
                         ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: signInWithGoogle,
-                      child: Assets.images.iconGoogleCircle.image(
-                        width: 36.w,
-                        height: 36.w,
-                      ),
-                    ),
-                    if (Platform.isIOS) ...[
-                      SizedBox(width: 36.w),
-                      GestureDetector(
-                        onTap: signInWithApple,
-                        child: Assets.images.iconAppleCircle.image(
-                          width: 36.w,
-                          height: 36.w,
-                        ),
-                      ),
-                    ],
-                    SizedBox(width: 36.w),
-                    GestureDetector(
-                      child: Assets.images.iconTelegramCircle.image(
-                        width: 36.w,
-                        height: 36.w,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 36.w),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Row _buildThirdLogin() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: signInWithGoogle,
+          child: Assets.images.iconGoogleCircle.image(
+            width: 36.w,
+            height: 36.w,
+          ),
+        ),
+        if (Platform.isIOS) ...[
+          SizedBox(width: 36.w),
+          GestureDetector(
+            onTap: signInWithApple,
+            child: Assets.images.iconAppleCircle.image(
+              width: 36.w,
+              height: 36.w,
+            ),
+          ),
+        ],
+        SizedBox(width: 36.w),
+        GestureDetector(
+          child: Assets.images.iconTelegramCircle.image(
+            width: 36.w,
+            height: 36.w,
+          ),
+        ),
+      ],
     );
   }
 

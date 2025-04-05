@@ -9,17 +9,15 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
-import 'package:holdem/widget/dialog_edit_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../stores/user_store.dart';
-import '../../utils/app_theme.dart';
 import '../../utils/net_request.dart';
-import '../../utils/size_fit.dart';
 import '../../widget/dialog_edit_mobile.dart';
+import '../../widget/dialog_edit_username.dart';
 
 part 'personal_controller.dart';
 
@@ -146,13 +144,13 @@ class _PersonalScreenState extends State<PersonalScreen> {
                               ),
                               _buildRowItem(
                                 label: '账号',
-                                value: UserStore.of.user?.account ?? '',
+                                value: UserStore.of.user?.username ?? '',
                                 onTap: () {
                                   showDialog(
                                     barrierDismissible: true,
                                     context: context,
-                                    builder: (context) => DialogEditAccount(
-                                      editContent: UserStore.of.user?.account ?? '',
+                                    builder: (context) => DialogEditUsername(
+                                      editContent: UserStore.of.user?.username ?? '',
                                     ),
                                   );
                                 },
@@ -180,13 +178,13 @@ class _PersonalScreenState extends State<PersonalScreen> {
                               ),
                               _buildRowItem(
                                 label: '手机号',
-                                value: UserStore.of.user?.account ?? '',
+                                value: UserStore.of.user?.phone ?? '',
                                 onTap: () {
                                   showDialog(
                                     barrierDismissible: true,
                                     context: context,
                                     builder: (context) => DialogEditMobile(
-                                      editContent: UserStore.of.user?.account ?? '',
+                                      editContent: UserStore.of.user?.phone ?? '',
                                     ),
                                   );
                                 },
@@ -223,7 +221,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 genImage: Assets.images.iconTelegram,
                                 label: 'Telegram',
                                 onTap: () {
-                                  launchUrl(Uri.parse('https://telegram.org/blog/login'), mode: LaunchMode.externalApplication);
+                                  launchUrl(Uri.parse('https://telegram.org/blog/login'),
+                                      mode: LaunchMode.externalApplication);
                                 },
                               ),
                               Container(
@@ -271,6 +270,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
   }) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.translucent,
       child: Container(
         height: 44.w,
         alignment: Alignment.center,

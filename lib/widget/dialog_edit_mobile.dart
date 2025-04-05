@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
+import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
@@ -395,15 +396,25 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
     );
   }
 
-  void _submitUpdate() {
+  Future<void> _submitUpdate() async {
     if (_isDisable) return;
-    String email = _controllerMobile.text;
+    String phone = _controllerMobile.text;
     String code = _controllerCode.text;
-    NetRequest().updateEmail(email, code, (data) {
-      ToastUtils.showToast('修改成功');
-      UserStore.of.getUserInfo();
-      Get.back();
-      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
-    });
+    try {
+      final res = await UserService.of.updatePhone(
+        phone: phone,
+        code: code,
+      );
+      if (res.isSuccess) {
+        ToastUtils.showToast('修改成功');
+        UserStore.of.updateUserInfo({'phone': phone});
+        Get.back();
+        Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } catch (e) {
+      ToastUtils.showToast('修改失败');
+    }
   }
 }

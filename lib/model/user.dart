@@ -5,14 +5,25 @@ class UserProfile {
   String? nickname;
   String? avatar;
   String? account;
+  String? phone;
+  String? username;
   String? token;
   int? followedCount;
   int? fansCount;
   bool? followed;
   bool? isfans;
 
-  UserProfile({this.id, this.nickname, this.avatar, this.account,
-    this.token, this.followedCount,this.fansCount, this.followed, this.isfans});
+  UserProfile({
+    this.id,
+    this.nickname,
+    this.avatar,
+    this.account,
+    this.token,
+    this.followedCount,
+    this.fansCount,
+    this.followed,
+    this.isfans,
+  });
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -26,6 +37,12 @@ class UserProfile {
     }
     if (json["account"] is String) {
       account = json["account"];
+    }
+    if (json["phone"] is String) {
+      phone = json["phone"];
+    }
+    if (json["username"] is String) {
+      username = json["username"];
     }
     if (json["token"] is String) {
       token = json["token"];
@@ -50,6 +67,8 @@ class UserProfile {
     _data["nickname"] = nickname;
     _data["avatar"] = avatar;
     _data["account"] = account;
+    _data["phone"] = phone;
+    _data["username"] = username;
     _data["token"] = token;
     _data["followedCount"] = followedCount;
     _data["fansCount"] = fansCount;
@@ -58,8 +77,7 @@ class UserProfile {
     return _data;
   }
 
-  factory UserProfile.fromRawJson(String str) =>
-      UserProfile.fromJson(json.decode(str));
+  factory UserProfile.fromRawJson(String str) => UserProfile.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 }

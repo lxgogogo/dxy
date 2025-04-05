@@ -36,6 +36,7 @@ class Api {
   //账号相关
   static const String login = '/api/passport/login';
   static const String register = '/api/passport/register';
+  static const String reg = '/api/passport/reg';
   static const String logout = '/api/passport/logout';
   static const String resetPassword = '/api/passport/resetPassword';
   static const String sendCode = '/api/passport/sendCode';
@@ -71,5 +72,7 @@ class Api {
   static const String searchTop = '/api/searchHistory/top';
 
   static const String thirdLogin = '/api/passport/thirdLogin';
+  static const String updatePhone = '/api/user/updatePhone';
+  static const String sendVerifyCode = '/api/passport/sendVerifyCode';
 
 }

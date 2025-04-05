@@ -104,4 +104,29 @@ class CommonService {
     );
     return res ?? ResBaseModel.defaultRes;
   }
+
+  static const String verifyTypeEmail = "EMAIL";
+  static const String verifyTypePhone = "PHONE";
+
+  static const String verifyCodeTypeRegister = "REGISTER";
+  static const String verifyCodeTypeResetPassword = "RESET_PASSWORD";
+  static const String verifyCodeTypeChangeEmail = "CHANGE_EMAIL";
+  static const String verifyCodeTypeDeleteAccount = "DELETE_ACCOUNT";
+  static const String verifyCodeTypeChangePhone = "CHANGE_PHONE";
+
+  Future<ResBaseModel> sendVerifyCode(
+    String verifyType,
+    String account,
+    String verifyCodeType,
+  ) async {
+    final res = await HttpUtils.postNew(
+      Api.sendVerifyCode,
+      params: {
+        "verifyType": verifyType,
+        "account": account,
+        "verifyCodeType": verifyCodeType,
+      },
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

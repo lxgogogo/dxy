@@ -15,6 +15,7 @@ import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/toast_utils.dart';
+import '../login_screen.dart';
 import 'type_selector.dart';
 
 class LoginContent extends StatefulWidget {
@@ -26,63 +27,36 @@ class LoginContent extends StatefulWidget {
 }
 
 class _LoginContentState extends State<LoginContent> {
-  final List<String> typeList = ['邮箱登录', '账号登录', '手机登录'];
   int typeIndex = 0;
 
-  String get type => typeList[typeIndex];
+  LoginType get type => LoginType.values[typeIndex];
 
-  bool get isMobile => typeIndex == 2;
+  bool get isPhone => type == LoginType.phone;
 
   final TextEditingController _controllerAccount = TextEditingController();
   bool isShowAccountTips = false;
-
-  String get accountTips {
-    switch (typeIndex) {
-      case 0: // 邮箱登录
-        return '*请输入正确邮箱地址';
-      case 1: // 账号登录
-        return '*6~15位英数字，大小写不同';
-      case 2: // 手机登录
-        return '*手机号格式错误';
-      default:
-        return '';
-    }
-  }
-
-  String get accountHint {
-    switch (typeIndex) {
-      case 0: // 邮箱登录
-        return '请输入邮箱';
-      case 1: // 账号登录
-        return '请输入账号';
-      case 2: // 手机登录
-        return '请输入手机号';
-      default:
-        return '';
-    }
-  }
 
   final TextEditingController _controllerPw = TextEditingController();
   bool isShowPwTips = false;
   bool isLogin = true;
   bool isOpen = false;
 
-  final FocusNode _focusEmail = FocusNode();
+  final FocusNode _focusAccount = FocusNode();
   final FocusNode _focusPwd = FocusNode();
 
   bool _isLoginDisable = true;
 
   void checkValid() {
     final account = _controllerAccount.text;
-    switch (typeIndex) {
-      case 0: // 邮箱登录
+    switch (type) {
+      case LoginType.email:
         isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
         break;
-      case 1: // 账号登录
-        isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
-        break;
-      case 2: // 手机登录
+      case LoginType.phone:
         isShowAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case LoginType.username:
+        isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
         break;
     }
     final password = _controllerPw.text;
@@ -94,16 +68,13 @@ class _LoginContentState extends State<LoginContent> {
   void onChangeCheckValid() {
     final account = _controllerAccount.text;
     bool showAccountTips = false;
-    switch (typeIndex) {
-      case 0: // 邮箱登录
+    switch (type) {
+      case LoginType.email:
         showAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
-        break;
-      case 1: // 账号登录
-        showAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
-        break;
-      case 2: // 手机登录
+      case LoginType.phone:
         showAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
-        break;
+      case LoginType.username:
+        showAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
     }
 
     final password = _controllerPw.text;
@@ -116,8 +87,8 @@ class _LoginContentState extends State<LoginContent> {
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(() {
-      if (!_focusEmail.hasFocus) {
+    _focusAccount.addListener(() {
+      if (!_focusAccount.hasFocus) {
         checkValid();
       }
     });
@@ -160,143 +131,138 @@ class _LoginContentState extends State<LoginContent> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: 24.w),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TypeSelector(
-                    typeList: typeList,
-                    typeIndex: typeIndex,
-                    onTypeSelected: (index) {
-                      typeIndex = index;
-                      checkValid();
+          TypeSelector(
+            typeList: LoginType.values.map((e) => e.typeName).toList(),
+            typeIndex: typeIndex,
+            onTypeSelected: (index) {
+              typeIndex = index;
+              checkValid();
+            },
+          ),
+          SizedBox(height: 12.w),
+          Container(
+            height: 40.w,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            decoration: BoxDecoration(
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),
+            ),
+            child: Row(
+              children: [
+                if (isPhone)
+                  Text(
+                    '+86 丨 ',
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                  ),
+                Expanded(
+                  child: TextField(
+                    focusNode: _focusAccount,
+                    keyboardType: isPhone ? TextInputType.phone : TextInputType.text,
+                    controller: _controllerAccount,
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                    inputFormatters: [if (isPhone) FilteringTextInputFormatter.digitsOnly],
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      isCollapsed: true,
+                      isDense: true,
+                      hintText: type.hint,
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                    ),
+                    onChanged: (text) {
+                      if (text.contains(' ')) {
+                        String newText = text.replaceAll(' ', '');
+                        _controllerAccount.text = newText;
+                        _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
+                      }
+                      onChangeCheckValid();
                     },
                   ),
-                  SizedBox(height: 12.w),
-                  Container(
-                    height: 40.w,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    decoration: BoxDecoration(
-                      color: '#f5f5f5'.hexColor,
-                      borderRadius: BorderRadius.circular(12.w),
-                    ),
-                    child: Row(
-                      children: [
-                        if (isMobile)
-                          Text(
-                            '+86 丨 ',
-                            style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                          ),
-                        Expanded(
-                          child: TextField(
-                            focusNode: _focusEmail,
-                            keyboardType: isMobile ? TextInputType.phone : TextInputType.text,
-                            controller: _controllerAccount,
-                            style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                            inputFormatters: [if (isMobile) FilteringTextInputFormatter.digitsOnly],
-                            decoration: InputDecoration(
-                              border: InputBorder.none, // 没有边框
-                              hintText: accountHint,
-                              hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
-                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
-                            ),
-                            onChanged: (text) {
-                              if (text.contains(' ')) {
-                                String newText = text.replaceAll(' ', '');
-                                _controllerAccount.text = newText;
-                                _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
-                              }
-                              onChangeCheckValid();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                    child: Text(
-                      isShowAccountTips ? accountTips : '',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 40.w,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    decoration: BoxDecoration(
-                      color: '#f5f5f5'.hexColor,
-                      borderRadius: BorderRadius.circular(12.w),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: _controllerPw,
-                            focusNode: _focusPwd,
-                            obscureText: !isOpen,
-                            style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '密码',
-                              hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
-                              contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
-                            ),
-                            onChanged: (_) {
-                              onChangeCheckValid();
-                            },
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isOpen = !isOpen;
-                            });
-                          },
-                          child: Image.asset(
-                            isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
-                            width: 18.w,
-                            height: 18.w,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                    child: Text(
-                      isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: UserTermsUncheck(
-                          reviewTerms: reviewTerms,
-                          reviewPrivacy: reviewPrivacy,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.forgetPassword);
-                        },
-                        child: Text(
-                          '忘记密码?',
-                          style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+            child: Text(
+              isShowAccountTips ? type.tips : '',
+              style: TextStyle(
+                fontSize: 10.sp,
+                color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
               ),
             ),
+          ),
+          Container(
+            height: 40.w,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            decoration: BoxDecoration(
+              color: '#f5f5f5'.hexColor,
+              borderRadius: BorderRadius.circular(12.w),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: _controllerPw,
+                    focusNode: _focusPwd,
+                    obscureText: !isOpen,
+                    style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      isCollapsed: true,
+                      isDense: true,
+                      hintText: '密码',
+                      hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
+                      contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
+                    ),
+                    onChanged: (_) {
+                      onChangeCheckValid();
+                    },
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isOpen = !isOpen;
+                    });
+                  },
+                  child: Image.asset(
+                    isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
+                    width: 18.w,
+                    height: 18.w,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+            child: Text(
+              isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
+              style: TextStyle(
+                fontSize: 10.sp,
+                color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: UserTermsUncheck(
+                  reviewTerms: reviewTerms,
+                  reviewPrivacy: reviewPrivacy,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.forgetPassword);
+                },
+                child: Text(
+                  '忘记密码?',
+                  style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 24.w),
           CustomButton(
@@ -343,7 +309,11 @@ class _LoginContentState extends State<LoginContent> {
     final password = _controllerPw.text;
     EasyLoading.show(status: 'loading...');
     try {
-      final res = await LoginService.of.login(account: account, password: password);
+      final res = await LoginService.of.login(
+        account: account,
+        password: password,
+        accountType: type.typeValue,
+      );
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);

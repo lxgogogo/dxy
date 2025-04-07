@@ -15,6 +15,7 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 import 'login_helper.dart';
+import 'widgets/mine_collect_view.dart';
 
 part 'mine_controller.dart';
 
@@ -206,7 +207,13 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               physics: const NeverScrollableScrollPhysics(),
                               children: List.generate(
                                 controller.tabs.length,
-                                (index) => MineChildView(tabIndex: index),
+                                (index) {
+                                  if (index == 1) {
+                                    return const MineCollectView();
+                                  } else {
+                                    return MineChildView(tabIndex: index);
+                                  }
+                                }
                               ),
                             ),
                           ),

@@ -74,8 +74,8 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                       right: 10.w,
                       top: 10.w,
                       child: CloseImageButton(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 12.w,
+                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
                         onPressed: () {
                           Navigator.of(context).pop();

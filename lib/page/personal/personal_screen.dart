@@ -18,6 +18,7 @@ import '../../stores/user_store.dart';
 import '../../utils/net_request.dart';
 import '../../widget/dialog_edit_mobile.dart';
 import '../../widget/dialog_edit_username.dart';
+import '../../widget/dialog_new_tip.dart';
 
 part 'personal_controller.dart';
 
@@ -130,7 +131,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 value: UserStore.of.user?.nickname ?? '',
                                 onTap: () {
                                   showDialog(
-                                    barrierDismissible: true,
                                     context: context,
                                     builder: (context) => DialogEditNickname(
                                       editContent: UserStore.of.user?.nickname ?? '',
@@ -147,12 +147,22 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 value: UserStore.of.user?.username ?? '',
                                 onTap: () {
                                   showDialog(
-                                    barrierDismissible: true,
                                     context: context,
                                     builder: (context) => DialogEditUsername(
                                       editContent: UserStore.of.user?.username ?? '',
                                     ),
-                                  );
+                                  ).then((errorTip) {
+                                    if (errorTip is String) {
+                                      if (!context.mounted) return;
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => DialogNewTip(
+                                          title: '绑定失败',
+                                          content: errorTip,
+                                        ),
+                                      );
+                                    }
+                                  });
                                 },
                               ),
                               Container(
@@ -164,12 +174,22 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 value: UserStore.of.user?.account ?? '',
                                 onTap: () {
                                   showDialog(
-                                    barrierDismissible: true,
                                     context: context,
                                     builder: (context) => DialogEditEmail(
                                       editContent: UserStore.of.user?.account ?? '',
                                     ),
-                                  );
+                                  ).then((errorTip) {
+                                    if (errorTip is String) {
+                                      if (!context.mounted) return;
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => DialogNewTip(
+                                          title: '绑定失败',
+                                          content: errorTip,
+                                        ),
+                                      );
+                                    }
+                                  });
                                 },
                               ),
                               Container(
@@ -181,12 +201,22 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                 value: UserStore.of.user?.phone ?? '',
                                 onTap: () {
                                   showDialog(
-                                    barrierDismissible: true,
                                     context: context,
                                     builder: (context) => DialogEditMobile(
                                       editContent: UserStore.of.user?.phone ?? '',
                                     ),
-                                  );
+                                  ).then((errorTip) {
+                                    if (errorTip is String) {
+                                      if (!context.mounted) return;
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => DialogNewTip(
+                                          title: '绑定失败',
+                                          content: errorTip,
+                                        ),
+                                      );
+                                    }
+                                  });
                                 },
                               ),
                               SizedBox(height: 32.w),
@@ -237,7 +267,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                       GestureDetector(
                         onTap: () {
                           showDialog(
-                            barrierDismissible: true,
                             context: context,
                             builder: (context) => const DialogDeleteAccount(),
                           );

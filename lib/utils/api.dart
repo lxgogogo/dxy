@@ -49,6 +49,7 @@ class Api {
   static const String updateAvatar = '/api/user/updateAvatar';
   static const String userUpdate = '/api/user/update';
   static const String updateEmail = '/api/user/updateEmail';
+  static const String updateUsername = '/api/user/updateUsername';
   static const String appVersion = '/api/appVersion';
 
   static const String followedList = '/api/follower/followed/list';

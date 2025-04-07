@@ -61,7 +61,7 @@ class CountDownView extends GetView<CountDownController> {
             ToastUtils.showToast('请输入正确的$desc');
             return;
           }
-          controller.startCountdown(verifyType, verifyCodeType, account);
+          controller.startCountdown(account, verifyType, verifyCodeType);
         },
         child: Text(
           '获取验证码',

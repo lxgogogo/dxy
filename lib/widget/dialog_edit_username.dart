@@ -29,29 +29,30 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
   bool isShowUsernameTips = false;
   final FocusNode _focusUsername = FocusNode();
 
-  final TextEditingController _controllerOriginalPw = TextEditingController();
-  bool _originalPwdObscureText = true;
+  // final TextEditingController _controllerOriginalPw = TextEditingController();
+  // bool _originalPwdObscureText = true;
 
   void checkValid() {
     final account = _controllerUsername.text;
     isShowUsernameTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
-    final originalPassword = _controllerOriginalPw.text;
+    // final originalPassword = _controllerOriginalPw.text;
 
-    _isDisable = account.isEmpty || isShowUsernameTips || originalPassword.isEmpty;
+    _isDisable = account.isEmpty || isShowUsernameTips /*|| originalPassword.isEmpty*/;
     setState(() {});
   }
 
   void onChangeCheckValid() {
     final account = _controllerUsername.text;
     final isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
-    final originalPassword = _controllerOriginalPw.text;
+    // final originalPassword = _controllerOriginalPw.text;
 
-    _isDisable = account.isEmpty || isShowAccountTips || originalPassword.isEmpty;
+    _isDisable = account.isEmpty || isShowAccountTips /*|| originalPassword.isEmpty*/;
     setState(() {});
   }
 
   @override
   void initState() {
+    _controllerUsername.text = widget.editContent;
     super.initState();
     _focusUsername.addListener(() {
       if (!_focusUsername.hasFocus) {
@@ -71,7 +72,7 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 16.w,
+          borderRadius: 16.r,
           margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
@@ -96,11 +97,11 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
                       ),
                     ),
                     Positioned(
-                      right: 0.w,
-                      top: 0.w,
+                      right: 0,
+                      top: 0,
                       child: CloseImageButton(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 12.w,
+                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -205,84 +206,83 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "密码",
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              height: 30.w,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.w),
-                                border: Border.all(
-                                  color: '#333333'.hexColor.withOpacity(0.2),
-                                  width: 1.w,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      controller: _controllerOriginalPw,
-                                      // focusNode: _focusOriginalPw,
-                                      style: TextStyle(
-                                        color: '#333333'.hexColor,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      maxLines: 1,
-                                      obscureText: _originalPwdObscureText,
-                                      onChanged: (_) {
-                                        onChangeCheckValid();
-                                      },
-                                      decoration: InputDecoration(
-                                        isCollapsed: true,
-                                        isDense: true,
-                                        contentPadding: EdgeInsets.only(left: 12.w),
-                                        hintText: '请输入原密码',
-                                        hintStyle: TextStyle(
-                                          color: '#3333334D'.hexColor,
-                                          fontSize: 12.sp,
-                                        ),
-                                        border: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent),
-                                        ),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent),
-                                        ),
-                                        disabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent),
-                                        ),
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.transparent),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                    child: CustomObscure(
-                                      onTap: () {
-                                        _originalPwdObscureText = !_originalPwdObscureText;
-                                        setState(() {});
-                                      },
-                                      obscureText: _originalPwdObscureText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Text(
+                      //       "密码",
+                      //       style: TextStyle(
+                      //         color: '#333333'.hexColor,
+                      //         fontSize: 14.sp,
+                      //         fontWeight: FontWeight.w500,
+                      //       ),
+                      //     ),
+                      //     SizedBox(width: 8.w),
+                      //     Expanded(
+                      //       child: Container(
+                      //         height: 30.w,
+                      //         decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(8.w),
+                      //           border: Border.all(
+                      //             color: '#333333'.hexColor.withOpacity(0.2),
+                      //             width: 1.w,
+                      //           ),
+                      //         ),
+                      //         child: Row(
+                      //           children: [
+                      //             Expanded(
+                      //               child: TextField(
+                      //                 controller: _controllerOriginalPw,
+                      //                 // focusNode: _focusOriginalPw,
+                      //                 style: TextStyle(
+                      //                   color: '#333333'.hexColor,
+                      //                   fontSize: 12.sp,
+                      //                   fontWeight: FontWeight.w500,
+                      //                 ),
+                      //                 maxLines: 1,
+                      //                 obscureText: _originalPwdObscureText,
+                      //                 onChanged: (_) {
+                      //                   onChangeCheckValid();
+                      //                 },
+                      //                 decoration: InputDecoration(
+                      //                   isCollapsed: true,
+                      //                   isDense: true,
+                      //                   contentPadding: EdgeInsets.only(left: 12.w),
+                      //                   hintText: '请输入原密码',
+                      //                   hintStyle: TextStyle(
+                      //                     color: '#3333334D'.hexColor,
+                      //                     fontSize: 12.sp,
+                      //                   ),
+                      //                   border: const OutlineInputBorder(
+                      //                     borderSide: BorderSide(color: Colors.transparent),
+                      //                   ),
+                      //                   enabledBorder: const OutlineInputBorder(
+                      //                     borderSide: BorderSide(color: Colors.transparent),
+                      //                   ),
+                      //                   disabledBorder: const OutlineInputBorder(
+                      //                     borderSide: BorderSide(color: Colors.transparent),
+                      //                   ),
+                      //                   focusedBorder: const OutlineInputBorder(
+                      //                     borderSide: BorderSide(color: Colors.transparent),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //             Padding(
+                      //               padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      //               child: CustomObscure(
+                      //                 onTap: () {
+                      //                   _originalPwdObscureText = !_originalPwdObscureText;
+                      //                   setState(() {});
+                      //                 },
+                      //                 obscureText: _originalPwdObscureText,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(height: 26.w),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -357,17 +357,21 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
   Future<void> _submitUpdate() async {
     if (_isDisable) return;
     String username = _controllerUsername.text;
-    String password = _controllerOriginalPw.text;
+    // String password = _controllerOriginalPw.text;
     try {
       final res = await UserService.of.updateUsername(
         username: username,
-        password: password,
+        // password: password,
       );
       if (res.isSuccess) {
         ToastUtils.showToast('修改成功');
         UserStore.of.getUserInfo();
         Get.back();
       } else {
+        if (res.code == 301) {
+          Get.back(result: res.msg);
+          return;
+        }
         ToastUtils.showToast(res.msg);
       }
     } catch (e) {

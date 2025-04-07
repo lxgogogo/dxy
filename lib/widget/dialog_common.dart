@@ -34,7 +34,7 @@ class CommonDialog extends StatelessWidget {
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.zero,
         child: ShadowWrapper(
-          borderRadius: 16.w,
+          borderRadius: 16.r,
           margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
@@ -59,11 +59,11 @@ class CommonDialog extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      right: 0.w,
-                      top: 0.w,
+                      right: 0,
+                      top: 0,
                       child: CloseImageButton(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 12.w,
+                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
                         onPressed: () {
                           Navigator.of(context).pop();

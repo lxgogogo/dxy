@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';
@@ -60,6 +58,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
 
   @override
   void initState() {
+    _controllerEmail.text = widget.editContent;
     super.initState();
     _focusEmail.addListener(() {
       if (!_focusEmail.hasFocus) {
@@ -84,7 +83,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 16.w,
+          borderRadius: 16.r,
           margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
             padding: EdgeInsets.only(bottom: 26.w),
@@ -109,11 +108,11 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                       ),
                     ),
                     Positioned(
-                      right: 0.w,
-                      top: 0.w,
+                      right: 0,
+                      top: 0,
                       child: CloseImageButton(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 12.w,
+                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -323,66 +322,64 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                         ],
                       ),
                       SizedBox(height: 26.w),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Container(
-                                width: 96.w,
-                                height: 33.w,
-                                decoration: ShapeDecoration(
-                                  color: '#333333'.hexColor.withOpacity(0.1),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              width: 96.w,
+                              height: 33.w,
+                              decoration: ShapeDecoration(
+                                color: '#333333'.hexColor.withOpacity(0.1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '取消',
-                                  style: TextStyle(
-                                    color: '#333333'.hexColor.withOpacity(0.7),
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '取消',
+                                style: TextStyle(
+                                  color: '#333333'.hexColor.withOpacity(0.7),
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 24.w),
-                            InkWell(
-                              onTap: _submitUpdate,
-                              child: Container(
-                                width: 96.w,
-                                height: 33.w,
-                                decoration: ShapeDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment(1.00, 0.00),
-                                    end: Alignment(-1, 0),
-                                    colors: [
-                                      Color(0xFF84BCF9),
-                                      Color(0xFF557BF6),
-                                    ],
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                          ),
+                          SizedBox(width: 24.w),
+                          InkWell(
+                            onTap: _submitUpdate,
+                            child: Container(
+                              width: 96.w,
+                              height: 33.w,
+                              decoration: ShapeDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment(1.00, 0.00),
+                                  end: Alignment(-1, 0),
+                                  colors: [
+                                    Color(0xFF84BCF9),
+                                    Color(0xFF557BF6),
+                                  ],
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '确定修改',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '确定修改',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -410,6 +407,10 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
         Get.back();
         Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
       } else {
+        if (res.code == 301) {
+          Get.back(result: res.msg);
+          return;
+        }
         ToastUtils.showToast(res.msg);
       }
     } catch (e) {

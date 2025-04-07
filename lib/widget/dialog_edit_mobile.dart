@@ -57,6 +57,7 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
 
   @override
   void initState() {
+    _controllerMobile.text = widget.editContent;
     super.initState();
     _focusMobile.addListener(() {
       if (!_focusMobile.hasFocus) {
@@ -81,10 +82,10 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: ShadowWrapper(
-          borderRadius: 16.w,
+          borderRadius: 16.r,
           margin: EdgeInsets.only(left: 32.w, right: 32.w),
           child: Container(
-            padding: EdgeInsets.only(bottom: 26.w),
+            padding: EdgeInsets.only(bottom: 24.w),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -106,11 +107,11 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
                       ),
                     ),
                     Positioned(
-                      right: 0.w,
-                      top: 0.w,
+                      right: 0,
+                      top: 0,
                       child: CloseImageButton(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 12.w,
+                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -416,6 +417,10 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
         Get.back();
         Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
       } else {
+        if (res.code == 301) {
+          Get.back(result: res.msg);
+          return;
+        }
         ToastUtils.showToast(res.msg);
       }
     } catch (e) {

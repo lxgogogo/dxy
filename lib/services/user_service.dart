@@ -16,6 +16,7 @@ class UserService {
         // "code": code,
         "code": 'BBS2025',
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }
@@ -31,20 +32,22 @@ class UserService {
         // "code": code,
         "code": 'BBS2025',
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }
 
   Future<ResBaseModel> updateUsername({
     required String username,
-    required String password,
+    // required String password,
   }) async {
     final res = await HttpUtils.postNew(
-      Api.updateEmail,
+      Api.updateUsername,
       params: {
         "username": username,
-        "password": password,
+        // "password": password,
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }

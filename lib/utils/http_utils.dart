@@ -130,9 +130,13 @@ class HttpUtils {
     String url, {
     Map<String, dynamic>? params,
     Options? options,
+    bool showLoading = false,
   }) async {
     Response response;
     try {
+      if (showLoading) {
+        EasyLoading.show(status: 'loading...', maskType: EasyLoadingMaskType.clear);
+      }
       response = await Http.dio.post(url, data: params ?? {}, options: options);
 
       final res = response.data as Map<String, dynamic>?;
@@ -140,6 +144,10 @@ class HttpUtils {
       return ResBaseModel.fromJson(res);
     } on DioException catch (e) {
       return _handleError(e);
+    } finally {
+      if (showLoading) {
+        EasyLoading.dismiss();
+      }
     }
   }
 

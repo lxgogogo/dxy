@@ -142,11 +142,11 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                       ),
                     ),
                     Positioned(
-                      right: 0.w,
-                      top: 0.w,
+                      right: 0,
+                      top: 0,
                       child: CloseImageButton(
-                        width: 16.w,
-                        height: 16.w,
+                        width: 12.w,
+                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
                         onPressed: () {
                           Navigator.of(context).pop();

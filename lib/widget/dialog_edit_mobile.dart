@@ -51,6 +51,10 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
     setState(() {});
   }
 
+  String get verifyType => Constants.verifyTypePhone;
+
+  String get verifyCodeType => Constants.verifyCodeTypeChangePhone;
+
   @override
   void initState() {
     super.initState();
@@ -287,8 +291,10 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
                                   Positioned(
                                     right: 12.w,
                                     child: CountDownView(
-                                      type: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL,
-                                      email: _controllerMobile.text,
+                                      account: _controllerMobile.text,
+                                      verifyType: verifyType,
+                                      verifyCodeType: verifyCodeType,
+                                      codeTypeDesc: '手机号',
                                     ),
                                   ),
                                 ],
@@ -407,9 +413,9 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
       );
       if (res.isSuccess) {
         ToastUtils.showToast('修改成功');
-        UserStore.of.updateUserInfo({'phone': phone});
+        UserStore.of.getUserInfo();
         Get.back();
-        Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
+        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
       } else {
         ToastUtils.showToast(res.msg);
       }

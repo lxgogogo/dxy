@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';
+import '../services/index.dart';
+import '../stores/user_store.dart';
+import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
 import 'dialog_edit_password.dart';
 
@@ -20,24 +25,24 @@ class DialogEditUsername extends StatefulWidget {
 class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
-  final TextEditingController _controllerAccount = TextEditingController();
-  bool isShowAccountTips = false;
-  final FocusNode _focusAccount = FocusNode();
+  final TextEditingController _controllerUsername = TextEditingController();
+  bool isShowUsernameTips = false;
+  final FocusNode _focusUsername = FocusNode();
 
   final TextEditingController _controllerOriginalPw = TextEditingController();
   bool _originalPwdObscureText = true;
 
   void checkValid() {
-    final account = _controllerAccount.text;
-    isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+    final account = _controllerUsername.text;
+    isShowUsernameTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
     final originalPassword = _controllerOriginalPw.text;
 
-    _isDisable = account.isEmpty || isShowAccountTips || originalPassword.isEmpty;
+    _isDisable = account.isEmpty || isShowUsernameTips || originalPassword.isEmpty;
     setState(() {});
   }
 
   void onChangeCheckValid() {
-    final account = _controllerAccount.text;
+    final account = _controllerUsername.text;
     final isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
     final originalPassword = _controllerOriginalPw.text;
 
@@ -48,8 +53,8 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
   @override
   void initState() {
     super.initState();
-    _focusAccount.addListener(() {
-      if (!_focusAccount.hasFocus) {
+    _focusUsername.addListener(() {
+      if (!_focusUsername.hasFocus) {
         checkValid();
       }
     });
@@ -131,8 +136,8 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
                                 ),
                               ),
                               child: TextField(
-                                controller: _controllerAccount,
-                                focusNode: _focusAccount,
+                                controller: _controllerUsername,
+                                focusNode: _focusUsername,
                                 style: TextStyle(
                                   color: '#333333'.hexColor,
                                   fontSize: 12.sp,
@@ -162,8 +167,8 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
                                 onChanged: (text) {
                                   if (text.contains(' ')) {
                                     String newText = text.replaceAll(' ', '');
-                                    _controllerAccount.text = newText;
-                                    _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
+                                    _controllerUsername.text = newText;
+                                    _controllerUsername.selection = TextSelection.collapsed(offset: newText.length);
                                   }
                                   onChangeCheckValid();
                                 },
@@ -190,10 +195,10 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
                               child: Text(
-                                isShowAccountTips ? '*6~15位英数字，大小写不同' : '',
+                                isShowUsernameTips ? '*6~15位英数字，大小写不同' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                                  color: isShowUsernameTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -349,15 +354,24 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
     );
   }
 
-  void _submitUpdate() {
+  Future<void> _submitUpdate() async {
     if (_isDisable) return;
-    // String account = _controllerAccount.text;
-    // String code = _controllerCode.text;
-    // NetRequest().updateAccount(account, code, (data) {
-    //   ToastUtils.showToast('修改成功');
-    //   UserStore.of.getUserInfo();
-    //   Get.back();
-    //   Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
-    // });
+    String username = _controllerUsername.text;
+    String password = _controllerOriginalPw.text;
+    try {
+      final res = await UserService.of.updateUsername(
+        username: username,
+        password: password,
+      );
+      if (res.isSuccess) {
+        ToastUtils.showToast('修改成功');
+        UserStore.of.getUserInfo();
+        Get.back();
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } catch (e) {
+      ToastUtils.showToast('修改失败');
+    }
   }
 }

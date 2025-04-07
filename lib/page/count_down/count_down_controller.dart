@@ -27,12 +27,20 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  void startCountdown(String type, String email) async {
+  void startCountdown(
+    String account,
+    String verifyType,
+    String verifyCodeType,
+  ) async {
     if (_timer?.isActive == true) {
       return;
     }
     try {
-      NetRequest().sendCode(type, email);
+      CommonService.of.sendVerifyCode(
+        account,
+        verifyType,
+        verifyCodeType,
+      );
       _startTime = DateTime.now();
       countdown(countdownDuration);
       _startTimer();

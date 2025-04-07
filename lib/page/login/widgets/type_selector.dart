@@ -98,7 +98,7 @@ class _TypeSelectorState extends State<TypeSelector> {
           height: 44.w,
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12.r),
             border: Border.all(color: '#557BF6'.hexColor),
           ),
           alignment: Alignment.centerLeft,

@@ -9,6 +9,8 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
+import '../constants.dart';
+import '../services/index.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
 
@@ -51,6 +53,10 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     _isDisable = account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
+
+  String get verifyType => Constants.verifyTypeEmail;
+
+  String get verifyCodeType => Constants.verifyCodeTypeChangeEmail;
 
   @override
   void initState() {
@@ -277,8 +283,10 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                   Positioned(
                                     right: 12.w,
                                     child: CountDownView(
-                                      type: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL,
-                                      email: _controllerEmail.text,
+                                      account: _controllerEmail.text,
+                                      verifyType: verifyType,
+                                      verifyCodeType: verifyCodeType,
+                                      codeTypeDesc: '邮箱',
                                     ),
                                   ),
                                 ],
@@ -388,15 +396,25 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     );
   }
 
-  void _submitUpdate() {
+  Future<void> _submitUpdate() async {
     if (_isDisable) return;
     String email = _controllerEmail.text;
     String code = _controllerCode.text;
-    NetRequest().updateEmail(email, code, (data) {
-      ToastUtils.showToast('修改成功');
-      UserStore.of.getUserInfo();
-      Get.back();
-      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_CHANGE_EMAIL, force: true);
-    });
+    try {
+      final res = await UserService.of.updateEmail(
+        email: email,
+        code: code,
+      );
+      if (res.isSuccess) {
+        ToastUtils.showToast('修改成功');
+        UserStore.of.getUserInfo();
+        Get.back();
+        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } catch (e) {
+      ToastUtils.showToast('修改失败');
+    }
   }
 }

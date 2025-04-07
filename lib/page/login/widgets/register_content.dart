@@ -93,7 +93,7 @@ class _RegisterContentState extends State<RegisterContent> {
 
     _isLoginDisable = account.isEmpty ||
         isShowAccountTips ||
-        (typeIndex != 1 && (code.isEmpty || isShowCodeTips)) ||
+        (type != LoginType.username && (code.isEmpty || isShowCodeTips)) ||
         password.isEmpty ||
         isShowPwTips ||
         againPw.isEmpty ||
@@ -117,24 +117,30 @@ class _RegisterContentState extends State<RegisterContent> {
         break;
     }
     final code = _controllerCode.text;
-    final isShowCodeTips = typeIndex != 1 && !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
+    final isShowCodeTips = type != LoginType.username && !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
     final isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
-    setState(() {
-      isShowAccountTips = showAccountTips;
-      _isLoginDisable = account.isEmpty ||
-          showAccountTips ||
-          (typeIndex != 1 && (code.isEmpty || isShowCodeTips)) ||
-          password.isEmpty ||
-          isShowPwTips ||
-          againPw.isEmpty ||
-          isShowAgainTips ||
-          !_didAgreeTerms.value;
-    });
+    _isLoginDisable = account.isEmpty ||
+        showAccountTips ||
+        (type != LoginType.username && (code.isEmpty || isShowCodeTips)) ||
+        password.isEmpty ||
+        isShowPwTips ||
+        againPw.isEmpty ||
+        isShowAgainTips ||
+        !_didAgreeTerms.value;
+    setState(() {});
   }
+
+  String get verifyType => switch (type) {
+    LoginType.email => Constants.verifyTypeEmail,
+    LoginType.phone => Constants.verifyTypePhone,
+    _ => '',
+  };
+
+  String get verifyCodeType => Constants.verifyCodeTypeRegister;
 
   @override
   void initState() {
@@ -195,7 +201,7 @@ class _RegisterContentState extends State<RegisterContent> {
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
               children: [
@@ -248,7 +254,7 @@ class _RegisterContentState extends State<RegisterContent> {
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               decoration: BoxDecoration(
                 color: '#f5f5f5'.hexColor,
-                borderRadius: BorderRadius.circular(12.w),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Row(
                 children: <Widget>[
@@ -272,8 +278,14 @@ class _RegisterContentState extends State<RegisterContent> {
                     ),
                   ),
                   CountDownView(
-                    type: NetRequest.SEND_CODE_TYPE_REGISTER,
-                    email: _controllerAccount.text,
+                    verifyType: verifyType,
+                    verifyCodeType: verifyCodeType,
+                    codeTypeDesc: switch (type) {
+                      LoginType.email => '邮箱',
+                      LoginType.phone => '手机号',
+                      _ => '',
+                    },
+                    account: _controllerAccount.text,
                   ),
                 ],
               ),
@@ -294,7 +306,7 @@ class _RegisterContentState extends State<RegisterContent> {
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
               children: <Widget>[
@@ -351,7 +363,7 @@ class _RegisterContentState extends State<RegisterContent> {
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
               children: <Widget>[
@@ -504,7 +516,7 @@ class _RegisterContentState extends State<RegisterContent> {
         UserStore.of.putUserInfo(userProfile);
         EventBusUtil.of.fire(EventLoginSuccess());
         Get.until((route) => route.settings.name == Routes.main);
-        Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_REGISTER, force: true);
+        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
       } else {
         ToastUtils.showToast(res.msg);
       }

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
-import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
 import '../../constants.dart';
+import '../../services/index.dart';
 import '../../widget/close_image_button.dart';
+import '../login/login_screen.dart';
+import '../login/widgets/type_selector.dart';
 
 part 'forget_password_controller.dart';
 
@@ -21,12 +24,18 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  int typeIndex = 0;
+
+  LoginType get type => LoginType.values[typeIndex];
+
+  bool get isPhone => type == LoginType.phone;
+
   bool _isVisible = false;
   bool _isVisibleAgain = false;
 
-  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerAccount = TextEditingController();
   bool isShowAccountTips = false;
-  final FocusNode _focusEmail = FocusNode();
+  final FocusNode _focusAccount = FocusNode();
   final TextEditingController _controllerCode = TextEditingController();
   bool isShowCodeTips = false;
   final FocusNode _focusCode = FocusNode();
@@ -38,18 +47,25 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final FocusNode _focusAgainPw = FocusNode();
 
   bool _isLoginDisable = true;
-  RegExp codeRegExp = RegExp(r'^\d{6}$');
-  RegExp containsInvalidChars = RegExp(
-      r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
   bool isContainsInvalidChars = false;
 
   void checkValid() {
-    final account = _controllerEmail.text;
-    isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final account = _controllerAccount.text;
+    switch (type) {
+      case LoginType.email:
+        isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+        break;
+      case LoginType.username:
+        isShowAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case LoginType.phone:
+        isShowAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+    }
     final code = _controllerCode.text;
-    isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    isShowCodeTips = type != LoginType.username && !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
-    isContainsInvalidChars = !containsInvalidChars.hasMatch(password);
+    isContainsInvalidChars = !Constants.containsInvalidChars.hasMatch(password);
     bool isValidPassword = Constants.passwordRegExp.hasMatch(password);
 
     if (password.isNotEmpty) {
@@ -68,8 +84,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
     _isLoginDisable = account.isEmpty ||
         isShowAccountTips ||
-        code.isEmpty ||
-        isShowCodeTips ||
+        (type != LoginType.username && (code.isEmpty || isShowCodeTips)) ||
         password.isEmpty ||
         isShowPwTips ||
         againPw.isEmpty ||
@@ -78,19 +93,29 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   void onChangeCheckValid() {
-    final account = _controllerEmail.text;
-    final isShowAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+    final account = _controllerAccount.text;
+    bool showAccountTips = false;
+    switch (type) {
+      case LoginType.email:
+        showAccountTips = !GetUtils.isEmail(account) && account.isNotEmpty;
+        break;
+      case LoginType.username:
+        showAccountTips = !Constants.accountRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+      case LoginType.phone:
+        showAccountTips = !Constants.phoneRegExp.hasMatch(account) && account.isNotEmpty;
+        break;
+    }
     final code = _controllerCode.text;
-    final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
+    final isShowCodeTips = type != LoginType.username && !Constants.codeRegExp.hasMatch(code) && code.isNotEmpty;
     final password = _controllerPw.text;
     final isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
     final againPw = _controllerAgainPw.text;
     final isShowAgainTips = password != againPw && againPw.isNotEmpty;
 
     _isLoginDisable = account.isEmpty ||
-        isShowAccountTips ||
-        code.isEmpty ||
-        isShowCodeTips ||
+        showAccountTips ||
+        (type != LoginType.username && (code.isEmpty || isShowCodeTips)) ||
         password.isEmpty ||
         isShowPwTips ||
         againPw.isEmpty ||
@@ -98,11 +123,19 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     setState(() {});
   }
 
+  String get verifyType => switch (type) {
+        LoginType.email => Constants.verifyTypeEmail,
+        LoginType.phone => Constants.verifyTypePhone,
+        _ => '',
+      };
+
+  String get verifyCodeType => Constants.verifyCodeTypeResetPassword;
+
   @override
   void initState() {
     super.initState();
-    _focusEmail.addListener(() {
-      if (!_focusEmail.hasFocus) {
+    _focusAccount.addListener(() {
+      if (!_focusAccount.hasFocus) {
         checkValid();
       }
     });
@@ -170,7 +203,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   Text(
                     '忘记密码',
                     style: TextStyle(
-                      fontSize: 24.sp,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       color: '#333333'.hexColor,
                     ),
@@ -195,35 +228,50 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
-                      height: 30.w,
+                    SizedBox(height: 24.w),
+                    TypeSelector(
+                      typeList: LoginType.values.map((e) => e.typeName).toList(),
+                      typeIndex: typeIndex,
+                      onTypeSelected: (index) {
+                        typeIndex = index;
+                        checkValid();
+                      },
                     ),
+                    SizedBox(height: 12.w),
                     Container(
-                      height: 44.w,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                      // 水平内边距
+                      height: 40.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
-                        borderRadius: BorderRadius.circular(12.w),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
                         children: <Widget>[
+                          if (isPhone)
+                            Text(
+                              '+86 丨 ',
+                              style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                            ),
                           Expanded(
                             child: TextField(
-                              focusNode: _focusEmail,
-                              keyboardType: TextInputType.text,
-                              controller: _controllerEmail,
+                              focusNode: _focusAccount,
+                              keyboardType: isPhone ? TextInputType.phone : TextInputType.text,
+                              controller: _controllerAccount,
+                              style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                              inputFormatters: [if (isPhone) FilteringTextInputFormatter.digitsOnly],
                               decoration: InputDecoration(
-                                border: InputBorder.none, // 没有边框
-                                hintText: '请输入邮箱',
-                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
+                                border: InputBorder.none,
+                                isCollapsed: true,
+                                isDense: true,
+                                hintText: type.hint,
+                                hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (text) {
                                 if (text.contains(' ')) {
                                   String newText = text.replaceAll(' ', '');
-                                  _controllerEmail.text = newText;
-                                  _controllerEmail.selection = TextSelection.collapsed(offset: newText.length);
+                                  _controllerAccount.text = newText;
+                                  _controllerAccount.selection = TextSelection.collapsed(offset: newText.length);
                                 }
                                 onChangeCheckValid();
                               },
@@ -235,65 +283,72 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     Padding(
                       padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
                       child: Text(
-                        isShowAccountTips ? '*请输入正确邮箱地址' : '',
+                        isShowAccountTips ? type.tips : '',
                         style: TextStyle(
                           fontSize: 10.sp,
                           color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                         ),
                       ),
                     ),
-                    Container(
-                      height: 44.w,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                      // 水平内边距
-                      // 水平内边距
-                      decoration: BoxDecoration(
-                        color: '#f5f5f5'.hexColor,
-                        borderRadius: BorderRadius.circular(12.w),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: _controllerCode,
-                              focusNode: _focusCode,
-                              keyboardType: TextInputType.number,
-                              // maxLength: 8,
-                              decoration: InputDecoration(
-                                border: InputBorder.none, // 没有边框
-                                hintText: '请输入验证码',
-                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
-                                contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                    if (type != LoginType.username) ...[
+                      Container(
+                        height: 40.w,
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        decoration: BoxDecoration(
+                          color: '#f5f5f5'.hexColor,
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: TextField(
+                                controller: _controllerCode,
+                                focusNode: _focusCode,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  isCollapsed: true,
+                                  isDense: true,
+                                  hintText: '请输入验证码',
+                                  hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
+                                  contentPadding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                                ),
+                                onChanged: (_) {
+                                  onChangeCheckValid();
+                                },
                               ),
-                              onChanged: (_) {
-                                onChangeCheckValid();
-                              },
                             ),
-                          ),
-                          CountDownView(
-                            type: NetRequest.SEND_CODE_TYPE_RESET_PW,
-                            email: _controllerEmail.text,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                      child: Text(
-                        isShowCodeTips ? '*验证码错误' : '',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                            CountDownView(
+                              verifyType: verifyType,
+                              verifyCodeType: verifyCodeType,
+                              codeTypeDesc: switch (type) {
+                                LoginType.email => '邮箱',
+                                LoginType.phone => '手机号',
+                                _ => '',
+                              },
+                              account: _controllerAccount.text,
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+                        child: Text(
+                          isShowCodeTips ? '*验证码错误' : '',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                          ),
+                        ),
+                      ),
+                    ],
                     Container(
-                      height: 44.w,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                      // 水平内边距
+                      height: 40.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
-                        borderRadius: BorderRadius.circular(12.w),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
                         children: <Widget>[
@@ -302,11 +357,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               controller: _controllerPw,
                               focusNode: _focusPw,
                               obscureText: !_isVisible,
-                              // 输入内容显示为密文
+                              style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
+                                isCollapsed: true,
+                                isDense: true,
                                 hintText: '请输入密码',
-                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -345,11 +402,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                     Container(
                       height: 40.w,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                      // 水平内边距
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
-                        borderRadius: BorderRadius.circular(12.w),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
                         children: <Widget>[
@@ -358,11 +414,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               controller: _controllerAgainPw,
                               focusNode: _focusAgainPw,
                               obscureText: !_isVisibleAgain,
-                              // 输入内容显示为密文
+                              style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                               decoration: InputDecoration(
-                                border: InputBorder.none, // 没有边框
+                                border: InputBorder.none,
+                                isCollapsed: true,
+                                isDense: true,
                                 hintText: '再次输入新密码',
-                                hintStyle: TextStyle(fontSize: 14.sp, color: '#bfbfbf'.hexColor),
+                                hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                                 contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                               ),
                               onChanged: (_) {
@@ -396,12 +454,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                           ),
                         )),
-                    SizedBox(height: 48.w),
+                    SizedBox(height: 24.w),
                     CustomButton(
                       onPressed: registerOrConfirm,
                       disable: _isLoginDisable,
                       textColor: Colors.white,
-                      height: 48.w,
+                      height: 42.w,
                       title: '找回密码',
                     ),
                   ],
@@ -414,25 +472,25 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-  //注册提交或者修改密码提交
-  void registerOrConfirm() {
-    var email = _controllerEmail.text;
-    var code = _controllerCode.text;
-    var password = _controllerPw.text;
-    var againPassword = _controllerAgainPw.text;
-    if (email.isEmpty) {
+  void registerOrConfirm() async {
+    var account = _controllerAccount.text;
+    if (account.isEmpty) {
       ToastUtils.showToast('邮箱不能为空');
       return;
     }
-    if (code.isEmpty) {
-      ToastUtils.showToast('验证码不能为空');
-      return;
+    var code = _controllerCode.text;
+    if (type != LoginType.username) {
+      if (code.isEmpty) {
+        ToastUtils.showToast('验证码不能为空');
+        return;
+      }
     }
-
+    var password = _controllerPw.text;
     if (password.isEmpty) {
       ToastUtils.showToast('密码不能为空');
       return;
     }
+    var againPassword = _controllerAgainPw.text;
     if (againPassword.isEmpty) {
       ToastUtils.showToast('请输入确认密码');
       return;
@@ -441,11 +499,25 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ToastUtils.showToast('两次输入的密码不一致');
       return;
     }
-    //忘记密码
-    NetRequest().resetPassword(email, password, code, (data) {
-      ToastUtils.showToast('重置密码成功');
-      Get.back();
-      Get.delete<CountDownController>(tag: NetRequest.SEND_CODE_TYPE_RESET_PW, force: true);
-    });
+    EasyLoading.show(status: 'loading...');
+    try {
+      final res = await LoginService.of.resetPassword(
+        verifyType: verifyType,
+        account: account,
+        password: password,
+        code: code,
+      );
+      if (res.isSuccess) {
+        ToastUtils.showToast('重置密码成功');
+        Get.back();
+        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } catch (e) {
+      ToastUtils.showToast('重置密码失败');
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
 }

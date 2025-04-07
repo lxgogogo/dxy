@@ -24,4 +24,14 @@ abstract class Constants {
 
   // 密码非法字符正则表达式：只允许英文字母、数字及特殊字符
   static final containsInvalidChars = RegExp(r'^[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]*$');
+
+  static const String verifyTypeEmail = "EMAIL";
+  static const String verifyTypePhone = "PHONE";
+
+  static const String verifyCodeTypeRegister = "REGISTER";
+  static const String verifyCodeTypeResetPassword = "RESET_PASSWORD";
+  static const String verifyCodeTypeChangeEmail = "CHANGE_EMAIL";
+  static const String verifyCodeTypeDeleteAccount = "DELETE_ACCOUNT";
+  static const String verifyCodeTypeChangePhone = "CHANGE_PHONE";
+
 }

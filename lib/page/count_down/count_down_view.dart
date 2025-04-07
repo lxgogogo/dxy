@@ -5,31 +5,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/services/index.dart';
 
 import '../../utils/toast_utils.dart';
 
 part 'count_down_controller.dart';
 
 class CountDownView extends GetView<CountDownController> {
-  final String type;
-  final String email;
+  final String verifyType;
+  final String verifyCodeType;
+  final String codeTypeDesc;
+  final String account;
 
   const CountDownView({
     super.key,
-    required this.type,
-    required this.email,
+    required this.verifyType,
+    required this.verifyCodeType,
+    required this.codeTypeDesc,
+    required this.account,
   });
 
   @override
-  String? get tag => type;
+  String? get tag => '$verifyType$verifyCodeType';
 
   @override
   CountDownController get controller => Get.put(
-    CountDownController(),
-    tag: type,
-    permanent: true,
-  );
+        CountDownController(),
+        tag: tag,
+        permanent: true,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +49,15 @@ class CountDownView extends GetView<CountDownController> {
       }
       return GestureDetector(
         onTap: () {
-          if (email.isEmpty) {
-            ToastUtils.showToast('邮箱不能为空');
+          if (account.isEmpty) {
+            ToastUtils.showToast('$codeTypeDesc不能为空');
             return;
           }
-          if (!GetUtils.isEmail(email)) {
-            ToastUtils.showToast('请输入正确邮箱地址');
-            return;
-          }
-          controller.startCountdown(type, email);
+          // if (!GetUtils.isEmail(account)) {
+          //   ToastUtils.showToast('请输入正确$codeTypeDesc');
+          //   return;
+          // }
+          controller.startCountdown(verifyType, verifyCodeType, account);
         },
         child: Text(
           '获取验证码',

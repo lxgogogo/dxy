@@ -145,7 +145,7 @@ class _LoginContentState extends State<LoginContent> {
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
               children: [
@@ -197,7 +197,7 @@ class _LoginContentState extends State<LoginContent> {
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             decoration: BoxDecoration(
               color: '#f5f5f5'.hexColor,
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
               children: <Widget>[

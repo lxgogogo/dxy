@@ -13,6 +13,7 @@ import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
+import '../constants.dart';
 import '../utils/event_bus_util.dart';
 import '../utils/toast_utils.dart';
 import 'close_image_button.dart';
@@ -24,8 +25,7 @@ class DialogDeleteAccount extends StatefulWidget {
   State<DialogDeleteAccount> createState() => _DialogDeleteAccountState();
 }
 
-class _DialogDeleteAccountState extends State<DialogDeleteAccount>
-    with SingleTickerProviderStateMixin {
+class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
   final TextEditingController _controllerEmail = TextEditingController();
@@ -43,8 +43,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
     final code = _controllerCode.text;
     isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
 
-    _isDisable =
-        account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
+    _isDisable = account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
 
@@ -54,10 +53,13 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
     final code = _controllerCode.text;
     final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
 
-    _isDisable =
-        account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
+    _isDisable = account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
+
+  String get verifyType => Constants.verifyTypeEmail;
+
+  String get verifyCodeType => Constants.verifyCodeTypeDeleteAccount;
 
   @override
   void initState() {
@@ -165,31 +167,26 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                 ),
                                 maxLines: 1,
                                 decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 12.w),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
                                   hintText: '请输入邮箱',
                                   hintStyle: TextStyle(
                                     color: '#3333334D'.hexColor,
                                     fontSize: 12.sp,
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
+                                    borderSide: const BorderSide(color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
+                                    borderSide: const BorderSide(color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                   disabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
+                                    borderSide: const BorderSide(color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        color: Colors.transparent),
+                                    borderSide: const BorderSide(color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(8.w),
                                   ),
                                 ),
@@ -215,9 +212,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                 isShowAccountTips ? '*请输入正确邮箱地址' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowAccountTips
-                                      ? Colors.red
-                                      : '#95A3C4'.hexColor,
+                                  color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -264,41 +259,31 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                     maxLines: 1,
                                     keyboardType: TextInputType.number,
                                     inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp('[0-9]')),
+                                      FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                                       LengthLimitingTextInputFormatter(6),
                                     ],
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 12.w),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
                                       hintText: '请输入验证码',
                                       hintStyle: TextStyle(
                                         color: '#3333334D'.hexColor,
                                         fontSize: 12.sp,
                                       ),
                                       border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
+                                        borderSide: const BorderSide(color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
+                                        borderSide: const BorderSide(color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       disabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
+                                        borderSide: const BorderSide(color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.transparent),
-                                        borderRadius:
-                                            BorderRadius.circular(10.w),
+                                        borderSide: const BorderSide(color: Colors.transparent),
+                                        borderRadius: BorderRadius.circular(10.w),
                                       ),
                                     ),
                                     onChanged: (_) {
@@ -308,9 +293,10 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                   Positioned(
                                     right: 12.w,
                                     child: CountDownView(
-                                      type: NetRequest
-                                          .SEND_CODE_DELETE_ACCOUNT,
-                                      email: _controllerEmail.text,
+                                      account: _controllerEmail.text,
+                                      verifyType: Constants.verifyTypeEmail,
+                                      verifyCodeType: Constants.verifyCodeTypeDeleteAccount,
+                                      codeTypeDesc: '邮箱',
                                     ),
                                   ),
                                 ],
@@ -330,9 +316,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
                                 isShowCodeTips ? '请输入6位数字验证码' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: isShowCodeTips
-                                      ? Colors.red
-                                      : '#95A3C4'.hexColor,
+                                  color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -419,8 +403,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount>
       EventBusUtil.of.fire(EventResetMainTab());
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
-      Get.delete<CountDownController>(
-          tag: NetRequest.SEND_CODE_DELETE_ACCOUNT, force: true);
+      Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
     });
   }
 }

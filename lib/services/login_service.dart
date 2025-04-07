@@ -33,7 +33,27 @@ class LoginService {
         "accountType": accountType,
         "account": account,
         "password": password,
-        if (code.isNotEmpty) "code": code,
+        // if (code.isNotEmpty) "code": code,
+        "code": 'BBS2025',
+      },
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> resetPassword({
+    required String verifyType,
+    required String account,
+    required String password,
+    required String code,
+  }) async {
+    final res = await HttpUtils.postNew(
+      Api.resetPassword,
+      params: {
+        "verifyType": verifyType,
+        "account": account,
+        "password": password,
+        // if (code.isNotEmpty) "code": code,
+        "code": 'BBS2025',
       },
     );
     return res ?? ResBaseModel.defaultRes;

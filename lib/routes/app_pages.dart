@@ -15,6 +15,15 @@ import 'package:holdem/page/feed_post/feed_post_screen.dart';
 import 'package:holdem/page/following/following_screen.dart';
 import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
+import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/mine/collect/creat_collect_group_view.dart';
+import 'package:holdem/page/mine/collect/finish_creat_collect_group_view.dart';
+import 'package:holdem/page/personal/personal_screen.dart';
+import 'package:holdem/page/search_tag/search_tag_screen.dart';
+import 'package:holdem/page/terms_privacy/terms_privacy_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
+import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
@@ -141,7 +150,8 @@ class AppPages {
     ),
     GetPage(
       name: Routes.feedPost,
-      page: () => FeedPostScreen(boardInfoList: Get.arguments as List<BoardInfo>),
+      page: () =>
+          FeedPostScreen(boardInfoList: Get.arguments as List<BoardInfo>),
     ),
     GetPage(
       name: Routes.personal,
@@ -174,6 +184,14 @@ class AppPages {
     GetPage(
       name: Routes.scanResult,
       page: () => const ScanResultScreen(),
+    ),
+    GetPage(
+      name: Routes.createCollect,
+      page: () => const CreatCollectGroupPage(),
+    ),
+    GetPage(
+      name: Routes.finishCreateCollect,
+      page: () => const FinishCreatCollectGroupPage(),
     ),
   ];
 }

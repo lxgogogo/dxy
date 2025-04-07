@@ -36,5 +36,7 @@ abstract class Routes {
   static const boolList = '/bookList';
   static const scan = '/scan';
   static const scanResult = '/scanResult';
+  static const createCollect = '/createCollect';
+  static const finishCreateCollect = '/finishCreateCollect';
 
 }

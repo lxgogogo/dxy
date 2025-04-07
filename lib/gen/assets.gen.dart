@@ -220,6 +220,22 @@ class $AssetsImagesGen {
   AssetGenImage get iconAppleCircle =>
       const AssetGenImage('assets/images/icon_apple_circle.png');
 
+  /// File path: assets/images/icon_collect_add.png
+  AssetGenImage get iconCollectAdd =>
+      const AssetGenImage('assets/images/icon_collect_add.png');
+
+  /// File path: assets/images/icon_collect_more.png
+  AssetGenImage get iconCollectMore =>
+      const AssetGenImage('assets/images/icon_collect_more.png');
+
+  /// File path: assets/images/icon_collect_normal.png
+  AssetGenImage get iconCollectNormal =>
+      const AssetGenImage('assets/images/icon_collect_normal.png');
+
+  /// File path: assets/images/icon_collect_select.png
+  AssetGenImage get iconCollectSelect =>
+      const AssetGenImage('assets/images/icon_collect_select.png');
+
   /// File path: assets/images/icon_google.png
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
@@ -606,6 +622,10 @@ class $AssetsImagesGen {
         icTwitter,
         iconApple,
         iconAppleCircle,
+        iconCollectAdd,
+        iconCollectMore,
+        iconCollectNormal,
+        iconCollectSelect,
         iconGoogle,
         iconGoogleCircle,
         iconHomeBook,
@@ -902,7 +922,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
@@ -943,7 +963,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

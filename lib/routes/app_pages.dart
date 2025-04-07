@@ -17,6 +17,7 @@ import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
+import 'package:holdem/page/mine/collect/collect_list_view.dart';
 import 'package:holdem/page/mine/collect/creat_collect_group_view.dart';
 import 'package:holdem/page/mine/collect/finish_creat_collect_group_view.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
@@ -192,6 +193,10 @@ class AppPages {
     GetPage(
       name: Routes.finishCreateCollect,
       page: () => const FinishCreatCollectGroupPage(),
+    ),
+    GetPage(
+      name: Routes.collectList,
+      page: () => const CollectListPage(),
     ),
   ];
 }

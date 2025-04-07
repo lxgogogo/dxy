@@ -38,5 +38,6 @@ abstract class Routes {
   static const scanResult = '/scanResult';
   static const createCollect = '/createCollect';
   static const finishCreateCollect = '/finishCreateCollect';
+  static const collectList = '/collectList';
 
 }

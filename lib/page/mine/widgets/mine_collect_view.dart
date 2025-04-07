@@ -238,74 +238,79 @@ class _MineCollectViewState extends State<MineCollectView> {
   }
 
   Widget _buildGroupItemWidget(int index) {
-    return Container(
-        margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 7.w, top: 5.w),
-        padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 12.w),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8.w)),
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(0, 0),
-                  color: '#0050FF'.hexColor.withOpacity(0.1),
-                  blurRadius: 8,
-                  spreadRadius: 0),
-            ],
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  '#FFFFFF'.hexColor,
-                  '#FFFFFF'.hexColor.withOpacity(0.5)
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(Routes.collectList);
+      },
+      child: Container(
+          margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 7.w, top: 5.w),
+          padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 12.w),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8.w)),
+              boxShadow: [
+                BoxShadow(
+                    offset: const Offset(0, 0),
+                    color: '#0050FF'.hexColor.withOpacity(0.1),
+                    blurRadius: 8,
+                    spreadRadius: 0),
+              ],
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    '#FFFFFF'.hexColor,
+                    '#FFFFFF'.hexColor.withOpacity(0.5)
+                  ],
+                  stops: const [
+                    0,
+                    1
+                  ])),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '王者归来的视频',
+                    style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w600),
+                  ),
+                  GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        color: Colors.transparent,
+                        padding: EdgeInsets.all(5.w),
+                        child: Image.asset(
+                          Assets.images.iconCollectMore.path,
+                          width: 16.w,
+                          height: 16.w,
+                          fit: BoxFit.cover,
+                        ),
+                      ))
                 ],
-                stops: const [
-                  0,
-                  1
-                ])),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '王者归来的视频',
-                  style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w600),
-                ),
-                GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      color: Colors.transparent,
-                      padding: EdgeInsets.all(5.w),
-                      child: Image.asset(
-                        Assets.images.iconCollectMore.path,
-                        width: 16.w,
-                        height: 16.w,
-                        fit: BoxFit.cover,
-                      ),
-                    ))
-              ],
-            ),
-            SizedBox(height: 5.w),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '26条内容',
-                  style: TextStyle(
-                      fontSize: 12.w,
-                      fontWeight: FontWeight.w600,
-                      color: '#333333'.hexColor),
-                ),
-                Text(
-                  '2024.11.25创建',
-                  style: TextStyle(
-                      fontSize: 12.w,
-                      fontWeight: FontWeight.w600,
-                      color: '#333333'.hexColor),
-                ),
-              ],
-            )
-          ],
-        ));
+              ),
+              SizedBox(height: 5.w),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '26条内容',
+                    style: TextStyle(
+                        fontSize: 12.w,
+                        fontWeight: FontWeight.w600,
+                        color: '#333333'.hexColor),
+                  ),
+                  Text(
+                    '2024.11.25创建',
+                    style: TextStyle(
+                        fontSize: 12.w,
+                        fontWeight: FontWeight.w600,
+                        color: '#333333'.hexColor),
+                  ),
+                ],
+              )
+            ],
+          ))
+    );
   }
 }

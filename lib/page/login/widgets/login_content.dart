@@ -33,6 +33,8 @@ class _LoginContentState extends State<LoginContent> {
 
   bool get isPhone => type == LoginType.phone;
 
+  bool get isUsername => type == LoginType.username;
+
   final TextEditingController _controllerAccount = TextEditingController();
   bool isShowAccountTips = false;
 
@@ -253,15 +255,16 @@ class _LoginContentState extends State<LoginContent> {
                   reviewPrivacy: reviewPrivacy,
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.forgetPassword);
-                },
-                child: Text(
-                  '忘记密码?',
-                  style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+              if (!isUsername)
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.forgetPassword);
+                  },
+                  child: Text(
+                    '忘记密码?',
+                    style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+                  ),
                 ),
-              ),
             ],
           ),
           SizedBox(height: 24.w),

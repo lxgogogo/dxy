@@ -24,9 +24,14 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  List<LoginType> loginTypes = [
+    LoginType.email,
+    LoginType.phone,
+  ];
+
   int typeIndex = 0;
 
-  LoginType get type => LoginType.values[typeIndex];
+  LoginType get type => loginTypes[typeIndex];
 
   bool get isPhone => type == LoginType.phone;
 
@@ -230,7 +235,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   children: [
                     SizedBox(height: 24.w),
                     TypeSelector(
-                      typeList: LoginType.values.map((e) => e.typeName).toList(),
+                      typeList: loginTypes.map((e) => e.typeName).toList(),
                       typeIndex: typeIndex,
                       onTypeSelected: (index) {
                         typeIndex = index;

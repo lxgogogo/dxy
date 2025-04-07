@@ -8,7 +8,6 @@ import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/login/widgets/user_terms.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/button.dart';
 
@@ -34,6 +33,8 @@ class _RegisterContentState extends State<RegisterContent> {
   LoginType get type => LoginType.values[typeIndex];
 
   bool get isPhone => type == LoginType.phone;
+
+  bool get isUsername => type == LoginType.username;
 
   bool _isVisible = false;
   bool _isVisibleAgain = false;
@@ -135,10 +136,10 @@ class _RegisterContentState extends State<RegisterContent> {
   }
 
   String get verifyType => switch (type) {
-    LoginType.email => Constants.verifyTypeEmail,
-    LoginType.phone => Constants.verifyTypePhone,
-    _ => '',
-  };
+        LoginType.email => Constants.verifyTypeEmail,
+        LoginType.phone => Constants.verifyTypePhone,
+        _ => '',
+      };
 
   String get verifyCodeType => Constants.verifyCodeTypeRegister;
 
@@ -418,15 +419,16 @@ class _RegisterContentState extends State<RegisterContent> {
                   reviewPrivacy: reviewPrivacy,
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.forgetPassword);
-                },
-                child: Text(
-                  '忘记密码?',
-                  style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+              if (!isUsername)
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.forgetPassword);
+                  },
+                  child: Text(
+                    '忘记密码?',
+                    style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+                  ),
                 ),
-              ),
             ],
           ),
           SizedBox(height: 24.w),

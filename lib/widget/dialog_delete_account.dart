@@ -296,7 +296,6 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                                       account: _controllerEmail.text,
                                       verifyType: Constants.verifyTypeEmail,
                                       verifyCodeType: Constants.verifyCodeTypeDeleteAccount,
-                                      codeTypeDesc: '邮箱',
                                     ),
                                   ),
                                 ],

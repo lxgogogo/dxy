@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/services/index.dart';
 
+import '../../constants.dart';
 import '../../utils/toast_utils.dart';
 
 part 'count_down_controller.dart';
@@ -14,14 +15,12 @@ part 'count_down_controller.dart';
 class CountDownView extends GetView<CountDownController> {
   final String verifyType;
   final String verifyCodeType;
-  final String codeTypeDesc;
   final String account;
 
   const CountDownView({
     super.key,
     required this.verifyType,
     required this.verifyCodeType,
-    required this.codeTypeDesc,
     required this.account,
   });
 
@@ -49,14 +48,19 @@ class CountDownView extends GetView<CountDownController> {
       }
       return GestureDetector(
         onTap: () {
-          if (account.isEmpty) {
-            ToastUtils.showToast('$codeTypeDesc不能为空');
+          String desc = '';
+          bool valid = false;
+          if (verifyType == Constants.verifyTypeEmail) {
+            desc = '邮箱';
+            valid = GetUtils.isEmail(account);
+          } else if (verifyType == Constants.verifyTypePhone) {
+            desc = '手机号';
+            valid = Constants.accountRegExp.hasMatch(account);
+          }
+          if (!valid) {
+            ToastUtils.showToast('请输入正确的$desc');
             return;
           }
-          // if (!GetUtils.isEmail(account)) {
-          //   ToastUtils.showToast('请输入正确$codeTypeDesc');
-          //   return;
-          // }
           controller.startCountdown(verifyType, verifyCodeType, account);
         },
         child: Text(

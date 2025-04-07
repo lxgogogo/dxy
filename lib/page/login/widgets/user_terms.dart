@@ -35,7 +35,7 @@ class UserTerms extends StatelessWidget {
                 width: 16.w,
                 height: 16.w,
                 decoration: BoxDecoration(
-                  color: didAgreeTerms ? '#249cfc'.hexColor : null,
+                  color: didAgreeTerms ? '#557BF6'.hexColor : null,
                   border: didAgreeTerms
                       ? null
                       : Border.all(
@@ -62,7 +62,7 @@ class UserTerms extends StatelessWidget {
                 TextSpan(
                   text: '我同意德学院',
                   style: TextStyle(
-                    color: '#3b5078'.hexColor,
+                    color: '#333333'.hexColor,
                     fontSize: 12.sp,
                   ),
                 ),
@@ -70,14 +70,14 @@ class UserTerms extends StatelessWidget {
                   text: ' 用户协议 ',
                   recognizer: TapGestureRecognizer()..onTap = reviewTerms,
                   style: TextStyle(
-                    color: '#249cfc'.hexColor,
+                    color: '#557BF6'.hexColor,
                     fontSize: 12.sp,
                   ),
                 ),
                 TextSpan(
                   text: '和',
                   style: TextStyle(
-                    color: '#3b5078'.hexColor,
+                    color: '#333333'.hexColor,
                     fontSize: 12.sp,
                   ),
                 ),
@@ -85,7 +85,7 @@ class UserTerms extends StatelessWidget {
                   text: ' 隐私政策 ',
                   recognizer: TapGestureRecognizer()..onTap = reviewPrivacy,
                   style: TextStyle(
-                    color: '#249cfc'.hexColor,
+                    color: '#557BF6'.hexColor,
                     fontSize: 12.sp,
                   ),
                 ),

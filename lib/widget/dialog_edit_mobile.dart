@@ -294,7 +294,6 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
                                       account: _controllerMobile.text,
                                       verifyType: verifyType,
                                       verifyCodeType: verifyCodeType,
-                                      codeTypeDesc: '手机号',
                                     ),
                                   ),
                                 ],

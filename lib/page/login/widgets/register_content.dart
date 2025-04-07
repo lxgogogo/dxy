@@ -280,11 +280,6 @@ class _RegisterContentState extends State<RegisterContent> {
                   CountDownView(
                     verifyType: verifyType,
                     verifyCodeType: verifyCodeType,
-                    codeTypeDesc: switch (type) {
-                      LoginType.email => '邮箱',
-                      LoginType.phone => '手机号',
-                      _ => '',
-                    },
                     account: _controllerAccount.text,
                   ),
                 ],

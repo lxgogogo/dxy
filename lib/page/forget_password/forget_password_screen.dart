@@ -322,11 +322,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             CountDownView(
                               verifyType: verifyType,
                               verifyCodeType: verifyCodeType,
-                              codeTypeDesc: switch (type) {
-                                LoginType.email => '邮箱',
-                                LoginType.phone => '手机号',
-                                _ => '',
-                              },
                               account: _controllerAccount.text,
                             ),
                           ],

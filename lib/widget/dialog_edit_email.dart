@@ -286,7 +286,6 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                       account: _controllerEmail.text,
                                       verifyType: verifyType,
                                       verifyCodeType: verifyCodeType,
-                                      codeTypeDesc: '邮箱',
                                     ),
                                   ),
                                 ],

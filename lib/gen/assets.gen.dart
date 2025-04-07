@@ -228,6 +228,14 @@ class $AssetsImagesGen {
   AssetGenImage get iconCollectMore =>
       const AssetGenImage('assets/images/icon_collect_more.png');
 
+  /// File path: assets/images/icon_collect_normal.png
+  AssetGenImage get iconCollectNormal =>
+      const AssetGenImage('assets/images/icon_collect_normal.png');
+
+  /// File path: assets/images/icon_collect_select.png
+  AssetGenImage get iconCollectSelect =>
+      const AssetGenImage('assets/images/icon_collect_select.png');
+
   /// File path: assets/images/icon_google.png
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
@@ -616,6 +624,8 @@ class $AssetsImagesGen {
         iconAppleCircle,
         iconCollectAdd,
         iconCollectMore,
+        iconCollectNormal,
+        iconCollectSelect,
         iconGoogle,
         iconGoogleCircle,
         iconHomeBook,

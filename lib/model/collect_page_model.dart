@@ -36,6 +36,7 @@ class CollectModel {
   String? relType;
   BoardBean? thread;
   ArticleBean? content;
+  bool? select;
 
   CollectModel({
     this.id,
@@ -43,6 +44,7 @@ class CollectModel {
     this.relType,
     this.thread,
     this.content,
+    this.select
   });
 
   CollectModel.fromJson(Map<String, dynamic> json) {

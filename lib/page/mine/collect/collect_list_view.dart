@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -43,19 +44,27 @@ class _CollectListPageState extends State<CollectListPage> {
           ),
         )
       ]),
-      body: Obx(() => SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: true,
-          controller: controller.refreshController,
-          onRefresh: controller.onRefresh,
-          onLoading: controller.onLoading,
-          child: controller.loaded.value && controller.collectList.isEmpty
-              ? const Center(child: NoDataView())
-              : ListView.builder(
-              itemBuilder: (c, i) {
-                return _buildItemWidget(i);
-              },
-              itemCount: controller.collectList.length)))
+      body: Obx(() => Column(
+        children: [
+          Expanded(child: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              controller: controller.refreshController,
+              onRefresh: controller.onRefresh,
+              onLoading: controller.onLoading,
+              child: controller.loaded.value && controller.collectList.isEmpty
+                  ? const Center(child: NoDataView())
+                  : ListView.builder(
+                  itemBuilder: (c, i) {
+                    return _buildItemWidget(i);
+                  },
+                  itemCount: controller.collectList.length))),
+          if (controller.isDeleting.value)
+            _buildSelectAllWidget()
+          else
+            const SizedBox()
+        ],
+      ))
     );
   }
 
@@ -93,6 +102,67 @@ class _CollectListPageState extends State<CollectListPage> {
         ],
         Expanded(child: MyCollectItem(item: model))
       ],
+    );
+  }
+
+  Widget _buildSelectAllWidget() {
+    return Container(
+      height: 80.w,
+      padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 12.w),
+      color: '#ffffff'.hexColor.withOpacity(0.9),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: controller.selectAllOnTap,
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(5.w),
+                  color: Colors.transparent,
+                  child: Image.asset(
+                    controller.isSelectAll.value
+                        ? Assets.images.iconCollectSelect.path
+                        : Assets.images.iconCollectNormal.path,
+                    width: 16.w,
+                    height: 16.w,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(width: 5.w),
+                Text(
+                  '移出',
+                  style: TextStyle(
+                      fontSize: 12.w,
+                      color: '#333333'.hexColor.withOpacity(0.1),
+                      fontWeight: FontWeight.w600
+                  ),
+                )
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: 60.w,
+              height: 32.w,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: '#FF3333'.hexColor.withOpacity(0.1),
+                borderRadius: BorderRadius.all(Radius.circular(4.w))
+              ),
+              child: Text(
+                '移出',
+                style: TextStyle(
+                  fontSize: 12.w,
+                  color: '#FF3333'.hexColor,
+                  fontWeight: FontWeight.w600
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

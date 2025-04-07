@@ -23,15 +23,15 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CommonAppBar.arrowBack(context, title: '新建收藏分类', actions: [
-          Obx(() => CommonDoneButton(
-              title: '下一步',
-              margin: EdgeInsets.only(right: 12.w),
-              disable: controller.enable.value,
-              signUpOnTap: () {
-                Get.toNamed(Routes.finishCreateCollect);
-              }))
-        ]),
+        appBar: CommonAppBar.arrowBack(context,
+            title: controller.isCreate ? '新建收藏分类' : '修改收藏分类',
+            actions: [
+              Obx(() => CommonDoneButton(
+                  title: controller.isCreate ? '下一步' : '完成',
+                  margin: EdgeInsets.only(right: 12.w),
+                  disable: controller.enable.value,
+                  signUpOnTap: controller.signUpOnTap))
+            ]),
         body: Container(
           margin: EdgeInsets.only(top: 20.w, left: 12.w, right: 12.w),
           child: Column(

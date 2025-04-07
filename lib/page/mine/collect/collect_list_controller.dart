@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/collect_page_model.dart';
 import '../../../utils/net_request.dart';
+import '../../../widget/dialog_common.dart';
 
 class CollectListController extends GetxController {
 
@@ -17,6 +20,7 @@ class CollectListController extends GetxController {
   RxBool enable = false.obs;
   // 是否删除中
   RxBool isDeleting = false.obs;
+  RxBool isSelectAll = false.obs;
 
   @override
   void onReady() {
@@ -97,9 +101,35 @@ class CollectListController extends GetxController {
   }
 
   void selectAlertOnTap(int index) {
-    if (index == 3) {
+    if (index == 0) {
+      Get.toNamed(Routes.finishCreateCollect);
+    } else if (index == 1) {
       isDeleting.value = true;
       collectList.refresh();
+    } else if (index == 2) {
+      Get.toNamed(Routes.createCollect, arguments: {'create': false});
+    } else {
+      showDialog(
+        barrierDismissible: false,
+        context: Get.context!,
+        builder: (context) => CommonDialog(
+          title: '删除分类',
+          content: '确定要删除这个分类吗？',
+          confirmText: '确定',
+          onConfirm: () {
+            Get.close(1);
+          },
+          cancelText: '取消',
+        )
+      );
     }
+  }
+
+  void selectAllOnTap() {
+    isSelectAll.value = !isSelectAll.value;
+    for (final model in collectList) {
+      model.select = isSelectAll.value;
+    }
+    collectList.refresh();
   }
 }

@@ -190,9 +190,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           CloseImageButton(
                             width: 16.w,
                             height: 16.w,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
+                            padding: EdgeInsets.all(16.w),
+                            onTap: Get.back,
                           ),
                         ],
                       ),

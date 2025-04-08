@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/gen/assets.gen.dart';
 
 class CloseImageButton extends StatelessWidget {
-  final VoidCallback? onPressed;
+  final VoidCallback? onTap;
   final double? width;
   final double? height;
   final Color? color;
-  const CloseImageButton({super.key, this.onPressed,this.width,this.height,this.color});
+  final EdgeInsetsGeometry? padding;
+
+  const CloseImageButton({
+    super.key,
+    this.onTap,
+    this.width = 12,
+    this.height = 12,
+    this.color,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onPressed,padding: EdgeInsets.zero,
-
-      icon: SvgPicture.asset('assets/svg/icon_close.svg',width:width?? 28.px,height: height??30.px,color: color??Colors.black,),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.translucent,
+      child: Padding(
+        padding: padding ?? const EdgeInsets.all(12),
+        child: SvgPicture.asset(
+          Assets.svg.iconClose,
+          width: width,
+          height: height,
+          color: color,
+        ),
+      ),
     );
   }
 }

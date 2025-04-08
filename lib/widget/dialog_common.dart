@@ -62,10 +62,8 @@ class CommonDialog extends StatelessWidget {
                       right: 0,
                       top: 0,
                       child: CloseImageButton(
-                        width: 12.w,
-                        height: 12.w,
                         color: '#333333'.hexColor.withOpacity(0.5),
-                        onPressed: () {
+                        onTap: () {
                           Navigator.of(context).pop();
                         },
                       ),

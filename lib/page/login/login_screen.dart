@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,6 +20,7 @@ import '../../stores/storage.dart';
 import '../../stores/user_store.dart';
 import '../../utils/event_bus_util.dart';
 import '../../utils/toast_utils.dart';
+import '../../widget/button.dart';
 import 'widgets/login_content.dart';
 
 part 'login_controller.dart';
@@ -43,6 +45,8 @@ enum LoginType {
   );
 }
 
+typedef CustomButtonBuilder = Widget Function({VoidCallback? onPressed, bool? disable});
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -51,18 +55,35 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final ValueNotifier<bool> _showButtonNotifier = ValueNotifier(true);
+  bool _isKeyboardVisible = false;
+
   bool isLogin = true;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            Column(
+    return KeyboardVisibilityBuilder(
+      builder: (context, bool isKeyboardVisible) {
+        if (isKeyboardVisible != _isKeyboardVisible) {
+          _isKeyboardVisible = isKeyboardVisible;
+          if (isKeyboardVisible) {
+            if (_showButtonNotifier.value) {
+              _showButtonNotifier.value = false;
+            }
+          } else {
+            Future.delayed(const Duration(milliseconds: 300), () {
+              if (!_isKeyboardVisible && !_showButtonNotifier.value) {
+                _showButtonNotifier.value = true;
+              }
+            });
+          }
+        }
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            extendBodyBehindAppBar: true,
+            body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Stack(
@@ -84,9 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               CloseImageButton(
                                 width: 16.w,
                                 height: 16.w,
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                                padding: EdgeInsets.all(16.w),
+                                onTap: Get.back,
                               ),
                             ],
                           ),
@@ -165,73 +185,116 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Expanded(
-                  child: isLogin
-                      ? SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              LoginContent(
-                                goRegister: () {
-                                  isLogin = false;
-                                  setState(() {});
-                                },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: isLogin
+                            ? LoginContent(
+                                buttonBuilder: _buildButton,
+                              )
+                            : RegisterContent(
+                                buttonBuilder: _buildButton,
                               ),
-                              _buildThirdLogin(),
-                              SizedBox(height: 36.w),
-                            ],
-                          ),
-                        )
-                      : SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              RegisterContent(
-                                goLogin: () {
-                                  isLogin = true;
-                                  setState(() {});
-                                },
-                              ),
-                              _buildThirdLogin(),
-                              SizedBox(height: 36.w),
-                            ],
-                          ),
-                        ),
+                      ),
+                      _buildThirdLogin(),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Row _buildThirdLogin() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: signInWithGoogle,
-          child: Assets.images.iconGoogleCircle.image(
-            width: 36.w,
-            height: 36.w,
-          ),
-        ),
-        if (Platform.isIOS) ...[
-          SizedBox(width: 36.w),
-          GestureDetector(
-            onTap: signInWithApple,
-            child: Assets.images.iconAppleCircle.image(
-              width: 36.w,
-              height: 36.w,
+  Widget _buildButton({VoidCallback? onPressed, bool? disable}) {
+    return ValueListenableBuilder(
+      valueListenable: _showButtonNotifier,
+      builder: (context, showButton, _) {
+        if (showButton) {
+          return Column(
+            children: [
+              CustomButton(
+                onPressed: onPressed,
+                disable: disable ?? false,
+                showOpacityAnimation: true,
+                textColor: Colors.white,
+                height: 42.w,
+                title: isLogin ? '登录' : '注册',
+              ),
+              SizedBox(height: 20.w),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    isLogin = !isLogin;
+                    setState(() {});
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '没有账号？',
+                        style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                      ),
+                      Text(
+                        isLogin ? '去注册' : '去登录',
+                        style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 24.w),
+            ],
+          );
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget _buildThirdLogin() {
+    return ValueListenableBuilder(
+      valueListenable: _showButtonNotifier,
+      builder: (context, showButton, _) {
+        if (showButton) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 36.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: signInWithGoogle,
+                  child: Assets.images.iconGoogleCircle.image(
+                    width: 36.w,
+                    height: 36.w,
+                  ),
+                ),
+                if (Platform.isIOS) ...[
+                  SizedBox(width: 36.w),
+                  GestureDetector(
+                    onTap: signInWithApple,
+                    child: Assets.images.iconAppleCircle.image(
+                      width: 36.w,
+                      height: 36.w,
+                    ),
+                  ),
+                ],
+                SizedBox(width: 36.w),
+                GestureDetector(
+                  child: Assets.images.iconTelegramCircle.image(
+                    width: 36.w,
+                    height: 36.w,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-        SizedBox(width: 36.w),
-        GestureDetector(
-          child: Assets.images.iconTelegramCircle.image(
-            width: 36.w,
-            height: 36.w,
-          ),
-        ),
-      ],
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 

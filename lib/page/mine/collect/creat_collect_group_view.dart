@@ -6,6 +6,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/widget/common_done_button.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../utils/color_style_util.dart';
 import '../../../widget/common_app_bar.dart';
 import 'creat_collect_group_controller.dart';
 
@@ -23,15 +24,15 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CommonAppBar.arrowBack(context, title: '新建收藏分类', actions: [
-          Obx(() => CommonDoneButton(
-              title: '下一步',
-              margin: EdgeInsets.only(right: 12.w),
-              disable: controller.enable.value,
-              signUpOnTap: () {
-                Get.toNamed(Routes.finishCreateCollect);
-              }))
-        ]),
+        appBar: CommonAppBar.arrowBack(context,
+            title: controller.isCreate ? '新建收藏分类' : '修改收藏分类',
+            actions: [
+              Obx(() => CommonDoneButton(
+                  title: controller.isCreate ? '下一步' : '完成',
+                  margin: EdgeInsets.only(right: 12.w),
+                  disable: controller.enable.value,
+                  signUpOnTap: controller.signUpOnTap))
+            ]),
         body: Container(
           margin: EdgeInsets.only(top: 20.w, left: 12.w, right: 12.w),
           child: Column(
@@ -51,7 +52,7 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
                       LengthLimitingTextInputFormatter(10),
                     ], onChanged: (value) {
                   controller.enable.value =
-                      value.length > 0 && value.length <= 10 ? true : false;
+                      value.isNotEmpty && value.length <= 10 ? true : false;
                 }),
               )
             ],
@@ -106,7 +107,7 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
         counterText: '',
         // 去除输入框底部的字符计数
         hintText: hintText,
-        hintStyle: TextStyle(fontSize: 12.w, color: '#333333'.hexColor),
+        hintStyle: TextStyle(fontSize: 12.w, color: ColorStyle.c333333),
         // prefix: prefix,
         prefixIcon: prefix,
       ),

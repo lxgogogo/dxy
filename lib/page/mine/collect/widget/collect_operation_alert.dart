@@ -5,23 +5,15 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 
 class CollectOperationAlert {
-  static List<CollectOperationModel> dataList = [
-    CollectOperationModel(title: '新增内容', select: false, index: 0),
-    CollectOperationModel(title: '选择内容', select: false, index: 1),
-    CollectOperationModel(title: '修改名称', select: false, index: 2),
-    CollectOperationModel(title: '删除分类', select: false, index: 3),
-  ];
-
   static show(Function selectOnTap) {
-    Get.dialog(CollectOperationWidget(dataList: dataList, selectOnTap: selectOnTap), barrierColor: Colors.transparent);
+    Get.dialog(CollectOperationWidget(selectOnTap: selectOnTap), barrierColor: Colors.transparent);
   }
 }
 
 class CollectOperationWidget extends StatefulWidget {
 
-  final List<CollectOperationModel> dataList;
   final Function selectOnTap;
-  const CollectOperationWidget({super.key, required this.dataList, required this.selectOnTap});
+  const CollectOperationWidget({super.key, required this.selectOnTap});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,6 +22,12 @@ class CollectOperationWidget extends StatefulWidget {
 }
 
 class _CollectOperationWidgetState extends State<CollectOperationWidget>{
+  final List<CollectOperationModel> _dataList = [
+    CollectOperationModel(title: '新增内容', select: false, index: 0),
+    CollectOperationModel(title: '选择内容', select: false, index: 1),
+    CollectOperationModel(title: '修改名称', select: false, index: 2),
+    CollectOperationModel(title: '删除分类', select: true, index: 3),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +53,7 @@ class _CollectOperationWidgetState extends State<CollectOperationWidget>{
               ),
               child: Wrap(
                 children: [
-                  ...CollectOperationAlert.dataList.map((e) {
+                  ..._dataList.map((e) {
                     return _buildItemWidget(e);
                   })
                 ],
@@ -70,15 +68,6 @@ class _CollectOperationWidgetState extends State<CollectOperationWidget>{
   Widget _buildItemWidget(e) {
     return GestureDetector(
       onTap: () {
-        for (final model in CollectOperationAlert.dataList) {
-          if (e.index != model.index) {
-            model.select = false;
-          }
-        }
-        e.select = !(e.select ?? false);
-        if (mounted) {
-          setState(() {});
-        }
         Get.close(1);
         widget.selectOnTap(e.index ?? 0);
       },

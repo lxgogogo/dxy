@@ -149,7 +149,7 @@ class _MineCollectViewState extends State<MineCollectView> {
               CommonTabWidget(selectOnTap: _selectOnTap),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.createCollect);
+                  Get.toNamed(Routes.createCollect, arguments: {'create': false});
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.w),

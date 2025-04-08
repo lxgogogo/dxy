@@ -5,6 +5,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../utils/color_style_util.dart';
 import '../../../widget/common_app_bar.dart';
 import '../../../widget/no_data.dart';
 import '../widgets/mine_collect_item.dart';
@@ -109,7 +110,7 @@ class _CollectListPageState extends State<CollectListPage> {
     return Container(
       height: 80.w,
       padding: EdgeInsets.only(left: 12.w, right: 12.w, bottom: 12.w),
-      color: '#ffffff'.hexColor.withOpacity(0.9),
+      color: ColorStyle.white.withOpacity(0.9),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -134,7 +135,7 @@ class _CollectListPageState extends State<CollectListPage> {
                   '移出',
                   style: TextStyle(
                       fontSize: 12.w,
-                      color: '#333333'.hexColor.withOpacity(0.1),
+                      color: ColorStyle.c333333.withOpacity(0.1),
                       fontWeight: FontWeight.w600
                   ),
                 )
@@ -148,14 +149,14 @@ class _CollectListPageState extends State<CollectListPage> {
               height: 32.w,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: '#FF3333'.hexColor.withOpacity(0.1),
+                color: ColorStyle.cFF3333.withOpacity(0.1),
                 borderRadius: BorderRadius.all(Radius.circular(4.w))
               ),
               child: Text(
                 '移出',
                 style: TextStyle(
                   fontSize: 12.w,
-                  color: '#FF3333'.hexColor,
+                  color: ColorStyle.cFF3333,
                   fontWeight: FontWeight.w600
                 ),
               ),

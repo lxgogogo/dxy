@@ -9,6 +9,49 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsEquityCenterGen {
+  const $AssetsEquityCenterGen();
+
+  /// File path: assets/equity_center/icon_center_book.png
+  AssetGenImage get iconCenterBook =>
+      const AssetGenImage('assets/equity_center/icon_center_book.png');
+
+  /// File path: assets/equity_center/icon_center_collect.png
+  AssetGenImage get iconCenterCollect =>
+      const AssetGenImage('assets/equity_center/icon_center_collect.png');
+
+  /// File path: assets/equity_center/icon_center_collect_group.png
+  AssetGenImage get iconCenterCollectGroup =>
+      const AssetGenImage('assets/equity_center/icon_center_collect_group.png');
+
+  /// File path: assets/equity_center/icon_center_high_video.png
+  AssetGenImage get iconCenterHighVideo =>
+      const AssetGenImage('assets/equity_center/icon_center_high_video.png');
+
+  /// File path: assets/equity_center/icon_center_level_bg.png
+  AssetGenImage get iconCenterLevelBg =>
+      const AssetGenImage('assets/equity_center/icon_center_level_bg.png');
+
+  /// File path: assets/equity_center/icon_center_roll_bg.png
+  AssetGenImage get iconCenterRollBg =>
+      const AssetGenImage('assets/equity_center/icon_center_roll_bg.png');
+
+  /// File path: assets/equity_center/icon_center_video.png
+  AssetGenImage get iconCenterVideo =>
+      const AssetGenImage('assets/equity_center/icon_center_video.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        iconCenterBook,
+        iconCenterCollect,
+        iconCenterCollectGroup,
+        iconCenterHighVideo,
+        iconCenterLevelBg,
+        iconCenterRollBg,
+        iconCenterVideo
+      ];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -860,6 +903,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/post_office.svg
   String get postOffice => 'assets/svg/post_office.svg';
 
+  /// File path: assets/svg/scan_failed.svg
+  String get scanFailed => 'assets/svg/scan_failed.svg';
+
+  /// File path: assets/svg/scan_success.svg
+  String get scanSuccess => 'assets/svg/scan_success.svg';
+
   /// File path: assets/svg/share.svg
   String get share => 'assets/svg/share.svg';
 
@@ -914,6 +963,8 @@ class $AssetsSvgGen {
         postGood,
         postNewer,
         postOffice,
+        scanFailed,
+        scanSuccess,
         share,
         spades,
         star,
@@ -924,6 +975,7 @@ class $AssetsSvgGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsSoundsGen sounds = $AssetsSoundsGen();

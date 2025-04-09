@@ -80,14 +80,19 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                             ),
                           ),
                           SizedBox(height: 8.w),
-                          Text(
-                            UserStore.of.user?.nickname ?? '',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xff333333),
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.equityCenter);
+                            },
+                            child: Text(
+                              UserStore.of.user?.nickname ?? '',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xff333333),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            )
                           ),
                           SizedBox(height: 4.w),
                           Row(

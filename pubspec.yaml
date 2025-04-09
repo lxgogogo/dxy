@@ -115,6 +115,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/equity_center/
     - assets/svg/
     - assets/lottie/
     - assets/sounds/

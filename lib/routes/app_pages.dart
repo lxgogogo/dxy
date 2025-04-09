@@ -9,6 +9,7 @@ import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/page/comment_list/comment_list_screen.dart';
 import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
 import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
+import 'package:holdem/page/equity_center/equity_center_view.dart';
 import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/feed_post/feed_post_screen.dart';
@@ -197,6 +198,10 @@ class AppPages {
     GetPage(
       name: Routes.collectList,
       page: () => const CollectListPage(),
+    ),
+    GetPage(
+      name: Routes.equityCenter,
+      page: () => const EquityCenterPage(),
     ),
   ];
 }

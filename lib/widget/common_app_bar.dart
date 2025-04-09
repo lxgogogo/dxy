@@ -26,7 +26,7 @@ class CommonAppBar {
           title,
           style: titleStyle??TextStyle(
             fontSize: 14.sp,
-            color: '#333333'.hexColor,
+            color: titleColor ?? '#333333'.hexColor,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -36,6 +36,7 @@ class CommonAppBar {
             'assets/images/back.png',
             width: 22.w,
             height: 22.w,
+            color: arrowColor,
           ),
           onPressed: Get.back,
         ),

@@ -72,4 +72,30 @@ class LoginService {
     );
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> queryLoginCode({
+    required String uuid,
+  }) async {
+    final res = await HttpUtils.postNew(
+      Api.queryLoginCode,
+      params: {
+        "uuid": uuid,
+      },
+      showLoading: true,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> confirmLoginCode({
+    required String uuid,
+  }) async {
+    final res = await HttpUtils.postNew(
+      Api.confirmLoginCode,
+      params: {
+        "uuid": uuid,
+      },
+      showLoading: true,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

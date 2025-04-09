@@ -74,6 +74,8 @@ class Api {
 
   static const String thirdLogin = '/api/passport/thirdLogin';
   static const String updatePhone = '/api/user/updatePhone';
+  static const String queryLoginCode = '/api/scanLogin/queryLoginCode';
+  static const String confirmLoginCode = '/api/scanLogin/confirmLoginCode';
   static const String sendVerifyCode = '/api/passport/sendVerifyCode';
 
 }

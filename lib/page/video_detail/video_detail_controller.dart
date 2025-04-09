@@ -72,6 +72,8 @@ class VideoDetailController extends GetxController {
     videoController?.removeListener(videoListener);
     videoController?.dispose();
     chewieController?.dispose();
+    /// 上传视频已播放时长
+
     super.onClose();
   }
 
@@ -145,8 +147,13 @@ class VideoDetailController extends GetxController {
   void videoListener() {
     if (detailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
-    if (videoController!.value.position.inSeconds > 0 &&
-        videoController!.value.position.inSeconds >= videoController!.value.duration.inSeconds) {
+    final currentDuration = videoController!.value.position.inSeconds;
+    final totalDuration = videoController!.value.duration.inSeconds;
+    // if (currentDuration >= freeTotalDuration) {
+    //   /// 权限不足 弹窗
+    //   return;
+    // }
+    if (currentDuration > 0 && currentDuration >= totalDuration) {
       if (playVideoIndex == detailBean!.videoList!.length - 1) {
         playVideoIndex = 0;
       } else {

@@ -7,12 +7,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/page/scan/widgets/scan_area_rector.dart';
+import 'package:holdem/routes/app_pages.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../services/index.dart';
 import '../../utils/debounce_throttle_util.dart';
+import '../../utils/toast_utils.dart';
 import 'widgets/scan_area_clipper.dart';
 
 part 'scan_controller.dart';
@@ -33,6 +36,7 @@ class ScanScreen extends StatelessWidget {
           children: [
             MobileScanner(
               controller: controller.controller,
+              onDetect: controller.onDetect,
             ),
             ClipPath(
               clipper: ScanAreaClipper(

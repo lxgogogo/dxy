@@ -12,6 +12,7 @@ class UserProfile {
   int? fansCount;
   bool? followed;
   bool? isfans;
+  int? favoriteCategory;
 
   UserProfile({
     this.id,
@@ -23,6 +24,7 @@ class UserProfile {
     this.fansCount,
     this.followed,
     this.isfans,
+    this.favoriteCategory
   });
 
   UserProfile.fromJson(Map<String, dynamic> json) {
@@ -59,6 +61,9 @@ class UserProfile {
     if (json["isFans"] is bool) {
       isfans = json["isFans"];
     }
+    if (json["favoriteCategory"] is int) {
+      favoriteCategory = json["favoriteCategory"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +79,7 @@ class UserProfile {
     _data["fansCount"] = fansCount;
     _data["followed"] = followed;
     _data["isFans"] = isfans;
+    _data["favoriteCategory"] = favoriteCategory;
     return _data;
   }
 

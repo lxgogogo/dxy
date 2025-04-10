@@ -25,7 +25,7 @@ class CreatCollectGroupController extends GetxController {
 
   void signUpOnTap() {
     if (isCreate) {
-      Get.toNamed(Routes.finishCreateCollect);
+      Get.toNamed(Routes.finishCreateCollect, arguments: {'name': textController.text});
     } else {
       Get.back();
     }

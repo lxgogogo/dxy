@@ -32,6 +32,8 @@ class CollectPageModel {
 
 class CollectModel {
   int? id;
+  int? relId;
+  int? status;
   String? createdAt;
   String? relType;
   BoardBean? thread;
@@ -44,12 +46,20 @@ class CollectModel {
     this.relType,
     this.thread,
     this.content,
-    this.select
+    this.select,
+    this.relId,
+    this.status
   });
 
   CollectModel.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
       id = json["id"];
+    }
+    if (json["relId"] is int) {
+      relId = json["relId"];
+    }
+    if (json["status"] is int) {
+      status = json["status"];
     }
     if (json["createdAt"] is String) {
       createdAt = json["createdAt"];
@@ -69,11 +79,12 @@ class CollectModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
+    _data["relId"] = relId;
     _data["createdAt"] = createdAt;
     _data["thread"] = thread;
     _data["content"] = content;
     _data["relType"] = relType;
-
+    _data["status"] = status;
     return _data;
   }
 }

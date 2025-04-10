@@ -60,3 +60,9 @@ class EventRefreshFeedTabs {}
 
 /// event
 class EventLoginSuccess {}
+
+class EventRefreshName{
+  final String name;
+
+  EventRefreshName(this.name);
+}

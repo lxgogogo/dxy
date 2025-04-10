@@ -1,4 +1,5 @@
 
+import '../model/collect_group_model.dart';
 import '../model/res_base_model.dart';
 import '../utils/api.dart';
 import '../utils/http_utils.dart';
@@ -6,9 +7,17 @@ import '../utils/http_utils.dart';
 class CollectService {
 
   // 收藏列表
-  static Future categoryList(data) async {
-    final res = await HttpUtils.postNew(Api.categoryList, params: data);
-    return res ?? ResBaseModel.defaultRes;
+  static Future<List<CollectGroupModel>> categoryList() async {
+    final res = await HttpUtils.postNew(Api.categoryList);
+    List<CollectGroupModel> saveList = [];
+    if (res?.isSuccess ?? false) {
+      final data = res?.data;
+      for (final map in data) {
+        CollectGroupModel model = CollectGroupModel.fromJson(map);
+        saveList.add(model);
+      }
+    }
+    return saveList;
   }
 
   // 保存收藏

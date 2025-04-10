@@ -7,9 +7,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/services/collect_service.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/color_style_util.dart';
+import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../model/collect_group_model.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/event_bus_util.dart';
@@ -39,12 +43,14 @@ class _MineCollectViewState extends State<MineCollectView> {
   int _selectIndex = 0;
 
   List<CollectModel> collectList = [];
+  List<CollectGroupModel> groupCollectList = [];
   final ScrollController _listController = ScrollController();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
   StreamSubscription? eventSub1;
   StreamSubscription? eventSub2;
+  StreamSubscription? eventSub3;
 
   // TODO: Private Method
 
@@ -87,28 +93,59 @@ class _MineCollectViewState extends State<MineCollectView> {
           _listController.jumpTo(0);
         }
       }
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  void _requestGroupData() async {
+    groupCollectList = await CollectService.categoryList();
+    _refreshController.refreshCompleted();
+    if (mounted) {
       setState(() {});
     }
   }
 
   void _onRefresh() async {
-    pageNum = 1;
-    _reqListData(showLoading: false);
+    if (_selectIndex == 0) {
+      pageNum = 1;
+      _reqListData(showLoading: false);
+    } else {
+      _requestGroupData();
+    }
   }
 
   void _onLoading() async {
-    if (noMore) {
-      _refreshController.loadNoData();
-      return;
+    if (_selectIndex == 0) {
+      if (noMore) {
+        _refreshController.loadNoData();
+        return;
+      }
+      pageNum++;
+      _reqListData(showLoading: false);
     }
-    pageNum++;
-    _reqListData(showLoading: false);
   }
 
   void _selectOnTap(int index) {
     _selectIndex = index;
-    if (mounted) {
-      setState(() {});
+    if (_selectIndex == 0) {
+      if (collectList.isEmpty) {
+        pageNum = 1;
+        _reqListData(showLoading: false);
+      } else {
+        if (mounted) {
+          setState(() {});
+        }
+      }
+    } else {
+      if (groupCollectList.isEmpty) {
+        _requestGroupData();
+      } else {
+        if (mounted) {
+          setState(() {});
+        }
+      }
     }
   }
 
@@ -125,6 +162,9 @@ class _MineCollectViewState extends State<MineCollectView> {
     });
     eventSub2 = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
       _onRefresh();
+    });
+    eventSub3 = EventBusUtil.of.on<EventRefreshName>().listen((event) {
+      _requestGroupData();
     });
   }
 
@@ -153,7 +193,10 @@ class _MineCollectViewState extends State<MineCollectView> {
               if (favoriteCategory != 0)
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(Routes.createCollect, arguments: {'create': true});
+                    Get.toNamed(Routes.createCollect,
+                        arguments: {'create': true})?.then((value) {
+                      _requestGroupData();
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.all(5.w),
@@ -235,7 +278,7 @@ class _MineCollectViewState extends State<MineCollectView> {
                               itemBuilder: (c, i) {
                                 return _buildGroupItemWidget(i);
                               },
-                              itemCount: collectList.length)),
+                              itemCount: groupCollectList.length)),
             );
           },
         ))
@@ -244,79 +287,77 @@ class _MineCollectViewState extends State<MineCollectView> {
   }
 
   Widget _buildGroupItemWidget(int index) {
+    final model = groupCollectList[index];
+    String dateStr = '';
+    if (model.createdat != null) {
+      dateStr = DateFormat('yyyy-MM-dd HH:mm:ss').format(model.createdat!);
+    }
     return GestureDetector(
-      onTap: () {
-        Get.toNamed(Routes.collectList);
-      },
-      child: Container(
-          margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 7.w, top: 5.w),
-          padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 12.w),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8.w)),
-              boxShadow: [
-                BoxShadow(
-                    offset: const Offset(0, 0),
-                    color: '#0050FF'.hexColor.withOpacity(0.1),
-                    blurRadius: 8,
-                    spreadRadius: 0),
-              ],
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    '#FFFFFF'.hexColor,
-                    '#FFFFFF'.hexColor.withOpacity(0.5)
+        onTap: () {
+          Get.toNamed(Routes.collectList, arguments: {
+            'name': model.name ?? '',
+            'id': model.id ?? 0
+          });
+        },
+        child: Container(
+            margin:
+                EdgeInsets.only(left: 16.w, right: 16.w, bottom: 7.w, top: 5.w),
+            padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 12.w),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                boxShadow: [
+                  BoxShadow(
+                      offset: const Offset(0, 0),
+                      color: '#0050FF'.hexColor.withOpacity(0.1),
+                      blurRadius: 8,
+                      spreadRadius: 0),
+                ],
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      '#FFFFFF'.hexColor,
+                      '#FFFFFF'.hexColor.withOpacity(0.5)
+                    ],
+                    stops: const [
+                      0,
+                      1
+                    ])),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      model.name ?? '',
+                      style: TextStyle(
+                          fontSize: 14.w, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(width: 26.w)
                   ],
-                  stops: const [
-                    0,
-                    1
-                  ])),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '王者归来的视频',
-                    style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w600),
-                  ),
-                  GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        color: Colors.transparent,
-                        padding: EdgeInsets.all(5.w),
-                        child: Image.asset(
-                          Assets.images.iconCollectMore.path,
-                          width: 16.w,
-                          height: 16.w,
-                          fit: BoxFit.cover,
-                        ),
-                      ))
-                ],
-              ),
-              SizedBox(height: 5.w),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '26条内容',
-                    style: TextStyle(
-                        fontSize: 12.w,
-                        fontWeight: FontWeight.w600,
-                        color: '#333333'.hexColor),
-                  ),
-                  Text(
-                    '2024.11.25创建',
-                    style: TextStyle(
-                        fontSize: 12.w,
-                        fontWeight: FontWeight.w600,
-                        color: '#333333'.hexColor),
-                  ),
-                ],
-              )
-            ],
-          ))
-    );
+                ),
+                SizedBox(height: 5.w),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${model.count ?? 0}条内容',
+                      style: TextStyle(
+                          fontSize: 12.w,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyle.c333333),
+                    ),
+                    Text(
+                      '$dateStr创建',
+                      style: TextStyle(
+                          fontSize: 12.w,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyle.c333333),
+                    ),
+                  ],
+                )
+              ],
+            )));
   }
 }

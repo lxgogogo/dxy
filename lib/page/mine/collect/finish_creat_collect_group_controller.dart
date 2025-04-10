@@ -6,6 +6,7 @@ import 'package:holdem/utils/toast_utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/collect_page_model.dart';
+import '../../../routes/app_pages.dart';
 import '../../../services/collect_service.dart';
 
 class FinishCreatCollectGroupController extends GetxController {
@@ -19,10 +20,16 @@ class FinishCreatCollectGroupController extends GetxController {
   bool noMore = false;
   RxBool loaded = false.obs;
   String name = '';
+  bool create = true;
+  int categoryId = 0;
 
   @override
   void onReady() {
     name = Get.arguments['name'] ?? '';
+    create = Get.arguments['create'] ?? true;
+    if (Get.arguments['id'] != null) {
+      categoryId = Get.arguments['id'] ?? 0;
+    }
     _reqListData();
     super.onReady();
   }
@@ -97,7 +104,7 @@ class FinishCreatCollectGroupController extends GetxController {
         selectIds.add({
           'relId': model.relId,
           'relType': model.relType,
-          'status': model.status ?? 0
+          'status': 1
         });
       }
     }
@@ -106,13 +113,25 @@ class FinishCreatCollectGroupController extends GetxController {
 
   void finishOnTap() async {
     EasyLoading.show(status: '加载中...');
-    final res = await CollectService.saveCategoryCollect({
+    var map = {
       'name': name,
       'favoriteDtoList': selectIds
-    });
+    };
+    if (!create) {
+      map = {
+        'id': categoryId,
+        'favoriteDtoList': selectIds
+      };
+    }
+    final res = await CollectService.saveCategoryCollect(map);
     EasyLoading.dismiss();
     if (res.isSuccess) {
       ToastUtils.showToast('保存成功');
+      if (create) {
+        Get.until((route) => route.settings.name == Routes.main);
+      } else {
+        Get.back();
+      }
     } else {
       ToastUtils.showToast(res.msg);
     }

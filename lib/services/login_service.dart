@@ -17,6 +17,7 @@ class LoginService {
         "account": account,
         "password": password,
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }
@@ -36,6 +37,7 @@ class LoginService {
         // if (code.isNotEmpty) "code": code,
         "code": 'BBS2025',
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }
@@ -55,6 +57,7 @@ class LoginService {
         // if (code.isNotEmpty) "code": code,
         "code": 'BBS2025',
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }

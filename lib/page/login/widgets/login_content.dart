@@ -288,27 +288,20 @@ class _LoginContentState extends State<LoginContent> {
   Future<void> login() async {
     final account = _controllerAccount.text;
     final password = _controllerPw.text;
-    EasyLoading.show(status: 'loading...');
-    try {
-      final res = await LoginService.of.login(
-        account: account,
-        password: password,
-        accountType: type.typeValue,
-      );
-      if (res.isSuccess) {
-        ToastUtils.showToast('登录成功');
-        StorageService.of.putToken(res.data['token']);
-        final userProfile = UserProfile.fromJson(res.data['user']);
-        UserStore.of.putUserInfo(userProfile);
-        EventBusUtil.of.fire(EventLoginSuccess());
-        Get.until((route) => route.settings.name == Routes.main);
-      } else {
-        ToastUtils.showToast(res.msg);
-      }
-    } catch (e) {
-      ToastUtils.showToast('登录失败');
-    } finally {
-      EasyLoading.dismiss();
+    final res = await LoginService.of.login(
+      account: account,
+      password: password,
+      accountType: type.typeValue,
+    );
+    if (res.isSuccess) {
+      ToastUtils.showToast('登录成功');
+      StorageService.of.putToken(res.data['token']);
+      final userProfile = UserProfile.fromJson(res.data['user']);
+      UserStore.of.putUserInfo(userProfile);
+      EventBusUtil.of.fire(EventLoginSuccess());
+      Get.until((route) => route.settings.name == Routes.main);
+    } else {
+      ToastUtils.showToast(res.msg);
     }
   }
 }

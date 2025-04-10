@@ -473,29 +473,22 @@ class _RegisterContentState extends State<RegisterContent> {
       ToastUtils.showToast('两次输入的密码不一致');
       return;
     }
-    EasyLoading.show(status: 'loading...');
-    try {
-      final res = await LoginService.of.register(
-        accountType: type.typeValue,
-        account: account,
-        password: password,
-        code: code,
-      );
-      if (res.isSuccess) {
-        ToastUtils.showToast('注册成功');
-        StorageService.of.putToken(res.data['token']);
-        final userProfile = UserProfile.fromJson(res.data['user']);
-        UserStore.of.putUserInfo(userProfile);
-        EventBusUtil.of.fire(EventLoginSuccess());
-        Get.until((route) => route.settings.name == Routes.main);
-        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
-      } else {
-        ToastUtils.showToast(res.msg);
-      }
-    } catch (e) {
-      ToastUtils.showToast('注册失败');
-    } finally {
-      EasyLoading.dismiss();
+    final res = await LoginService.of.register(
+      accountType: type.typeValue,
+      account: account,
+      password: password,
+      code: code,
+    );
+    if (res.isSuccess) {
+      ToastUtils.showToast('注册成功');
+      StorageService.of.putToken(res.data['token']);
+      final userProfile = UserProfile.fromJson(res.data['user']);
+      UserStore.of.putUserInfo(userProfile);
+      EventBusUtil.of.fire(EventLoginSuccess());
+      Get.until((route) => route.settings.name == Routes.main);
+      Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+    } else {
+      ToastUtils.showToast(res.msg);
     }
   }
 

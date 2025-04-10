@@ -404,25 +404,21 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
     if (_isDisable) return;
     String phone = _controllerMobile.text;
     String code = _controllerCode.text;
-    try {
-      final res = await UserService.of.updatePhone(
-        phone: phone,
-        code: code,
-      );
-      if (res.isSuccess) {
-        ToastUtils.showToast('修改成功');
-        UserStore.of.getUserInfo();
-        Get.back();
-        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
-      } else {
-        if (res.code == 301) {
-          Get.back(result: res.msg);
-          return;
-        }
-        ToastUtils.showToast(res.msg);
+    final res = await UserService.of.updatePhone(
+      phone: phone,
+      code: code,
+    );
+    if (res.isSuccess) {
+      ToastUtils.showToast('修改成功');
+      UserStore.of.getUserInfo();
+      Get.back();
+      Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+    } else {
+      if (res.code == 301) {
+        Get.back(result: res.msg);
+        return;
       }
-    } catch (e) {
-      ToastUtils.showToast('修改失败');
+      ToastUtils.showToast(res.msg);
     }
   }
 }

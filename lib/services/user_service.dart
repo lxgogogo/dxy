@@ -51,4 +51,12 @@ class UserService {
     );
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> deleteAccount() async {
+    final res = await HttpUtils.postNew(
+      Api.deleteAccount,
+      showLoading: true,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

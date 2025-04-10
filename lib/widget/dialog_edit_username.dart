@@ -356,24 +356,20 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
     if (_isDisable) return;
     String username = _controllerUsername.text;
     // String password = _controllerOriginalPw.text;
-    try {
-      final res = await UserService.of.updateUsername(
-        username: username,
-        // password: password,
-      );
-      if (res.isSuccess) {
-        ToastUtils.showToast('修改成功');
-        UserStore.of.getUserInfo();
-        Get.back();
-      } else {
-        if (res.code == 301) {
-          Get.back(result: res.msg);
-          return;
-        }
-        ToastUtils.showToast(res.msg);
+    final res = await UserService.of.updateUsername(
+      username: username,
+      // password: password,
+    );
+    if (res.isSuccess) {
+      ToastUtils.showToast('修改成功');
+      UserStore.of.getUserInfo();
+      Get.back();
+    } else {
+      if (res.code == 301) {
+        Get.back(result: res.msg);
+        return;
       }
-    } catch (e) {
-      ToastUtils.showToast('修改失败');
+      ToastUtils.showToast(res.msg);
     }
   }
 }

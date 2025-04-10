@@ -498,25 +498,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ToastUtils.showToast('两次输入的密码不一致');
       return;
     }
-    EasyLoading.show(status: 'loading...');
-    try {
-      final res = await LoginService.of.resetPassword(
-        verifyType: verifyType,
-        account: account,
-        password: password,
-        code: code,
-      );
-      if (res.isSuccess) {
-        ToastUtils.showToast('重置密码成功');
-        Get.back();
-        Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
-      } else {
-        ToastUtils.showToast(res.msg);
-      }
-    } catch (e) {
-      ToastUtils.showToast('重置密码失败');
-    } finally {
-      EasyLoading.dismiss();
+    final res = await LoginService.of.resetPassword(
+      verifyType: verifyType,
+      account: account,
+      password: password,
+      code: code,
+    );
+    if (res.isSuccess) {
+      ToastUtils.showToast('重置密码成功');
+      Get.back();
+      Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+    } else {
+      ToastUtils.showToast(res.msg);
     }
   }
 }

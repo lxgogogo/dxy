@@ -1,24 +1,28 @@
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/collect_page_model.dart';
+import '../../../services/collect_service.dart';
 
 class FinishCreatCollectGroupController extends GetxController {
 
   final RefreshController refreshController = RefreshController(initialRefresh: false);
 
   RxList<CollectModel> collectList = <CollectModel>[].obs;
-  List<int> selectIds = [];
+  List<Map<String, dynamic>> selectIds = [];
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
   RxBool loaded = false.obs;
-  RxBool enable = false.obs;
+  String name = '';
 
   @override
   void onReady() {
+    name = Get.arguments['name'] ?? '';
     _reqListData();
     super.onReady();
   }
@@ -85,17 +89,32 @@ class FinishCreatCollectGroupController extends GetxController {
   }
 
   void selectOnTap(int index) {
+    collectList[index].select = !(collectList[index].select ?? false);
+    selectIds.clear();
     for (int i = 0; i < collectList.length; i++) {
       final model = collectList[i];
-      model.select = false;
+      if (model.select ?? false) {
+        selectIds.add({
+          'relId': model.relId,
+          'relType': model.relType,
+          'status': model.status ?? 0
+        });
+      }
     }
-    collectList[index].select = true;
-    selectIds = [collectList[index].id ?? 0];
     collectList.refresh();
-    enable.value = selectIds.isEmpty ? false : true;
   }
 
-  void finishOnTap() {
-
+  void finishOnTap() async {
+    EasyLoading.show(status: '加载中...');
+    final res = await CollectService.saveCategoryCollect({
+      'name': name,
+      'favoriteDtoList': selectIds
+    });
+    EasyLoading.dismiss();
+    if (res.isSuccess) {
+      ToastUtils.showToast('保存成功');
+    } else {
+      ToastUtils.showToast(res.msg);
+    }
   }
 }

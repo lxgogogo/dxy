@@ -78,4 +78,9 @@ class Api {
   static const String confirmLoginCode = '/api/scanLogin/confirmLoginCode';
   static const String sendVerifyCode = '/api/passport/sendVerifyCode';
 
+
+  static const String categoryList = '/api/favorite/category';
+  static const String categorySave = '/api/favorite/category/save';
+  static const String deleteFavorite = '/api/favorite/category/deleteFavorite';
+  static const String deleteCategory = '/api/favorite/category/deleteCategory';
 }

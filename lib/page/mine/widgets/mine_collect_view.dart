@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/collect_page_model.dart';
@@ -138,6 +139,8 @@ class _MineCollectViewState extends State<MineCollectView> {
 
   @override
   Widget build(BuildContext context) {
+    int favoriteCategory = UserStore.of.user?.favoriteCategory ?? 0;
+    favoriteCategory = 1;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -147,21 +150,24 @@ class _MineCollectViewState extends State<MineCollectView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CommonTabWidget(selectOnTap: _selectOnTap),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.createCollect, arguments: {'create': false});
-                },
-                child: Container(
-                  padding: EdgeInsets.all(5.w),
-                  color: Colors.transparent,
-                  child: Image.asset(
-                    Assets.images.iconCollectAdd.path,
-                    width: 20.w,
-                    height: 20.w,
-                    fit: BoxFit.cover,
+              if (favoriteCategory != 0)
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.createCollect, arguments: {'create': true});
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5.w),
+                    color: Colors.transparent,
+                    child: Image.asset(
+                      Assets.images.iconCollectAdd.path,
+                      width: 20.w,
+                      height: 20.w,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              )
+                )
+              else
+                SizedBox(width: 30.w)
             ],
           ),
         ),

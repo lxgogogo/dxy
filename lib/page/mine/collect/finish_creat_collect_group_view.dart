@@ -29,11 +29,11 @@ class _FinishCreatCollectGroupPageState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CommonAppBar.arrowBack(context, title: '从全部收藏中选择', actions: [
-          Obx(() => CommonDoneButton(
+          CommonDoneButton(
               title: '完成',
-              disable: controller.enable.value,
+              disable: true,
               margin: EdgeInsets.only(right: 12.w),
-              signUpOnTap: controller.finishOnTap))
+              signUpOnTap: controller.finishOnTap)
         ]),
         body: Obx(() => SmartRefresher(
             enablePullDown: true,

@@ -327,7 +327,8 @@ class NetRequest {
   }
 
   ///收藏列表 user/favorite/list
-  Future userFavoriteList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess, {bool showLoading = true}) async {
+  Future userFavoriteList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess,
+      {bool showLoading = true, int categoryId = 0}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -336,6 +337,9 @@ class NetRequest {
     //"relType": "thread" // 可选 评论类型, thread 帖子、 content 内容
     if (relType.isNotEmpty) {
       filters['relType'] = relType;
+    }
+    if (categoryId > 0) {
+      filters['categoryId'] = categoryId;
     }
     params['filters'] = filters;
 

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
@@ -24,49 +25,70 @@ class _CollectListPageState extends State<CollectListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar.arrowBack(context, title: '德州课程', actions: [
-        GestureDetector(
-          onTap: () {
-            CollectOperationAlert.show((index) {
-              controller.selectAlertOnTap(index);
-            });
-          },
-          child: Container(
-            padding: EdgeInsets.all(5.w),
-            margin: EdgeInsets.only(right: 5.w),
-            color: Colors.transparent,
-            child: Image.asset(
-              Assets.images.iconCollectMore.path,
-              width: 24.w,
-              height: 24.w,
-              color: Colors.black,
-            ),
-          ),
-        )
-      ]),
-      body: Obx(() => Column(
-        children: [
-          Expanded(child: SmartRefresher(
-              enablePullDown: true,
-              enablePullUp: true,
-              controller: controller.refreshController,
-              onRefresh: controller.onRefresh,
-              onLoading: controller.onLoading,
-              child: controller.loaded.value && controller.collectList.isEmpty
-                  ? const Center(child: NoDataView())
-                  : ListView.builder(
-                  itemBuilder: (c, i) {
-                    return _buildItemWidget(i);
+    return Obx(() => Scaffold(
+        appBar: CommonAppBar.arrowBack(context,
+            title: controller.name.value,
+            actions: [
+              if (controller.isDeleting.value)
+                GestureDetector(
+                  onTap: () {
+                    controller.isDeleting.value = false;
                   },
-                  itemCount: controller.collectList.length))),
-          if (controller.isDeleting.value)
-            _buildSelectAllWidget()
-          else
-            const SizedBox()
-        ],
-      ))
-    );
+                  child: Container(
+                    padding: EdgeInsets.all(5.w).copyWith(right: 16.w),
+                    color: Colors.transparent,
+                    child: Text(
+                        '取消',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: AppTheme.color_999999
+                      ),
+                    ),
+                  )
+                )
+              else
+                GestureDetector(
+                onTap: () {
+                  CollectOperationAlert.show((index) {
+                    controller.selectAlertOnTap(index);
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.w),
+                  margin: EdgeInsets.only(right: 5.w),
+                  color: Colors.transparent,
+                  child: Image.asset(
+                    Assets.images.iconCollectMore.path,
+                    width: 24.w,
+                    height: 24.w,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            ]),
+        body: Column(
+          children: [
+            Expanded(
+                child: SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    controller: controller.refreshController,
+                    onRefresh: controller.onRefresh,
+                    onLoading: controller.onLoading,
+                    child: controller.loaded.value &&
+                            controller.collectList.isEmpty
+                        ? const Center(child: NoDataView())
+                        : ListView.builder(
+                            itemBuilder: (c, i) {
+                              return _buildItemWidget(i);
+                            },
+                            itemCount: controller.collectList.length))),
+            if (controller.isDeleting.value)
+              _buildSelectAllWidget()
+            else
+              const SizedBox()
+          ],
+        )));
   }
 
   @override
@@ -81,7 +103,7 @@ class _CollectListPageState extends State<CollectListPage> {
     final model = controller.collectList[index];
     return Row(
       children: [
-        if (controller.isDeleting.value)...[
+        if (controller.isDeleting.value) ...[
           SizedBox(width: 10.w),
           GestureDetector(
             onTap: () {
@@ -132,33 +154,30 @@ class _CollectListPageState extends State<CollectListPage> {
                 ),
                 SizedBox(width: 5.w),
                 Text(
-                  '移出',
+                  '全选',
                   style: TextStyle(
                       fontSize: 12.w,
-                      color: ColorStyle.c333333.withOpacity(0.1),
-                      fontWeight: FontWeight.w600
-                  ),
+                      color: AppTheme.color_999999,
+                      fontWeight: FontWeight.w600),
                 )
               ],
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: controller.deleteCollectList,
             child: Container(
               width: 60.w,
               height: 32.w,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: ColorStyle.cFF3333.withOpacity(0.1),
-                borderRadius: BorderRadius.all(Radius.circular(4.w))
-              ),
+                  color: ColorStyle.cFF3333.withOpacity(0.1),
+                  borderRadius: BorderRadius.all(Radius.circular(4.w))),
               child: Text(
                 '移出',
                 style: TextStyle(
-                  fontSize: 12.w,
-                  color: ColorStyle.cFF3333,
-                  fontWeight: FontWeight.w600
-                ),
+                    fontSize: 12.w,
+                    color: ColorStyle.cFF3333,
+                    fontWeight: FontWeight.w600),
               ),
             ),
           )

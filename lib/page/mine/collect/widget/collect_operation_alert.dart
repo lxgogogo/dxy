@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/stores/user_store.dart';
 
 class CollectOperationAlert {
   static show(Function selectOnTap) {
@@ -39,7 +40,7 @@ class _CollectOperationWidgetState extends State<CollectOperationWidget>{
             top: kToolbarHeight,
             child: Container(
               width: 72.w,
-              height: 128.w,
+              height: 30.w*_dataList.length+8.w,
               padding: EdgeInsets.only(top: 4.w, bottom: 4.w),
               decoration: BoxDecoration(
                 color: '#FCFCFC'.hexColor,

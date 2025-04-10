@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
@@ -28,7 +29,25 @@ class _CollectListPageState extends State<CollectListPage> {
         appBar: CommonAppBar.arrowBack(context,
             title: controller.name.value,
             actions: [
-              GestureDetector(
+              if (controller.isDeleting.value)
+                GestureDetector(
+                  onTap: () {
+                    controller.isDeleting.value = false;
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5.w).copyWith(right: 16.w),
+                    color: Colors.transparent,
+                    child: Text(
+                        '取消',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: AppTheme.color_999999
+                      ),
+                    ),
+                  )
+                )
+              else
+                GestureDetector(
                 onTap: () {
                   CollectOperationAlert.show((index) {
                     controller.selectAlertOnTap(index);
@@ -138,7 +157,7 @@ class _CollectListPageState extends State<CollectListPage> {
                   '全选',
                   style: TextStyle(
                       fontSize: 12.w,
-                      color: ColorStyle.c333333.withOpacity(0.1),
+                      color: AppTheme.color_999999,
                       fontWeight: FontWeight.w600),
                 )
               ],

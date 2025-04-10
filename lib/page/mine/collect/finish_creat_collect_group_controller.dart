@@ -8,6 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/collect_service.dart';
+import '../../../utils/event_bus_util.dart';
 
 class FinishCreatCollectGroupController extends GetxController {
 
@@ -104,7 +105,6 @@ class FinishCreatCollectGroupController extends GetxController {
         selectIds.add({
           'relId': model.relId,
           'relType': model.relType,
-          'status': 1
         });
       }
     }
@@ -120,16 +120,18 @@ class FinishCreatCollectGroupController extends GetxController {
     if (!create) {
       map = {
         'id': categoryId,
-        'favoriteDtoList': selectIds
+        'addFavoriteList': selectIds
       };
     }
     final res = await CollectService.saveCategoryCollect(map);
     EasyLoading.dismiss();
     if (res.isSuccess) {
-      ToastUtils.showToast('保存成功');
       if (create) {
+        ToastUtils.showToast('保存成功');
         Get.until((route) => route.settings.name == Routes.main);
       } else {
+        ToastUtils.showToast('添加成功');
+        EventBusUtil.of.fire(EventRefreshName(name));
         Get.back();
       }
     } else {

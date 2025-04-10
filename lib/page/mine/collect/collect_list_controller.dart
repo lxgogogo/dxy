@@ -18,7 +18,7 @@ class CollectListController extends GetxController {
       RefreshController(initialRefresh: false);
 
   RxList<CollectModel> collectList = <CollectModel>[].obs;
-  List<int> selectIds = [];
+  List<dynamic> selectIds = [];
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
@@ -89,6 +89,9 @@ class CollectListController extends GetxController {
       refreshController.loadFailed();
     } finally {
       loaded.value = true;
+      if (collectList.isEmpty) {
+        isDeleting.value = false;
+      }
     }
   }
 
@@ -107,10 +110,13 @@ class CollectListController extends GetxController {
 
   void _deleteCollectList() async {
     EasyLoading.show(status: '加载中...');
-    final res =
-        await CollectService.deleteFavorite({'id': id, 'selectIds': selectIds});
+    final res = await CollectService.saveCategoryCollect({
+      'id': id,
+      'deleteIdList': selectIds
+    });
     EasyLoading.dismiss();
     if (res.isSuccess) {
+      EventBusUtil.of.fire(EventRefreshName(name.value));
       ToastUtils.showToast('删除成功');
       _reqListData();
     } else {
@@ -119,11 +125,18 @@ class CollectListController extends GetxController {
   }
 
   void _getSelectIds() {
+    int selectCount = 0;
     for (int i = 0; i < collectList.length; i++) {
       final model = collectList[i];
       if (model.select ?? false) {
-        selectIds.add(model.id ?? 0);
+        selectCount++;
+        selectIds.add('${model.id ?? 0}');
       }
+    }
+    if (collectList.length == selectCount) {
+      isSelectAll.value = true;
+    } else {
+      isSelectAll.value = false;
     }
   }
 
@@ -144,11 +157,7 @@ class CollectListController extends GetxController {
   }
 
   void selectOnTap(int index) {
-    for (int i = 0; i < collectList.length; i++) {
-      final model = collectList[i];
-      model.select = false;
-    }
-    collectList[index].select = true;
+    collectList[index].select = !(collectList[index].select ?? false);
     _getSelectIds();
     collectList.refresh();
     enable.value = selectIds.isEmpty ? false : true;

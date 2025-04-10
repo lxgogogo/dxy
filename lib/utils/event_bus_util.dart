@@ -39,9 +39,10 @@ class EventRefreshNum {
   final int? commentCount;
   final int? likeCount;
   final int? favoriteCount;
+  final int? viewCount;
   final int id;
 
-  EventRefreshNum(this.id, {this.commentCount, this.likeCount, this.favoriteCount});
+  EventRefreshNum(this.id, {this.commentCount, this.likeCount, this.favoriteCount, this.viewCount});
 }
 
 /// event

@@ -51,12 +51,14 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         videoItems[videoIndex].likeCount = event.likeCount;
         videoItems[videoIndex].favoriteCount = event.favoriteCount;
         videoItems[videoIndex].commentCount = event.commentCount;
+        videoItems[videoIndex].viewCount = event.viewCount;
         safeUpdate();
       }
       final hotVideoIndex = hotVideos.indexWhere((e) => e.id == event.id);
       if (hotVideoIndex != -1) {
         hotVideos[hotVideoIndex].likeCount = event.likeCount;
         hotVideos[hotVideoIndex].commentCount = event.commentCount;
+        hotVideos[hotVideoIndex].viewCount = event.viewCount;
         safeUpdate();
       }
     });

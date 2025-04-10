@@ -68,6 +68,7 @@ class BookDetailController extends GetxController {
         commentCount: detailBean?.commentCount,
         likeCount: detailBean?.likeCount,
         favoriteCount: detailBean?.favoriteCount,
+        viewCount: detailBean?.viewCount,
       ));
     });
 

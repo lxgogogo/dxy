@@ -15,6 +15,7 @@ class ArticleDetailBean {
   bool? liked;
   int? id;
   int? likeCount;
+  int? viewCount;
   int? listId;
   String? title;
   String? description;
@@ -41,6 +42,7 @@ class ArticleDetailBean {
     this.liked,
     this.id,
     this.likeCount,
+    this.viewCount,
     this.listId,
     this.title,
     this.description,
@@ -92,6 +94,9 @@ class ArticleDetailBean {
     }
     if (json["likeCount"] is int) {
       likeCount = json["likeCount"];
+    }
+    if (json["viewCount"] is int) {
+      viewCount = json["viewCount"];
     }
     if (json["listId"] is int) {
       listId = json["listId"];

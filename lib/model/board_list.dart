@@ -50,6 +50,7 @@ class BoardBean {
   int? favoriteCount;
   int? likeCount;
   int? shareCount;
+  int? viewCount;
   bool? liked;
   bool? favorited;
   List<TagModel>? tagList;
@@ -73,6 +74,7 @@ class BoardBean {
       this.favoriteCount,
       this.likeCount,
       this.shareCount,
+      this.viewCount,
       this.liked,
       this.favorited,
       this.tagList,
@@ -97,6 +99,7 @@ class BoardBean {
     int? favoriteCount,
     int? likeCount,
     int? shareCount,
+    int? viewCount,
     bool? liked,
     bool? favorited,
     List<TagModel>? tagList,
@@ -122,6 +125,7 @@ class BoardBean {
         favoriteCount: favoriteCount ?? this.favoriteCount,
         likeCount: likeCount ?? this.likeCount,
         shareCount: shareCount ?? this.shareCount,
+        viewCount: viewCount ?? this.viewCount,
         liked: liked ?? this.liked,
         favorited: favorited ?? this.favorited,
         tagList: tagList ?? this.tagList,
@@ -193,6 +197,9 @@ class BoardBean {
     if (json["shareCount"] is int) {
       shareCount = json["shareCount"];
     }
+    if (json["viewCount"] is int) {
+      viewCount = json["viewCount"];
+    }
     if (json["liked"] is bool) {
       liked = json["liked"];
     }
@@ -225,6 +232,7 @@ class BoardBean {
     _data["favoriteCount"] = favoriteCount;
     _data["likeCount"] = likeCount;
     _data["shareCount"] = shareCount;
+    _data["viewCount"] = viewCount;
     _data["liked"] = liked;
     _data["tagList"] = tagList;
     _data["files"] = files;

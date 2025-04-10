@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -12,8 +16,9 @@ import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import '../../model/user.dart';
+import '../../services/index.dart';
 import '../../stores/user_store.dart';
 import '../../utils/net_request.dart';
 import '../../widget/dialog_edit_mobile.dart';
@@ -30,265 +35,271 @@ class PersonalScreen extends StatefulWidget {
 }
 
 class _PersonalScreenState extends State<PersonalScreen> {
-  String imageUrl = ""; //本地图片地址
-
-  @override
-  void initState() {
-    super.initState();
-    UserStore.of.getUserInfo();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar.arrowBack(context, title: '个人资料'),
-      backgroundColor: '#F7F8FC'.hexColor,
-      body: Obx(
-        () {
-          return Column(
-            children: [
-              SizedBox(
-                height: 23.5.w,
-              ),
-              SizedBox(
-                width: 88.w,
-                height: 88.w,
-                child: ClipOval(
-                  child: IndexedStack(
-                    index: imageUrl.isNotEmpty ? 0 : 1,
+    return GetBuilder<PersonalScreenController>(
+      init: PersonalScreenController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: CommonAppBar.arrowBack(context, title: '个人资料'),
+          backgroundColor: '#F7F8FC'.hexColor,
+          body: Obx(
+            () {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 23.5.w,
+                  ),
+                  SizedBox(
+                    width: 88.w,
+                    height: 88.w,
+                    child: ClipOval(
+                      child: IndexedStack(
+                        index: controller.imageUrl.isNotEmpty ? 0 : 1,
 
-                    /// 保留新netImage渲染,返回后也能加快加载
-                    sizing: StackFit.expand,
-                    children: [
-                      Image.file(
-                        File(imageUrl),
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                          fit: BoxFit.fill,
+                        /// 保留新netImage渲染,返回后也能加快加载
+                        sizing: StackFit.expand,
+                        children: [
+                          Image.file(
+                            File(controller.imageUrl),
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: UserStore.of.user?.avatar ?? '',
+                            cacheKey: UserStore.of.user?.avatar ?? '',
+                            placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.white,
+                            )),
+                            errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.w),
+                  GestureDetector(
+                    onTap: controller.selectImage,
+                    child: Container(
+                      width: 72.w,
+                      height: 30.w,
+                      decoration: ShapeDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF557BF6),
+                            Color(0xFF84BCF9),
+                          ],
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
                         ),
                       ),
-                      CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: UserStore.of.user?.avatar ?? '',
-                        cacheKey: UserStore.of.user?.avatar ?? '',
-                        placeholder: (context, url) => const Center(
-                            child: CircularProgressIndicator(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '修改头像',
+                        style: TextStyle(
                           color: Colors.white,
-                        )),
-                        errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                          fit: BoxFit.fill,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 12.w),
-              GestureDetector(
-                onTap: _phoneSelectImage,
-                child: Container(
-                  width: 72.w,
-                  height: 30.w,
-                  decoration: ShapeDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF557BF6),
-                        Color(0xFF84BCF9),
-                      ],
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    '修改头像',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(12.w).copyWith(top: 0),
-                  margin: EdgeInsets.only(top: 16.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              _buildRowItem(
-                                label: '昵称',
-                                value: UserStore.of.user?.nickname ?? '',
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => DialogEditNickname(
-                                      editContent: UserStore.of.user?.nickname ?? '',
-                                    ),
-                                  );
-                                },
-                              ),
-                              Container(
-                                color: const Color(0xffe6e6e6),
-                                height: 0.5.w,
-                              ),
-                              _buildRowItem(
-                                label: '账号',
-                                value: UserStore.of.user?.username ?? '',
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => DialogEditUsername(
-                                      editContent: UserStore.of.user?.username ?? '',
-                                    ),
-                                  ).then((errorTip) {
-                                    if (errorTip is String) {
-                                      if (!context.mounted) return;
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(12.w).copyWith(top: 0),
+                      margin: EdgeInsets.only(top: 16.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  _buildRowItem(
+                                    label: '昵称',
+                                    value: UserStore.of.user?.nickname ?? '',
+                                    onTap: () {
                                       showDialog(
                                         context: context,
-                                        builder: (context) => DialogNewTip(
-                                          title: '绑定失败',
-                                          content: errorTip,
+                                        builder: (context) => DialogEditNickname(
+                                          editContent: UserStore.of.user?.nickname ?? '',
                                         ),
                                       );
-                                    }
-                                  });
-                                },
-                              ),
-                              Container(
-                                color: const Color(0xffe6e6e6),
-                                height: 0.5.w,
-                              ),
-                              _buildRowItem(
-                                label: '邮箱',
-                                value: UserStore.of.user?.account ?? '',
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => DialogEditEmail(
-                                      editContent: UserStore.of.user?.account ?? '',
-                                    ),
-                                  ).then((errorTip) {
-                                    if (errorTip is String) {
-                                      if (!context.mounted) return;
+                                    },
+                                  ),
+                                  Container(
+                                    color: const Color(0xffe6e6e6),
+                                    height: 0.5.w,
+                                  ),
+                                  _buildRowItem(
+                                    label: '账号',
+                                    value: UserStore.of.user?.username ?? '',
+                                    onTap: () {
                                       showDialog(
                                         context: context,
-                                        builder: (context) => DialogNewTip(
-                                          title: '绑定失败',
-                                          content: errorTip,
+                                        builder: (context) => DialogEditUsername(
+                                          editContent: UserStore.of.user?.username ?? '',
                                         ),
-                                      );
-                                    }
-                                  });
-                                },
-                              ),
-                              Container(
-                                color: const Color(0xffe6e6e6),
-                                height: 0.5.w,
-                              ),
-                              _buildRowItem(
-                                label: '手机号',
-                                value: UserStore.of.user?.phone ?? '',
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => DialogEditMobile(
-                                      editContent: UserStore.of.user?.phone ?? '',
-                                    ),
-                                  ).then((errorTip) {
-                                    if (errorTip is String) {
-                                      if (!context.mounted) return;
+                                      ).then((errorTip) {
+                                        if (errorTip is String) {
+                                          if (!context.mounted) return;
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => DialogNewTip(
+                                              title: '绑定失败',
+                                              content: errorTip,
+                                            ),
+                                          );
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Container(
+                                    color: const Color(0xffe6e6e6),
+                                    height: 0.5.w,
+                                  ),
+                                  _buildRowItem(
+                                    label: '邮箱',
+                                    value: UserStore.of.user?.account ?? '',
+                                    onTap: () {
                                       showDialog(
                                         context: context,
-                                        builder: (context) => DialogNewTip(
-                                          title: '绑定失败',
-                                          content: errorTip,
+                                        builder: (context) => DialogEditEmail(
+                                          editContent: UserStore.of.user?.account ?? '',
                                         ),
-                                      );
-                                    }
-                                  });
-                                },
+                                      ).then((errorTip) {
+                                        if (errorTip is String) {
+                                          if (!context.mounted) return;
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => DialogNewTip(
+                                              title: '绑定失败',
+                                              content: errorTip,
+                                            ),
+                                          );
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Container(
+                                    color: const Color(0xffe6e6e6),
+                                    height: 0.5.w,
+                                  ),
+                                  _buildRowItem(
+                                    label: '手机号',
+                                    value: UserStore.of.user?.phone ?? '',
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => DialogEditMobile(
+                                          editContent: UserStore.of.user?.phone ?? '',
+                                        ),
+                                      ).then((errorTip) {
+                                        if (errorTip is String) {
+                                          if (!context.mounted) return;
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) => DialogNewTip(
+                                              title: '绑定失败',
+                                              content: errorTip,
+                                            ),
+                                          );
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(height: 32.w),
+                                  Text(
+                                    '第三方账号绑定',
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      color: '#333333'.hexColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 16.w),
+                                  _buildRowButtonItem(
+                                    genImage: Assets.images.iconGoogle,
+                                    label: 'Google',
+                                    onTap: () {
+                                      if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
+                                      controller.signInWithGoogle();
+                                    },
+                                    isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
+                                  ),
+                                  Container(
+                                    color: const Color(0xffe6e6e6),
+                                    height: 0.5.w,
+                                  ),
+                                  _buildRowButtonItem(
+                                    genImage: Assets.images.iconApple,
+                                    label: 'Apple',
+                                    onTap: () {
+                                      if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
+                                      controller.signInWithApple();
+                                    },
+                                    isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
+                                  ),
+                                  Container(
+                                    color: const Color(0xffe6e6e6),
+                                    height: 0.5.w,
+                                  ),
+                                  _buildRowButtonItem(
+                                    genImage: Assets.images.iconTelegram,
+                                    label: 'Telegram',
+                                    onTap: () {
+                                      if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
+                                      controller.signInWithTelegram();
+                                    },
+                                    isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
+                                  ),
+                                  Container(
+                                    color: const Color(0xffe6e6e6),
+                                    height: 0.5.w,
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 32.w),
-                              Text(
-                                '第三方账号绑定',
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  color: '#333333'.hexColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 16.w),
-                              _buildRowButtonItem(
-                                genImage: Assets.images.iconGoogle,
-                                label: 'Google',
-                                onTap: () {},
-                              ),
-                              Container(
-                                color: const Color(0xffe6e6e6),
-                                height: 0.5.w,
-                              ),
-                              _buildRowButtonItem(
-                                genImage: Assets.images.iconApple,
-                                label: 'Apple',
-                                onTap: () {},
-                              ),
-                              Container(
-                                color: const Color(0xffe6e6e6),
-                                height: 0.5.w,
-                              ),
-                              _buildRowButtonItem(
-                                genImage: Assets.images.iconTelegram,
-                                label: 'Telegram',
-                                onTap: () {
-                                  launchUrl(Uri.parse('https://telegram.org/blog/login'),
-                                      mode: LaunchMode.externalApplication);
-                                },
-                              ),
-                              Container(
-                                color: const Color(0xffe6e6e6),
-                                height: 0.5.w,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 16.w),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const DialogDeleteAccount(),
-                          );
-                        },
-                        behavior: HitTestBehavior.translucent,
-                        child: Text(
-                          '注销账号',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: '#FF3333'.hexColor,
+                          SizedBox(height: 16.w),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => const DialogDeleteAccount(),
+                              );
+                            },
+                            behavior: HitTestBehavior.translucent,
+                            child: Text(
+                              '注销账号',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: '#FF3333'.hexColor,
+                              ),
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 70.w)
+                        ],
                       ),
-                      SizedBox(height: 70.w)
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -392,32 +403,5 @@ class _PersonalScreenState extends State<PersonalScreen> {
         ),
       ),
     );
-  }
-
-  _phoneSelectImage() async {
-    final ImagePicker picker = ImagePicker();
-    var picked = await picker.pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (picked != null) {
-      final fileLength = await picked.length();
-      if (fileLength > 10 * 1024 * 1024) {
-        ToastUtils.showToast('上传头像不得超过10M');
-        return;
-      }
-      imageUrl = picked.path;
-      if (imageUrl.isNotEmpty) {
-        NetRequest().updateAvatar(imageUrl, (data) {
-          ToastUtils.showToast('上传成功');
-          final url = data?['url'];
-          if (url is String) {
-            UserStore.of.updateUserInfo({'avatar': url});
-          }
-        }, (errMsg) {
-          ToastUtils.showToast('上传文件失败，请重新上传');
-        }, (int sent, int total) {}).whenComplete(() {});
-      }
-    }
   }
 }

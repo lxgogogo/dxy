@@ -73,6 +73,7 @@ class Api {
   static const String searchTop = '/api/searchHistory/top';
 
   static const String thirdLogin = '/api/passport/thirdLogin';
+  static const String bindThirdLogin = '/api/user/bindThirdLogin';
   static const String updatePhone = '/api/user/updatePhone';
   static const String queryLoginCode = '/api/scanLogin/queryLoginCode';
   static const String confirmLoginCode = '/api/scanLogin/confirmLoginCode';

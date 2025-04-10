@@ -7,6 +7,9 @@ class UserProfile {
   String? account;
   String? phone;
   String? username;
+  String? googleAccount;
+  String? appleAccount;
+  String? telegramAccount;
   String? token;
   int? followedCount;
   int? fansCount;
@@ -14,18 +17,17 @@ class UserProfile {
   bool? isfans;
   int? favoriteCategory;
 
-  UserProfile({
-    this.id,
-    this.nickname,
-    this.avatar,
-    this.account,
-    this.token,
-    this.followedCount,
-    this.fansCount,
-    this.followed,
-    this.isfans,
-    this.favoriteCategory
-  });
+  UserProfile(
+      {this.id,
+      this.nickname,
+      this.avatar,
+      this.account,
+      this.token,
+      this.followedCount,
+      this.fansCount,
+      this.followed,
+      this.isfans,
+      this.favoriteCategory});
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -45,6 +47,15 @@ class UserProfile {
     }
     if (json["username"] is String) {
       username = json["username"];
+    }
+    if (json["googleAccount"] is String) {
+      googleAccount = json["googleAccount"];
+    }
+    if (json["appleAccount"] is String) {
+      appleAccount = json["appleAccount"];
+    }
+    if (json["telegramAccount"] is String) {
+      telegramAccount = json["telegramAccount"];
     }
     if (json["token"] is String) {
       token = json["token"];
@@ -74,6 +85,9 @@ class UserProfile {
     _data["account"] = account;
     _data["phone"] = phone;
     _data["username"] = username;
+    _data["googleAccount"] = googleAccount;
+    _data["appleAccount"] = appleAccount;
+    _data["telegramAccount"] = telegramAccount;
     _data["token"] = token;
     _data["followedCount"] = followedCount;
     _data["fansCount"] = fansCount;

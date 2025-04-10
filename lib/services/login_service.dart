@@ -34,8 +34,8 @@ class LoginService {
         "accountType": accountType,
         "account": account,
         "password": password,
-        // if (code.isNotEmpty) "code": code,
-        "code": 'BBS2025',
+        if (code.isNotEmpty) /*"code": code,*/
+          "code": 'BBS2025',
       },
       showLoading: true,
     );
@@ -54,8 +54,8 @@ class LoginService {
         "verifyType": verifyType,
         "account": account,
         "password": password,
-        // if (code.isNotEmpty) "code": code,
-        "code": 'BBS2025',
+        if (code.isNotEmpty) /*"code": code,*/
+          "code": 'BBS2025',
       },
       showLoading: true,
     );
@@ -68,6 +68,20 @@ class LoginService {
   }) async {
     final res = await HttpUtils.postNew(
       Api.thirdLogin,
+      params: {
+        "thirdLoginType": type,
+        "accessToken": token,
+      },
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> bindThirdLogin({
+    required String type,
+    required String token,
+  }) async {
+    final res = await HttpUtils.postNew(
+      Api.bindThirdLogin,
       params: {
         "thirdLoginType": type,
         "accessToken": token,

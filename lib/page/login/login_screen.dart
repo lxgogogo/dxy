@@ -302,32 +302,27 @@ class _LoginScreenState extends State<LoginScreen> {
     final googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
       EasyLoading.show(status: 'loading...');
-      try {
-        final googleAuth = await googleUser.authentication;
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-        final idTokenResult = await userCredential.user?.getIdTokenResult(true);
-        final res = await LoginService.of.thirdLogin(
-          type: 'GOOGLE',
-          token: idTokenResult?.token ?? '',
-        );
-        if (res.isSuccess) {
-          ToastUtils.showToast('登录成功');
-          StorageService.of.putToken(res.data['token']);
-          final userProfile = UserProfile.fromJson(res.data['user']);
-          UserStore.of.putUserInfo(userProfile);
-          EventBusUtil.of.fire(EventLoginSuccess());
-          Get.until((route) => route.settings.name == Routes.main);
-        } else {
-          ToastUtils.showToast(res.msg);
-        }
-      } catch (e) {
-        ToastUtils.showToast('登录失败');
-      } finally {
-        EasyLoading.dismiss();
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final idTokenResult = await userCredential.user?.getIdTokenResult(true);
+      final res = await LoginService.of.thirdLogin(
+        type: 'GOOGLE',
+        token: idTokenResult?.token ?? '',
+      );
+      EasyLoading.dismiss();
+      if (res.isSuccess) {
+        ToastUtils.showToast('登录成功');
+        StorageService.of.putToken(res.data['token']);
+        final userProfile = UserProfile.fromJson(res.data['user']);
+        UserStore.of.putUserInfo(userProfile);
+        EventBusUtil.of.fire(EventLoginSuccess());
+        Get.until((route) => route.settings.name == Routes.main);
+      } else {
+        ToastUtils.showToast(res.msg);
       }
     }
   }
@@ -340,33 +335,28 @@ class _LoginScreenState extends State<LoginScreen> {
     //   ],
     // );
     // EasyLoading.show(status: 'loading...');
-    try {
-      final appleProvider = AppleAuthProvider();
-      final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
-      EasyLoading.show(status: 'loading...');
-      final idTokenResult = await auth.user?.getIdTokenResult(true);
-      final res = await LoginService.of.thirdLogin(
-        type: 'APPLE',
-        token: idTokenResult?.token ?? '',
-      );
-      // final res = await LoginService.of.thirdLogin(
-      //   type: 'APPLE',
-      //   token: credential.identityToken ?? '',
-      // );
-      if (res.isSuccess) {
-        ToastUtils.showToast('登录成功');
-        StorageService.of.putToken(res.data['token']);
-        final userProfile = UserProfile.fromJson(res.data['user']);
-        UserStore.of.putUserInfo(userProfile);
-        EventBusUtil.of.fire(EventLoginSuccess());
-        Get.until((route) => route.settings.name == Routes.main);
-      } else {
-        ToastUtils.showToast(res.msg);
-      }
-    } catch (e) {
-      ToastUtils.showToast('登录失败');
-    } finally {
-      EasyLoading.dismiss();
+    final appleProvider = AppleAuthProvider();
+    final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
+    EasyLoading.show(status: 'loading...');
+    final idTokenResult = await auth.user?.getIdTokenResult(true);
+    final res = await LoginService.of.thirdLogin(
+      type: 'APPLE',
+      token: idTokenResult?.token ?? '',
+    );
+    // final res = await LoginService.of.thirdLogin(
+    //   type: 'APPLE',
+    //   token: credential.identityToken ?? '',
+    // );
+    EasyLoading.dismiss();
+    if (res.isSuccess) {
+      ToastUtils.showToast('登录成功');
+      StorageService.of.putToken(res.data['token']);
+      final userProfile = UserProfile.fromJson(res.data['user']);
+      UserStore.of.putUserInfo(userProfile);
+      EventBusUtil.of.fire(EventLoginSuccess());
+      Get.until((route) => route.settings.name == Routes.main);
+    } else {
+      ToastUtils.showToast(res.msg);
     }
   }
 }

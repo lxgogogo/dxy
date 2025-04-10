@@ -414,11 +414,7 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
       Get.back();
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
     } else {
-      if (res.code == 301) {
-        Get.back(result: res.msg);
-        return;
-      }
-      ToastUtils.showToast(res.msg);
+      Get.back(result: res.msg);
     }
   }
 }

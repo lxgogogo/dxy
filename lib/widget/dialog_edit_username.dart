@@ -365,11 +365,7 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
       UserStore.of.getUserInfo();
       Get.back();
     } else {
-      if (res.code == 301) {
-        Get.back(result: res.msg);
-        return;
-      }
-      ToastUtils.showToast(res.msg);
+      Get.back(result: res.msg);
     }
   }
 }

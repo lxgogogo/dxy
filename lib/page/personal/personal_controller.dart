@@ -3,6 +3,8 @@ part of 'personal_screen.dart';
 class PersonalScreenController extends GetxController {
   String imageUrl = ""; //本地图片地址
 
+  bool isAuthorizing = false;
+
   @override
   void onReady() {
     UserStore.of.getUserInfo();
@@ -38,14 +40,16 @@ class PersonalScreenController extends GetxController {
     }
   }
 
-  Future<void> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
-    if (googleUser != null) {
+  Future<void> signInWithGoogle(BuildContext context) async {
+    try {
+      if (isAuthorizing) return;
+      isAuthorizing = true;
+      final googleUser = await GoogleSignIn().signIn();
       EasyLoading.show(status: 'loading...');
-      final googleAuth = await googleUser.authentication;
+      final googleAuth = await googleUser?.authentication;
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
       );
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final idTokenResult = await userCredential.user?.getIdTokenResult(true);
@@ -59,12 +63,21 @@ class PersonalScreenController extends GetxController {
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
       } else {
-        ToastUtils.showToast(res.msg);
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => DialogNewTip(
+            title: '绑定失败',
+            content: res.msg,
+          ),
+        );
       }
+    } finally {
+      isAuthorizing = false;
     }
   }
 
-  Future<void> signInWithApple() async {
+  Future<void> signInWithApple(BuildContext context) async {
     // final credential = await SignInWithApple.getAppleIDCredential(
     //   scopes: [
     //     AppleIDAuthorizationScopes.email,
@@ -72,25 +85,40 @@ class PersonalScreenController extends GetxController {
     //   ],
     // );
     // EasyLoading.show(status: 'loading...');
-    final appleProvider = AppleAuthProvider();
-    final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
-    EasyLoading.show(status: 'loading...');
-    final idTokenResult = await auth.user?.getIdTokenResult(true);
-    final res = await LoginService.of.bindThirdLogin(
-      type: 'APPLE',
-      token: idTokenResult?.token ?? '',
-    );
-    // final res = await LoginService.of.thirdLogin(
-    //   type: 'APPLE',
-    //   token: credential.identityToken ?? '',
-    // );
-    EasyLoading.dismiss();
-    if (res.isSuccess) {
-      ToastUtils.showToast('绑定成功');
-      final userProfile = UserProfile.fromJson(res.data['user']);
-      UserStore.of.putUserInfo(userProfile);
-    } else {
-      ToastUtils.showToast(res.msg);
+    try {
+      if (isAuthorizing) return;
+      isAuthorizing = true;
+      final appleProvider = AppleAuthProvider()
+        ..addScope('email')
+        ..addScope('name');
+      final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
+      EasyLoading.show(status: 'loading...');
+      final idTokenResult = await auth.user?.getIdTokenResult(true);
+      final res = await LoginService.of.bindThirdLogin(
+        type: 'APPLE',
+        token: idTokenResult?.token ?? '',
+      );
+      // final res = await LoginService.of.thirdLogin(
+      //   type: 'APPLE',
+      //   token: credential.identityToken ?? '',
+      // );
+      EasyLoading.dismiss();
+      if (res.isSuccess) {
+        ToastUtils.showToast('绑定成功');
+        final userProfile = UserProfile.fromJson(res.data['user']);
+        UserStore.of.putUserInfo(userProfile);
+      } else {
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => DialogNewTip(
+            title: '绑定失败',
+            content: res.msg,
+          ),
+        );
+      }
+    } finally {
+      isAuthorizing = false;
     }
   }
 

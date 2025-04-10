@@ -60,6 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isLogin = true;
 
+  bool isAuthorizing = false;
+
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
@@ -299,13 +301,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
-    if (googleUser != null) {
+    try {
+      if (isAuthorizing) return;
+      isAuthorizing = true;
+      final googleUser = await GoogleSignIn().signIn();
       EasyLoading.show(status: 'loading...');
-      final googleAuth = await googleUser.authentication;
+      final googleAuth = await googleUser?.authentication;
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
       );
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final idTokenResult = await userCredential.user?.getIdTokenResult(true);
@@ -324,6 +328,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         ToastUtils.showToast(res.msg);
       }
+    } finally {
+      isAuthorizing = false;
     }
   }
 
@@ -335,28 +341,36 @@ class _LoginScreenState extends State<LoginScreen> {
     //   ],
     // );
     // EasyLoading.show(status: 'loading...');
-    final appleProvider = AppleAuthProvider();
-    final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
-    EasyLoading.show(status: 'loading...');
-    final idTokenResult = await auth.user?.getIdTokenResult(true);
-    final res = await LoginService.of.thirdLogin(
-      type: 'APPLE',
-      token: idTokenResult?.token ?? '',
-    );
-    // final res = await LoginService.of.thirdLogin(
-    //   type: 'APPLE',
-    //   token: credential.identityToken ?? '',
-    // );
-    EasyLoading.dismiss();
-    if (res.isSuccess) {
-      ToastUtils.showToast('登录成功');
-      StorageService.of.putToken(res.data['token']);
-      final userProfile = UserProfile.fromJson(res.data['user']);
-      UserStore.of.putUserInfo(userProfile);
-      EventBusUtil.of.fire(EventLoginSuccess());
-      Get.until((route) => route.settings.name == Routes.main);
-    } else {
-      ToastUtils.showToast(res.msg);
+    try {
+      if (isAuthorizing) return;
+      isAuthorizing = true;
+      final appleProvider = AppleAuthProvider()
+        ..addScope('email')
+        ..addScope('name');
+      final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
+      EasyLoading.show(status: 'loading...');
+      final idTokenResult = await auth.user?.getIdTokenResult(true);
+      final res = await LoginService.of.thirdLogin(
+        type: 'APPLE',
+        token: idTokenResult?.token ?? '',
+      );
+      // final res = await LoginService.of.thirdLogin(
+      //   type: 'APPLE',
+      //   token: credential.identityToken ?? '',
+      // );
+      EasyLoading.dismiss();
+      if (res.isSuccess) {
+        ToastUtils.showToast('登录成功');
+        StorageService.of.putToken(res.data['token']);
+        final userProfile = UserProfile.fromJson(res.data['user']);
+        UserStore.of.putUserInfo(userProfile);
+        EventBusUtil.of.fire(EventLoginSuccess());
+        Get.until((route) => route.settings.name == Routes.main);
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } finally {
+      isAuthorizing = false;
     }
   }
 }

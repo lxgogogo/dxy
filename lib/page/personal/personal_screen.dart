@@ -16,6 +16,7 @@ import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../model/user.dart';
 import '../../services/index.dart';
@@ -234,7 +235,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                     label: 'Google',
                                     onTap: () {
                                       if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
-                                      controller.signInWithGoogle();
+                                      controller.signInWithGoogle(context);
                                     },
                                     isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
                                   ),
@@ -247,7 +248,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                     label: 'Apple',
                                     onTap: () {
                                       if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
-                                      controller.signInWithApple();
+                                      controller.signInWithApple(context);
                                     },
                                     isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
                                   ),

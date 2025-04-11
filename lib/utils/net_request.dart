@@ -736,7 +736,7 @@ class NetRequest {
       LogUtils.printAll("favoriteToggle===>$response");
       onSuccess(response['data']);
     } else {
-      if (resp.code == 1000) {
+      if (resp.code == 403) {
         onError('');
       } else {
         if (resp.code != 402) {

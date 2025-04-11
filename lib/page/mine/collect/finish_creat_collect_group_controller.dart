@@ -46,8 +46,9 @@ class FinishCreatCollectGroupController extends GetxController {
   void _reqListData({bool showLoading = true}) async {
     int recordsSize = 0;
     try {
+      int notCategoryId = create ? 0 : categoryId;
       await NetRequest().userFavoriteList(pageNum, pageSize, '',
-          showLoading: showLoading, (data) {
+          showLoading: showLoading, notCategoryId: notCategoryId, (data) {
             CollectPageModel dataList = CollectPageModel.fromJson(data);
             recordsSize = (dataList.list ?? []).length;
             if (pageNum == 1) {
@@ -112,6 +113,14 @@ class FinishCreatCollectGroupController extends GetxController {
   }
 
   void finishOnTap() async {
+    if (!create && collectList.isEmpty) {
+      ToastUtils.showToast('收藏内容已无可收藏内容');
+      return;
+    }
+    if (!create && selectIds.isEmpty) {
+      ToastUtils.showToast('请选择一条收藏内容新增');
+      return;
+    }
     EasyLoading.show(status: '加载中...');
     var map = {
       'name': name,

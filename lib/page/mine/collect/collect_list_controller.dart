@@ -52,6 +52,7 @@ class CollectListController extends GetxController {
   void _addEvent() {
     eventSub = EventBusUtil.of.on<EventRefreshName>().listen((event) {
       name.value = event.name;
+      _reqListData();
     });
   }
 
@@ -166,10 +167,7 @@ class CollectListController extends GetxController {
   void selectAlertOnTap(int index) {
     if (index == 0) {
       Get.toNamed(Routes.finishCreateCollect,
-              arguments: {'name': name.value, 'create': false, 'id': id})!
-          .then((value) {
-        _reqListData();
-      });
+              arguments: {'name': name.value, 'create': false, 'id': id});
     } else if (index == 1) {
       if (collectList.isNotEmpty) {
         isDeleting.value = true;

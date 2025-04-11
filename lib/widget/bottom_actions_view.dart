@@ -18,6 +18,7 @@ import '../model/user.dart';
 import '../page/comment_publish/comment_publish_screen.dart';
 import '../page/feed_detail/feed_detail_screen.dart';
 import '../page/mine/login_helper.dart';
+import '../routes/app_routes_utils.dart';
 import '../utils/toast_utils.dart';
 import 'like_button/like_button.dart';
 
@@ -300,6 +301,10 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
   }
 
   void _favoriteToggle() {
+    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏',
+        content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
+      return;
+    }
     NetRequest().favoriteToggle(
         widget.viewParams.relType, widget.viewParams.relId, !(widget.viewParams.favoriteState ?? false), (data) {
       if (widget.viewParams.favoriteState != true) {
@@ -316,6 +321,8 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       }
       setState(() {});
       EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
+    }, (msg) {
+      AppRoutesUtils.haveCollect();
     });
   }
 

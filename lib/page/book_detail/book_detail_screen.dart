@@ -11,6 +11,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
@@ -24,6 +25,7 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../stores/user_store.dart';
 import '../../utils/date_util.dart';
 import '../search_tag/search_tag_screen.dart';
 
@@ -168,9 +170,13 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       SizedBox(height: 16.w),
                                       GestureDetector(
                                         onTap: () {
-                                          // case：添加用户权限不足弹窗
-                                          if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
-                                            launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                          // 书籍下载
+                                          int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
+                                          bool haveDown = bookDownload != 0 ? true : false;
+                                          if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
+                                            if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                              launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                            }
                                           }
                                         },
                                         child: Center(

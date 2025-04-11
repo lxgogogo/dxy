@@ -328,7 +328,7 @@ class NetRequest {
 
   ///收藏列表 user/favorite/list
   Future userFavoriteList(int pageNum, int pageSize, String relType, SuccessCallback onSuccess,
-      {bool showLoading = true, int categoryId = 0}) async {
+      {bool showLoading = true, int categoryId = 0, int notCategoryId = 0}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -340,6 +340,9 @@ class NetRequest {
     }
     if (categoryId > 0) {
       filters['categoryId'] = categoryId;
+    }
+    if (notCategoryId > 0) {
+      filters['notCategoryId'] = notCategoryId;
     }
     params['filters'] = filters;
 
@@ -716,7 +719,10 @@ class NetRequest {
   }
 
   ///收藏操作 取消、收藏
-  Future favoriteToggle(String? relType, int? relId, bool state, SuccessCallback onSuccess) async {
+  Future favoriteToggle(
+      String? relType, int? relId, bool state,
+      SuccessCallback onSuccess,
+      FailureCallback onError) async {
     Map<String, dynamic> params = {};
     params['relType'] = relType; //// 类型 thread 帖子，content 内容
     params['relId'] = relId; // 收藏对象id
@@ -730,8 +736,12 @@ class NetRequest {
       LogUtils.printAll("favoriteToggle===>$response");
       onSuccess(response['data']);
     } else {
-      if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+      if (resp.code == 1000) {
+        onError('');
+      } else {
+        if (resp.code != 402) {
+          ToastUtils.showToast(resp.message ?? '未知错误');
+        }
       }
     }
   }

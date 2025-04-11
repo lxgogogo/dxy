@@ -34,6 +34,10 @@ class VideoDetailController extends GetxController {
   int pageNum = 1;
   int pageSize = 10;
   bool noMore = false;
+  // 是否有观影权限
+  RxBool haveWatchPower = true.obs;
+  // 是否展示无权限弹窗
+  bool haveWatchAlert = false;
 
   @override
   void onInit() {
@@ -102,24 +106,80 @@ class VideoDetailController extends GetxController {
           return;
         }
         detailBean = ArticleDetailBean.fromJson(data);
-
-        safeUpdate();
-        if (videoController == null) {
-          if (detailBean?.videoList?.isNotEmpty == true) {
-            if (childId != null) {
-              final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
-              if (index != -1) {
-                playVideoIndex = index;
-                autoScrollController.scrollToIndex(
-                  playVideoIndex,
-                  duration: const Duration(microseconds: 1),
-                  preferPosition: AutoScrollPosition.end,
-                );
+        int featured = detailBean?.featured ?? 0;
+        bool isLogin = false;
+        if (featured == 1) {
+          isLogin = AppRoutesUtils.haveLogin(
+              title: '请登录后观看',
+              content: '您当前的身份为访客\n登录后即可观看精选视频');
+        } else {
+          isLogin = AppRoutesUtils.haveLogin(
+              title: '当前观看视频已达上限',
+              content: '您当前的身份为访客\n请注册或登录以提升观看权限');
+        }
+        if (isLogin) {
+          int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
+          int featuredWatch = detailBean?.userlevel?.featured ?? 0;
+          videoWatch = 0;
+          featuredWatch = 0;
+          safeUpdate();
+          if (videoController == null) {
+            if (detailBean?.videoList?.isNotEmpty == true) {
+              if (childId != null) {
+                final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
+                if (index != -1) {
+                  playVideoIndex = index;
+                  autoScrollController.scrollToIndex(
+                    playVideoIndex,
+                    duration: const Duration(microseconds: 1),
+                    preferPosition: AutoScrollPosition.end,
+                  );
+                }
+              }
+              if (!haveWatchAlert) {
+                haveWatchAlert = false;
+                if (featured == 1) {
+                  if (featuredWatch > 0) {
+                    haveWatchPower.value = true;
+                    _startVideoPlayer(
+                        detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+                  } else {
+                    haveWatchPower.value = false;
+                    AppRoutesUtils.haveVideoWatch();
+                  }
+                } else {
+                  if (videoWatch > 0) {
+                    haveWatchPower.value = true;
+                    _startVideoPlayer(
+                        detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+                  } else {
+                    haveWatchPower.value = false;
+                    AppRoutesUtils.haveVideoWatch();
+                  }
+                }
+              }
+            } else {
+              if (!haveWatchAlert) {
+                haveWatchAlert = false;
+                if (featured == 1) {
+                  if (featuredWatch > 0) {
+                    haveWatchPower.value = true;
+                    _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
+                  } else {
+                    haveWatchPower.value = false;
+                    AppRoutesUtils.haveVideoWatch();
+                  }
+                } else {
+                  if (videoWatch > 0) {
+                    haveWatchPower.value = true;
+                    _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
+                  } else {
+                    haveWatchPower.value = false;
+                    AppRoutesUtils.haveVideoWatch();
+                  }
+                }
               }
             }
-            _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
-          } else {
-            _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           }
         }
         EventBusUtil.of.fire(EventRefreshNum(

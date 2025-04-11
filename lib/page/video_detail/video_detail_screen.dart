@@ -11,6 +11,7 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -104,13 +105,18 @@ class VideoDetailScreen extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          child: controller.videoNotifier.chewieController != null
-                                              ? ChewieVideo(
-                                                  notifier: controller.videoNotifier,
-                                                )
-                                              : const Center(
-                                                  child: CircularProgressIndicator(),
-                                                ),
+                                          child: Obx(() {
+                                            if (!controller.haveWatchPower.value) {
+                                              return const SizedBox();
+                                            }
+                                            return controller.videoNotifier.chewieController != null
+                                                ? ChewieVideo(
+                                              notifier: controller.videoNotifier,
+                                            )
+                                                : const Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          })
                                         ),
                                       ),
                                       Text(

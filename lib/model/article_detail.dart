@@ -27,6 +27,7 @@ class ArticleDetailBean {
   List<VideoBean>? videoList;
   List<TagModel>? tagList;
   Userlevel? userlevel;
+  int? featured;
 
 
   ArticleDetailBean({
@@ -54,7 +55,8 @@ class ArticleDetailBean {
     this.user,
     this.videoList,
     this.tagList,
-    this.userlevel
+    this.userlevel,
+    this.featured
   });
 
   ArticleDetailBean.fromJson(Map<String, dynamic> json) {
@@ -131,8 +133,11 @@ class ArticleDetailBean {
     if (json["tagList"] is List) {
       tagList = json["tagList"] == null ? null : (json["tagList"] as List).map((e) => TagModel.fromJson(e)).toList();
     }
-    if (json["userlevel"] is Map) {
-      userlevel = Userlevel.fromJson(json["userlevel"]);
+    if (json["userLevel"] is Map) {
+      userlevel = Userlevel.fromJson(json["userLevel"]);
+    }
+    if (json["featured"] is int) {
+      featured = json["featured"];
     }
   }
 }

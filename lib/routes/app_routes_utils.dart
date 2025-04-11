@@ -81,5 +81,22 @@ class AppRoutesUtils {
         ));
   }
 
+  static void haveVideoWatch({
+    String title = '当前观看视频已达上限',
+    String content = '您当前的身份为一般用户\n请提升用户等级获得更多权限'}) {
+    showDialog(
+        barrierDismissible: false,
+        context: Get.context!,
+        builder: (context) => CommonDialog(
+          title: title,
+          content: content,
+          confirmText: '好',
+          onConfirm: () {
+            Get.toNamed(Routes.equityCenter);
+          },
+          cancelText: '取消',
+        ));
+  }
+
 
 }

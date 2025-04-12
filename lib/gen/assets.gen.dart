@@ -24,33 +24,9 @@ class $AssetsEquityCenterGen {
   AssetGenImage get iconCenterCollectGroup =>
       const AssetGenImage('assets/equity_center/icon_center_collect_group.png');
 
-  /// File path: assets/equity_center/icon_center_high2_book.png
-  AssetGenImage get iconCenterHigh2Book =>
-      const AssetGenImage('assets/equity_center/icon_center_high2_book.png');
-
   /// File path: assets/equity_center/icon_center_high2_button.png
   AssetGenImage get iconCenterHigh2Button =>
       const AssetGenImage('assets/equity_center/icon_center_high2_button.png');
-
-  /// File path: assets/equity_center/icon_center_high2_collect.png
-  AssetGenImage get iconCenterHigh2Collect =>
-      const AssetGenImage('assets/equity_center/icon_center_high2_collect.png');
-
-  /// File path: assets/equity_center/icon_center_high2_collect_group.png
-  AssetGenImage get iconCenterHigh2CollectGroup => const AssetGenImage(
-      'assets/equity_center/icon_center_high2_collect_group.png');
-
-  /// File path: assets/equity_center/icon_center_high2_top_video.png
-  AssetGenImage get iconCenterHigh2TopVideo => const AssetGenImage(
-      'assets/equity_center/icon_center_high2_top_video.png');
-
-  /// File path: assets/equity_center/icon_center_high2_up_video.png
-  AssetGenImage get iconCenterHigh2UpVideo => const AssetGenImage(
-      'assets/equity_center/icon_center_high2_up_video.png');
-
-  /// File path: assets/equity_center/icon_center_high2_user.png
-  AssetGenImage get iconCenterHigh2User =>
-      const AssetGenImage('assets/equity_center/icon_center_high2_user.png');
 
   /// File path: assets/equity_center/icon_center_high_bg.png
   AssetGenImage get iconCenterHighBg =>
@@ -60,21 +36,9 @@ class $AssetsEquityCenterGen {
   AssetGenImage get iconCenterHighBg2 =>
       const AssetGenImage('assets/equity_center/icon_center_high_bg2.png');
 
-  /// File path: assets/equity_center/icon_center_high_book.png
-  AssetGenImage get iconCenterHighBook =>
-      const AssetGenImage('assets/equity_center/icon_center_high_book.png');
-
   /// File path: assets/equity_center/icon_center_high_button.png
   AssetGenImage get iconCenterHighButton =>
       const AssetGenImage('assets/equity_center/icon_center_high_button.png');
-
-  /// File path: assets/equity_center/icon_center_high_collect.png
-  AssetGenImage get iconCenterHighCollect =>
-      const AssetGenImage('assets/equity_center/icon_center_high_collect.png');
-
-  /// File path: assets/equity_center/icon_center_high_collect_group.png
-  AssetGenImage get iconCenterHighCollectGroup => const AssetGenImage(
-      'assets/equity_center/icon_center_high_collect_group.png');
 
   /// File path: assets/equity_center/icon_center_high_level_bg.png
   AssetGenImage get iconCenterHighLevelBg =>
@@ -83,18 +47,6 @@ class $AssetsEquityCenterGen {
   /// File path: assets/equity_center/icon_center_high_level_bg2.png
   AssetGenImage get iconCenterHighLevelBg2 => const AssetGenImage(
       'assets/equity_center/icon_center_high_level_bg2.png');
-
-  /// File path: assets/equity_center/icon_center_high_top_video.png
-  AssetGenImage get iconCenterHighTopVideo => const AssetGenImage(
-      'assets/equity_center/icon_center_high_top_video.png');
-
-  /// File path: assets/equity_center/icon_center_high_up_video.png
-  AssetGenImage get iconCenterHighUpVideo =>
-      const AssetGenImage('assets/equity_center/icon_center_high_up_video.png');
-
-  /// File path: assets/equity_center/icon_center_high_user.png
-  AssetGenImage get iconCenterHighUser =>
-      const AssetGenImage('assets/equity_center/icon_center_high_user.png');
 
   /// File path: assets/equity_center/icon_center_high_video.png
   AssetGenImage get iconCenterHighVideo =>
@@ -111,10 +63,6 @@ class $AssetsEquityCenterGen {
   /// File path: assets/equity_center/icon_center_normal_button.png
   AssetGenImage get iconCenterNormalButton =>
       const AssetGenImage('assets/equity_center/icon_center_normal_button.png');
-
-  /// File path: assets/equity_center/icon_center_normal_user.png
-  AssetGenImage get iconCenterNormalUser =>
-      const AssetGenImage('assets/equity_center/icon_center_normal_user.png');
 
   /// File path: assets/equity_center/icon_center_roll_bg.png
   AssetGenImage get iconCenterRollBg =>
@@ -145,29 +93,16 @@ class $AssetsEquityCenterGen {
         iconCenterBook,
         iconCenterCollect,
         iconCenterCollectGroup,
-        iconCenterHigh2Book,
         iconCenterHigh2Button,
-        iconCenterHigh2Collect,
-        iconCenterHigh2CollectGroup,
-        iconCenterHigh2TopVideo,
-        iconCenterHigh2UpVideo,
-        iconCenterHigh2User,
         iconCenterHighBg,
         iconCenterHighBg2,
-        iconCenterHighBook,
         iconCenterHighButton,
-        iconCenterHighCollect,
-        iconCenterHighCollectGroup,
         iconCenterHighLevelBg,
         iconCenterHighLevelBg2,
-        iconCenterHighTopVideo,
-        iconCenterHighUpVideo,
-        iconCenterHighUser,
         iconCenterHighVideo,
         iconCenterLevelBg,
         iconCenterNormalBg,
         iconCenterNormalButton,
-        iconCenterNormalUser,
         iconCenterRollBg,
         iconCenterRollHighBg,
         iconCenterRollHighBg2,

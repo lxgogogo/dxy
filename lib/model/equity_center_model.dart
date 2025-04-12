@@ -11,6 +11,7 @@ class EquityCenterBannerModel {
   String? levelIcon;
   String? buttonIcon;
   Color? titleColor;
+  Color? levelColor;
   Color? shadowColor;
 
   EquityCenterBannerModel(
@@ -22,5 +23,6 @@ class EquityCenterBannerModel {
       this.levelIcon,
       this.buttonIcon,
       this.titleColor,
+      this.levelColor,
       this.shadowColor});
 }

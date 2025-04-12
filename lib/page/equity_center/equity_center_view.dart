@@ -103,10 +103,13 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        item.titleIcon ?? '',
-                        width: 96.w,
-                        fit: BoxFit.fitWidth,
+                      Text(
+                        '阿斯蒂芬额阿斯蒂芬额',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                          color: item.titleColor
+                        ),
                       ),
                       SizedBox(height: 15.w),
                       Row(
@@ -228,7 +231,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   ),
                 ),
                 Positioned(
-                  right: 20.w,
+                  right: 0,
                   child: Image.asset(
                     item.levelIcon ?? '',
                     width: 116.w,
@@ -253,22 +256,8 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     var contentData = ['2本/天', '102分钟', '2部/天', '50', ''];
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
     if (controller.selectIndex == 1) {
-      iconData = [
-        Assets.equityCenter.iconCenterHighBook.path,
-        Assets.equityCenter.iconCenterHighUpVideo.path,
-        Assets.equityCenter.iconCenterHighTopVideo.path,
-        Assets.equityCenter.iconCenterHighCollect.path,
-        Assets.equityCenter.iconCenterHighCollectGroup.path,
-      ];
       contentData = ['2本/天', '102分钟', '2部/天', '50', ''];
     } else if (controller.selectIndex == 2) {
-      iconData = [
-        Assets.equityCenter.iconCenterHigh2Book.path,
-        Assets.equityCenter.iconCenterHigh2UpVideo.path,
-        Assets.equityCenter.iconCenterHigh2TopVideo.path,
-        Assets.equityCenter.iconCenterHigh2Collect.path,
-        Assets.equityCenter.iconCenterHigh2CollectGroup.path,
-      ];
       contentData = ['2本/天', '102分钟', '2部/天', '50', ''];
     }
     List<Map<String, dynamic>> data = [];
@@ -302,12 +291,13 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     Text(
                       e['title'],
                       style:
-                          TextStyle(fontSize: 12.sp, color: model.titleColor),
+                          TextStyle(fontSize: 12.sp, color: model.titleColor, fontWeight: FontWeight.w500),
                     ),
+                    SizedBox(height: 5.w),
                     Text(
                       e['content'],
                       style:
-                          TextStyle(fontSize: 10.sp, color: model.titleColor),
+                          TextStyle(fontSize: 10.sp, color: model.titleColor!.withOpacity(0.7)),
                     ),
                   ],
                 ),
@@ -320,7 +310,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   Widget _buildDayTaskWidget() {
     return Container(
       margin: EdgeInsets.only(left: 10.w, right: 10.w),
-      padding: EdgeInsets.all(24.w).copyWith(bottom: 16.w),
+      padding: EdgeInsets.all(16.w).copyWith(bottom: 12.w),
       decoration: BoxDecoration(
           color: ColorStyle.white,
           borderRadius: BorderRadius.only(
@@ -340,11 +330,11 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               SizedBox(width: 10.w),
               Text(
                 '多领多赚，单日最高 120',
-                style: TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
+                style: TextStyle(fontSize: 12.sp, color: ColorStyle.c333333.withOpacity(0.7)),
               )
             ],
           ),
-          SizedBox(height: 10.w),
+          SizedBox(height: 5.w),
           Wrap(
             children: [
               _buildDayTaskItemWidget(),
@@ -398,7 +388,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     Text(
                       '每日登录即可领取10经验值',
                       style:
-                          TextStyle(fontSize: 10.sp, color: ColorStyle.c333333),
+                          TextStyle(fontSize: 10.sp, color: ColorStyle.c333333.withOpacity(0.7)),
                     )
                   ],
                 ),
@@ -425,7 +415,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   Widget _buildRunWidget() {
     return Container(
       margin: EdgeInsets.only(left: 10.w, right: 10.w),
-      padding: EdgeInsets.all(24.w).copyWith(bottom: 16.w),
+      padding: EdgeInsets.all(16.w).copyWith(bottom: 12.w),
       decoration: BoxDecoration(
           color: ColorStyle.white,
           borderRadius: BorderRadius.all(Radius.circular(10.w))),
@@ -443,11 +433,11 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               SizedBox(width: 10.w),
               Text(
                 '显示最近6个月的经验值记录',
-                style: TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
+                style: TextStyle(fontSize: 12.sp, color: ColorStyle.c333333.withOpacity(0.7)),
               )
             ],
           ),
-          SizedBox(height: 10.w),
+          SizedBox(height: 5.w),
           Wrap(
             children: [
               _buildRunItemWidget(),
@@ -464,7 +454,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
 
   Widget _buildRunItemWidget() {
     return SizedBox(
-        height: 48.w,
+        height: 40.w,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

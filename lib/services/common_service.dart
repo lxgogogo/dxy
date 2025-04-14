@@ -120,4 +120,10 @@ class CommonService {
     );
     return res ?? ResBaseModel.defaultRes;
   }
+
+  // 观看视频上报时长
+  Future uploadBenefits(data) async {
+    final res = await HttpUtils.postNew(Api.benefits, params: data);
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

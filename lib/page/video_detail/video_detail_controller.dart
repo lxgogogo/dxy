@@ -38,6 +38,8 @@ class VideoDetailController extends GetxController {
   RxBool haveWatchPower = true.obs;
   // 是否展示无权限弹窗
   bool haveWatchAlert = false;
+  // 0-普通视频 1-精选视频
+  int videoType = 0;
 
   @override
   void onInit() {
@@ -72,13 +74,29 @@ class VideoDetailController extends GetxController {
 
   @override
   void onClose() {
+    /// 上传视频已播放时长
+    _uploadVideoReport();
     _eventSubscription?.cancel();
     videoController?.removeListener(videoListener);
     videoController?.dispose();
     chewieController?.dispose();
-    /// 上传视频已播放时长
-
     super.onClose();
+  }
+
+  void _uploadVideoReport() async {
+    if (!UserStore.of.isLogin) {
+      return;
+    }
+    if (detailBean != null && videoController != null) {
+      int videoType = detailBean?.featured ?? 0;
+      final currentDuration = videoController?.value.position.inSeconds;
+      if ((currentDuration ?? 0) > 1) {
+        await CommonService.of.uploadBenefits({
+          'type': videoType == 1 ? 'featured' : 'video',
+          'value': currentDuration
+        });
+      }
+    }
   }
 
   void requestData({bool showLoading = true}) {
@@ -107,24 +125,12 @@ class VideoDetailController extends GetxController {
         }
         detailBean = ArticleDetailBean.fromJson(data);
         int featured = detailBean?.featured ?? 0;
-        bool isLogin = false;
-        if (!haveWatchAlert) {
-          haveWatchAlert = true;
-          if (featured == 1) {
-            isLogin = AppRoutesUtils.haveLogin(
-                title: '请登录后观看',
-                content: '您当前的身份为访客\n登录后即可观看精选视频');
-          } else {
-            isLogin = AppRoutesUtils.haveLogin(
-                title: '当前观看视频已达上限',
-                content: '您当前的身份为访客\n请注册或登录以提升观看权限');
-          }
-        }
+        bool isLogin = UserStore.of.isLogin;
         if (isLogin) {
           int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
           int featuredWatch = detailBean?.userlevel?.featured ?? 0;
-          videoWatch = 0;
-          featuredWatch = 0;
+          // videoWatch = 0;
+          // featuredWatch = 0;
           safeUpdate();
           if (videoController == null) {
             if (detailBean?.videoList?.isNotEmpty == true) {
@@ -140,7 +146,7 @@ class VideoDetailController extends GetxController {
                 }
               }
               if (!haveWatchAlert) {
-                haveWatchAlert = false;
+                haveWatchAlert = true;
                 if (featured == 1) {
                   if (featuredWatch > 0) {
                     haveWatchPower.value = true;
@@ -163,7 +169,7 @@ class VideoDetailController extends GetxController {
               }
             } else {
               if (!haveWatchAlert) {
-                haveWatchAlert = false;
+                haveWatchAlert = true;
                 if (featured == 1) {
                   if (featuredWatch > 0) {
                     haveWatchPower.value = true;
@@ -186,6 +192,18 @@ class VideoDetailController extends GetxController {
           }
         } else {
           haveWatchPower.value = false;
+          if (!haveWatchAlert) {
+            haveWatchAlert = true;
+            if (featured == 1) {
+              AppRoutesUtils.haveLogin(
+                  title: '请登录后观看',
+                  content: '您当前的身份为访客\n登录后即可观看精选视频');
+            } else {
+              AppRoutesUtils.haveLogin(
+                  title: '当前观看视频已达上限',
+                  content: '您当前的身份为访客\n请注册或登录以提升观看权限');
+            }
+          }
         }
         EventBusUtil.of.fire(EventRefreshNum(
           detailBean!.id!,
@@ -214,6 +232,7 @@ class VideoDetailController extends GetxController {
     if (detailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
     final currentDuration = videoController!.value.position.inSeconds;
+    Log.d('----currentDuration: $currentDuration');
     final totalDuration = videoController!.value.duration.inSeconds;
     // if (currentDuration >= freeTotalDuration) {
     //   /// 权限不足 弹窗

@@ -84,4 +84,5 @@ class Api {
   static const String categorySave = '/api/favorite/category/save';
   static const String deleteFavorite = '/api/favorite/category/deleteFavorite';
   static const String deleteCategory = '/api/favorite/category/delete';
+  static const String benefits = '/api/user/level/benefits';
 }

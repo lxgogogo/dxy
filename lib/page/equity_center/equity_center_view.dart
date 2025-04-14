@@ -97,7 +97,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             color: (item.shadowColor ?? ColorStyle.c6CABFF)
                                 .withOpacity(0.5),
                             offset: const Offset(0, 4),
-                            blurRadius: 12,
+                            blurRadius: 6,
                             spreadRadius: 0),
                       ]),
                   child: Column(
@@ -231,7 +231,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   ),
                 ),
                 Positioned(
-                  right: 0,
+                  right: 5.w,
                   child: Image.asset(
                     item.levelIcon ?? '',
                     width: 116.w,

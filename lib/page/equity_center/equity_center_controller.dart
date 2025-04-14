@@ -19,7 +19,7 @@ class EquityCenterController extends GetxController {
       buttonIcon: Assets.equityCenter.iconCenterNormalButton.path,
       titleColor: ColorStyle.c333333,
       levelColor: ColorStyle.c0F51BB,
-      shadowColor: ColorStyle.c2856E5,
+      shadowColor: ColorStyle.cA4B2D5.withOpacity(0.5),
     ),
     EquityCenterBannerModel(
       title: '1',
@@ -30,7 +30,7 @@ class EquityCenterController extends GetxController {
       buttonIcon: Assets.equityCenter.iconCenterHighButton.path,
       titleColor: ColorStyle.c333333,
       levelColor: ColorStyle.c0F51BB,
-      shadowColor: ColorStyle.c6CABFF,
+      shadowColor: ColorStyle.cA3A4A5.withOpacity(0.5),
     ),
     EquityCenterBannerModel(
       title: '2',
@@ -41,7 +41,7 @@ class EquityCenterController extends GetxController {
       buttonIcon: Assets.equityCenter.iconCenterHigh2Button.path,
       titleColor: ColorStyle.c333333,
       levelColor: ColorStyle.c0F51BB,
-      shadowColor: ColorStyle.cF3A948,
+      shadowColor: ColorStyle.cAE9E86.withOpacity(0.5),
     ),
   ].obs;
 

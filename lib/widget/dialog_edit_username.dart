@@ -194,7 +194,7 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.w),
                               child: Text(
-                                isShowUsernameTips ? '*6~15位英数字，大小写不同' : '',
+                                isShowUsernameTips ? '*6-15位，允许输入英文大小写字母、数字' : '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: isShowUsernameTips ? Colors.red : '#95A3C4'.hexColor,

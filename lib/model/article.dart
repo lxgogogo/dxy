@@ -18,6 +18,7 @@ class ArticleBean {
   String? title;
   String? type;
   DateTime? updatedAt;
+  int? featured;
 
   ArticleBean(
       {this.author,
@@ -36,7 +37,8 @@ class ArticleBean {
       this.shareCount,
       this.title,
       this.type,
-      this.updatedAt});
+      this.updatedAt,
+        this.featured});
 
   ArticleBean.fromJson(Map<String, dynamic> json) {
     if (json["author"] is String) {
@@ -95,6 +97,9 @@ class ArticleBean {
     if (json["updatedAt"] is String) {
       updatedAt = DateTime.parse(json["updatedAt"]).toLocal();
     }
+    if (json["featured"] is int) {
+      featured = json["featured"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -113,7 +118,7 @@ class ArticleBean {
     _data["type"] = type;
     _data["updated_at"] = updatedAt;
     _data['duration'] = duration;
-
+    _data['featured'] = featured;
     return _data;
   }
 }

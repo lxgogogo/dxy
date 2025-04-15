@@ -9,6 +9,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/duration_text.dart';
 import 'package:intl/intl.dart';
@@ -118,15 +119,37 @@ class VideoItem extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(top: 6.w, bottom: 3.w),
-            child: Text(
-              item.title ?? '',
-              style: TextStyle(
-                color: '#333333'.hexColor,
-                fontSize: 12.sp,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            child: Row(
+              children: [
+                if (item.featured == 1)
+                  Container(
+                    width: 28.w,
+                    height: 18.w,
+                    margin: EdgeInsets.only(right: 2.w),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(4.w)),
+                        color: ColorStyle.cFF650F
+                    ),
+                    child: Text(
+                      '精选',
+                      style: TextStyle(
+                          fontSize: 10.sp,
+                          color: Colors.white
+                      ),
+                    ),
+                  ),
+                Expanded(child: Text(
+                  item.title ?? '',
+                  style: TextStyle(
+                    color: '#333333'.hexColor,
+                    fontSize: 12.sp,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ))
+              ],
+            )
           ),
           Row(
             children: [

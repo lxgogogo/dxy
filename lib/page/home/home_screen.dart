@@ -289,6 +289,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                           type: e.type,
                                                           likeCount: e.likeCount,
                                                           commentCount: e.commentCount,
+
                                                         )),
                                                       ))
                                                   .toList(),

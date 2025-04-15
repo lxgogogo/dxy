@@ -272,10 +272,23 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
     List<Map<String, dynamic>> data = [];
     for (int i = 0; i < iconData.length; i++) {
+      bool suo = true;
+      if (i == 0 && (model.bookDownload ?? 0) > 0) {
+        suo = false;
+      } else if (i == 1 && (model.videoWatch ?? 0) > 0) {
+        suo = false;
+      } else if (i == 2 && (model.featured ?? 0) > 0) {
+        suo = false;
+      } else if (i == 3 && (model.favorite ?? 0) > 0) {
+        suo = false;
+      } else if (i == 4 && (model.favoriteCategory ?? 0) > 0) {
+        suo = false;
+      }
       data.add({
         'icon': iconData[i],
         'title': titleData[i],
-        'content': contentData[i]
+        'content': contentData[i],
+        'suo': suo
       });
     }
     return Container(
@@ -290,11 +303,26 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      e['icon'],
-                      width: 42.w,
-                      height: 42.w,
-                      fit: BoxFit.contain,
+                    Stack(
+                      children: [
+                        Image.asset(
+                          e['icon'],
+                          width: 42.w,
+                          height: 42.w,
+                          fit: BoxFit.contain,
+                        ),
+                        if (e['suo'])
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: Image.asset(
+                              Assets.equityCenter.iconCenterSuo.path,
+                              width: 22.w,
+                              height: 22.w,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                      ],
                     ),
                     SizedBox(height: 10.w),
                     Text(

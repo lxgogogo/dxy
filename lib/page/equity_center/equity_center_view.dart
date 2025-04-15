@@ -73,6 +73,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       options: CarouselOptions(
           viewportFraction: 0.9,
           height: 178.w,
+          initialPage: controller.selectIndex,
           clipBehavior: Clip.antiAlias,
           onPageChanged: (index, reason) {
             controller.onPageChanged(index);
@@ -97,7 +98,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             color: (item.shadowColor ?? ColorStyle.c6CABFF)
                                 .withOpacity(0.5),
                             offset: const Offset(0, 4),
-                            blurRadius: 12,
+                            blurRadius: 6,
                             spreadRadius: 0),
                       ]),
                   child: Column(
@@ -173,7 +174,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                 )
                               ),
                               child: Text(
-                                controller.selectIndex == 0 ? '去升级' : '去完成',
+                                item.title ?? '',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
@@ -231,7 +232,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   ),
                 ),
                 Positioned(
-                  right: 0,
+                  right: 5.w,
                   child: Image.asset(
                     item.levelIcon ?? '',
                     width: 116.w,
@@ -246,6 +247,10 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   }
 
   Widget _buildCategoryWidget() {
+    if (controller.bannerList.isEmpty) {
+      return SizedBox(height: 70.w);
+    }
+    final model = controller.bannerModel.value;
     var iconData = [
       Assets.equityCenter.iconCenterBook.path,
       Assets.equityCenter.iconCenterVideo.path,
@@ -253,13 +258,14 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       Assets.equityCenter.iconCenterCollect.path,
       Assets.equityCenter.iconCenterCollectGroup.path,
     ];
-    var contentData = ['2本/天', '102分钟', '2部/天', '50', ''];
+    var contentData = [
+      '${model.bookDownload ?? 0}本/天',
+      '${model.videoWatch ?? 0}分钟',
+      '${model.featured ?? 0}部/天',
+      '${model.favorite ?? 0}',
+      '${model.favoriteCategory ?? 0}'
+    ];
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
-    if (controller.selectIndex == 1) {
-      contentData = ['2本/天', '102分钟', '2部/天', '50', ''];
-    } else if (controller.selectIndex == 2) {
-      contentData = ['2本/天', '102分钟', '2部/天', '50', ''];
-    }
     List<Map<String, dynamic>> data = [];
     for (int i = 0; i < iconData.length; i++) {
       data.add({
@@ -268,7 +274,6 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
         'content': contentData[i]
       });
     }
-    final model = controller.bannerModel.value;
     return Container(
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
         child: Wrap(

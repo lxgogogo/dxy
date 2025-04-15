@@ -14,6 +14,14 @@ class EquityCenterBannerModel {
   Color? levelColor;
   Color? shadowColor;
 
+  double? maxPoints;
+  double? minPoints;
+  int? bookDownload;
+  int? videoWatch;
+  int? featured;
+  int? favorite;
+  int? favoriteCategory;
+
   EquityCenterBannerModel(
       {this.title,
       this.index,
@@ -24,5 +32,12 @@ class EquityCenterBannerModel {
       this.buttonIcon,
       this.titleColor,
       this.levelColor,
-      this.shadowColor});
+      this.shadowColor,
+      this.maxPoints,
+      this.minPoints,
+      this.bookDownload,
+      this.videoWatch,
+      this.featured,
+      this.favorite,
+      this.favoriteCategory});
 }

@@ -129,8 +129,6 @@ class VideoDetailController extends GetxController {
         if (isLogin) {
           int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
           int featuredWatch = detailBean?.userlevel?.featured ?? 0;
-          // videoWatch = 0;
-          // featuredWatch = 0;
           safeUpdate();
           if (videoController == null) {
             if (detailBean?.videoList?.isNotEmpty == true) {
@@ -192,17 +190,12 @@ class VideoDetailController extends GetxController {
           }
         } else {
           haveWatchPower.value = false;
+          safeUpdate();
           if (!haveWatchAlert) {
             haveWatchAlert = true;
-            if (featured == 1) {
-              AppRoutesUtils.haveLogin(
-                  title: '请登录后观看',
-                  content: '您当前的身份为访客\n登录后即可观看精选视频');
-            } else {
-              AppRoutesUtils.haveLogin(
-                  title: '当前观看视频已达上限',
-                  content: '您当前的身份为访客\n请注册或登录以提升观看权限');
-            }
+            AppRoutesUtils.haveLogin(
+                title: '请登录后观看',
+                content: '您当前的身份为访客\n请注册或登录以提升观看权限');
           }
         }
         EventBusUtil.of.fire(EventRefreshNum(

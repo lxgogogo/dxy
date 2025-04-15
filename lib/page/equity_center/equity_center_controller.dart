@@ -1,4 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/color_style_util.dart';
@@ -11,11 +13,16 @@ class EquityCenterController extends GetxController {
       CarouselSliderController();
 
   RxList<EquityCenterBannerModel> bannerList = <EquityCenterBannerModel>[].obs;
+  RxList<EquityExpModel> expDataList = <EquityExpModel>[].obs;
+  RxList<EquityLevelRecordModel> levelDataList = <EquityLevelRecordModel>[].obs;
 
   // 背景图
   RxString bg = Assets.equityCenter.iconCenterNormalBg.path.obs;
   int selectIndex = 0;
   var bannerModel = EquityCenterBannerModel().obs;
+  RxInt remainingPoints = 0.obs;
+  int pointsToDay = 0;
+  int levelPoints = 0;
 
   @override
   void onReady() {
@@ -26,18 +33,47 @@ class EquityCenterController extends GetxController {
   // TODO: Private Method
 
   void _requestData() async {
+    EasyLoading.show(status: '加载中...');
     final res = await EquityCenterService.userEquity();
     if (res.isSuccess) {
-      _getData(res.data ?? {});
+      final data = res.data ?? {};
+      remainingPoints.value = data['remainingPoints'] ?? 0;
+      pointsToDay = data['pointsToDay'] ?? 0;
+      levelPoints = data['levelPoints'] ?? 0;
+      final expData = data['exp'] ?? [];
+      final levelRecord = data['levelRecord'] ?? [];
+      List<EquityExpModel> saveExpData = [];
+      List<EquityLevelRecordModel> saveRecordData = [];
+      for (final map in expData) {
+        saveExpData.add(EquityExpModel.fromJson(map));
+      }
+      for (final map in levelRecord) {
+        saveRecordData.add(EquityLevelRecordModel.fromJson(map));
+      }
+      expDataList.value = saveExpData;
+      levelDataList.value = saveRecordData;
+      // banner
+      _getData(data);
     }
+    EasyLoading.dismiss();
   }
 
   void _getData(res) {
-    final data = res['userLevel'] ?? [];
-    selectIndex = (res['userLevelId'] ?? 1) - 1;
+    final data = res['userLevelList'] ?? [];
+    int userLevelId = (res['userLevelId'] ?? 0);
+    if (selectIndex > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        carouselController.jumpToPage(selectIndex);
+      });
+    }
     List<EquityCenterBannerModel> saveData = [];
     for (int i = 0; i < data.length; i++) {
       final map = data[i];
+      int minPoints = map['minPoints'] ?? 0;
+      if (userLevelId == (map['id'] ?? 0)) {
+        selectIndex = i;
+        minPoints = pointsToDay;
+      }
       if (map['index'] == 1) {
         saveData.add(EquityCenterBannerModel(
           title: '一般用户',
@@ -49,13 +85,13 @@ class EquityCenterController extends GetxController {
           titleColor: ColorStyle.c333333,
           levelColor: ColorStyle.c0F51BB,
           shadowColor: ColorStyle.cA4B2D5.withOpacity(0.5),
-          maxPoints: data['maxPoints'],
-          minPoints: data['minPoints'],
-          bookDownload: data['bookDownload'],
-          videoWatch: data['videoWatch'],
-          featured: data['featured'],
-          favorite: data['favorite'],
-          favoriteCategory: data['favoriteCategory'],
+          maxPoints: map['maxPoints'] ?? 0,
+          minPoints: minPoints,
+          bookDownload: map['bookDownload'],
+          videoWatch: map['videoWatch'],
+          featured: map['featured'],
+          favorite: map['favorite'],
+          favoriteCategory: map['favoriteCategory'],
         ));
       } else if (map['index'] == 2) {
         saveData.add(EquityCenterBannerModel(
@@ -68,13 +104,13 @@ class EquityCenterController extends GetxController {
           titleColor: ColorStyle.c333333,
           levelColor: ColorStyle.c0F51BB,
           shadowColor: ColorStyle.cA3A4A5.withOpacity(0.5),
-          maxPoints: data['maxPoints'],
-          minPoints: data['minPoints'],
-          bookDownload: data['bookDownload'],
-          videoWatch: data['videoWatch'],
-          featured: data['featured'],
-          favorite: data['favorite'],
-          favoriteCategory: data['favoriteCategory'],
+          maxPoints: map['maxPoints'],
+          minPoints: minPoints,
+          bookDownload: map['bookDownload'],
+          videoWatch: map['videoWatch'],
+          featured: map['featured'],
+          favorite: map['favorite'],
+          favoriteCategory: map['favoriteCategory'],
         ));
       } else {
         saveData.add(EquityCenterBannerModel(
@@ -87,13 +123,13 @@ class EquityCenterController extends GetxController {
           titleColor: ColorStyle.c333333,
           levelColor: ColorStyle.c0F51BB,
           shadowColor: ColorStyle.cAE9E86.withOpacity(0.5),
-          maxPoints: data['maxPoints'],
-          minPoints: data['minPoints'],
-          bookDownload: data['bookDownload'],
-          videoWatch: data['videoWatch'],
-          featured: data['featured'],
-          favorite: data['favorite'],
-          favoriteCategory: data['favoriteCategory'],
+          maxPoints: map['maxPoints'],
+          minPoints: minPoints,
+          bookDownload: map['bookDownload'],
+          videoWatch: map['videoWatch'],
+          featured: map['featured'],
+          favorite: map['favorite'],
+          favoriteCategory: map['favoriteCategory'],
         ));
       }
     }

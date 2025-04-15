@@ -14,8 +14,8 @@ class EquityCenterBannerModel {
   Color? levelColor;
   Color? shadowColor;
 
-  double? maxPoints;
-  double? minPoints;
+  int? maxPoints;
+  int? minPoints;
   int? bookDownload;
   int? videoWatch;
   int? featured;
@@ -40,4 +40,82 @@ class EquityCenterBannerModel {
       this.featured,
       this.favorite,
       this.favoriteCategory});
+}
+
+class EquityExpModel {
+
+  String? name;
+  int? points;
+  String? description;
+  int? limitNum;
+  int? completedNum;
+  bool? completed;
+
+  EquityExpModel({
+    this.name,
+    this.points,
+    this.description,
+    this.limitNum,
+    this.completedNum,
+    this.completed});
+
+  EquityExpModel.fromJson(Map<String, dynamic> json) {
+    if (json["points"] is int) {
+      points = json["points"];
+    }
+    if (json["name"] is String) {
+      name = json["name"];
+    }
+    if (json["description"] is String) {
+      description = json["description"];
+    }
+    if (json["limitNum"] is int) {
+      limitNum = json["limitNum"];
+    }
+    if (json["completedNum"] is int) {
+      completedNum = json["completedNum"];
+    }
+    if (json["completed"] is bool) {
+      completed = json["completed"];
+    }
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["points"] = points;
+    _data["name"] = name;
+    _data["description"] = description;
+    _data["completedNum"] = completedNum;
+    _data["limitNum"] = limitNum;
+    _data["completed"] = completed;
+    return _data;
+  }
+}
+
+class EquityLevelRecordModel {
+
+  String? month;
+  int? pointsSum;
+
+  EquityLevelRecordModel({
+    this.month,
+    this.pointsSum});
+
+  EquityLevelRecordModel.fromJson(Map<String, dynamic> json) {
+    if (json["pointsSum"] is int) {
+      pointsSum = json["pointsSum"];
+    }
+    if (json["month"] is String) {
+      month = json["month"];
+    }
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["month"] = month;
+    _data["pointsSum"] = pointsSum;
+    return _data;
+  }
 }

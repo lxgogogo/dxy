@@ -122,5 +122,28 @@ class PersonalScreenController extends GetxController {
     }
   }
 
-  void signInWithTelegram() {}
+  Future<void> signInWithTelegram(BuildContext context) async {
+    final token = await Get.toNamed(Routes.telegramLogin);
+    if (token is String) {
+      final res = await LoginService.of.bindThirdLogin(
+        type: 'TELEGRAM',
+        token: token,
+      );
+      EasyLoading.dismiss();
+      if (res.isSuccess) {
+        ToastUtils.showToast('绑定成功');
+        final userProfile = UserProfile.fromJson(res.data['user']);
+        UserStore.of.putUserInfo(userProfile);
+      } else {
+        if (!context.mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => DialogNewTip(
+            title: '绑定失败',
+            content: res.msg,
+          ),
+        );
+      }
+    }
+  }
 }

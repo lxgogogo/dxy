@@ -19,6 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../model/user.dart';
+import '../../routes/app_pages.dart';
 import '../../services/index.dart';
 import '../../stores/user_store.dart';
 import '../../utils/net_request.dart';
@@ -261,7 +262,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                     label: 'Telegram',
                                     onTap: () {
                                       if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
-                                      controller.signInWithTelegram();
+                                      controller.signInWithTelegram(context);
                                     },
                                     isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
                                   ),

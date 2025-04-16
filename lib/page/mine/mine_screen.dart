@@ -4,17 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
-import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
-import 'package:holdem/model/user.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
-import 'login_helper.dart';
 import 'widgets/mine_collect_view.dart';
 
 part 'mine_controller.dart';
@@ -80,19 +75,14 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                             ),
                           ),
                           SizedBox(height: 8.w),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.equityCenter);
-                            },
-                            child: Text(
-                              UserStore.of.user?.nickname ?? '',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xff333333),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            )
+                          Text(
+                            UserStore.of.user?.nickname ?? '',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xff333333),
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 4.w),
                           Row(

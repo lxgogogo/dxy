@@ -286,6 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
                 SizedBox(width: 36.w),
                 GestureDetector(
+                  onTap: signInWithTelegram,
                   child: Assets.images.iconTelegramCircle.image(
                     width: 36.w,
                     height: 36.w,
@@ -371,6 +372,27 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } finally {
       isAuthorizing = false;
+    }
+  }
+
+  Future<void> signInWithTelegram() async {
+    final token = await Get.toNamed(Routes.telegramLogin);
+    if (token is String) {
+      final res = await LoginService.of.thirdLogin(
+        type: 'TELEGRAM',
+        token: token,
+      );
+      EasyLoading.dismiss();
+      if (res.isSuccess) {
+        ToastUtils.showToast('登录成功');
+        StorageService.of.putToken(res.data['token']);
+        final userProfile = UserProfile.fromJson(res.data['user']);
+        UserStore.of.putUserInfo(userProfile);
+        EventBusUtil.of.fire(EventLoginSuccess());
+        Get.until((route) => route.settings.name == Routes.main);
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
     }
   }
 }

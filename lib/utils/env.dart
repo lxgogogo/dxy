@@ -45,4 +45,16 @@ class Env {
         return 'https://dpoker.club';
     }
   }
+  static String get telegramLogin {
+    switch (_kApiEnv) {
+      case ApiEnv.dev:
+        return 'https://telegram-login-dev.dx252.com/';
+      case ApiEnv.test:
+        return 'https://telegram-login-fat.dx252.com/';
+      case ApiEnv.prod1:
+        return 'https://telegram-login-dev.dx252.com/';
+      case ApiEnv.prod2:
+        return 'https://telegram-login-dev.dx252.com/';
+    }
+  }
 }

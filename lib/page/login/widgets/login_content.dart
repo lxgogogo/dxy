@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/login/widgets/user_terms_uncheck.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/widget/button.dart';
 
 import '../../../constants.dart';
 import '../../../model/user.dart';
@@ -286,6 +284,8 @@ class _LoginContentState extends State<LoginContent> {
   }
 
   Future<void> login() async {
+    // final captcha = await CaptchaStore.of.verify();
+    // if (captcha.isEmpty) return;
     final account = _controllerAccount.text;
     final password = _controllerPw.text;
     final res = await LoginService.of.login(

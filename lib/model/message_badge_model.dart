@@ -20,18 +20,34 @@ class MessageBadgeModel {
   String toRawJson() => json.encode(toJson());
 
   factory MessageBadgeModel.fromJson(Map<String, dynamic> json) => MessageBadgeModel(
-    total: json["total"],
-    at: json["at"],
-    like: json["like"],
-    comment: json["comment"],
-    favorite: json["favorite"],
-  );
+        total: json["total"],
+        at: json["at"],
+        like: json["like"],
+        comment: json["comment"],
+        favorite: json["favorite"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "total": total,
-    "at": at,
-    "like": like,
-    "comment": comment,
-    "favorite": favorite,
-  };
+        "total": total,
+        "at": at,
+        "like": like,
+        "comment": comment,
+        "favorite": favorite,
+      };
+
+  MessageBadgeModel copyWith({
+    int? total,
+    int? at,
+    int? like,
+    int? comment,
+    int? favorite,
+  }) {
+    return MessageBadgeModel(
+      total: total ?? this.total,
+      at: at ?? this.at,
+      like: like ?? this.like,
+      comment: comment ?? this.comment,
+      favorite: favorite ?? this.favorite,
+    );
+  }
 }

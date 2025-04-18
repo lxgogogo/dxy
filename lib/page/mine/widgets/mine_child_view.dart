@@ -42,7 +42,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
 
   bool loaded = false;
 
-  reqListData({bool showLoading = true}) async {
+  reqListData({bool showLoading = false}) async {
     int recordsSize = 0;
     try {
       if (widget.tabIndex == 0) {
@@ -117,7 +117,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
 
   void _onRefresh() async {
     pageNum = 1;
-    reqListData(showLoading: false);
+    reqListData();
   }
 
   void _onLoading() async {
@@ -126,9 +126,10 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
       return;
     }
     pageNum++;
-    reqListData(showLoading: false);
+    reqListData();
   }
 
+  StreamSubscription? tabEvent;
   StreamSubscription? eventSub1;
   StreamSubscription? eventSub2;
 
@@ -138,6 +139,11 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
     _isMounted = true;
     reqListData();
 
+    tabEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
+      if (event.tabIndex == 3) {
+        _onRefresh();
+      }
+    });
     eventSub1 = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       _onRefresh();
     });
@@ -149,6 +155,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
   @override
   void dispose() {
     _isMounted = false;
+    tabEvent?.cancel();
     eventSub1?.cancel();
     eventSub2?.cancel();
     _listController.dispose(); // 释放资源

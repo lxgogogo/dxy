@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/page/message/message_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -64,6 +67,48 @@ class UserStore extends GetxController {
 
   /// badge
   Rx<MessageBadgeModel?> badgeModel = Rx(null);
+
+  Future<void> refreshLocalBadge(int count, {required MessageType messageType}) async {
+    final total = badgeModel.value?.total ?? 0;
+    switch (messageType) {
+      case MessageType.at:
+        final at = badgeModel.value?.at ?? 0;
+        if (at - count >= 0) {
+          badgeModel.value = badgeModel.value?.copyWith(
+            total: total - count,
+            at: at - count,
+          );
+        }
+        break;
+      case MessageType.comment:
+        final comment = badgeModel.value?.comment ?? 0;
+        if (comment - count >= 0) {
+          badgeModel.value = badgeModel.value?.copyWith(
+            total: total - count,
+            comment: comment - count,
+          );
+        }
+        break;
+      case MessageType.like:
+        final like = badgeModel.value?.like ?? 0;
+        if (like - count >= 0) {
+          badgeModel.value = badgeModel.value?.copyWith(
+            total: total - count,
+            like: like - count,
+          );
+        }
+        break;
+      case MessageType.favorite:
+        final favorite = badgeModel.value?.favorite ?? 0;
+        if (favorite - count >= 0) {
+          badgeModel.value = badgeModel.value?.copyWith(
+            total: total - count,
+            favorite: favorite - count,
+          );
+        }
+        break;
+    }
+  }
 
   Future<void> refreshBadge() async {
     if (UserStore.of.isLogin) {

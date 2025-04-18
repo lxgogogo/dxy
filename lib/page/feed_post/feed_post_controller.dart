@@ -117,14 +117,12 @@ class FeedPostController extends GetxController {
       isClickPublish = false;
     });
     if (success) {
-      EventBusManager.eventBus.fire(EventBusAction.refreshForumList.eventBusTypeName);
-
+      EventBusUtil.of.fire(EventPostFeed());
       Get.back();
     }
   }
 
   Future<void> onImageInsertCallback(String image, QuillController controller) async {
-
     final fileLength = await File(image).length();
     if (fileLength > 10 * 1024 * 1024) {
       ToastUtils.showToast('上传图片不得超过10M');

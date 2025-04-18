@@ -10,6 +10,8 @@ class MainController extends GetxController with WidgetsBindingObserver {
   ///deeplink
   final AppLinks _appLinks = AppLinks();
 
+  PageController pageController = PageController();
+
   void onTabBarItem(int index) {
     if (index == 2 || index == 3) {
       if (!UserStore.of.isLogin) {
@@ -17,8 +19,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
         return;
       }
     }
-    tabIndex = index;
-    safeUpdate();
+    pageController.jumpToPage(index);
 
     saveReview();
 
@@ -55,9 +56,15 @@ class MainController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() {
     super.onReady();
-    eventSubscription = EventBusUtil.of.on<EventResetMainTab>().listen((event) {
-      tabIndex = 0;
+    pageController.addListener(() {
+      tabIndex = pageController.page?.toInt() ?? 0;
       safeUpdate();
+      DebounceThrottle.throttle(() {
+        EventBusUtil.of.fire(EventChangeMainTab(tabIndex));
+      });
+    });
+    eventSubscription = EventBusUtil.of.on<EventResetMainTab>().listen((event) {
+      pageController.jumpToPage(0);
     });
     _initAppLinks();
     _checkAppVersion();

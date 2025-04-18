@@ -14,6 +14,7 @@ class MessageChildController extends GetxController {
   final RefreshController refreshController = RefreshController();
   final ScrollController scrollController = ScrollController();
 
+  StreamSubscription? tabEvent;
   StreamSubscription? refreshEvent;
 
   void onRefresh() async {
@@ -29,6 +30,11 @@ class MessageChildController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    tabEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
+      if (event.tabIndex == 2) {
+        loadData();
+      }
+    });
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
       onRefresh();
     });
@@ -36,6 +42,7 @@ class MessageChildController extends GetxController {
 
   @override
   void onClose() {
+    tabEvent?.cancel();
     refreshEvent?.cancel();
     refreshController.dispose();
     scrollController.dispose();

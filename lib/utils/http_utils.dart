@@ -41,7 +41,7 @@ class HttpUtils {
     String path, {
     Map<String, dynamic>? params,
     Options? options,
-    bool showLoading = true,
+    bool showLoading = false,
   }) async {
     try {
       if (showLoading) {

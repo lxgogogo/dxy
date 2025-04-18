@@ -14,6 +14,8 @@ class MessageController extends GetxController with GetSingleTickerProviderState
       } ??
       0;
 
+  int tabIndex = 0;
+
   @override
   void onInit() {
     super.onInit();
@@ -22,7 +24,8 @@ class MessageController extends GetxController with GetSingleTickerProviderState
       vsync: this,
     )..addListener(() {
         if (tabController.indexIsChanging) return;
-        loadTabChild();
+        loadTabChild(preMessageType: MessageType.values[tabIndex]);
+        tabIndex = tabController.index;
       });
     for (final type in MessageType.values) {
       Get.lazyPut(() => MessageChildController(type), tag: messageType.type);
@@ -42,7 +45,20 @@ class MessageController extends GetxController with GetSingleTickerProviderState
     }
   }
 
-  void loadTabChild() {
+  void loadTabChild({MessageType? preMessageType}) {
+    if (preMessageType != null) {
+      final preChildLogic = Get.find<MessageChildController>(
+        tag: preMessageType.type,
+      );
+      final markNeedReadCount = preChildLogic.items.where((e) => e.readStatus != 1).length;
+      if (markNeedReadCount >= 0) {
+        UserStore.of.refreshLocalBadge(
+          markNeedReadCount,
+          messageType: preMessageType,
+        );
+      }
+    }
+
     final childLogic = Get.find<MessageChildController>(tag: messageType.type);
     childLogic.onRefresh();
   }

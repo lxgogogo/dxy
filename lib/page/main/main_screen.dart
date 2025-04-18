@@ -21,10 +21,12 @@ import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/dialog_common.dart';
+import 'package:holdem/widget/keepalive_wrapper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/message_badge_model.dart';
+import '../../utils/debounce_throttle_util.dart';
 import '../../utils/event_bus_util.dart';
 import '../mine/mine_screen.dart';
 
@@ -47,12 +49,16 @@ class _MainScreenState extends State<MainScreen> {
         return Scaffold(
           body: Stack(
             children: [
-              [
-                const HomeScreen(),
-                const FeedListScreen(),
-                const MessagePage(),
-                const MineScreen(),
-              ][controller.tabIndex],
+              PageView(
+                controller: controller.pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  const HomeScreen().keepAlive,
+                  const FeedListScreen().keepAlive,
+                  const MessagePage().keepAlive,
+                  const MineScreen().keepAlive,
+                ],
+              ),
               Positioned(
                 left: 0,
                 right: 0,

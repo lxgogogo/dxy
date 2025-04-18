@@ -28,19 +28,28 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     super.onInit();
   }
 
-  @override
-  void onReady() {
+  void loadData() {
     loadBanners();
     loadHotVideos();
     loadCourses();
     loadBooks();
     loadHotTags();
+  }
+
+  @override
+  void onReady() {
+    loadData();
     super.onReady();
     scrollController.addListener(() {
       final isShow = scrollController.offset > (211.w + 24.w + 52.w + 24.w + 52.w - (12.w + 32.w + 12.w));
       if (isShowHomeMenu != isShow) {
         isShowHomeMenu = isShow;
         safeUpdate();
+      }
+    });
+    EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
+      if (event.tabIndex == 0) {
+        loadData();
       }
     });
     EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
@@ -89,11 +98,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       {
         'pageNum': 1,
         'pageSize': 4,
-        'filters': {
-          'categoryAlias': HomeType.video.categoryAlias,
-          'sort': 'popular',
-          'tagId' : tagId
-        }
+        'filters': {'categoryAlias': HomeType.video.categoryAlias, 'sort': 'popular', 'tagId': tagId}
       },
       showLoading: false,
       (data) {
@@ -142,11 +147,8 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     });
   }
 
-  void loadHotTags() async  {
-    tagList = await HomeService.queryTopHeatTag({
-      'pageNum': 1,
-      'pageSize': 100
-    });
+  void loadHotTags() async {
+    tagList = await HomeService.queryTopHeatTag({'pageNum': 1, 'pageSize': 100});
     tagId = tagList[0].id ?? 0;
     loadVideos();
     safeUpdate();
@@ -175,8 +177,8 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     );
   }
 
-  Future<void> loadBooks({bool showLoading = true}) async {
-    await NetRequest().bookRecommend({"pageSize": 4}, showLoading: showLoading, (data) {
+  Future<void> loadBooks() async {
+    await NetRequest().bookRecommend({"pageSize": 4}, showLoading: false, (data) {
       final items = List<ArticleBean>.from(
         data.map((article) => ArticleBean.fromJson(article)),
       );

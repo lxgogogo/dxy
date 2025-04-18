@@ -10,6 +10,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/tag_model.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/tag_list/tag_list_screen.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/html_parse_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';

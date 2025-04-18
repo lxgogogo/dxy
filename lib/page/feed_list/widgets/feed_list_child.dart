@@ -10,8 +10,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
 import '../../../stores/config_store.dart';
-import '../../../utils/eventbus/EventBusAction.dart';
-import '../../../utils/eventbus/EventBusManager.dart';
 import '../../../utils/toast_utils.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/report_sheet.dart';
@@ -40,13 +38,14 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   final ScrollController _listController = ScrollController();
 
-  StreamSubscription? eventSubscription;
+  StreamSubscription? tabEvent;
+  StreamSubscription? postFeedEvent;
   StreamSubscription? refreshNumEventObs;
 
-  void _onRefresh({bool showLoading = true}) async {
+  void _onRefresh() async {
     EventBusUtil.of.fire(EventRefreshFeedTabs());
     pageNum = 1;
-    reqListData(showLoading: showLoading);
+    reqListData();
   }
 
   void _onLoading() async {
@@ -55,7 +54,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
       return;
     }
     pageNum++;
-    reqListData(showLoading: false);
+    reqListData();
   }
 
   void refreshData(int id, String order) {
@@ -83,12 +82,14 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
 
     reqListData();
 
-    eventSubscription = EventBusManager.eventBus.on().listen((event) {
-      if (event.toString() == EventBusAction.refreshForumList.eventBusTypeName) {
-        boardSort = NetRequest.BOARD_SORT_TIME;
-        pageNum = 1;
-        reqListData();
+    tabEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
+      if (event.tabIndex == 1) {
+        _onRefresh();
       }
+    });
+    postFeedEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
+      boardSort = NetRequest.BOARD_SORT_TIME;
+      _onRefresh();
     });
     refreshNumEventObs = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
       final index = boardPostList.indexWhere((e) => e.id == event.id);
@@ -103,12 +104,13 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
 
   @override
   void dispose() {
-    eventSubscription?.cancel();
+    tabEvent?.cancel();
+    postFeedEvent?.cancel();
     _listController.dispose();
     super.dispose();
   }
 
-  reqListData({bool showLoading = true}) async {
+  reqListData({bool showLoading = false}) async {
     Map<String, Object> params = {};
     params['pageNum'] = pageNum;
     params['pageSize'] = pageSize;
@@ -204,7 +206,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
       enablePullUp: boardPostList.isNotEmpty == true || !noMore,
       footer: const SpecialClassicFooter(),
       controller: _refreshController,
-      onRefresh: () => _onRefresh(showLoading: false),
+      onRefresh: _onRefresh,
       onLoading: _onLoading,
       scrollController: _listController,
       child: boardPostList.isEmpty

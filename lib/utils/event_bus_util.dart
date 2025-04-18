@@ -27,7 +27,6 @@ class EventBusUtil {
   }
 }
 
-
 /// event
 class EventRefreshPage {
   final String relType;
@@ -55,14 +54,22 @@ class EventRefreshSearchResult {
 /// event
 class EventResetMainTab {}
 
+class EventChangeMainTab {
+  final int tabIndex;
+
+  EventChangeMainTab(this.tabIndex);
+}
+
 /// event
 class EventRefreshFeedTabs {}
 
 /// event
 class EventLoginSuccess {}
 
-class EventRefreshName{
+class EventRefreshName {
   final String name;
 
   EventRefreshName(this.name);
 }
+
+class EventPostFeed {}

@@ -107,7 +107,7 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
         counterText: '',
         // 去除输入框底部的字符计数
         hintText: hintText,
-        hintStyle: TextStyle(fontSize: 12.w, color: ColorStyle.c333333),
+        hintStyle: TextStyle(fontSize: 12.w, color: ColorStyle.c333333.withOpacity(0.7)),
         // prefix: prefix,
         prefixIcon: prefix,
       ),

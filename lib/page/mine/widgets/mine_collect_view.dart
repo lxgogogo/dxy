@@ -290,7 +290,7 @@ class _MineCollectViewState extends State<MineCollectView> {
     final model = groupCollectList[index];
     String dateStr = '';
     if (model.createdat != null) {
-      dateStr = DateFormat('yyyy-MM-dd HH:mm:ss').format(model.createdat!);
+      dateStr = DateFormat('yyyy.MM.dd').format(model.createdat!);
     }
     return GestureDetector(
         onTap: () {
@@ -337,7 +337,7 @@ class _MineCollectViewState extends State<MineCollectView> {
                     SizedBox(width: 26.w)
                   ],
                 ),
-                SizedBox(height: 5.w),
+                SizedBox(height: 10.w),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -345,15 +345,13 @@ class _MineCollectViewState extends State<MineCollectView> {
                       '${model.count ?? 0}条内容',
                       style: TextStyle(
                           fontSize: 12.w,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyle.c333333),
+                          color: ColorStyle.c333333.withOpacity(0.5)),
                     ),
                     Text(
                       '$dateStr创建',
                       style: TextStyle(
                           fontSize: 12.w,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyle.c333333),
+                          color: ColorStyle.c333333.withOpacity(0.5)),
                     ),
                   ],
                 )

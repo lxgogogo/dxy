@@ -60,8 +60,8 @@ class _CommonTabWidgetState extends State<CommonTabWidget> {
           item.title ?? '',
           style: TextStyle(
               fontSize: 14.w,
-              color: Colors.black,
-              fontWeight: (item.select ?? false) ? FontWeight.w600 : FontWeight.w400
+              color: (item.select ?? false) ? Colors.black : Colors.black.withOpacity(0.8),
+              fontWeight: (item.select ?? false) ? FontWeight.bold : FontWeight.normal
           ),
         )
       ),

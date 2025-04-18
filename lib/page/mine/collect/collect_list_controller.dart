@@ -115,6 +115,7 @@ class CollectListController extends GetxController {
       'id': id,
       'deleteIdList': selectIds
     });
+    selectIds.clear();
     EasyLoading.dismiss();
     if (res.isSuccess) {
       EventBusUtil.of.fire(EventRefreshName(name.value));
@@ -127,6 +128,7 @@ class CollectListController extends GetxController {
 
   void _getSelectIds() {
     int selectCount = 0;
+    selectIds.clear();
     for (int i = 0; i < collectList.length; i++) {
       final model = collectList[i];
       if (model.select ?? false) {
@@ -205,6 +207,10 @@ class CollectListController extends GetxController {
   }
 
   void deleteCollectList() {
+    if (selectIds.isEmpty) {
+      ToastUtils.showToast('请选择需要删除的内容');
+      return;
+    }
     _deleteCollectList();
   }
 }

@@ -195,10 +195,11 @@ class _RegisterContentState extends State<RegisterContent> {
                     typeList: LoginType.values.map((e) => e.typeOtherName).toList(),
                     typeIndex: typeIndex,
                     onTypeSelected: (index) {
-                      setState(() {
+                      if (typeIndex != index) {
+                        _controllerAccount.clear();
                         typeIndex = index;
                         checkValid();
-                      });
+                      }
                     },
                   ),
                   SizedBox(height: 12.w),
@@ -221,7 +222,12 @@ class _RegisterContentState extends State<RegisterContent> {
                             focusNode: _focusEmail,
                             keyboardType: TextInputType.text,
                             controller: _controllerAccount,
-                            inputFormatters: [if (isPhone) FilteringTextInputFormatter.digitsOnly],
+                            inputFormatters: [
+                              if (isPhone) ...[
+                                LengthLimitingTextInputFormatter(11),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ]
+                            ],
                             style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                             decoration: InputDecoration(
                               border: InputBorder.none,

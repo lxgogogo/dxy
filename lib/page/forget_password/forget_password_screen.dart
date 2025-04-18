@@ -237,8 +237,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       typeList: loginTypes.map((e) => e.typeName).toList(),
                       typeIndex: typeIndex,
                       onTypeSelected: (index) {
-                        typeIndex = index;
-                        checkValid();
+                        if (typeIndex != index) {
+                          _controllerAccount.clear();
+                          typeIndex = index;
+                          checkValid();
+                        }
                       },
                     ),
                     SizedBox(height: 12.w),
@@ -262,7 +265,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               keyboardType: isPhone ? TextInputType.phone : TextInputType.text,
                               controller: _controllerAccount,
                               style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
-                              inputFormatters: [if (isPhone) FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: [
+                                if (isPhone) ...[
+                                  LengthLimitingTextInputFormatter(11),
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ]
+                              ],
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 isCollapsed: true,

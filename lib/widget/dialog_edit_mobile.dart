@@ -57,7 +57,7 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
 
   @override
   void initState() {
-    _controllerMobile.text = widget.editContent;
+    // _controllerMobile.text = widget.editContent;
     super.initState();
     _focusMobile.addListener(() {
       if (!_focusMobile.hasFocus) {

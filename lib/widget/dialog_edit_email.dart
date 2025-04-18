@@ -58,7 +58,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
 
   @override
   void initState() {
-    _controllerEmail.text = widget.editContent;
+    // _controllerEmail.text = widget.editContent;
     super.initState();
     _focusEmail.addListener(() {
       if (!_focusEmail.hasFocus) {
@@ -399,7 +399,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
       code: code,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('修改成功');
+      ToastUtils.showToast('绑定成功');
       UserStore.of.getUserInfo();
       Get.back();
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);

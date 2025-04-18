@@ -40,8 +40,8 @@ class TagListController extends GetxController with RefreshControllerMixin {
     }
   }
   void addSelectTag(TagModel tag) {
-    if (selectedItems.length >= 5) {
-      showToast('最多只能选择5个标签');
+    if (selectedItems.length >= 10) {
+      showToast('最多只能选择10个标签');
       return;
     }
     if (selectedItems.any((e) => e.id == tag.id)) {

@@ -66,10 +66,8 @@ class _TypeSelectorState extends State<TypeSelector> {
             final item = widget.typeList[index];
             return GestureDetector(
               onTap: () {
-                if (widget.typeIndex != index) {
-                  widget.onTypeSelected(index);
-                  _tipController.hideTooltip();
-                }
+                widget.onTypeSelected(index);
+                _tipController.hideTooltip();
               },
               child: Container(
                 height: 44.w,

@@ -52,7 +52,7 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
 
   @override
   void initState() {
-    _controllerUsername.text = widget.editContent;
+    // _controllerUsername.text = widget.editContent;
     super.initState();
     _focusUsername.addListener(() {
       if (!_focusUsername.hasFocus) {
@@ -361,7 +361,7 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
       // password: password,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('修改成功');
+      ToastUtils.showToast('绑定成功');
       UserStore.of.getUserInfo();
       Get.back();
     } else {

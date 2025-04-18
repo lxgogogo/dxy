@@ -28,7 +28,7 @@ part 'login_controller.dart';
 enum LoginType {
   email('邮箱登录', '邮箱注册', 'EMAIL', '*请输入正确邮箱地址', '请输入邮箱'),
   username('账号登录', '账号注册', 'USERNAME', '*6-15位，允许输入英文大小写字母、数字', '请输入账号'),
-  phone('手机登录', '手机注册', 'PHONE', '*手机号格式错误', '请输入手机号');
+  phone('手机号登录', '手机号注册', 'PHONE', '*手机号格式错误', '请输入手机号');
 
   final String typeName;
   final String typeOtherName;
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _showButtonNotifier.value = false;
             }
           } else {
-            Future.delayed(const Duration(milliseconds: 300), () {
+            Future.delayed(const Duration(milliseconds: 150), () {
               if (!_isKeyboardVisible && !_showButtonNotifier.value) {
                 _showButtonNotifier.value = true;
               }

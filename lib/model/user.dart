@@ -15,7 +15,7 @@ class UserProfile {
   int? fansCount;
   bool? followed;
   bool? isfans;
-  int? favoriteCategory;
+  UserLevel? userLevel;
 
   UserProfile(
       {this.id,
@@ -27,7 +27,7 @@ class UserProfile {
       this.fansCount,
       this.followed,
       this.isfans,
-      this.favoriteCategory});
+      this.userLevel});
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -72,8 +72,8 @@ class UserProfile {
     if (json["isFans"] is bool) {
       isfans = json["isFans"];
     }
-    if (json["favoriteCategory"] is int) {
-      favoriteCategory = json["favoriteCategory"];
+    if (json["userLevel"] is Map) {
+      userLevel = UserLevel.fromJson(json["userLevel"]);
     }
   }
 
@@ -93,11 +93,26 @@ class UserProfile {
     _data["fansCount"] = fansCount;
     _data["followed"] = followed;
     _data["isFans"] = isfans;
-    _data["favoriteCategory"] = favoriteCategory;
     return _data;
   }
 
   factory UserProfile.fromRawJson(String str) => UserProfile.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
+}
+
+class UserLevel {
+  int? favoriteCategory;
+
+  UserLevel.fromJson(Map<String, dynamic> json) {
+    if (json["favoriteCategory"] is int) {
+      favoriteCategory = json["favoriteCategory"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["favoriteCategory"] = favoriteCategory;
+    return _data;
+  }
 }

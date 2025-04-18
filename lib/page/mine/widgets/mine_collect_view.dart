@@ -33,7 +33,8 @@ class MineCollectView extends StatefulWidget {
   }
 }
 
-class _MineCollectViewState extends State<MineCollectView> with SingleTickerProviderStateMixin {
+class _MineCollectViewState extends State<MineCollectView>
+    with SingleTickerProviderStateMixin {
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
@@ -48,7 +49,7 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final RefreshController _refreshController2 =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   late final TabController tabController;
 
   StreamSubscription? eventSub1;
@@ -187,7 +188,8 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    int favoriteCategory = UserStore.of.user?.favoriteCategory ?? 0;
+    int favoriteCategory = UserStore.of.user?.userLevel?.favoriteCategory ?? 0;
+    bool showFavorite = favoriteCategory > groupCollectList.length ? true : false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,7 +198,8 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: SizedBox(
+              Expanded(
+                  child: SizedBox(
                 height: 40.w,
                 child: TabBar(
                     controller: tabController,
@@ -220,10 +223,9 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
                     ),
-                    onTap: _selectOnTap
-                ),
+                    onTap: _selectOnTap),
               )),
-              if (favoriteCategory != 0)
+              if (showFavorite)
                 GestureDetector(
                   onTap: () {
                     Get.toNamed(Routes.createCollect,
@@ -248,18 +250,17 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
           ),
         ),
         SizedBox(height: 5.w),
-        Expanded(child: TabBarView(
+        Expanded(
+            child: TabBarView(
           controller: tabController,
           physics: const NeverScrollableScrollPhysics(),
-          children: List.generate(
-              2, (index) {
-                if (index == 0) {
-                  return _buildCollectListWidget();
-                } else {
-                  return _buildGroupWidget();
-                }
-              }
-          ),
+          children: List.generate(2, (index) {
+            if (index == 0) {
+              return _buildCollectListWidget();
+            } else {
+              return _buildGroupWidget();
+            }
+          }),
         ))
       ],
     );
@@ -279,51 +280,48 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
               child: loaded && collectList.isEmpty
                   ? const Center(child: NoDataView())
                   : ListView.builder(
-                  itemBuilder: (c, i) {
-                    return Slidable(
-                        groupTag: '1-list',
-                        key: ValueKey('${collectList[i].id}'),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          extentRatio: 42 / maxWidth,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  barrierDismissible: true,
-                                  context: context,
-                                  builder: (context) =>
-                                      CommonDialog(
+                      itemBuilder: (c, i) {
+                        return Slidable(
+                            groupTag: '1-list',
+                            key: ValueKey('${collectList[i].id}'),
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              extentRatio: 42 / maxWidth,
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: (context) => CommonDialog(
                                         title: '删除收藏',
                                         content: '确定要删除这个收藏吗？',
                                         confirmText: '确认删除',
                                         onConfirm: () {
                                           Navigator.of(context).pop();
                                           NetRequest().favoriteDelete(
-                                              collectList[i].id,
-                                                  (data) {
-                                                if (_isMounted) {
-                                                  ToastUtils.showToast(
-                                                      '删除成功');
-                                                  collectList.removeAt(i);
-                                                  setState(() {});
-                                                }
-                                              });
+                                              collectList[i].id, (data) {
+                                            if (_isMounted) {
+                                              ToastUtils.showToast('删除成功');
+                                              collectList.removeAt(i);
+                                              setState(() {});
+                                            }
+                                          });
                                         },
                                       ),
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                'assets/svg/icon_delete.svg',
-                                width: 22,
-                                height: 22,
-                              ),
+                                    );
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/svg/icon_delete.svg',
+                                    width: 22,
+                                    height: 22,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: MyCollectItem(item: collectList[i]));
-                  },
-                  itemCount: collectList.length)),
+                            child: MyCollectItem(item: collectList[i]));
+                      },
+                      itemCount: collectList.length)),
         );
       },
     );
@@ -341,10 +339,10 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
               child: loaded && groupCollectList.isEmpty
                   ? const Center(child: NoDataView())
                   : ListView.builder(
-                  itemBuilder: (c, i) {
-                    return _buildGroupItemWidget(i);
-                  },
-                  itemCount: groupCollectList.length)),
+                      itemBuilder: (c, i) {
+                        return _buildGroupItemWidget(i);
+                      },
+                      itemCount: groupCollectList.length)),
         );
       },
     );
@@ -358,10 +356,8 @@ class _MineCollectViewState extends State<MineCollectView> with SingleTickerProv
     }
     return GestureDetector(
         onTap: () {
-          Get.toNamed(Routes.collectList, arguments: {
-            'name': model.name ?? '',
-            'id': model.id ?? 0
-          });
+          Get.toNamed(Routes.collectList,
+              arguments: {'name': model.name ?? '', 'id': model.id ?? 0});
         },
         child: Container(
             margin:

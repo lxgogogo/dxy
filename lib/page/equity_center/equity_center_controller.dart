@@ -33,7 +33,6 @@ class EquityCenterController extends GetxController {
   // TODO: Private Method
 
   void _requestData() async {
-    EasyLoading.show(status: '加载中...');
     final res = await EquityCenterService.userEquity();
     if (res.isSuccess) {
       final data = res.data ?? {};
@@ -55,7 +54,6 @@ class EquityCenterController extends GetxController {
       // banner
       _getData(data);
     }
-    EasyLoading.dismiss();
   }
 
   void _getData(res) {

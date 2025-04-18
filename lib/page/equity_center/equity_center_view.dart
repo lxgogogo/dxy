@@ -263,11 +263,11 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       Assets.equityCenter.iconCenterCollectGroup.path,
     ];
     var contentData = [
-      '${model.bookDownload ?? 0}本/天',
-      '${model.videoWatch ?? 0}分钟',
-      '${model.featured ?? 0}部/天',
-      '${model.favorite ?? 0}',
-      '${model.favoriteCategory ?? 0}'
+      (model.bookDownload ?? 0) == -1 ? '无限' : '${model.bookDownload ?? 0}本/天',
+      (model.videoWatch ?? 0) == -1 ? '无限' : '${model.videoWatch ?? 0}分钟',
+      (model.featured ?? 0) == -1 ? '无限' : '${model.featured ?? 0}部/天',
+      (model.favorite ?? 0) == -1 ? '无限' : '${model.favorite ?? 0}',
+      (model.favoriteCategory ?? 0) == -1 ? '无限' : '${model.favoriteCategory ?? 0}'
     ];
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
     List<Map<String, dynamic>> data = [];

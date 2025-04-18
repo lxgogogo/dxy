@@ -254,15 +254,37 @@ class VideoHorizontalItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      item.title ?? '',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 12.sp,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        if (item.featured == 1)
+                          Container(
+                            width: 28.w,
+                            height: 18.w,
+                            margin: EdgeInsets.only(right: 2.w),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(4.w)),
+                                color: ColorStyle.cFF650F
+                            ),
+                            child: Text(
+                              '精选',
+                              style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: Colors.white
+                              ),
+                            ),
+                          ),
+                        Expanded(child: Text(
+                          item.title ?? '',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: '#333333'.hexColor,
+                            fontSize: 12.sp,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ))
+                      ],
                     ),
                     Row(
                       children: [

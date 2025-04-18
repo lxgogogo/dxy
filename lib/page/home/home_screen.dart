@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ import 'package:holdem/model/video_bean.dart';
 import 'package:holdem/page/home/widgets/home_course_item.dart';
 import 'package:holdem/page/home/widgets/home_menu_animation.dart';
 import 'package:holdem/page/home/widgets/home_nemu_item.dart';
+import 'package:holdem/page/home/widgets/home_tag_list_widget.dart';
 import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
@@ -26,6 +28,8 @@ import 'package:holdem/widget/transparent_pointer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/banner.dart';
+import '../../model/home_hot_tag_model.dart';
+import '../../services/home_service.dart';
 import '../../utils/event_bus_util.dart';
 
 part 'home_controller.dart';
@@ -297,10 +301,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           },
                                         ),
                                         SizedBox(height: 12.w),
-                                        HomeTitle(
-                                          title: '精彩视频',
-                                          onTap: controller.toVideoList,
-                                        ),
+                                        HomeTagListWidget(tagList: controller.tagList, tagOnTap: controller.tagOnTap),
+                                        SizedBox(height: 10.w),
                                         Column(
                                           children: controller.videoItems
                                               .map((e) => Padding(

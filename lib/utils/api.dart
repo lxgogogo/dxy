@@ -86,4 +86,6 @@ class Api {
   static const String benefits = '/api/user/level/benefits';
   // 权益中心
   static const String userEquity = '/api/user/equity';
+
+  static const String topHeatTag = '/api/tag/topHeatTag';
 }

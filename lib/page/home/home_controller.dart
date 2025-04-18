@@ -8,10 +8,13 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   List<IndexCategory> courseItems = [];
   List<ArticleBean> bookItems = [];
   List<VideoBean> hotVideos = [];
+  List<HomeHotTagModel> tagList = [];
 
   bool isShowHomeMenu = false;
 
   int bannerIndex = 0;
+
+  int tagId = 0;
 
   bool isHotVideosLoading = false;
   late AnimationController animationController;
@@ -29,9 +32,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   void onReady() {
     loadBanners();
     loadHotVideos();
-    loadVideos();
     loadCourses();
     loadBooks();
+    loadHotTags();
     super.onReady();
     scrollController.addListener(() {
       final isShow = scrollController.offset > (211.w + 24.w + 52.w + 24.w + 52.w - (12.w + 32.w + 12.w));
@@ -88,6 +91,8 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         'pageSize': 4,
         'filters': {
           'categoryAlias': HomeType.video.categoryAlias,
+          'sort': 'popular',
+          'tagId' : tagId
         }
       },
       showLoading: false,
@@ -135,6 +140,16 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       safeUpdate();
       animationController.stop();
     });
+  }
+
+  void loadHotTags() async  {
+    tagList = await HomeService.queryTopHeatTag({
+      'pageNum': 1,
+      'pageSize': 100
+    });
+    tagId = tagList[0].id ?? 0;
+    loadVideos();
+    safeUpdate();
   }
 
   void toVideoList() {
@@ -200,5 +215,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   changeMainTab(int i) {
     Get.find<MainController>().onTabBarItem(1);
+  }
+
+  void tagOnTap(value) async {
+    EasyLoading.show(status: '加载中......');
+    tagId = value.id ?? 0;
+    await loadVideos();
+    EasyLoading.dismiss();
   }
 }

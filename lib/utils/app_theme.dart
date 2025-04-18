@@ -24,6 +24,11 @@ class AppTheme {
   static const color_333333 = Color(0xFF333333);
   static const color_476DB7 = Color(0xFF476DB7);
   static const color_6A7790 = Color(0xFF6A7790);
+  static const color_0050FF = Color(0xFF0050FF);
+  static const color_557BF6 = Color(0xFF557BF6);
+  static const color_84BCF9 = Color(0xFF84BCF9);
+
+
 
   static const TextStyle text3B5078Size23 = TextStyle(
     fontWeight: FontWeight.w500,

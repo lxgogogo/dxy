@@ -25,38 +25,37 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     return Stack(
       children: [
         Obx(() => Image.asset(
-              controller.bg.value,
-              width: 1.sw,
-              height: 1.sh - MediaQuery.of(context).padding.bottom,
-              fit: BoxFit.fill,
-            )),
+          controller.bg.value,
+          width: 1.sw,
+          fit: BoxFit.fitWidth,
+        )),
         Scaffold(
             backgroundColor: Colors.transparent,
             appBar: CommonAppBar.arrowBack(context, title: '权益中心'),
-            body: Obx(() => SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildBannerWidget(),
-                  _buildCategoryWidget(),
-                  Container(
-                      margin: EdgeInsets.only(top: 10.w),
-                      decoration: BoxDecoration(
-                          color: ColorStyle.cF5F5F5,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.w),
-                              topRight: Radius.circular(10.w))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildDayTaskWidget(),
-                          SizedBox(height: 10.w),
-                          _buildRunWidget()
-                        ],
-                      )),
-                  const SafeArea(child: SizedBox())
-                ],
-              )
+            body: Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildBannerWidget(),
+                _buildCategoryWidget(),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(top: 10.w),
+                        decoration: BoxDecoration(
+                            color: ColorStyle.cF5F5F5,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.w),
+                                topRight: Radius.circular(10.w))),
+                        child: SafeArea(
+                            child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildDayTaskWidget(),
+                                    SizedBox(height: 10.w),
+                                    _buildRunWidget()
+                                  ],
+                                )))))
+              ],
             )))
       ],
     );

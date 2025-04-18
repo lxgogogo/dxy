@@ -39,6 +39,7 @@ class _MineCollectViewState extends State<MineCollectView>
   int pageSize = 20;
   bool noMore = false;
   bool _isMounted = false;
+  bool _showFavorite = false;
 
   bool loaded = false;
   int _selectIndex = 0;
@@ -107,6 +108,8 @@ class _MineCollectViewState extends State<MineCollectView>
     groupCollectList = await CollectService.categoryList();
     _refreshController2.refreshCompleted();
     _refreshController2.loadNoData();
+    int favoriteCategory = UserStore.of.user?.userLevel?.favoriteCategory ?? 0;
+    _showFavorite = favoriteCategory > groupCollectList.length ? true : false;
     if (mounted) {
       setState(() {});
     }
@@ -162,6 +165,7 @@ class _MineCollectViewState extends State<MineCollectView>
     tabController = TabController(length: 2, vsync: this);
     _isMounted = true;
     _reqListData();
+    _requestGroupData();
 
     eventSub1 = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
       _onRefresh();
@@ -188,8 +192,6 @@ class _MineCollectViewState extends State<MineCollectView>
 
   @override
   Widget build(BuildContext context) {
-    int favoriteCategory = UserStore.of.user?.userLevel?.favoriteCategory ?? 0;
-    bool showFavorite = favoriteCategory > groupCollectList.length ? true : false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -225,7 +227,7 @@ class _MineCollectViewState extends State<MineCollectView>
                     ),
                     onTap: _selectOnTap),
               )),
-              if (showFavorite)
+              if (_showFavorite)
                 GestureDetector(
                   onTap: () {
                     Get.toNamed(Routes.createCollect,

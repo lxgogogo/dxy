@@ -33,7 +33,7 @@ class MineCollectView extends StatefulWidget {
   }
 }
 
-class _MineCollectViewState extends State<MineCollectView> {
+class _MineCollectViewState extends State<MineCollectView> with SingleTickerProviderStateMixin {
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
@@ -47,6 +47,9 @@ class _MineCollectViewState extends State<MineCollectView> {
   final ScrollController _listController = ScrollController();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  final RefreshController _refreshController2 =
+  RefreshController(initialRefresh: false);
+  late final TabController tabController;
 
   StreamSubscription? eventSub1;
   StreamSubscription? eventSub2;
@@ -101,7 +104,8 @@ class _MineCollectViewState extends State<MineCollectView> {
 
   void _requestGroupData() async {
     groupCollectList = await CollectService.categoryList();
-    _refreshController.refreshCompleted();
+    _refreshController2.refreshCompleted();
+    _refreshController2.loadNoData();
     if (mounted) {
       setState(() {});
     }
@@ -154,6 +158,7 @@ class _MineCollectViewState extends State<MineCollectView> {
   @override
   void initState() {
     super.initState();
+    tabController = TabController(length: 2, vsync: this);
     _isMounted = true;
     _reqListData();
 
@@ -174,13 +179,15 @@ class _MineCollectViewState extends State<MineCollectView> {
     eventSub1?.cancel();
     eventSub2?.cancel();
     _listController.dispose(); // 释放资源
+    tabController.dispose();
+    _refreshController.dispose();
+    _refreshController2.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     int favoriteCategory = UserStore.of.user?.favoriteCategory ?? 0;
-    favoriteCategory = 1;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -189,7 +196,33 @@ class _MineCollectViewState extends State<MineCollectView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CommonTabWidget(selectOnTap: _selectOnTap),
+              Expanded(child: SizedBox(
+                height: 40.w,
+                child: TabBar(
+                    controller: tabController,
+                    tabs: ['全部收藏', '收藏分类'].map((e) => Tab(text: e)).toList(),
+                    isScrollable: true,
+                    indicator: null,
+                    indicatorColor: Colors.transparent,
+                    enableFeedback: false,
+                    tabAlignment: TabAlignment.start,
+                    overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                      return Colors.transparent;
+                    }),
+                    dividerHeight: 0,
+                    labelStyle: TextStyle(
+                      color: ColorStyle.c333333,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      color: ColorStyle.c333333,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    onTap: _selectOnTap
+                ),
+              )),
               if (favoriteCategory != 0)
                 GestureDetector(
                   onTap: () {
@@ -215,74 +248,105 @@ class _MineCollectViewState extends State<MineCollectView> {
           ),
         ),
         SizedBox(height: 5.w),
-        Expanded(child: LayoutBuilder(
-          builder: (context, constraints) {
-            final maxWidth = constraints.maxWidth;
-            return SlidableAutoCloseBehavior(
-              child: SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  controller: _refreshController,
-                  onRefresh: _onRefresh,
-                  onLoading: _onLoading,
-                  child: loaded && collectList.isEmpty
-                      ? const Center(child: NoDataView())
-                      : _selectIndex == 0
-                          ? ListView.builder(
-                              itemBuilder: (c, i) {
-                                return Slidable(
-                                    groupTag: '1-list',
-                                    key: ValueKey('${collectList[i].id}'),
-                                    endActionPane: ActionPane(
-                                      motion: const ScrollMotion(),
-                                      extentRatio: 42 / maxWidth,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () async {
-                                            await showDialog(
-                                              barrierDismissible: true,
-                                              context: context,
-                                              builder: (context) =>
-                                                  CommonDialog(
-                                                title: '删除收藏',
-                                                content: '确定要删除这个收藏吗？',
-                                                confirmText: '确认删除',
-                                                onConfirm: () {
-                                                  Navigator.of(context).pop();
-                                                  NetRequest().favoriteDelete(
-                                                      collectList[i].id,
-                                                      (data) {
-                                                    if (_isMounted) {
-                                                      ToastUtils.showToast(
-                                                          '删除成功');
-                                                      collectList.removeAt(i);
-                                                      setState(() {});
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                            );
-                                          },
-                                          child: SvgPicture.asset(
-                                            'assets/svg/icon_delete.svg',
-                                            width: 22,
-                                            height: 22,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    child: MyCollectItem(item: collectList[i]));
-                              },
-                              itemCount: collectList.length)
-                          : ListView.builder(
-                              itemBuilder: (c, i) {
-                                return _buildGroupItemWidget(i);
-                              },
-                              itemCount: groupCollectList.length)),
-            );
-          },
+        Expanded(child: TabBarView(
+          controller: tabController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: List.generate(
+              2, (index) {
+                if (index == 0) {
+                  return _buildCollectListWidget();
+                } else {
+                  return _buildGroupWidget();
+                }
+              }
+          ),
         ))
       ],
+    );
+  }
+
+  Widget _buildCollectListWidget() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth;
+        return SlidableAutoCloseBehavior(
+          child: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
+              child: loaded && collectList.isEmpty
+                  ? const Center(child: NoDataView())
+                  : ListView.builder(
+                  itemBuilder: (c, i) {
+                    return Slidable(
+                        groupTag: '1-list',
+                        key: ValueKey('${collectList[i].id}'),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          extentRatio: 42 / maxWidth,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                await showDialog(
+                                  barrierDismissible: true,
+                                  context: context,
+                                  builder: (context) =>
+                                      CommonDialog(
+                                        title: '删除收藏',
+                                        content: '确定要删除这个收藏吗？',
+                                        confirmText: '确认删除',
+                                        onConfirm: () {
+                                          Navigator.of(context).pop();
+                                          NetRequest().favoriteDelete(
+                                              collectList[i].id,
+                                                  (data) {
+                                                if (_isMounted) {
+                                                  ToastUtils.showToast(
+                                                      '删除成功');
+                                                  collectList.removeAt(i);
+                                                  setState(() {});
+                                                }
+                                              });
+                                        },
+                                      ),
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                'assets/svg/icon_delete.svg',
+                                width: 22,
+                                height: 22,
+                              ),
+                            ),
+                          ],
+                        ),
+                        child: MyCollectItem(item: collectList[i]));
+                  },
+                  itemCount: collectList.length)),
+        );
+      },
+    );
+  }
+
+  Widget _buildGroupWidget() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SlidableAutoCloseBehavior(
+          child: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              controller: _refreshController2,
+              onRefresh: _onRefresh,
+              child: loaded && groupCollectList.isEmpty
+                  ? const Center(child: NoDataView())
+                  : ListView.builder(
+                  itemBuilder: (c, i) {
+                    return _buildGroupItemWidget(i);
+                  },
+                  itemCount: groupCollectList.length)),
+        );
+      },
     );
   }
 

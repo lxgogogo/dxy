@@ -41,5 +41,7 @@ abstract class Routes {
   static const collectList = '/collectList';
   static const equityCenter = '/equityCenter';
   static const telegramLogin = '/telegramLogin';
+  static const noticeList = '/noticeList';
+  static const noticeDetail = '/noticeDetail';
 
 }

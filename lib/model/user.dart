@@ -103,16 +103,27 @@ class UserProfile {
 
 class UserLevel {
   int? favoriteCategory;
+  int? id;
+  String? name;
+
 
   UserLevel.fromJson(Map<String, dynamic> json) {
     if (json["favoriteCategory"] is int) {
       favoriteCategory = json["favoriteCategory"];
+    }
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["name"] is String) {
+      name = json["name"];
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["favoriteCategory"] = favoriteCategory;
+    _data["id"] = id;
+    _data["name"] = name;
     return _data;
   }
 }

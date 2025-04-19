@@ -18,6 +18,8 @@ import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
+import 'package:holdem/page/message/notice/message_notice_detail_view.dart';
+import 'package:holdem/page/message/notice/message_notice_view.dart';
 import 'package:holdem/page/mine/collect/collect_list_view.dart';
 import 'package:holdem/page/mine/collect/creat_collect_group_view.dart';
 import 'package:holdem/page/mine/collect/finish_creat_collect_group_view.dart';
@@ -200,6 +202,14 @@ class AppPages {
     GetPage(
       name: Routes.telegramLogin,
       page: () => const TelegramLoginScreen(),
+    ),
+    GetPage(
+      name: Routes.noticeList,
+      page: () => const MessageNoticePage(),
+    ),
+    GetPage(
+      name: Routes.noticeDetail,
+      page: () => const MessageNoticeDetailPage(),
     ),
   ];
 }

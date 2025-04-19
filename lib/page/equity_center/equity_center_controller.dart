@@ -59,11 +59,6 @@ class EquityCenterController extends GetxController {
   void _getData(res) {
     final data = res['userLevelList'] ?? [];
     int userLevelId = (res['userLevelId'] ?? 0);
-    if (selectIndex > 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        carouselController.jumpToPage(selectIndex);
-      });
-    }
     List<EquityCenterBannerModel> saveData = [];
     for (int i = 0; i < data.length; i++) {
       final map = data[i];
@@ -130,6 +125,11 @@ class EquityCenterController extends GetxController {
           favoriteCategory: map['favoriteCategory'],
         ));
       }
+    }
+    if (selectIndex > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        carouselController.jumpToPage(selectIndex);
+      });
     }
     bannerList.value = saveData;
     bannerModel.value = bannerList[selectIndex];

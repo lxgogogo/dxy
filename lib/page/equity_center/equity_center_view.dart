@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -175,15 +176,22 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                       GestureDetector(
                           onTap: () {},
                           child: Container(
-                            width: 60.w,
                             height: 24.w,
+                            constraints: BoxConstraints(
+                              maxWidth: 86.w
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
                             alignment: Alignment.center,
+                            clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(12.w)),
                                 image: DecorationImage(
                                     image:
                                     AssetImage(item.buttonIcon ?? ''),
-                                    fit: BoxFit.fill)),
-                            child: Text(item.title ?? '',
+                                    fit: BoxFit.cover)),
+                            child: AutoSizeText(item.title ?? '',
+                                minFontSize: 8,
+                                maxLines: 1,
                                 style: TextStyle(
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w500,
@@ -272,15 +280,15 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     List<Map<String, dynamic>> data = [];
     for (int i = 0; i < iconData.length; i++) {
       bool suo = true;
-      if (i == 0 && (model.bookDownload ?? 0) > 0) {
+      if (i == 0 && (model.bookDownload ?? 0) > 0 || (model.bookDownload ?? 0) == -1) {
         suo = false;
-      } else if (i == 1 && (model.videoWatch ?? 0) > 0) {
+      } else if (i == 1 && (model.videoWatch ?? 0) > 0 || (model.videoWatch ?? 0) == -1) {
         suo = false;
-      } else if (i == 2 && (model.featured ?? 0) > 0) {
+      } else if (i == 2 && (model.featured ?? 0) > 0 || (model.featured ?? 0) == -1) {
         suo = false;
-      } else if (i == 3 && (model.favorite ?? 0) > 0) {
+      } else if (i == 3 && (model.favorite ?? 0) > 0 || (model.favorite ?? 0) == -1) {
         suo = false;
-      } else if (i == 4 && (model.favoriteCategory ?? 0) > 0) {
+      } else if (i == 4 && (model.favoriteCategory ?? 0) > 0 || (model.favoriteCategory ?? 0) == -1) {
         suo = false;
       }
       data.add({

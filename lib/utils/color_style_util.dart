@@ -20,6 +20,7 @@ class ColorStyle {
   static const cAE9E86 = Color(0xffAE9E86);
   static const cA4B2D5 = Color(0xffA4B2D5);
   static const cFF650F = Color(0xffFF650F);
+  static const c984100 = Color(0xff984100);
 
 
 

@@ -7,6 +7,7 @@ import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../routes/app_pages.dart';
 import '../../stores/user_store.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 
@@ -168,7 +169,9 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
 
   Widget _buildButtonItemWidget(int index) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.toNamed(Routes.noticeList);
+      },
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [

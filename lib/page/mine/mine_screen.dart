@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';

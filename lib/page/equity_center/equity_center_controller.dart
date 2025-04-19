@@ -74,7 +74,7 @@ class EquityCenterController extends GetxController {
       }
       if (map['index'] == 1) {
         saveData.add(EquityCenterBannerModel(
-          title: '一般用户',
+          title: map['name'] ??"",
           index: 0,
           bg: Assets.equityCenter.iconCenterNormalBg.path,
           rollBg: Assets.equityCenter.iconCenterRollBg.path,
@@ -93,7 +93,7 @@ class EquityCenterController extends GetxController {
         ));
       } else if (map['index'] == 2) {
         saveData.add(EquityCenterBannerModel(
-          title: '高级用户',
+          title: map['name'] ??"",
           index: 1,
           bg: Assets.equityCenter.iconCenterHighBg.path,
           rollBg: Assets.equityCenter.iconCenterRollHighBg.path,
@@ -112,7 +112,7 @@ class EquityCenterController extends GetxController {
         ));
       } else {
         saveData.add(EquityCenterBannerModel(
-          title: '皇家用户',
+          title: map['name'] ??"",
           index: 2,
           bg: Assets.equityCenter.iconCenterHighBg2.path,
           rollBg: Assets.equityCenter.iconCenterRollHighBg2.path,

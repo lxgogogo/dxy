@@ -5,6 +5,8 @@ class Log {
   static final _log = Logger(
     filter: _LogFilter(),
     printer: PrettyPrinter(lineLength: 500),
+
+    level: Level.debug
   );
 
   static void d(dynamic message) => _log.d(message);

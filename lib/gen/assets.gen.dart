@@ -363,6 +363,14 @@ class $AssetsImagesGen {
   AssetGenImage get iconHomeVideo =>
       const AssetGenImage('assets/images/icon_home_video.png');
 
+  /// File path: assets/images/icon_message_system_df.png
+  AssetGenImage get iconMessageSystemDf =>
+      const AssetGenImage('assets/images/icon_message_system_df.png');
+
+  /// File path: assets/images/icon_notice_user_n.png
+  AssetGenImage get iconNoticeUserN =>
+      const AssetGenImage('assets/images/icon_notice_user_n.png');
+
   /// File path: assets/images/icon_play.png
   AssetGenImage get iconPlay =>
       const AssetGenImage('assets/images/icon_play.png');
@@ -735,6 +743,8 @@ class $AssetsImagesGen {
         iconHomeCourse,
         iconHomeFeed,
         iconHomeVideo,
+        iconMessageSystemDf,
+        iconNoticeUserN,
         iconPlay,
         iconPostFeed,
         iconTelegram,

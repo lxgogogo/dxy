@@ -46,6 +46,7 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                _buildNoticeBtnWidget(),
                 Row(
                   children: [
                     Expanded(
@@ -150,4 +151,61 @@ class _MessagePageState extends State<MessagePage> with AutomaticKeepAliveClient
 
   @override
   bool get wantKeepAlive => true;
+
+  Widget _buildNoticeBtnWidget() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16.w, top: 12.w),
+      child: Row(
+        children: [
+          _buildButtonItemWidget(0),
+          SizedBox(width: 20.w),
+          _buildButtonItemWidget(1)
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtonItemWidget(int index) {
+    return GestureDetector(
+      onTap: () {},
+      child: Stack(
+        alignment: Alignment.centerLeft,
+        children: [
+          SizedBox(width: 58.w, height: 58.w),
+          Container(
+            width: 48.w,
+            height: 48.w,
+            color: Colors.transparent,
+            child: Image.asset(
+              Assets.images.iconNoticeUserN.path,
+              width: 48.w,
+              height: 48.w,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Container(
+              width: 22.w,
+              height: 22.w,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(11.w))
+              ),
+              child: Text(
+                '99+',
+                style: TextStyle(
+                    fontSize: 8.sp,
+                    color: Colors.white
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

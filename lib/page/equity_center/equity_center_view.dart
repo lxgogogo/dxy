@@ -114,7 +114,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    UserStore.of.user?.nickname ?? '',
+                    item.title ?? '',
                     style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
@@ -466,7 +466,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
           Row(
             children: [
               Text(
-                '成长值记录',
+                '经验值记录',
                 style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,

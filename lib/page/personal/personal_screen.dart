@@ -155,14 +155,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         ),
                                       ).then((errorTip) {
                                         if (errorTip is String) {
-                                          if (!context.mounted) return;
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => DialogNewTip(
-                                              title: '绑定失败',
-                                              content: errorTip,
-                                            ),
-                                          );
+                                          ToastUtils.showToast(errorTip);
+                                          // if (!context.mounted) return;
+                                          // showDialog(
+                                          //   context: context,
+                                          //   builder: (context) => DialogNewTip(
+                                          //     title: '绑定失败',
+                                          //     content: errorTip,
+                                          //   ),
+                                          // );
                                         }
                                       });
                                     },
@@ -182,14 +183,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         ),
                                       ).then((errorTip) {
                                         if (errorTip is String) {
-                                          if (!context.mounted) return;
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => DialogNewTip(
-                                              title: '绑定失败',
-                                              content: errorTip,
-                                            ),
-                                          );
+                                          ToastUtils.showToast(errorTip);
+                                          // if (!context.mounted) return;
+                                          // showDialog(
+                                          //   context: context,
+                                          //   builder: (context) => DialogNewTip(
+                                          //     title: '绑定失败',
+                                          //     content: errorTip,
+                                          //   ),
+                                          // );
                                         }
                                       });
                                     },
@@ -209,14 +211,15 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         ),
                                       ).then((errorTip) {
                                         if (errorTip is String) {
-                                          if (!context.mounted) return;
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => DialogNewTip(
-                                              title: '绑定失败',
-                                              content: errorTip,
-                                            ),
-                                          );
+                                          ToastUtils.showToast(errorTip);
+                                          // if (!context.mounted) return;
+                                          // showDialog(
+                                          //   context: context,
+                                          //   builder: (context) => DialogNewTip(
+                                          //     title: '绑定失败',
+                                          //     content: errorTip,
+                                          //   ),
+                                          // );
                                         }
                                       });
                                     },

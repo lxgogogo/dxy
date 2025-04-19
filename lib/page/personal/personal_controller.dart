@@ -63,14 +63,15 @@ class PersonalScreenController extends GetxController {
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
       } else {
-        if (!context.mounted) return;
-        showDialog(
-          context: context,
-          builder: (context) => DialogNewTip(
-            title: '绑定失败',
-            content: res.msg,
-          ),
-        );
+        ToastUtils.showToast(res.msg);
+        // if (!context.mounted) return;
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => DialogNewTip(
+        //     title: '绑定失败',
+        //     content: res.msg,
+        //   ),
+        // );
       }
     } finally {
       isAuthorizing = false;
@@ -108,14 +109,15 @@ class PersonalScreenController extends GetxController {
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
       } else {
-        if (!context.mounted) return;
-        showDialog(
-          context: context,
-          builder: (context) => DialogNewTip(
-            title: '绑定失败',
-            content: res.msg,
-          ),
-        );
+        ToastUtils.showToast(res.msg);
+        // if (!context.mounted) return;
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => DialogNewTip(
+        //     title: '绑定失败',
+        //     content: res.msg,
+        //   ),
+        // );
       }
     } finally {
       isAuthorizing = false;
@@ -135,14 +137,15 @@ class PersonalScreenController extends GetxController {
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
       } else {
-        if (!context.mounted) return;
-        showDialog(
-          context: context,
-          builder: (context) => DialogNewTip(
-            title: '绑定失败',
-            content: res.msg,
-          ),
-        );
+        ToastUtils.showToast(res.msg);
+        // if (!context.mounted) return;
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => DialogNewTip(
+        //     title: '绑定失败',
+        //     content: res.msg,
+        //   ),
+        // );
       }
     }
   }

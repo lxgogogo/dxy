@@ -376,7 +376,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               ),
               SizedBox(width: 10.w),
               Text(
-                '多领多赚，单日最高 ${controller.levelPoints}',
+                '多领多赚，单日最高 ${controller.remainingPoints}',
                 style: TextStyle(
                     fontSize: 12.sp,
                     color: ColorStyle.c333333.withOpacity(0.7)),

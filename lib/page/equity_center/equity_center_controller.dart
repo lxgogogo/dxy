@@ -65,7 +65,7 @@ class EquityCenterController extends GetxController {
       int minPoints = map['minPoints'] ?? 0;
       if (userLevelId == (map['id'] ?? 0)) {
         selectIndex = i;
-        minPoints = pointsToDay;
+        minPoints = levelPoints;
       }
       if (map['index'] == 1) {
         saveData.add(EquityCenterBannerModel(

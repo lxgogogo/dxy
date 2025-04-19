@@ -73,7 +73,8 @@ dependencies:
   flutter_inappwebview: 6.1.5
   app_links: ^6.3.3
   smooth_page_indicator: ^1.2.1
-  visibility_detector: ^0.4.0+2
+#  visibility_detector: ^0.4.0+2
+  focus_detector: ^2.0.1
   firebase_core: ^3.13.0
   sign_in_with_apple: ^6.1.4
   google_sign_in: ^6.2.2

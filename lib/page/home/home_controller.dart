@@ -34,6 +34,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     loadCourses();
     loadBooks();
     loadHotTags();
+    UserStore.of.getUserInfo();
   }
 
   @override

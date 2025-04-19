@@ -93,6 +93,7 @@ class UserProfile {
     _data["fansCount"] = fansCount;
     _data["followed"] = followed;
     _data["isFans"] = isfans;
+    _data["userLevel"] = userLevel?.toJson();
     return _data;
   }
 

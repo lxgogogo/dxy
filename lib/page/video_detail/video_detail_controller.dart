@@ -356,4 +356,12 @@ class VideoDetailController extends GetxController {
       safeUpdate();
     }
   }
+
+  void onFocusGained() {
+    playVideo();
+  }
+
+  void onFocusLost() {
+    videoController?.pause();
+  }
 }

@@ -8,6 +8,9 @@ class MineController extends GetxController with GetSingleTickerProviderStateMix
   void onInit() {
     super.onInit();
     tabController = TabController(length: tabs.length, vsync: this);
+  }
+
+  void onFocusGained() {
     UserStore.of.getUserInfo();
   }
 }

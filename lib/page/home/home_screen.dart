@@ -30,6 +30,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../model/banner.dart';
 import '../../model/home_hot_tag_model.dart';
 import '../../services/home_service.dart';
+import '../../stores/user_store.dart';
 import '../../utils/event_bus_util.dart';
 
 part 'home_controller.dart';

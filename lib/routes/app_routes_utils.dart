@@ -46,12 +46,16 @@ class AppRoutesUtils {
         content: '您当前的身份为一般用户\n请提升用户等级获得更多权限')) {
       return false;
     } else if (!haveDown) {
+      String powerName = UserStore.of.user?.userLevel?.name ?? '';
+      if (powerName.isEmpty) {
+        powerName = '一般用户';
+      }
       showDialog(
           barrierDismissible: false,
           context: Get.context!,
           builder: (context) => CommonDialog(
             title: '当前下载书籍已达上限',
-            content: '您当前的身份为一般用户\n请提升用户等级获得更多权限',
+            content: '您当前的身份为$powerName\n请提升用户等级获得更多权限',
             confirmText: '好',
             onConfirm: () {
               Get.close(1);
@@ -66,12 +70,16 @@ class AppRoutesUtils {
 
   // 收藏权限
   static void haveCollect() {
+    String powerName = UserStore.of.user?.userLevel?.name ?? '';
+    if (powerName.isEmpty) {
+      powerName = '一般用户';
+    }
     showDialog(
         barrierDismissible: false,
         context: Get.context!,
         builder: (context) => CommonDialog(
           title: '当前收藏内容已达上限',
-          content: '您当前的身份为一般用户\n请提升用户等级获得更多权限',
+          content: '您当前的身份为$powerName\n请提升用户等级获得更多权限',
           confirmText: '好',
           onConfirm: () {
             Get.close(1);
@@ -82,8 +90,12 @@ class AppRoutesUtils {
   }
 
   static void haveVideoWatch({
-    String title = '当前观看视频已达上限',
-    String content = '您当前的身份为一般用户\n请提升用户等级获得更多权限'}) {
+    String title = '当前观看视频已达上限'}) {
+    String powerName = UserStore.of.user?.userLevel?.name ?? '';
+    if (powerName.isEmpty) {
+      powerName = '一般用户';
+    }
+    String content = '您当前的身份为$powerName\n请提升用户等级获得更多权限';
     showDialog(
         barrierDismissible: false,
         context: Get.context!,

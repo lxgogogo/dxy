@@ -404,7 +404,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
       Get.back();
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
     } else {
-      Get.back(result: res.msg);
+      ToastUtils.showToast(res.msg);
     }
   }
 }

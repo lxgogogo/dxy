@@ -155,7 +155,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         ),
                                       ).then((errorTip) {
                                         if (errorTip is String) {
-                                          ToastUtils.showToast(errorTip);
                                           // if (!context.mounted) return;
                                           // showDialog(
                                           //   context: context,
@@ -183,7 +182,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         ),
                                       ).then((errorTip) {
                                         if (errorTip is String) {
-                                          ToastUtils.showToast(errorTip);
                                           // if (!context.mounted) return;
                                           // showDialog(
                                           //   context: context,
@@ -211,7 +209,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         ),
                                       ).then((errorTip) {
                                         if (errorTip is String) {
-                                          ToastUtils.showToast(errorTip);
                                           // if (!context.mounted) return;
                                           // showDialog(
                                           //   context: context,

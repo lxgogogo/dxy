@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../utils/track_utils.dart';
 
 class HomeCourseItem extends StatelessWidget {
   const HomeCourseItem({
@@ -25,7 +26,11 @@ class HomeCourseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed(Routes.course, arguments: {'title': title}),
+      onTap: TrackUtils.trackedTap(
+        onTap: () => Get.toNamed(Routes.course, arguments: {'title': title}),
+        category: '首页',
+        action: '点击德州教程',
+      ),
       child: Container(
         width: itemWidth,
         height: itemWidth / (170 / 205),

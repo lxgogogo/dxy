@@ -32,6 +32,7 @@ import '../../model/home_hot_tag_model.dart';
 import '../../services/home_service.dart';
 import '../../stores/user_store.dart';
 import '../../utils/event_bus_util.dart';
+import '../../utils/track_utils.dart';
 
 part 'home_controller.dart';
 
@@ -90,9 +91,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   children: [
                     Assets.images.logoText.image(width: 91.75.w),
                     GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.search);
-                      },
+                      onTap: TrackUtils.trackedTap(
+                        onTap: () => Get.toNamed(Routes.search),
+                        category: '首页',
+                        action: '点击搜索',
+                      ),
                       child: SvgPicture.asset(
                         Assets.svg.iconSearch,
                         width: 24.w,
@@ -125,7 +128,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     itemCount: controller.banners.length,
                                     itemBuilder: (BuildContext context, int index) {
                                       return GestureDetector(
-                                        onTap: controller.jumpPage,
+                                        onTap: TrackUtils.trackedTap(
+                                          onTap: controller.jumpPage,
+                                          category: '首页',
+                                          action: '点击Banner',
+                                          parameters: {
+                                            'url': controller.banners[index].jumpValue,
+                                          },
+                                        ),
                                         child: CachedNetworkImage(
                                           fit: BoxFit.cover,
                                           imageUrl: controller.banners[index].imgMobile ?? '',
@@ -211,28 +221,44 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     name: '精彩视频',
                                                     nameEn: 'Video',
                                                     imagePath: Assets.images.iconHomeVideo.path,
-                                                    onTap: () => Get.toNamed(Routes.videoList),
+                                                    onTap: TrackUtils.trackedTap(
+                                                      onTap: () => Get.toNamed(Routes.videoList),
+                                                      category: '首页',
+                                                      action: '点击视频页签',
+                                                    ),
                                                   ),
                                                   HomeMenuItem(
                                                     itemWidth: itemWidth,
                                                     name: '德州教程',
                                                     nameEn: 'Tutorial',
                                                     imagePath: Assets.images.iconHomeCourse.path,
-                                                    onTap: () => Get.toNamed(Routes.course),
+                                                    onTap: TrackUtils.trackedTap(
+                                                      onTap: () => Get.toNamed(Routes.course),
+                                                      category: '首页',
+                                                      action: '点击教程页签',
+                                                    ),
                                                   ),
                                                   HomeMenuItem(
                                                     itemWidth: itemWidth,
                                                     name: '好书推荐',
                                                     nameEn: 'Recommend',
                                                     imagePath: Assets.images.iconHomeBook.path,
-                                                    onTap: () => Get.toNamed(Routes.boolList),
+                                                    onTap: TrackUtils.trackedTap(
+                                                      onTap: () => Get.toNamed(Routes.boolList),
+                                                      category: '首页',
+                                                      action: '点击书籍页签',
+                                                    ),
                                                   ),
                                                   HomeMenuItem(
                                                     itemWidth: itemWidth,
                                                     name: '火爆论坛',
                                                     nameEn: 'BBS',
                                                     imagePath: Assets.images.iconHomeFeed.path,
-                                                    onTap: () => controller.changeMainTab(1),
+                                                    onTap: TrackUtils.trackedTap(
+                                                      onTap: () => controller.changeMainTab(1),
+                                                      category: '首页',
+                                                      action: '点击论坛页签',
+                                                    ),
                                                   ),
                                                 ],
                                               );
@@ -243,7 +269,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                         HomeTitle(
                                           title: '热门视频',
                                           subtitle: GestureDetector(
-                                            onTap: controller.loadHotVideos,
+                                            onTap: TrackUtils.trackedTap(
+                                              onTap: controller.loadHotVideos,
+                                              category: '首页',
+                                              action: '换一批',
+                                            ),
                                             child: Row(
                                               children: [
                                                 Text(
@@ -281,10 +311,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                               spacing: 12.w,
                                               runSpacing: 12.w,
                                               children: controller.hotVideos
-                                                  .map((e) => SizedBox(
-                                                        width: itemWidth,
-                                                        child: VideoItem(
-                                                            item: ArticleBean(
+                                                  .map(
+                                                    (e) => SizedBox(
+                                                      width: itemWidth,
+                                                      child: VideoItem(
+                                                        onTap: () => TrackUtils.trackEvent(
+                                                          category: '首页',
+                                                          action: '点击热门视频',
+                                                        ),
+                                                        item: ArticleBean(
                                                           id: e.id,
                                                           cover: e.cover,
                                                           viewCount: e.viewCount,
@@ -294,9 +329,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                           type: e.type,
                                                           likeCount: e.likeCount,
                                                           commentCount: e.commentCount,
-
-                                                        )),
-                                                      ))
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
                                                   .toList(),
                                             );
                                           },
@@ -308,7 +344,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           children: controller.videoItems
                                               .map((e) => Padding(
                                                     padding: EdgeInsets.only(top: 6.w),
-                                                    child: VideoHorizontalItem(item: e),
+                                                    child: VideoHorizontalItem(
+                                                      item: e,
+                                                      onTap: () => TrackUtils.trackEvent(
+                                                        category: '首页',
+                                                        action: '点击精彩视频',
+                                                      ),
+                                                    ),
                                                   ))
                                               .toList(),
                                         ),
@@ -374,7 +416,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           },
                                         ),
                                         SizedBox(height: 24.w),
-                                        HomeTitle(title: '好书推荐', onTap: () => Get.toNamed(Routes.boolList)),
+                                        HomeTitle(
+                                          title: '好书推荐',
+                                          onTap: TrackUtils.trackedTap(
+                                            onTap: () => Get.toNamed(Routes.boolList),
+                                            category: '首页',
+                                            action: '点击好书推荐查看更多',
+                                          ),
+                                        ),
                                         SizedBox(height: 12.w),
                                         LayoutBuilder(
                                           builder: (BuildContext context, BoxConstraints constraints) {
@@ -383,12 +432,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                               spacing: 12.w,
                                               runSpacing: 12.w,
                                               children: controller.bookItems
-                                                  .map(
-                                                    (e) => ThreeDBookItem(
+                                                  .map((e) => ThreeDBookItem(
                                                       itemWidth: itemWidth,
                                                       item: e,
-                                                    ),
-                                                  )
+                                                      onTap: () => TrackUtils.trackEvent(
+                                                            category: '首页',
+                                                            action: '点击好书推荐',
+                                                          )))
                                                   .toList(),
                                             );
                                           },

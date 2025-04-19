@@ -64,6 +64,7 @@ class Api {
   static const String upCount = '/api/content/upCount';
   static const String threadUpCount = '/api/thread/upCount';
   static const String deleteAccount = '/api/user/deleteAccount';
+  static const String trackEvent = '';
   static const String saveReview = '/api/statistics/save';
   static const String sourceCreate = '/api/source/create';
 

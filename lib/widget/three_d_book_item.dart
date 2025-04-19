@@ -12,10 +12,12 @@ class ThreeDBookItem extends StatelessWidget {
     super.key,
     required this.itemWidth,
     required this.item,
+    this.onTap,
   });
 
   final double itemWidth;
   final ArticleBean item;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class ThreeDBookItem extends StatelessWidget {
           Routes.bookDetail,
           arguments: item.id,
         );
+        onTap?.call();
       },
       child: SizedBox(
         width: itemWidth,

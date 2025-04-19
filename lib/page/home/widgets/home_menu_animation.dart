@@ -7,6 +7,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../utils/track_utils.dart';
 import '../../main/main_screen.dart';
 
 class HomeMenuSlideAnimation extends StatefulWidget {
@@ -58,28 +59,44 @@ class HomeMenu extends StatelessWidget {
                   name: '精彩视频',
                   nameEn: 'Video',
                   imagePath: Assets.images.iconHomeVideo.path,
-                  onTap: () => Get.toNamed(Routes.videoList),
+                  onTap: TrackUtils.trackedTap(
+                    onTap: () => Get.toNamed(Routes.videoList),
+                    category: '首页',
+                    action: '点击视频页签',
+                  ),
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
                   name: '德州教程',
                   nameEn: 'Tutorial',
                   imagePath: Assets.images.iconHomeCourse.path,
-                  onTap: () => Get.toNamed(Routes.course),
+                  onTap: TrackUtils.trackedTap(
+                    onTap: () => Get.toNamed(Routes.course),
+                    category: '首页',
+                    action: '点击教程页签',
+                  ),
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
                   name: '好书推荐',
                   nameEn: 'Recommend',
                   imagePath: Assets.images.iconHomeBook.path,
-                  onTap: () => Get.toNamed(Routes.boolList),
+                  onTap: TrackUtils.trackedTap(
+                    onTap: () => Get.toNamed(Routes.boolList),
+                    category: '首页',
+                    action: '点击书籍页签',
+                  ),
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
                   name: '火爆论坛',
                   nameEn: 'BBS',
                   imagePath: Assets.images.iconHomeFeed.path,
-                  onTap: () => Get.find<MainController>().onTabBarItem(1),
+                  onTap: TrackUtils.trackedTap(
+                    onTap: () => Get.find<MainController>().onTabBarItem(1),
+                    category: '首页',
+                    action: '点击论坛页签',
+                  ),
                 ),
               ],
             ),

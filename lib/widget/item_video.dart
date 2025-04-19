@@ -20,8 +20,14 @@ import '../utils/log_utils.dart';
 class VideoItem extends StatelessWidget {
   final ArticleBean item;
   final BorderRadiusGeometry? borderRadius;
+  final VoidCallback? onTap;
 
-  const VideoItem({super.key, required this.item, this.borderRadius});
+  const VideoItem({
+    super.key,
+    required this.item,
+    this.borderRadius,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +39,7 @@ class VideoItem extends StatelessWidget {
           Routes.videoDetail,
           arguments: {'id': item.id},
         );
+        onTap?.call();
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,39 +125,34 @@ class VideoItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 6.w, bottom: 3.w),
-            child: Row(
-              children: [
-                if (item.featured == 1)
-                  Container(
-                    width: 28.w,
-                    height: 18.w,
-                    margin: EdgeInsets.only(right: 2.w),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4.w)),
-                        color: ColorStyle.cFF650F
-                    ),
-                    child: Text(
-                      '精选',
-                      style: TextStyle(
-                          fontSize: 10.sp,
-                          color: Colors.white
+              padding: EdgeInsets.only(top: 6.w, bottom: 3.w),
+              child: Row(
+                children: [
+                  if (item.featured == 1)
+                    Container(
+                      width: 28.w,
+                      height: 18.w,
+                      margin: EdgeInsets.only(right: 2.w),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(4.w)), color: ColorStyle.cFF650F),
+                      child: Text(
+                        '精选',
+                        style: TextStyle(fontSize: 10.sp, color: Colors.white),
                       ),
                     ),
-                  ),
-                Expanded(child: Text(
-                  item.title ?? '',
-                  style: TextStyle(
-                    color: '#333333'.hexColor,
-                    fontSize: 12.sp,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ))
-              ],
-            )
-          ),
+                  Expanded(
+                      child: Text(
+                    item.title ?? '',
+                    style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 12.sp,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ))
+                ],
+              )),
           Row(
             children: [
               Text(
@@ -179,8 +181,13 @@ class VideoItem extends StatelessWidget {
 
 class VideoHorizontalItem extends StatelessWidget {
   final ArticleBean item;
+  final VoidCallback? onTap;
 
-  const VideoHorizontalItem({super.key, required this.item});
+  const VideoHorizontalItem({
+    super.key,
+    required this.item,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -192,6 +199,7 @@ class VideoHorizontalItem extends StatelessWidget {
           Routes.videoDetail,
           arguments: {'id': item.id},
         );
+        onTap?.call();
       },
       child: Container(
         height: 92.w,
@@ -263,18 +271,14 @@ class VideoHorizontalItem extends StatelessWidget {
                             margin: EdgeInsets.only(right: 2.w),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(4.w)),
-                                color: ColorStyle.cFF650F
-                            ),
+                                borderRadius: BorderRadius.all(Radius.circular(4.w)), color: ColorStyle.cFF650F),
                             child: Text(
                               '精选',
-                              style: TextStyle(
-                                  fontSize: 10.sp,
-                                  color: Colors.white
-                              ),
+                              style: TextStyle(fontSize: 10.sp, color: Colors.white),
                             ),
                           ),
-                        Expanded(child: Text(
+                        Expanded(
+                            child: Text(
                           item.title ?? '',
                           textAlign: TextAlign.left,
                           style: TextStyle(

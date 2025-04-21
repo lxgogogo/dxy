@@ -37,13 +37,12 @@ class CaptchaStore extends GetxController {
           // TODO
           // 发送 message["result"] 中的数据向服务端二次查询接口查询结果
           // 对结果进行二次校验
-          final result = message["result"] as Map<String, dynamic>;
+          Map result = message["result"] as Map;
           final captchaModel = CaptchaResultModel.fromJson(result);
           completer?.complete(captchaModel);
         } else {
           // 终端用户完成验证错误，验证会自动刷新
           debugPrint("Captcha 'onResult' state: $status");
-          completer?.complete(null);
         }
       },
       onError: (Map<String, dynamic> message) async {

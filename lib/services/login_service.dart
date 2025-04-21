@@ -17,6 +17,7 @@ class LoginService {
         "accountType": accountType,
         "account": account,
         "password": password,
+        "validateDto": captchaResult.toPostJson(),
       },
       showLoading: true,
     );

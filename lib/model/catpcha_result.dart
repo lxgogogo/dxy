@@ -1,6 +1,6 @@
 class CaptchaResultModel {
   String? passToken;
-  int? genTime;
+  String? genTime;
   String? captchaOutput;
   String? captchaId;
   String? lotNumber;
@@ -13,7 +13,7 @@ class CaptchaResultModel {
     this.lotNumber,
   });
 
-  factory CaptchaResultModel.fromJson(Map<String, dynamic> json) => CaptchaResultModel(
+  factory CaptchaResultModel.fromJson(Map json) => CaptchaResultModel(
         passToken: json["pass_token"],
         genTime: json["gen_time"],
         captchaOutput: json["captcha_output"],
@@ -27,5 +27,12 @@ class CaptchaResultModel {
         "captcha_output": captchaOutput,
         "captcha_id": captchaId,
         "lot_number": lotNumber,
+      };
+
+  Map<String, dynamic> toPostJson() => {
+        "passToken": 'passToken',
+        "genTime": genTime,
+        "captchaOutput": captchaOutput,
+        "lotNumber": lotNumber,
       };
 }

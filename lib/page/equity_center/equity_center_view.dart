@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -23,43 +24,53 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Obx(() => Image.asset(
-          controller.bg.value,
-          width: 1.sw,
-          fit: BoxFit.fitWidth,
-        )),
-        Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: CommonAppBar.arrowBack(context, title: '权益中心'),
-            body: Obx(() => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildBannerWidget(),
-                _buildCategoryWidget(),
-                Expanded(
-                    child: Container(
-                        margin: EdgeInsets.only(top: 10.w),
-                        decoration: BoxDecoration(
-                            color: ColorStyle.cF5F5F5,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.w),
-                                topRight: Radius.circular(10.w))),
-                        child: SafeArea(
-                            child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildDayTaskWidget(),
-                                    SizedBox(height: 10.w),
-                                    _buildRunWidget()
-                                  ],
-                                )))))
-              ],
-            )))
-      ],
-    );
+    return Obx(() => Stack(
+          children: [
+            if (controller.isLoading.value)
+              const SizedBox()
+            else
+              Image.asset(
+                controller.bg.value,
+                width: 1.sw,
+                fit: BoxFit.fitWidth,
+              ),
+            Scaffold(
+                backgroundColor: controller.isLoading.value
+                    ? Colors.white
+                    : Colors.transparent,
+                appBar: CommonAppBar.arrowBack(context, title: '权益中心'),
+                body: controller.isLoading.value
+                    ? const Center(
+                        child: CupertinoActivityIndicator(color: Colors.grey),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildBannerWidget(),
+                          _buildCategoryWidget(),
+                          Expanded(
+                              child: Container(
+                                  margin: EdgeInsets.only(top: 10.w),
+                                  decoration: BoxDecoration(
+                                      color: ColorStyle.cF5F5F5,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10.w),
+                                          topRight: Radius.circular(10.w))),
+                                  child: SafeArea(
+                                      child: SingleChildScrollView(
+                                          child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _buildDayTaskWidget(),
+                                      SizedBox(height: 10.w),
+                                      _buildRunWidget()
+                                    ],
+                                  )))))
+                        ],
+                      ))
+          ],
+        ));
   }
 
   @override
@@ -78,6 +89,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
           height: 178.w,
           initialPage: controller.selectIndex,
           clipBehavior: Clip.antiAlias,
+          enableInfiniteScroll: false,
           onPageChanged: (index, reason) {
             controller.onPageChanged(index);
           }),
@@ -89,7 +101,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
         if (minPoint >= maxPoint || maxPoint <= 0) {
           progressWidth = allWidth;
         } else {
-          progressWidth = minPoint/maxPoint * allWidth;
+          progressWidth = minPoint / maxPoint * allWidth;
         }
         return Stack(
           children: [
@@ -101,8 +113,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               margin: EdgeInsets.only(left: 6.w, right: 6.w, top: 15.w),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(item.rollBg ?? ''),
-                      fit: BoxFit.fill),
+                      image: AssetImage(item.rollBg ?? ''), fit: BoxFit.fill),
                   boxShadow: [
                     BoxShadow(
                         color: (item.shadowColor ?? ColorStyle.c6CABFF)
@@ -127,23 +138,21 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
-                            Row(
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 '经验值 ${item.minPoints ?? 0}',
                                 style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: item.titleColor),
+                                    fontSize: 12.sp, color: item.titleColor),
                               ),
                               Text(
-                                maxPoint > 0 ?'/${item.maxPoints ?? 0}' : '/-',
+                                maxPoint > 0 ? '/${item.maxPoints ?? 0}' : '/-',
                                 style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: (item.titleColor ??
-                                        ColorStyle.c333333)
-                                        .withOpacity(0.5)),
+                                    color:
+                                        (item.titleColor ?? ColorStyle.c333333)
+                                            .withOpacity(0.5)),
                               ),
                             ],
                           ),
@@ -154,18 +163,17 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                 width: allWidth,
                                 height: 2.w,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(1.w)),
-                                  color:
-                                  ColorStyle.c29426A.withOpacity(0.2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(1.w)),
+                                  color: ColorStyle.c29426A.withOpacity(0.2),
                                 ),
                               ),
                               Container(
                                 width: progressWidth,
                                 height: 2.w,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(1.w)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(1.w)),
                                     color: item.titleColor),
                               ),
                             ],
@@ -177,17 +185,15 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                           onTap: () {},
                           child: Container(
                             height: 24.w,
-                            constraints: BoxConstraints(
-                              maxWidth: 86.w
-                            ),
+                            constraints: BoxConstraints(maxWidth: 86.w),
                             padding: EdgeInsets.symmetric(horizontal: 8.w),
                             alignment: Alignment.center,
                             clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(12.w)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.w)),
                                 image: DecorationImage(
-                                    image:
-                                    AssetImage(item.buttonIcon ?? ''),
+                                    image: AssetImage(item.buttonIcon ?? ''),
                                     fit: BoxFit.cover)),
                             child: AutoSizeText(item.title ?? '',
                                 minFontSize: 8,
@@ -206,8 +212,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                       height: 36.w,
                       padding: EdgeInsets.only(left: 12.w, right: 12.w),
                       decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(8.w)),
+                          borderRadius: BorderRadius.all(Radius.circular(8.w)),
                           color: ColorStyle.white.withOpacity(0.3)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -222,8 +227,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                               Text(
                                 '去完成',
                                 style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: item.titleColor),
+                                    fontSize: 12.sp, color: item.titleColor),
                               ),
                               Image.asset(
                                 Assets.images.arrowRight.path,
@@ -261,7 +265,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     if (controller.bannerList.isEmpty) {
       return SizedBox(height: 70.w);
     }
-    final model = controller.bannerModel.value;
+    final model = controller.userLevelModel.value;
     var iconData = [
       Assets.equityCenter.iconCenterBook.path,
       Assets.equityCenter.iconCenterVideo.path,
@@ -274,21 +278,28 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       (model.videoWatch ?? 0) == -1 ? '无限' : '${model.videoWatch ?? 0}分钟',
       (model.featured ?? 0) == -1 ? '无限' : '${model.featured ?? 0}部/天',
       (model.favorite ?? 0) == -1 ? '无限' : '${model.favorite ?? 0}',
-      (model.favoriteCategory ?? 0) == -1 ? '无限' : '${model.favoriteCategory ?? 0}'
+      (model.favoriteCategory ?? 0) == -1
+          ? '无限'
+          : '${model.favoriteCategory ?? 0}'
     ];
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
     List<Map<String, dynamic>> data = [];
     for (int i = 0; i < iconData.length; i++) {
       bool suo = true;
-      if (i == 0 && (model.bookDownload ?? 0) > 0 || (model.bookDownload ?? 0) == -1) {
+      if (i == 0 && (model.bookDownload ?? 0) > 0 ||
+          (model.bookDownload ?? 0) == -1) {
         suo = false;
-      } else if (i == 1 && (model.videoWatch ?? 0) > 0 || (model.videoWatch ?? 0) == -1) {
+      } else if (i == 1 && (model.videoWatch ?? 0) > 0 ||
+          (model.videoWatch ?? 0) == -1) {
         suo = false;
-      } else if (i == 2 && (model.featured ?? 0) > 0 || (model.featured ?? 0) == -1) {
+      } else if (i == 2 && (model.featured ?? 0) > 0 ||
+          (model.featured ?? 0) == -1) {
         suo = false;
-      } else if (i == 3 && (model.favorite ?? 0) > 0 || (model.favorite ?? 0) == -1) {
+      } else if (i == 3 && (model.favorite ?? 0) > 0 ||
+          (model.favorite ?? 0) == -1) {
         suo = false;
-      } else if (i == 4 && (model.favoriteCategory ?? 0) > 0 || (model.favoriteCategory ?? 0) == -1) {
+      } else if (i == 4 && (model.favoriteCategory ?? 0) > 0 ||
+          (model.favoriteCategory ?? 0) == -1) {
         suo = false;
       }
       data.add({

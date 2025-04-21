@@ -206,6 +206,13 @@ class _CollectListPageState extends State<CollectListPage> {
               ],
             ),
           ),
+          Text(
+            '已选${controller.selectAllCount.value}条',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: ColorStyle.c333333
+            ),
+          ),
           GestureDetector(
             onTap: controller.deleteCollectList,
             child: Container(

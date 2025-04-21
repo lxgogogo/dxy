@@ -18,6 +18,7 @@ class CollectListController extends GetxController {
       RefreshController(initialRefresh: false);
 
   RxList<CollectModel> collectList = <CollectModel>[].obs;
+  RxInt selectAllCount = 0.obs;
   List<dynamic> selectIds = [];
   int pageNum = 1;
   int pageSize = 20;
@@ -136,6 +137,7 @@ class CollectListController extends GetxController {
         selectIds.add('${model.id ?? 0}');
       }
     }
+    selectAllCount.value = selectIds.length;
     if (collectList.length == selectCount) {
       isSelectAll.value = true;
     } else {

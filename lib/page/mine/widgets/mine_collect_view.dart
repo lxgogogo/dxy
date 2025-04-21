@@ -16,6 +16,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../model/collect_group_model.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../../utils/date_util.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/net_request.dart';
 import '../../../utils/toast_utils.dart';
@@ -218,12 +219,12 @@ class _MineCollectViewState extends State<MineCollectView>
                     labelStyle: TextStyle(
                       color: ColorStyle.c333333,
                       fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                     ),
                     unselectedLabelStyle: TextStyle(
-                      color: ColorStyle.c333333,
+                      color: ColorStyle.c333333.withOpacity(0.7),
                       fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.normal,
                     ),
                     onTap: _selectOnTap),
               )),
@@ -354,7 +355,10 @@ class _MineCollectViewState extends State<MineCollectView>
     final model = groupCollectList[index];
     String dateStr = '';
     if (model.createdat != null) {
-      dateStr = DateFormat('yyyy.MM.dd').format(model.createdat!);
+      dateStr = '${DateUtil.formatDateAlias3(
+        model.createdat!.millisecondsSinceEpoch,
+        hasHM: true,
+      )}创建';
     }
     return GestureDetector(
         onTap: () {
@@ -410,7 +414,7 @@ class _MineCollectViewState extends State<MineCollectView>
                           color: ColorStyle.c333333.withOpacity(0.5)),
                     ),
                     Text(
-                      '$dateStr创建',
+                      dateStr,
                       style: TextStyle(
                           fontSize: 12.w,
                           color: ColorStyle.c333333.withOpacity(0.5)),

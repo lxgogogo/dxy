@@ -9,6 +9,7 @@ import 'package:holdem/routes/app_pages.dart';
 import '../../../constants.dart';
 import '../../../model/user.dart';
 import '../../../services/index.dart';
+import '../../../stores/captcha_store.dart';
 import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
@@ -292,14 +293,15 @@ class _LoginContentState extends State<LoginContent> {
   }
 
   Future<void> login() async {
-    // final captcha = await CaptchaStore.of.verify();
-    // if (captcha.isEmpty) return;
+    final captchaResult = await CaptchaStore.of.verify();
+    if (captchaResult == null) return;
     final account = _controllerAccount.text;
     final password = _controllerPw.text;
     final res = await LoginService.of.login(
       account: account,
       password: password,
       accountType: type.typeValue,
+      captchaResult: captchaResult,
     );
     if (res.isSuccess) {
       ToastUtils.showToast('登录成功');

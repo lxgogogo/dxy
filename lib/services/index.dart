@@ -7,6 +7,8 @@ import 'package:holdem/utils/devices_util.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/http_utils.dart';
 
+import '../model/catpcha_result.dart';
+
 part 'common_service.dart';
 part 'login_service.dart';
 part 'user_service.dart';

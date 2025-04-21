@@ -6,11 +6,13 @@ import 'package:get/get.dart';
 import 'package:gt4_flutter_plugin/gt4_flutter_plugin.dart';
 import 'package:gt4_flutter_plugin/gt4_session_configuration.dart';
 
+import '../model/catpcha_result.dart';
+
 class CaptchaStore extends GetxController {
   static CaptchaStore get of => Get.find();
 
   Gt4FlutterPlugin? captcha;
-  Completer<String>? completer;
+  Completer<CaptchaResultModel?>? completer;
 
   @override
   void onReady() {
@@ -30,19 +32,19 @@ class CaptchaStore extends GetxController {
         debugPrint("Captcha did show");
       },
       onResult: (Map<String, dynamic> message) async {
-        debugPrint("Captcha result: " + message.toString());
-
         String status = message["status"];
         if (status == "1") {
           // TODO
           // 发送 message["result"] 中的数据向服务端二次查询接口查询结果
           // 对结果进行二次校验
-          Map result = message["result"] as Map;
+          final result = message["result"] as Map<String, dynamic>;
+          final captchaModel = CaptchaResultModel.fromJson(result);
+          completer?.complete(captchaModel);
         } else {
           // 终端用户完成验证错误，验证会自动刷新
           debugPrint("Captcha 'onResult' state: $status");
+          completer?.complete(null);
         }
-        completer?.complete('success');
       },
       onError: (Map<String, dynamic> message) async {
         debugPrint("Captcha onError: $message");
@@ -70,13 +72,13 @@ class CaptchaStore extends GetxController {
           }
         }
 
-        completer?.complete('');
+        completer?.complete(null);
       },
     );
   }
 
-  Future<String> verify() {
-    completer = Completer<String>();
+  Future<CaptchaResultModel?> verify() {
+    completer = Completer<CaptchaResultModel?>();
     captcha?.verify();
     return completer!.future;
   }

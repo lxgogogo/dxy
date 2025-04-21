@@ -9,6 +9,7 @@ class LoginService {
     required String accountType,
     required String account,
     required String password,
+    required CaptchaResultModel captchaResult,
   }) async {
     final res = await HttpUtils.postNew(
       Api.login,

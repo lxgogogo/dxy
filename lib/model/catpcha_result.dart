@@ -30,7 +30,7 @@ class CaptchaResultModel {
       };
 
   Map<String, dynamic> toPostJson() => {
-        "passToken": 'passToken',
+        "passToken": passToken,
         "genTime": genTime,
         "captchaOutput": captchaOutput,
         "lotNumber": lotNumber,

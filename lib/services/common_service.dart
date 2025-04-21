@@ -117,6 +117,7 @@ class CommonService {
         "account": account,
         "verifyCodeType": verifyCodeType,
       },
+      showLoading: true,
     );
     return res ?? ResBaseModel.defaultRes;
   }

@@ -274,16 +274,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 36.w,
                   ),
                 ),
-                if (Platform.isIOS) ...[
-                  SizedBox(width: 36.w),
-                  GestureDetector(
-                    onTap: signInWithApple,
-                    child: Assets.images.iconAppleCircle.image(
-                      width: 36.w,
-                      height: 36.w,
-                    ),
+                // if (Platform.isIOS) ...[
+                SizedBox(width: 36.w),
+                GestureDetector(
+                  onTap: signInWithApple,
+                  child: Assets.images.iconAppleCircle.image(
+                    width: 36.w,
+                    height: 36.w,
                   ),
-                ],
+                ),
+                // ],
                 SizedBox(width: 36.w),
                 GestureDetector(
                   onTap: signInWithTelegram,

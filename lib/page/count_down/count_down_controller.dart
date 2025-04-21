@@ -36,14 +36,18 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
       return;
     }
     try {
-      CommonService.of.sendVerifyCode(
+      final res = await CommonService.of.sendVerifyCode(
         account,
         verifyType,
         verifyCodeType,
       );
-      _startTime = DateTime.now();
-      countdown(countdownDuration);
-      _startTimer();
+      if (res.isSuccess) {
+        _startTime = DateTime.now();
+        countdown(countdownDuration);
+        _startTimer();
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Failed to send code: $e');

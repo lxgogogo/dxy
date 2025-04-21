@@ -1,18 +1,26 @@
 import 'package:get/get.dart';
+import 'package:holdem/services/message_service.dart';
+
+import '../../../model/message_notice_model.dart';
+
 
 class MessageNoticeDetailController extends GetxController {
 
-  bool isSystem = true;
+  RxBool isSystem = true.obs;
+  var detailData = MessageNoticeModel().obs;
 
   @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
+  void onInit() {
+    super.onInit();
+    isSystem.value = Get.arguments['pageType'] == 0 ? true : false;
+    detailData.value = MessageNoticeModel.fromJson(Get.arguments['data']);
+    _requestData();
+
   }
 
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
+  void _requestData() async {
+    int id = Get.arguments['id'];
+    final resData = await MessageService.noticeRead({'notifiesId': id});
+    detailData.value = resData;
   }
 }

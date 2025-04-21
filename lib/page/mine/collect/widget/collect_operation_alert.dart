@@ -25,7 +25,7 @@ class CollectOperationWidget extends StatefulWidget {
 class _CollectOperationWidgetState extends State<CollectOperationWidget>{
   final List<CollectOperationModel> _dataList = [
     CollectOperationModel(title: '新增内容', select: false, index: 0),
-    CollectOperationModel(title: '删除内容', select: false, index: 1),
+    CollectOperationModel(title: '移出分类', select: false, index: 1),
     CollectOperationModel(title: '修改名称', select: false, index: 2),
     CollectOperationModel(title: '删除分类', select: true, index: 3),
   ];

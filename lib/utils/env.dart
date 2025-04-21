@@ -7,7 +7,7 @@ enum ApiEnv {
   prod2,
 }
 
-ApiEnv _kApiEnv = ApiEnv.test;
+ApiEnv _kApiEnv = ApiEnv.dev;
 
 ApiEnv get kAPiEnv => _kApiEnv;
 

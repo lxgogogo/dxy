@@ -16,6 +16,10 @@ class MessageController extends GetxController with GetSingleTickerProviderState
 
   int tabIndex = 0;
 
+  RxInt notifiesOfficial = 0.obs;
+  RxInt notifiesPrivate = 0.obs;
+
+
   @override
   void onInit() {
     super.onInit();
@@ -61,5 +65,15 @@ class MessageController extends GetxController with GetSingleTickerProviderState
 
     final childLogic = Get.find<MessageChildController>(tag: messageType.type);
     childLogic.onRefresh();
+  }
+
+  void onFocusGained() {
+    getNoticeBadge();
+  }
+
+  void getNoticeBadge() async {
+    final res =  await MessageService.noticeBadge();
+    notifiesOfficial.value = res['notifiesOfficial'];
+    notifiesPrivate.value = res['notifiesPrivate'];
   }
 }

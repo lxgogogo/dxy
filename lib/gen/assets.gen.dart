@@ -371,6 +371,10 @@ class $AssetsImagesGen {
   AssetGenImage get iconMineSignBg =>
       const AssetGenImage('assets/images/icon_mine_sign_bg.png');
 
+  /// File path: assets/images/icon_notice_system_n.png
+  AssetGenImage get iconNoticeSystemN =>
+      const AssetGenImage('assets/images/icon_notice_system_n.png');
+
   /// File path: assets/images/icon_notice_user_n.png
   AssetGenImage get iconNoticeUserN =>
       const AssetGenImage('assets/images/icon_notice_user_n.png');
@@ -749,6 +753,7 @@ class $AssetsImagesGen {
         iconHomeVideo,
         iconMessageSystemDf,
         iconMineSignBg,
+        iconNoticeSystemN,
         iconNoticeUserN,
         iconPlay,
         iconPostFeed,

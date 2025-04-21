@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,54 +23,62 @@ class MessageNoticePage extends StatefulWidget {
 }
 
 class _MessageNoticePageState extends State<MessageNoticePage> {
-  final MessageNoticeController controller =
-      Get.put(MessageNoticeController());
+  final MessageNoticeController controller = Get.put(MessageNoticeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-        appBar: CommonAppBar.arrowBack(context, title: '管方通知'),
+        backgroundColor: Colors.white,
+        appBar: CommonAppBar.arrowBack(context,
+            title: controller.isSystem.value ? '官方通知' : '用户私信'),
         body: LayoutBuilder(
           builder: (context, constraints) {
             final maxWidth = constraints.maxWidth;
             return SlidableAutoCloseBehavior(
-              child: ListView.builder(
-                  itemBuilder: (c, i) {
-                    return Slidable(
-                        groupTag: '1-list',
-                        //key: ValueKey('${collectList[i].id}'),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          extentRatio: 42 / maxWidth,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  barrierDismissible: true,
-                                  context: context,
-                                  builder: (context) => CommonDialog(
-                                    title: '删除收藏',
-                                    content: '确定要删除这个收藏吗？',
-                                    confirmText: '确认删除',
-                                    onConfirm: () {
-                                      Navigator.of(context).pop();
+                child: Obx(() => SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    controller: controller.refreshController,
+                    onRefresh: controller.onRefresh,
+                    onLoading: controller.onLoading,
+                    child: controller.dataList.isEmpty
+                        ? const Center(child: NoDataView())
+                        : ListView.builder(
+                        itemBuilder: (c, i) {
+                          return Slidable(
+                              groupTag: '1-list',
+                              key: ValueKey('${controller.dataList[i].id}'),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                extentRatio: 42 / maxWidth,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await showDialog(
+                                        barrierDismissible: true,
+                                        context: context,
+                                        builder: (context) => CommonDialog(
+                                          title: '删除通知',
+                                          content: '确定要删除这个通知吗？',
+                                          confirmText: '确认删除',
+                                          onConfirm: () {
+                                            Navigator.of(context).pop();
+                                            controller.delete(controller.dataList[i]);
+                                          },
+                                        ),
+                                      );
                                     },
+                                    child: SvgPicture.asset(
+                                      'assets/svg/icon_delete.svg',
+                                      width: 22,
+                                      height: 22,
+                                    ),
                                   ),
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                'assets/svg/icon_delete.svg',
-                                width: 22,
-                                height: 22,
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        child: _buildListItemWidget(i));
-                  },
-                  itemCount: 5)
-            );
+                              child: _buildListItemWidget(i));
+                        },
+                        itemCount: controller.dataList.length))));
           },
         ));
   }
@@ -82,9 +91,14 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
 
   // TODO: Build Widget
   Widget _buildListItemWidget(int index) {
+    final model = controller.dataList[index];
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.noticeDetail);
+        Get.toNamed(Routes.noticeDetail, arguments: {
+          'pageType': Get.arguments['pageType'],
+          'id': model.id,
+          'data': model.toJson()
+        });
       },
       child: Column(
         children: [
@@ -96,24 +110,26 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       : Colors.white),
               child: Row(
                 children: [
-                  if (controller.isSystem)
-                    Image.asset(
-                      Assets.images.iconMessageSystemDf.path,
+                  Container(
+                    width: 38.w,
+                    height: 38.w,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(19.w))),
+                    child: CachedNetworkImage(
                       width: 38.w,
                       height: 38.w,
                       fit: BoxFit.cover,
-                    )
-                  else
-                    CachedNetworkImage(
-                      width: 38.w,
-                      height: 38.w,
-                      fit: BoxFit.cover,
-                      imageUrl: '',
-                      placeholder: (context, url) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                      imageUrl: model.sendUserHeadimg ?? '',
+                      placeholder: (context, url) => Assets
+                          .images.imageLoadingDef
+                          .image(fit: BoxFit.fill),
+                      errorWidget: (context, url, error) => Assets
+                          .images.imageLoadingDef
+                          .image(fit: BoxFit.fill),
                     ),
+                  ),
                   SizedBox(width: 10.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,13 +140,13 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '官方通知',
+                              model.title ?? '',
                               style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                   color: ColorStyle.c333333),
                             ),
-                            Text('1分钟前',
+                            Text(model.createdAt ?? '',
                                 style: TextStyle(
                                     fontSize: 12.sp,
                                     color: ColorStyle.c333333.withOpacity(0.7)))
@@ -140,16 +156,20 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       SizedBox(height: 8.w),
                       SizedBox(
                         width: 1.sw - 80.w,
-                        child: Text(
-                          '亲爱的无敌铁头：恭喜您获得尊贵的德学院亲爱的无敌铁头：恭dsdsd喜...',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 10.sp,
+                        child: DefaultTextStyle(
+                            style: TextStyle(
                               color: index == 0
                                   ? ColorStyle.c333333
-                                  : ColorStyle.c333333.withOpacity(0.7)),
-                        ),
+                                  : ColorStyle.c333333.withOpacity(0.7),
+                              fontSize: 14,
+                              fontFeatures: const [FontFeature.tabularFigures()],
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            child: Html(
+                              data: model.content ?? "",
+                              shrinkWrap: true,
+                            ))
                       )
                     ],
                   )
@@ -158,8 +178,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
           Container(
               height: 1.w,
               margin: EdgeInsets.symmetric(horizontal: 16.w),
-              color: ColorStyle.c333333.withOpacity(0.05)
-          )
+              color: ColorStyle.c333333.withOpacity(0.05))
         ],
       ),
     );

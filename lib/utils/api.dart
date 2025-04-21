@@ -89,4 +89,10 @@ class Api {
   static const String userEquity = '/api/user/equity';
 
   static const String topHeatTag = '/api/tag/topHeatTag';
+
+  // 站内信
+  static const String noticeRead = '/api/notifies/read';
+  static const String noticeList = '/api/notifies/list';
+  static const String noticeDelete = '/api/notifies/del';
+  static const String noticeBadge = '/api/message/badge';
 }

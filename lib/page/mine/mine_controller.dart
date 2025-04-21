@@ -11,7 +11,9 @@ class MineController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   void onFocusGained() async {
-    await UserStore.of.getUserInfo();
-    safeUpdate();
+    if (UserStore.of.isLogin) {
+      await UserStore.of.getUserInfo();
+      safeUpdate();
+    }
   }
 }

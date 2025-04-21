@@ -213,4 +213,10 @@ class CollectListController extends GetxController {
     }
     _deleteCollectList();
   }
+
+  void deleteItem(int index) {
+    final model = collectList[index];
+    selectIds = ['${model.id ?? 0}'];
+    _deleteCollectList();
+  }
 }

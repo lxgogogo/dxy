@@ -13,27 +13,36 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
+import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 import '../../utils/toast_utils.dart';
+import '../../utils/track_utils.dart';
 
 part 'comment_input_controller.dart';
 
 class CommentInputScreen extends GetView<CommentInputController> {
   final String relType; //// 评论对象类型
   final int relId; //// 评论对象id
+  final SourceType sourceType;
 
-  const CommentInputScreen({super.key, required this.relType, required this.relId});
+  const CommentInputScreen({
+    super.key,
+    required this.relType,
+    required this.relId,
+    required this.sourceType,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CommentInputController>(
-      init: CommentInputController(relType, relId),
+      init: CommentInputController(relType, relId, sourceType),
       builder: (logic) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.w).copyWith(bottom: ScreenUtil().bottomBarHeight),
+          padding:
+              EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.w).copyWith(bottom: ScreenUtil().bottomBarHeight),
           decoration: BoxDecoration(
-            color:Colors.white,
+            color: Colors.white,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(12.r),
             ),
@@ -47,29 +56,28 @@ class CommentInputScreen extends GetView<CommentInputController> {
                   Expanded(
                     child: Container(
                       constraints: BoxConstraints(minHeight: 56.w, maxHeight: 120.w),
-                      padding: EdgeInsets.symmetric( vertical: 8.w),
-
+                      padding: EdgeInsets.symmetric(vertical: 8.w),
                       child: QuillEditor.basic(
                         controller: controller.quillController,
                         config: QuillEditorConfig(
                           showCursor: true,
                           embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                           placeholder: '说点什么吧...',
-                          customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
-                              TextStyle(
-                                fontSize: 14.sp,
-                                color: '#333333'.hexColor.withOpacity(0.7),
-                              ),
-                              HorizontalSpacing.zero,
-                              VerticalSpacing.zero,
-                              VerticalSpacing.zero,
-                              null))),
+                          customStyles: DefaultStyles.getInstance(context).merge(DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                  TextStyle(
+                                    fontSize: 14.sp,
+                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                  ),
+                                  HorizontalSpacing.zero,
+                                  VerticalSpacing.zero,
+                                  VerticalSpacing.zero,
+                                  null))),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(width: 10.w),
-
                 ],
               ),
               Row(

@@ -23,15 +23,19 @@ import '../services/index.dart';
 import '../stores/config_store.dart';
 import '../utils/date_util.dart';
 import '../utils/toast_utils.dart';
+import '../utils/track_utils.dart';
+import 'bottom_actions_view.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentBean commentBean;
   final bool isReply;
   final String relType;
+  final SourceType sourceType;
 
   const CommentItem({
     super.key,
     required this.commentBean,
+    required this.sourceType,
     this.relType = '',
     this.isReply = false,
   });
@@ -197,8 +201,8 @@ class _CommentItemState extends State<CommentItem> {
                       onToggleLike: () async {
                         final data = await NetRequest().newContentLike({
                           'relType': 'comment',
-                          'relId': widget.commentBean.id!,
-                          'state': widget.commentBean.liked! ? false : true
+                          'relId': widget.commentBean.id,
+                          'state': widget.commentBean.liked == true ? false : true
                         });
                         if (data is int) {
                           widget.commentBean.liked = !widget.commentBean.liked!;
@@ -206,6 +210,20 @@ class _CommentItemState extends State<CommentItem> {
                           widget.commentBean.likeCount = widget.commentBean.liked! ? count + 1 : count - 1;
                           if (widget.commentBean.liked == true) {
                             ToastUtils.showToast('点赞成功');
+                            switch (widget.sourceType) {
+                              case SourceType.video:
+                                TrackUtils.trackEvent(userLogType: '103008', params: widget.commentBean.id);
+                                break;
+                              case SourceType.course:
+                                TrackUtils.trackEvent(userLogType: '105007', params: widget.commentBean.id);
+                                break;
+                              case SourceType.book:
+                                TrackUtils.trackEvent(userLogType: '107008', params: widget.commentBean.id);
+                                break;
+                              case SourceType.feed:
+                                TrackUtils.trackEvent(userLogType: '109007', params: widget.commentBean.id);
+                                break;
+                            }
                           } else {
                             ToastUtils.showToast('取消点赞成功');
                           }
@@ -225,6 +243,7 @@ class _CommentItemState extends State<CommentItem> {
                             CommentInputScreen(
                               relType: widget.commentBean.relType ?? '',
                               relId: widget.commentBean.id ?? 0,
+                              sourceType: widget.sourceType,
                             ),
                           );
                         });
@@ -358,8 +377,8 @@ class _CommentItemState extends State<CommentItem> {
                                           onToggleLike: () async {
                                             final data = await NetRequest().newContentLike({
                                               'relType': 'comment',
-                                              'relId': reply.id!,
-                                              'state': reply.liked! ? false : true
+                                              'relId': reply.id,
+                                              'state': reply.liked == true ? false : true
                                             });
                                             if (data is int) {
                                               reply.liked = !reply.liked!;
@@ -367,6 +386,20 @@ class _CommentItemState extends State<CommentItem> {
                                               reply.likeCount = reply.liked! ? count + 1 : count - 1;
                                               if (reply.liked == true) {
                                                 ToastUtils.showToast('点赞成功');
+                                                switch (widget.sourceType) {
+                                                  case SourceType.video:
+                                                    TrackUtils.trackEvent(userLogType: '103009', params: reply.id);
+                                                    break;
+                                                  case SourceType.course:
+                                                    TrackUtils.trackEvent(userLogType: '105008', params: reply.id);
+                                                    break;
+                                                  case SourceType.book:
+                                                    TrackUtils.trackEvent(userLogType: '107009', params: reply.id);
+                                                    break;
+                                                  case SourceType.feed:
+                                                    TrackUtils.trackEvent(userLogType: '109008', params: reply.id);
+                                                    break;
+                                                }
                                               } else {
                                                 ToastUtils.showToast('取消点赞成功');
                                               }

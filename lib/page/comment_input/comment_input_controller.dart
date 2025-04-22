@@ -3,8 +3,9 @@ part of 'comment_input_screen.dart';
 class CommentInputController extends GetxController {
   final String relType;
   final int relId;
+  final SourceType sourceType;
 
-  CommentInputController(this.relType, this.relId);
+  CommentInputController(this.relType, this.relId, this.sourceType);
 
   final QuillController quillController = QuillController.basic();
 
@@ -32,9 +33,23 @@ class CommentInputController extends GetxController {
       return;
     }
     NetRequest().commentCreate('comment', relId, content, at: atList, (data) {
-      EventBusUtil.of.fire(EventRefreshPage(relType));
       ToastUtils.showToast('发布成功');
       Get.back();
+      EventBusUtil.of.fire(EventRefreshPage(relType));
+      switch (sourceType) {
+        case SourceType.video:
+          TrackUtils.trackEvent(userLogType: '103007', params: relId);
+          break;
+        case SourceType.course:
+          TrackUtils.trackEvent(userLogType: '105006', params: relId);
+          break;
+        case SourceType.book:
+          TrackUtils.trackEvent(userLogType: '107007', params: relId);
+          break;
+        case SourceType.feed:
+          TrackUtils.trackEvent(userLogType: '109006', params: relId);
+          break;
+      }
     });
   }
 }

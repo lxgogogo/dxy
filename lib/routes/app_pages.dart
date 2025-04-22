@@ -6,7 +6,6 @@ import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/page/bool_list/book_list_screen.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
-import 'package:holdem/page/comment_list/comment_list_screen.dart';
 import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
 import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
 import 'package:holdem/page/equity_center/equity_center_view.dart';
@@ -24,7 +23,6 @@ import 'package:holdem/page/mine/collect/collect_list_view.dart';
 import 'package:holdem/page/mine/collect/creat_collect_group_view.dart';
 import 'package:holdem/page/mine/collect/finish_creat_collect_group_view.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
-import 'package:holdem/page/reply_list/reply_list_screen.dart';
 import 'package:holdem/page/scan/scan_screen.dart';
 import 'package:holdem/page/scan_result/scan_result_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
@@ -97,36 +95,6 @@ class AppPages {
     //   name: Routes.publishComment,
     //   page: () => const CommentPublishScreen(),
     // ),
-    GetPage(
-      name: Routes.inputComment,
-      page: () {
-        final arguments = Get.arguments as Map;
-        return CommentInputScreen(
-          relType: arguments['relType'],
-          relId: arguments['relId'],
-        );
-      },
-    ),
-    GetPage(
-      name: Routes.commentList,
-      page: () {
-        final arguments = Get.arguments as Map;
-        return CommentListScreen(
-          relType: arguments['relType'],
-          relId: arguments['relId'],
-        );
-      },
-    ),
-    GetPage(
-      name: Routes.replyList,
-      page: () {
-        final arguments = Get.arguments as Map;
-        return ReplyListScreen(
-          id: arguments['id'],
-          commentBean: arguments['commentBean'],
-        );
-      },
-    ),
     GetPage(
       name: Routes.following,
       page: () => FollowingScreen(isFollowPage: Get.arguments as bool),

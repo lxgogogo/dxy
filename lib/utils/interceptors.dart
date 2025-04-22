@@ -29,7 +29,7 @@ class HttpHeaderInterceptors extends InterceptorsWrapper {
     final nowData = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     if (token.isNotEmpty) {
       options.headers['X-Auth-Token'] = token;
-      options.headers['opt-a'] = nowData;
+      options.headers['opt-at'] = nowData;
     }
     options.headers = {
       ...AppUtil.of.headerJson,

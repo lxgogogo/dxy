@@ -20,8 +20,6 @@ abstract class Routes {
   static const atUser = '/atUser';
   static const publishComment = '/publishComment';
   static const inputComment = '/inputComment';
-  static const commentList = '/commentList';
-  static const replyList = '/replyList';
   static const following = '/following';
   static const bookDetail = '/bookDetail';
   static const articleDetail = '/articleDetail';

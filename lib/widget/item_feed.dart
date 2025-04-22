@@ -21,6 +21,7 @@ class FeedItem extends StatelessWidget {
   final VoidCallback? onShield;
   final VoidCallback? onShieldUser;
   final VoidCallback? onReport;
+  final VoidCallback? onTap;
 
   const FeedItem(
     this.item, {
@@ -29,6 +30,7 @@ class FeedItem extends StatelessWidget {
     this.onShield,
     this.onShieldUser,
     this.onReport,
+    this.onTap,
   });
 
   @override
@@ -42,6 +44,7 @@ class FeedItem extends StatelessWidget {
         } else {
           Get.toNamed(Routes.feedDetail, arguments: item.id ?? 0);
         }
+        onTap?.call();
       },
       child: Container(
         margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w),

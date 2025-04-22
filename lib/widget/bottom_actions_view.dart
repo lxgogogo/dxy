@@ -23,22 +23,22 @@ import '../routes/app_routes_utils.dart';
 import '../utils/toast_utils.dart';
 import 'like_button/like_button.dart';
 
-enum ContentType {
+enum SourceType {
   video,
   course,
   book,
   feed,
-  article,
+  // article,
 }
 
 class CommonDetailBottomView extends StatefulWidget {
   final DetailViewParams viewParams;
-  final ContentType contentType;
+  final SourceType sourceType;
 
   const CommonDetailBottomView({
     Key? key,
     required this.viewParams,
-    required this.contentType,
+    required this.sourceType,
   }) : super(key: key);
 
   @override
@@ -292,24 +292,24 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
       widget.viewParams.liked = !(widget.viewParams.liked ?? false);
       if (widget.viewParams.liked == true) {
         ToastUtils.showToast('点赞成功');
+        switch (widget.sourceType) {
+          case SourceType.video:
+            TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
+            break;
+          case SourceType.course:
+            TrackUtils.trackEvent(userLogType: '105002', params: widget.viewParams.relId);
+            break;
+          case SourceType.book:
+            TrackUtils.trackEvent(userLogType: '107003', params: widget.viewParams.relId);
+            break;
+          case SourceType.feed:
+            TrackUtils.trackEvent(userLogType: '109002', params: widget.viewParams.relId);
+        }
       } else {
         ToastUtils.showToast('取消点赞成功');
       }
       setState(() {});
       EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
-      // switch (widget.contentType) {
-      //   case ContentType.video:
-      //     TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
-      //     break;
-      //   case ContentType.course:
-      //     TrackUtils.trackEvent(userLogType: '105002', params: widget.viewParams.relId);
-      //     break;
-      //   case ContentType.book:
-      //     TrackUtils.trackEvent(userLogType: '107003', params: widget.viewParams.relId);
-      //     break;
-      //   case ContentType.feed:
-      //   case ContentType.article:
-      // }
       return true;
     }
     return false;
@@ -338,18 +338,18 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         }
         setState(() {});
         EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
-        // switch (widget.contentType) {
-        //   case ContentType.video:
+        // switch (widget.sourceType) {
+        //   case SourceType.video:
         //     TrackUtils.trackEvent(userLogType: '103004', params: widget.viewParams.relId);
         //     break;
-        //   case ContentType.course:
+        //   case SourceType.course:
         //     TrackUtils.trackEvent(userLogType: '105003', params: widget.viewParams.relId);
         //     break;
-        //   case ContentType.book:
+        //   case SourceType.book:
         //     TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
         //     break;
-        //   case ContentType.feed:
-        //   case ContentType.article:
+        //   case SourceType.feed:
+        //     TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
         // }
       },
       (msg) {
@@ -373,20 +373,18 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
-        switch (widget.contentType) {
-          case ContentType.video:
+        switch (widget.sourceType) {
+          case SourceType.video:
             TrackUtils.trackEvent(userLogType: '103005', params: widget.viewParams.relId);
             break;
-          case ContentType.course:
+          case SourceType.course:
             TrackUtils.trackEvent(userLogType: '105004', params: widget.viewParams.relId);
             break;
-          case ContentType.book:
+          case SourceType.book:
             TrackUtils.trackEvent(userLogType: '107005', params: widget.viewParams.relId);
             break;
-          case ContentType.feed:
-            break;
-          case ContentType.article:
-            TrackUtils.trackEvent(userLogType: '105004', params: widget.viewParams.relId);
+          case SourceType.feed:
+            TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
             break;
         }
       });
@@ -401,6 +399,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         CommentPublishScreen(
           relType: widget.viewParams.relType!,
           relId: widget.viewParams.relId!,
+          sourceType: widget.sourceType,
         ),
       );
     });

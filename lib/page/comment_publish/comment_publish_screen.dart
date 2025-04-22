@@ -44,22 +44,34 @@ import '../../model/upload_file.dart';
 import '../../utils/common_utils.dart';
 import '../../utils/html_parse_util.dart';
 import '../../utils/net_request.dart';
+import '../../utils/track_utils.dart';
+import '../../widget/bottom_actions_view.dart';
 
 part 'comment_publish_controller.dart';
 
 class CommentPublishScreen extends GetView<CommentPublishController> {
-  const CommentPublishScreen({super.key,required this.relType,required this.relId});
+  const CommentPublishScreen({
+    super.key,
+    required this.relType,
+    required this.relId,
+    required this.sourceType,
+  });
+
   final String relType;
   final int relId;
+  final SourceType sourceType;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CommentPublishController>(
-      init: CommentPublishController(relType, relId),
+      init: CommentPublishController(relType, relId, sourceType),
       builder: (logic) {
         return Container(
-          margin: EdgeInsets.only(top: 12.w,),
+          margin: EdgeInsets.only(
+            top: 12.w,
+          ),
           // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height/2),
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(
@@ -69,7 +81,8 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 18.w),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
                   child: Container(
@@ -83,15 +96,16 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                           showCursor: true,
                           embedBuilders: FlutterQuillEmbeds.editorBuilders(),
                           placeholder: '说点什么吧...',
-                          customStyles:DefaultStyles.getInstance(context).merge(DefaultStyles(placeHolder: DefaultTextBlockStyle(
-                              TextStyle(
-                                fontSize: 14.sp,
-                                color: '#333333'.hexColor.withOpacity(0.7),
-                              ),
-                              HorizontalSpacing.zero,
-                              VerticalSpacing.zero,
-                              VerticalSpacing.zero,
-                              null))),
+                          customStyles: DefaultStyles.getInstance(context).merge(DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                  TextStyle(
+                                    fontSize: 14.sp,
+                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                  ),
+                                  HorizontalSpacing.zero,
+                                  VerticalSpacing.zero,
+                                  VerticalSpacing.zero,
+                                  null))),
                         ),
                       ),
                     ),
@@ -107,13 +121,14 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
       },
     );
   }
-  Widget imageGallery(){
+
+  Widget imageGallery() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: 12.w),
+        padding: EdgeInsets.symmetric(vertical: 12.w),
         child: Row(
-         children:  controller.imageData
+          children: controller.imageData
               .map(
                 (filePath) => Row(
                   children: [
@@ -121,49 +136,52 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                       width: 70.w,
                       height: 70.w,
                       child: Stack(
-                                      key: ValueKey(filePath),
-                                      fit: StackFit.expand,
-                                      children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(6),
-                          ),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: Image.file(
-                          File(filePath),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: GestureDetector(
-                          onTap: () => controller.deleteMediaItem(filePath),
-                          behavior: HitTestBehavior.translucent,
-                          child: Padding(
-                            padding: EdgeInsets.all(4.w),
-                            child: SvgPicture.asset(
-                              Assets.svg.closeBlack,
-                              width: 12.w,
-                              height: 12.w,
+                        key: ValueKey(filePath),
+                        fit: StackFit.expand,
+                        children: [
+                          Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(6),
+                              ),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: Image.file(
+                              File(filePath),
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
+                          Positioned(
+                            right: 2,
+                            top: 2,
+                            child: GestureDetector(
+                              onTap: () => controller.deleteMediaItem(filePath),
+                              behavior: HitTestBehavior.translucent,
+                              child: Padding(
+                                padding: EdgeInsets.all(4.w),
+                                child: SvgPicture.asset(
+                                  Assets.svg.closeBlack,
+                                  width: 12.w,
+                                  height: 12.w,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                                      ],
-                                    ),
                     ),
-                    SizedBox(width: 8.w,)
+                    SizedBox(
+                      width: 8.w,
+                    )
                   ],
                 ),
-
-          )
+              )
               .toList(),
         ),
       ),
     );
   }
+
   Widget _mediaShowView() {
     return ReorderableGridView.count(
       shrinkWrap: true,
@@ -217,7 +235,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
 
   Widget buildBottomToolbar(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 4.w,bottom: 30.w),
+      padding: EdgeInsets.only(top: 4.w, bottom: 30.w),
       decoration: const BoxDecoration(
         border: Border.symmetric(
           horizontal: BorderSide(color: Color(0xffe6e6e6)),
@@ -234,7 +252,9 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
               controller.openFilePicker();
             },
             child: Container(
-              margin: EdgeInsets.only(right: 16.w,),
+              margin: EdgeInsets.only(
+                right: 16.w,
+              ),
               child: SvgPicture.asset(
                 Assets.svg.inputImage,
                 width: 20.w,
@@ -251,10 +271,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
             },
             child: Text(
               '@',
-              style: TextStyle(
-                fontSize: 16.sp,
-                color: '#333333'.hexColor.withOpacity(0.7)
-              ),
+              style: TextStyle(fontSize: 16.sp, color: '#333333'.hexColor.withOpacity(0.7)),
             ),
           ),
           const Spacer(),
@@ -265,9 +282,8 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
               });
             },
             child: Container(
-
               height: 24.w,
-             // margin: EdgeInsets.only(right: 10.w),
+              // margin: EdgeInsets.only(right: 10.w),
               alignment: Alignment.center,
               child: Text(
                 '发布',

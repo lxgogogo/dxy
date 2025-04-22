@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'api.dart';
 import 'http_utils.dart';
@@ -8,9 +9,12 @@ class TrackUtils {
     required String userLogType,
     dynamic params,
   }) async {
+    final nowData = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
     final Map<String, dynamic> postParams = {
       'userLogType': 'USER_LOG_$userLogType',
-      'params': params,
+      if (params != null) 'params': params,
+      'optAt': nowData,
     };
 
     try {

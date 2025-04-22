@@ -1,10 +1,11 @@
 part of 'comment_publish_screen.dart';
 
 class CommentPublishController extends GetxController {
-  late String relType;
-  late int relId;
+  final String relType;
+  final int relId;
+  final SourceType sourceType;
 
-  CommentPublishController(this.relType, this.relId);
+  CommentPublishController(this.relType, this.relId, this.sourceType);
 
   // @override
   // void onInit() {
@@ -84,10 +85,7 @@ class CommentPublishController extends GetxController {
           imageUrlList.add(uploadFile);
           if (imageUrlList.isNotEmpty && imageUrlList.length == imageData.length) {
             NetRequest().commentCreate(relType, relId, content, at: atList, files: imageUrlList, (data) {
-              EventBusUtil.of.fire(EventRefreshPage(relType));
-              EasyLoading.dismiss();
-              ToastUtils.showToast('发布成功');
-              Get.back();
+              _onSuccess();
             });
           }
         }, (errMsg) {
@@ -99,11 +97,29 @@ class CommentPublishController extends GetxController {
       });
     } else {
       NetRequest().commentCreate(relType, relId, content, at: atList, (data) {
-        EventBusUtil.of.fire(EventRefreshPage(relType));
-        EasyLoading.dismiss();
-        ToastUtils.showToast('发布成功');
-        Get.back();
+        _onSuccess();
       });
+    }
+  }
+
+  void _onSuccess() {
+    EasyLoading.dismiss();
+    ToastUtils.showToast('发布成功');
+    Get.back();
+    EventBusUtil.of.fire(EventRefreshPage(relType));
+    switch (sourceType) {
+      case SourceType.video:
+        TrackUtils.trackEvent(userLogType: '103006', params: relId);
+        break;
+      case SourceType.course:
+        TrackUtils.trackEvent(userLogType: '105005', params: relId);
+        break;
+      case SourceType.book:
+        TrackUtils.trackEvent(userLogType: '107006', params: relId);
+        break;
+      case SourceType.feed:
+        TrackUtils.trackEvent(userLogType: '109005', params: relId);
+        break;
     }
   }
 

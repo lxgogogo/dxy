@@ -199,6 +199,7 @@ class FeedDetailScreen extends StatelessWidget {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
                                     relType: 'thread',
+                                    sourceType: SourceType.feed,
                                   );
                                 },
                                 childCount: controller.comments!.length,
@@ -225,7 +226,7 @@ class FeedDetailScreen extends StatelessWidget {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                       author: controller.detailBean?.user),
-                  contentType: ContentType.feed,
+                  sourceType: SourceType.feed,
                 )
               : const SizedBox(),
         );

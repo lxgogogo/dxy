@@ -21,6 +21,7 @@ import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../utils/track_utils.dart';
 import '../../../widget/three_d_book_item.dart';
 
 part 'search_tag_child_controller.dart';
@@ -68,9 +69,13 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
         ? ListView.separated(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
             itemBuilder: (_, int index) => GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
-              },
+              onTap: TrackUtils.trackedTap(
+                onTap: () {
+                  Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
+                },
+                userLogType: '112003',
+                params: controller.courses[index].targetId,
+              ),
               child: Container(
                 padding: EdgeInsets.only(bottom: 16.w),
                 decoration: BoxDecoration(
@@ -124,6 +129,10 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
                 children: [
                   Expanded(
                     child: ThreeDBookItem(
+                      onTap: () => TrackUtils.trackEvent(
+                        userLogType: '112002',
+                        params: controller.articles[firstIndex].id,
+                      ),
                       item: controller.articles[firstIndex],
                       itemWidth: itemWidth,
                     ),
@@ -132,6 +141,10 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
                     SizedBox(width: 12.w),
                     Expanded(
                       child: ThreeDBookItem(
+                        onTap: () => TrackUtils.trackEvent(
+                          userLogType: '112002',
+                          params: controller.articles[secondIndex].id,
+                        ),
                         item: controller.articles[secondIndex],
                         itemWidth: itemWidth,
                       ),
@@ -167,12 +180,24 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: VideoItem(item: controller.articles[firstIndex]),
+                child: VideoItem(
+                  onTap: () => TrackUtils.trackEvent(
+                    userLogType: '112001',
+                    params: controller.articles[firstIndex].id,
+                  ),
+                  item: controller.articles[firstIndex],
+                ),
               ),
               if (hasSecond) ...[
                 SizedBox(width: 12.w),
                 Expanded(
-                  child: VideoItem(item: controller.articles[secondIndex]),
+                  child: VideoItem(
+                    onTap: () => TrackUtils.trackEvent(
+                      userLogType: '112001',
+                      params: controller.articles[secondIndex].id,
+                    ),
+                    item: controller.articles[secondIndex],
+                  ),
                 ),
               ] else
                 const Expanded(child: SizedBox()),
@@ -197,7 +222,13 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
     return controller.feeds.isNotEmpty
         ? ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 24.w),
-            itemBuilder: (c, i) => FeedItem(controller.feeds[i]),
+            itemBuilder: (c, i) => FeedItem(
+              onTap: () => TrackUtils.trackEvent(
+                userLogType: '112004',
+                params: controller.feeds[i].id,
+              ),
+              controller.feeds[i],
+            ),
             itemCount: controller.feeds.length,
           )
         : const Center(child: NoDataView());

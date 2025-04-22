@@ -133,6 +133,7 @@ class ArticleDetailScreen extends StatelessWidget {
                                 (BuildContext context, int index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
+                                    sourceType: SourceType.course,
                                   );
                                 },
                                 childCount: controller.comments!.length,
@@ -159,7 +160,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     commentCount: controller.detailBean?.commentCount ?? 0,
                     shareCount: controller.detailBean?.shareCount ?? 0,
                   ),
-                  contentType: ContentType.article,
+                  sourceType: SourceType.course,
                 )
               : const SizedBox(),
         );

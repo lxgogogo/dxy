@@ -239,6 +239,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                 (BuildContext context, int index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
+                                    sourceType: SourceType.book,
                                   );
                                 },
                                 childCount: controller.comments!.length,
@@ -265,7 +266,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     commentCount: controller.detailBean?.commentCount ?? 0,
                     shareCount: controller.detailBean?.shareCount ?? 0,
                   ),
-                  contentType: ContentType.book,
+                  sourceType: SourceType.book,
                 )
               : const SizedBox(),
         );

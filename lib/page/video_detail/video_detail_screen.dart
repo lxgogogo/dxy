@@ -271,6 +271,7 @@ class VideoDetailScreen extends StatelessWidget {
                                   (BuildContext context, int index) {
                                     return CommentItem(
                                       commentBean: controller.comments![index],
+                                      sourceType: SourceType.video,
                                     );
                                   },
                                   childCount: controller.comments!.length,
@@ -297,7 +298,7 @@ class VideoDetailScreen extends StatelessWidget {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                     ),
-                    contentType: ContentType.video,
+                    sourceType: SourceType.video,
                   )
                 : const SizedBox(),
           ),

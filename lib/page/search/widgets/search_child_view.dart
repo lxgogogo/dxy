@@ -30,6 +30,8 @@ import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../utils/track_utils.dart';
+
 part 'search_child_controller.dart';
 
 class SearchChildView extends GetView<SearchChildView> {
@@ -90,11 +92,15 @@ class SearchChildView extends GetView<SearchChildView> {
         ? ListView.separated(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
             itemBuilder: (_, int index) => GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.searchTag, arguments: {
-                  'tag': controller.tagItems[index],
-                });
-              },
+              onTap: TrackUtils.trackedTap(
+                onTap: () {
+                  Get.toNamed(Routes.searchTag, arguments: {
+                    'tag': controller.tagItems[index],
+                  });
+                },
+                userLogType: '111004',
+                params: controller.tagItems[index].id,
+              ),
               child: Container(
                 padding: EdgeInsets.only(bottom: 16.w),
                 decoration: BoxDecoration(
@@ -215,9 +221,13 @@ class SearchChildView extends GetView<SearchChildView> {
         ? ListView.separated(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
             itemBuilder: (_, int index) => GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
-              },
+              onTap: TrackUtils.trackedTap(
+                onTap: () {
+                  Get.toNamed(Routes.articleDetail, arguments: controller.courses[index].targetId ?? 0);
+                },
+                userLogType: '111003',
+                params: controller.courses[index].targetId,
+              ),
               child: Container(
                 padding: EdgeInsets.only(bottom: 16.w),
                 decoration: BoxDecoration(
@@ -271,6 +281,10 @@ class SearchChildView extends GetView<SearchChildView> {
                 children: [
                   Expanded(
                     child: ThreeDBookItem(
+                      onTap: () => TrackUtils.trackEvent(
+                        userLogType: '111002',
+                        params: controller.articles[firstIndex].id,
+                      ),
                       item: controller.articles[firstIndex],
                       itemWidth: itemWidth,
                     ),
@@ -279,6 +293,10 @@ class SearchChildView extends GetView<SearchChildView> {
                     SizedBox(width: 12.w),
                     Expanded(
                       child: ThreeDBookItem(
+                        onTap: () => TrackUtils.trackEvent(
+                          userLogType: '111002',
+                          params: controller.articles[secondIndex].id,
+                        ),
                         item: controller.articles[secondIndex],
                         itemWidth: itemWidth,
                       ),
@@ -314,12 +332,24 @@ class SearchChildView extends GetView<SearchChildView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: VideoItem(item: controller.articles[firstIndex]),
+                child: VideoItem(
+                  onTap: () => TrackUtils.trackEvent(
+                    userLogType: '111001',
+                    params: controller.articles[firstIndex].id,
+                  ),
+                  item: controller.articles[firstIndex],
+                ),
               ),
               if (hasSecond) ...[
                 SizedBox(width: 12.w),
                 Expanded(
-                  child: VideoItem(item: controller.articles[secondIndex]),
+                  child: VideoItem(
+                    onTap: () => TrackUtils.trackEvent(
+                      userLogType: '111001',
+                      params: controller.articles[secondIndex].id,
+                    ),
+                    item: controller.articles[secondIndex],
+                  ),
                 ),
               ] else
                 const Expanded(child: SizedBox()),

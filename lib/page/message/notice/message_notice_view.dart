@@ -10,6 +10,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
+import '../../../utils/date_util.dart';
 import '../../../widget/common_app_bar.dart';
 import '../../../widget/dialog_common.dart';
 import '../../../widget/no_data.dart';
@@ -92,6 +93,13 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
   // TODO: Build Widget
   Widget _buildListItemWidget(int index) {
     final model = controller.dataList[index];
+    String dateStr = '';
+    if (model.createdAt != null) {
+      dateStr = DateUtil.formatDateAlias3(
+        model.createdAt!.millisecondsSinceEpoch,
+        hasHM: true,
+      );
+    }
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.noticeDetail, arguments: {
@@ -146,7 +154,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                   fontWeight: FontWeight.w600,
                                   color: ColorStyle.c333333),
                             ),
-                            Text(model.createdAt ?? '',
+                            Text(dateStr,
                                 style: TextStyle(
                                     fontSize: 12.sp,
                                     color: ColorStyle.c333333.withOpacity(0.7)))

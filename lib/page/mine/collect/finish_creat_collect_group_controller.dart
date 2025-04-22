@@ -124,7 +124,7 @@ class FinishCreatCollectGroupController extends GetxController {
     EasyLoading.show(status: '加载中...');
     var map = {
       'name': name,
-      'favoriteDtoList': selectIds
+      'addFavoriteList': selectIds
     };
     if (!create) {
       map = {

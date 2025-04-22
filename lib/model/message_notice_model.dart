@@ -7,7 +7,7 @@ class MessageNoticeModel {
   String? sendUserName;
   String? title;
   String? content;
-  String? createdAt;
+  DateTime? createdAt;
   int? isDel;
 
   MessageNoticeModel({
@@ -21,16 +21,27 @@ class MessageNoticeModel {
     this.isDel,
   });
 
-  factory MessageNoticeModel.fromJson(Map<String, dynamic> json) => MessageNoticeModel(
-    id: json["id"],
-    type: json["type"],
-    sendUserHeadimg: json["sendUserHeadimg"],
-    sendUserName: json["sendUserName"],
-    title: json["title"],
-    content: json["content"],
-    createdAt: json["createdAt"],
-    isDel: json["isDel"],
-  );
+  factory MessageNoticeModel.fromJson(Map<String, dynamic> json) {
+    DateTime? _createdat;
+    if (json["createdAt"] is String) {
+      String atStr = json["createdAt"] ?? '';
+      if (atStr.isNotEmpty) {
+        _createdat = DateTime.parse(atStr).toLocal();
+      }
+    } else {
+      _createdat = json["createdAt"];
+    }
+    return MessageNoticeModel(
+      id: json["id"],
+      type: json["type"],
+      sendUserHeadimg: json["sendUserHeadimg"],
+      sendUserName: json["sendUserName"],
+      title: json["title"],
+      content: json["content"],
+      createdAt: _createdat,
+      isDel: json["isDel"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,

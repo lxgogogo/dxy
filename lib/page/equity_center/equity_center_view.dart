@@ -100,6 +100,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
         int minPoint = item.minPoints ?? 0;
         double allWidth = 1.sw*0.9 - 32.w;
         double progressWidth = 0;
+        int nowPoint = maxPoint - minPoint;
         if (minPoint >= maxPoint || maxPoint <= 0) {
           progressWidth = allWidth;
         } else {
@@ -189,19 +190,20 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                     .withOpacity(0.5)),
                               ),
                               Text(
-                                '8888',
+                                '${controller.integral}',
                                 style: TextStyle(
                                     fontSize: 10.sp,
                                     color: item.titleColor),
                               ),
                             ],
                           ),
-                          Text(
-                            '还差 1111经验值升级',
-                            style: TextStyle(
-                                fontSize: 10.sp, color: (item.titleColor ?? ColorStyle.c333333)
-                                .withOpacity(0.5)),
-                          )
+                          if (nowPoint > 0)
+                            Text(
+                              '还差 $nowPoint经验值升级',
+                              style: TextStyle(
+                                  fontSize: 10.sp, color: (item.titleColor ?? ColorStyle.c333333)
+                                  .withOpacity(0.5)),
+                            )
                         ],
                       ),
                       SizedBox(height: 8.w),
@@ -550,7 +552,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
           SizedBox(height: 5.w),
           Wrap(
             children: [
-              ...controller.levelDataList.map((e) {
+              ...controller.scoreDataList.map((e) {
                 return _buildRunItemWidget(e);
               })
             ],

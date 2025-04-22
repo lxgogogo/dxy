@@ -15,6 +15,7 @@ class EquityCenterController extends GetxController {
   RxList<EquityCenterBannerModel> bannerList = <EquityCenterBannerModel>[].obs;
   RxList<EquityExpModel> expDataList = <EquityExpModel>[].obs;
   RxList<EquityLevelRecordModel> levelDataList = <EquityLevelRecordModel>[].obs;
+  RxList<EquityLevelRecordModel> scoreDataList = <EquityLevelRecordModel>[].obs;
 
   // 背景图
   RxString bg = Assets.equityCenter.iconCenterNormalBg.path.obs;
@@ -24,6 +25,7 @@ class EquityCenterController extends GetxController {
   RxInt remainingPoints = 0.obs;
   int pointsToDay = 0;
   int levelPoints = 0;
+  int integral = 0;
   RxBool isLoading = true.obs;
 
   @override
@@ -41,18 +43,25 @@ class EquityCenterController extends GetxController {
       remainingPoints.value = data['remainingPoints'] ?? 0;
       pointsToDay = data['pointsToDay'] ?? 0;
       levelPoints = data['levelPoints'] ?? 0;
+      integral = data['integral'] ?? 0;
       final expData = data['exp'] ?? [];
       final levelRecord = data['levelRecord'] ?? [];
+      final scoreRecord = data['integralRecord'] ?? [];
       List<EquityExpModel> saveExpData = [];
       List<EquityLevelRecordModel> saveRecordData = [];
+      List<EquityLevelRecordModel> saveScoreRecord = [];
       for (final map in expData) {
         saveExpData.add(EquityExpModel.fromJson(map));
       }
       for (final map in levelRecord) {
         saveRecordData.add(EquityLevelRecordModel.fromJson(map));
       }
+      for (final map in scoreRecord) {
+        saveScoreRecord.add(EquityLevelRecordModel.fromJson(map));
+      }
       expDataList.value = saveExpData;
       levelDataList.value = saveRecordData;
+      scoreDataList.value = saveScoreRecord;
       // banner
       _getData(data);
     }

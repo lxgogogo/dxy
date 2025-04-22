@@ -69,6 +69,8 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
     historyItems.clear();
     StorageUtil().prefs?.remove('search');
     safeUpdate();
+
+    TrackUtils.trackEvent(userLogType: '110004');
   }
 
   void deleteItemHistory(int index) {

@@ -17,6 +17,7 @@ import '../../../services/index.dart';
 import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
+import '../../../utils/track_utils.dart';
 import 'type_selector.dart';
 
 class RegisterContent extends StatefulWidget {
@@ -432,9 +433,12 @@ class _RegisterContentState extends State<RegisterContent> {
                       ),
                       if (!isUsername)
                         GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.forgetPassword);
-                          },
+                          onTap: TrackUtils.trackedTap(
+                            onTap: () {
+                              Get.toNamed(Routes.forgetPassword);
+                            },
+                            userLogType: '118003',
+                          ),
                           child: Text(
                             '忘记密码?',
                             style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
@@ -493,8 +497,10 @@ class _RegisterContentState extends State<RegisterContent> {
       EventBusUtil.of.fire(EventLoginSuccess());
       Get.until((route) => route.settings.name == Routes.main);
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+      // TrackUtils.trackEvent(userLogType: '118005');
     } else {
       ToastUtils.showToast(res.msg);
+      // TrackUtils.trackEvent(userLogType: '118006');
     }
   }
 

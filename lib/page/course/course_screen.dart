@@ -10,6 +10,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/utils/track_utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/course.dart';
@@ -126,7 +127,11 @@ class CourseScreen extends StatelessWidget {
                                                           controller.categories.length,
                                                           (index) {
                                                             return GestureDetector(
-                                                              onTap: () => controller.onTapTab(index),
+                                                              onTap: TrackUtils.trackedTap(
+                                                                onTap: () => controller.onTapTab(index),
+                                                                userLogType: '104001',
+                                                                params: controller.categories[index].id,
+                                                              ),
                                                               child: Container(
                                                                 margin: EdgeInsets.only(right: 10.w),
                                                                 padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -201,7 +206,7 @@ class CourseScreen extends StatelessWidget {
                                       (BuildContext context, int index) {
                                         CourseBean bean = controller.courses[index];
                                         return Container(
-                                          padding:  EdgeInsets.symmetric(horizontal: 12.w),
+                                          padding: EdgeInsets.symmetric(horizontal: 12.w),
                                           margin: EdgeInsets.only(bottom: 18.w),
                                           child: Column(
                                             children: [

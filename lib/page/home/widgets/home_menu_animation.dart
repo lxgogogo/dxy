@@ -61,8 +61,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeVideo.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.videoList),
-                    category: '首页',
-                    action: '点击视频页签',
+                    userLogType: '100002',
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -72,8 +71,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeCourse.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.course),
-                    category: '首页',
-                    action: '点击教程页签',
+                    userLogType: '100003',
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -83,8 +81,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeBook.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.boolList),
-                    category: '首页',
-                    action: '点击书籍页签',
+                    userLogType: '100004',
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -94,8 +91,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeFeed.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.find<MainController>().onTabBarItem(1),
-                    category: '首页',
-                    action: '点击论坛页签',
+                    userLogType: '100005',
                   ),
                 ),
               ],

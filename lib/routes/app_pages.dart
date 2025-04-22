@@ -38,6 +38,7 @@ import 'package:holdem/services/index.dart';
 
 import '../page/course/course_screen.dart';
 import '../page/telegram_login/telegram_login_screen.dart';
+import '../utils/track_utils.dart';
 
 part 'app_routes.dart';
 part 'route_observers.dart';

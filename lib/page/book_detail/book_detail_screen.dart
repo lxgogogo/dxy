@@ -27,6 +27,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../stores/user_store.dart';
 import '../../utils/date_util.dart';
+import '../../utils/track_utils.dart';
 import '../search_tag/search_tag_screen.dart';
 
 part 'book_detail_controller.dart';
@@ -166,19 +167,29 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                         style: TextStyle(color: Color(0xFF1E1E1E).withOpacity(0.7), fontSize: 12.sp),
                                       ),
                                       if (controller.detailBean?.tagList?.isNotEmpty == true)
-                                        TagListView(tagList: controller.detailBean?.tagList ?? []),
+                                        TagListView(
+                                          tagList: controller.detailBean?.tagList ?? [],
+                                          onTapItem: (model) => TrackUtils.trackEvent(
+                                            userLogType: '107002',
+                                            params: model.id,
+                                          ),
+                                        ),
                                       SizedBox(height: 16.w),
                                       GestureDetector(
-                                        onTap: () {
-                                          // 书籍下载
-                                          int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
-                                          bool haveDown = bookDownload != 0 ? true : false;
-                                          if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
-                                            if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
-                                              launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                        onTap: TrackUtils.trackedTap(
+                                          onTap: () {
+                                            // 书籍下载
+                                            int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
+                                            bool haveDown = bookDownload != 0 ? true : false;
+                                            if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
+                                              if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                                launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                              }
                                             }
-                                          }
-                                        },
+                                          },
+                                          userLogType: '104001',
+                                          params: controller.detailBean?.id,
+                                        ),
                                         child: Center(
                                           child: Container(
                                             width: 160.w,
@@ -241,19 +252,21 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       ),
                     ),
           bottomNavigationBar: controller.detailBean != null
-              ? FeedDetailBottomView(
-                  viewParams: PostBottomViewParams(
-                  postId: controller.id,
-                  relId: controller.id,
-                  relType: NetRequest.COMMENT_TYPE_CONTENT,
-                  favoriteState: controller.detailBean?.favorited ?? false,
-                  liked: controller.detailBean?.liked ?? false,
-                  shareLink: 'details/book-${controller.id}',
-                  likeCount: controller.detailBean?.likeCount ?? 0,
-                  favoriteCount: controller.detailBean?.favoriteCount ?? 0,
-                  commentCount: controller.detailBean?.commentCount ?? 0,
-                  shareCount: controller.detailBean?.shareCount ?? 0,
-                ))
+              ? CommonDetailBottomView(
+                  viewParams: DetailViewParams(
+                    postId: controller.id,
+                    relId: controller.id,
+                    relType: NetRequest.COMMENT_TYPE_CONTENT,
+                    favoriteState: controller.detailBean?.favorited ?? false,
+                    liked: controller.detailBean?.liked ?? false,
+                    shareLink: 'details/book-${controller.id}',
+                    likeCount: controller.detailBean?.likeCount ?? 0,
+                    favoriteCount: controller.detailBean?.favoriteCount ?? 0,
+                    commentCount: controller.detailBean?.commentCount ?? 0,
+                    shareCount: controller.detailBean?.shareCount ?? 0,
+                  ),
+                  contentType: ContentType.book,
+                )
               : const SizedBox(),
         );
       },

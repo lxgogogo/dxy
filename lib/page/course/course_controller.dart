@@ -117,10 +117,9 @@ class CourseController extends GetxController {
 
   onTapTab(int index) {
     categorySel = index;
-    categoryId = categories[index].id;
-    pageNum = 1;
     safeUpdate();
-    loadCourses();
+    categoryId = categories[index].id;
+    onRefresh();
     listController.animateTo(
       0.0,
       duration: const Duration(milliseconds: 300),

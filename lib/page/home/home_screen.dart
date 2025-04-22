@@ -93,8 +93,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     GestureDetector(
                       onTap: TrackUtils.trackedTap(
                         onTap: () => Get.toNamed(Routes.search),
-                        category: '首页',
-                        action: '点击搜索',
+                        userLogType: '100006',
                       ),
                       child: SvgPicture.asset(
                         Assets.svg.iconSearch,
@@ -130,11 +129,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       return GestureDetector(
                                         onTap: TrackUtils.trackedTap(
                                           onTap: controller.jumpPage,
-                                          category: '首页',
-                                          action: '点击Banner',
-                                          parameters: {
-                                            'url': controller.banners[index].jumpValue,
-                                          },
+                                          userLogType: '101001',
+                                          params: controller.banners[index].jumpValue,
                                         ),
                                         child: CachedNetworkImage(
                                           fit: BoxFit.cover,
@@ -223,8 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     imagePath: Assets.images.iconHomeVideo.path,
                                                     onTap: TrackUtils.trackedTap(
                                                       onTap: () => Get.toNamed(Routes.videoList),
-                                                      category: '首页',
-                                                      action: '点击视频页签',
+                                                      userLogType: '101002',
                                                     ),
                                                   ),
                                                   HomeMenuItem(
@@ -234,8 +229,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     imagePath: Assets.images.iconHomeCourse.path,
                                                     onTap: TrackUtils.trackedTap(
                                                       onTap: () => Get.toNamed(Routes.course),
-                                                      category: '首页',
-                                                      action: '点击教程页签',
+                                                      userLogType: '101003',
                                                     ),
                                                   ),
                                                   HomeMenuItem(
@@ -245,8 +239,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     imagePath: Assets.images.iconHomeBook.path,
                                                     onTap: TrackUtils.trackedTap(
                                                       onTap: () => Get.toNamed(Routes.boolList),
-                                                      category: '首页',
-                                                      action: '点击书籍页签',
+                                                      userLogType: '101004',
                                                     ),
                                                   ),
                                                   HomeMenuItem(
@@ -256,8 +249,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     imagePath: Assets.images.iconHomeFeed.path,
                                                     onTap: TrackUtils.trackedTap(
                                                       onTap: () => controller.changeMainTab(1),
-                                                      category: '首页',
-                                                      action: '点击论坛页签',
+                                                      userLogType: '101005',
                                                     ),
                                                   ),
                                                 ],
@@ -271,8 +263,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           subtitle: GestureDetector(
                                             onTap: TrackUtils.trackedTap(
                                               onTap: controller.loadHotVideos,
-                                              category: '首页',
-                                              action: '换一批',
+                                              userLogType: '101007',
                                             ),
                                             child: Row(
                                               children: [
@@ -315,10 +306,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     (e) => SizedBox(
                                                       width: itemWidth,
                                                       child: VideoItem(
-                                                        onTap: () => TrackUtils.trackEvent(
-                                                          category: '首页',
-                                                          action: '点击热门视频',
-                                                        ),
+                                                        onTap: () => TrackUtils.trackEvent(userLogType: '101006'),
                                                         item: ArticleBean(
                                                           id: e.id,
                                                           cover: e.cover,
@@ -346,10 +334,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     padding: EdgeInsets.only(top: 6.w),
                                                     child: VideoHorizontalItem(
                                                       item: e,
-                                                      onTap: () => TrackUtils.trackEvent(
-                                                        category: '首页',
-                                                        action: '点击精彩视频',
-                                                      ),
+                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101008'),
                                                     ),
                                                   ))
                                               .toList(),
@@ -420,8 +405,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           title: '好书推荐',
                                           onTap: TrackUtils.trackedTap(
                                             onTap: () => Get.toNamed(Routes.boolList),
-                                            category: '首页',
-                                            action: '点击好书推荐查看更多',
+                                            userLogType: '101013',
                                           ),
                                         ),
                                         SizedBox(height: 12.w),
@@ -435,10 +419,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   .map((e) => ThreeDBookItem(
                                                       itemWidth: itemWidth,
                                                       item: e,
-                                                      onTap: () => TrackUtils.trackEvent(
-                                                            category: '首页',
-                                                            action: '点击好书推荐',
-                                                          )))
+                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101012')))
                                                   .toList(),
                                             );
                                           },

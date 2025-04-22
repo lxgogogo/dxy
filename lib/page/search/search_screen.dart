@@ -15,6 +15,7 @@ import 'package:holdem/utils/storage.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
+import '../../utils/track_utils.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 import '../../widget/dialog_common.dart';
 
@@ -73,7 +74,11 @@ class SearchScreen extends GetView<SearchController> {
                 title: buildSearchInput(),
                 actions: [
                   GestureDetector(
-                    onTap: () => controller.onSearch(context),
+                    onTap: TrackUtils.trackedTap(
+                      onTap: () => controller.onSearch(context),
+                      userLogType: '110001',
+                      params: controller.controller.text,
+                    ),
                     child: Padding(
                       padding: EdgeInsets.only(left: 12.w, right: 16.w),
                       child: Text(
@@ -106,8 +111,7 @@ class SearchScreen extends GetView<SearchController> {
                             isScrollable: true,
                             tabAlignment: TabAlignment.start,
                             indicator: RoundUnderlineTabIndicator(
-                              borderSide:
-                              BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                              borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
                               wantToWith: 12.w,
                             ),
                             enableFeedback: false,
@@ -268,10 +272,14 @@ class SearchScreen extends GetView<SearchController> {
                       controller.historyItems.length,
                       (index) {
                         return GestureDetector(
-                          onTap: () {
-                            controller.controller.text = controller.historyItems[index];
-                            controller.onSearch(context);
-                          },
+                          onTap: TrackUtils.trackedTap(
+                            onTap: () {
+                              controller.controller.text = controller.historyItems[index];
+                              controller.onSearch(context);
+                            },
+                            userLogType: '110003',
+                            params: controller.controller.text,
+                          ),
                           onLongPress: () async {
                             showDialog(
                               barrierDismissible: false,
@@ -338,22 +346,32 @@ class SearchScreen extends GetView<SearchController> {
                 controller.hotTagItems.length,
                 (index) {
                   return GestureDetector(
-                    onTap: () {
-                      // Get.toNamed(Routes.searchTag, arguments: {
-                      //   'tag': controller.hotTagItems[index],
-                      // });
-                      final item = controller.hotTagItems[index];
-                      final id = item.id;
-                      if (item.type == 'book') {
-                        Get.toNamed(Routes.bookDetail, arguments: id);
-                      } else if (item.type == 'article') {
-                        Get.toNamed(Routes.articleDetail, arguments: id);
-                      } else if (item.type == 'video' || item.type == 'videoList') {
-                        Get.toNamed(Routes.videoDetail, arguments: {'id': id});
-                      } else if (item.type == 'thread') {
-                        Get.toNamed(Routes.feedDetail, arguments: id);
-                      }
-                    },
+                    onTap: TrackUtils.trackedTap(
+                      onTap: () {
+                        // Get.toNamed(Routes.searchTag, arguments: {
+                        //   'tag': controller.hotTagItems[index],
+                        // });
+                        final item = controller.hotTagItems[index];
+                        final id = item.id;
+                        String eventName = '';
+                        if (item.type == 'book') {
+                          eventName = '书籍';
+                          Get.toNamed(Routes.bookDetail, arguments: id);
+                        } else if (item.type == 'article') {
+                          eventName = '教程';
+                          Get.toNamed(Routes.articleDetail, arguments: id);
+                        } else if (item.type == 'video' || item.type == 'videoList') {
+                          eventName = '视频';
+                          Get.toNamed(Routes.videoDetail, arguments: {'id': id});
+                        } else if (item.type == 'thread') {
+                          eventName = '帖子';
+                          Get.toNamed(Routes.feedDetail, arguments: id);
+                        }
+                        TrackUtils.trackEvent(userLogType: '110002', params: [id.toString(), eventName].join(','));
+                      },
+                      userLogType: '108001',
+                      params: 0,
+                    ),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
                       decoration: BoxDecoration(

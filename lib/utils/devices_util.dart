@@ -34,6 +34,7 @@ class DevicesUtil {
     }
     return Platform.operatingSystem;
   }
+
   String get platformDesc {
     if (Platform.isIOS) {
       return '苹果APP';
@@ -65,9 +66,7 @@ class DevicesUtil {
   }
 
   Future<String?> _getDeviceId(String? id) {
-    return SecureStorageUtil.of
-        .read(Constants.localSecureDeviceId)
-        .then((value) {
+    return SecureStorageUtil.of.read(Constants.localSecureDeviceId).then((value) {
       if (value == null) {
         SecureStorageUtil.of.write(
           Constants.localSecureDeviceId,
@@ -85,6 +84,7 @@ class DevicesUtil {
   Map<String, dynamic> get headerJson => {
         'Device-Id': deviceID,
         'Device-Type': platform,
+        'device-name': getBrand,
       };
 
   String getPlatform() {
@@ -104,15 +104,12 @@ class DevicesUtil {
 
   bool get isBrandMeizu {
     if (!Platform.isAndroid) return false;
-    return _androidBrand.contains("meizu") ||
-        _androidBrand.contains("22c4185e");
+    return _androidBrand.contains("meizu") || _androidBrand.contains("22c4185e");
   }
 
   bool get isBrandOppo {
     if (!Platform.isAndroid) return false;
-    return _androidBrand.contains("oppo") ||
-        _androidBrand.contains("realme") ||
-        _androidBrand.contains("oneplus");
+    return _androidBrand.contains("oppo") || _androidBrand.contains("realme") || _androidBrand.contains("oneplus");
   }
 
   bool get isBrandVivo {

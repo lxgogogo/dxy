@@ -13,6 +13,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
+import '../../utils/track_utils.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 import 'widgets/mine_collect_view.dart';
 
@@ -58,62 +59,54 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 Get.toNamed(Routes.personal);
                               },
                               child: Center(
-
                                   child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: 88.w,
-                                        height: 88.w,
-                                        child: ClipOval(
-                                          child: CachedNetworkImage(
-                                            fit: BoxFit.cover,
-                                            imageUrl: UserStore.of.user?.avatar ?? '',
-                                            cacheKey: UserStore.of.user?.avatar ?? '',
-                                            placeholder: (context, url) => const Center(
-                                                child: CircularProgressIndicator(
-                                                  color: Colors.white,
-                                                )),
-                                            errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                                              fit: BoxFit.fill,
-                                            ),
-                                            fadeOutDuration: Duration.zero,
-                                            fadeInDuration: Duration.zero,
-                                          ),
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 88.w,
+                                    height: 88.w,
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl: UserStore.of.user?.avatar ?? '',
+                                        cacheKey: UserStore.of.user?.avatar ?? '',
+                                        placeholder: (context, url) => const Center(
+                                            child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )),
+                                        errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                                          fit: BoxFit.fill,
                                         ),
+                                        fadeOutDuration: Duration.zero,
+                                        fadeInDuration: Duration.zero,
                                       ),
-                                      Positioned(
-                                        bottom: 0,
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(Routes.equityCenter);
-                                            },
-                                            child: Container(
-                                              width: 64.w,
-                                              height: 22.w,
-                                              alignment: Alignment.center,
-                                              padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: AssetImage(Assets.images.iconMineSignBg.path),
-                                                      fit: BoxFit.fill
-                                                  )
-                                              ),
-                                              child: AutoSizeText(
-                                                UserStore.of.user?.userLevel?.name ?? '',
-                                                maxLines: 1,
-                                                minFontSize: 8,
-                                                style: TextStyle(
-                                                    fontSize: 10.sp,
-                                                    color: ColorStyle.c984100
-                                                ),
-                                              ),
-                                            )
-                                        ),
-                                      )
-                                    ],
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.equityCenter);
+                                        },
+                                        child: Container(
+                                          width: 64.w,
+                                          height: 22.w,
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(Assets.images.iconMineSignBg.path),
+                                                  fit: BoxFit.fill)),
+                                          child: AutoSizeText(
+                                            UserStore.of.user?.userLevel?.name ?? '',
+                                            maxLines: 1,
+                                            minFontSize: 8,
+                                            style: TextStyle(fontSize: 10.sp, color: ColorStyle.c984100),
+                                          ),
+                                        )),
                                   )
-                              ),
+                                ],
+                              )),
                             ),
                             SizedBox(height: 8.w),
                             Text(
@@ -132,6 +125,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 GestureDetector(
                                   onTap: () {
                                     Get.toNamed(Routes.following, arguments: true);
+                                    TrackUtils.trackEvent(userLogType: '113004');
                                   },
                                   child: Text(
                                     '关注 ${UserStore.of.user?.followedCount.abbreviateNumber ?? '0'}',
@@ -145,6 +139,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 GestureDetector(
                                   onTap: () {
                                     Get.toNamed(Routes.following, arguments: false);
+                                    TrackUtils.trackEvent(userLogType: '113005');
                                   },
                                   child: Text(
                                     '粉丝 ${UserStore.of.user?.fansCount.abbreviateNumber ?? '0'}',
@@ -236,22 +231,28 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w400,
                               ),
+                              onTap: (int index) {
+                                TrackUtils.trackEvent(
+                                  userLogType: index == 0
+                                      ? index == 1
+                                          ? '113001'
+                                          : '113002'
+                                      : '113003',
+                                );
+                              },
                             ),
                           ),
                           Expanded(
                             child: TabBarView(
                               controller: controller.tabController,
                               physics: const NeverScrollableScrollPhysics(),
-                              children: List.generate(
-                                controller.tabs.length,
-                                (index) {
-                                  if (index == 1) {
-                                    return const MineCollectView();
-                                  } else {
-                                    return MineChildView(tabIndex: index);
-                                  }
+                              children: List.generate(controller.tabs.length, (index) {
+                                if (index == 1) {
+                                  return const MineCollectView();
+                                } else {
+                                  return MineChildView(tabIndex: index);
                                 }
-                              ),
+                              }),
                             ),
                           ),
                           SizedBox(

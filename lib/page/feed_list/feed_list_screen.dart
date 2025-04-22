@@ -13,6 +13,7 @@ import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
+import '../../utils/track_utils.dart';
 
 part 'feed_list_controller.dart';
 
@@ -108,17 +109,21 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                       width: 18.w,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selIndex = 0;
-                        });
-                        String order = filterIndex == 0
-                            ? 'time'
-                            : filterIndex == 1
-                                ? 'comment'
-                                : 'like';
-                        _pageKey.currentState?.refreshData(0, order);
-                      },
+                      onTap: TrackUtils.trackedTap(
+                        onTap: () {
+                          setState(() {
+                            selIndex = 0;
+                          });
+                          String order = filterIndex == 0
+                              ? 'time'
+                              : filterIndex == 1
+                                  ? 'comment'
+                                  : 'like';
+                          _pageKey.currentState?.refreshData(0, order);
+                        },
+                        userLogType: '108001',
+                        params: 0,
+                      ),
                       child: Container(
                         height: 30.w,
                         padding: EdgeInsets.symmetric(horizontal: 17.w),
@@ -153,17 +158,21 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                     ),
                     ...List.generate(boardInfoList.length, (index) {
                       return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selIndex = index + 1;
-                          });
-                          String order = filterIndex == 0
-                              ? 'time'
-                              : filterIndex == 1
-                                  ? 'comment'
-                                  : 'like';
-                          _pageKey.currentState?.refreshData(boardInfoList[selIndex - 1].id!, order);
-                        },
+                        onTap: TrackUtils.trackedTap(
+                          onTap: () {
+                            setState(() {
+                              selIndex = index + 1;
+                            });
+                            String order = filterIndex == 0
+                                ? 'time'
+                                : filterIndex == 1
+                                    ? 'comment'
+                                    : 'like';
+                            _pageKey.currentState?.refreshData(boardInfoList[selIndex - 1].id!, order);
+                          },
+                          userLogType: '108001',
+                          params: 0,
+                        ),
                         child: Container(
                           height: 30.w,
                           padding: EdgeInsets.symmetric(horizontal: 17.w),

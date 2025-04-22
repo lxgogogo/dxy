@@ -11,6 +11,7 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/track_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
@@ -234,10 +235,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                   _buildRowButtonItem(
                                     genImage: Assets.images.iconGoogle,
                                     label: 'Google',
-                                    onTap: () {
-                                      if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
-                                      controller.signInWithGoogle(context);
-                                    },
+                                    onTap: TrackUtils.trackedTap(
+                                      onTap: () {
+                                        if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
+                                        controller.signInWithGoogle(context);
+                                      },
+                                      userLogType: '115006',
+                                      params: '谷歌',
+                                    ),
                                     isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
                                   ),
                                   Container(
@@ -247,10 +252,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                   _buildRowButtonItem(
                                     genImage: Assets.images.iconApple,
                                     label: 'Apple',
-                                    onTap: () {
-                                      if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
-                                      controller.signInWithApple(context);
-                                    },
+                                    onTap: TrackUtils.trackedTap(
+                                      onTap: () {
+                                        if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
+                                        controller.signInWithApple(context);
+                                      },
+                                      userLogType: '115006',
+                                      params: '苹果',
+                                    ),
                                     isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
                                   ),
                                   Container(
@@ -260,10 +269,14 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                   _buildRowButtonItem(
                                     genImage: Assets.images.iconTelegram,
                                     label: 'Telegram',
-                                    onTap: () {
-                                      if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
-                                      controller.signInWithTelegram(context);
-                                    },
+                                    onTap: TrackUtils.trackedTap(
+                                      onTap: () {
+                                        if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
+                                        controller.signInWithTelegram(context);
+                                      },
+                                      userLogType: '115006',
+                                      params: 'TG',
+                                    ),
                                     isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
                                   ),
                                   Container(

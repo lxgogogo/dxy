@@ -12,6 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../routes/app_pages.dart';
+import '../../utils/track_utils.dart';
 import '../../widget/common_app_bar.dart';
 import '../../widget/item_video.dart';
 import '../../widget/no_data.dart';
@@ -128,12 +129,18 @@ class _VideoListScreenState extends State<VideoListScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: VideoItem(item: controller.articles[firstIndex]),
+                          child: VideoItem(
+                            onTap: () => TrackUtils.trackEvent(userLogType: '102001'),
+                            item: controller.articles[firstIndex],
+                          ),
                         ),
                         if (hasSecond) ...[
                           SizedBox(width: 12.w),
                           Expanded(
-                            child: VideoItem(item: controller.articles[secondIndex]),
+                            child: VideoItem(
+                              onTap: () => TrackUtils.trackEvent(userLogType: '102001'),
+                              item: controller.articles[secondIndex],
+                            ),
                           ),
                         ] else
                           const Expanded(child: SizedBox()),

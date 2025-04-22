@@ -15,6 +15,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
 import '../../../utils/toast_utils.dart';
+import '../../../utils/track_utils.dart';
 import '../message_screen.dart';
 import 'item_common_message.dart';
 
@@ -47,7 +48,11 @@ class MessageChildViewState extends State<MessageChildView> {
               padding: EdgeInsets.symmetric(vertical: 12.w),
               itemBuilder: (c, i) => MessageCommonItem(
                 item: widget.controller.items[i],
-                onTap: () => jumpPage(widget.controller.items[i]),
+                onTap: TrackUtils.trackedTap(
+                  onTap: () => jumpPage(widget.controller.items[i]),
+                  userLogType: '114001',
+                  params: widget.controller.items[i].id,
+                ),
               ),
               // itemExtent: 160.0,
               itemCount: widget.controller.items.length,

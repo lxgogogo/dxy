@@ -42,6 +42,7 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
         verifyCodeType,
       );
       if (res.isSuccess) {
+        TrackUtils.trackEvent(userLogType: '118007');
         _startTime = DateTime.now();
         countdown(countdownDuration);
         _startTimer();

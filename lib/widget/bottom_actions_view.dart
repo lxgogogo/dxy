@@ -12,6 +12,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/utils/track_utils.dart';
 import 'package:holdem/widget/count_widget.dart';
 
 import '../model/user.dart';
@@ -22,21 +23,29 @@ import '../routes/app_routes_utils.dart';
 import '../utils/toast_utils.dart';
 import 'like_button/like_button.dart';
 
-class FeedDetailBottomView extends StatefulWidget {
-  final List<TagModel> tagList;
-  final PostBottomViewParams viewParams;
+enum ContentType {
+  video,
+  course,
+  book,
+  feed,
+  article,
+}
 
-  const FeedDetailBottomView({
+class CommonDetailBottomView extends StatefulWidget {
+  final DetailViewParams viewParams;
+  final ContentType contentType;
+
+  const CommonDetailBottomView({
     Key? key,
     required this.viewParams,
-    this.tagList = const [],
+    required this.contentType,
   }) : super(key: key);
 
   @override
-  State createState() => _FeedDetailBottomViewState();
+  State createState() => _CommonDetailBottomViewState();
 }
 
-class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
+class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,13 +54,6 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.tagList.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.only(left: 12.w),
-              child: TagListView(
-                tagList: widget.tagList,
-              ),
-            ),
           Container(
             padding: EdgeInsets.only(top: 10.w, bottom: 12.w),
             decoration: BoxDecoration(
@@ -286,7 +288,6 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
       'state': widget.viewParams.liked ?? false ? false : true,
     });
     if (data is int) {
-      EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
       widget.viewParams.likeCount = data;
       widget.viewParams.liked = !(widget.viewParams.liked ?? false);
       if (widget.viewParams.liked == true) {
@@ -295,35 +296,66 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
         ToastUtils.showToast('取消点赞成功');
       }
       setState(() {});
+      EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
+      // switch (widget.contentType) {
+      //   case ContentType.video:
+      //     TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
+      //     break;
+      //   case ContentType.course:
+      //     TrackUtils.trackEvent(userLogType: '105002', params: widget.viewParams.relId);
+      //     break;
+      //   case ContentType.book:
+      //     TrackUtils.trackEvent(userLogType: '107003', params: widget.viewParams.relId);
+      //     break;
+      //   case ContentType.feed:
+      //   case ContentType.article:
+      // }
       return true;
     }
     return false;
   }
 
   void _favoriteToggle() {
-    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏',
-        content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
+    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
       return;
     }
     NetRequest().favoriteToggle(
-        widget.viewParams.relType, widget.viewParams.relId, !(widget.viewParams.favoriteState ?? false), (data) {
-      if (widget.viewParams.favoriteState != true) {
-        ToastUtils.showToast('收藏成功');
-      } else {
-        ToastUtils.showToast('取消收藏成功');
-      }
-      if (widget.viewParams.favoriteState == true) {
-        widget.viewParams.favoriteState = false;
-        widget.viewParams.favoriteCount = widget.viewParams.favoriteCount - 1;
-      } else {
-        widget.viewParams.favoriteState = true;
-        widget.viewParams.favoriteCount = widget.viewParams.favoriteCount + 1;
-      }
-      setState(() {});
-      EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
-    }, (msg) {
-      AppRoutesUtils.haveCollect();
-    });
+      widget.viewParams.relType,
+      widget.viewParams.relId,
+      !(widget.viewParams.favoriteState ?? false),
+      (data) {
+        if (widget.viewParams.favoriteState != true) {
+          ToastUtils.showToast('收藏成功');
+        } else {
+          ToastUtils.showToast('取消收藏成功');
+        }
+        if (widget.viewParams.favoriteState == true) {
+          widget.viewParams.favoriteState = false;
+          widget.viewParams.favoriteCount = widget.viewParams.favoriteCount - 1;
+        } else {
+          widget.viewParams.favoriteState = true;
+          widget.viewParams.favoriteCount = widget.viewParams.favoriteCount + 1;
+        }
+        setState(() {});
+        EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
+        // switch (widget.contentType) {
+        //   case ContentType.video:
+        //     TrackUtils.trackEvent(userLogType: '103004', params: widget.viewParams.relId);
+        //     break;
+        //   case ContentType.course:
+        //     TrackUtils.trackEvent(userLogType: '105003', params: widget.viewParams.relId);
+        //     break;
+        //   case ContentType.book:
+        //     TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
+        //     break;
+        //   case ContentType.feed:
+        //   case ContentType.article:
+        // }
+      },
+      (msg) {
+        AppRoutesUtils.haveCollect();
+      },
+    );
   }
 
   void _toShare() {
@@ -333,6 +365,7 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
+        TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
       });
     } else {
       NetRequest().upCount(widget.viewParams.relId!, (data) async {
@@ -340,17 +373,24 @@ class _FeedDetailBottomViewState extends State<FeedDetailBottomView> {
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
+        switch (widget.contentType) {
+          case ContentType.video:
+            TrackUtils.trackEvent(userLogType: '103005', params: widget.viewParams.relId);
+            break;
+          case ContentType.course:
+            TrackUtils.trackEvent(userLogType: '105004', params: widget.viewParams.relId);
+            break;
+          case ContentType.book:
+            TrackUtils.trackEvent(userLogType: '107005', params: widget.viewParams.relId);
+            break;
+          case ContentType.feed:
+            break;
+          case ContentType.article:
+            TrackUtils.trackEvent(userLogType: '105004', params: widget.viewParams.relId);
+            break;
+        }
       });
     }
-  }
-
-  void _pushComment() {
-    UserStore.of.checkLogin(() {
-      Get.toNamed(Routes.publishComment, arguments: {
-        'relType': widget.viewParams.relType!,
-        'relId': widget.viewParams.relId!,
-      });
-    });
   }
 
   void _toCommentList() {
@@ -371,9 +411,11 @@ class TagListView extends StatelessWidget {
   const TagListView({
     super.key,
     required this.tagList,
+    this.onTapItem,
   });
 
   final List<TagModel> tagList;
+  final Function(TagModel model)? onTapItem;
 
   @override
   Widget build(BuildContext context) {
@@ -391,6 +433,7 @@ class TagListView extends StatelessWidget {
                 Get.toNamed(Routes.searchTag, arguments: {
                   'tag': tagList[index],
                 });
+                onTapItem?.call(tagList[index]);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
@@ -417,7 +460,7 @@ class TagListView extends StatelessWidget {
   }
 }
 
-class PostBottomViewParams {
+class DetailViewParams {
   int? postId; //帖子id
   int? relId; // 评论对象id
   String? relType; //  评论对象类型   // thread 帖子，content 内容，comment 评论
@@ -430,7 +473,7 @@ class PostBottomViewParams {
   int shareCount;
   UserProfile? author;
 
-  PostBottomViewParams({
+  DetailViewParams({
     this.postId,
     required this.relId,
     required this.relType,

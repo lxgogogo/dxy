@@ -128,7 +128,9 @@ class FeedDetailScreen extends StatelessWidget {
                                               imageHeight: 20,
                                               topText: controller.detailBean?.user?.nickname ?? '',
                                               topTextStyle: TextStyle(
-                                                  color: '#535861'.hexColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                                                  color: '#535861'.hexColor,
+                                                  fontSize: 12.sp,
+                                                  fontWeight: FontWeight.w600),
                                               bottomText1: controller.detailBean?.createdAt != null
                                                   ? '${DateUtil.formatDateAlias3(
                                                       controller.detailBean!.createdAt!.millisecondsSinceEpoch,
@@ -210,8 +212,8 @@ class FeedDetailScreen extends StatelessWidget {
                       ),
                     ),
           bottomNavigationBar: controller.detailBean != null
-              ? FeedDetailBottomView(
-                  viewParams: PostBottomViewParams(
+              ? CommonDetailBottomView(
+                  viewParams: DetailViewParams(
                       postId: controller.id,
                       relId: controller.id,
                       relType: NetRequest.COMMENT_TYPE_THREAD,
@@ -223,6 +225,7 @@ class FeedDetailScreen extends StatelessWidget {
                       commentCount: controller.detailBean?.commentCount ?? 0,
                       shareCount: controller.detailBean?.shareCount ?? 0,
                       author: controller.detailBean?.user),
+                  contentType: ContentType.feed,
                 )
               : const SizedBox(),
         );

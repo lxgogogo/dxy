@@ -14,6 +14,7 @@ import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/toast_utils.dart';
+import '../../../utils/track_utils.dart';
 import '../login_screen.dart';
 import 'type_selector.dart';
 
@@ -272,9 +273,12 @@ class _LoginContentState extends State<LoginContent> {
                       ),
                       if (!isUsername)
                         GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.forgetPassword);
-                          },
+                          onTap: TrackUtils.trackedTap(
+                            onTap: () {
+                              Get.toNamed(Routes.forgetPassword);
+                            },
+                            userLogType: '118003',
+                          ),
                           child: Text(
                             '忘记密码?',
                             style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
@@ -304,6 +308,7 @@ class _LoginContentState extends State<LoginContent> {
       captchaResult: captchaResult,
     );
     if (res.isSuccess) {
+      // TrackUtils.trackEvent(userLogType: '118002');
       ToastUtils.showToast('登录成功');
       StorageService.of.putToken(res.data['token']);
       final userProfile = UserProfile.fromJson(res.data['user']);
@@ -311,6 +316,7 @@ class _LoginContentState extends State<LoginContent> {
       EventBusUtil.of.fire(EventLoginSuccess());
       Get.until((route) => route.settings.name == Routes.main);
     } else {
+      // TrackUtils.trackEvent(userLogType: '118004');
       ToastUtils.showToast(res.msg);
     }
   }

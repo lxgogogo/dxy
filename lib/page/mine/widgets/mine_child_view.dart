@@ -13,6 +13,7 @@ import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
 import '../../../utils/net_request.dart';
 import '../../../utils/toast_utils.dart';
+import '../../../utils/track_utils.dart';
 import '../../../widget/dialog_common.dart';
 import '../../../widget/my_item_feed.dart';
 import '../../../widget/no_data.dart';
@@ -225,6 +226,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                             ToastUtils.showToast('删除成功');
                                             collectList.removeAt(i);
                                             setState(() {});
+                                            TrackUtils.trackEvent(userLogType: '113007');
                                           }
                                         });
                                       } else if (widget.tabIndex == 2) {
@@ -233,6 +235,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                             ToastUtils.showToast('删除成功');
                                             commentDataList.removeAt(i);
                                             setState(() {});
+                                            TrackUtils.trackEvent(userLogType: '113008');
                                           }
                                         });
                                       }

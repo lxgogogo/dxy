@@ -27,6 +27,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/date_util.dart';
+import '../../utils/track_utils.dart';
 
 part 'article_detail_controller.dart';
 
@@ -103,7 +104,13 @@ class ArticleDetailScreen extends StatelessWidget {
                                       },
                                     ),
                                   if (controller.detailBean?.tagList?.isNotEmpty == true)
-                                    TagListView(tagList: controller.detailBean?.tagList ?? [])
+                                    TagListView(
+                                      tagList: controller.detailBean?.tagList ?? [],
+                                      onTapItem: (model) => TrackUtils.trackEvent(
+                                        userLogType: '105001',
+                                        params: model.id,
+                                      ),
+                                    )
                                   else
                                     SizedBox(height: 16.w),
                                   Text(
@@ -139,8 +146,8 @@ class ArticleDetailScreen extends StatelessWidget {
                       ),
                     ),
           bottomNavigationBar: controller.detailBean != null
-              ? FeedDetailBottomView(
-                  viewParams: PostBottomViewParams(
+              ? CommonDetailBottomView(
+                  viewParams: DetailViewParams(
                     postId: controller.id,
                     relId: controller.id,
                     relType: NetRequest.COMMENT_TYPE_CONTENT,
@@ -152,6 +159,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     commentCount: controller.detailBean?.commentCount ?? 0,
                     shareCount: controller.detailBean?.shareCount ?? 0,
                   ),
+                  contentType: ContentType.article,
                 )
               : const SizedBox(),
         );

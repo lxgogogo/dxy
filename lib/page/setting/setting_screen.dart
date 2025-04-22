@@ -23,6 +23,7 @@ import '../../utils/event_bus_util.dart';
 import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
+import '../../utils/track_utils.dart';
 
 part 'setting_controller.dart';
 
@@ -207,9 +208,12 @@ class _SettingScreenState extends State<SettingScreen> {
     required String url,
   }) {
     return GestureDetector(
-      onTap: () {
-        launchUrl(Uri.parse(url));
-      },
+      onTap: TrackUtils.trackedTap(
+        onTap: () {
+          launchUrl(Uri.parse(url));
+        },
+        userLogType: '116001',
+      ),
       behavior: HitTestBehavior.translucent,
       child: Padding(
         padding: EdgeInsets.only(right: 20.w),
@@ -295,6 +299,7 @@ class _SettingScreenState extends State<SettingScreen> {
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);
             EventBusUtil.of.fire(EventResetMainTab());
+            TrackUtils.trackEvent(userLogType: '117001');
           });
         },
         cancelText: '取消',

@@ -14,6 +14,7 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/dialog_tip.dart';
+import 'package:intl/intl.dart';
 
 import 'env.dart';
 
@@ -25,13 +26,15 @@ class HttpHeaderInterceptors extends InterceptorsWrapper {
     RequestInterceptorHandler handler,
   ) {
     final token = StorageService.of.getToken();
+    final nowData = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     if (token.isNotEmpty) {
       options.headers['X-Auth-Token'] = token;
+      options.headers['opt-a'] = nowData;
     }
     options.headers = {
-      ...options.headers,
-      ...DevicesUtil.of.headerJson,
       ...AppUtil.of.headerJson,
+      ...DevicesUtil.of.headerJson,
+      ...options.headers,
     };
     super.onRequest(options, handler);
   }

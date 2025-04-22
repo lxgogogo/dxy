@@ -28,8 +28,7 @@ class HomeCourseItem extends StatelessWidget {
     return GestureDetector(
       onTap: TrackUtils.trackedTap(
         onTap: () => Get.toNamed(Routes.course, arguments: {'title': title}),
-        category: '首页',
-        action: '点击德州教程',
+        userLogType: '101010',
       ),
       child: Container(
         width: itemWidth,

@@ -64,7 +64,9 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                     children: [
                                       _buildDayTaskWidget(),
                                       SizedBox(height: 10.w),
-                                      _buildRunWidget()
+                                      _buildRunWidget(),
+                                      SizedBox(height: 10.w),
+                                      _buildScoreWidget()
                                     ],
                                   )))))
                         ],
@@ -96,7 +98,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       items: controller.bannerList.map((item) {
         int maxPoint = item.maxPoints ?? 0;
         int minPoint = item.minPoints ?? 0;
-        double allWidth = 96.w;
+        double allWidth = 1.sw*0.9 - 32.w;
         double progressWidth = 0;
         if (minPoint >= maxPoint || maxPoint <= 0) {
           progressWidth = allWidth;
@@ -133,13 +135,35 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                         color: item.titleColor),
                   ),
                   SizedBox(height: 15.w),
-                  Row(
+                  Container(
+                    height: 24.w,
+                    constraints: BoxConstraints(maxWidth: 86.w),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(12.w)),
+                        image: DecorationImage(
+                            image: AssetImage(item.buttonIcon ?? ''),
+                            fit: BoxFit.cover)),
+                    child: AutoSizeText(item.title ?? '',
+                        minFontSize: 8,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                            color: ColorStyle.white)),
+                  ),
+                  const Expanded(child: SizedBox()),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                                 '经验值 ${item.minPoints ?? 0}',
@@ -151,98 +175,60 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                 style: TextStyle(
                                     fontSize: 12.sp,
                                     color:
-                                        (item.titleColor ?? ColorStyle.c333333)
-                                            .withOpacity(0.5)),
+                                    (item.titleColor ?? ColorStyle.c333333)
+                                        .withOpacity(0.5)),
                               ),
                             ],
-                          ),
-                          SizedBox(height: 5.w),
-                          Stack(
-                            children: [
-                              Container(
-                                width: allWidth,
-                                height: 2.w,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(1.w)),
-                                  color: ColorStyle.c29426A.withOpacity(0.2),
-                                ),
-                              ),
-                              Container(
-                                width: progressWidth,
-                                height: 2.w,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(1.w)),
-                                    color: item.titleColor),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 10.w),
-                      GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 24.w,
-                            constraints: BoxConstraints(maxWidth: 86.w),
-                            padding: EdgeInsets.symmetric(horizontal: 8.w),
-                            alignment: Alignment.center,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.w)),
-                                image: DecorationImage(
-                                    image: AssetImage(item.buttonIcon ?? ''),
-                                    fit: BoxFit.cover)),
-                            child: AutoSizeText(item.title ?? '',
-                                minFontSize: 8,
-                                maxLines: 1,
-                                style: TextStyle(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorStyle.white)),
-                          ))
-                    ],
-                  ),
-                  const Expanded(child: SizedBox()),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 36.w,
-                      padding: EdgeInsets.only(left: 12.w, right: 12.w),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                          color: ColorStyle.white.withOpacity(0.3)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '今日做任务还可得${controller.remainingPoints.value}成长值',
-                            style: TextStyle(
-                                fontSize: 12.sp, color: item.titleColor),
                           ),
                           Row(
                             children: [
                               Text(
-                                '去完成',
+                                '积分',
                                 style: TextStyle(
-                                    fontSize: 12.sp, color: item.titleColor),
+                                    fontSize: 10.sp, color: (item.titleColor ?? ColorStyle.c333333)
+                                    .withOpacity(0.5)),
                               ),
-                              Image.asset(
-                                Assets.images.arrowRight.path,
-                                width: 12.w,
-                                height: 12.w,
-                                fit: BoxFit.cover,
-                                color: item.titleColor,
-                              )
+                              Text(
+                                '8888',
+                                style: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: item.titleColor),
+                              ),
                             ],
+                          ),
+                          Text(
+                            '还差 1111经验值升级',
+                            style: TextStyle(
+                                fontSize: 10.sp, color: (item.titleColor ?? ColorStyle.c333333)
+                                .withOpacity(0.5)),
                           )
                         ],
                       ),
-                    ),
+                      SizedBox(height: 8.w),
+                      Stack(
+                        children: [
+                          Container(
+                            width: allWidth,
+                            height: 2.w,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(1.w)),
+                              color: ColorStyle.c29426A.withOpacity(0.2),
+                            ),
+                          ),
+                          Container(
+                            width: progressWidth,
+                            height: 2.w,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(1.w)),
+                                color: item.titleColor),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10.w)
+                  SizedBox(height: 15.w)
                 ],
               ),
             ),
@@ -532,5 +518,45 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
             )
           ],
         ));
+  }
+
+  Widget _buildScoreWidget() {
+    return Container(
+      margin: EdgeInsets.only(left: 10.w, right: 10.w),
+      padding: EdgeInsets.all(16.w).copyWith(bottom: 12.w),
+      decoration: BoxDecoration(
+          color: ColorStyle.white,
+          borderRadius: BorderRadius.all(Radius.circular(10.w))),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                '积分记录',
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: ColorStyle.c333333),
+              ),
+              SizedBox(width: 10.w),
+              Text(
+                '显示最近6个月的经验值记录',
+                style: TextStyle(
+                    fontSize: 12.sp,
+                    color: ColorStyle.c333333.withOpacity(0.7)),
+              )
+            ],
+          ),
+          SizedBox(height: 5.w),
+          Wrap(
+            children: [
+              ...controller.levelDataList.map((e) {
+                return _buildRunItemWidget(e);
+              })
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

@@ -31,47 +31,45 @@ class _CollectListPageState extends State<CollectListPage> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        appBar: CommonAppBar.arrowBack(context,
-            title: controller.name.value,
-            actions: [
-              if (controller.isDeleting.value)
-                GestureDetector(
-                    onTap: () {
-                      controller.isDeleting.value = false;
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(5.w).copyWith(right: 16.w),
-                      color: Colors.transparent,
-                      child: Text(
-                        '取消',
-                        style: TextStyle(
-                            fontSize: 13.sp, color: AppTheme.color_999999),
-                      ),
-                    ))
-              else
-                GestureDetector(
-                  onTap: () {
-                    CollectOperationAlert.show((index) {
-                      controller.selectAlertOnTap(index);
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(5.w),
-                    margin: EdgeInsets.only(right: 5.w),
-                    color: Colors.transparent,
-                    child: Image.asset(
-                      Assets.images.iconCollectMore.path,
-                      width: 24.w,
-                      height: 24.w,
-                      color: Colors.black,
-                    ),
+        appBar: CommonAppBar
+            .arrowBack(context, title: controller.name.value, actions: [
+          if (controller.isDeleting.value)
+            GestureDetector(
+                onTap: () {
+                  controller.isDeleting.value = false;
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.w).copyWith(right: 16.w),
+                  color: Colors.transparent,
+                  child: Text(
+                    '取消',
+                    style: TextStyle(
+                        fontSize: 13.sp, color: AppTheme.color_999999),
                   ),
-                )
-            ]),
+                ))
+          else
+            GestureDetector(
+              onTap: () {
+                CollectOperationAlert.show((index) {
+                  controller.selectAlertOnTap(index);
+                }, showMoveBtn: controller.collectList.isEmpty ? false : true);
+              },
+              child: Container(
+                padding: EdgeInsets.all(5.w),
+                margin: EdgeInsets.only(right: 5.w),
+                color: Colors.transparent,
+                child: Image.asset(
+                  Assets.images.iconCollectMore.path,
+                  width: 24.w,
+                  height: 24.w,
+                  color: Colors.black,
+                ),
+              ),
+            )
+        ]),
         body: Column(
           children: [
-            Expanded(
-                child: _buildCollectListWidget()),
+            Expanded(child: _buildCollectListWidget()),
             if (controller.isDeleting.value)
               _buildSelectAllWidget()
             else
@@ -93,51 +91,50 @@ class _CollectListPageState extends State<CollectListPage> {
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
         return SlidableAutoCloseBehavior(
-          child: Obx(() => SmartRefresher(
-              enablePullDown: true,
-              enablePullUp: true,
-              controller: controller.refreshController,
-              onRefresh: controller.onRefresh,
-              onLoading: controller.onLoading,
-              child: controller.loaded.value && controller.collectList.isEmpty
-                  ? const Center(child: NoDataView())
-                  : ListView.builder(
-                  itemBuilder: (c, i) {
-                    return Slidable(
-                        groupTag: '1-list',
-                        key: ValueKey('${controller.collectList[i].id}'),
-                        endActionPane: ActionPane(
-                          motion: const ScrollMotion(),
-                          extentRatio: 42 / maxWidth,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                await showDialog(
-                                  barrierDismissible: true,
-                                  context: context,
-                                  builder: (context) => CommonDialog(
-                                    title: '删除收藏',
-                                    content: '确定要删除这个收藏吗？',
-                                    confirmText: '确认删除',
-                                    onConfirm: () {
-                                      Navigator.of(context).pop();
-                                      controller.deleteItem(i);
+            child: Obx(() => SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: true,
+                controller: controller.refreshController,
+                onRefresh: controller.onRefresh,
+                onLoading: controller.onLoading,
+                child: controller.loaded.value && controller.collectList.isEmpty
+                    ? const Center(child: NoDataView())
+                    : ListView.builder(
+                        itemBuilder: (c, i) {
+                          return Slidable(
+                              groupTag: '1-list',
+                              key: ValueKey('${controller.collectList[i].id}'),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                extentRatio: 42 / maxWidth,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await showDialog(
+                                        barrierDismissible: true,
+                                        context: context,
+                                        builder: (context) => CommonDialog(
+                                          title: '删除收藏',
+                                          content: '确定要删除这个收藏吗？',
+                                          confirmText: '确认删除',
+                                          onConfirm: () {
+                                            Navigator.of(context).pop();
+                                            controller.deleteItem(i);
+                                          },
+                                        ),
+                                      );
                                     },
+                                    child: SvgPicture.asset(
+                                      'assets/svg/icon_delete.svg',
+                                      width: 22,
+                                      height: 22,
+                                    ),
                                   ),
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                'assets/svg/icon_delete.svg',
-                                width: 22,
-                                height: 22,
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        child: _buildItemWidget(i));
-                  },
-                  itemCount: controller.collectList.length)))
-        );
+                              child: _buildItemWidget(i));
+                        },
+                        itemCount: controller.collectList.length))));
       },
     );
   }
@@ -208,10 +205,7 @@ class _CollectListPageState extends State<CollectListPage> {
           ),
           Text(
             '已选${controller.selectAllCount.value}条',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: ColorStyle.c333333
-            ),
+            style: TextStyle(fontSize: 14.sp, color: ColorStyle.c333333),
           ),
           GestureDetector(
             onTap: controller.deleteCollectList,

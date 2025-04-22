@@ -210,7 +210,7 @@ class CollectListController extends GetxController {
 
   void deleteCollectList() {
     if (selectIds.isEmpty) {
-      ToastUtils.showToast('请选择需要删除的内容');
+      ToastUtils.showToast('请先选择要移出的内容');
       return;
     }
     _deleteCollectList();

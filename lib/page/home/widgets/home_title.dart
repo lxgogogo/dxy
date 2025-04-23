@@ -31,10 +31,10 @@ class HomeTitle extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 6.w),
-              SvgPicture.asset(
-                Assets.svg.homeTag,
-                width: 34.w,
-              ),
+              // SvgPicture.asset(
+              //   Assets.svg.homeTag,
+              //   width: 34.w,
+              // ),
             ],
           ),
         ),

@@ -224,7 +224,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             decoration: BoxDecoration(
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(1.w)),
-                                color: item.titleColor),
+                                color: ColorStyle.c557BF6),
                           ),
                         ],
                       ),

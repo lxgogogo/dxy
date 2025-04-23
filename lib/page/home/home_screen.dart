@@ -41,7 +41,8 @@ enum SourceType {
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
   course('教程', categoryAlias: 'course'),
-  feed('帖子', categoryAlias: 'feed');
+  feed('帖子', categoryAlias: 'feed'),
+  tool('工具', categoryAlias: 'tool');
 
   final String title;
 

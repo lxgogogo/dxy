@@ -26,7 +26,7 @@ class _ToolItemState extends State<ToolItem> {
         Get.toNamed(Routes.toolDetail, arguments: widget.article.id ?? 0);
       },
       child: Container(
-        height: 132.w,
+        height: 112.w,
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -41,11 +41,11 @@ class _ToolItemState extends State<ToolItem> {
         ),
         clipBehavior: Clip.antiAlias,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
               clipBehavior: Clip.antiAlias,
-              margin: EdgeInsets.only(right: 18.w),
+              margin: EdgeInsets.only(right: 12.w),
               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8.w))),
               child: CachedNetworkImage(
                 imageUrl: widget.article.cover ?? '',
@@ -59,7 +59,6 @@ class _ToolItemState extends State<ToolItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 8.w),
                   Text(
                     widget.article.title ?? '',
                     overflow: TextOverflow.ellipsis,
@@ -68,24 +67,23 @@ class _ToolItemState extends State<ToolItem> {
                       color: '#333333'.hexColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      height: 1.2,
                     ),
                   ),
                   SizedBox(height: 4.w),
-                  Text(
-                    widget.article.description ?? '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
-                      fontSize: 12.sp,
-                      height: 1.2,
+                  Expanded(
+                    child: Text(
+                      widget.article.description ?? '',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: '#333333'.hexColor.withOpacity(0.7),
+                        fontSize: 12.sp,
+                      ),
                     ),
                   ),
-                  const Spacer(),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Spacer(),
                       Text(
                         [
                           '${widget.article.likeCount?.abbreviateNumber}点赞',

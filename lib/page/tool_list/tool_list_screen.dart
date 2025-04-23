@@ -11,6 +11,7 @@ import '../../gen/assets.gen.dart';
 import '../../routes/app_pages.dart';
 import '../../widget/common_app_bar.dart';
 import '../../widget/item_tool.dart';
+import '../../widget/no_data.dart';
 import 'tool_list_controller.dart';
 
 class ToolListScreen extends StatelessWidget {
@@ -50,6 +51,7 @@ class ToolListScreen extends StatelessWidget {
               ),
             ),
             NestedScrollView(
+              controller: controller.scrollController,
               headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return [
                   SliverToBoxAdapter(
@@ -71,28 +73,31 @@ class ToolListScreen extends StatelessWidget {
                       color: '#F3F8FF'.hexColor.withOpacity(0.7),
                     ),
                     child: SmartRefresher(
+
                       enablePullDown: false,
-                      enablePullUp: true,
+                      enablePullUp: controller.articles.isNotEmpty || !controller.noMore,
                       controller: controller.refreshController,
                       onLoading: controller.onLoading,
                       child: controller.isLoaded
-                          ? CustomScrollView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              slivers: [
-                                SliverList(
-                                    delegate: SliverChildBuilderDelegate(
-                                  childCount: controller.articles.length,
-                                  (context, index) {
-                                    return Container(
-                                      margin: EdgeInsets.fromLTRB(12.w, 0, 12.w, 12.w),
-                                      child: ToolItem(
-                                        article: controller.articles[index],
-                                      ),
-                                    );
-                                  },
-                                ))
-                              ],
-                            )
+                          ? controller.articles.isNotEmpty
+                              ? CustomScrollView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  slivers: [
+                                    SliverList(
+                                        delegate: SliverChildBuilderDelegate(
+                                      childCount: controller.articles.length,
+                                      (context, index) {
+                                        return Container(
+                                          margin: EdgeInsets.fromLTRB(12.w, index == 0 ? 24.w : 8.w, 12.w, 0),
+                                          child: ToolItem(
+                                            article: controller.articles[index],
+                                          ),
+                                        );
+                                      },
+                                    ))
+                                  ],
+                                )
+                              : const Center(child: NoDataView())
                           : const SizedBox(),
                     ),
                   ),

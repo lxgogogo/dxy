@@ -36,7 +36,7 @@ class ToolListController extends GetxController with GetSingleTickerProviderStat
       'pageNum': pageNum,
       'pageSize': pageSize,
       'filters': {
-        'categoryAlias': SourceType.book.categoryAlias,
+        'categoryAlias': SourceType.tool.categoryAlias,
       }
     };
     try {

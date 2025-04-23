@@ -14,6 +14,7 @@ import '../../gen/assets.gen.dart';
 import '../../routes/app_pages.dart';
 import '../../widget/common_app_bar.dart';
 import '../../widget/item_book.dart';
+import '../../widget/no_data.dart';
 import '../../widget/three_d_book_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -59,36 +60,42 @@ class _BookListScreenState extends State<BookListScreen> {
               ),
             ),
             NestedScrollView(
-                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 211.w,
-                      ),
-                    )
-                  ];
-                },
-                body: ClipRRect(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 100),
-                      decoration: BoxDecoration(
-                        color: '#F3F8FF'.hexColor.withOpacity(0.7),
-                      ),
-                      child: SmartRefresher(
-                        enablePullDown: false,
-                        enablePullUp: true,
-                        controller: controller.refreshController,
-                        onLoading: controller.onLoading,
-                        child: controller.isLoaded ? _buildContentView(controller) : const SizedBox(),
-                      ),
+              controller: controller.scrollController,
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 211.w,
+                    ),
+                  )
+                ];
+              },
+              body: ClipRRect(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 100),
+                    decoration: BoxDecoration(
+                      color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                    ),
+                    child: SmartRefresher(
+                      enablePullDown: false,
+                      enablePullUp: controller.articles.isNotEmpty || !controller.noMore,
+                      controller: controller.refreshController,
+                      onLoading: controller.onLoading,
+                      child: controller.isLoaded
+                          ? controller.articles.isNotEmpty
+                              ? _buildContentView(controller)
+                              : const Center(child: NoDataView())
+                          : const SizedBox(),
                     ),
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),

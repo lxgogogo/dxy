@@ -219,6 +219,8 @@ class _CommentItemState extends State<CommentItem> {
                               case SourceType.feed:
                                 TrackUtils.trackEvent(userLogType: '109007', params: widget.commentBean.id);
                                 break;
+                              case SourceType.tool:
+                                // TODO: Handle this case.
                             }
                           } else {
                             ToastUtils.showToast('取消点赞成功');
@@ -395,6 +397,8 @@ class _CommentItemState extends State<CommentItem> {
                                                   case SourceType.feed:
                                                     TrackUtils.trackEvent(userLogType: '109008', params: reply.id);
                                                     break;
+                                                  case SourceType.tool:
+                                                    // TODO: Handle this case.
                                                 }
                                               } else {
                                                 ToastUtils.showToast('取消点赞成功');

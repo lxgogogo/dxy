@@ -191,7 +191,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                             padding: EdgeInsets.zero,
                             onTap: onLikeButtonTapped,
                             likeBuilder: (bool isLiked) {
-                              return isLiked ?? false
+                              return isLiked
                                   ? SvgPicture.asset(
                                       Assets.svg.liked,
                                       color: '#567BF6'.hexColor.withOpacity(0.7),
@@ -297,11 +297,12 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
             break;
           case SourceType.feed:
             TrackUtils.trackEvent(userLogType: '109002', params: widget.viewParams.relId);
+          case SourceType.tool:
+          // TODO: Handle this case.
         }
       } else {
         ToastUtils.showToast('取消点赞成功');
       }
-      setState(() {});
       EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
       return true;
     }
@@ -329,7 +330,6 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
           widget.viewParams.favoriteState = true;
           widget.viewParams.favoriteCount = widget.viewParams.favoriteCount + 1;
         }
-        setState(() {});
         EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
         // switch (widget.sourceType) {
         //   case SourceType.video:
@@ -365,7 +365,6 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
-        setState(() {});
         switch (widget.sourceType) {
           case SourceType.video:
             TrackUtils.trackEvent(userLogType: '103005', params: widget.viewParams.relId);
@@ -379,6 +378,8 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
           case SourceType.feed:
             TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
             break;
+          case SourceType.tool:
+          // TODO: Handle this case.
         }
       });
     }

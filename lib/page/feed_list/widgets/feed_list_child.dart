@@ -30,7 +30,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
-
+  bool isLoaded = false;
   int pageId = 0;
   String boardSort = NetRequest.BOARD_SORT_TIME;
   List<BoardBean> boardPostList = [];
@@ -154,6 +154,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     } catch (e) {
       _refreshController.loadFailed();
     } finally {
+      isLoaded = true;
       setState(() {});
     }
   }
@@ -209,37 +210,39 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       scrollController: _listController,
-      child: boardPostList.isEmpty
-          ? const NoDataView()
-          : CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int i) {
-                      return FeedItem(
-                        boardPostList[i],
-                        onShield: () {
-                          if (boardPostList[i].id != null) {
-                            _onShield(boardPostList[i].id!);
-                          }
+      child: isLoaded
+          ? boardPostList.isNotEmpty
+              ? CustomScrollView(
+                  slivers: [
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int i) {
+                          return FeedItem(
+                            boardPostList[i],
+                            onShield: () {
+                              if (boardPostList[i].id != null) {
+                                _onShield(boardPostList[i].id!);
+                              }
+                            },
+                            onShieldUser: () {
+                              if (boardPostList[i].user?.id != null) {
+                                _onShieldUser(boardPostList[i].user!.id!);
+                              }
+                            },
+                            onReport: () {
+                              if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
+                                _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
+                              }
+                            },
+                          );
                         },
-                        onShieldUser: () {
-                          if (boardPostList[i].user?.id != null) {
-                            _onShieldUser(boardPostList[i].user!.id!);
-                          }
-                        },
-                        onReport: () {
-                          if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
-                            _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
-                          }
-                        },
-                      );
-                    },
-                    childCount: boardPostList.length,
-                  ),
-                ),
-              ],
-            ),
+                        childCount: boardPostList.length,
+                      ),
+                    ),
+                  ],
+                )
+              : const Center(child: NoDataView())
+          : const SizedBox(),
     );
   }
 

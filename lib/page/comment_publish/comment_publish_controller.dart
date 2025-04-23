@@ -120,6 +120,8 @@ class CommentPublishController extends GetxController {
       case SourceType.feed:
         TrackUtils.trackEvent(userLogType: '109005', params: relId);
         break;
+      case SourceType.tool:
+        // TODO: Handle this case.
     }
   }
 

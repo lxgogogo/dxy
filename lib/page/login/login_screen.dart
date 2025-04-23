@@ -11,7 +11,6 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/login/widgets/register_content.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/widget/close_image_button.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../model/user.dart';
@@ -26,12 +25,13 @@ import 'widgets/login_content.dart';
 part 'login_controller.dart';
 
 enum LoginType {
-  email('邮箱登录', '邮箱注册', 'EMAIL', '*请输入正确邮箱地址', '邮箱地址'),
-  username('账号登录', '账号注册', 'USERNAME', '*6-15位，允许输入英文大小写字母、数字', '账号'),
-  phone('手机号登录', '手机号注册', 'PHONE', '*手机号格式错误', '手机号');
+  email('邮箱登录', '邮箱注册', '邮箱找回密码', 'EMAIL', '*请输入正确邮箱地址', '邮箱地址'),
+  username('账号登录', '账号注册', '账号找回密码', 'USERNAME', '*6-15位，允许输入英文大小写字母、数字', '账号'),
+  phone('手机号登录', '手机号注册', '手机号找回密码', 'PHONE', '*手机号格式错误', '手机号');
 
   final String typeName;
   final String typeOtherName;
+  final String typeOtherName2;
   final String typeValue;
   final String tips;
   final String hint;
@@ -39,6 +39,7 @@ enum LoginType {
   const LoginType(
     this.typeName,
     this.typeOtherName,
+    this.typeOtherName2,
     this.typeValue,
     this.tips,
     this.hint,

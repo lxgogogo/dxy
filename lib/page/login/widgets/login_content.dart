@@ -147,6 +147,7 @@ class _LoginContentState extends State<LoginContent> {
                     onTypeSelected: (index) {
                       if (typeIndex != index) {
                         _controllerAccount.clear();
+                        _controllerPw.clear();
                         typeIndex = index;
                         checkValid();
                       }

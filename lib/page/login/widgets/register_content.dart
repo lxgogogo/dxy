@@ -198,6 +198,9 @@ class _RegisterContentState extends State<RegisterContent> {
                     onTypeSelected: (index) {
                       if (typeIndex != index) {
                         _controllerAccount.clear();
+                        _controllerCode.clear();
+                        _controllerPw.clear();
+                        _controllerAgainPw.clear();
                         typeIndex = index;
                         checkValid();
                       }

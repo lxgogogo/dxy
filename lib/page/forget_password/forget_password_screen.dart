@@ -234,11 +234,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   children: [
                     SizedBox(height: 24.w),
                     TypeSelector(
-                      typeList: loginTypes.map((e) => e.typeName).toList(),
+                      typeList: loginTypes.map((e) => e.typeOtherName2).toList(),
                       typeIndex: typeIndex,
                       onTypeSelected: (index) {
                         if (typeIndex != index) {
                           _controllerAccount.clear();
+                          _controllerCode.clear();
+                          _controllerPw.clear();
+                          _controllerAgainPw.clear();
                           typeIndex = index;
                           checkValid();
                         }

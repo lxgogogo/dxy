@@ -17,17 +17,18 @@ class UserProfile {
   bool? isfans;
   UserLevel? userLevel;
 
-  UserProfile(
-      {this.id,
-      this.nickname,
-      this.avatar,
-      this.account,
-      this.token,
-      this.followedCount,
-      this.fansCount,
-      this.followed,
-      this.isfans,
-      this.userLevel});
+  UserProfile({
+    this.id,
+    this.nickname,
+    this.avatar,
+    this.account,
+    this.token,
+    this.followedCount,
+    this.fansCount,
+    this.followed,
+    this.isfans,
+    this.userLevel,
+  });
 
   UserProfile.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -107,6 +108,8 @@ class UserLevel {
   int? id;
   String? name;
 
+  ///观看引流广告 0:否  1:是
+  int? advertise;
 
   UserLevel.fromJson(Map<String, dynamic> json) {
     if (json["favoriteCategory"] is int) {
@@ -118,6 +121,9 @@ class UserLevel {
     if (json["name"] is String) {
       name = json["name"];
     }
+    if (json["advertise"] is int) {
+      advertise = json["advertise"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -125,6 +131,7 @@ class UserLevel {
     _data["favoriteCategory"] = favoriteCategory;
     _data["id"] = id;
     _data["name"] = name;
+    _data["advertise"] = advertise;
     return _data;
   }
 }

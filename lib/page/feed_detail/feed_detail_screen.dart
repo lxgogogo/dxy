@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../services/index.dart';
@@ -145,6 +147,44 @@ class FeedDetailScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            if (controller.detailBean?.advertiseStatus == 1)
+                              SliverToBoxAdapter(
+                                child: Builder(
+                                  builder: (context) {
+                                    if (UserStore.of.user?.userLevel?.advertise == 0) return const SizedBox();
+                                    final advertiseImage = controller.detailBean?.advertiseImage ?? '';
+                                    if (advertiseImage.isEmpty) return const SizedBox();
+                                    precacheImage(
+                                      CachedNetworkImageProvider(advertiseImage, cacheKey: advertiseImage),
+                                      context,
+                                    );
+                                    return SizedBox(
+                                      height: 120.w,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          final advertiseUrl = controller.detailBean?.advertiseImage ?? '';
+                                          if (advertiseUrl.isNotEmpty) {
+                                            launchUrlString(advertiseUrl, mode: LaunchMode.externalApplication);
+                                          }
+                                        },
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: advertiseImage,
+                                          fadeOutDuration: Duration.zero,
+                                          fadeInDuration: Duration.zero,
+                                          cacheKey: advertiseImage,
+                                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+                                            fit: BoxFit.fill,
+                                          ),
+                                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                             if (controller.detailBean?.content?.isNotEmpty == true)
                               SliverToBoxAdapter(
                                 child: HtmlWidget(

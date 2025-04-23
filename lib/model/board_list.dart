@@ -61,91 +61,43 @@ class BoardBean {
   String? cover;
   String? comment;
 
-  BoardBean(
-      {this.id,
-      this.orignalId,
-      this.user,
-      this.board,
-      this.title,
-      this.content,
-      this.pureText,
-      this.createdAt,
-      this.commentCount,
-      this.favoriteCount,
-      this.likeCount,
-      this.shareCount,
-      this.viewCount,
-      this.liked,
-      this.favorited,
-      this.tagList,
-      this.sign,
-      this.pics,
-      this.files,
-      this.relType,
-      this.contentBean,
-      this.cover,
-      this.comment});
-//copywith
-  BoardBean copyWith({
-    int? id,
-    int? orignalId,
-    UserProfile? user,
-    BoardInfo? board,
-    String? title,
-    String? content,
-    String? pureText,
-    DateTime? createdAt,
-    int? commentCount,
-    int? favoriteCount,
-    int? likeCount,
-    int? shareCount,
-    int? viewCount,
-    bool? liked,
-    bool? favorited,
-    List<TagModel>? tagList,
-    List<String>? sign,
-    List<String>? pics,
-    List<UploadFile>? files,
-    String? relType,
-    String? cover,
-    String? comment,
-    ArticleBean? contentBean,
+  ///观看引流广告开关 0:否  1:是
+  int? advertiseStatus;
 
-  }) =>
-      BoardBean(
-        id: id ?? this.id,
-        orignalId: orignalId ?? this.orignalId,
-        user: user ?? this.user,
-        board: board ?? this.board,
-        title: title ?? this.title,
-        content: content ?? this.content,
-        pureText: pureText ?? this.pureText,
-        createdAt: createdAt ?? this.createdAt,
-        commentCount: commentCount ?? this.commentCount,
-        favoriteCount: favoriteCount ?? this.favoriteCount,
-        likeCount: likeCount ?? this.likeCount,
-        shareCount: shareCount ?? this.shareCount,
-        viewCount: viewCount ?? this.viewCount,
-        liked: liked ?? this.liked,
-        favorited: favorited ?? this.favorited,
-        tagList: tagList ?? this.tagList,
-        sign: sign ?? this.sign,
-        pics: pics ?? this.pics,
-        files: files ?? this.files,
-        relType: relType ?? this.relType,
-        cover: cover ?? this.cover,
-        comment: comment ?? this.comment,
-        contentBean: contentBean ?? this.contentBean,
-      );
+  ///观看引流广告网址
+  String? advertiseUrl;
 
+  ///观看引流广告图
+  String? advertiseImage;
 
-
-
-
-
-
-
-
+  BoardBean({
+    this.id,
+    this.orignalId,
+    this.user,
+    this.board,
+    this.title,
+    this.content,
+    this.pureText,
+    this.createdAt,
+    this.commentCount,
+    this.favoriteCount,
+    this.likeCount,
+    this.shareCount,
+    this.viewCount,
+    this.liked,
+    this.favorited,
+    this.tagList,
+    this.sign,
+    this.pics,
+    this.files,
+    this.relType,
+    this.contentBean,
+    this.cover,
+    this.comment,
+    this.advertiseStatus,
+    this.advertiseUrl,
+    this.advertiseImage,
+  });
 
   BoardBean.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
@@ -219,6 +171,18 @@ class BoardBean {
     if (json["pics"] is List) {
       pics = json["pics"] == null ? null : (json["pics"] as List).map((e) => e.toString()).toList();
     }
+
+    if (json["advertiseStatus"] is int) {
+      advertiseStatus = json["advertiseStatus"];
+    }
+
+    if (json["advertiseUrl"] is String) {
+      advertiseUrl = json["advertiseUrl"];
+    }
+
+    if (json["advertiseImage"] is String) {
+      advertiseImage = json["advertiseImage"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -239,6 +203,9 @@ class BoardBean {
     _data["relType"] = relType;
     _data["comment"] = comment;
     _data["contentBean"] = contentBean;
+    _data["advertiseStatus"] = advertiseStatus;
+    _data["advertiseUrl"] = advertiseUrl;
+    _data["advertiseImage"] = advertiseImage;
     return _data;
   }
 }

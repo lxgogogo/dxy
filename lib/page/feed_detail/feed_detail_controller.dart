@@ -32,21 +32,21 @@ class FeedDetailController extends GetxController {
 
   Future<void> dataInit() async {
     final events = await Connectivity().checkConnectivity();
-    // noNetwork = events.contains(ConnectivityResult.none);
-    // if (noNetwork) {
-    //   safeUpdate();
-    //   return;
-    // }
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      safeUpdate();
+      return;
+    }
     requestDetail(showLoading: false);
   }
 
   Future<void> refreshData() async {
     final events = await Connectivity().checkConnectivity();
-    // noNetwork = events.contains(ConnectivityResult.none);
-    // if (noNetwork) {
-    //   ToastUtils.showToast('请检查网络');
-    //   return;
-    // }
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      ToastUtils.showToast('请检查网络');
+      return;
+    }
     requestDetail();
   }
 

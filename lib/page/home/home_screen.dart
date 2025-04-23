@@ -36,17 +36,18 @@ import '../../utils/track_utils.dart';
 
 part 'home_controller.dart';
 
-enum HomeType {
-  news('资讯', categoryAlias: 'news'),
+enum SourceType {
+  // news('资讯', categoryAlias: 'news'),
   video('视频', categoryAlias: 'video'),
   book('书籍', categoryAlias: 'book'),
-  course('教程', categoryAlias: 'course');
+  course('教程', categoryAlias: 'course'),
+  feed('帖子', categoryAlias: 'feed');
 
   final String title;
 
   final String categoryAlias;
 
-  const HomeType(this.title, {required this.categoryAlias});
+  const SourceType(this.title, {required this.categoryAlias});
 }
 
 class HomeScreen extends StatefulWidget {
@@ -244,11 +245,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   ),
                                                   HomeMenuItem(
                                                     itemWidth: itemWidth,
-                                                    name: '火爆论坛',
-                                                    nameEn: 'BBS',
-                                                    imagePath: Assets.images.iconHomeFeed.path,
+                                                    name: '实用工具',
+                                                    nameEn: 'Tools',
+                                                    imagePath: Assets.images.iconHomeTool.path,
                                                     onTap: TrackUtils.trackedTap(
-                                                      onTap: () => controller.changeMainTab(1),
+                                                      onTap: () => Get.toNamed(Routes.toolList),
                                                       userLogType: '101005',
                                                     ),
                                                   ),

@@ -359,6 +359,10 @@ class $AssetsImagesGen {
   AssetGenImage get iconHomeFeed =>
       const AssetGenImage('assets/images/icon_home_feed.png');
 
+  /// File path: assets/images/icon_home_tool.png
+  AssetGenImage get iconHomeTool =>
+      const AssetGenImage('assets/images/icon_home_tool.png');
+
   /// File path: assets/images/icon_home_video.png
   AssetGenImage get iconHomeVideo =>
       const AssetGenImage('assets/images/icon_home_video.png');
@@ -668,6 +672,10 @@ class $AssetsImagesGen {
   AssetGenImage get titleLogo =>
       const AssetGenImage('assets/images/title_logo.png');
 
+  /// File path: assets/images/tool_banner.png
+  AssetGenImage get toolBanner =>
+      const AssetGenImage('assets/images/tool_banner.png');
+
   /// File path: assets/images/version_update.png
   AssetGenImage get versionUpdate =>
       const AssetGenImage('assets/images/version_update.png');
@@ -750,6 +758,7 @@ class $AssetsImagesGen {
         iconHomeBook,
         iconHomeCourse,
         iconHomeFeed,
+        iconHomeTool,
         iconHomeVideo,
         iconMessageSystemDf,
         iconMineSignBg,
@@ -833,6 +842,7 @@ class $AssetsImagesGen {
         tabSel,
         time,
         titleLogo,
+        toolBanner,
         versionUpdate,
         video,
         videoBanner,
@@ -1053,7 +1063,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  const Assets._();
+  Assets._();
 
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
@@ -1095,7 +1105,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.medium,
+    FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
   }) {

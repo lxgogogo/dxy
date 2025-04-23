@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import '../../model/article.dart';
 import '../../utils/net_request.dart';
 import '../home/home_screen.dart';
-import 'package:holdem/extensions/safe_update_extensions.dart';
 
-/**
- * Created on 2025/3/6
- * Description:
- */
-class VideoListController extends GetxController {
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
+class ToolListController extends GetxController with GetSingleTickerProviderStateMixin {
+  final RefreshController refreshController = RefreshController();
   List<ArticleBean> articles = [];
   int pageNum = 1;
   int pageSize = 20;
@@ -39,7 +36,7 @@ class VideoListController extends GetxController {
       'pageNum': pageNum,
       'pageSize': pageSize,
       'filters': {
-        'categoryAlias': SourceType.video.categoryAlias,
+        'categoryAlias': SourceType.book.categoryAlias,
       }
     };
     try {

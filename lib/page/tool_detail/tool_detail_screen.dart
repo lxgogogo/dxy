@@ -1,18 +1,18 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
-import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
-import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/page/home/home_screen.dart';
+import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -21,22 +21,26 @@ import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
-import 'package:html/dom.dart' as dom;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/date_util.dart';
 import '../../utils/track_utils.dart';
 
-part 'article_detail_controller.dart';
+part 'tool_detail_controller.dart';
 
-class ArticleDetailScreen extends StatelessWidget {
-  const ArticleDetailScreen({super.key});
+class ToolDetailScreen extends StatefulWidget {
+  const ToolDetailScreen({super.key});
 
   @override
+  State<ToolDetailScreen> createState() => _ToolDetailScreenState();
+}
+
+class _ToolDetailScreenState extends State<ToolDetailScreen> {
+  @override
   Widget build(BuildContext context) {
-    return GetBuilder<ArticleDetailController>(
-      init: ArticleDetailController(),
+    return GetBuilder<ToolDetailController>(
+      init: ToolDetailController(),
       tag: '${Get.arguments}',
       builder: (controller) {
         return Scaffold(
@@ -65,15 +69,35 @@ class ArticleDetailScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
+                                  Center(
+                                    child: AnimatedOpacity(
+                                      opacity: controller.detailBean?.cover?.isNotEmpty == true ? 1 : 0,
+                                      duration: const Duration(milliseconds: 50),
+                                      child: SizedBox(
+                                        width: context.width * 0.6,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(4),
+                                          child: CachedNetworkImage(
+                                            imageUrl: controller.detailBean?.cover ?? '',
+                                            fit: BoxFit.cover,
+                                            placeholder: (context, url) =>
+                                                Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                            errorWidget: (context, url, error) =>
+                                                Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.w),
                                   Text(
                                     controller.detailBean?.title ?? '',
                                     style: TextStyle(
-                                      color: '#333333'.hexColor,
+                                      color: '#1E1E1E'.hexColor,
                                       fontSize: 20.sp,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  SizedBox(height: 8.w),
                                   Text(
                                     controller.detailBean!.createdAt != null
                                         ? '${DateUtil.formatDateAlias3(
@@ -83,35 +107,71 @@ class ArticleDetailScreen extends StatelessWidget {
                                         : '',
                                     style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
                                   ),
-                                  SizedBox(height: 5.w),
-                                  if (controller.detailBean?.article?.content?.isNotEmpty == true)
-                                    HtmlWidget(
-                                      controller.detailBean!.article!.content!,
-                                      customStylesBuilder: htmlCustomStyles,
-                                      factoryBuilder: () => HtmlFactoryBuilder(
-                                        context,
-                                        content: controller.detailBean!.article!.content!,
+                                  if (controller.detailBean?.description?.isNotEmpty == true)
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 6.w),
+                                      child: Text(
+                                        controller.detailBean?.description ?? '',
+                                        style: TextStyle(
+                                          color: const Color(0xFF333333).withOpacity(0.7),
+                                          fontSize: 12.sp,
+                                        ),
+                                        maxLines: 100,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      customWidgetBuilder: (dom.Element element) {
-                                        if (element.localName == 'table') {
-                                          return const SizedBox();
-                                        }
-                                        return null;
-                                      },
-                                      onTapUrl: (String url) async {
-                                        return launchUrlString(url, mode: LaunchMode.externalApplication);
-                                      },
                                     ),
+                                  const SizedBox(height: 6),
                                   if (controller.detailBean?.tagList?.isNotEmpty == true)
                                     TagListView(
                                       tagList: controller.detailBean?.tagList ?? [],
                                       onTapItem: (model) => TrackUtils.trackEvent(
-                                        userLogType: '105001',
+                                        userLogType: '107002',
                                         params: model.id,
                                       ),
-                                    )
-                                  else
-                                    SizedBox(height: 16.w),
+                                    ),
+                                  SizedBox(height: 16.w),
+                                  GestureDetector(
+                                    onTap: TrackUtils.trackedTap(
+                                      onTap: () {
+                                        // 书籍下载
+                                        int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
+                                        bool haveDown = bookDownload != 0 ? true : false;
+                                        if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
+                                          if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                            launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                          }
+                                        }
+                                      },
+                                      userLogType: '104001',
+                                      params: controller.detailBean?.id,
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        width: 160.w,
+                                        height: 46.w,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(50.w),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment(1.00, 0.00),
+                                            end: Alignment(-1, 0),
+                                            colors: [
+                                              Color(0xFF84BCF9),
+                                              Color(0xFF557BF6),
+                                            ],
+                                          ),
+                                        ),
+                                        child: Text(
+                                          '访问工具',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 16.w),
                                   Text(
                                     '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
                                     style: TextStyle(
@@ -132,7 +192,7 @@ class ArticleDetailScreen extends StatelessWidget {
                                 (BuildContext context, int index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
-                                    sourceType: SourceType.course,
+                                    sourceType: SourceType.book,
                                   );
                                 },
                                 childCount: controller.comments!.length,
@@ -153,13 +213,13 @@ class ArticleDetailScreen extends StatelessWidget {
                     relType: NetRequest.COMMENT_TYPE_CONTENT,
                     favoriteState: controller.detailBean?.favorited ?? false,
                     liked: controller.detailBean?.liked ?? false,
-                    shareLink: 'details/article-${controller.id}',
+                    shareLink: 'details/tool-${controller.id}',
                     likeCount: controller.detailBean?.likeCount ?? 0,
                     favoriteCount: controller.detailBean?.favoriteCount ?? 0,
                     commentCount: controller.detailBean?.commentCount ?? 0,
                     shareCount: controller.detailBean?.shareCount ?? 0,
                   ),
-                  sourceType: SourceType.course,
+                  sourceType: SourceType.book,
                 )
               : const SizedBox(),
         );

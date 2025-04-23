@@ -31,7 +31,6 @@ class _BookListScreenState extends State<BookListScreen> {
       backgroundColor: Colors.white,
       appBar: CommonAppBar.arrowBack(
         context,
-        title: '',
         actions: [
           GestureDetector(
             onTap: () {
@@ -171,23 +170,6 @@ _buildContentView(BookListController controller) {
           },
         ),
       )),
-
-      // SliverToBoxAdapter(
-      //   child: Container(
-      //     margin: EdgeInsets.only(top: 20.w),
-      //     child: Center(
-      //       child: SmoothPageIndicator(
-      //         controller: controller.pageController,
-      //         count: controller.bookItems.length,
-      //         effect:  ExpandingDotsEffect(
-      //           dotHeight: 8.w,
-      //           dotWidth: 8.w,
-      //           activeDotColor: '#6591FF'.hexColor
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
       SliverToBoxAdapter(
         child: Container(
           padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),

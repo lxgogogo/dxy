@@ -1,42 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text_editing_controller.dart';
-import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/common_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:holdem/extensions/safe_update_extensions.dart';
-import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/model/attribute_model.dart';
-import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/common_app_bar.dart';
-import 'package:super_tooltip/super_tooltip.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 import '../../gen/assets.gen.dart';
@@ -45,7 +24,6 @@ import '../../utils/common_utils.dart';
 import '../../utils/html_parse_util.dart';
 import '../../utils/net_request.dart';
 import '../../utils/track_utils.dart';
-import '../../widget/bottom_actions_view.dart';
 
 part 'comment_publish_controller.dart';
 

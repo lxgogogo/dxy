@@ -7,6 +7,7 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/tag_model.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
@@ -22,14 +23,6 @@ import '../page/mine/login_helper.dart';
 import '../routes/app_routes_utils.dart';
 import '../utils/toast_utils.dart';
 import 'like_button/like_button.dart';
-
-enum SourceType {
-  video,
-  course,
-  book,
-  feed,
-  // article,
-}
 
 class CommonDetailBottomView extends StatefulWidget {
   final DetailViewParams viewParams;

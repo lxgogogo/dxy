@@ -6,30 +6,24 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/count_widget.dart';
-import 'package:holdem/widget/linear_card.dart';
-
-import '../utils/date_util.dart';
 
 // ignore: must_be_immutable
-class BookItem extends StatefulWidget {
+class ToolItem extends StatefulWidget {
   ArticleBean article;
 
-  BookItem({super.key, required this.article});
+  ToolItem({super.key, required this.article});
 
   @override
-  State<BookItem> createState() => _BookItemState();
+  State<ToolItem> createState() => _ToolItemState();
 }
 
-class _BookItemState extends State<BookItem> {
+class _ToolItemState extends State<ToolItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.bookDetail, arguments: widget.article.id ?? 0);
+        Get.toNamed(Routes.toolDetail, arguments: widget.article.id ?? 0);
       },
       child: Container(
         height: 132.w,
@@ -79,17 +73,6 @@ class _BookItemState extends State<BookItem> {
                   ),
                   SizedBox(height: 4.w),
                   Text(
-                    '作者:${widget.article.author ?? ''}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
-                      fontSize: 12.sp,
-                      height: 1.2,
-                    ),
-                  ),
-                  SizedBox(height: 4.w),
-                  Text(
                     widget.article.description ?? '',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -102,15 +85,6 @@ class _BookItemState extends State<BookItem> {
                   const Spacer(),
                   Row(
                     children: [
-                      Text(
-                        widget.article.createdAt != null
-                            ? DateUtil.formatDateAlias3(widget.article.createdAt!.millisecondsSinceEpoch)
-                            : '',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: '#333333'.hexColor.withOpacity(0.8),
-                        ),
-                      ),
                       const Spacer(),
                       Text(
                         [

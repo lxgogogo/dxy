@@ -81,7 +81,7 @@ class BookListController extends GetxController with GetSingleTickerProviderStat
       'pageNum': pageNum,
       'pageSize': pageSize,
       'filters': {
-        'categoryAlias': HomeType.book.categoryAlias,
+        'categoryAlias': SourceType.book.categoryAlias,
       }
     };
     try {

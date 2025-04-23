@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,20 +9,18 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/report_sheet.dart';
-import 'package:intl/intl.dart';
 
 import '../services/index.dart';
 import '../stores/config_store.dart';
 import '../utils/date_util.dart';
 import '../utils/toast_utils.dart';
 import '../utils/track_utils.dart';
-import 'bottom_actions_view.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentBean commentBean;

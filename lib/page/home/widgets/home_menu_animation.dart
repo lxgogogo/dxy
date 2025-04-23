@@ -86,11 +86,11 @@ class HomeMenu extends StatelessWidget {
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
-                  name: '火爆论坛',
-                  nameEn: 'BBS',
+                  name: '实用工具',
+                  nameEn: 'Tools',
                   imagePath: Assets.images.iconHomeFeed.path,
                   onTap: TrackUtils.trackedTap(
-                    onTap: () => Get.find<MainController>().onTabBarItem(1),
+                    onTap: () => Get.toNamed(Routes.toolList),
                     userLogType: '100005',
                   ),
                 ),

@@ -12,6 +12,7 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';

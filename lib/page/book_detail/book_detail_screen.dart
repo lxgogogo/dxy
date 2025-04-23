@@ -11,10 +11,10 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/common_app_bar.dart';
@@ -25,10 +25,8 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../stores/user_store.dart';
 import '../../utils/date_util.dart';
 import '../../utils/track_utils.dart';
-import '../search_tag/search_tag_screen.dart';
 
 part 'book_detail_controller.dart';
 

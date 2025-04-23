@@ -22,6 +22,7 @@ abstract class Routes {
   static const inputComment = '/inputComment';
   static const following = '/following';
   static const bookDetail = '/bookDetail';
+  static const toolDetail = '/toolDetail';
   static const articleDetail = '/articleDetail';
   static const videoDetail = '/videoDetail';
   static const feedDetail = '/feedDetail';
@@ -32,6 +33,7 @@ abstract class Routes {
   static const course = '/course';
   static const videoList = '/videoList';
   static const boolList = '/bookList';
+  static const toolList = '/toolList';
   static const scan = '/scan';
   static const scanResult = '/scanResult';
   static const createCollect = '/createCollect';

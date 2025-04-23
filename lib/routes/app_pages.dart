@@ -36,6 +36,8 @@ import 'package:holdem/services/index.dart';
 
 import '../page/course/course_screen.dart';
 import '../page/telegram_login/telegram_login_screen.dart';
+import '../page/tool_detail/tool_detail_screen.dart';
+import '../page/tool_list/tool_list_screen.dart';
 import '../utils/track_utils.dart';
 
 part 'app_routes.dart';
@@ -104,6 +106,10 @@ class AppPages {
       page: () => const BookDetailScreen(),
     ),
     GetPage(
+      name: Routes.toolDetail,
+      page: () => const ToolDetailScreen(),
+    ),
+    GetPage(
       name: Routes.articleDetail,
       page: () => const ArticleDetailScreen(),
     ),
@@ -143,6 +149,10 @@ class AppPages {
     GetPage(
       name: Routes.boolList,
       page: () => const BookListScreen(),
+    ),
+    GetPage(
+      name: Routes.toolList,
+      page: () => const ToolListScreen(),
     ),
     GetPage(
       name: Routes.scan,

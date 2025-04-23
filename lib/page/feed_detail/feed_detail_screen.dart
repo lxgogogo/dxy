@@ -11,7 +11,7 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
-import 'package:holdem/page/search_tag/search_tag_screen.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';

@@ -1,19 +1,15 @@
 import 'dart:convert';
 
-import 'package:detectable_text_field/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/user.dart';
+import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 import '../../utils/toast_utils.dart';

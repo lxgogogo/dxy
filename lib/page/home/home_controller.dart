@@ -101,7 +101,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       {
         'pageNum': 1,
         'pageSize': 4,
-        'filters': {'categoryAlias': HomeType.video.categoryAlias, 'sort': 'popular', 'tagId': tagId}
+        'filters': {'categoryAlias': SourceType.video.categoryAlias, 'sort': 'popular', 'tagId': tagId}
       },
       showLoading: false,
       (data) {

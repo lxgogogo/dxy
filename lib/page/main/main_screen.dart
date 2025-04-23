@@ -28,6 +28,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../model/message_badge_model.dart';
 import '../../utils/debounce_throttle_util.dart';
 import '../../utils/event_bus_util.dart';
+import '../../utils/track_utils.dart';
 import '../mine/mine_screen.dart';
 
 part 'main_controller.dart';

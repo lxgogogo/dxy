@@ -27,6 +27,21 @@ class MainController extends GetxController with WidgetsBindingObserver {
     if (index != 2) {
       UserStore.of.refreshBadge();
     }
+
+    switch (index) {
+      case 0:
+        TrackUtils.trackEvent(userLogType: '100001');
+        break;
+      case 1:
+        TrackUtils.trackEvent(userLogType: '100005');
+        break;
+      case 2:
+        TrackUtils.trackEvent(userLogType: '100010');
+        break;
+      case 3:
+        TrackUtils.trackEvent(userLogType: '100009');
+        break;
+    }
   }
 
   @override

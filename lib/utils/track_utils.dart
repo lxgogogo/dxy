@@ -18,7 +18,7 @@ class TrackUtils {
     };
 
     try {
-      await HttpUtils.postNew(Api.trackEvent, params: postParams);
+      await HttpUtils.postNewDynamic(Api.trackEvent, params: [postParams]);
     } catch (e, stack) {
       debugPrint('埋点失败: $e\n$stack');
     }

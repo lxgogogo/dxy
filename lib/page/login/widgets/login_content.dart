@@ -113,7 +113,7 @@ class _LoginContentState extends State<LoginContent> {
     Get.toNamed(
       Routes.termsAndPrivacy,
       arguments: {
-        'title': '用户协议',
+        'title': '《德学院用户注册协议》',
       },
     );
   }

@@ -64,8 +64,6 @@ class TermsPrivacyPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
                   child: Text(
                     '''
-《德学院用户注册协议》
-
 欢迎您注册并使用“德学院”应用（以下简称“本平台”）。在使用我们的服务前，请您仔细阅读并充分理解本协议。您点击“同意”即视为您已阅读、理解并接受本协议的全部内容，并愿意受其约束。
 
 一、服务内容

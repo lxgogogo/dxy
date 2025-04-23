@@ -86,7 +86,6 @@ class EquityCenterController extends GetxController {
       String name = map['name'] ?? "";
       if (userLevelId == (map['id'] ?? 0)) {
         minPoints = levelPoints;
-        name = UserStore.of.user?.username ?? '';
       }
       if (map['index'] == 1) {
         if (selectIndex > 0) {

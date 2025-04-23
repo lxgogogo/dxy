@@ -129,7 +129,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.title ?? '',
+                    UserStore.of.user?.nickname ?? '',
                     style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,

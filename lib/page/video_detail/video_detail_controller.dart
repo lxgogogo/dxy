@@ -40,6 +40,7 @@ class VideoDetailController extends GetxController {
   bool haveWatchAlert = false;
   // 0-普通视频 1-精选视频
   int videoType = 0;
+  bool isDisposed = false;
 
   @override
   void onInit() {
@@ -74,6 +75,7 @@ class VideoDetailController extends GetxController {
 
   @override
   void onClose() {
+    isDisposed = true;
     /// 上传视频已播放时长
     _uploadVideoReport();
     _eventSubscription?.cancel();
@@ -84,17 +86,16 @@ class VideoDetailController extends GetxController {
   }
 
   void _uploadVideoReport() async {
-    if (!UserStore.of.isLogin) {
-      return;
-    }
     if (detailBean != null && videoController != null) {
       int videoType = detailBean?.featured ?? 0;
       final currentDuration = videoController?.value.position.inSeconds;
-      if ((currentDuration ?? 0) > 1) {
-        await CommonService.of.uploadBenefits({
-          'type': videoType == 1 ? 'featured' : 'video',
-          'value': currentDuration
-        });
+      if ((videoType == 1 && UserStore.of.isLogin) || videoType == 0) {
+        if ((currentDuration ?? 0) > 1) {
+          await CommonService.of.uploadBenefits({
+            'type': videoType == 1 ? 'featured' : 'video',
+            'value': currentDuration
+          });
+        }
       }
     }
   }
@@ -125,77 +126,31 @@ class VideoDetailController extends GetxController {
         }
         detailBean = ArticleDetailBean.fromJson(data);
         int featured = detailBean?.featured ?? 0;
+        int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
         bool isLogin = UserStore.of.isLogin;
         if (isLogin) {
-          int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
-          int featuredWatch = detailBean?.userlevel?.featured ?? 0;
           safeUpdate();
-          if (videoController == null) {
-            if (detailBean?.videoList?.isNotEmpty == true) {
-              if (childId != null) {
-                final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
-                if (index != -1) {
-                  playVideoIndex = index;
-                  autoScrollController.scrollToIndex(
-                    playVideoIndex,
-                    duration: const Duration(microseconds: 1),
-                    preferPosition: AutoScrollPosition.end,
-                  );
-                }
-              }
-              if (!haveWatchAlert) {
-                haveWatchAlert = true;
-                if (featured == 1) {
-                  if (featuredWatch > 0) {
-                    haveWatchPower.value = true;
-                    _startVideoPlayer(
-                        detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
-                  } else {
-                    haveWatchPower.value = false;
-                    AppRoutesUtils.haveVideoWatch();
-                  }
-                } else {
-                  if (videoWatch > 0) {
-                    haveWatchPower.value = true;
-                    _startVideoPlayer(
-                        detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
-                  } else {
-                    haveWatchPower.value = false;
-                    AppRoutesUtils.haveVideoWatch();
-                  }
-                }
-              }
-            } else {
-              if (!haveWatchAlert) {
-                haveWatchAlert = true;
-                if (featured == 1) {
-                  if (featuredWatch > 0) {
-                    haveWatchPower.value = true;
-                    _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
-                  } else {
-                    haveWatchPower.value = false;
-                    AppRoutesUtils.haveVideoWatch();
-                  }
-                } else {
-                  if (videoWatch > 0) {
-                    haveWatchPower.value = true;
-                    _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
-                  } else {
-                    haveWatchPower.value = false;
-                    AppRoutesUtils.haveVideoWatch();
-                  }
-                }
-              }
-            }
-          }
+          _watchVideo();
         } else {
           haveWatchPower.value = false;
           safeUpdate();
-          if (!haveWatchAlert) {
-            haveWatchAlert = true;
-            AppRoutesUtils.haveLogin(
-                title: '请登录后观看',
-                content: '您当前的身份为访客\n请注册或登录以提升观看权限');
+          if (featured == 0) {
+            // 普通视频未登录可以观看
+            if (videoWatch > 0) {
+              _watchVideo();
+            } else {
+              haveWatchAlert = true;
+              AppRoutesUtils.haveLogin(
+                  title: '当前观看视频已达上限',
+                  content: '您当前的身份为访客\n请注册或登录以提升观看权限');
+            }
+          } else {
+            if (!haveWatchAlert) {
+              haveWatchAlert = true;
+              AppRoutesUtils.haveLogin(
+                  title: '请登录后观看',
+                  content: '您当前的身份为访客\n登录后即可观看精选视频');
+            }
           }
         }
         EventBusUtil.of.fire(EventRefreshNum(
@@ -207,6 +162,71 @@ class VideoDetailController extends GetxController {
         ));
       },
     );
+  }
+
+  void _watchVideo() {
+    int featured = detailBean?.featured ?? 0;
+    int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
+    int featuredWatch = detailBean?.userlevel?.featured ?? 0;
+    Log.d('featured: $featured;videoWatch:$videoWatch;featuredWatch:$featuredWatch');
+    if (videoController == null) {
+      if (detailBean?.videoList?.isNotEmpty == true) {
+        if (childId != null) {
+          final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
+          if (index != -1) {
+            playVideoIndex = index;
+            autoScrollController.scrollToIndex(
+              playVideoIndex,
+              duration: const Duration(microseconds: 1),
+              preferPosition: AutoScrollPosition.end,
+            );
+          }
+        }
+        if (!haveWatchAlert) {
+          haveWatchAlert = true;
+          if (featured == 1) {
+            if (featuredWatch > 0) {
+              haveWatchPower.value = true;
+              _startVideoPlayer(
+                  detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+            } else {
+              haveWatchPower.value = false;
+              AppRoutesUtils.haveVideoWatch();
+            }
+          } else {
+            if (videoWatch > 0) {
+              haveWatchPower.value = true;
+              _startVideoPlayer(
+                  detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+            } else {
+              haveWatchPower.value = false;
+              AppRoutesUtils.haveVideoWatch();
+            }
+          }
+        }
+      } else {
+        if (!haveWatchAlert) {
+          haveWatchAlert = true;
+          if (featured == 1) {
+            if (featuredWatch > 0) {
+              haveWatchPower.value = true;
+              _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
+            } else {
+              haveWatchPower.value = false;
+              AppRoutesUtils.haveVideoWatch();
+            }
+          } else {
+            if (videoWatch > 0) {
+              haveWatchPower.value = true;
+              _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
+            } else {
+              haveWatchPower.value = false;
+              AppRoutesUtils.haveVideoWatch();
+            }
+          }
+        }
+      }
+    }
   }
 
   void _initController(String link) {
@@ -362,6 +382,8 @@ class VideoDetailController extends GetxController {
   }
 
   void onFocusLost() {
-    videoController?.pause();
+    if (!isDisposed) {
+      videoController?.pause();
+    }
   }
 }

@@ -25,6 +25,7 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../services/index.dart';
 import '../../utils/date_util.dart';
 import '../../utils/track_utils.dart';
 
@@ -175,13 +176,18 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       SizedBox(height: 16.w),
                                       GestureDetector(
                                         onTap: TrackUtils.trackedTap(
-                                          onTap: () {
+                                          onTap: () async {
                                             // 书籍下载
                                             int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
                                             bool haveDown = bookDownload != 0 ? true : false;
                                             if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
                                               if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
                                                 launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                                // 书籍下载上报
+                                                await CommonService.of.uploadBenefits({
+                                                  'type': 'book',
+                                                  'value': '1'
+                                                });
                                               }
                                             }
                                           },

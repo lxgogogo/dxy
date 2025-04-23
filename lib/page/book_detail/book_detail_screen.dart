@@ -14,6 +14,7 @@ import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
@@ -179,9 +180,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                           onTap: () async {
                                             // 书籍下载
                                             int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
-                                            bool haveDown = bookDownload != 0 ? true : false;
+                                            bool haveDown = bookDownload > 0 ? true : false;
+                                            Log.d('bookDownload:$bookDownload');
                                             if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
                                               if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                                controller.detailBean?.userlevel?.bookDownload =
+                                                 (controller.detailBean?.userlevel?.bookDownload ?? 0) - 1;
                                                 launchUrlString(controller.detailBean!.book!.downloadUrl!);
                                                 // 书籍下载上报
                                                 await CommonService.of.uploadBenefits({

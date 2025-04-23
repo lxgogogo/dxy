@@ -162,6 +162,7 @@ class EquityCenterController extends GetxController {
     userLevelModel.value = saveData[selectIndex];
     bannerList.value = saveData;
     bannerModel.value = bannerList[selectIndex];
+    bg.value = bannerList[selectIndex].bg ?? '';
   }
 
   // TODO: Public Method

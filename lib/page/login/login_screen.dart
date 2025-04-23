@@ -26,9 +26,9 @@ import 'widgets/login_content.dart';
 part 'login_controller.dart';
 
 enum LoginType {
-  email('邮箱登录', '邮箱注册', 'EMAIL', '*请输入正确邮箱地址', '请输入邮箱'),
-  username('账号登录', '账号注册', 'USERNAME', '*6-15位，允许输入英文大小写字母、数字', '请输入账号'),
-  phone('手机号登录', '手机号注册', 'PHONE', '*手机号格式错误', '请输入手机号');
+  email('邮箱登录', '邮箱注册', 'EMAIL', '*请输入正确邮箱地址', '邮箱地址'),
+  username('账号登录', '账号注册', 'USERNAME', '*6-15位，允许输入英文大小写字母、数字', '账号'),
+  phone('手机号登录', '手机号注册', 'PHONE', '*手机号格式错误', '手机号');
 
   final String typeName;
   final String typeOtherName;

@@ -60,7 +60,7 @@ class PersonalScreenController extends GetxController {
       EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('绑定成功');
-        final userProfile = UserProfile.fromJson(res.data['user']);
+        final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
         // TrackUtils.trackEvent(userLogType: '115005', params: '谷歌');
       } else {
@@ -107,7 +107,7 @@ class PersonalScreenController extends GetxController {
       EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('绑定成功');
-        final userProfile = UserProfile.fromJson(res.data['user']);
+        final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
         // TrackUtils.trackEvent(userLogType: '115005', params: '苹果');
       } else {
@@ -136,7 +136,7 @@ class PersonalScreenController extends GetxController {
       EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('绑定成功');
-        final userProfile = UserProfile.fromJson(res.data['user']);
+        final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
         // TrackUtils.trackEvent(userLogType: '115005', params: 'TG');
       } else {

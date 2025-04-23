@@ -431,11 +431,16 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                           TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
                     ),
                     SizedBox(height: 5.w),
-                    Text(
-                      model.description ?? '',
-                      style: TextStyle(
-                          fontSize: 10.sp,
-                          color: ColorStyle.c333333.withOpacity(0.7)),
+                    SizedBox(
+                      width: 1.sw - 180.w,
+                      child: Text(
+                        model.description ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 10.sp,
+                            color: ColorStyle.c333333.withOpacity(0.7)),
+                      ),
                     )
                   ],
                 ),

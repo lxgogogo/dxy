@@ -35,18 +35,23 @@ class Video {
       );
 
   factory Video.fromMap(Map<String, dynamic> json) => Video(
-    code: json["code"],
-    message: json["message"],
-    videoBean: json["data"] == null ? [] : List<VideoBean>.from(json["data"]!.map((x) => VideoBean.fromMap(x))),
-    traceId: json["traceId"],
-  );
+        code: json["code"],
+        message: json["message"],
+        videoBean: json["data"] == null
+            ? []
+            : List<VideoBean>.from(
+                json["data"]!.map((x) => VideoBean.fromMap(x))),
+        traceId: json["traceId"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "code": code,
-    "message": message,
-    "videoBean": videoBean == null ? [] : List<dynamic>.from(videoBean!.map((x) => x.toMap())),
-    "traceId": traceId,
-  };
+        "code": code,
+        "message": message,
+        "videoBean": videoBean == null
+            ? []
+            : List<dynamic>.from(videoBean!.map((x) => x.toMap())),
+        "traceId": traceId,
+      };
 }
 
 class VideoBean {
@@ -61,44 +66,49 @@ class VideoBean {
   final double? popularCount;
   final String? type;
   final DateTime? createdAt;
-  VideoBean({
-    this.id,
-    this.title,
-    this.description,
-    this.cover,
-    this.commentCount,
-    this.likeCount,
-    this.viewCount,
-    this.duration,
-    this.popularCount,
-    this.type,
-    this.createdAt,
-  });
+  final int? featured;
+  VideoBean(
+      {this.id,
+      this.title,
+      this.description,
+      this.cover,
+      this.commentCount,
+      this.likeCount,
+      this.viewCount,
+      this.duration,
+      this.popularCount,
+      this.type,
+      this.createdAt,
+      this.featured});
   factory VideoBean.fromMap(Map<String, dynamic> json) => VideoBean(
-    id: json["id"],
-    title: json["title"],
-    description: json["description"],
-    cover: json["cover"],
-    commentCount: json["commentCount"],
-    likeCount: json["likeCount"],
-    viewCount: json["viewCount"],
-    duration: json["duration"],
-    popularCount: json["popularCount"],
-    type: json["type"],
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-  );
+        id: json["id"],
+        title: json["title"],
+        description: json["description"],
+        cover: json["cover"],
+        commentCount: json["commentCount"],
+        likeCount: json["likeCount"],
+        viewCount: json["viewCount"],
+        duration: json["duration"],
+        popularCount: json["popularCount"],
+        type: json["type"],
+        featured: json["featured"],
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.parse(json["createdAt"]),
+      );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "title": title,
-    "description": description,
-    "cover": cover,
-    "commentCount": commentCount,
-    "likeCount": likeCount,
-    "viewCount": viewCount,
-    "duration": duration,
-    "popularCount": popularCount,
-    "type": type,
-    "createdAt": createdAt?.toIso8601String(),
-  };
+        "id": id,
+        "title": title,
+        "description": description,
+        "cover": cover,
+        "commentCount": commentCount,
+        "likeCount": likeCount,
+        "viewCount": viewCount,
+        "duration": duration,
+        "popularCount": popularCount,
+        "type": type,
+        "createdAt": createdAt?.toIso8601String(),
+        "featured": featured
+      };
 }

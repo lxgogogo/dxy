@@ -14,6 +14,7 @@ class CommonDialog extends StatelessWidget {
   final String confirmText;
   final String cancelText;
   final bool onlyConfirm;
+  final bool showClose;
 
   const CommonDialog({
     super.key,
@@ -23,6 +24,7 @@ class CommonDialog extends StatelessWidget {
     this.confirmText = '确定',
     this.cancelText = '取消',
     this.onlyConfirm = false,
+    this.showClose = true
   });
 
   @override
@@ -58,16 +60,17 @@ class CommonDialog extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: CloseImageButton(
-                        color: '#333333'.hexColor.withOpacity(0.5),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
+                    if (showClose)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: CloseImageButton(
+                          color: '#333333'.hexColor.withOpacity(0.5),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      )
                   ],
                 ),
                 if (content?.isNotEmpty ?? false)

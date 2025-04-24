@@ -13,8 +13,8 @@ class UserService {
       Api.updatePhone,
       params: {
         "phone": phone,
-        // "code": code,
-        "code": 'BBS2025',
+        "code": code,
+        // "code": 'BBS2025',
       },
       showLoading: true,
     );
@@ -29,8 +29,8 @@ class UserService {
       Api.updateEmail,
       params: {
         "email": email,
-        // "code": code,
-        "code": 'BBS2025',
+        "code": code,
+        // "code": 'BBS2025',
       },
       showLoading: true,
     );

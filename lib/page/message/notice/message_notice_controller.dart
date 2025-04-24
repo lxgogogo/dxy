@@ -1,9 +1,11 @@
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/services/message_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/message_notice_model.dart';
+import '../../../utils/event_bus_util.dart';
 
 class MessageNoticeController extends GetxController {
 
@@ -70,5 +72,6 @@ class MessageNoticeController extends GetxController {
     EasyLoading.dismiss();
     dataList.remove(model);
     dataList.refresh();
+    EventBusUtil.of.fire(EventRefreshNotice());
   }
 }

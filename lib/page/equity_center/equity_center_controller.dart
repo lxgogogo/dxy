@@ -178,4 +178,27 @@ class EquityCenterController extends GetxController {
     selectIndex = index;
     bannerModel.value = bannerList[index];
   }
+
+  String getTaskIcon(String code) {
+    String icon = Assets.equityCenter.iconEquityLogin.path;
+    switch (code) {
+      case 'LOGIN':
+        return Assets.equityCenter.iconEquityLogin.path;
+      case 'THREAD_RELEASE':
+        return Assets.equityCenter.iconEquitySend.path;
+      case 'COMMENT':
+        return Assets.equityCenter.iconEquityReplay.path;
+      case 'LIKE':
+        icon = Assets.equityCenter.iconEquityGood.path;
+      case 'COLLECT':
+        return Assets.equityCenter.iconEquityLike.path;
+      case 'FOLLOWED':
+        return Assets.equityCenter.iconEquityFocus.path;
+      case 'BEING_FOLLOWED':
+        return Assets.equityCenter.iconEquityGetFocus.path;
+      case 'other':
+        return Assets.equityCenter.iconEquityLogin.path;
+    }
+    return icon;
+  }
 }

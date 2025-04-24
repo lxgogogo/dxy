@@ -51,7 +51,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                               key: ValueKey('${controller.dataList[i].id}'),
                               endActionPane: ActionPane(
                                 motion: const ScrollMotion(),
-                                extentRatio: 42 / maxWidth,
+                                extentRatio: 60.w / maxWidth,
                                 children: [
                                   GestureDetector(
                                     onTap: () async {
@@ -69,11 +69,18 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                         ),
                                       );
                                     },
-                                    child: SvgPicture.asset(
-                                      'assets/svg/icon_delete.svg',
-                                      width: 22,
-                                      height: 22,
-                                    ),
+                                    child: Container(
+                                      width: 60.w,
+                                      color: Colors.red,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '删除',
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          color: Colors.white
+                                        ),
+                                      ),
+                                    )
                                   ),
                                 ],
                               ),

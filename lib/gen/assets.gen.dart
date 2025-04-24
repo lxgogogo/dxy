@@ -88,6 +88,38 @@ class $AssetsEquityCenterGen {
   AssetGenImage get iconCenterYuanBg =>
       const AssetGenImage('assets/equity_center/icon_center_yuan_bg.png');
 
+  /// File path: assets/equity_center/icon_equity_focus.png
+  AssetGenImage get iconEquityFocus =>
+      const AssetGenImage('assets/equity_center/icon_equity_focus.png');
+
+  /// File path: assets/equity_center/icon_equity_get_focus.png
+  AssetGenImage get iconEquityGetFocus =>
+      const AssetGenImage('assets/equity_center/icon_equity_get_focus.png');
+
+  /// File path: assets/equity_center/icon_equity_good.png
+  AssetGenImage get iconEquityGood =>
+      const AssetGenImage('assets/equity_center/icon_equity_good.png');
+
+  /// File path: assets/equity_center/icon_equity_hate.png
+  AssetGenImage get iconEquityHate =>
+      const AssetGenImage('assets/equity_center/icon_equity_hate.png');
+
+  /// File path: assets/equity_center/icon_equity_like.png
+  AssetGenImage get iconEquityLike =>
+      const AssetGenImage('assets/equity_center/icon_equity_like.png');
+
+  /// File path: assets/equity_center/icon_equity_login.png
+  AssetGenImage get iconEquityLogin =>
+      const AssetGenImage('assets/equity_center/icon_equity_login.png');
+
+  /// File path: assets/equity_center/icon_equity_replay.png
+  AssetGenImage get iconEquityReplay =>
+      const AssetGenImage('assets/equity_center/icon_equity_replay.png');
+
+  /// File path: assets/equity_center/icon_equity_send.png
+  AssetGenImage get iconEquitySend =>
+      const AssetGenImage('assets/equity_center/icon_equity_send.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         iconCenterBook,
@@ -108,7 +140,15 @@ class $AssetsEquityCenterGen {
         iconCenterRollHighBg2,
         iconCenterSuo,
         iconCenterVideo,
-        iconCenterYuanBg
+        iconCenterYuanBg,
+        iconEquityFocus,
+        iconEquityGetFocus,
+        iconEquityGood,
+        iconEquityHate,
+        iconEquityLike,
+        iconEquityLogin,
+        iconEquityReplay,
+        iconEquitySend
       ];
 }
 
@@ -1063,7 +1103,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
@@ -1105,7 +1145,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

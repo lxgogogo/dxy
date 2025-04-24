@@ -6,6 +6,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
   int tabIndex = 0;
 
   StreamSubscription? eventSubscription;
+  StreamSubscription? refreshNoticeSubs;
 
   ///deeplink
   final AppLinks _appLinks = AppLinks();
@@ -81,6 +82,9 @@ class MainController extends GetxController with WidgetsBindingObserver {
     eventSubscription = EventBusUtil.of.on<EventResetMainTab>().listen((event) {
       pageController.jumpToPage(0);
     });
+    refreshNoticeSubs = EventBusUtil.of.on<EventRefreshNotice>().listen((event) {
+      UserStore.of.refreshBadge();
+    });
     _initAppLinks();
     _checkAppVersion();
     UserStore.of.refreshBadge();
@@ -93,6 +97,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
   @override
   void onClose() {
     eventSubscription?.cancel();
+    refreshNoticeSubs?.cancel();
     // timer?.cancel();
     super.onClose();
   }

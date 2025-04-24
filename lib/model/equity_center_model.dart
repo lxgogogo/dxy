@@ -44,6 +44,7 @@ class EquityCenterBannerModel {
 
 class EquityExpModel {
 
+  String? code;
   String? name;
   int? points;
   String? description;
@@ -57,7 +58,8 @@ class EquityExpModel {
     this.description,
     this.limitNum,
     this.completedNum,
-    this.completed});
+    this.completed,
+    this.code});
 
   EquityExpModel.fromJson(Map<String, dynamic> json) {
     if (json["points"] is int) {
@@ -65,6 +67,9 @@ class EquityExpModel {
     }
     if (json["name"] is String) {
       name = json["name"];
+    }
+    if (json["code"] is String) {
+      code = json["code"];
     }
     if (json["description"] is String) {
       description = json["description"];
@@ -89,6 +94,7 @@ class EquityExpModel {
     _data["completedNum"] = completedNum;
     _data["limitNum"] = limitNum;
     _data["completed"] = completed;
+    _data["code"] = code;
     return _data;
   }
 }

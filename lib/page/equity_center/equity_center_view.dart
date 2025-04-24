@@ -403,23 +403,12 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
           children: [
             Row(
               children: [
-                Container(
-                    width: 38.w,
-                    height: 38.w,
-                    clipBehavior: Clip.antiAlias,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                                Assets.equityCenter.iconCenterYuanBg.path),
-                            fit: BoxFit.fill)),
-                    child: Text(
-                      '+${model.points}',
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyle.c557BF6),
-                    )),
+                Image.asset(
+                  controller.getTaskIcon(model.code ?? ''),
+                  width: 38.w,
+                  height: 38.w,
+                  fit: BoxFit.cover,
+                ),
                 SizedBox(width: 15.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,8 +423,8 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     SizedBox(
                       width: 1.sw - 180.w,
                       child: Text(
-                        model.description ?? '',
-                        maxLines: 1,
+                        '${model.description ?? ''}、${model.points}积分',
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 10.sp,

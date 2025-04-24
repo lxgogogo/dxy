@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
 import '../../model/equity_center_model.dart';
@@ -82,6 +83,7 @@ class EquityCenterController extends GetxController {
       final map = data[i];
       int minPoints = map['minPoints'] ?? 0;
       int maxPoints = map['maxPoints'] ?? 0;
+      String name = map['name'] ?? "";
       if (userLevelId == (map['id'] ?? 0)) {
         minPoints = levelPoints;
       }
@@ -90,7 +92,7 @@ class EquityCenterController extends GetxController {
           minPoints = maxPoints;
         }
         saveData.add(EquityCenterBannerModel(
-          title: map['name'] ??"",
+          title: name,
           index: 0,
           bg: Assets.equityCenter.iconCenterNormalBg.path,
           rollBg: Assets.equityCenter.iconCenterRollBg.path,
@@ -112,7 +114,7 @@ class EquityCenterController extends GetxController {
           minPoints = maxPoints;
         }
         saveData.add(EquityCenterBannerModel(
-          title: map['name'] ??"",
+          title: name,
           index: 1,
           bg: Assets.equityCenter.iconCenterHighBg.path,
           rollBg: Assets.equityCenter.iconCenterRollHighBg.path,
@@ -134,9 +136,13 @@ class EquityCenterController extends GetxController {
         if (selectIndex > 2 && i != data.length - 1) {
           minPoints = maxPoints;
         }
+        int iIndex = (map['index'] ?? 1) - 1;
+        if (iIndex < 0) {
+          iIndex = 0;
+        }
         saveData.add(EquityCenterBannerModel(
-          title: map['name'] ??"",
-          index: 2,
+          title: name,
+          index: iIndex,
           bg: Assets.equityCenter.iconCenterHighBg2.path,
           rollBg: Assets.equityCenter.iconCenterRollHighBg2.path,
           levelIcon: Assets.equityCenter.iconCenterHighLevelBg2.path,
@@ -162,6 +168,7 @@ class EquityCenterController extends GetxController {
     userLevelModel.value = saveData[selectIndex];
     bannerList.value = saveData;
     bannerModel.value = bannerList[selectIndex];
+    bg.value = bannerList[selectIndex].bg ?? '';
   }
 
   // TODO: Public Method
@@ -170,5 +177,28 @@ class EquityCenterController extends GetxController {
     bg.value = bannerList[index].bg ?? '';
     selectIndex = index;
     bannerModel.value = bannerList[index];
+  }
+
+  String getTaskIcon(String code) {
+    String icon = Assets.equityCenter.iconEquityLogin.path;
+    switch (code) {
+      case 'LOGIN':
+        return Assets.equityCenter.iconEquityLogin.path;
+      case 'THREAD_RELEASE':
+        return Assets.equityCenter.iconEquitySend.path;
+      case 'COMMENT':
+        return Assets.equityCenter.iconEquityReplay.path;
+      case 'LIKE':
+        icon = Assets.equityCenter.iconEquityGood.path;
+      case 'COLLECT':
+        return Assets.equityCenter.iconEquityLike.path;
+      case 'FOLLOWED':
+        return Assets.equityCenter.iconEquityFocus.path;
+      case 'BEING_FOLLOWED':
+        return Assets.equityCenter.iconEquityGetFocus.path;
+      case 'other':
+        return Assets.equityCenter.iconEquityLogin.path;
+    }
+    return icon;
   }
 }

@@ -73,3 +73,5 @@ class EventRefreshName {
 }
 
 class EventPostFeed {}
+
+class EventRefreshNotice {}

@@ -129,7 +129,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.title ?? '',
+                    UserStore.of.user?.nickname ?? '',
                     style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
@@ -224,7 +224,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             decoration: BoxDecoration(
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(1.w)),
-                                color: item.titleColor),
+                                color: ColorStyle.c557BF6),
                           ),
                         ],
                       ),
@@ -403,23 +403,12 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
           children: [
             Row(
               children: [
-                Container(
-                    width: 38.w,
-                    height: 38.w,
-                    clipBehavior: Clip.antiAlias,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                                Assets.equityCenter.iconCenterYuanBg.path),
-                            fit: BoxFit.fill)),
-                    child: Text(
-                      '+${model.points}',
-                      style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: ColorStyle.c557BF6),
-                    )),
+                Image.asset(
+                  controller.getTaskIcon(model.code ?? ''),
+                  width: 38.w,
+                  height: 38.w,
+                  fit: BoxFit.cover,
+                ),
                 SizedBox(width: 15.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -431,11 +420,16 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                           TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
                     ),
                     SizedBox(height: 5.w),
-                    Text(
-                      model.description ?? '',
-                      style: TextStyle(
-                          fontSize: 10.sp,
-                          color: ColorStyle.c333333.withOpacity(0.7)),
+                    SizedBox(
+                      width: 1.sw - 180.w,
+                      child: Text(
+                        '${model.description ?? ''}、${model.points}积分',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 10.sp,
+                            color: ColorStyle.c333333.withOpacity(0.7)),
+                      ),
                     )
                   ],
                 ),

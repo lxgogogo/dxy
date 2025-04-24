@@ -88,7 +88,7 @@ class HomeMenu extends StatelessWidget {
                 MenuItem(
                   name: '实用工具',
                   nameEn: 'Tools',
-                  imagePath: Assets.images.iconHomeFeed.path,
+                  imagePath: Assets.images.iconHomeTool.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.toolList),
                     userLogType: '100005',

@@ -57,6 +57,7 @@ class _MineCollectViewState extends State<MineCollectView>
   StreamSubscription? eventSub1;
   StreamSubscription? eventSub2;
   StreamSubscription? eventSub3;
+  StreamSubscription? eventSub4;
 
   // TODO: Private Method
 
@@ -177,6 +178,23 @@ class _MineCollectViewState extends State<MineCollectView>
     eventSub3 = EventBusUtil.of.on<EventRefreshName>().listen((event) {
       _requestGroupData();
     });
+    eventSub4 = EventBusUtil.of.on<EventRefreshCollect>().listen((event) {
+      int id = event.id;
+      int removeId = 0;
+      for (final model in collectList) {
+        if (model.content?.id == id && id > 0) {
+          removeId = model.id ?? 0;
+          break;
+        }
+      }
+      NetRequest().favoriteDelete(
+          removeId, (data) {
+        if (_isMounted) {
+          collectList.removeWhere((item) => item.id == removeId);
+          setState(() {});
+        }
+      });
+    });
   }
 
   @override
@@ -184,6 +202,8 @@ class _MineCollectViewState extends State<MineCollectView>
     _isMounted = false;
     eventSub1?.cancel();
     eventSub2?.cancel();
+    eventSub3?.cancel();
+    eventSub4?.cancel();
     _listController.dispose(); // 释放资源
     tabController.dispose();
     _refreshController.dispose();
@@ -357,7 +377,7 @@ class _MineCollectViewState extends State<MineCollectView>
     if (model.createdat != null) {
       dateStr = '${DateUtil.formatDateAlias3(
         model.createdat!.millisecondsSinceEpoch,
-        hasHM: true,
+        hasHM: false,
       )}创建';
     }
     return GestureDetector(

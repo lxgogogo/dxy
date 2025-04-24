@@ -110,18 +110,19 @@ class CollectListController extends GetxController {
     }
   }
 
-  void _deleteCollectList() async {
+  void _deleteCollectList({String tips = '移出成功'}) async {
     EasyLoading.show(status: '加载中...');
     final res = await CollectService.saveCategoryCollect({
       'id': id,
       'deleteIdList': selectIds
     });
     selectIds.clear();
+    selectAllCount.value = 0;
     EasyLoading.dismiss();
     if (res.isSuccess) {
-      EventBusUtil.of.fire(EventRefreshName(name.value));
-      ToastUtils.showToast('删除成功');
       _reqListData();
+      EventBusUtil.of.fire(EventRefreshName(name.value));
+      ToastUtils.showToast(tips);
     } else {
       ToastUtils.showToast(res.msg);
     }
@@ -216,9 +217,12 @@ class CollectListController extends GetxController {
     _deleteCollectList();
   }
 
-  void deleteItem(int index) {
+  // 移除分类
+  void deleteItem(int index) async {
     final model = collectList[index];
-    selectIds = ['${model.id ?? 0}'];
-    _deleteCollectList();
+    int sId = model.id ?? 0;
+    selectIds = ['$sId'];
+    _deleteCollectList(tips: '删除成功');
+    EventBusUtil.of.fire(EventRefreshCollect(model.content?.id ?? 0));
   }
 }

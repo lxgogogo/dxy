@@ -72,6 +72,11 @@ class EventRefreshName {
   EventRefreshName(this.name);
 }
 
+class EventRefreshCollect {
+  int id;
+  EventRefreshCollect(this.id);
+}
+
 class EventPostFeed {}
 
 class EventRefreshNotice {}

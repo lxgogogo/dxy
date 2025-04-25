@@ -194,13 +194,13 @@ class SearchChildView extends GetView<SearchChildView> {
                       height: 28.w,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: item.followed == true ? '#EBEBEB'.hexColor : '#557BF6'.hexColor.withOpacity(0.1),
+                        color: item.followed == true ? '#EBEBEB'.hexColor : '#557BF6'.hexColor,
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: Text(
                         item.followed == true ? '已关注' : '关注',
                         style: TextStyle(
-                          color: item.followed == true ? '#333333'.hexColor : '#557BF6'.hexColor,
+                          color: item.followed == true ? '#333333'.hexColor : Colors.white,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),

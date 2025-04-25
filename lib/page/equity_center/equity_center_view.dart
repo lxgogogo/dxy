@@ -379,13 +379,6 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: ColorStyle.c333333),
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                '多领多赚，单日最高 ${controller.remainingPoints}',
-                style: TextStyle(
-                    fontSize: 12.sp,
-                    color: ColorStyle.c333333.withOpacity(0.7)),
               )
             ],
           ),
@@ -422,7 +415,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${model.name ?? ''}(${model.completedNum}/${model.limitNum})',
+                      '${model.name ?? ''}（${model.completedNum}/${model.limitNum}）',
                       style:
                           TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
                     ),

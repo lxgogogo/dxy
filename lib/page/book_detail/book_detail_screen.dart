@@ -180,7 +180,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                           onTap: () async {
                                             // 书籍下载
                                             int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
-                                            bool haveDown = bookDownload > 0 ? true : false;
+                                            bool haveDown = bookDownload != 0 ? true : false;
                                             Log.d('bookDownload:$bookDownload');
                                             if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
                                               if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {

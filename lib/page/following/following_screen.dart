@@ -190,9 +190,17 @@ class _FollowingScreenState extends State<FollowingScreen> {
     bool followed = items[index].followed ?? false;
     bool isfans = items[index].isfans ?? false;
     if (widget.isFollowPage) {
-      title = '已关注';
       if (isfans) {
         title = '互相关注';
+        if (!followed) {
+          title = '回关';
+        }
+      } else {
+        if (followed) {
+          title = '已关注';
+        } else {
+          title = '+关注';
+        }
       }
     } else {
       title = '回关';
@@ -207,8 +215,12 @@ class _FollowingScreenState extends State<FollowingScreen> {
             items[index].id!,
             false,
             (data) {
-              items.removeAt(index);
-              ToastUtils.showToast('取消关注成功');
+              if (items[index].followed ?? false) {
+                ToastUtils.showToast('取消关注成功');
+              } else {
+                ToastUtils.showToast('关注成功');
+              }
+              items[index].followed = !items[index].followed!;
               if (_isMounted) {
                 setState(() {});
               }

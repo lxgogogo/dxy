@@ -98,7 +98,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       items: controller.bannerList.map((item) {
         int maxPoint = item.maxPoints ?? 0;
         int minPoint = item.minPoints ?? 0;
-        double allWidth = 1.sw*0.9 - 32.w;
+        double allWidth = 1.sw * 0.9 - 32.w;
         double progressWidth = 0;
         int nowPoint = maxPoint - minPoint;
         if (minPoint >= maxPoint || maxPoint <= 0) {
@@ -143,8 +143,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     alignment: Alignment.center,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(12.w)),
+                        borderRadius: BorderRadius.all(Radius.circular(12.w)),
                         image: DecorationImage(
                             image: AssetImage(item.buttonIcon ?? ''),
                             fit: BoxFit.cover)),
@@ -169,31 +168,38 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                               Text(
                                 '经验值 ${item.minPoints ?? 0}',
                                 style: TextStyle(
-                                    fontSize: 12.sp, color: item.titleColor),
-                              ),
-                              Text(
-                                maxPoint > 0 ? '/${item.maxPoints ?? 0}' : '/-',
-                                style: TextStyle(
                                     fontSize: 12.sp,
-                                    color:
-                                    (item.titleColor ?? ColorStyle.c333333)
-                                        .withOpacity(0.5)),
+                                    color: item.titleColor,
+                                    fontWeight: FontWeight.w400),
                               ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 1.5.w),
+                                child: Text(
+                                  maxPoint > 0 ? '/${item.maxPoints ?? 0}' : '/-',
+                                  style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color:
+                                      (item.titleColor ?? ColorStyle.c333333)
+                                          .withOpacity(0.5),
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              )
                             ],
                           ),
                           Row(
                             children: [
                               Text(
-                                '积分',
+                                '积分 ',
                                 style: TextStyle(
-                                    fontSize: 10.sp, color: (item.titleColor ?? ColorStyle.c333333)
-                                    .withOpacity(0.5)),
+                                    fontSize: 10.sp,
+                                    color:
+                                        (item.titleColor ?? ColorStyle.c333333)
+                                            .withOpacity(0.5)),
                               ),
                               Text(
                                 '${controller.integral}',
                                 style: TextStyle(
-                                    fontSize: 10.sp,
-                                    color: item.titleColor),
+                                    fontSize: 10.sp, color: item.titleColor),
                               ),
                             ],
                           ),
@@ -201,12 +207,13 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             Text(
                               '还差 $nowPoint经验值升级',
                               style: TextStyle(
-                                  fontSize: 10.sp, color: (item.titleColor ?? ColorStyle.c333333)
-                                  .withOpacity(0.5)),
+                                  fontSize: 10.sp,
+                                  color: (item.titleColor ?? ColorStyle.c333333)
+                                      .withOpacity(0.5)),
                             )
                         ],
                       ),
-                      SizedBox(height: 8.w),
+                      SizedBox(height: 6.w),
                       Stack(
                         children: [
                           Container(
@@ -214,7 +221,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             height: 2.w,
                             decoration: BoxDecoration(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(1.w)),
+                                  BorderRadius.all(Radius.circular(1.w)),
                               color: ColorStyle.c29426A.withOpacity(0.2),
                             ),
                           ),
@@ -223,7 +230,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             height: 2.w,
                             decoration: BoxDecoration(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(1.w)),
+                                    BorderRadius.all(Radius.circular(1.w)),
                                 color: ColorStyle.c557BF6),
                           ),
                         ],

@@ -112,6 +112,9 @@ class _MineCollectViewState extends State<MineCollectView>
     _refreshController2.loadNoData();
     int favoriteCategory = UserStore.of.user?.userLevel?.favoriteCategory ?? 0;
     _showFavorite = favoriteCategory > groupCollectList.length ? true : false;
+    if (favoriteCategory == -1) {
+      _showFavorite = true;
+    }
     if (mounted) {
       setState(() {});
     }

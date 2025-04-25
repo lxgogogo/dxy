@@ -136,7 +136,7 @@ class VideoDetailController extends GetxController {
           safeUpdate();
           if (featured == 0) {
             // 普通视频未登录可以观看
-            if (videoWatch > 0) {
+            if (videoWatch != 0) {
               _watchVideo();
             } else {
               haveWatchAlert = true;
@@ -185,7 +185,7 @@ class VideoDetailController extends GetxController {
         if (!haveWatchAlert) {
           haveWatchAlert = true;
           if (featured == 1) {
-            if (featuredWatch > 0) {
+            if (featuredWatch != 0) {
               haveWatchPower.value = true;
               _startVideoPlayer(
                   detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
@@ -194,7 +194,7 @@ class VideoDetailController extends GetxController {
               AppRoutesUtils.haveVideoWatch();
             }
           } else {
-            if (videoWatch > 0) {
+            if (videoWatch != 0) {
               haveWatchPower.value = true;
               _startVideoPlayer(
                   detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
@@ -208,7 +208,7 @@ class VideoDetailController extends GetxController {
         if (!haveWatchAlert) {
           haveWatchAlert = true;
           if (featured == 1) {
-            if (featuredWatch > 0) {
+            if (featuredWatch != 0) {
               haveWatchPower.value = true;
               _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
             } else {

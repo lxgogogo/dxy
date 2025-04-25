@@ -328,6 +328,7 @@ class _MineCollectViewState extends State<MineCollectView>
                                               ToastUtils.showToast('删除成功');
                                               collectList.removeAt(i);
                                               setState(() {});
+                                              _requestGroupData();
                                             }
                                           });
                                         },

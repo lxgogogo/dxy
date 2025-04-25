@@ -430,7 +430,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     SizedBox(
                       width: 1.sw - 180.w,
                       child: Text(
-                        '${model.description ?? ''}、${model.points}积分',
+                        model.description ?? '',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

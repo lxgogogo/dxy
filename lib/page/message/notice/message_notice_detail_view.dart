@@ -83,7 +83,6 @@ class _MessageNoticeDetailPageState extends State<MessageNoticeDetailPage> {
                                     FontFeature.tabularFigures()
                                   ],
                                 ),
-                                maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 child: Html(
                                   data: controller.detailData.value.content ?? "",

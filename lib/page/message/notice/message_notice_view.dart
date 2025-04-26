@@ -153,7 +153,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            Expanded(child: Text(
                               controller.isSystem.value
                                   ? model.title ?? ''
                                   : model.sendUserName ?? '',
@@ -161,7 +161,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
                                   color: ColorStyle.c333333),
-                            ),
+                            )),
                             Text(dateStr,
                                 style: TextStyle(
                                     fontSize: 12.sp,
@@ -172,22 +172,18 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       SizedBox(height: 8.w),
                       SizedBox(
                           width: 1.sw - 80.w,
-                          child: DefaultTextStyle(
-                              style: TextStyle(
-                                color: index == 0
-                                    ? ColorStyle.c333333
-                                    : ColorStyle.c333333.withOpacity(0.7),
-                                fontSize: 14,
-                                fontFeatures: const [
-                                  FontFeature.tabularFigures()
-                                ],
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              child: Html(
-                                data: model.content ?? "",
-                                shrinkWrap: true,
-                              )))
+                          child: Text(
+                            model.content ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                              color: index == 0
+                                  ? ColorStyle.c333333
+                                  : ColorStyle.c333333.withOpacity(0.7),
+                              fontSize: 12.sp,
+                            )
+                          )
+                      )
                     ],
                   )
                 ],

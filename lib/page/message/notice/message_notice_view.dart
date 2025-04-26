@@ -45,48 +45,48 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                     child: controller.dataList.isEmpty
                         ? const Center(child: NoDataView())
                         : ListView.builder(
-                        itemBuilder: (c, i) {
-                          return Slidable(
-                              groupTag: '1-list',
-                              key: ValueKey('${controller.dataList[i].id}'),
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                extentRatio: 60.w / maxWidth,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await showDialog(
-                                        barrierDismissible: true,
-                                        context: context,
-                                        builder: (context) => CommonDialog(
-                                          title: '删除通知',
-                                          content: '确定要删除这个通知吗？',
-                                          confirmText: '确认删除',
-                                          onConfirm: () {
-                                            Navigator.of(context).pop();
-                                            controller.delete(controller.dataList[i]);
+                            itemBuilder: (c, i) {
+                              return Slidable(
+                                  groupTag: '1-list',
+                                  key: ValueKey('${controller.dataList[i].id}'),
+                                  endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    extentRatio: 60.w / maxWidth,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () async {
+                                            await showDialog(
+                                              barrierDismissible: true,
+                                              context: context,
+                                              builder: (context) =>
+                                                  CommonDialog(
+                                                title: '删除通知',
+                                                content: '确定要删除这个通知吗？',
+                                                confirmText: '确认删除',
+                                                onConfirm: () {
+                                                  Navigator.of(context).pop();
+                                                  controller.delete(
+                                                      controller.dataList[i]);
+                                                },
+                                              ),
+                                            );
                                           },
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      width: 60.w,
-                                      color: Colors.red,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '删除',
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: Colors.white
-                                        ),
-                                      ),
-                                    )
+                                          child: Container(
+                                            width: 60.w,
+                                            color: Colors.red,
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              '删除',
+                                              style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: Colors.white),
+                                            ),
+                                          )),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: _buildListItemWidget(i));
-                        },
-                        itemCount: controller.dataList.length))));
+                                  child: _buildListItemWidget(i));
+                            },
+                            itemCount: controller.dataList.length))));
           },
         ));
   }
@@ -109,6 +109,8 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
     }
     return GestureDetector(
       onTap: () {
+        model.isReader = 1;
+        controller.dataList.refresh();
         Get.toNamed(Routes.noticeDetail, arguments: {
           'pageType': Get.arguments['pageType'],
           'id': model.id,
@@ -120,7 +122,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
           Container(
               padding: EdgeInsets.symmetric(vertical: 12.w, horizontal: 16.w),
               decoration: BoxDecoration(
-                  color: index == 0
+                  color: model.isReader == 0
                       ? ColorStyle.c557BF6.withOpacity(0.1)
                       : Colors.white),
               child: Row(
@@ -130,19 +132,16 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                     height: 38.w,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(19.w))),
+                        borderRadius: BorderRadius.all(Radius.circular(19.w))),
                     child: CachedNetworkImage(
                       width: 38.w,
                       height: 38.w,
                       fit: BoxFit.cover,
                       imageUrl: model.sendUserHeadimg ?? '',
-                      placeholder: (context, url) => Assets
-                          .images.imageLoadingDef
-                          .image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) => Assets
-                          .images.imageLoadingDef
-                          .image(fit: BoxFit.fill),
+                      placeholder: (context, url) =>
+                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                      errorWidget: (context, url, error) =>
+                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -155,7 +154,9 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              model.title ?? '',
+                              controller.isSystem.value
+                                  ? model.title ?? ''
+                                  : model.sendUserName ?? '',
                               style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,
@@ -170,30 +171,31 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       ),
                       SizedBox(height: 8.w),
                       SizedBox(
-                        width: 1.sw - 80.w,
-                        child: DefaultTextStyle(
-                            style: TextStyle(
-                              color: index == 0
-                                  ? ColorStyle.c333333
-                                  : ColorStyle.c333333.withOpacity(0.7),
-                              fontSize: 14,
-                              fontFeatures: const [FontFeature.tabularFigures()],
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            child: Html(
-                              data: model.content ?? "",
-                              shrinkWrap: true,
-                            ))
-                      )
+                          width: 1.sw - 80.w,
+                          child: DefaultTextStyle(
+                              style: TextStyle(
+                                color: index == 0
+                                    ? ColorStyle.c333333
+                                    : ColorStyle.c333333.withOpacity(0.7),
+                                fontSize: 14,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures()
+                                ],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              child: Html(
+                                data: model.content ?? "",
+                                shrinkWrap: true,
+                              )))
                     ],
                   )
                 ],
               )),
           Container(
               height: 1.w,
-              margin: EdgeInsets.symmetric(horizontal: 16.w),
-              color: ColorStyle.c333333.withOpacity(0.05))
+              margin: EdgeInsets.symmetric(horizontal: 0),
+              color: model.isReader == 0 ? ColorStyle.c333333.withOpacity(0.15) : ColorStyle.c333333.withOpacity(0.05))
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:app_links/app_links.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -106,24 +107,24 @@ class _MainScreenState extends State<MainScreen> {
                                 return Positioned(
                                   top: -7.5.w,
                                   right: -7.5.w,
-                                  child: Stack(
+                                  child: Container(
+                                    width: 16.w,
+                                    height: 16.w,
+                                    padding: EdgeInsets.all(1.w),
                                     alignment: Alignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        Assets.svg.badge,
-                                        width: 15.w,
-                                        height: 15.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                                      color: Colors.red
+                                    ),
+                                    child: AutoSizeText(
+                                      '${badgeCount > 99 ? '99+' : badgeCount}',
+                                      minFontSize: 6,
+                                      style: TextStyle(
+                                        fontSize: 9.sp,
+                                        color: Colors.white,
                                       ),
-                                      Text(
-                                        '${badgeCount > 99 ? 99 : badgeCount}',
-                                        style: TextStyle(
-                                          fontSize: 9.sp,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    )
+                                  )
                                 );
                               }
                               return const SizedBox();

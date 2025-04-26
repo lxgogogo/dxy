@@ -184,7 +184,7 @@ class _MessagePageState extends State<MessagePage>
                 Get.toNamed(Routes.noticeList, arguments: {'pageType': 1});
               })
             ],
-          ),
+          )
         ));
   }
 
@@ -199,19 +199,31 @@ class _MessagePageState extends State<MessagePage>
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
-          SizedBox(width: 58.w, height: 58.w),
-          Container(
-            width: 48.w,
-            height: 48.w,
-            color: Colors.transparent,
-            child: Image.asset(
-              index == 0
-                  ? Assets.images.iconNoticeSystemN.path
-                  : Assets.images.iconNoticeUserN.path,
-              width: 48.w,
-              height: 48.w,
-              fit: BoxFit.cover,
-            ),
+          SizedBox(width: 58.w, height: 78.w),
+          Column(
+            children: [
+              Container(
+                width: 48.w,
+                height: 48.w,
+                color: Colors.transparent,
+                child: Image.asset(
+                  index == 0
+                      ? Assets.images.iconNoticeSystemN.path
+                      : Assets.images.iconNoticeUserN.path,
+                  width: 48.w,
+                  height: 48.w,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(height: 5.w),
+              Text(
+                index == 0 ? '官方通知' : '用户私信',
+                style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.black
+                ),
+              )
+            ],
           ),
           if (badge > 0)
             Positioned(
@@ -231,7 +243,7 @@ class _MessagePageState extends State<MessagePage>
               ),
             )
         ],
-      ),
+      )
     );
   }
 }

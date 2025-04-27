@@ -54,7 +54,7 @@ class CommonDialog extends StatelessWidget {
                           title,
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 16.px,
+                            fontSize: 16.w,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -80,14 +80,14 @@ class CommonDialog extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: '#333333'.hexColor,
-                        fontSize: 14.px,
+                        fontSize: 14.w,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                SizedBox(height: 26.px),
+                SizedBox(height: 26.w),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 22.px),
+                  padding: EdgeInsets.symmetric(horizontal: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -110,14 +110,14 @@ class CommonDialog extends StatelessWidget {
                               cancelText,
                               style: TextStyle(
                                 color: '#333333'.hexColor.withOpacity(0.7),
-                                fontSize: 12.px,
+                                fontSize: 12.w,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-
-                      ],SizedBox(width: 24.px),
+                        SizedBox(width: 24.w),
+                      ],
                       InkWell(
                         onTap: () {
                           onConfirm?.call();
@@ -143,14 +143,14 @@ class CommonDialog extends StatelessWidget {
                             confirmText,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.px,
+                              fontSize: 12.w,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ),
                     ],
-                  ),
+                  )
                 ),
               ],
             ),

@@ -66,8 +66,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                         topLeft: Radius.circular(10.w),
                                         topRight: Radius.circular(10.w))),
                                 child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _buildDayTaskWidget(),
                                     SizedBox(height: 10.w),
@@ -175,11 +174,19 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                           Row(
                             children: [
                               Text(
-                                '经验值 ${item.minPoints ?? 0}',
+                                '经验值',
                                 style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: item.titleColor,
-                                    fontWeight: FontWeight.w400),
+                                    fontSize: 12.sp, color: ColorStyle.c333333),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 1.5.w),
+                                child: Text(
+                                  ' ${item.minPoints ?? 0}',
+                                  style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: item.titleColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 1.5.w),
@@ -203,14 +210,15 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                 '积分 ',
                                 style: TextStyle(
                                     fontSize: 10.sp,
-                                    color:
-                                        (item.titleColor ?? ColorStyle.c333333)
-                                            .withOpacity(0.5)),
+                                    color: (item.titleColor ??
+                                        ColorStyle.c333333)),
                               ),
                               Text(
                                 '${controller.integral}',
                                 style: TextStyle(
-                                    fontSize: 10.sp, color: item.titleColor),
+                                    fontSize: 10.sp,
+                                    color: item.titleColor,
+                                    fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
@@ -220,7 +228,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                               style: TextStyle(
                                   fontSize: 10.sp,
                                   color: (item.titleColor ?? ColorStyle.c333333)
-                                      .withOpacity(0.5)),
+                                      .withOpacity(0.7)),
                             )
                         ],
                       ),
@@ -279,13 +287,16 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       Assets.equityCenter.iconCenterCollect.path,
       Assets.equityCenter.iconCenterCollectGroup.path,
     ];
+    const limitTitle = '无限制';
     var contentData = [
-      (model.bookDownload ?? 0) == -1 ? '无限' : '${model.bookDownload ?? 0}本/天',
-      (model.videoWatch ?? 0) == -1 ? '无限' : '${model.videoWatch ?? 0}分钟',
-      (model.featured ?? 0) == -1 ? '无限' : '${model.featured ?? 0}部/天',
-      (model.favorite ?? 0) == -1 ? '无限' : '${model.favorite ?? 0}',
+      (model.bookDownload ?? 0) == -1
+          ? limitTitle
+          : '${model.bookDownload ?? 0}本/天',
+      (model.videoWatch ?? 0) == -1 ? limitTitle : '${model.videoWatch ?? 0}分钟',
+      (model.featured ?? 0) == -1 ? limitTitle : '${model.featured ?? 0}部/天',
+      (model.favorite ?? 0) == -1 ? limitTitle : '${model.favorite ?? 0}',
       (model.favoriteCategory ?? 0) == -1
-          ? '无限'
+          ? limitTitle
           : '${model.favoriteCategory ?? 0}'
     ];
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
@@ -407,7 +418,8 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   }
 
   Widget _buildDayTaskItemWidget(EquityExpModel model) {
-    String title = '${model.name ?? ''}（${model.completedNum}/${model.limitNum}）';
+    String title =
+        '${model.name ?? ''}（${model.completedNum}/${model.limitNum}）';
     if ((model.name ?? '').contains('登录')) {
       title = model.name ?? '';
     }

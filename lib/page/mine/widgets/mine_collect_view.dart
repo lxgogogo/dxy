@@ -182,21 +182,12 @@ class _MineCollectViewState extends State<MineCollectView>
       _requestGroupData();
     });
     eventSub4 = EventBusUtil.of.on<EventRefreshCollect>().listen((event) {
-      int id = event.id;
-      int removeId = 0;
-      for (final model in collectList) {
-        if (model.content?.id == id && id > 0) {
-          removeId = model.id ?? 0;
-          break;
-        }
+      int relId = event.id;
+      collectList.removeWhere((item) => relId > 0 && item.relId == relId);
+      if (_isMounted) {
+        setState(() {});
       }
-      NetRequest().favoriteDelete(
-          removeId, (data) {
-        if (_isMounted) {
-          collectList.removeWhere((item) => item.id == removeId);
-          setState(() {});
-        }
-      });
+      _requestGroupData();
     });
   }
 

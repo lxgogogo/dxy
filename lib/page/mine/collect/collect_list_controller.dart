@@ -220,9 +220,13 @@ class CollectListController extends GetxController {
   // 移除分类
   void deleteItem(int index) async {
     final model = collectList[index];
-    int sId = model.id ?? 0;
-    selectIds = ['$sId'];
-    _deleteCollectList(tips: '删除成功');
-    EventBusUtil.of.fire(EventRefreshCollect(model.content?.id ?? 0));
+    NetRequest().favoriteDelete(
+        model.id, (data) {
+      ToastUtils.showToast('删除成功');
+      selectIds.clear();
+      selectAllCount.value = 0;
+      collectList.removeAt(index);
+      EventBusUtil.of.fire(EventRefreshCollect(model.relId ?? 0));
+    });
   }
 }

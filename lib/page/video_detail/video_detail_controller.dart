@@ -216,7 +216,7 @@ class VideoDetailController extends GetxController {
               AppRoutesUtils.haveVideoWatch();
             }
           } else {
-            if (videoWatch > 0) {
+            if (videoWatch != 0) {
               haveWatchPower.value = true;
               _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
             } else {

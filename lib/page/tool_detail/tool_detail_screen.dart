@@ -132,8 +132,8 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                   SizedBox(height: 16.w),
                                   GestureDetector(
                                     onTap: () {
-                                      if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
-                                        launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                      if (controller.detailBean?.tool?.url?.isNotEmpty == true) {
+                                        launchUrlString(controller.detailBean!.tool!.url!);
                                       }
                                     },
                                     // onTap: TrackUtils.trackedTap(

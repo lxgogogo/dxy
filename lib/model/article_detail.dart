@@ -23,6 +23,7 @@ class ArticleDetailBean {
   DateTime? updatedAt;
   VideoBean? video;
   BookBean? book;
+  ToolBean? tool;
   UserProfile? user;
   List<VideoBean>? videoList;
   List<TagModel>? tagList;
@@ -123,12 +124,15 @@ class ArticleDetailBean {
     if (json["book"] is Map) {
       book = BookBean.fromJson(json["book"]);
     }
+    if (json["tool"] is Map) {
+      tool = ToolBean.fromJson(json["tool"]);
+    }
     if (json['user'] != null) {
       user = UserProfile.fromJson(json['user']);
     }
     if (json["videoList"] is List) {
       videoList =
-          json["videoList"] == null ? null : (json["videoList"] as List).map((e) => VideoBean.fromJson(e)).toList();
+      json["videoList"] == null ? null : (json["videoList"] as List).map((e) => VideoBean.fromJson(e)).toList();
     }
     if (json["tagList"] is List) {
       tagList = json["tagList"] == null ? null : (json["tagList"] as List).map((e) => TagModel.fromJson(e)).toList();
@@ -202,6 +206,30 @@ class BookBean {
   }
 }
 
+class ToolBean {
+  int? id;
+  String? url;
+  String? androidUrl;
+  String? iosUrl;
+
+  ToolBean({this.id, this.url, this.androidUrl, this.iosUrl});
+
+  ToolBean.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["url"] is String) {
+      url = json["url"];
+    }
+    if (json["androidUrl"] is String) {
+      androidUrl = json["androidUrl"];
+    }
+    if (json["iosUrl"] is String) {
+      iosUrl = json["iosUrl"];
+    }
+  }
+}
+
 class VideoBean {
   int? duration;
   int? id;
@@ -210,7 +238,7 @@ class VideoBean {
   String? quality;
   String? sourceUrl;
 
-  VideoBean({this.duration, this.id, this.num, this.title,this.quality, this.sourceUrl});
+  VideoBean({this.duration, this.id, this.num, this.title, this.quality, this.sourceUrl});
 
   VideoBean.fromJson(Map<String, dynamic> json) {
     if (json["duration"] is int) {

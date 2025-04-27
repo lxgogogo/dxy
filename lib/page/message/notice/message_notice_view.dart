@@ -175,7 +175,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           child: Text(
                             model.content ?? '',
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
+                            maxLines: 1,
                             style: TextStyle(
                               color: index == 0
                                   ? ColorStyle.c333333

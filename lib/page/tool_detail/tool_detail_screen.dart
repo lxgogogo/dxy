@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -132,8 +133,27 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                   SizedBox(height: 16.w),
                                   GestureDetector(
                                     onTap: () {
-                                      if (controller.detailBean?.tool?.url?.isNotEmpty == true) {
-                                        launchUrlString(controller.detailBean!.tool!.url!, mode: LaunchMode.externalApplication);
+                                      final androidUrl = controller.detailBean?.tool?.androidUrl ?? '';
+                                      final iosUrl = controller.detailBean?.tool?.iosUrl ?? '';
+                                      final url = controller.detailBean?.tool?.url ?? '';
+                                      if (Platform.isAndroid) {
+                                        launchUrlString(
+                                          androidUrl.isNotEmpty
+                                              ? androidUrl
+                                              : url.isNotEmpty
+                                                  ? url
+                                                  : iosUrl,
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      } else if (Platform.isIOS) {
+                                        launchUrlString(
+                                          iosUrl.isNotEmpty
+                                              ? iosUrl
+                                              : url.isNotEmpty
+                                                  ? url
+                                                  : androidUrl,
+                                          mode: LaunchMode.externalApplication,
+                                        );
                                       }
                                     },
                                     // onTap: TrackUtils.trackedTap(

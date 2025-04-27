@@ -32,8 +32,17 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               Image.asset(
                 controller.bg.value,
                 width: 1.sw,
-                fit: BoxFit.fitWidth,
+                height: 1.sh,
+                fit: BoxFit.fill,
               ),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: 1.sw,
+                height: 260.w,
+                color: ColorStyle.cF5F5F5,
+              ),
+            ),
             Scaffold(
                 backgroundColor: controller.isLoading.value
                     ? Colors.white
@@ -43,33 +52,33 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     ? const Center(
                         child: CupertinoActivityIndicator(color: Colors.grey),
                       )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildBannerWidget(),
-                          _buildCategoryWidget(),
-                          Expanded(
-                              child: Container(
-                                  margin: EdgeInsets.only(top: 10.w),
-                                  decoration: BoxDecoration(
-                                      color: ColorStyle.cF5F5F5,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10.w),
-                                          topRight: Radius.circular(10.w))),
-                                  child: SafeArea(
-                                      child: SingleChildScrollView(
-                                          child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      _buildDayTaskWidget(),
-                                      SizedBox(height: 10.w),
-                                      _buildRunWidget(),
-                                      SizedBox(height: 10.w),
-                                      _buildScoreWidget()
-                                    ],
-                                  )))))
-                        ],
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildBannerWidget(),
+                            _buildCategoryWidget(),
+                            Container(
+                                margin: EdgeInsets.only(top: 10.w),
+                                decoration: BoxDecoration(
+                                    color: ColorStyle.cF5F5F5,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10.w),
+                                        topRight: Radius.circular(10.w))),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    _buildDayTaskWidget(),
+                                    SizedBox(height: 10.w),
+                                    _buildRunWidget(),
+                                    SizedBox(height: 10.w),
+                                    _buildScoreWidget()
+                                  ],
+                                )),
+                            SafeArea(child: SizedBox())
+                          ],
+                        ),
                       ))
           ],
         ));
@@ -175,11 +184,13 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                               Padding(
                                 padding: EdgeInsets.only(top: 1.5.w),
                                 child: Text(
-                                  maxPoint > 0 ? '/${item.maxPoints ?? 0}' : '/-',
+                                  maxPoint > 0
+                                      ? '/${item.maxPoints ?? 0}'
+                                      : '/-',
                                   style: TextStyle(
                                       fontSize: 12.sp,
-                                      color:
-                                      (item.titleColor ?? ColorStyle.c333333)
+                                      color: (item.titleColor ??
+                                              ColorStyle.c333333)
                                           .withOpacity(0.5),
                                       fontWeight: FontWeight.w400),
                                 ),
@@ -396,6 +407,10 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   }
 
   Widget _buildDayTaskItemWidget(EquityExpModel model) {
+    String title = '${model.name ?? ''}（${model.completedNum}/${model.limitNum}）';
+    if ((model.name ?? '').contains('登录')) {
+      title = model.name ?? '';
+    }
     return SizedBox(
         height: 58.w,
         child: Row(
@@ -415,7 +430,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${model.name ?? ''}（${model.completedNum}/${model.limitNum}）',
+                      title,
                       style:
                           TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
                     ),

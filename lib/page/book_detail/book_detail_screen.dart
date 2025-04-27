@@ -186,7 +186,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                               if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
                                                 controller.detailBean?.userlevel?.bookDownload =
                                                  (controller.detailBean?.userlevel?.bookDownload ?? 0) - 1;
-                                                launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                                launchUrlString(controller.detailBean!.book!.downloadUrl!, mode: LaunchMode.externalApplication);
                                                 // 书籍下载上报
                                                 await CommonService.of.uploadBenefits({
                                                   'type': 'book',

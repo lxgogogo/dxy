@@ -133,7 +133,7 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       if (controller.detailBean?.tool?.url?.isNotEmpty == true) {
-                                        launchUrlString(controller.detailBean!.tool!.url!);
+                                        launchUrlString(controller.detailBean!.tool!.url!, mode: LaunchMode.externalApplication);
                                       }
                                     },
                                     // onTap: TrackUtils.trackedTap(

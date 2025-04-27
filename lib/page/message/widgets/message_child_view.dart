@@ -68,7 +68,9 @@ class MessageChildViewState extends State<MessageChildView> {
     if (bean.jumpType == 'content') {
       if (bean.resourceType == 'book') {
         Get.toNamed(Routes.bookDetail, arguments: id);
-      } else if (bean.resourceType == 'article') {
+      } else if (bean.resourceType == 'tool') {
+        Get.toNamed(Routes.toolDetail, arguments: id);
+      }else if (bean.resourceType == 'article') {
         Get.toNamed(Routes.articleDetail, arguments: id);
       } else if (bean.resourceType == 'video' || bean.resourceType == 'videoList') {
         Get.toNamed(Routes.videoDetail, arguments: {'id': id});

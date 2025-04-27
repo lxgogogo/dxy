@@ -64,6 +64,8 @@ class MyCollectItem extends StatelessWidget {
             Get.toNamed(Routes.articleDetail, arguments: id);
           } else if (type == 'book') {
             Get.toNamed(Routes.bookDetail, arguments: id);
+          } else if (type == 'tool') {
+            Get.toNamed(Routes.toolDetail, arguments: id);
           } else if (type == 'video' || type == 'videoList') {
             Get.toNamed(Routes.videoDetail, arguments: {'id': id});
           }

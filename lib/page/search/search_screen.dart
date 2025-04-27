@@ -360,6 +360,9 @@ class SearchScreen extends GetView<SearchController> {
                         } else if (item.type == 'article') {
                           eventName = '教程';
                           Get.toNamed(Routes.articleDetail, arguments: id);
+                        } else if (item.type == 'tool') {
+                          eventName = '工具';
+                          Get.toNamed(Routes.toolDetail, arguments: id);
                         } else if (item.type == 'video' || item.type == 'videoList') {
                           eventName = '视频';
                           Get.toNamed(Routes.videoDetail, arguments: {'id': id});

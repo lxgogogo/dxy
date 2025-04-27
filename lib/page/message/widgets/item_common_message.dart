@@ -33,6 +33,8 @@ class MessageCommonItem extends StatelessWidget {
       var resourceType = '';
       if (item.resourceType == 'book') {
         resourceType = '书籍';
+      } else if (item.resourceType == 'tool') {
+        resourceType = '工具';
       } else if (item.resourceType == 'video') {
         resourceType = '视频';
       } else if (item.resourceType == 'videoList') {
@@ -91,6 +93,8 @@ class MessageCommonItem extends StatelessWidget {
       typeName = '视频合集';
     } else if (item.resourceType == 'book') {
       typeName = '书籍';
+    } else if (item.resourceType == 'tool') {
+      typeName = '工具';
     } else {
       typeName = '资源';
     }

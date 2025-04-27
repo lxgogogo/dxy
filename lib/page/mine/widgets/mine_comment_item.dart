@@ -86,6 +86,8 @@ class MyCommentItem extends StatelessWidget {
         typeName = '视频合集';
       } else if (item.resourceType == 'book') {
         typeName = '书籍';
+      } else if (item.resourceType == 'tool') {
+        typeName = '工具';
       }
     }
 
@@ -112,6 +114,8 @@ class MyCommentItem extends StatelessWidget {
           Get.toNamed(Routes.articleDetail, arguments: id);
         } else if (item.resourceType == 'book') {
           Get.toNamed(Routes.bookDetail, arguments: id);
+        } else if (item.resourceType == 'tool') {
+          Get.toNamed(Routes.toolDetail, arguments: id);
         } else if (item.resourceType == 'video' || item.resourceType == 'videoList') {
           Get.toNamed(Routes.videoDetail, arguments: {'id': id});
         }

@@ -162,7 +162,7 @@ class FeedDetailScreen extends StatelessWidget {
                                       height: 120.w,
                                       child: GestureDetector(
                                         onTap: () {
-                                          final advertiseUrl = controller.detailBean?.advertiseImage ?? '';
+                                          final advertiseUrl = controller.detailBean?.advertiseUrl ?? '';
                                           if (advertiseUrl.isNotEmpty) {
                                             launchUrlString(advertiseUrl, mode: LaunchMode.externalApplication);
                                           }

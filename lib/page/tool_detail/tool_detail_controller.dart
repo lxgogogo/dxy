@@ -56,7 +56,7 @@ class ToolDetailController extends GetxController {
   requestDetail({bool showLoading = true}) {
     NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) {
       if (data == null) {
-        ToastUtils.showToast('该书籍已删除');
+        ToastUtils.showToast('该工具已删除');
         Get.back();
         return;
       }

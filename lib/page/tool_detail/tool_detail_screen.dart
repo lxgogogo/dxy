@@ -98,15 +98,15 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  Text(
-                                    controller.detailBean!.createdAt != null
-                                        ? '${DateUtil.formatDateAlias3(
-                                            controller.detailBean!.createdAt!.millisecondsSinceEpoch,
-                                            hasHM: true,
-                                          )}发布'
-                                        : '',
-                                    style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
-                                  ),
+                                  // Text(
+                                  //   controller.detailBean!.createdAt != null
+                                  //       ? '${DateUtil.formatDateAlias3(
+                                  //           controller.detailBean!.createdAt!.millisecondsSinceEpoch,
+                                  //           hasHM: true,
+                                  //         )}发布'
+                                  //       : '',
+                                  //   style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
+                                  // ),
                                   if (controller.detailBean?.description?.isNotEmpty == true)
                                     Padding(
                                       padding: EdgeInsets.only(top: 6.w),
@@ -131,20 +131,24 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                     ),
                                   SizedBox(height: 16.w),
                                   GestureDetector(
-                                    onTap: TrackUtils.trackedTap(
-                                      onTap: () {
-                                        // 书籍下载
-                                        int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
-                                        bool haveDown = bookDownload != 0 ? true : false;
-                                        if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
-                                          if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
-                                            launchUrlString(controller.detailBean!.book!.downloadUrl!);
-                                          }
-                                        }
-                                      },
-                                      userLogType: '104001',
-                                      params: controller.detailBean?.id,
-                                    ),
+                                    onTap: () {
+                                      if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                        launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                      }
+                                    },
+                                    // onTap: TrackUtils.trackedTap(
+                                    //   onTap: () {
+                                    //     int bookDownload = controller.detailBean?.userlevel?.bookDownload ?? 0;
+                                    //     bool haveDown = bookDownload != 0 ? true : false;
+                                    //     if (AppRoutesUtils.haveDownLoadBook(haveDown)) {
+                                    //       if (controller.detailBean?.book?.downloadUrl?.isNotEmpty == true) {
+                                    //         launchUrlString(controller.detailBean!.book!.downloadUrl!);
+                                    //       }
+                                    //     }
+                                    //   },
+                                    //   userLogType: '104001',
+                                    //   params: controller.detailBean?.id,
+                                    // ),
                                     child: Center(
                                       child: Container(
                                         width: 160.w,

@@ -154,9 +154,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(child: Text(
-                              controller.isSystem.value
-                                  ? '官方通知'
-                                  : model.sendUserName ?? '',
+                              model.sendUserName ?? '',
                               style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w600,

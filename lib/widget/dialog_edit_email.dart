@@ -207,7 +207,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                               child: Text(
                                 isShowAccountTips ? '*请输入正确邮箱地址' : '',
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: 10.sp,
                                   color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
@@ -311,7 +311,7 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                               child: Text(
                                 isShowCodeTips ? '请输入6位数字验证码' : '',
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: 10.sp,
                                   color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),

@@ -217,7 +217,7 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
                               child: Text(
                                 isShowMobileTips ? '*手机号格式错误' : '',
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: 10.sp,
                                   color: isShowMobileTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),
@@ -321,7 +321,7 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
                               child: Text(
                                 isShowCodeTips ? '请输入6位数字验证码' : '',
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: 10.sp,
                                   color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                                 ),
                               ),

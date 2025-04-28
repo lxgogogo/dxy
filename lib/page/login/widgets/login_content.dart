@@ -17,6 +17,7 @@ import '../../../utils/toast_utils.dart';
 import '../../../utils/track_utils.dart';
 import '../login_screen.dart';
 import 'type_selector.dart';
+import 'user_terms.dart';
 
 class LoginContent extends StatefulWidget {
   const LoginContent({
@@ -51,6 +52,10 @@ class _LoginContentState extends State<LoginContent> {
 
   bool _isLoginDisable = true;
 
+  ///隐私协议
+  ValueNotifier<bool> get didAgreeTerms => _didAgreeTerms;
+  late ValueNotifier<bool> _didAgreeTerms;
+
   void checkValid() {
     final account = _controllerAccount.text;
     switch (type) {
@@ -66,7 +71,7 @@ class _LoginContentState extends State<LoginContent> {
     }
     final password = _controllerPw.text;
     isShowPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
-    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips;
+    _isLoginDisable = account.isEmpty || isShowAccountTips || password.isEmpty || isShowPwTips || !_didAgreeTerms.value;
     setState(() {});
   }
 
@@ -84,7 +89,7 @@ class _LoginContentState extends State<LoginContent> {
 
     final password = _controllerPw.text;
     final showPwTips = !Constants.passwordRegExp.hasMatch(password) && password.isNotEmpty;
-    _isLoginDisable = account.isEmpty || showAccountTips || password.isEmpty || showPwTips;
+    _isLoginDisable = account.isEmpty || showAccountTips || password.isEmpty || showPwTips || !_didAgreeTerms.value;
 
     setState(() {});
   }
@@ -92,6 +97,10 @@ class _LoginContentState extends State<LoginContent> {
   @override
   void initState() {
     super.initState();
+    _didAgreeTerms = ValueNotifier<bool>(true);
+    _didAgreeTerms.addListener(() {
+      onChangeCheckValid();
+    });
     _focusAccount.addListener(() {
       if (!_focusAccount.hasFocus) {
         checkValid();
@@ -106,7 +115,12 @@ class _LoginContentState extends State<LoginContent> {
 
   @override
   void dispose() {
+    _didAgreeTerms.dispose();
     super.dispose();
+  }
+
+  void onTermsCheck() {
+    _didAgreeTerms.value = !_didAgreeTerms.value;
   }
 
   void reviewTerms() {
@@ -267,7 +281,9 @@ class _LoginContentState extends State<LoginContent> {
                   Row(
                     children: [
                       Expanded(
-                        child: UserTermsUncheck(
+                        child: UserTerms(
+                          onTermsCheck: onTermsCheck,
+                          didAgreeTerms: didAgreeTerms,
                           reviewTerms: reviewTerms,
                           reviewPrivacy: reviewPrivacy,
                         ),

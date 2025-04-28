@@ -35,7 +35,7 @@ class _MessageNoticeDetailPageState extends State<MessageNoticeDetailPage> {
       }
       return Scaffold(
         appBar: CommonAppBar.arrowBack(context,
-            title: controller.isSystem.value ? '官方通知' : '用户私信'),
+            title: controller.detailData.value.sendUserName ?? ''),
         body: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(left: 16.w, right: 32.w),

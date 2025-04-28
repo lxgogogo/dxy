@@ -21,6 +21,7 @@ class EquityCenterController extends GetxController {
   // 背景图
   RxString bg = Assets.equityCenter.iconCenterNormalBg.path.obs;
   int selectIndex = 0;
+  int userIndex = 0;
   var bannerModel = EquityCenterBannerModel().obs;
   var userLevelModel = EquityCenterBannerModel().obs;
   RxInt remainingPoints = 0.obs;
@@ -77,20 +78,16 @@ class EquityCenterController extends GetxController {
       final map = data[i];
       if (userLevelId == (map['id'] ?? 0)) {
         selectIndex = i;
+        userIndex = i;
+        break;
       }
     }
     for (int i = 0; i < data.length; i++) {
       final map = data[i];
-      int minPoints = map['minPoints'] ?? 0;
+      int minPoints = levelPoints;
       int maxPoints = map['maxPoints'] ?? 0;
       String name = map['name'] ?? "";
-      if (userLevelId == (map['id'] ?? 0)) {
-        minPoints = levelPoints;
-      }
       if (map['index'] == 1) {
-        if (selectIndex > 0) {
-          minPoints = maxPoints;
-        }
         saveData.add(EquityCenterBannerModel(
           title: name,
           index: 0,
@@ -110,9 +107,6 @@ class EquityCenterController extends GetxController {
           favoriteCategory: map['favoriteCategory'],
         ));
       } else if (map['index'] == 2) {
-        if (selectIndex > 1) {
-          minPoints = maxPoints;
-        }
         saveData.add(EquityCenterBannerModel(
           title: name,
           index: 1,
@@ -133,9 +127,6 @@ class EquityCenterController extends GetxController {
         ));
       } else {
         // 非最后一个
-        if (selectIndex > 2 && i != data.length - 1) {
-          minPoints = maxPoints;
-        }
         int iIndex = (map['index'] ?? 1) - 1;
         if (iIndex < 0) {
           iIndex = 0;

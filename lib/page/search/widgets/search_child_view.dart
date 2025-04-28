@@ -163,6 +163,14 @@ class SearchChildView extends GetView<SearchChildView> {
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
             itemBuilder: (context, index) {
               final item = controller.userItems[index];
+              String title = '关注';
+              if ((item.isfans ?? false) && (item.followed ?? false)) {
+                title = '互相关注';
+              } else if (!(item.isfans ?? false) && (item.followed ?? false)) {
+                title = '已关注';
+              } else if ((item.isfans ?? false) && !(item.followed ?? false)) {
+                title = '回关';
+              }
               return Row(
                 children: [
                   ClipOval(
@@ -198,7 +206,7 @@ class SearchChildView extends GetView<SearchChildView> {
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: Text(
-                        item.followed == true ? '已关注' : '关注',
+                        title,
                         style: TextStyle(
                           color: item.followed == true ? '#333333'.hexColor : Colors.white,
                           fontSize: 12.sp,

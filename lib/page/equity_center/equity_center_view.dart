@@ -109,10 +109,19 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
         double allWidth = 1.sw * 0.9 - 32.w;
         double progressWidth = 0;
         int nowPoint = maxPoint - minPoint;
-        if (minPoint >= maxPoint || maxPoint <= 0) {
-          progressWidth = allWidth;
+        if (maxPoint <= 0) {
+          if (controller.userIndex ==
+              controller.bannerList.length - 1) {
+            progressWidth = allWidth;
+          } else {
+            progressWidth = 0;
+          }
         } else {
-          progressWidth = minPoint / maxPoint * allWidth;
+          if (minPoint >= maxPoint) {
+            progressWidth = allWidth;
+          } else {
+            progressWidth = minPoint / maxPoint * allWidth;
+          }
         }
         return Stack(
           children: [

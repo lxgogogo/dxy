@@ -197,7 +197,6 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
       NetRequest().followerToggle(userItems[index].id!, !followed, (data) {
         userItems[index].followed = !followed;
         safeUpdate();
-
         if (!followed) {
           TrackUtils.trackEvent(userLogType: '111005', params: userItems[index].id!);
         }

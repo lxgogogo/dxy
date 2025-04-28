@@ -117,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
                                       color: Colors.red
                                     ),
                                     child: AutoSizeText(
-                                      '${badgeCount > 99 ? '99+' : badgeCount}',
+                                      '${badgeCount > 99 ? '99' : badgeCount}',
                                       minFontSize: 6,
                                       style: TextStyle(
                                         fontSize: 9.sp,

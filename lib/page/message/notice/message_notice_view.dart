@@ -120,7 +120,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
       child: Column(
         children: [
           Container(
-              padding: EdgeInsets.symmetric(vertical: 12.w, horizontal: 16.w),
+              padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w),
               decoration: BoxDecoration(
                   color: model.isReader == 0
                       ? ColorStyle.c557BF6.withOpacity(0.1)
@@ -155,7 +155,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           children: [
                             Expanded(child: Text(
                               controller.isSystem.value
-                                  ? model.title ?? ''
+                                  ? '官方通知'
                                   : model.sendUserName ?? '',
                               style: TextStyle(
                                   fontSize: 12.sp,
@@ -169,7 +169,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 8.w),
+                      SizedBox(height: 3.w),
                       SizedBox(
                           width: 1.sw - 80.w,
                           child: Text(
@@ -190,7 +190,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
               )),
           Container(
               height: 1.w,
-              margin: EdgeInsets.symmetric(horizontal: 0),
+              margin: const EdgeInsets.symmetric(horizontal: 0),
               color: model.isReader == 0 ? ColorStyle.c333333.withOpacity(0.15) : ColorStyle.c333333.withOpacity(0.05))
         ],
       ),

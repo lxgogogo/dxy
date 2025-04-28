@@ -60,8 +60,9 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                               context: context,
                                               builder: (context) =>
                                                   CommonDialog(
-                                                title: '删除通知',
-                                                content: '确定要删除这个通知吗？',
+                                                title: '删除信件',
+                                                content:
+                                                    '确定删除【${controller.dataList[i].sendUserName ?? ''}】发来的信件吗？',
                                                 confirmText: '确认删除',
                                                 onConfirm: () {
                                                   Navigator.of(context).pop();
@@ -153,7 +154,8 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(child: Text(
+                            Expanded(
+                                child: Text(
                               model.sendUserName ?? '',
                               style: TextStyle(
                                   fontSize: 12.sp,
@@ -170,18 +172,15 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       SizedBox(height: 3.w),
                       SizedBox(
                           width: 1.sw - 80.w,
-                          child: Text(
-                            model.content ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: index == 0
-                                  ? ColorStyle.c333333
-                                  : ColorStyle.c333333.withOpacity(0.7),
-                              fontSize: 12.sp,
-                            )
-                          )
-                      )
+                          child: Text(model.content ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: index == 0
+                                    ? ColorStyle.c333333
+                                    : ColorStyle.c333333.withOpacity(0.7),
+                                fontSize: 12.sp,
+                              )))
                     ],
                   )
                 ],
@@ -189,7 +188,9 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
           Container(
               height: 1.w,
               margin: const EdgeInsets.symmetric(horizontal: 0),
-              color: model.isReader == 0 ? ColorStyle.c333333.withOpacity(0.15) : ColorStyle.c333333.withOpacity(0.05))
+              color: model.isReader == 0
+                  ? ColorStyle.c333333.withOpacity(0.15)
+                  : ColorStyle.c333333.withOpacity(0.05))
         ],
       ),
     );

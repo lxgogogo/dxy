@@ -269,6 +269,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
             const Spacer(),
             FollowBtn(
                 isFollowed: followOrFanUserList[index].followed!,
+                isFans: followOrFanUserList[index].isfans!,
                 onTap: () {
                   NetRequest().followerToggle(followOrFanUserList[index].id!, !followOrFanUserList[index].followed!,
                       (data) {

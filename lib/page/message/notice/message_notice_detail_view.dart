@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/date_util.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:html/dom.dart' as dom;
 
@@ -53,16 +54,9 @@ class _MessageNoticeDetailPageState extends State<MessageNoticeDetailPage> {
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(19.w))),
-                    child: CachedNetworkImage(
-                      width: 38.w,
-                      height: 38.w,
-                      fit: BoxFit.cover,
-                      imageUrl: controller.detailData.value.sendUserHeadimg ?? '',
-                      placeholder: (context, url) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    ),
+                    child: BorderAvatar(
+                      avatarSize: 38.w,
+                        avatar: controller.detailData.value.sendUserHeadimg ?? '')
                   ),
                   SizedBox(width: 10.w),
                   SizedBox(

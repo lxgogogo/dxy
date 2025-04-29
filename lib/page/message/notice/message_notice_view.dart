@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
@@ -128,29 +129,15 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       : Colors.white),
               child: Row(
                 children: [
-                  Container(
-                    width: 38.w,
-                    height: 38.w,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(19.w))),
-                    child: CachedNetworkImage(
-                      width: 38.w,
-                      height: 38.w,
-                      fit: BoxFit.cover,
-                      imageUrl: model.sendUserHeadimg ?? '',
-                      placeholder: (context, url) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    ),
-                  ),
+                  BorderAvatar(
+                      avatarSize: 38.w,
+                      avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 1.sw - 80.w,
+                        width: 1.sw - 84.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -171,7 +158,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       ),
                       SizedBox(height: 3.w),
                       SizedBox(
-                          width: 1.sw - 80.w,
+                          width: 1.sw - 84.w,
                           child: Text(
                               controller.htmlToPlainText(model.content ?? ''),
                               overflow: TextOverflow.ellipsis,

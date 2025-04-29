@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:holdem/utils/log_util.dart';
@@ -14,7 +15,6 @@ class HtmlFactoryBuilder extends WidgetFactory {
 
   @override
   void parse(BuildTree meta) {
-    final e = meta.element;
     if (meta.element.localName == 'td' || meta.element.localName == 'th') {
       meta.register(
         BuildOp(onRenderedBlock: (BuildTree tree, Widget block) {}),
@@ -146,6 +146,12 @@ class _VideoPlayerState extends State<VideoPlayer> {
           videoPlayerController: videoController!,
           autoPlay: false,
           showOptions: false,
+          showControlsOnInitialize: false,
+          deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
+          deviceOrientationsAfterFullScreen: [
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ],
         );
         setState(() {});
       });

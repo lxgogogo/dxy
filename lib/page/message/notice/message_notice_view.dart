@@ -172,7 +172,8 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       SizedBox(height: 3.w),
                       SizedBox(
                           width: 1.sw - 80.w,
-                          child: Text(model.content ?? '',
+                          child: Text(
+                              controller.htmlToPlainText(model.content ?? ''),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(

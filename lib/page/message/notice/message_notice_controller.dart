@@ -45,6 +45,9 @@ class MessageNoticeController extends GetxController {
     if (pageNum == 1) {
       dataList.value = data;
       refreshController.refreshCompleted();
+      if (data.length < pageSize) {
+        refreshController.loadNoData();
+      }
     } else {
       dataList.addAll(data);
       refreshController.loadComplete();

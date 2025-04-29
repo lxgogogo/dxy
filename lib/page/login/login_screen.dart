@@ -325,6 +325,7 @@ class _LoginScreenState extends State<LoginScreen> {
         StorageService.of.putToken(res.data['token']);
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
+        UserStore.of.getUserInfo();
         EventBusUtil.of.fire(EventLoginSuccess());
         Get.until((route) => route.settings.name == Routes.main);
       } else {
@@ -366,6 +367,7 @@ class _LoginScreenState extends State<LoginScreen> {
         StorageService.of.putToken(res.data['token']);
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
+        UserStore.of.getUserInfo();
         EventBusUtil.of.fire(EventLoginSuccess());
         Get.until((route) => route.settings.name == Routes.main);
       } else {
@@ -389,6 +391,7 @@ class _LoginScreenState extends State<LoginScreen> {
         StorageService.of.putToken(res.data['token']);
         final userProfile = UserProfile.fromJson(res.data['user']);
         UserStore.of.putUserInfo(userProfile);
+        UserStore.of.getUserInfo();
         EventBusUtil.of.fire(EventLoginSuccess());
         Get.until((route) => route.settings.name == Routes.main);
       } else {

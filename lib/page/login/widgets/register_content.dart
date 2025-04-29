@@ -497,6 +497,7 @@ class _RegisterContentState extends State<RegisterContent> {
       StorageService.of.putToken(res.data['token']);
       final userProfile = UserProfile.fromJson(res.data['user']);
       UserStore.of.putUserInfo(userProfile);
+      UserStore.of.getUserInfo();
       EventBusUtil.of.fire(EventLoginSuccess());
       Get.until((route) => route.settings.name == Routes.main);
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);

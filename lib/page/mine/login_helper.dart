@@ -19,26 +19,6 @@ typedef LoginSuccess = void Function(dynamic data);
 typedef GetUserInfoSuccess = void Function(dynamic data);
 
 class LoginHelper {
-  //登录
-  userLogin(String account, String password, LoginSuccess loginSuccessCallBack) {
-    NetRequest().userLogin(account, password, (data) {
-      UserProfile userProfile = UserProfile.fromJson(data['user']);
-      ToastUtils.showToast('登录成功');
-      StorageService.of.putToken(data['token']);
-      UserStore.of.putUserInfo(userProfile);
-      EventBusUtil.of.fire(EventLoginSuccess());
-      loginSuccessCallBack(data);
-    });
-  }
-
-  getUserInfo(GetUserInfoSuccess getSuccessCallback) {
-    NetRequest().getUserInfo((data) {
-      UserProfile user = UserProfile.fromJson(data);
-      getSuccessCallback(user);
-    }, (errorMsg) {
-
-    });
-  }
 
   //获取图像
   Widget getUserAvatar(String avatarUrl, double width, double height) {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
@@ -349,6 +350,11 @@ class VideoNotifier extends ChangeNotifier {
       routePageBuilder: (context, animation, secondaryAnimation, controllerProvider) {
         return ChewieVideo(notifier: this);
       },
+      deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
+      deviceOrientationsAfterFullScreen: [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ],
     );
     notifyListeners();
   }

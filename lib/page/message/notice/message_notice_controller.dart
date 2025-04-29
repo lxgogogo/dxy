@@ -2,6 +2,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/services/message_service.dart';
+import 'package:html/parser.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/message_notice_model.dart';
@@ -43,9 +44,6 @@ class MessageNoticeController extends GetxController {
     if (pageNum == 1) {
       dataList.value = data;
       refreshController.refreshCompleted();
-      if (data.length < pageSize) {
-        refreshController.loadNoData();
-      }
     } else {
       dataList.addAll(data);
       refreshController.loadComplete();
@@ -73,5 +71,10 @@ class MessageNoticeController extends GetxController {
     dataList.remove(model);
     dataList.refresh();
     EventBusUtil.of.fire(EventRefreshNotice());
+  }
+
+  String htmlToPlainText(String htmlString) {
+    final document = parse(htmlString);
+    return document.body?.text ?? '';
   }
 }

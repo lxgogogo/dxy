@@ -2,6 +2,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/services/message_service.dart';
+import 'package:holdem/utils/toast_utils.dart';
 import 'package:html/parser.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -67,6 +68,7 @@ class MessageNoticeController extends GetxController {
   void delete(MessageNoticeModel model) async {
     EasyLoading.show(status: '加载中......');
     await MessageService.noticeDelete({'notifiesId': model.id});
+    ToastUtils.showToast('删除成功');
     EasyLoading.dismiss();
     dataList.remove(model);
     dataList.refresh();

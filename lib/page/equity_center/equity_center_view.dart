@@ -572,7 +572,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               ),
               SizedBox(width: 10.w),
               Text(
-                '显示最近6个月的经验值记录',
+                '显示最近6个月的积分记录',
                 style: TextStyle(
                     fontSize: 12.sp,
                     color: ColorStyle.c333333.withOpacity(0.7)),

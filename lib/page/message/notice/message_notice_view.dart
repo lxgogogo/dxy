@@ -129,9 +129,15 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       : Colors.white),
               child: Row(
                 children: [
-                  BorderAvatar(
-                      avatarSize: 38.w,
-                      avatar: model.sendUserHeadimg ?? ''),
+                  model.isReader == 1
+                      ? Opacity(
+                          opacity: 0.7,
+                          child: BorderAvatar(
+                              avatarSize: 38.w,
+                              avatar: model.sendUserHeadimg ?? ''))
+                      : BorderAvatar(
+                          avatarSize: 38.w,
+                          avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'article_detail.dart';
+
 class UserProfile {
   int? id;
   String? nickname;
@@ -101,37 +103,4 @@ class UserProfile {
   factory UserProfile.fromRawJson(String str) => UserProfile.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
-}
-
-class UserLevel {
-  int? favoriteCategory;
-  int? id;
-  String? name;
-
-  ///观看引流广告 0:否  1:是
-  int? advertise;
-
-  UserLevel.fromJson(Map<String, dynamic> json) {
-    if (json["favoriteCategory"] is int) {
-      favoriteCategory = json["favoriteCategory"];
-    }
-    if (json["id"] is int) {
-      id = json["id"];
-    }
-    if (json["name"] is String) {
-      name = json["name"];
-    }
-    if (json["advertise"] is int) {
-      advertise = json["advertise"];
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["favoriteCategory"] = favoriteCategory;
-    _data["id"] = id;
-    _data["name"] = name;
-    _data["advertise"] = advertise;
-    return _data;
-  }
 }

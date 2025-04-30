@@ -7,6 +7,8 @@ import 'package:holdem/utils/html_parse_util.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 
+import 'article_detail.dart';
+
 /// pager : {"total":1,"pageNum":0,"pageSize":10}
 /// list : [{"id":2,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"titletitletitletitle 你好","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false},{"id":1,"user":{"id":1,"nickname":"昵称","avatar":""},"board":{"id":1,"name":"测试板块"},"title":"title","tags":["测试"],"pics":["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQ0YBJwzYaHDpWjjGCkthYR8kBica2DXaqhZv-EwFZlg"],"commentCount":0,"favoriteCount":0,"likeCount":0,"liked":false,"favorited":false}]
 
@@ -60,6 +62,7 @@ class BoardBean {
   String? relType;
   String? cover;
   String? comment;
+  UserLevel? userlevel;
 
   ///观看引流广告开关 0:否  1:是
   int? advertiseStatus;
@@ -97,6 +100,7 @@ class BoardBean {
     this.advertiseStatus,
     this.advertiseUrl,
     this.advertiseImage,
+    this.userlevel,
   });
 
   BoardBean.fromJson(Map<String, dynamic> json) {
@@ -182,6 +186,10 @@ class BoardBean {
 
     if (json["advertiseImage"] is String) {
       advertiseImage = json["advertiseImage"];
+    }
+
+    if (json["userLevel"] is Map) {
+      userlevel = UserLevel.fromJson(json["userLevel"]);
     }
   }
 

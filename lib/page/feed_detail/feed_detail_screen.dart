@@ -151,7 +151,7 @@ class FeedDetailScreen extends StatelessWidget {
                               SliverToBoxAdapter(
                                 child: Builder(
                                   builder: (context) {
-                                    if (UserStore.of.user?.userLevel?.advertise == 0) return const SizedBox();
+                                    if (controller.detailBean?.userlevel?.advertise == 0) return const SizedBox();
                                     final advertiseImage = controller.detailBean?.advertiseImage ?? '';
                                     if (advertiseImage.isEmpty) return const SizedBox();
                                     precacheImage(

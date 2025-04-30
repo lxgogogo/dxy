@@ -27,7 +27,7 @@ class ArticleDetailBean {
   UserProfile? user;
   List<VideoBean>? videoList;
   List<TagModel>? tagList;
-  Userlevel? userlevel;
+  UserLevel? userlevel;
   int? featured;
 
 
@@ -138,7 +138,7 @@ class ArticleDetailBean {
       tagList = json["tagList"] == null ? null : (json["tagList"] as List).map((e) => TagModel.fromJson(e)).toList();
     }
     if (json["userLevel"] is Map) {
-      userlevel = Userlevel.fromJson(json["userLevel"]);
+      userlevel = UserLevel.fromJson(json["userLevel"]);
     }
     if (json["featured"] is int) {
       featured = json["featured"];
@@ -262,14 +262,21 @@ class VideoBean {
   }
 }
 
-class Userlevel {
+class UserLevel {
+  int? favoriteCategory;
+  int? id;
+  String? name;
+
+  ///观看引流广告 0:否  1:是
+  int? advertise;
+
   int? featured;
   int? videoWatch;
   int? bookDownload;
 
-  Userlevel({this.featured, this.videoWatch, this.bookDownload});
+  UserLevel({this.featured, this.videoWatch, this.bookDownload});
 
-  Userlevel.fromJson(Map<String, dynamic> json) {
+  UserLevel.fromJson(Map<String, dynamic> json) {
     if (json["featured"] is int) {
       featured = json["featured"];
     }
@@ -279,5 +286,29 @@ class Userlevel {
     if (json["bookDownload"] is int) {
       bookDownload = json["bookDownload"];
     }
+    if (json["favoriteCategory"] is int) {
+      favoriteCategory = json["favoriteCategory"];
+    }
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["name"] is String) {
+      name = json["name"];
+    }
+    if (json["advertise"] is int) {
+      advertise = json["advertise"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["featured"] = featured;
+    _data["videoWatch"] = videoWatch;
+    _data["bookDownload"] = bookDownload;
+    _data["favoriteCategory"] = favoriteCategory;
+    _data["id"] = id;
+    _data["name"] = name;
+    _data["advertise"] = advertise;
+    return _data;
   }
 }

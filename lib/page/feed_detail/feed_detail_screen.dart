@@ -106,7 +106,7 @@ class FeedDetailScreen extends StatelessWidget {
                             ),
                             SliverToBoxAdapter(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16.w),
+                                padding: EdgeInsets.only(top: 12.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -158,26 +158,32 @@ class FeedDetailScreen extends StatelessWidget {
                                       CachedNetworkImageProvider(advertiseImage, cacheKey: advertiseImage),
                                       context,
                                     );
-                                    return SizedBox(
-                                      height: 120.w,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          final advertiseUrl = controller.detailBean?.advertiseUrl ?? '';
-                                          if (advertiseUrl.isNotEmpty) {
-                                            launchUrlString(advertiseUrl, mode: LaunchMode.externalApplication);
-                                          }
-                                        },
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl: advertiseImage,
-                                          fadeOutDuration: Duration.zero,
-                                          fadeInDuration: Duration.zero,
-                                          cacheKey: advertiseImage,
-                                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(
-                                            fit: BoxFit.fill,
-                                          ),
-                                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
-                                            fit: BoxFit.cover,
+                                    return Padding(
+                                      padding: EdgeInsets.only(top: 12.w),
+                                      child: AspectRatio(
+                                        aspectRatio: 343 / 60,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            final advertiseUrl = controller.detailBean?.advertiseUrl ?? '';
+                                            if (advertiseUrl.isNotEmpty) {
+                                              launchUrlString(advertiseUrl, mode: LaunchMode.externalApplication);
+                                            }
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.r),
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
+                                              imageUrl: advertiseImage,
+                                              fadeOutDuration: Duration.zero,
+                                              fadeInDuration: Duration.zero,
+                                              cacheKey: advertiseImage,
+                                              placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+                                                fit: BoxFit.fill,
+                                              ),
+                                              errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -187,23 +193,26 @@ class FeedDetailScreen extends StatelessWidget {
                               ),
                             if (controller.detailBean?.content?.isNotEmpty == true)
                               SliverToBoxAdapter(
-                                child: HtmlWidget(
-                                  controller.detailBean!.content!,
-                                  customStylesBuilder: htmlCustomStyles,
-                                  factoryBuilder: () =>
-                                      HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
-                                  customWidgetBuilder: (dom.Element element) {
-                                    if (element.localName == 'table') {
-                                      return const SizedBox();
-                                    }
-                                    // if(element.localName=='p'){
-                                    //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7)),);
-                                    // }
-                                    return null;
-                                  },
-                                  onTapUrl: (String url) async {
-                                    return launchUrlString(url, mode: LaunchMode.externalApplication);
-                                  },
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 12.w),
+                                  child: HtmlWidget(
+                                    controller.detailBean!.content!,
+                                    customStylesBuilder: htmlCustomStyles,
+                                    factoryBuilder: () =>
+                                        HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
+                                    customWidgetBuilder: (dom.Element element) {
+                                      if (element.localName == 'table') {
+                                        return const SizedBox();
+                                      }
+                                      // if(element.localName=='p'){
+                                      //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7)),);
+                                      // }
+                                      return null;
+                                    },
+                                    onTapUrl: (String url) async {
+                                      return launchUrlString(url, mode: LaunchMode.externalApplication);
+                                    },
+                                  ),
                                 ),
                               ),
                             if (controller.detailBean?.tagList?.isNotEmpty == true)

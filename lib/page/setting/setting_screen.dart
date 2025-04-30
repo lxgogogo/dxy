@@ -69,76 +69,74 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                      builder: (context) => const DialogEditPassword(),
-                    );
-                  },
-                  behavior: HitTestBehavior.translucent,
-                  child: Container(
-                    height: 56.w,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '修改密码',
-                          style: AppTheme.text333333Size16,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/images/edit_password.png'),
-                          size: 20,
-                        )
-                      ],
-                    ),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (context) => const DialogEditPassword(),
+                  );
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                  height: 56.w,
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '修改密码',
+                        style: AppTheme.text333333Size16,
+                      ),
+                      ImageIcon(
+                        AssetImage('assets/images/edit_password.png'),
+                        size: 20,
+                      )
+                    ],
                   ),
                 ),
-                Container(
-                  color: AppTheme.color_1A000000,
-                  height: 0.5.w,
-                ),
-                GestureDetector(
-                    onTap: () {
-                      _checkAppVersion();
-                    },
-                    behavior: HitTestBehavior.translucent,
-                    child: Container(
-                      height: 56.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            '检查更新',
-                            style: AppTheme.text333333Size16,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
-                                style: AppTheme.text333333Size16,
+              ),
+              Container(
+                color: AppTheme.color_1A000000,
+                height: 0.5.w,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    _checkAppVersion();
+                  },
+                  behavior: HitTestBehavior.translucent,
+                  child: SizedBox(
+                    height: 56.w,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '检查更新',
+                          style: AppTheme.text333333Size16,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
+                              style: AppTheme.text333333Size16,
+                            ),
+                            if (_canUpdate)
+                              Container(
+                                width: 7.w,
+                                height: 7.w,
+                                decoration: const ShapeDecoration(shape: CircleBorder(), color: Color(0xffff4040)),
                               ),
-                              if (_canUpdate)
-                                Container(
-                                  width: 7.w,
-                                  height: 7.w,
-                                  decoration: const ShapeDecoration(shape: CircleBorder(), color: Color(0xffff4040)),
-                                ),
-                              const ImageIcon(
-                                AssetImage('assets/images/item_arrow.png'),
-                                size: 22,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )),
-              ],
-            ),
+                            const ImageIcon(
+                              AssetImage('assets/images/item_arrow.png'),
+                              size: 22,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
           ),
         ),
         SizedBox(height: 8.w),
@@ -166,10 +164,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       'assets/images/ic_twitter.png',
                       url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
                     ),
-                    buildSocialIcon(
-                      'assets/images/ic_tiktok.png',
-                      url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
-                    ),
+                    // buildSocialIcon(
+                    //   'assets/images/ic_tiktok.png',
+                    //   url: 'https://www.tiktok.com/@dexueyuan?_t=8qAwlHWfhnl&_r=1',
+                    // ),
                     buildSocialIcon(
                       'assets/images/ic_telegram.png',
                       url: 'https://t.me/dpoker',

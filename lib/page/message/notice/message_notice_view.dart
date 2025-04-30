@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
@@ -118,50 +119,44 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
           'data': model.toJson()
         });
       },
-      child: Column(
-        children: [
-          Container(
-              padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w),
-              decoration: BoxDecoration(
-                  color: model.isReader == 0
-                      ? ColorStyle.c557BF6.withOpacity(0.1)
-                      : Colors.white),
-              child: Row(
+      child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w).copyWith(bottom: 0),
+          decoration: BoxDecoration(
+              color: model.isReader == 0
+                  ? ColorStyle.c557BF6.withOpacity(0.1)
+                  : Colors.white),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Container(
-                    width: 38.w,
-                    height: 38.w,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(19.w))),
-                    child: CachedNetworkImage(
-                      width: 38.w,
-                      height: 38.w,
-                      fit: BoxFit.cover,
-                      imageUrl: model.sendUserHeadimg ?? '',
-                      placeholder: (context, url) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                      errorWidget: (context, url, error) =>
-                          Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    ),
-                  ),
+                  model.isReader == 1
+                      ? Opacity(
+                      opacity: 0.7,
+                      child: BorderAvatar(
+                          avatarSize: 38.w,
+                          avatar: model.sendUserHeadimg ?? ''))
+                      : BorderAvatar(
+                      avatarSize: 38.w,
+                      avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 1.sw - 80.w,
+                        width: 1.sw - 84.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                                 child: Text(
-                              model.sendUserName ?? '',
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: ColorStyle.c333333),
-                            )),
+                                  model.sendUserName ?? '',
+                                  style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: model.isReader == 1
+                                          ? FontWeight.w400
+                                          : FontWeight.w600,
+                                      color: ColorStyle.c333333),
+                                )),
                             Text(dateStr,
                                 style: TextStyle(
                                     fontSize: 12.sp,
@@ -171,29 +166,29 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       ),
                       SizedBox(height: 3.w),
                       SizedBox(
-                          width: 1.sw - 80.w,
+                          width: 1.sw - 84.w,
                           child: Text(
                               controller.htmlToPlainText(model.content ?? ''),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
-                                color: index == 0
+                                color: model.isReader == 0
                                     ? ColorStyle.c333333
                                     : ColorStyle.c333333.withOpacity(0.7),
-                                fontSize: 12.sp,
+                                fontSize: 10.sp,
                               )))
                     ],
                   )
                 ],
-              )),
-          Container(
-              height: 1.w,
-              margin: const EdgeInsets.symmetric(horizontal: 0),
-              color: model.isReader == 0
-                  ? ColorStyle.c333333.withOpacity(0.15)
-                  : ColorStyle.c333333.withOpacity(0.05))
-        ],
-      ),
+              ),
+              SizedBox(height: 10.w),
+              Container(
+                  height: 1.w,
+                  margin: const EdgeInsets.symmetric(horizontal: 0),
+                  color: ColorStyle.c333333.withOpacity(0.05))
+            ],
+          )
+      )
     );
   }
 }

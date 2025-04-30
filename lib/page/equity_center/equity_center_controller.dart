@@ -86,7 +86,7 @@ class EquityCenterController extends GetxController {
       int minPoints = levelPoints;
       int maxPoints = map['maxPoints'] ?? 0;
       String name = map['name'] ?? "";
-      if (map['index'] == 0 || map['index'] == 1) {
+      if (map['index'] == 1) {
         saveData.add(EquityCenterBannerModel(
           title: name,
           index: 0,
@@ -105,7 +105,7 @@ class EquityCenterController extends GetxController {
           favorite: map['favorite'],
           favoriteCategory: map['favoriteCategory'],
         ));
-      } else if (map['index'] == 2 || map['index'] == 3 || map['index'] == 4) {
+      } else if (map['index'] == 2) {
         saveData.add(EquityCenterBannerModel(
           title: name,
           index: 1,

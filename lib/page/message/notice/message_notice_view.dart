@@ -119,25 +119,25 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
           'data': model.toJson()
         });
       },
-      child: Column(
-        children: [
-          Container(
-              padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w),
-              decoration: BoxDecoration(
-                  color: model.isReader == 0
-                      ? ColorStyle.c557BF6.withOpacity(0.1)
-                      : Colors.white),
-              child: Row(
+      child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10.w, horizontal: 16.w).copyWith(bottom: 0),
+          decoration: BoxDecoration(
+              color: model.isReader == 0
+                  ? ColorStyle.c557BF6.withOpacity(0.1)
+                  : Colors.white),
+          child: Column(
+            children: [
+              Row(
                 children: [
                   model.isReader == 1
                       ? Opacity(
-                          opacity: 0.7,
-                          child: BorderAvatar(
-                              avatarSize: 38.w,
-                              avatar: model.sendUserHeadimg ?? ''))
-                      : BorderAvatar(
+                      opacity: 0.7,
+                      child: BorderAvatar(
                           avatarSize: 38.w,
-                          avatar: model.sendUserHeadimg ?? ''),
+                          avatar: model.sendUserHeadimg ?? ''))
+                      : BorderAvatar(
+                      avatarSize: 38.w,
+                      avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,14 +149,14 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           children: [
                             Expanded(
                                 child: Text(
-                              model.sendUserName ?? '',
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: model.isReader == 1
-                                      ? FontWeight.w400
-                                      : FontWeight.w600,
-                                  color: ColorStyle.c333333),
-                            )),
+                                  model.sendUserName ?? '',
+                                  style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: model.isReader == 1
+                                          ? FontWeight.w400
+                                          : FontWeight.w600,
+                                      color: ColorStyle.c333333),
+                                )),
                             Text(dateStr,
                                 style: TextStyle(
                                     fontSize: 12.sp,
@@ -180,15 +180,15 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                     ],
                   )
                 ],
-              )),
-          Container(
-              height: 1.w,
-              margin: const EdgeInsets.symmetric(horizontal: 0),
-              color: model.isReader == 0
-                  ? ColorStyle.c333333.withOpacity(0.15)
-                  : ColorStyle.c333333.withOpacity(0.05))
-        ],
-      ),
+              ),
+              SizedBox(height: 10.w),
+              Container(
+                  height: 1.w,
+                  margin: const EdgeInsets.symmetric(horizontal: 0),
+                  color: ColorStyle.c333333.withOpacity(0.05))
+            ],
+          )
+      )
     );
   }
 }

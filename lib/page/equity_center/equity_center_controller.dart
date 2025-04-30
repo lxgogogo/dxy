@@ -10,8 +10,7 @@ import '../../model/equity_center_model.dart';
 import '../../services/equity_center_service.dart';
 
 class EquityCenterController extends GetxController {
-  final CarouselSliderController carouselController =
-      CarouselSliderController();
+  final CarouselSliderController carouselController = CarouselSliderController();
 
   RxList<EquityCenterBannerModel> bannerList = <EquityCenterBannerModel>[].obs;
   RxList<EquityExpModel> expDataList = <EquityExpModel>[].obs;
@@ -87,7 +86,7 @@ class EquityCenterController extends GetxController {
       int minPoints = levelPoints;
       int maxPoints = map['maxPoints'] ?? 0;
       String name = map['name'] ?? "";
-      if (map['index'] == 1) {
+      if (map['index'] == 0 || map['index'] == 1) {
         saveData.add(EquityCenterBannerModel(
           title: name,
           index: 0,
@@ -106,7 +105,7 @@ class EquityCenterController extends GetxController {
           favorite: map['favorite'],
           favoriteCategory: map['favoriteCategory'],
         ));
-      } else if (map['index'] == 2) {
+      } else if (map['index'] == 2 || map['index'] == 3 || map['index'] == 4) {
         saveData.add(EquityCenterBannerModel(
           title: name,
           index: 1,
@@ -155,6 +154,34 @@ class EquityCenterController extends GetxController {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         carouselController.jumpToPage(selectIndex);
       });
+    }
+    /// 临时加的调整
+    for (int i = 0; i < saveData.length; i++) {
+      if (i == 0 || i == 1) {
+        saveData[i].bg = Assets.equityCenter.iconCenterNormalBg.path;
+        saveData[i].rollBg = Assets.equityCenter.iconCenterRollBg.path;
+        saveData[i].levelIcon = Assets.equityCenter.iconCenterLevelBg.path;
+        saveData[i].buttonIcon = Assets.equityCenter.iconCenterNormalButton.path;
+        saveData[i].titleColor = ColorStyle.c333333;
+        saveData[i].levelColor = ColorStyle.c0F51BB;
+        saveData[i].shadowColor = ColorStyle.cA4B2D5.withOpacity(0.5);
+      } else if (i == 2 || i == 3 || i == 4) {
+        saveData[i].bg = Assets.equityCenter.iconCenterHighBg.path;
+        saveData[i].rollBg = Assets.equityCenter.iconCenterRollHighBg.path;
+        saveData[i].levelIcon = Assets.equityCenter.iconCenterHighLevelBg.path;
+        saveData[i].buttonIcon = Assets.equityCenter.iconCenterHighButton.path;
+        saveData[i].titleColor = ColorStyle.c333333;
+        saveData[i].levelColor = ColorStyle.c0F51BB;
+        saveData[i].shadowColor = ColorStyle.cA3A4A5.withOpacity(0.5);
+      } else {
+        saveData[i].bg = Assets.equityCenter.iconCenterHighBg2.path;
+        saveData[i].rollBg = Assets.equityCenter.iconCenterRollHighBg2.path;
+        saveData[i].levelIcon = Assets.equityCenter.iconCenterHighLevelBg2.path;
+        saveData[i].buttonIcon = Assets.equityCenter.iconCenterHigh2Button.path;
+        saveData[i].titleColor = ColorStyle.c333333;
+        saveData[i].levelColor = ColorStyle.c0F51BB;
+        saveData[i].shadowColor = ColorStyle.cAE9E86.withOpacity(0.5);
+      }
     }
     userLevelModel.value = saveData[selectIndex];
     bannerList.value = saveData;

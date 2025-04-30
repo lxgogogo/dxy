@@ -152,7 +152,9 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                               model.sendUserName ?? '',
                               style: TextStyle(
                                   fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: model.isReader == 1
+                                      ? FontWeight.w400
+                                      : FontWeight.w600,
                                   color: ColorStyle.c333333),
                             )),
                             Text(dateStr,
@@ -170,10 +172,10 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: TextStyle(
-                                color: index == 0
+                                color: model.isReader == 0
                                     ? ColorStyle.c333333
                                     : ColorStyle.c333333.withOpacity(0.7),
-                                fontSize: 12.sp,
+                                fontSize: 10.sp,
                               )))
                     ],
                   )

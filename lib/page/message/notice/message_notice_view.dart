@@ -139,12 +139,11 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       avatarSize: 38.w,
                       avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 1.sw - 84.w,
-                        child: Row(
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
@@ -163,21 +162,19 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                     color: ColorStyle.c333333.withOpacity(0.7)))
                           ],
                         ),
-                      ),
-                      SizedBox(height: 3.w),
-                      SizedBox(
-                          width: 1.sw - 84.w,
-                          child: Text(
-                              controller.htmlToPlainText(model.content ?? ''),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: model.isReader == 0
-                                    ? ColorStyle.c333333
-                                    : ColorStyle.c333333.withOpacity(0.7),
-                                fontSize: 10.sp,
-                              )))
-                    ],
+                        SizedBox(height: 3.w),
+                        Text(
+                            controller.htmlToPlainText(model.content ?? ''),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: model.isReader == 0
+                                  ? ColorStyle.c333333
+                                  : ColorStyle.c333333.withOpacity(0.7),
+                              fontSize: 10.sp,
+                            ))
+                      ],
+                    ),
                   )
                 ],
               ),

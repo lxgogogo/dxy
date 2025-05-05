@@ -1,6 +1,6 @@
 part of 'feed_detail_screen.dart';
 
-class FeedDetailController extends GetxController {
+class FeedDetailController extends GetxController with StayReportGetxMixin {
   int? id;
 
   BoardBean? detailBean;
@@ -245,5 +245,10 @@ class FeedDetailController extends GetxController {
         videoController?.play();
       }
     }
+  }
+
+  @override
+  void onStayReported() {
+    TrackUtils.trackEvent(userLogType: '109010', params: id);
   }
 }

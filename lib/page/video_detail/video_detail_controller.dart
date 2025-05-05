@@ -34,10 +34,13 @@ class VideoDetailController extends GetxController {
   int pageNum = 1;
   int pageSize = 10;
   bool noMore = false;
+
   // 是否有观影权限
   RxBool haveWatchPower = true.obs;
+
   // 是否展示无权限弹窗
   bool haveWatchAlert = false;
+
   // 0-普通视频 1-精选视频
   int videoType = 0;
   bool isDisposed = false;
@@ -76,6 +79,7 @@ class VideoDetailController extends GetxController {
   @override
   void onClose() {
     isDisposed = true;
+
     /// 上传视频已播放时长
     _uploadVideoReport();
     _eventSubscription?.cancel();
@@ -91,10 +95,8 @@ class VideoDetailController extends GetxController {
       final currentDuration = videoController?.value.position.inSeconds;
       if ((videoType == 1 && UserStore.of.isLogin) || videoType == 0) {
         if ((currentDuration ?? 0) > 1) {
-          await CommonService.of.uploadBenefits({
-            'type': videoType == 1 ? 'featured' : 'video',
-            'value': currentDuration
-          });
+          await CommonService.of
+              .uploadBenefits({'type': videoType == 1 ? 'featured' : 'video', 'value': currentDuration});
         }
       }
     }
@@ -140,16 +142,12 @@ class VideoDetailController extends GetxController {
               _watchVideo();
             } else {
               haveWatchAlert = true;
-              AppRoutesUtils.haveLogin(
-                  title: '当前观看视频已达上限',
-                  content: '您当前的身份为访客\n请注册或登录以提升观看权限');
+              AppRoutesUtils.haveLogin(title: '当前观看视频已达上限', content: '您当前的身份为访客\n请注册或登录以提升观看权限');
             }
           } else {
             if (!haveWatchAlert) {
               haveWatchAlert = true;
-              AppRoutesUtils.haveLogin(
-                  title: '请登录后观看',
-                  content: '您当前的身份为访客\n登录后即可观看精选视频');
+              AppRoutesUtils.haveLogin(title: '请登录后观看', content: '您当前的身份为访客\n登录后即可观看精选视频');
             }
           }
         }
@@ -187,8 +185,7 @@ class VideoDetailController extends GetxController {
           if (featured == 1) {
             if (featuredWatch != 0) {
               haveWatchPower.value = true;
-              _startVideoPlayer(
-                  detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+              _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
             } else {
               haveWatchPower.value = false;
               AppRoutesUtils.haveVideoWatch();
@@ -196,8 +193,7 @@ class VideoDetailController extends GetxController {
           } else {
             if (videoWatch != 0) {
               haveWatchPower.value = true;
-              _startVideoPlayer(
-                  detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+              _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
             } else {
               haveWatchPower.value = false;
               AppRoutesUtils.haveVideoWatch();
@@ -241,29 +237,34 @@ class VideoDetailController extends GetxController {
       });
   }
 
+  int reportedMinutes = 0; // 已上报分钟数
+
   void videoListener() {
     if (detailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
     final currentDuration = videoController!.value.position.inSeconds;
-    Log.d('----currentDuration: $currentDuration');
-    final totalDuration = videoController!.value.duration.inSeconds;
-    // if (currentDuration >= freeTotalDuration) {
-    //   /// 权限不足 弹窗
-    //   return;
-    // }
-    if (currentDuration > 0 && currentDuration >= totalDuration) {
-      if (playVideoIndex == detailBean!.videoList!.length - 1) {
-        playVideoIndex = 0;
-      } else {
-        playVideoIndex += 1;
+    if (currentDuration > 0) {
+      final totalDuration = videoController!.value.duration.inSeconds;
+      if (currentDuration >= totalDuration) {
+        if (playVideoIndex == detailBean!.videoList!.length - 1) {
+          playVideoIndex = 0;
+        } else {
+          playVideoIndex += 1;
+        }
+        autoScrollController.scrollToIndex(
+          playVideoIndex,
+          duration: const Duration(microseconds: 1),
+          preferPosition: AutoScrollPosition.end,
+        );
+        safeUpdate();
+        _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+        return;
       }
-      autoScrollController.scrollToIndex(
-        playVideoIndex,
-        duration: const Duration(microseconds: 1),
-        preferPosition: AutoScrollPosition.end,
-      );
-      safeUpdate();
-      _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+      // 上报逻辑：每满1分钟上报一次，最多上报到3分钟
+      if (currentDuration >= 60 * (reportedMinutes + 1) && reportedMinutes < 3) {
+        reportedMinutes++;
+        TrackUtils.trackEvent(userLogType: '103012', params: [id.toString(), reportedMinutes].join(','));
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 part of 'article_detail_screen.dart';
 
-class ArticleDetailController extends GetxController {
+class ArticleDetailController extends GetxController with StayReportGetxMixin {
   int? id;
 
   ArticleDetailBean? detailBean;
@@ -129,5 +129,10 @@ class ArticleDetailController extends GetxController {
     } finally {
       safeUpdate();
     }
+  }
+
+  @override
+  void onStayReported() {
+    TrackUtils.trackEvent(userLogType: '109010', params: id);
   }
 }

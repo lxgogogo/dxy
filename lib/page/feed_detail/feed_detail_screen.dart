@@ -28,11 +28,13 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../mixins/stay_report_mixin.dart';
 import '../../model/board_list.dart';
 import '../../model/comment_list.dart';
 import '../../services/index.dart';
 import '../../stores/config_store.dart';
 import '../../utils/date_util.dart';
+import '../../utils/track_utils.dart';
 import '../../widget/circle_image_with_text.dart';
 import '../../widget/feed_more_action.dart';
 import '../../widget/report_sheet.dart';

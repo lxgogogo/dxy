@@ -25,6 +25,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../mixins/stay_report_mixin.dart';
 import '../../utils/date_util.dart';
 import '../../utils/track_utils.dart';
 

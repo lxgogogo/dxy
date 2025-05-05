@@ -171,7 +171,9 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                             _pageKey.currentState?.refreshData(boardInfoList[selIndex - 1].id!, order);
                           },
                           userLogType: '108001',
-                          params: boardInfoList[selIndex - 1].id,
+                          params: selIndex - 1 > 0 && selIndex - 1 < boardInfoList.length
+                              ? boardInfoList[selIndex - 1].id
+                              : null,
                         ),
                         child: Container(
                           height: 30.w,

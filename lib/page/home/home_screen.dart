@@ -337,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     padding: EdgeInsets.only(top: 6.w),
                                                     child: VideoHorizontalItem(
                                                       item: e,
-                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101008'),
+                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101008', params: e.id),
                                                     ),
                                                   ))
                                               .toList(),

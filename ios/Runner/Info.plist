@@ -50,7 +50,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>App需要您的同意,才能访问您的相机</string>
+	<string>App需要您的同意,才能访问您的相机，用于发布内容时上传图片及扫描二维码登录帐号</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>App需要您的同意,才能访问您的麦克风</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

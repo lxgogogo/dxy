@@ -61,7 +61,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeVideo.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.videoList),
-                    userLogType: '100002',
+                    userLogType: '101002',
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -71,7 +71,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeCourse.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.course),
-                    userLogType: '100003',
+                    userLogType: '101003',
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -81,7 +81,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeBook.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.boolList),
-                    userLogType: '100004',
+                    userLogType: '101004',
                   ),
                 ),
                 SizedBox(width: 6.w),
@@ -91,7 +91,7 @@ class HomeMenu extends StatelessWidget {
                   imagePath: Assets.images.iconHomeTool.path,
                   onTap: TrackUtils.trackedTap(
                     onTap: () => Get.toNamed(Routes.toolList),
-                    userLogType: '100005',
+                    userLogType: '101014',
                   ),
                 ),
               ],

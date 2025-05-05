@@ -230,9 +230,9 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
       if (detailBean?.user?.id == null) return;
       final followed = detailBean?.user?.followed ?? false;
       NetRequest().followerToggle(detailBean!.user!.id!, !followed, (data) {
-
         detailBean?.user?.followed = !followed;
         safeUpdate();
+        TrackUtils.trackEvent(userLogType: '108003');
       });
     });
   }

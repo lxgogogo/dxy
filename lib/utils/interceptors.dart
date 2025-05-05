@@ -26,11 +26,11 @@ class HttpHeaderInterceptors extends InterceptorsWrapper {
     RequestInterceptorHandler handler,
   ) {
     final token = StorageService.of.getToken();
-    final nowData = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     if (token.isNotEmpty) {
       options.headers['X-Auth-Token'] = token;
-      options.headers['opt-at'] = nowData;
     }
+    final nowData = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    options.headers['Opt-At'] = nowData;
     options.headers = {
       ...AppUtil.of.headerJson,
       ...DevicesUtil.of.headerJson,

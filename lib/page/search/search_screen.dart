@@ -346,35 +346,31 @@ class SearchScreen extends GetView<SearchController> {
                 controller.hotTagItems.length,
                 (index) {
                   return GestureDetector(
-                    onTap: TrackUtils.trackedTap(
-                      onTap: () {
-                        // Get.toNamed(Routes.searchTag, arguments: {
-                        //   'tag': controller.hotTagItems[index],
-                        // });
-                        final item = controller.hotTagItems[index];
-                        final id = item.id;
-                        String eventName = '';
-                        if (item.type == 'book') {
-                          eventName = '书籍';
-                          Get.toNamed(Routes.bookDetail, arguments: id);
-                        } else if (item.type == 'article') {
-                          eventName = '教程';
-                          Get.toNamed(Routes.articleDetail, arguments: id);
-                        } else if (item.type == 'tool') {
-                          eventName = '工具';
-                          Get.toNamed(Routes.toolDetail, arguments: id);
-                        } else if (item.type == 'video' || item.type == 'videoList') {
-                          eventName = '视频';
-                          Get.toNamed(Routes.videoDetail, arguments: {'id': id});
-                        } else if (item.type == 'thread') {
-                          eventName = '帖子';
-                          Get.toNamed(Routes.feedDetail, arguments: id);
-                        }
-                        TrackUtils.trackEvent(userLogType: '110002', params: [id.toString(), eventName].join(','));
-                      },
-                      userLogType: '108001',
-                      params: 0,
-                    ),
+                    onTap: () {
+                      // Get.toNamed(Routes.searchTag, arguments: {
+                      //   'tag': controller.hotTagItems[index],
+                      // });
+                      final item = controller.hotTagItems[index];
+                      final id = item.id;
+                      String eventName = '';
+                      if (item.type == 'book') {
+                        eventName = '书籍';
+                        Get.toNamed(Routes.bookDetail, arguments: id);
+                      } else if (item.type == 'article') {
+                        eventName = '教程';
+                        Get.toNamed(Routes.articleDetail, arguments: id);
+                      } else if (item.type == 'tool') {
+                        eventName = '工具';
+                        Get.toNamed(Routes.toolDetail, arguments: id);
+                      } else if (item.type == 'video' || item.type == 'videoList') {
+                        eventName = '视频';
+                        Get.toNamed(Routes.videoDetail, arguments: {'id': id});
+                      } else if (item.type == 'thread') {
+                        eventName = '帖子';
+                        Get.toNamed(Routes.feedDetail, arguments: id);
+                      }
+                      TrackUtils.trackEvent(userLogType: '110002', params: [id.toString(), eventName].join(','));
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
                       decoration: BoxDecoration(

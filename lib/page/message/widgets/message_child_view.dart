@@ -51,7 +51,7 @@ class MessageChildViewState extends State<MessageChildView> {
                 onTap: TrackUtils.trackedTap(
                   onTap: () => jumpPage(widget.controller.items[i]),
                   userLogType: '114001',
-                  params: widget.controller.items[i].id,
+                  params: widget.controller.items[i].jumpId,
                 ),
               ),
               // itemExtent: 160.0,

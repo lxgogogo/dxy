@@ -11,13 +11,13 @@ class AppRouteObserver<R extends Route<dynamic>> extends RouteObserver<R> {
         TrackUtils.trackEvent(userLogType: '118001');
         break;
       case Routes.articleDetail:
-        TrackUtils.trackEvent(userLogType: '104002', params: Get.arguments);
+        // TrackUtils.trackEvent(userLogType: '104002', params: Get.arguments);
         break;
       case Routes.bookDetail:
-        TrackUtils.trackEvent(userLogType: '106001', params: Get.arguments);
+        // TrackUtils.trackEvent(userLogType: '106001', params: Get.arguments);
         break;
       case Routes.feedDetail:
-        TrackUtils.trackEvent(userLogType: '108002', params: Get.arguments);
+        // TrackUtils.trackEvent(userLogType: '108002', params: Get.arguments);
         break;
       case Routes.feedPost:
         TrackUtils.trackEvent(userLogType: '108005');
@@ -53,13 +53,13 @@ class AppRouteObserver<R extends Route<dynamic>> extends RouteObserver<R> {
           TrackUtils.trackEvent(userLogType: '118001');
           break;
         case Routes.articleDetail:
-          TrackUtils.trackEvent(userLogType: '104002', params: Get.arguments);
+          // TrackUtils.trackEvent(userLogType: '104002', params: Get.arguments);
           break;
         case Routes.bookDetail:
-          TrackUtils.trackEvent(userLogType: '106001', params: Get.arguments);
+          // TrackUtils.trackEvent(userLogType: '106001', params: Get.arguments);
           break;
         case Routes.feedDetail:
-          TrackUtils.trackEvent(userLogType: '108002', params: Get.arguments);
+          // TrackUtils.trackEvent(userLogType: '108002', params: Get.arguments);
           break;
         case Routes.feedPost:
           TrackUtils.trackEvent(userLogType: '108005');

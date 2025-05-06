@@ -5,10 +5,9 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course.dart';
-import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/linear_card.dart';
+
+import '../utils/track_utils.dart';
 
 class CourseItem extends StatelessWidget {
   const CourseItem({
@@ -29,6 +28,7 @@ class CourseItem extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 Get.toNamed(Routes.articleDetail, arguments: collectBean.targetId ?? 0);
+                TrackUtils.trackEvent(userLogType: '104002', params: Get.arguments);
               },
               child: Container(
                 height: 44.w,

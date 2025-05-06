@@ -6,13 +6,10 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
-import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/count_widget.dart';
-import 'package:holdem/widget/linear_card.dart';
 
 import '../utils/date_util.dart';
+import '../utils/track_utils.dart';
 
 // ignore: must_be_immutable
 class BookItem extends StatefulWidget {
@@ -30,6 +27,7 @@ class _BookItemState extends State<BookItem> {
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.bookDetail, arguments: widget.article.id ?? 0);
+        TrackUtils.trackEvent(userLogType: '106001', params: Get.arguments);
       },
       child: Container(
         height: 132.w,

@@ -11,6 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../services/index.dart';
 import '../../../stores/config_store.dart';
 import '../../../utils/toast_utils.dart';
+import '../../../utils/track_utils.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/report_sheet.dart';
 import '../../../widget/special_classic_footer.dart';
@@ -234,6 +235,10 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
                                 _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
                               }
                             },
+                            onTap: () => TrackUtils.trackEvent(
+                              userLogType: '108002',
+                              params: boardPostList[i].id,
+                            ),
                           );
                         },
                         childCount: boardPostList.length,

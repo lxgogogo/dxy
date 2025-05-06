@@ -195,7 +195,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                               }
                                             }
                                           },
-                                          userLogType: '104001',
+                                          userLogType: '107001',
                                           params: controller.detailBean?.id,
                                         ),
                                         child: Center(

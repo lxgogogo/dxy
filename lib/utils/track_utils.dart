@@ -13,7 +13,7 @@ class TrackUtils {
 
     final Map<String, dynamic> postParams = {
       'userLogType': 'USER_LOG_$userLogType',
-      if (params != null) 'params': params,
+      if (params != null) 'param': params,
       'optAt': nowData,
     };
 

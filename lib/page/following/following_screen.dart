@@ -217,8 +217,10 @@ class _FollowingScreenState extends State<FollowingScreen> {
             (data) {
               if (items[index].followed ?? false) {
                 ToastUtils.showToast('取消关注成功');
+                TrackUtils.trackEvent(userLogType: '113009');
               } else {
                 ToastUtils.showToast('关注成功');
+                TrackUtils.trackEvent(userLogType: '113010');
               }
               items[index].followed = !items[index].followed!;
               if (_isMounted) {

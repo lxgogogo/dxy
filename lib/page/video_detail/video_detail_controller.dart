@@ -234,6 +234,7 @@ class VideoDetailController extends GetxController {
         videoNotifier.initChewieController(videoController!);
         isInitialize = true;
         safeUpdate();
+        TrackUtils.trackEvent(userLogType: '103011', params: id);
       });
   }
 

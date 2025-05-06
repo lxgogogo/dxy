@@ -234,10 +234,10 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               onTap: (int index) {
                                 TrackUtils.trackEvent(
                                   userLogType: index == 0
-                                      ? index == 1
-                                          ? '113001'
-                                          : '113002'
-                                      : '113003',
+                                      ? '113001'
+                                      : index == 1
+                                          ? '113002'
+                                          : '113003',
                                 );
                               },
                             ),

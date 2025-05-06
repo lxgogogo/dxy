@@ -219,7 +219,13 @@ class FeedDetailScreen extends StatelessWidget {
                               ),
                             if (controller.detailBean?.tagList?.isNotEmpty == true)
                               SliverToBoxAdapter(
-                                child: TagListView(tagList: controller.detailBean?.tagList ?? []),
+                                child: TagListView(
+                                  tagList: controller.detailBean?.tagList ?? [],
+                                  onTapItem: (model) => TrackUtils.trackEvent(
+                                    userLogType: '109001',
+                                    params: model.id,
+                                  ),
+                                ),
                               )
                             else
                               SliverToBoxAdapter(

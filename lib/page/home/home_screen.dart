@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     imagePath: Assets.images.iconHomeTool.path,
                                                     onTap: TrackUtils.trackedTap(
                                                       onTap: () => Get.toNamed(Routes.toolList),
-                                                      userLogType: '101005',
+                                                      userLogType: '101014',
                                                     ),
                                                   ),
                                                 ],

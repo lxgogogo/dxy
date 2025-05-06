@@ -11,6 +11,7 @@ import '../../../services/collect_service.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/net_request.dart';
 import '../../../utils/toast_utils.dart';
+import '../../../utils/track_utils.dart';
 import '../../../widget/dialog_common.dart';
 
 class CollectListController extends GetxController {
@@ -227,6 +228,7 @@ class CollectListController extends GetxController {
       selectAllCount.value = 0;
       collectList.removeAt(index);
       EventBusUtil.of.fire(EventRefreshCollect(model.relId ?? 0));
+      TrackUtils.trackEvent(userLogType: '113007');
     });
   }
 }

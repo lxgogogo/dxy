@@ -241,24 +241,25 @@ class VideoDetailController extends GetxController {
   int reportedMinutes = 0; // 已上报分钟数
 
   void videoListener() {
-    if (detailBean?.videoList?.isNotEmpty != true) return;
     if (videoController == null) return;
     final currentDuration = videoController!.value.position.inSeconds;
     if (currentDuration > 0) {
       final totalDuration = videoController!.value.duration.inSeconds;
       if (currentDuration >= totalDuration) {
-        if (playVideoIndex == detailBean!.videoList!.length - 1) {
-          playVideoIndex = 0;
-        } else {
-          playVideoIndex += 1;
+        if (detailBean?.videoList?.isNotEmpty == true) {
+          if (playVideoIndex == detailBean!.videoList!.length - 1) {
+            playVideoIndex = 0;
+          } else {
+            playVideoIndex += 1;
+          }
+          autoScrollController.scrollToIndex(
+            playVideoIndex,
+            duration: const Duration(microseconds: 1),
+            preferPosition: AutoScrollPosition.end,
+          );
+          safeUpdate();
+          _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
         }
-        autoScrollController.scrollToIndex(
-          playVideoIndex,
-          duration: const Duration(microseconds: 1),
-          preferPosition: AutoScrollPosition.end,
-        );
-        safeUpdate();
-        _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
         return;
       }
       // 上报逻辑：每满1分钟上报一次，最多上报到3分钟

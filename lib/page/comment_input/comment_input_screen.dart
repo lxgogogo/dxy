@@ -21,18 +21,20 @@ class CommentInputScreen extends GetView<CommentInputController> {
   final String relType; //// 评论对象类型
   final int relId; //// 评论对象id
   final SourceType sourceType;
+  final int? sourceId;
 
   const CommentInputScreen({
     super.key,
     required this.relType,
     required this.relId,
     required this.sourceType,
+    this.sourceId,
   });
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CommentInputController>(
-      init: CommentInputController(relType, relId, sourceType),
+      init: CommentInputController(relType, relId, sourceType, sourceId),
       builder: (logic) {
         return Container(
           padding:

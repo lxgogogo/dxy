@@ -248,6 +248,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
                                     sourceType: SourceType.book,
+                                    sourceId: controller.id,
                                   );
                                 },
                                 childCount: controller.comments!.length,

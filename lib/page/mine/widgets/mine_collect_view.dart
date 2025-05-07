@@ -20,6 +20,7 @@ import '../../../utils/date_util.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/net_request.dart';
 import '../../../utils/toast_utils.dart';
+import '../../../utils/track_utils.dart';
 import '../../../widget/common_tab_widget.dart';
 import '../../../widget/dialog_common.dart';
 import '../../../widget/no_data.dart';
@@ -323,6 +324,7 @@ class _MineCollectViewState extends State<MineCollectView>
                                               collectList.removeAt(i);
                                               setState(() {});
                                               _requestGroupData();
+                                              TrackUtils.trackEvent(userLogType: '113007');
                                             }
                                           });
                                         },

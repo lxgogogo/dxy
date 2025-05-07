@@ -216,7 +216,8 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                 (BuildContext context, int index) {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
-                                    sourceType: SourceType.book,
+                                    sourceType: SourceType.tool,
+                                    sourceId: controller.id,
                                   );
                                 },
                                 childCount: controller.comments!.length,

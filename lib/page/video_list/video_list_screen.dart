@@ -130,7 +130,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
                       children: [
                         Expanded(
                           child: VideoItem(
-                            onTap: () => TrackUtils.trackEvent(userLogType: '102001'),
+                            onTap: () => TrackUtils.trackEvent(userLogType: '102001', params: controller.articles[firstIndex].id),
                             item: controller.articles[firstIndex],
                           ),
                         ),
@@ -138,7 +138,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
                           SizedBox(width: 12.w),
                           Expanded(
                             child: VideoItem(
-                              onTap: () => TrackUtils.trackEvent(userLogType: '102001'),
+                              onTap: () => TrackUtils.trackEvent(userLogType: '102001', params: controller.articles[secondIndex].id),
                               item: controller.articles[secondIndex],
                             ),
                           ),

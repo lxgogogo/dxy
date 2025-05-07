@@ -257,6 +257,7 @@ class FeedDetailScreen extends StatelessWidget {
                                     commentBean: controller.comments![index],
                                     relType: 'thread',
                                     sourceType: SourceType.feed,
+                                    sourceId: controller.id,
                                   );
                                 },
                                 childCount: controller.comments!.length,

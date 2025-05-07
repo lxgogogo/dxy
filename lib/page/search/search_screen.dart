@@ -278,7 +278,7 @@ class SearchScreen extends GetView<SearchController> {
                               controller.onSearch(context);
                             },
                             userLogType: '110003',
-                            params: controller.controller.text,
+                            params: controller.historyItems[index],
                           ),
                           onLongPress: () async {
                             showDialog(

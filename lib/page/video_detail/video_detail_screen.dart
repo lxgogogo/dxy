@@ -274,6 +274,7 @@ class VideoDetailScreen extends StatelessWidget {
                                     return CommentItem(
                                       commentBean: controller.comments![index],
                                       sourceType: SourceType.video,
+                                      sourceId: controller.id,
                                     );
                                   },
                                   childCount: controller.comments!.length,

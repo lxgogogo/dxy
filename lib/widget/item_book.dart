@@ -27,7 +27,7 @@ class _BookItemState extends State<BookItem> {
     return GestureDetector(
       onTap: () {
         Get.toNamed(Routes.bookDetail, arguments: widget.article.id ?? 0);
-        TrackUtils.trackEvent(userLogType: '106001', params: Get.arguments);
+        TrackUtils.trackEvent(userLogType: '106001', params: widget.article.id ?? 0);
       },
       child: Container(
         height: 132.w,

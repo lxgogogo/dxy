@@ -25,8 +25,13 @@ class FeedListScreen extends StatefulWidget {
 }
 
 class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProviderStateMixin {
-  int currentBoardId = 0;
   List<BoardInfo> boardInfoList = [];
+
+  List<BoardInfo> get showBoardInfoList => [
+        BoardInfo(id: 0, name: '全部'),
+        ...boardInfoList,
+      ];
+
   int selIndex = 0;
 
   final SuperTooltipController _tipController = SuperTooltipController();
@@ -60,9 +65,8 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
     NetRequest().getBoardData(showLoading: false, (data) {
       List<BoardInfo> dataList = List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
       if (mounted) {
-        setState(() {
-          boardInfoList = dataList;
-        });
+        boardInfoList = dataList;
+        setState(() {});
       }
     });
   }
@@ -88,10 +92,6 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   }
 
   Widget detail() {
-    int tabId = 0;
-    if (selIndex != 0) {
-      tabId = boardInfoList[selIndex - 1].id!;
-    }
     return Stack(
       children: [
         Column(
@@ -105,82 +105,35 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 18.w,
-                    ),
-                    GestureDetector(
-                      onTap: TrackUtils.trackedTap(
+                    SizedBox(width: 18.w),
+                    ...List.generate(showBoardInfoList.length, (index) {
+                      return GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selIndex = 0;
-                          });
-                          String order = filterIndex == 0
+                          selIndex = index;
+                          setState(() {});
+                          final order = filterIndex == 0
                               ? 'time'
                               : filterIndex == 1
                                   ? 'comment'
                                   : 'like';
-                          _pageKey.currentState?.refreshData(0, order);
+                          final boardId = showBoardInfoList[selIndex].id;
+                          if (boardId == null) return;
+                          _pageKey.currentState?.refreshData(
+                            boardId,
+                            order,
+                          );
+
+                          TrackUtils.trackEvent(
+                            userLogType: '108001',
+                            params: boardId,
+                          );
                         },
-                        userLogType: '108001',
-                        params: 0,
-                      ),
-                      child: Container(
-                        height: 30.w,
-                        padding: EdgeInsets.symmetric(horizontal: 17.w),
-                        margin: EdgeInsets.only(right: 12.w),
-                        alignment: Alignment.center,
-                        decoration: selIndex != 0
-                            ? ShapeDecoration(
-                                color: '#edeef2'.hexColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                              )
-                            : BoxDecoration(
-                                borderRadius: BorderRadius.circular(24.w),
-                                gradient: const LinearGradient(
-                                  begin: Alignment(1.00, 0.00),
-                                  end: Alignment(-1, 0),
-                                  colors: [
-                                    Color(0xFF84BCF9),
-                                    Color(0xFF557BF6),
-                                  ],
-                                ),
-                              ),
-                        child: Text(
-                          '全部',
-                          style: TextStyle(
-                              color: selIndex == 0 ? Colors.white : '#6f6f70'.hexColor,
-                              fontWeight: selIndex == 0 ? FontWeight.w600 : FontWeight.w500,
-                              fontSize: 12),
-                        ),
-                      ),
-                    ),
-                    ...List.generate(boardInfoList.length, (index) {
-                      return GestureDetector(
-                        onTap: TrackUtils.trackedTap(
-                          onTap: () {
-                            setState(() {
-                              selIndex = index + 1;
-                            });
-                            String order = filterIndex == 0
-                                ? 'time'
-                                : filterIndex == 1
-                                    ? 'comment'
-                                    : 'like';
-                            _pageKey.currentState?.refreshData(boardInfoList[selIndex - 1].id!, order);
-                          },
-                          userLogType: '108001',
-                          params: selIndex - 1 > 0 && selIndex - 1 < boardInfoList.length
-                              ? boardInfoList[selIndex - 1].id
-                              : null,
-                        ),
                         child: Container(
                           height: 30.w,
                           padding: EdgeInsets.symmetric(horizontal: 17.w),
                           margin: EdgeInsets.only(right: 12.w),
                           alignment: Alignment.center,
-                          decoration: selIndex != index + 1
+                          decoration: selIndex != index
                               ? ShapeDecoration(
                                   color: '#edeef2'.hexColor,
                                   shape: RoundedRectangleBorder(
@@ -199,10 +152,10 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                                   ),
                                 ),
                           child: Text(
-                            boardInfoList[index].name!,
+                            showBoardInfoList[index].name!,
                             style: TextStyle(
-                                color: selIndex == index + 1 ? Colors.white : '#6f6f70'.hexColor,
-                                fontWeight: selIndex == index + 1 ? FontWeight.w600 : FontWeight.w500,
+                                color: selIndex == index ? Colors.white : '#6f6f70'.hexColor,
+                                fontWeight: selIndex == index ? FontWeight.w600 : FontWeight.w500,
                                 fontSize: 12),
                           ),
                         ),
@@ -296,9 +249,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                             ),
                           ),
                           child: GestureDetector(
-                            onTap: () {
-                              _tipController.showTooltip();
-                            },
+                            onTap: _tipController.showTooltip,
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
                               child: Row(
@@ -322,14 +273,8 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 12.w,
-                      ),
-                      Expanded(
-                          child: FeedListChildView(
-                        tabId: tabId,
-                        key: _pageKey,
-                      )),
+                      SizedBox(height: 12.w),
+                      Expanded(child: FeedListChildView(key: _pageKey)),
                     ],
                   )),
             )

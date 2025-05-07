@@ -17,9 +17,8 @@ import '../../../widget/report_sheet.dart';
 import '../../../widget/special_classic_footer.dart';
 
 class FeedListChildView extends StatefulWidget {
-  final int tabId;
 
-  const FeedListChildView({super.key, required this.tabId});
+  const FeedListChildView({super.key});
 
   @override
   State<FeedListChildView> createState() => FeedListChildViewState();

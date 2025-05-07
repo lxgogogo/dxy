@@ -27,11 +27,13 @@ class CommentItem extends StatefulWidget {
   final bool isReply;
   final String relType;
   final SourceType sourceType;
+  final int? sourceId;
 
   const CommentItem({
     super.key,
     required this.commentBean,
     required this.sourceType,
+    this.sourceId,
     this.relType = '',
     this.isReply = false,
   });
@@ -208,16 +210,16 @@ class _CommentItemState extends State<CommentItem> {
                             ToastUtils.showToast('点赞成功');
                             switch (widget.sourceType) {
                               case SourceType.video:
-                                TrackUtils.trackEvent(userLogType: '103008', params: widget.commentBean.id);
+                                TrackUtils.trackEvent(userLogType: '103008', params: widget.sourceId);
                                 break;
                               case SourceType.course:
-                                TrackUtils.trackEvent(userLogType: '105007', params: widget.commentBean.id);
+                                TrackUtils.trackEvent(userLogType: '105007', params: widget.sourceId);
                                 break;
                               case SourceType.book:
-                                TrackUtils.trackEvent(userLogType: '107008', params: widget.commentBean.id);
+                                TrackUtils.trackEvent(userLogType: '107008', params: widget.sourceId);
                                 break;
                               case SourceType.feed:
-                                TrackUtils.trackEvent(userLogType: '109007', params: widget.commentBean.id);
+                                TrackUtils.trackEvent(userLogType: '109007', params: widget.sourceId);
                                 break;
                               case SourceType.tool:
                                 // TODO: Handle this case.
@@ -386,16 +388,16 @@ class _CommentItemState extends State<CommentItem> {
                                                 ToastUtils.showToast('点赞成功');
                                                 switch (widget.sourceType) {
                                                   case SourceType.video:
-                                                    TrackUtils.trackEvent(userLogType: '103009', params: reply.id);
+                                                    TrackUtils.trackEvent(userLogType: '103009', params: widget.sourceId);
                                                     break;
                                                   case SourceType.course:
-                                                    TrackUtils.trackEvent(userLogType: '105008', params: reply.id);
+                                                    TrackUtils.trackEvent(userLogType: '105008', params: widget.sourceId);
                                                     break;
                                                   case SourceType.book:
-                                                    TrackUtils.trackEvent(userLogType: '107009', params: reply.id);
+                                                    TrackUtils.trackEvent(userLogType: '107009', params: widget.sourceId);
                                                     break;
                                                   case SourceType.feed:
-                                                    TrackUtils.trackEvent(userLogType: '109008', params: reply.id);
+                                                    TrackUtils.trackEvent(userLogType: '109008', params: widget.sourceId);
                                                     break;
                                                   case SourceType.tool:
                                                     // TODO: Handle this case.

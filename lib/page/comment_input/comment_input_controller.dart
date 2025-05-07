@@ -4,8 +4,14 @@ class CommentInputController extends GetxController {
   final String relType;
   final int relId;
   final SourceType sourceType;
+  final int? sourceId;
 
-  CommentInputController(this.relType, this.relId, this.sourceType);
+  CommentInputController(
+    this.relType,
+    this.relId,
+    this.sourceType,
+    this.sourceId,
+  );
 
   final QuillController quillController = QuillController.basic();
 
@@ -38,19 +44,19 @@ class CommentInputController extends GetxController {
       EventBusUtil.of.fire(EventRefreshPage(relType));
       switch (sourceType) {
         case SourceType.video:
-          TrackUtils.trackEvent(userLogType: '103007', params: relId);
+          TrackUtils.trackEvent(userLogType: '103007', params: sourceId);
           break;
         case SourceType.course:
-          TrackUtils.trackEvent(userLogType: '105006', params: relId);
+          TrackUtils.trackEvent(userLogType: '105006', params: sourceId);
           break;
         case SourceType.book:
-          TrackUtils.trackEvent(userLogType: '107007', params: relId);
+          TrackUtils.trackEvent(userLogType: '107007', params: sourceId);
           break;
         case SourceType.feed:
-          TrackUtils.trackEvent(userLogType: '109006', params: relId);
+          TrackUtils.trackEvent(userLogType: '109006', params: sourceId);
           break;
         case SourceType.tool:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
       }
     });
   }

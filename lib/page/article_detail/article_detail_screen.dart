@@ -134,6 +134,7 @@ class ArticleDetailScreen extends StatelessWidget {
                                   return CommentItem(
                                     commentBean: controller.comments![index],
                                     sourceType: SourceType.course,
+                                    sourceId: controller.id,
                                   );
                                 },
                                 childCount: controller.comments!.length,

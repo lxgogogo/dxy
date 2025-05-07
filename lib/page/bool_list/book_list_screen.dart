@@ -12,6 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../routes/app_pages.dart';
+import '../../utils/track_utils.dart';
 import '../../widget/common_app_bar.dart';
 import '../../widget/item_book.dart';
 import '../../widget/no_data.dart';
@@ -170,6 +171,9 @@ _buildContentView(BookListController controller) {
                     (e) => ThreeDBookItem(
                       itemWidth: itemWidth,
                       item: e,
+                      onTap: () {
+                        TrackUtils.trackEvent(userLogType: '106001', params: e.id ?? 0);
+                      },
                     ),
                   )
                   .toList(),

@@ -292,12 +292,12 @@ class _SettingScreenState extends State<SettingScreen> {
         content: '退出登录您将无法查看个人中心等',
         confirmText: '确认退出',
         onConfirm: () {
+          TrackUtils.trackEvent(userLogType: '117001', params: UserStore.of.user?.id);
           Navigator.of(context).pop();
           NetRequest().logout((data) {
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);
             EventBusUtil.of.fire(EventResetMainTab());
-            TrackUtils.trackEvent(userLogType: '117001');
           });
         },
         cancelText: '取消',

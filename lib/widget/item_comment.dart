@@ -244,6 +244,7 @@ class _CommentItemState extends State<CommentItem> {
                               relType: widget.commentBean.relType ?? '',
                               relId: widget.commentBean.id ?? 0,
                               sourceType: widget.sourceType,
+                              sourceId: widget.sourceId,
                             ),
                           );
                         });

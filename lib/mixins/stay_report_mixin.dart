@@ -5,6 +5,12 @@ mixin StayReportGetxMixin on GetxController {
   Timer? _stayTimer;
   bool _hasReportedStay = false;
 
+  @override
+  void onInit() {
+    startStayReportTimer();
+    super.onInit();
+  }
+
   /// 启动监听（建议在 onInit 或 onReady 中调用）
   void startStayReportTimer() {
     _stayTimer = Timer(const Duration(minutes: 1), () {

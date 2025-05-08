@@ -308,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     (e) => SizedBox(
                                                       width: itemWidth,
                                                       child: VideoItem(
-                                                        onTap: () => TrackUtils.trackEvent(userLogType: '101006'),
+                                                        onTap: () => TrackUtils.trackEvent(userLogType: '101006', params: e.id),
                                                         item: ArticleBean(
                                                           id: e.id,
                                                           cover: e.cover,

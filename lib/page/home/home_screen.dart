@@ -422,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   .map((e) => ThreeDBookItem(
                                                       itemWidth: itemWidth,
                                                       item: e,
-                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101012')))
+                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101012', params: e.id)))
                                                   .toList(),
                                             );
                                           },

@@ -281,9 +281,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
       'state': widget.viewParams.liked ?? false ? false : true,
     });
     if (data is int) {
-      widget.viewParams.likeCount = data;
-      widget.viewParams.liked = !(widget.viewParams.liked ?? false);
-      if (widget.viewParams.liked == true) {
+      if (widget.viewParams.liked != true) {
         ToastUtils.showToast('点赞成功');
         switch (widget.sourceType) {
           case SourceType.video:
@@ -303,7 +301,14 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
       } else {
         ToastUtils.showToast('取消点赞成功');
       }
-      EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
+      if (widget.viewParams.liked == true) {
+        widget.viewParams.liked = false;
+        widget.viewParams.likeCount = widget.viewParams.likeCount - 1;
+      } else {
+        widget.viewParams.liked = true;
+        widget.viewParams.likeCount = widget.viewParams.likeCount + 1;
+      }
+      setState(() {});
       return true;
     }
     return false;
@@ -330,7 +335,8 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
           widget.viewParams.favoriteState = true;
           widget.viewParams.favoriteCount = widget.viewParams.favoriteCount + 1;
         }
-        EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
+        setState(() {});
+        // EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
         // switch (widget.sourceType) {
         //   case SourceType.video:
         //     TrackUtils.trackEvent(userLogType: '103004', params: widget.viewParams.relId);
@@ -365,6 +371,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         ToastUtils.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
+        setState(() {});
         switch (widget.sourceType) {
           case SourceType.video:
             TrackUtils.trackEvent(userLogType: '103005', params: widget.viewParams.relId);

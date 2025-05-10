@@ -206,12 +206,10 @@ class _SettingScreenState extends State<SettingScreen> {
     required String url,
   }) {
     return GestureDetector(
-      onTap: TrackUtils.trackedTap(
-        onTap: () {
-          launchUrl(Uri.parse(url));
-        },
-        userLogType: '116001',
-      ),
+      onTap: () {
+        launchUrl(Uri.parse(url));
+        TrackUtils.trackEvent(userLogType: '116001', params: url);
+      },
       behavior: HitTestBehavior.translucent,
       child: Padding(
         padding: EdgeInsets.only(right: 20.w),

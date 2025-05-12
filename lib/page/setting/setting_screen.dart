@@ -82,16 +82,20 @@ class _SettingScreenState extends State<SettingScreen> {
                 behavior: HitTestBehavior.translucent,
                 child: Container(
                   height: 56.w,
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         '修改密码',
-                        style: AppTheme.text333333Size16,
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: AppTheme.color_333333
+                        )
                       ),
                       ImageIcon(
-                        AssetImage('assets/images/edit_password.png'),
-                        size: 20,
+                        const AssetImage('assets/images/edit_password.png'),
+                        size: 12.w,
+                        color: AppTheme.color_999999,
                       )
                     ],
                   ),
@@ -111,15 +115,21 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           '检查更新',
-                          style: AppTheme.text333333Size16,
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppTheme.color_333333
+                          )
                         ),
                         Row(
                           children: [
                             Text(
                               '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
-                              style: AppTheme.text333333Size16,
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: AppTheme.color_333333
+                              )
                             ),
                             if (_canUpdate)
                               Container(
@@ -148,9 +158,12 @@ class _SettingScreenState extends State<SettingScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '联系我们',
-                  style: AppTheme.text333333Size16,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: AppTheme.color_333333
+                  ),
                 ),
                 SizedBox(height: 16.w),
                 Row(
@@ -189,7 +202,7 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Text(
                 '退出登录',
                 style: TextStyle(
-                  color: '#333333'.hexColor.withOpacity(0.7),
+                  color: AppTheme.color_999999,
                   fontSize: 16.sp,
                 ),
               ),
@@ -288,7 +301,7 @@ class _SettingScreenState extends State<SettingScreen> {
       builder: (context) => CommonDialog(
         title: '退出登录',
         content: '退出登录您将无法查看个人中心等',
-        confirmText: '确认退出',
+        confirmText: '退出',
         onConfirm: () {
           TrackUtils.trackEvent(userLogType: '117001', params: UserStore.of.user?.id);
           Navigator.of(context).pop();

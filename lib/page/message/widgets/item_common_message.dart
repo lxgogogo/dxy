@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/message.dart';
+import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/item_comment.dart';
@@ -106,116 +108,127 @@ class MessageCommonItem extends StatelessWidget {
         onTap?.call();
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-        decoration: BoxDecoration(
-          color: item.readStatus == 1 ? Colors.transparent : '#557BF6'.hexColor.withOpacity(0.05),
-          border: Border(
-            bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 1.w),
+        alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w).copyWith(bottom: 0),
+          decoration: BoxDecoration(
+            color: item.readStatus == 1 ? Colors.white : '#557BF6'.hexColor.withOpacity(0.05),
           ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 36.w,
-              height: 36.w,
-              child: Stack(
-                fit: StackFit.expand,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  BorderAvatar(avatar: item.fromUser?.avatar ?? ''),
-                  // if (smallIcon?.isNotEmpty == true)
-                  //   Positioned(
-                  //     right: 0,
-                  //     bottom: 0,
-                  //     child: Image.asset(
-                  //       smallIcon!,
-                  //       width: 12.w,
-                  //       height: 12.w,
+                  SizedBox(
+                    width: 42.w,
+                    height: 42.w,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        BorderAvatar(avatar: item.fromUser?.avatar ?? '', avatarSize: 42.w),
+                        // if (smallIcon?.isNotEmpty == true)
+                        //   Positioned(
+                        //     right: 0,
+                        //     bottom: 0,
+                        //     child: Image.asset(
+                        //       smallIcon!,
+                        //       width: 12.w,
+                        //       height: 12.w,
+                        //     ),
+                        //   )
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                item.fromUser?.nickname ?? '',
+                                style: TextStyle(
+                                  color: ColorStyle.c333333,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              item.createdAt != null
+                                  ? DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)
+                                  : '',
+                              style: TextStyle(
+                                color: AppTheme.color_999999,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 4.w),
+                        Row(
+                          children: [
+                            Text(
+                              tipTitle ?? '',
+                              style: TextStyle(
+                                color: AppTheme.color_666666,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              title ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: ColorStyle.c333333,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600
+                              ),
+                            ),
+                          ],
+                        ),
+                        //  SizedBox(height: 8.w),
+                      ],
+                    ),
+                  ),
+                  // if(isFavorite)
+                  // Container(
+                  //   width: 70,
+                  //   height: 28,
+                  //   decoration: ShapeDecoration(
+                  //     shape: RoundedRectangleBorder(
+                  //       side: const BorderSide(width: 1, color: Color(0xFF557BF6)),
+                  //       borderRadius: BorderRadius.circular(4),
                   //     ),
-                  //   )
+                  //   ),
+                  //   child:const Center(
+                  //     child: Text(
+                  //       '回关',
+                  //       style: TextStyle(
+                  //         color: Color(0xFF557BF6),
+                  //         fontSize: 12.sp,
+                  //         fontFamily: 'PingFang SC',
+                  //         fontWeight: FontWeight.w600,
+                  //       ),
+                  //     ),
+                  //   ) ,
+                  // )
                 ],
               ),
-            ),
-            SizedBox(width: 8.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          item.fromUser?.nickname ?? '',
-                          style: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        item.createdAt != null
-                            ? DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)
-                            : '',
-                        style: TextStyle(
-                          color: '#333333'.hexColor.withOpacity(0.7),
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4.w),
-                  Row(
-                    children: [
-                      Text(
-                        tipTitle ?? '',
-                        style: TextStyle(
-                          color: '#333333'.hexColor,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        title ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: '##333333'.hexColor,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  //  SizedBox(height: 8.w),
-                ],
-              ),
-            ),
-            // if(isFavorite)
-            // Container(
-            //   width: 70,
-            //   height: 28,
-            //   decoration: ShapeDecoration(
-            //     shape: RoundedRectangleBorder(
-            //       side: const BorderSide(width: 1, color: Color(0xFF557BF6)),
-            //       borderRadius: BorderRadius.circular(4),
-            //     ),
-            //   ),
-            //   child:const Center(
-            //     child: Text(
-            //       '回关',
-            //       style: TextStyle(
-            //         color: Color(0xFF557BF6),
-            //         fontSize: 12.sp,
-            //         fontFamily: 'PingFang SC',
-            //         fontWeight: FontWeight.w600,
-            //       ),
-            //     ),
-            //   ) ,
-            // )
-          ],
-        ),
-      ),
+              Container(
+                margin: EdgeInsets.only(top: 12.w),
+                height: 1.w,
+                color: Colors.black.withOpacity(0.05),
+              )
+            ],
+          )
+      )
     );
   }
 }

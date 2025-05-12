@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/utils/track_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
@@ -51,69 +52,60 @@ class _PersonalScreenState extends State<PersonalScreen> {
               return Column(
                 children: [
                   SizedBox(
-                    height: 23.5.w,
+                    height: 26.w,
                   ),
-                  SizedBox(
-                    width: 88.w,
-                    height: 88.w,
-                    child: ClipOval(
-                      child: IndexedStack(
-                        index: controller.imageUrl.isNotEmpty ? 0 : 1,
+                  Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: controller.selectImage,
+                        child: SizedBox(
+                          width: 88.w,
+                          height: 88.w,
+                          child: ClipOval(
+                            child: IndexedStack(
+                              index: controller.imageUrl.isNotEmpty ? 0 : 1,
 
-                        /// 保留新netImage渲染,返回后也能加快加载
-                        sizing: StackFit.expand,
-                        children: [
-                          Image.file(
-                            File(controller.imageUrl),
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                              fit: BoxFit.fill,
+                              /// 保留新netImage渲染,返回后也能加快加载
+                              sizing: StackFit.expand,
+                              children: [
+                                Image.file(
+                                  File(controller.imageUrl),
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: UserStore.of.user?.avatar ?? '',
+                                  cacheKey: UserStore.of.user?.avatar ?? '',
+                                  placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )),
+                                  errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: UserStore.of.user?.avatar ?? '',
-                            cacheKey: UserStore.of.user?.avatar ?? '',
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.white,
-                            )),
-                            errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Positioned(
+                        left: (88.w - 16.w)/2,
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: controller.selectImage,
+                          child: Image.asset(
+                            Assets.images.icMineCamera.path,
+                            width: 16.w,
+                          ),
+                        )
+                      )
+                    ],
                   ),
                   SizedBox(height: 12.w),
-                  GestureDetector(
-                    onTap: controller.selectImage,
-                    child: Container(
-                      width: 72.w,
-                      height: 30.w,
-                      decoration: ShapeDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF557BF6),
-                            Color(0xFF84BCF9),
-                          ],
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        '修改头像',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
                   Expanded(
                     child: Container(
                       padding: EdgeInsets.all(12.w).copyWith(top: 0),
@@ -226,7 +218,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                   Text(
                                     '第三方账号绑定',
                                     style: TextStyle(
-                                      fontSize: 18.sp,
+                                      fontSize: 16.sp,
                                       color: '#333333'.hexColor,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -299,8 +291,8 @@ class _PersonalScreenState extends State<PersonalScreen> {
                             child: Text(
                               '注销账号',
                               style: TextStyle(
-                                fontSize: 16.sp,
-                                color: '#FF3333'.hexColor,
+                                fontSize: 14.sp,
+                                color: AppTheme.color_999999,
                               ),
                             ),
                           ),
@@ -334,7 +326,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
             Text(
               label,
               style: TextStyle(
-                color: '#333333'.hexColor,
+                color: AppTheme.color_666666,
                 fontSize: 14.sp,
               ),
             ),
@@ -343,8 +335,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
               child: Text(
                 value,
                 style: TextStyle(
-                  color: '#333333'.hexColor,
+                  color: AppTheme.color_333333,
                   fontSize: 14.sp,
+                  fontWeight: FontWeight.w600
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -390,17 +383,9 @@ class _PersonalScreenState extends State<PersonalScreen> {
                 width: 60.w,
                 height: 24.w,
                 decoration: ShapeDecoration(
-                  color: isBind ? '#333333'.hexColor.withOpacity(0.1) : null,
-                  gradient: isBind
-                      ? null
-                      : const LinearGradient(
-                          colors: [
-                            Color(0xFF557BF6),
-                            Color(0xFF84BCF9),
-                          ],
-                        ),
+                  color: isBind ? '#333333'.hexColor.withOpacity(0.1) : AppTheme.color_557BF6,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4.r),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                 ),
                 alignment: Alignment.center,

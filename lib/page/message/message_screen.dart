@@ -52,83 +52,18 @@ class _MessagePageState extends State<MessagePage>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _buildNoticeBtnWidget(controller),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 4.w),
-                            child: Obx(() {
-                              return TabBar(
-                                controller: controller.tabController,
-                                tabs: MessageType.values.map((e) {
-                                  final unReadCount = switch (e) {
-                                    MessageType.at =>
-                                      UserStore.of.badgeModel.value?.at,
-                                    MessageType.comment =>
-                                      UserStore.of.badgeModel.value?.comment,
-                                    MessageType.like =>
-                                      UserStore.of.badgeModel.value?.like,
-                                    MessageType.favorite =>
-                                      UserStore.of.badgeModel.value?.favorite,
-                                  };
-                                  return Tab(
-                                    child: Stack(
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        Text(e.title),
-                                        if ((unReadCount ?? 0) > 0)
-                                          Positioned(
-                                            right: -4.w,
-                                            top: -4.w,
-                                            child: Container(
-                                              width: 8.w,
-                                              height: 8.w,
-                                              decoration: const ShapeDecoration(
-                                                color: Color(0xFFFF3232),
-                                                shape: OvalBorder(),
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                                isScrollable: true,
-                                tabAlignment: TabAlignment.start,
-                                indicator: RoundUnderlineTabIndicator(
-                                  borderSide: BorderSide(
-                                      width: 2.w,
-                                      color: const Color(0xff4260FF)),
-                                  wantToWith: 12.w,
-                                ),
-                                enableFeedback: false,
-                                overlayColor:
-                                    WidgetStateProperty.resolveWith<Color>((_) {
-                                  return Colors.transparent;
-                                }),
-                                dividerHeight: 0,
-                                labelStyle: TextStyle(
-                                  color: const Color(0xff2c2c2c),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                unselectedLabelStyle: TextStyle(
-                                  color: const Color(0xff666666),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
+                        _buildNoticeBtnWidget(controller),
                         Obx(() {
                           return GestureDetector(
                             onTap: controller.messageReadAll,
                             child: Opacity(
                               opacity: controller.unReadCount > 0 ? 1 : 0.3,
                               child: Padding(
-                                padding: EdgeInsets.only(right: 16.w),
+                                padding: EdgeInsets.only(right: 16.w, top: 26.w),
                                 child: SvgPicture.asset(
                                   Assets.svg.messageClean,
                                 ),
@@ -137,6 +72,73 @@ class _MessagePageState extends State<MessagePage>
                           );
                         }),
                       ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.zero,
+                      child: Obx(() {
+                        return TabBar(
+                          controller: controller.tabController,
+                          tabs: MessageType.values.map((e) {
+                            final unReadCount = switch (e) {
+                              MessageType.at =>
+                              UserStore.of.badgeModel.value?.at,
+                              MessageType.comment =>
+                              UserStore.of.badgeModel.value?.comment,
+                              MessageType.like =>
+                              UserStore.of.badgeModel.value?.like,
+                              MessageType.favorite =>
+                              UserStore.of.badgeModel.value?.favorite,
+                            };
+                            return Tab(
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Text(e.title),
+                                  if ((unReadCount ?? 0) > 0)
+                                    Positioned(
+                                      right: -4.w,
+                                      top: -4.w,
+                                      child: Container(
+                                        width: 8.w,
+                                        height: 8.w,
+                                        decoration: const ShapeDecoration(
+                                          color: Color(0xFFFF3232),
+                                          shape: OvalBorder(),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          indicator: RoundUnderlineTabIndicator(
+                            borderSide: BorderSide(
+                                width: 2.w,
+                                color: const Color(0xff4260FF)),
+                            wantToWith: 12.w,
+                            insets: EdgeInsets.symmetric(vertical: 8.w),
+                          ),
+                          enableFeedback: false,
+                          overlayColor:
+                          WidgetStateProperty.resolveWith<Color>((_) {
+                            return Colors.transparent;
+                          }),
+                          dividerHeight: 0,
+                          labelPadding: EdgeInsets.symmetric(horizontal: 20.w),
+                          labelStyle: TextStyle(
+                            color: const Color(0xff2c2c2c),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: const Color(0xff666666),
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        );
+                      }),
                     ),
                     Expanded(
                       child: TabBarView(

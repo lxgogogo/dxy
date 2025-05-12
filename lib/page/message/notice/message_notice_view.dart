@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -133,10 +134,10 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       ? Opacity(
                       opacity: 0.7,
                       child: BorderAvatar(
-                          avatarSize: 38.w,
+                          avatarSize: 44.w,
                           avatar: model.sendUserHeadimg ?? ''))
                       : BorderAvatar(
-                      avatarSize: 38.w,
+                      avatarSize: 44.w,
                       avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
                   Expanded(
@@ -150,16 +151,13 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                 child: Text(
                                   model.sendUserName ?? '',
                                   style: TextStyle(
-                                      fontSize: 12.sp,
-                                      fontWeight: model.isReader == 1
-                                          ? FontWeight.w400
-                                          : FontWeight.w600,
+                                      fontSize: 14.sp,
                                       color: ColorStyle.c333333),
                                 )),
                             Text(dateStr,
                                 style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: ColorStyle.c333333.withOpacity(0.7)))
+                                    fontSize: 10.sp,
+                                    color: AppTheme.color_999999))
                           ],
                         ),
                         SizedBox(height: 3.w),
@@ -168,10 +166,8 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                              color: model.isReader == 0
-                                  ? ColorStyle.c333333
-                                  : ColorStyle.c333333.withOpacity(0.7),
-                              fontSize: 10.sp,
+                              color: AppTheme.color_666666,
+                              fontSize: 14.sp,
                             ))
                       ],
                     ),
@@ -182,7 +178,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
               Container(
                   height: 1.w,
                   margin: const EdgeInsets.symmetric(horizontal: 0),
-                  color: ColorStyle.c333333.withOpacity(0.05))
+                  color: Colors.black.withOpacity(0.05))
             ],
           )
       )

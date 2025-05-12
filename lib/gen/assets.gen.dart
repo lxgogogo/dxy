@@ -343,6 +343,10 @@ class $AssetsImagesGen {
   AssetGenImage get icFacebook =>
       const AssetGenImage('assets/images/ic_facebook.png');
 
+  /// File path: assets/images/ic_mine_camera.png
+  AssetGenImage get icMineCamera =>
+      const AssetGenImage('assets/images/ic_mine_camera.png');
+
   /// File path: assets/images/ic_telegram.png
   AssetGenImage get icTelegram =>
       const AssetGenImage('assets/images/ic_telegram.png');
@@ -784,6 +788,7 @@ class $AssetsImagesGen {
         homeTop,
         homeVideo,
         icFacebook,
+        icMineCamera,
         icTelegram,
         icTiktok,
         icTwitter,

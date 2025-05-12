@@ -22,6 +22,7 @@ class ArticleDetailController extends GetxController with StayReportGetxMixin {
     id = Get.arguments as int?;
     super.onInit();
     eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
+      detailBean?.commentCount = (detailBean?.commentCount ?? 0) + 1;
       onRefresh();
     });
     dataInit();

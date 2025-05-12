@@ -51,6 +51,7 @@ class VideoDetailController extends GetxController {
     childId = Get.arguments['childId'] as int?;
     super.onInit();
     _eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
+      detailBean?.commentCount = (detailBean?.commentCount ?? 0) + 1;
       onRefresh();
     });
     dataInit();

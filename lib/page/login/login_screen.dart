@@ -91,7 +91,11 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Stack(
                   children: [
-                    Image.asset('assets/images/login_bg.png'),
+                    Image.asset(
+                        'assets/images/login_bg.png',
+                      height: 160.w,
+                      fit: BoxFit.contain,
+                    ),
                     Positioned(
                       child: SafeArea(
                         child: Container(
@@ -101,14 +105,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Image.asset(
-                                'assets/images/logo.png',
-                                height: 23.w,
+                              SizedBox(
+                                width: 96.w,
+                                height: 20.w,
                               ),
                               CloseImageButton(
                                 width: 16.w,
                                 height: 16.w,
-                                padding: EdgeInsets.all(16.w),
+                                padding: EdgeInsets.all(16.w).copyWith(top: 0),
                                 onTap: Get.back,
                               ),
                             ],
@@ -132,14 +136,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             Text(
                               '登录',
                               style: TextStyle(
-                                fontSize: 20.sp,
+                                fontSize: isLogin ? 18.sp : 14.sp,
                                 fontWeight: isLogin ? FontWeight.w600 : FontWeight.w400,
                                 color: isLogin ? '#333333'.hexColor : '#333333'.hexColor,
                               ),
                             ),
                             Container(
-                              width: 21.w,
-                              height: 4.w,
+                              width: 12.w,
+                              height: 2.w,
                               margin: EdgeInsets.only(top: 4.w),
                               decoration: BoxDecoration(
                                 color: isLogin ? '#557BF6'.hexColor : Colors.transparent,
@@ -165,14 +169,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             Text(
                               '注册',
                               style: TextStyle(
-                                fontSize: 20.sp,
+                                fontSize: isLogin ? 14.sp : 18.sp,
                                 fontWeight: !isLogin ? FontWeight.w600 : FontWeight.w400,
                                 color: !isLogin ? '#333333'.hexColor : '#333333'.hexColor,
                               ),
                             ),
                             Container(
-                              width: 21.w,
-                              height: 4.w,
+                              width: 12.w,
+                              height: 2.w,
                               margin: EdgeInsets.only(top: 4.w),
                               decoration: BoxDecoration(
                                 color: !isLogin ? '#557BF6'.hexColor : Colors.transparent,
@@ -225,6 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 showOpacityAnimation: true,
                 textColor: Colors.white,
                 height: 42.w,
+                radius: 8.w,
                 title: isLogin ? '登录' : '注册',
               ),
               SizedBox(height: 20.w),
@@ -238,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '没有账号？',
+                        isLogin ? '没有账号？' : '已有账号？',
                         style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                       ),
                       Text(

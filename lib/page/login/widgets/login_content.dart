@@ -167,7 +167,7 @@ class _LoginContentState extends State<LoginContent> {
                       }
                     },
                   ),
-                  SizedBox(height: 12.w),
+                  SizedBox(height: 16.w),
                   Container(
                     height: 40.w,
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -216,7 +216,7 @@ class _LoginContentState extends State<LoginContent> {
                     ),
                   ),
                   Padding(
-                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
                     child: Text(
                       isShowAccountTips ? type.tips : '',
                       style: TextStyle(
@@ -269,7 +269,7 @@ class _LoginContentState extends State<LoginContent> {
                     ),
                   ),
                   Padding(
-                    padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
+                    padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
                     child: Text(
                       isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
                       style: TextStyle(

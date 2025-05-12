@@ -105,7 +105,7 @@ class _TypeSelectorState extends State<TypeSelector> {
               Expanded(
                 child: Text(
                   widget.typeList[widget.typeIndex],
-                  style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
+                  style: TextStyle(fontSize: 14.sp, color: '#333333'.hexColor),
                 ),
               ),
               SvgPicture.asset(

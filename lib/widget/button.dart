@@ -47,7 +47,7 @@ class CustomButton extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(height / 2),
+          borderRadius: BorderRadius.circular(radius != null ? radius! : height / 2),
           image: DecorationImage(
             image: AssetImage(isCancel ? 'assets/images/logout_btn.png' : 'assets/images/login_btn.png'),
             fit: BoxFit.fill,
@@ -61,7 +61,7 @@ class CustomButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(height * 0.5),
+              borderRadius: BorderRadius.circular(radius != null ? radius! : height * 0.5),
             ),
           ),
           child: Text(

@@ -28,10 +28,10 @@ class EventBusUtil {
 }
 
 /// event
-class EventRefreshPage {
+class EventRefreshComments {
   final String relType;
 
-  EventRefreshPage(this.relType);
+  EventRefreshComments(this.relType);
 }
 
 class EventRefreshNum {

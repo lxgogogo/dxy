@@ -21,8 +21,8 @@ class BookDetailController extends GetxController {
   void onInit() {
     id = Get.arguments as int?;
     super.onInit();
-    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail(showLoading: false);
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
+      onRefresh();
     });
     dataInit();
   }

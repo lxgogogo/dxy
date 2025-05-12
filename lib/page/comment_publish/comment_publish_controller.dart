@@ -106,7 +106,7 @@ class CommentPublishController extends GetxController {
     EasyLoading.dismiss();
     ToastUtils.showToast('发布成功');
     Get.back();
-    EventBusUtil.of.fire(EventRefreshPage(relType));
+    EventBusUtil.of.fire(EventRefreshComments(relType));
     switch (sourceType) {
       case SourceType.video:
         TrackUtils.trackEvent(userLogType: '103006', params: relId);

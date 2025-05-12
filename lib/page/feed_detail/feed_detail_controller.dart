@@ -24,8 +24,8 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
   void onInit() async {
     id = Get.arguments as int?;
     super.onInit();
-    eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestDetail(showLoading: false);
+    eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
+      onRefresh();
     });
     dataInit();
   }
@@ -249,6 +249,6 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
 
   @override
   void onStayReported() {
-    TrackUtils.trackEvent(userLogType: '109010', params: id);
+    // TrackUtils.trackEvent(userLogType: '109010', params: id);
   }
 }

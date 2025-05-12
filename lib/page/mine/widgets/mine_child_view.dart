@@ -145,7 +145,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
         _onRefresh();
       }
     });
-    eventSub1 = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
+    eventSub1 = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
       _onRefresh();
     });
     eventSub2 = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {

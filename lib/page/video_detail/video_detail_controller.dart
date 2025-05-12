@@ -50,8 +50,8 @@ class VideoDetailController extends GetxController {
     id = Get.arguments['id'] as int?;
     childId = Get.arguments['childId'] as int?;
     super.onInit();
-    _eventSubscription = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
-      requestData(showLoading: false);
+    _eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
+      onRefresh();
     });
     dataInit();
   }
@@ -265,7 +265,7 @@ class VideoDetailController extends GetxController {
       // 上报逻辑：每满1分钟上报一次，最多上报到3分钟
       if (currentDuration >= 60 * (reportedMinutes + 1) && reportedMinutes < 3) {
         reportedMinutes++;
-        TrackUtils.trackEvent(userLogType: '103012', params: [id.toString(), reportedMinutes].join(','));
+        // TrackUtils.trackEvent(userLogType: '103012', params: [id.toString(), reportedMinutes].join(','));
       }
     }
   }

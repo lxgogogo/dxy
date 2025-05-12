@@ -41,7 +41,7 @@ class CommentInputController extends GetxController {
     NetRequest().commentCreate('comment', relId, content, at: atList, (data) {
       ToastUtils.showToast('发布成功');
       Get.back();
-      EventBusUtil.of.fire(EventRefreshPage(relType));
+      EventBusUtil.of.fire(EventRefreshComments(relType));
       switch (sourceType) {
         case SourceType.video:
           TrackUtils.trackEvent(userLogType: '103007', params: sourceId);

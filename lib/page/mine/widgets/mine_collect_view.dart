@@ -173,7 +173,7 @@ class _MineCollectViewState extends State<MineCollectView>
     _reqListData();
     _requestGroupData();
 
-    eventSub1 = EventBusUtil.of.on<EventRefreshPage>().listen((event) {
+    eventSub1 = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
       _onRefresh();
     });
     eventSub2 = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {

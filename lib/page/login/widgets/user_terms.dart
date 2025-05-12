@@ -8,6 +8,7 @@ class UserTerms extends StatelessWidget {
   final ValueNotifier<bool> didAgreeTerms;
   final VoidCallback reviewTerms;
   final VoidCallback reviewPrivacy;
+  final bool showSelectBtn;
 
   const UserTerms({
     super.key,
@@ -15,46 +16,48 @@ class UserTerms extends StatelessWidget {
     required this.didAgreeTerms,
     required this.reviewTerms,
     required this.reviewPrivacy,
+    this.showSelectBtn = true
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ValueListenableBuilder(
-          valueListenable: didAgreeTerms,
-          builder: (
-            BuildContext context,
-            bool didAgreeTerms,
-            Widget? child,
-          ) {
-            return InkWell(
-              onTap: onTermsCheck,
-              child: Container(
-                margin: EdgeInsets.only(right: 8.w),
-                width: 16.w,
-                height: 16.w,
-                decoration: BoxDecoration(
-                  color: didAgreeTerms ? '#557BF6'.hexColor : null,
-                  border: didAgreeTerms
-                      ? null
-                      : Border.all(
-                          color: '#333333'.hexColor.withOpacity(0.3),
-                          width: 1.w,
-                        ),
-                  borderRadius: BorderRadius.circular(4.r),
+        if (showSelectBtn)
+          ValueListenableBuilder(
+            valueListenable: didAgreeTerms,
+            builder: (
+                BuildContext context,
+                bool didAgreeTerms,
+                Widget? child,
+                ) {
+              return InkWell(
+                onTap: onTermsCheck,
+                child: Container(
+                  margin: EdgeInsets.only(right: 8.w),
+                  width: 16.w,
+                  height: 16.w,
+                  decoration: BoxDecoration(
+                    color: didAgreeTerms ? '#557BF6'.hexColor : null,
+                    border: didAgreeTerms
+                        ? null
+                        : Border.all(
+                      color: '#333333'.hexColor.withOpacity(0.3),
+                      width: 1.w,
+                    ),
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                  child: didAgreeTerms
+                      ? Icon(
+                    Icons.check,
+                    color: Colors.white,
+                    size: 12.sp,
+                  )
+                      : null,
                 ),
-                child: didAgreeTerms
-                    ? Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 12.sp,
-                      )
-                    : null,
-              ),
-            );
-          },
-        ),
+              );
+            },
+          ),
         Flexible(
           child: Text.rich(
             TextSpan(

@@ -228,9 +228,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 disable: disable ?? false,
                 showOpacityAnimation: true,
                 textColor: Colors.white,
-                height: 42.w,
+                height: 48.w,
                 radius: 8.w,
                 title: isLogin ? '登录' : '注册',
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
               ),
               SizedBox(height: 20.w),
               Center(

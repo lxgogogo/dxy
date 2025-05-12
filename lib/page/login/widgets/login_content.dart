@@ -217,11 +217,14 @@ class _LoginContentState extends State<LoginContent> {
                   ),
                   Padding(
                     padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
-                    child: Text(
-                      isShowAccountTips ? type.tips : '',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                    child: SizedBox(
+                      height: 16.w,
+                      child: Text(
+                        isShowAccountTips ? type.tips : '',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                        ),
                       ),
                     ),
                   ),
@@ -270,11 +273,14 @@ class _LoginContentState extends State<LoginContent> {
                   ),
                   Padding(
                     padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
-                    child: Text(
-                      isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                    child: SizedBox(
+                      height: 16.w,
+                      child: Text(
+                        isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                        ),
                       ),
                     ),
                   ),
@@ -286,6 +292,7 @@ class _LoginContentState extends State<LoginContent> {
                           didAgreeTerms: didAgreeTerms,
                           reviewTerms: reviewTerms,
                           reviewPrivacy: reviewPrivacy,
+                          showSelectBtn: false,
                         ),
                       ),
                       if (!isUsername)

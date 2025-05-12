@@ -183,14 +183,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Image.asset(
-                            'assets/images/logo.png',
-                            height: 23.w,
+                          SizedBox(
+                            width: 96.w,
+                            height: 20.w,
                           ),
                           CloseImageButton(
                             width: 16.w,
                             height: 16.w,
-                            padding: EdgeInsets.all(16.w),
+                            padding: EdgeInsets.all(16.w).copyWith(top: 0),
                             onTap: Get.back,
                           ),
                         ],
@@ -207,7 +207,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   Text(
                     '忘记密码',
                     style: TextStyle(
-                      fontSize: 20.sp,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
                       color: '#333333'.hexColor,
                     ),
@@ -247,7 +247,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         }
                       },
                     ),
-                    SizedBox(height: 12.w),
+                    SizedBox(height: 16.w),
                     Container(
                       height: 40.w,
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -296,12 +296,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                      child: Text(
-                        isShowAccountTips ? type.tips : '',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                      padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
+                      child: SizedBox(
+                        height: 16.w,
+                        child: Text(
+                          isShowAccountTips ? type.tips : '',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                          ),
                         ),
                       ),
                     ),
@@ -343,12 +346,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         ),
                       ),
                       Padding(
-                        padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 3.w) : EdgeInsets.zero,
-                        child: Text(
-                          isShowCodeTips ? '*验证码错误' : '',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                        padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
+                        child: SizedBox(
+                          height: 16.w,
+                          child: Text(
+                            isShowCodeTips ? '*验证码错误' : '',
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                            ),
                           ),
                         ),
                       ),
@@ -397,16 +403,19 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 6.w),
-                      child: Text(
-                        isShowPwTips
-                            ? isContainsInvalidChars
-                                ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
-                                : '*至少包含一位大小写字母+数字'
-                            : '*8-12字符，至少包含大小写字母+数字',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                      padding: EdgeInsets.symmetric(vertical: 10.w),
+                      child: SizedBox(
+                        height: 16.w,
+                        child: Text(
+                          isShowPwTips
+                              ? isContainsInvalidChars
+                              ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
+                              : '*至少包含一位大小写字母+数字'
+                              : '*8-12字符，至少包含大小写字母+数字',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                          ),
                         ),
                       ),
                     ),
@@ -456,12 +465,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(vertical: 6.w),
-                        child: Text(
-                          isShowAgainTips ? '*两次输入的密码不一致' : '*8-12字符，至少包含大小写字母+数字',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
+                        padding: EdgeInsets.symmetric(vertical: 10.w),
+                        child: SizedBox(
+                          height: 16.w,
+                          child: Text(
+                            isShowAgainTips ? '*两次输入的密码不一致' : '*8-12字符，至少包含大小写字母+数字',
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
+                            ),
                           ),
                         )),
                     SizedBox(height: 24.w),
@@ -469,8 +481,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       onPressed: registerOrConfirm,
                       disable: _isLoginDisable,
                       textColor: Colors.white,
-                      height: 42.w,
+                      height: 48.w,
+                      radius: 8.w,
                       title: '找回密码',
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ],
                 ),

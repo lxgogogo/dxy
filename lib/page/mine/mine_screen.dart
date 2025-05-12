@@ -215,6 +215,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               indicator: RoundUnderlineTabIndicator(
                                 borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
                                 wantToWith: 12.w,
+                                insets: EdgeInsets.only(bottom:3.w)
                               ),
                               enableFeedback: false,
                               overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
@@ -223,7 +224,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                               dividerHeight: 0,
                               labelStyle: TextStyle(
                                 color: const Color(0xff333333),
-                                fontSize: 16.sp,
+                                fontSize: 18.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                               unselectedLabelStyle: TextStyle(

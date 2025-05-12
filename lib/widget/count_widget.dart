@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/utils/app_theme.dart';
 
 import 'like_button/like_button.dart';
 import 'package:badges/badges.dart' as badges;
@@ -392,8 +393,8 @@ class SimpleCountText extends StatelessWidget {
                   Text(
                     '000.0M',
                     style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
-                      fontSize: 12.sp,
+                      color: AppTheme.color_999999,
+                      fontSize: 10.sp,
                     ),
                   ),
                   SizedBox(width: 2.w),
@@ -401,8 +402,8 @@ class SimpleCountText extends StatelessWidget {
                     desc,
                     style: descStyle ??
                         TextStyle(
-                          color: const Color(0xff999999),
-                          fontSize: 12.sp,
+                          color: AppTheme.color_999999,
+                          fontSize: 10.sp,
                         ),
                   ),
                 ],
@@ -417,7 +418,7 @@ class SimpleCountText extends StatelessWidget {
                   '000',
                   style: TextStyle(
                     color: const Color(0xff9CACC9),
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                   ),
                 ),
                 SizedBox(width: 2.w),
@@ -425,8 +426,8 @@ class SimpleCountText extends StatelessWidget {
                   desc,
                   style: descStyle ??
                       TextStyle(
-                        color: const Color(0xff999999),
-                        fontSize: 12.sp,
+                        color: AppTheme.color_999999,
+                        fontSize: 10.sp,
                       ),
                 ),
               ],
@@ -439,17 +440,17 @@ class SimpleCountText extends StatelessWidget {
             Text(
               count,
               style: TextStyle(
-                color: const Color(0xff999999),
-                fontSize: 12.sp,
-              ),
+                color: AppTheme.color_999999,
+                fontSize: 10.sp,
+              )
             ),
             SizedBox(width: 2.w),
             Text(
               desc,
               style: descStyle ??
                   TextStyle(
-                    color: const Color(0xff999999),
-                    fontSize: 12.sp,
+                    color: AppTheme.color_999999,
+                    fontSize: 10.sp,
                   ),
             ),
           ],

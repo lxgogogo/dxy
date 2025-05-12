@@ -137,7 +137,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: '#F7F8FC'.hexColor,
+      backgroundColor: Colors.white,
       body: SmartRefresher(
         enablePullDown: true,
         enablePullUp: items.isNotEmpty == true || !noMore,
@@ -168,7 +168,6 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
@@ -249,21 +248,19 @@ class _FollowingScreenState extends State<FollowingScreen> {
         }
       },
       child: Container(
-        width: 70.w,
+        width: 72.w,
         height: 28.w,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: items[index].followed == true
-              ? '#EBEBEB'.hexColor
-              : '#557BF6'.hexColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(4.r),
+          color: AppTheme.color_333333.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8.r),
         ),
         child: Text(
           title,
           style: TextStyle(
-            color: items[index].followed == true
-                ? '#333333'.hexColor
-                : '#557BF6'.hexColor,
+            color: title == '已关注'
+                ? AppTheme.color_999999
+                : AppTheme.color_333333,
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
           ),

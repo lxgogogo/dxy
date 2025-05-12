@@ -6,6 +6,7 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/count_widget.dart';
 
 import '../../../model/collect_page_model.dart';
@@ -84,8 +85,8 @@ class MyCollectItem extends StatelessWidget {
             Text(
               title ?? '',
               style: TextStyle(
-                color: '#333333'.hexColor,
-                fontSize: 14.sp,
+                color: AppTheme.color_333333,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
               softWrap: true,
@@ -152,8 +153,8 @@ class MyCollectItem extends StatelessWidget {
                               Text(
                                 title ?? '',
                                 style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 14.sp,
+                                  color: AppTheme.color_333333,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 softWrap: true,
@@ -174,8 +175,8 @@ class MyCollectItem extends StatelessWidget {
                           Text(
                             content ?? '',
                             style: TextStyle(
-                              fontSize: 12.sp,
-                              color: '#333333'.hexColor.withOpacity(0.7),
+                              fontSize: 14.sp,
+                              color: AppTheme.color_666666,
                             ),
                             softWrap: true,
                             maxLines: 2,
@@ -187,8 +188,8 @@ class MyCollectItem extends StatelessWidget {
                               Text(
                                 DateUtil.formatDateAlias3(createdAt!.millisecondsSinceEpoch,),
                                 style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: '#333333'.hexColor.withOpacity(0.5),
+                                  fontSize: 10.sp,
+                                  color: AppTheme.color_999999,
                                 ),
                               ),
                               const Spacer(),

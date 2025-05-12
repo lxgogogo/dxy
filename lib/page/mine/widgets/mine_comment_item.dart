@@ -11,6 +11,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/html_parse_util.dart';
@@ -116,7 +117,8 @@ class MyCommentItem extends StatelessWidget {
           Get.toNamed(Routes.bookDetail, arguments: id);
         } else if (item.resourceType == 'tool') {
           Get.toNamed(Routes.toolDetail, arguments: id);
-        } else if (item.resourceType == 'video' || item.resourceType == 'videoList') {
+        } else if (item.resourceType == 'video' ||
+            item.resourceType == 'videoList') {
           Get.toNamed(Routes.videoDetail, arguments: {'id': id});
         }
       },
@@ -124,7 +126,7 @@ class MyCommentItem extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16.w),
         padding: EdgeInsets.symmetric(vertical: 12.w),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: '#F2F2F2'.hexColor)),
+          border: Border(bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -135,14 +137,15 @@ class MyCommentItem extends StatelessWidget {
                 Obx(() {
                   return BorderAvatar(
                     avatar: UserStore.of.user?.avatar ?? '',
-                    avatarSize: 20.w,
+                    avatarSize: 22.w,
                     borderWidth: 0,
                   );
                 }),
                 SizedBox(width: 8.w),
                 Text(
                   '评论了${typeName}:',
-                  style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7), fontSize: 12.sp),
+                  style:
+                      TextStyle(color: AppTheme.color_666666, fontSize: 14.sp),
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
@@ -150,7 +153,10 @@ class MyCommentItem extends StatelessWidget {
                     content ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: '#333333'.hexColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        color: AppTheme.color_333333,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 SizedBox(width: 8.w),
@@ -161,8 +167,8 @@ class MyCommentItem extends StatelessWidget {
                         )
                       : '',
                   style: TextStyle(
-                    fontSize: 12.sp,
-                    color: '#333333'.hexColor.withOpacity(0.5),
+                    fontSize: 10.sp,
+                    color: AppTheme.color_999999,
                   ),
                 ),
                 // Expanded(
@@ -270,8 +276,8 @@ class MyCommentItem extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 14.sp,
-                  color: '#333333'.hexColor.withOpacity(0.7),
+                  fontSize: 16.sp,
+                  color: AppTheme.color_666666,
                   fontWeight: FontWeight.w600,
                 ),
               ),

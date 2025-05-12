@@ -5,10 +5,13 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/widget/count_widget.dart';
 
 import '../gen/assets.gen.dart';
 import '../model/board_list.dart';
+import '../utils/date_util.dart';
 
 class MyFeedItem extends StatelessWidget {
   final BoardBean item;
@@ -42,8 +45,8 @@ class MyFeedItem extends StatelessWidget {
             Text(
               item.title ?? '',
               style: TextStyle(
-                color: '#333333'.hexColor,
-                fontSize: 14.sp,
+                color: ColorStyle.c333333,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
               softWrap: true,
@@ -71,8 +74,12 @@ class MyFeedItem extends StatelessWidget {
                             imageUrl: showCover ?? '',
                             fit: BoxFit.cover,
                             width: double.infinity,
-                            placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                            errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                            placeholder: (context, url) => Assets
+                                .images.imageLoadingDef
+                                .image(fit: BoxFit.fill),
+                            errorWidget: (context, url, error) => Assets
+                                .images.imageLoadingDef
+                                .image(fit: BoxFit.fill),
                           ),
                           if (item.files!.first.type == 'video')
                             Center(
@@ -92,31 +99,49 @@ class MyFeedItem extends StatelessWidget {
                         Text(
                           item.pureText ?? '',
                           style: TextStyle(
-                            fontSize: 12.sp,
-                            color: '#333333'.hexColor.withOpacity(0.7),
+                            fontSize: 14.sp,
+                            color: AppTheme.color_666666,
                           ),
                           softWrap: true,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SimpleCountText(
-                              count: item.likeCount?.abbreviateNumber ?? '0',
-                              desc: '点赞',
+                            Text(
+                              item.createdAt != null
+                                  ? DateUtil.formatDateAlias3(
+                                      item.createdAt?.millisecondsSinceEpoch ??
+                                          0)
+                                  : '',
+                              style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: AppTheme.color_999999),
                             ),
-                            const SimpleDot(),
-                            SimpleCountText(
-                              count: item.commentCount?.abbreviateNumber ?? '0',
-                              desc: '评论',
-                            ),
-                            const SimpleDot(),
-                            SimpleCountText(
-                              count: item.favoriteCount?.abbreviateNumber ?? '0',
-                              desc: '收藏',
-                            ),
+                            Row(
+                              children: [
+                                SimpleCountText(
+                                  count:
+                                      item.likeCount?.abbreviateNumber ?? '0',
+                                  desc: '点赞',
+                                ),
+                                const SimpleDot(),
+                                SimpleCountText(
+                                  count: item.commentCount?.abbreviateNumber ??
+                                      '0',
+                                  desc: '评论',
+                                ),
+                                const SimpleDot(),
+                                SimpleCountText(
+                                  count: item.favoriteCount?.abbreviateNumber ??
+                                      '0',
+                                  desc: '收藏',
+                                ),
+                              ],
+                            )
                           ],
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -129,6 +154,7 @@ class MyFeedItem extends StatelessWidget {
     );
   }
 
-  String? get showCover =>
-      item.files?.firstOrNull?.type == 'video' ? item.files?.firstOrNull?.posterUrl : item.files?.firstOrNull?.url;
+  String? get showCover => item.files?.firstOrNull?.type == 'video'
+      ? item.files?.firstOrNull?.posterUrl
+      : item.files?.firstOrNull?.url;
 }

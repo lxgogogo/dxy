@@ -5,7 +5,6 @@ import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/page/bool_list/book_list_screen.dart';
-import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
 import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
 import 'package:holdem/page/equity_center/equity_center_view.dart';
@@ -23,6 +22,11 @@ import 'package:holdem/page/mine/collect/collect_list_view.dart';
 import 'package:holdem/page/mine/collect/creat_collect_group_view.dart';
 import 'package:holdem/page/mine/collect/finish_creat_collect_group_view.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
+import 'package:holdem/page/revise/delete_account/delete_account_view.dart';
+import 'package:holdem/page/revise/revise_account/revise_account_view.dart';
+import 'package:holdem/page/revise/revise_email/revise_email_view.dart';
+import 'package:holdem/page/revise/revise_password/revise_password_view.dart';
+import 'package:holdem/page/revise/revise_phone/revise_phone_view.dart';
 import 'package:holdem/page/scan/scan_screen.dart';
 import 'package:holdem/page/scan_result/scan_result_screen.dart';
 import 'package:holdem/page/search/search_screen.dart';
@@ -189,6 +193,27 @@ class AppPages {
     GetPage(
       name: Routes.noticeDetail,
       page: () => const MessageNoticeDetailPage(),
+    ),
+
+    GetPage(
+      name: Routes.reviseAccount,
+      page: () => const ReviseAccountPage(),
+    ),
+    GetPage(
+      name: Routes.reviseEmail,
+      page: () => const ReviseEmailPage(),
+    ),
+    GetPage(
+      name: Routes.revisePassword,
+      page: () => const RevisePasswordPage(),
+    ),
+    GetPage(
+      name: Routes.revisePhone,
+      page: () => const RevisePhonePage(),
+    ),
+    GetPage(
+      name: Routes.deleteAccount,
+      page: () => const DeleteAccountPage(),
     ),
   ];
 }

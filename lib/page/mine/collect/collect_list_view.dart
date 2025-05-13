@@ -29,42 +29,47 @@ class _CollectListPageState extends State<CollectListPage> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-        appBar: CommonAppBar
-            .arrowBack(context, title: controller.name.value, actions: [
-          if (controller.isDeleting.value)
-            GestureDetector(
-                onTap: () {
-                  controller.isDeleting.value = false;
-                },
-                child: Container(
-                  padding: EdgeInsets.all(5.w).copyWith(right: 16.w),
-                  color: Colors.transparent,
-                  child: Text(
-                    '取消',
-                    style: TextStyle(
-                        fontSize: 13.sp, color: AppTheme.color_999999),
+        appBar: CommonAppBar.arrowBack(context,
+            title: controller.selectAllCount.value > 0
+                ? '已选${controller.selectAllCount.value}条'
+                : controller.name.value,
+            actions: [
+              if (controller.isDeleting.value)
+                GestureDetector(
+                    onTap: controller.deleteCollectList,
+                    child: Container(
+                      padding: EdgeInsets.all(5.w).copyWith(right: 16.w),
+                      color: Colors.transparent,
+                      child: Text(
+                        '移出',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            color: ColorStyle.cFF3333,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ))
+              else
+                GestureDetector(
+                  onTap: () {
+                    CollectOperationSheet.actionSheet((index) {
+                      controller.selectAlertOnTap(index);
+                    },
+                        showMoveBtn:
+                            controller.collectList.isEmpty ? false : true);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5.w),
+                    margin: EdgeInsets.only(right: 5.w),
+                    color: Colors.transparent,
+                    child: Image.asset(
+                      Assets.images.iconCollectMore.path,
+                      width: 24.w,
+                      height: 24.w,
+                      color: Colors.black,
+                    ),
                   ),
-                ))
-          else
-            GestureDetector(
-              onTap: () {
-                CollectOperationSheet.actionSheet((index) {
-                  controller.selectAlertOnTap(index);
-                }, showMoveBtn: controller.collectList.isEmpty ? false : true);
-              },
-              child: Container(
-                padding: EdgeInsets.all(5.w),
-                margin: EdgeInsets.only(right: 5.w),
-                color: Colors.transparent,
-                child: Image.asset(
-                  Assets.images.iconCollectMore.path,
-                  width: 24.w,
-                  height: 24.w,
-                  color: Colors.black,
-                ),
-              ),
-            )
-        ]),
+                )
+            ]),
         body: Column(
           children: [
             Expanded(child: _buildCollectListWidget()),
@@ -194,34 +199,14 @@ class _CollectListPageState extends State<CollectListPage> {
                 Text(
                   '全选',
                   style: TextStyle(
-                      fontSize: 14.w,
-                      color: AppTheme.color_333333,),
+                    fontSize: 14.w,
+                    color: AppTheme.color_333333,
+                  ),
                 )
               ],
             ),
           ),
-          Text(
-            '已选${controller.selectAllCount.value}条',
-            style: TextStyle(fontSize: 14.sp, color: ColorStyle.c333333),
-          ),
-          GestureDetector(
-            onTap: controller.deleteCollectList,
-            child: Container(
-              width: 60.w,
-              height: 32.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: ColorStyle.cFF3333.withOpacity(0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(4.w))),
-              child: Text(
-                '移出',
-                style: TextStyle(
-                    fontSize: 12.w,
-                    color: ColorStyle.cFF3333,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-          )
+          SizedBox(width: 40.w)
         ],
       ),
     );

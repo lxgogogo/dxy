@@ -141,23 +141,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                     label: '账号',
                                     value: UserStore.of.user?.username ?? '',
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => DialogEditUsername(
-                                          editContent: UserStore.of.user?.username ?? '',
-                                        ),
-                                      ).then((errorTip) {
-                                        if (errorTip is String) {
-                                          // if (!context.mounted) return;
-                                          // showDialog(
-                                          //   context: context,
-                                          //   builder: (context) => DialogNewTip(
-                                          //     title: '绑定失败',
-                                          //     content: errorTip,
-                                          //   ),
-                                          // );
-                                        }
-                                      });
+                                      Get.toNamed(Routes.reviseAccount);
                                     },
                                   ),
                                   Container(
@@ -168,23 +152,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                     label: '邮箱',
                                     value: UserStore.of.user?.account ?? '',
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => DialogEditEmail(
-                                          editContent: UserStore.of.user?.account ?? '',
-                                        ),
-                                      ).then((errorTip) {
-                                        if (errorTip is String) {
-                                          // if (!context.mounted) return;
-                                          // showDialog(
-                                          //   context: context,
-                                          //   builder: (context) => DialogNewTip(
-                                          //     title: '绑定失败',
-                                          //     content: errorTip,
-                                          //   ),
-                                          // );
-                                        }
-                                      });
+                                      Get.toNamed(Routes.reviseEmail);
                                     },
                                   ),
                                   Container(

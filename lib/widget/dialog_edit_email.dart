@@ -20,7 +20,8 @@ class DialogEditEmail extends StatefulWidget {
   State<DialogEditEmail> createState() => _DialogEditEmailState();
 }
 
-class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProviderStateMixin {
+class _DialogEditEmailState extends State<DialogEditEmail>
+    with SingleTickerProviderStateMixin {
   bool _isDisable = true;
 
   final TextEditingController _controllerEmail = TextEditingController();
@@ -38,7 +39,8 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     final code = _controllerCode.text;
     isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
 
-    _isDisable = account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
+    _isDisable =
+        account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
 
@@ -48,7 +50,8 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
     final code = _controllerCode.text;
     final isShowCodeTips = !codeRegExp.hasMatch(code) && code.isNotEmpty;
 
-    _isDisable = account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
+    _isDisable =
+        account.isEmpty || isShowAccountTips || code.isEmpty || isShowCodeTips;
     setState(() {});
   }
 
@@ -155,30 +158,37 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                 ),
                                 maxLines: 1,
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 12.w),
                                   hintText: '请输入邮箱',
                                   hintStyle: TextStyle(
                                     color: '#3333334D'.hexColor,
                                     fontSize: 12.sp,
                                   ),
                                   border: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
                                   ),
                                   enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
                                   ),
                                   disabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
                                   ),
                                   focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.transparent),
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
                                   ),
                                 ),
                                 onChanged: (text) {
                                   if (text.contains(' ')) {
                                     String newText = text.replaceAll(' ', '');
                                     _controllerEmail.text = newText;
-                                    _controllerEmail.selection = TextSelection.collapsed(offset: newText.length);
+                                    _controllerEmail.selection =
+                                        TextSelection.collapsed(
+                                            offset: newText.length);
                                   }
                                   onChangeCheckValid();
                                 },
@@ -208,7 +218,9 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                 isShowAccountTips ? '*请输入正确邮箱地址' : '',
                                 style: TextStyle(
                                   fontSize: 10.sp,
-                                  color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                                  color: isShowAccountTips
+                                      ? Colors.red
+                                      : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -250,27 +262,33 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                     maxLines: 1,
                                     keyboardType: TextInputType.number,
                                     inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9]')),
                                       LengthLimitingTextInputFormatter(6),
                                     ],
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12.w),
                                       hintText: '请输入验证码',
                                       hintStyle: TextStyle(
                                         color: '#3333334D'.hexColor,
                                         fontSize: 12.sp,
                                       ),
                                       border: const OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.transparent),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
                                       ),
                                       enabledBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.transparent),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
                                       ),
                                       disabledBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.transparent),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
                                       ),
                                       focusedBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.transparent),
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent),
                                       ),
                                     ),
                                     onChanged: (_) {
@@ -312,7 +330,9 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
                                 isShowCodeTips ? '请输入6位数字验证码' : '',
                                 style: TextStyle(
                                   fontSize: 10.sp,
-                                  color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                                  color: isShowCodeTips
+                                      ? Colors.red
+                                      : '#95A3C4'.hexColor,
                                 ),
                               ),
                             ),
@@ -402,7 +422,8 @@ class _DialogEditEmailState extends State<DialogEditEmail> with SingleTickerProv
       ToastUtils.showToast('绑定成功');
       UserStore.of.getUserInfo();
       Get.back();
-      Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
+      Get.delete<CountDownController>(
+          tag: '$verifyType$verifyCodeType', force: true);
     } else {
       ToastUtils.showToast(res.msg);
     }

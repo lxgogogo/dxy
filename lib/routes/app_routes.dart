@@ -43,5 +43,9 @@ abstract class Routes {
   static const telegramLogin = '/telegramLogin';
   static const noticeList = '/noticeList';
   static const noticeDetail = '/noticeDetail';
-
+  static const reviseEmail = '/reviseEmail';
+  static const revisePhone = '/revisePhone';
+  static const revisePassword = '/revisePassword';
+  static const reviseAccount = '/reviseAccount';
+  static const deleteAccount = '/deleteAccount';
 }

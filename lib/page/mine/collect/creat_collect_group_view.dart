@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/common_done_button.dart';
 
-import '../../../routes/app_pages.dart';
 import '../../../utils/color_style_util.dart';
 import '../../../widget/common_app_bar.dart';
 import 'creat_collect_group_controller.dart';
@@ -27,26 +26,45 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
         appBar: CommonAppBar.arrowBack(context,
             title: controller.isCreate ? '新建收藏分类' : '修改收藏分类',
             actions: [
-              Obx(() => CommonDoneButton(
-                  title: controller.isCreate ? '下一步' : '完成',
-                  margin: EdgeInsets.only(right: 12.w),
-                  disable: controller.enable.value,
-                  signUpOnTap: controller.signUpOnTap))
+              Obx(() => GestureDetector(
+                onTap: () {
+                  if (controller.enable.value) {
+                    controller.signUpOnTap();
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Text(
+                    controller.isCreate ? '下一步' : '完成',
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.color_557BF6
+                    ),
+                  ),
+                ),
+              ))
             ]),
         body: Container(
-          margin: EdgeInsets.only(top: 20.w, left: 12.w, right: 12.w),
+          margin: EdgeInsets.only(top: 20.w, left: 16.w, right: 16.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '分类命名',
                 style: TextStyle(
-                    fontSize: 14.w,
+                    fontSize: 16.w,
                     fontWeight: FontWeight.w600,
                     color: Colors.black),
               ),
-              SizedBox(
-                height: 40.w,
+              SizedBox(height: 10.w),
+              Container(
+                height: 36.w,
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(18.w)),
+                  color: ColorStyle.c333333.withOpacity(0.05)
+                ),
                 child: field(controller.textController, '分类名称最多十个字',
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(10),

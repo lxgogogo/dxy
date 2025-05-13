@@ -347,6 +347,10 @@ class $AssetsImagesGen {
   AssetGenImage get icMineCamera =>
       const AssetGenImage('assets/images/ic_mine_camera.png');
 
+  /// File path: assets/images/ic_mine_power_center.png
+  AssetGenImage get icMinePowerCenter =>
+      const AssetGenImage('assets/images/ic_mine_power_center.png');
+
   /// File path: assets/images/ic_telegram.png
   AssetGenImage get icTelegram =>
       const AssetGenImage('assets/images/ic_telegram.png');
@@ -434,6 +438,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/icon_post_feed.png
   AssetGenImage get iconPostFeed =>
       const AssetGenImage('assets/images/icon_post_feed.png');
+
+  /// File path: assets/images/icon_scan.svg
+  String get iconScan => 'assets/images/icon_scan.svg';
+
+  /// File path: assets/images/icon_setting.svg
+  String get iconSetting => 'assets/images/icon_setting.svg';
 
   /// File path: assets/images/icon_telegram.png
   AssetGenImage get iconTelegram =>
@@ -789,6 +799,7 @@ class $AssetsImagesGen {
         homeVideo,
         icFacebook,
         icMineCamera,
+        icMinePowerCenter,
         icTelegram,
         icTiktok,
         icTwitter,
@@ -811,6 +822,8 @@ class $AssetsImagesGen {
         iconNoticeUserN,
         iconPlay,
         iconPostFeed,
+        iconScan,
+        iconSetting,
         iconTelegram,
         iconTelegramCircle,
         imageAdd,

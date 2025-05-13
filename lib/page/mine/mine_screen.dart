@@ -11,6 +11,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
 import '../../utils/track_utils.dart';
@@ -26,7 +27,8 @@ class MineScreen extends StatefulWidget {
   State<MineScreen> createState() => _MineScreenState();
 }
 
-class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+class _MineScreenState extends State<MineScreen>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -38,187 +40,249 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
           extendBodyBehindAppBar: true,
           body: Stack(
             children: [
-              Container(
-                height: 268.w,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: Assets.images.mineHeaderBg.provider(),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                child: Stack(
-                  children: [
-                    Obx(() {
-                      return FocusDetector(
-                        onFocusGained: controller.onFocusGained,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
+              Image.asset(
+                Assets.images.mineHeaderBg.path,
+                width: 1.sw,
+                fit: BoxFit.fitWidth,
+              ),
+              Obx(() => FocusDetector(
+                    onFocusGained: controller.onFocusGained,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: ScreenUtil().statusBarHeight + 4.w),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.toNamed(Routes.personal);
+                                Get.toNamed(Routes.equityCenter);
                               },
-                              child: Center(
-                                  child: Stack(
+                              child: Container(
+                                width: 84.w,
+                                height: 24.w,
+                                margin: EdgeInsets.only(left: 16.w),
                                 alignment: Alignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 88.w,
-                                    height: 88.w,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12.w)),
+                                    border: Border.all(
+                                        width: 1.w,
+                                        color: AppTheme.color_557BF6)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      Assets.images.icMinePowerCenter.path,
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    SizedBox(width: 2.w),
+                                    Text(
+                                      '权益中心',
+                                      style: TextStyle(
+                                          fontSize: 12.sp,
+                                          color: AppTheme.color_557BF6),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(Routes.scan);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 8.w,
+                                        left: 16.w,
+                                        top: 6.w,
+                                        bottom: 6.w),
+                                    child: SvgPicture.asset(
+                                      Assets.svg.iconScan,
+                                      width: 24.w,
+                                      height: 24.w,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(Routes.setting);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 16.w,
+                                        left: 8.w,
+                                        top: 6.w,
+                                        bottom: 6.w),
+                                    child: SvgPicture.asset(
+                                      Assets.svg.iconSetting,
+                                      width: 24.w,
+                                      height: 24.w,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 12.w),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(Routes.personal);
+                                  },
+                                  child: SizedBox(
+                                    width: 48.w,
+                                    height: 48.w,
                                     child: ClipOval(
                                       child: CachedNetworkImage(
                                         fit: BoxFit.cover,
                                         imageUrl: UserStore.of.user?.avatar ?? '',
                                         cacheKey: UserStore.of.user?.avatar ?? '',
-                                        placeholder: (context, url) => const Center(
+                                        placeholder: (context, url) =>
+                                        const Center(
                                             child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )),
-                                        errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                                          fit: BoxFit.fill,
-                                        ),
+                                              color: Colors.white,
+                                            )),
+                                        errorWidget: (_, __, ___) =>
+                                            Assets.images.imageLoadingDef.image(
+                                              fit: BoxFit.fill,
+                                            ),
                                         fadeOutDuration: Duration.zero,
                                         fadeInDuration: Duration.zero,
                                       ),
                                     ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(Routes.equityCenter);
-                                        },
-                                        child: Container(
-                                          width: 64.w,
-                                          height: 22.w,
-                                          alignment: Alignment.center,
-                                          padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: AssetImage(Assets.images.iconMineSignBg.path),
-                                                  fit: BoxFit.fill)),
-                                          child: AutoSizeText(
-                                            UserStore.of.user?.userLevel?.name ?? '',
-                                            maxLines: 1,
-                                            minFontSize: 8,
-                                            style: TextStyle(fontSize: 10.sp, color: ColorStyle.c984100),
+                                  )),
+                              SizedBox(width: 8.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: 1.sw - 32.w - 48.w - 60.w - 24.w
+                                        ),
+                                        child: Text(
+                                          UserStore.of.user?.nickname ?? '',
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppTheme.color_333333,
                                           ),
-                                        )),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 84.w,
+                                        height: 22.w,
+                                        margin: EdgeInsets.only(left: 6.w),
+                                        alignment: Alignment.center,
+                                        padding:
+                                        EdgeInsets.symmetric(horizontal: 2.w),
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(Assets
+                                                    .images.iconMineSignBg.path),
+                                                fit: BoxFit.fill)),
+                                        child: AutoSizeText(
+                                          UserStore.of.user?.userLevel?.name ??
+                                              '',
+                                          maxLines: 1,
+                                          minFontSize: 8,
+                                          style: TextStyle(
+                                              fontSize: 10.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 5.w),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.following,
+                                              arguments: true);
+                                          TrackUtils.trackEvent(
+                                              userLogType: '113004');
+                                        },
+                                        child: Text(
+                                          '关注 ${UserStore.of.user?.followedCount.abbreviateNumber ?? '0'}',
+                                          style: TextStyle(
+                                            color: AppTheme.color_666666,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.following,
+                                              arguments: false);
+                                          TrackUtils.trackEvent(
+                                              userLogType: '113005');
+                                        },
+                                        child: Text(
+                                          '粉丝 ${UserStore.of.user?.fansCount.abbreviateNumber ?? '0'}',
+                                          style: TextStyle(
+                                            color: AppTheme.color_666666,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )),
-                            ),
-                            SizedBox(height: 8.w),
-                            Text(
-                              UserStore.of.user?.nickname ?? '',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xff333333),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            SizedBox(height: 4.w),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.following, arguments: true);
-                                    TrackUtils.trackEvent(userLogType: '113004');
-                                  },
-                                  child: Text(
-                                    '关注 ${UserStore.of.user?.followedCount.abbreviateNumber ?? '0'}',
-                                    style: TextStyle(
-                                      color: const Color(0xff6B6D70),
-                                      fontSize: 12.sp,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 24.w),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.following, arguments: false);
-                                    TrackUtils.trackEvent(userLogType: '113005');
-                                  },
-                                  child: Text(
-                                    '粉丝 ${UserStore.of.user?.fansCount.abbreviateNumber ?? '0'}',
-                                    style: TextStyle(
-                                      color: const Color(0xff6B6D70),
-                                      fontSize: 12.sp,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 24.w + 268.w - 239.w),
-                          ],
-                        ),
-                      );
-                    }),
-                    Positioned(
-                      top: ScreenUtil().statusBarHeight + 4.w,
-                      right: 0,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.scan);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(16.w).copyWith(right: 6.w),
-                              child: SvgPicture.asset(
-                                Assets.svg.iconScan,
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                            ),
+                              )
+                            ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.setting);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(16.w).copyWith(left: 6.w),
-                              child: SvgPicture.asset(
-                                Assets.svg.iconSetting,
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+                        )
+                      ],
+                    ),
+                  )),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 239.w),
+                  SizedBox(height: 178.w),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(12.r)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.w),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16.w, vertical: 4.w),
                             child: TabBar(
                               controller: controller.tabController,
-                              tabs: controller.tabs.map((e) => Tab(text: e)).toList(),
+                              tabs: controller.tabs
+                                  .map((e) => Tab(text: e))
+                                  .toList(),
                               isScrollable: false,
                               indicator: RoundUnderlineTabIndicator(
-                                borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
-                                wantToWith: 12.w,
-                                insets: EdgeInsets.only(bottom:3.w)
-                              ),
+                                  borderSide: BorderSide(
+                                      width: 2.w,
+                                      color: const Color(0xff4260FF)),
+                                  wantToWith: 12.w,
+                                  insets: EdgeInsets.only(bottom: 3.w)),
                               enableFeedback: false,
-                              overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                              overlayColor:
+                                  WidgetStateProperty.resolveWith<Color>((_) {
                                 return Colors.transparent;
                               }),
                               dividerHeight: 0,
@@ -247,7 +311,8 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                             child: TabBarView(
                               controller: controller.tabController,
                               physics: const NeverScrollableScrollPhysics(),
-                              children: List.generate(controller.tabs.length, (index) {
+                              children: List.generate(controller.tabs.length,
+                                  (index) {
                                 if (index == 1) {
                                   return const MineCollectView();
                                 } else {
@@ -257,7 +322,8 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                             ),
                           ),
                           SizedBox(
-                            height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
+                            height: kBottomNavigationBarHeight +
+                                ScreenUtil().bottomBarHeight,
                           ),
                         ],
                       ),

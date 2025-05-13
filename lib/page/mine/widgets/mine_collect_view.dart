@@ -9,6 +9,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/services/collect_service.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -237,7 +238,7 @@ class _MineCollectViewState extends State<MineCollectView>
                       fontWeight: FontWeight.bold,
                     ),
                     unselectedLabelStyle: TextStyle(
-                      color: ColorStyle.c333333.withOpacity(0.7),
+                      color: AppTheme.color_999999,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.normal,
                     ),
@@ -395,17 +396,8 @@ class _MineCollectViewState extends State<MineCollectView>
                       blurRadius: 8,
                       spreadRadius: 0),
                 ],
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      '#FFFFFF'.hexColor,
-                      '#FFFFFF'.hexColor.withOpacity(0.5)
-                    ],
-                    stops: const [
-                      0,
-                      1
-                    ])),
+                color: Colors.white
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -415,7 +407,7 @@ class _MineCollectViewState extends State<MineCollectView>
                     Text(
                       model.name ?? '',
                       style: TextStyle(
-                          fontSize: 14.w, fontWeight: FontWeight.w600),
+                          fontSize: 16.w, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(width: 26.w)
                   ],
@@ -427,13 +419,13 @@ class _MineCollectViewState extends State<MineCollectView>
                     Text(
                       '${model.count ?? 0}条内容',
                       style: TextStyle(
-                          fontSize: 12.w,
+                          fontSize: 10.w,
                           color: ColorStyle.c333333.withOpacity(0.5)),
                     ),
                     Text(
                       dateStr,
                       style: TextStyle(
-                          fontSize: 12.w,
+                          fontSize: 10.w,
                           color: ColorStyle.c333333.withOpacity(0.5)),
                     ),
                   ],

@@ -3,19 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
-import '../../../utils/net_request.dart';
-import '../../../utils/toast_utils.dart';
 import '../../../widget/common_app_bar.dart';
 import '../../../widget/dialog_common.dart';
 import '../../../widget/no_data.dart';
 import '../widgets/mine_collect_item.dart';
 import 'collect_list_controller.dart';
+import 'widget/collect_operation_actionsheet.dart';
 import 'widget/collect_operation_alert.dart';
 
 class CollectListPage extends StatefulWidget {
@@ -50,7 +48,7 @@ class _CollectListPageState extends State<CollectListPage> {
           else
             GestureDetector(
               onTap: () {
-                CollectOperationAlert.show((index) {
+                CollectOperationSheet.actionSheet((index) {
                   controller.selectAlertOnTap(index);
                 }, showMoveBtn: controller.collectList.isEmpty ? false : true);
               },

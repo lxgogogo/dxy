@@ -194,9 +194,8 @@ class _CollectListPageState extends State<CollectListPage> {
                 Text(
                   '全选',
                   style: TextStyle(
-                      fontSize: 12.w,
-                      color: AppTheme.color_999999,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 14.w,
+                      color: AppTheme.color_333333,),
                 )
               ],
             ),

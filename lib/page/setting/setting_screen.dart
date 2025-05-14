@@ -24,6 +24,7 @@ import '../../utils/eventbus/EventBusAction.dart';
 import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/size_fit.dart';
 import '../../utils/track_utils.dart';
+import '../../widget/dialog_delete_account.dart';
 
 part 'setting_controller.dart';
 
@@ -200,7 +201,7 @@ class _SettingScreenState extends State<SettingScreen> {
               height: 45.w,
               alignment: Alignment.center,
               child: Text(
-                '退出登录',
+                '注销账号',
                 style: TextStyle(
                   color: AppTheme.color_999999,
                   fontSize: 16.sp,
@@ -295,24 +296,10 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void logout() {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => CommonDialog(
-        title: '退出登录',
-        content: '退出登录您将无法查看个人中心等',
-        confirmText: '退出',
-        onConfirm: () {
-          TrackUtils.trackEvent(userLogType: '117001', params: UserStore.of.user?.id);
-          Navigator.of(context).pop();
-          NetRequest().logout((data) {
-            UserStore.of.clearUserStorage();
-            Get.until((route) => route.settings.name == Routes.main);
-            EventBusUtil.of.fire(EventResetMainTab());
-          });
-        },
-        cancelText: '取消',
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => const DialogDeleteAccount(),
+    // );
+    Get.toNamed(Routes.deleteAccount);
   }
 }

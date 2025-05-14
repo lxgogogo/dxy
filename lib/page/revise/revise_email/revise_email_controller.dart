@@ -25,6 +25,7 @@ class ReviseEmailController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    controllerEmail.text = UserStore.of.user?.account ?? '';
     focusEmail.addListener(() {
       if (!focusEmail.hasFocus) {
         checkValid();

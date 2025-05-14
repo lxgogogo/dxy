@@ -152,4 +152,26 @@ class PersonalScreenController extends GetxController {
       }
     }
   }
+
+  void loginOut(context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => CommonDialog(
+        title: '退出登录',
+        content: '退出登录您将无法查看个人中心等',
+        confirmText: '退出',
+        onConfirm: () {
+          TrackUtils.trackEvent(userLogType: '117001', params: UserStore.of.user?.id);
+          Navigator.of(context).pop();
+          NetRequest().logout((data) {
+            UserStore.of.clearUserStorage();
+            Get.until((route) => route.settings.name == Routes.main);
+            EventBusUtil.of.fire(EventResetMainTab());
+          });
+        },
+        cancelText: '取消',
+      ),
+    );
+  }
 }

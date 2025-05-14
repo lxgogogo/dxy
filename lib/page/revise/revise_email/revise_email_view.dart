@@ -144,7 +144,7 @@ class _ReviseEmailPageState extends State<ReviseEmailPage> {
                           LengthLimitingTextInputFormatter(6),
                         ],
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                           hintText: '请输入验证码',
                           hintStyle: TextStyle(
                             color: AppTheme.color_999999,

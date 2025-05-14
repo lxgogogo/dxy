@@ -11,9 +11,11 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/utils/track_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/widget/dialog_delete_account.dart';
 import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
@@ -163,23 +165,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                     label: '手机号',
                                     value: UserStore.of.user?.phone ?? '',
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => DialogEditMobile(
-                                          editContent: UserStore.of.user?.phone ?? '',
-                                        ),
-                                      ).then((errorTip) {
-                                        if (errorTip is String) {
-                                          // if (!context.mounted) return;
-                                          // showDialog(
-                                          //   context: context,
-                                          //   builder: (context) => DialogNewTip(
-                                          //     title: '绑定失败',
-                                          //     content: errorTip,
-                                          //   ),
-                                          // );
-                                        }
-                                      });
+                                      Get.toNamed(Routes.revisePhone);
                                     },
                                   ),
                                   SizedBox(height: 32.w),
@@ -250,14 +236,11 @@ class _PersonalScreenState extends State<PersonalScreen> {
                           SizedBox(height: 16.w),
                           GestureDetector(
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => const DialogDeleteAccount(),
-                              );
+                              controller.loginOut(context);
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Text(
-                              '注销账号',
+                              '退出登录',
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: AppTheme.color_999999,

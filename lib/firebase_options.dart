@@ -50,21 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCqv_vYAQkd6-pLXrNIdJUKvA-YbVrwzEw',
-    appId: '1:302206761540:android:d5f91fd78f1b0c7f9ada11',
-    messagingSenderId: '302206761540',
-    projectId: 'dexueyuan-68769',
-    storageBucket: 'dexueyuan-68769.firebasestorage.app',
+    apiKey: 'AIzaSyAqLuK6BLuWbKSbaOfNrfPXzIyFfMj-wsI',
+    appId: '1:390652331371:android:66f1794d14dcdbf259382e',
+    messagingSenderId: '390652331371',
+    projectId: 'dxy-project-82dc6',
+    storageBucket: 'dxy-project-82dc6.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB24EzjurQM7073lNWOcgoHopLhx6p2ids',
-    appId: '1:302206761540:ios:8d7a67a4a81f88999ada11',
-    messagingSenderId: '302206761540',
-    projectId: 'dexueyuan-68769',
-    storageBucket: 'dexueyuan-68769.firebasestorage.app',
-    androidClientId: '302206761540-j0udll8imi95gqifp70nr5l6sitkmc6c.apps.googleusercontent.com',
-    iosClientId: '302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDXmp8qPY_sGW1kX4G6o7jngJjwo-8E-lo',
+    appId: '1:390652331371:ios:f4d00ef4f4b595a259382e',
+    messagingSenderId: '390652331371',
+    projectId: 'dxy-project-82dc6',
+    storageBucket: 'dxy-project-82dc6.firebasestorage.app',
+    iosClientId: '390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com',
     iosBundleId: 'com.dxy.holdem',
   );
 

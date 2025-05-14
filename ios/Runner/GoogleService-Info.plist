@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq.apps.googleusercontent.com</string>
+	<string>390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>302206761540-j0udll8imi95gqifp70nr5l6sitkmc6c.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB24EzjurQM7073lNWOcgoHopLhx6p2ids</string>
+	<string>AIzaSyDXmp8qPY_sGW1kX4G6o7jngJjwo-8E-lo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>302206761540</string>
+	<string>390652331371</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.dxy.holdem</string>
 	<key>PROJECT_ID</key>
-	<string>dexueyuan-68769</string>
+	<string>dxy-project-82dc6</string>
 	<key>STORAGE_BUCKET</key>
-	<string>dexueyuan-68769.firebasestorage.app</string>
+	<string>dxy-project-82dc6.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:302206761540:ios:8d7a67a4a81f88999ada11</string>
+	<string>1:390652331371:ios:f4d00ef4f4b595a259382e</string>
 </dict>
 </plist>

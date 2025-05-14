@@ -134,10 +134,10 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                       ? Opacity(
                       opacity: 0.7,
                       child: BorderAvatar(
-                          avatarSize: 44.w,
+                          avatarSize: 42.w,
                           avatar: model.sendUserHeadimg ?? ''))
                       : BorderAvatar(
-                      avatarSize: 44.w,
+                      avatarSize: 42.w,
                       avatar: model.sendUserHeadimg ?? ''),
                   SizedBox(width: 10.w),
                   Expanded(

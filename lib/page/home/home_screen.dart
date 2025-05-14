@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 48.w,
+                height: 44.w,
                 margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Row(
@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                   child: AnimatedContainer(
                                     duration: const Duration(milliseconds: 100),
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w),
                                     decoration: BoxDecoration(
                                       color: '#F3F8FF'.hexColor,
                                       borderRadius: BorderRadius.vertical(
@@ -203,16 +203,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
-                                        SizedBox(height: 24.w),
+                                        SizedBox(height: 16.w),
                                         AnimatedOpacity(
                                           opacity: controller.isShowHomeMenu ? 0 : 1,
                                           duration: const Duration(milliseconds: 300),
                                           child: LayoutBuilder(
                                             builder: (BuildContext context, BoxConstraints constraints) {
-                                              final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                              final itemWidth = (constraints.maxWidth - 15.w) / 2;
                                               return Wrap(
-                                                spacing: 12.w,
-                                                runSpacing: 24.w,
+                                                spacing: 15.w,
+                                                runSpacing: 16.w,
                                                 children: [
                                                   HomeMenuItem(
                                                     itemWidth: itemWidth,

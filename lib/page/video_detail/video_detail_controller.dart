@@ -10,6 +10,7 @@ class VideoDetailController extends GetxController {
 
   List<CommentBean>? comments;
   bool isInitialize = false;
+  bool hasUploadEvent = false;
 
   StreamSubscription? _eventSubscription;
 
@@ -235,7 +236,10 @@ class VideoDetailController extends GetxController {
         videoNotifier.initChewieController(videoController!);
         isInitialize = true;
         safeUpdate();
-        TrackUtils.trackEvent(userLogType: '103011', params: id);
+        if (!hasUploadEvent) {
+          hasUploadEvent = true;
+          TrackUtils.trackEvent(userLogType: '103011', params: id);
+        }
       });
   }
 

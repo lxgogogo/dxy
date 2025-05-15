@@ -22,6 +22,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../model/user.dart';
 import '../../routes/app_pages.dart';
 import '../../services/index.dart';
+import '../../stores/config_store.dart';
 import '../../stores/user_store.dart';
 import '../../utils/net_request.dart';
 import '../../widget/dialog_edit_mobile.dart';
@@ -222,66 +223,78 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                       });
                                     },
                                   ),
-                                  SizedBox(height: 32.w),
-                                  Text(
-                                    '第三方账号绑定',
-                                    style: TextStyle(
-                                      fontSize: 18.sp,
-                                      color: '#333333'.hexColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 16.w),
-                                  _buildRowButtonItem(
-                                    genImage: Assets.images.iconGoogle,
-                                    label: 'Google',
-                                    onTap: TrackUtils.trackedTap(
-                                      onTap: () {
-                                        if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
-                                        controller.signInWithGoogle(context);
-                                      },
-                                      userLogType: '115006',
-                                      params: '谷歌',
-                                    ),
-                                    isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
-                                  ),
-                                  Container(
-                                    color: const Color(0xffe6e6e6),
-                                    height: 0.5.w,
-                                  ),
-                                  _buildRowButtonItem(
-                                    genImage: Assets.images.iconApple,
-                                    label: 'Apple',
-                                    onTap: TrackUtils.trackedTap(
-                                      onTap: () {
-                                        if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
-                                        controller.signInWithApple(context);
-                                      },
-                                      userLogType: '115006',
-                                      params: '苹果',
-                                    ),
-                                    isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
-                                  ),
-                                  Container(
-                                    color: const Color(0xffe6e6e6),
-                                    height: 0.5.w,
-                                  ),
-                                  _buildRowButtonItem(
-                                    genImage: Assets.images.iconTelegram,
-                                    label: 'Telegram',
-                                    onTap: TrackUtils.trackedTap(
-                                      onTap: () {
-                                        if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
-                                        controller.signInWithTelegram(context);
-                                      },
-                                      userLogType: '115006',
-                                      params: 'TG',
-                                    ),
-                                    isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
-                                  ),
-                                  Container(
-                                    color: const Color(0xffe6e6e6),
-                                    height: 0.5.w,
+                                  Obx(
+                                    () {
+                                      if (ConfigStore.of.isOutsideTheWall.isFalse) {
+                                        return const SizedBox();
+                                      }
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          SizedBox(height: 32.w),
+                                          Text(
+                                            '第三方账号绑定',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              color: '#333333'.hexColor,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          SizedBox(height: 16.w),
+                                          _buildRowButtonItem(
+                                            genImage: Assets.images.iconGoogle,
+                                            label: 'Google',
+                                            onTap: TrackUtils.trackedTap(
+                                              onTap: () {
+                                                if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
+                                                controller.signInWithGoogle(context);
+                                              },
+                                              userLogType: '115006',
+                                              params: '谷歌',
+                                            ),
+                                            isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
+                                          ),
+                                          Container(
+                                            color: const Color(0xffe6e6e6),
+                                            height: 0.5.w,
+                                          ),
+                                          _buildRowButtonItem(
+                                            genImage: Assets.images.iconApple,
+                                            label: 'Apple',
+                                            onTap: TrackUtils.trackedTap(
+                                              onTap: () {
+                                                if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
+                                                controller.signInWithApple(context);
+                                              },
+                                              userLogType: '115006',
+                                              params: '苹果',
+                                            ),
+                                            isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
+                                          ),
+                                          Container(
+                                            color: const Color(0xffe6e6e6),
+                                            height: 0.5.w,
+                                          ),
+                                          _buildRowButtonItem(
+                                            genImage: Assets.images.iconTelegram,
+                                            label: 'Telegram',
+                                            onTap: TrackUtils.trackedTap(
+                                              onTap: () {
+                                                if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
+                                                controller.signInWithTelegram(context);
+                                              },
+                                              userLogType: '115006',
+                                              params: 'TG',
+                                            ),
+                                            isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
+                                          ),
+                                          Container(
+                                            color: const Color(0xffe6e6e6),
+                                            height: 0.5.w,
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
                                 ],
                               ),

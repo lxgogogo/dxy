@@ -319,7 +319,6 @@ class _LoginScreenState extends State<LoginScreen> {
         type: 'GOOGLE',
         token: idTokenResult?.token ?? '',
       );
-      EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);
@@ -332,6 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ToastUtils.showToast(res.msg);
       }
     } finally {
+      EasyLoading.dismiss();
       isAuthorizing = false;
     }
   }
@@ -361,7 +361,6 @@ class _LoginScreenState extends State<LoginScreen> {
       //   type: 'APPLE',
       //   token: credential.identityToken ?? '',
       // );
-      EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);
@@ -374,6 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ToastUtils.showToast(res.msg);
       }
     } finally {
+      EasyLoading.dismiss();
       isAuthorizing = false;
     }
   }

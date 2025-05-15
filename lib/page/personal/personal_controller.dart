@@ -57,7 +57,6 @@ class PersonalScreenController extends GetxController {
         type: 'GOOGLE',
         token: idTokenResult?.token ?? '',
       );
-      EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('绑定成功');
         final userProfile = UserProfile.fromJson(res.data);
@@ -75,6 +74,7 @@ class PersonalScreenController extends GetxController {
         // );
       }
     } finally {
+      EasyLoading.dismiss();
       isAuthorizing = false;
     }
   }
@@ -104,7 +104,6 @@ class PersonalScreenController extends GetxController {
       //   type: 'APPLE',
       //   token: credential.identityToken ?? '',
       // );
-      EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('绑定成功');
         final userProfile = UserProfile.fromJson(res.data);
@@ -122,6 +121,7 @@ class PersonalScreenController extends GetxController {
         // );
       }
     } finally {
+      EasyLoading.dismiss();
       isAuthorizing = false;
     }
   }

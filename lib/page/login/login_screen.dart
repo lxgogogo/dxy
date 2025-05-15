@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/login/widgets/register_content.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/stores/config_store.dart';
 import 'package:holdem/widget/close_image_button.dart';
 
 import '../../gen/assets.gen.dart';
@@ -266,47 +267,52 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildThirdLogin() {
-    return ValueListenableBuilder(
-      valueListenable: _showButtonNotifier,
-      builder: (context, showButton, _) {
-        if (showButton) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 36.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: signInWithGoogle,
-                  child: Assets.images.iconGoogleCircle.image(
-                    width: 36.w,
-                    height: 36.w,
-                  ),
-                ),
-                // if (Platform.isIOS) ...[
-                SizedBox(width: 36.w),
-                GestureDetector(
-                  onTap: signInWithApple,
-                  child: Assets.images.iconAppleCircle.image(
-                    width: 36.w,
-                    height: 36.w,
-                  ),
-                ),
-                // ],
-                SizedBox(width: 36.w),
-                GestureDetector(
-                  onTap: signInWithTelegram,
-                  child: Assets.images.iconTelegramCircle.image(
-                    width: 36.w,
-                    height: 36.w,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
+    return Obx(() {
+      if (ConfigStore.of.isOutsideTheWall.isFalse) {
         return const SizedBox();
-      },
-    );
+      }
+      return ValueListenableBuilder(
+        valueListenable: _showButtonNotifier,
+        builder: (context, showButton, _) {
+          if (showButton) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: 36.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: signInWithGoogle,
+                    child: Assets.images.iconGoogleCircle.image(
+                      width: 36.w,
+                      height: 36.w,
+                    ),
+                  ),
+                  // if (Platform.isIOS) ...[
+                  SizedBox(width: 36.w),
+                  GestureDetector(
+                    onTap: signInWithApple,
+                    child: Assets.images.iconAppleCircle.image(
+                      width: 36.w,
+                      height: 36.w,
+                    ),
+                  ),
+                  // ],
+                  SizedBox(width: 36.w),
+                  GestureDetector(
+                    onTap: signInWithTelegram,
+                    child: Assets.images.iconTelegramCircle.image(
+                      width: 36.w,
+                      height: 36.w,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return const SizedBox();
+        },
+      );
+    });
   }
 
   Future<void> signInWithGoogle() async {
@@ -326,7 +332,6 @@ class _LoginScreenState extends State<LoginScreen> {
         type: 'GOOGLE',
         token: idTokenResult?.token ?? '',
       );
-      EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);
@@ -339,6 +344,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ToastUtils.showToast(res.msg);
       }
     } finally {
+      EasyLoading.dismiss();
       isAuthorizing = false;
     }
   }
@@ -368,7 +374,6 @@ class _LoginScreenState extends State<LoginScreen> {
       //   type: 'APPLE',
       //   token: credential.identityToken ?? '',
       // );
-      EasyLoading.dismiss();
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);
@@ -381,6 +386,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ToastUtils.showToast(res.msg);
       }
     } finally {
+      EasyLoading.dismiss();
       isAuthorizing = false;
     }
   }

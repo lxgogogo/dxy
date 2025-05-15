@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAqLuK6BLuWbKSbaOfNrfPXzIyFfMj-wsI',
-    appId: '1:390652331371:android:66f1794d14dcdbf259382e',
+    appId: '1:390652331371:android:ca71cf6da53bd5ec59382e',
     messagingSenderId: '390652331371',
     projectId: 'dxy-project-82dc6',
     storageBucket: 'dxy-project-82dc6.firebasestorage.app',
@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '390652331371',
     projectId: 'dxy-project-82dc6',
     storageBucket: 'dxy-project-82dc6.firebasestorage.app',
+    androidClientId: '390652331371-foqudl398pc638is8e6b92vsga7lscqc.apps.googleusercontent.com',
     iosClientId: '390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com',
     iosBundleId: 'com.dxy.holdem',
   );

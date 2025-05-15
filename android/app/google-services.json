@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:390652331371:android:66f1794d14dcdbf259382e",
+        "mobilesdk_app_id": "1:390652331371:android:ca71cf6da53bd5ec59382e",
         "android_client_info": {
           "package_name": "com.dxy.depokers"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "390652331371-foqudl398pc638is8e6b92vsga7lscqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dxy.depokers",
+            "certificate_hash": "3f3bb48b1fd8ff0c048dc4731a7a19d86dff782b"
+          }
+        },
         {
           "client_id": "390652331371-5iiof1847g75rnf11vm4kgc104a1mt7t.apps.googleusercontent.com",
           "client_type": 3

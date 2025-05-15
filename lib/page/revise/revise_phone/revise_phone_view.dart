@@ -30,7 +30,7 @@ class _RevisePhonePageState extends State<RevisePhonePage> {
             onTap: controller.reviseOnTap,
             child: Container(
               padding: EdgeInsets.only(right: 16.w),
-              color: Colors.white,
+              color: Colors.transparent,
               child: Text(
                 '修改',
                 style: TextStyle(

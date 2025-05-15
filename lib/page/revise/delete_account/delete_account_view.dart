@@ -27,7 +27,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
               onTap: controller.reviseOnTap,
               child: Container(
                 padding: EdgeInsets.only(right: 16.w),
-                color: Colors.white,
+                color: Colors.transparent,
                 child: Text(
                   '注销',
                   style: TextStyle(

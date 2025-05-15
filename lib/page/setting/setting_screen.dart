@@ -74,11 +74,12 @@ class _SettingScreenState extends State<SettingScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) => const DialogEditPassword(),
-                  );
+                  Get.toNamed(Routes.revisePassword);
+                  // showDialog(
+                  //   barrierDismissible: true,
+                  //   context: context,
+                  //   builder: (context) => const DialogEditPassword(),
+                  // );
                 },
                 behavior: HitTestBehavior.translucent,
                 child: Container(

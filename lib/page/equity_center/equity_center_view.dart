@@ -218,14 +218,14 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                               Text(
                                 '积分 ',
                                 style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 12.sp,
                                     color: (item.titleColor ??
                                         ColorStyle.c333333)),
                               ),
                               Text(
                                 '${controller.integral}',
                                 style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 12.sp,
                                     color: item.titleColor,
                                     fontWeight: FontWeight.w600),
                               ),
@@ -457,7 +457,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     ),
                     SizedBox(height: 5.w),
                     SizedBox(
-                      width: 1.sw - 180.w,
+                      width: 1.sw - 184.w,
                       child: Text(
                         model.description ?? '',
                         maxLines: 2,
@@ -472,8 +472,8 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               ],
             ),
             Container(
-              width: 66.w,
-              height: 30.w,
+              width: 72.w,
+              height: 28.w,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(8.w)),

@@ -41,7 +41,7 @@ class ScanResultScreen extends StatelessWidget {
                       : '当前二维码已过期',
               style: TextStyle(
                 color: '#333333'.hexColor,
-                fontSize: 14.sp,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
@@ -57,13 +57,13 @@ class ScanResultScreen extends StatelessWidget {
                   controller.onConfirm();
                 },
                 child: Container(
-                  width: 96.w,
-                  height: 33.w,
+                  height: 48.w,
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
                   decoration: ShapeDecoration(
                     gradient: const LinearGradient(
                       colors: [
-                        Color(0xFF84BCF9),
                         Color(0xFF557BF6),
+                        Color(0xFF84BCF9),
                       ],
                     ),
                     shape: RoundedRectangleBorder(

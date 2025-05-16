@@ -53,21 +53,19 @@ class SearchScreen extends GetView<SearchController> {
                 backgroundColor: Colors.transparent,
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
-                leading: UnconstrainedBox(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (controller.showResult) {
-                        controller.onClear();
-                        return;
-                      }
-                      Get.back();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 8.w, right: 4.w),
-                      child: Image.asset(
-                        'assets/images/navi_back.png',
-                        width: 24.w,
-                      ),
+                leading: GestureDetector(
+                  onTap: () {
+                    if (controller.showResult) {
+                      controller.onClear();
+                      return;
+                    }
+                    Get.back();
+                  },
+                  child: Center(
+                    child: SvgPicture.asset(
+                      Assets.svg.iconBack,
+                      width: 24.w,
+                      height: 24.w,
                     ),
                   ),
                 ),
@@ -80,55 +78,50 @@ class SearchScreen extends GetView<SearchController> {
                       params: controller.controller.text,
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 12.w, right: 16.w),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(
                         '搜索',
                         style: TextStyle(
-                          color: '#557BF6'.hexColor,
+                          color: '#333333'.hexColor,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
+                toolbarHeight: 56.w,
               ),
               backgroundColor: Colors.white,
               body: controller.showResult
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 6.w),
-                          child: TabBar(
-                            controller: controller.tabController,
-                            tabs: SearchType.values
-                                .map((e) => Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 6.w),
-                                      child: Tab(text: e.title),
-                                    ))
-                                .toList(),
-                            isScrollable: true,
-                            tabAlignment: TabAlignment.start,
-                            indicator: RoundUnderlineTabIndicator(
-                              borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
-                              wantToWith: 12.w,
-                            ),
-                            enableFeedback: false,
-                            overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                              return Colors.transparent;
-                            }),
-                            dividerHeight: 0,
-                            labelStyle: TextStyle(
-                              color: const Color(0xff2c2c2c),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            unselectedLabelStyle: TextStyle(
-                              color: const Color(0xff666666),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
+                        TabBar(
+                          controller: controller.tabController,
+                          tabs: SearchType.values
+                              .map((e) => Tab(text: e.title))
+                              .toList(),
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          indicator: RoundUnderlineTabIndicator(
+                            borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
+                            wantToWith: 12.w,
+                          ),
+                          enableFeedback: false,
+                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
+                            return Colors.transparent;
+                          }),
+                          dividerHeight: 0,
+                          labelStyle: TextStyle(
+                            color: '#333333'.hexColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            color: '#333333'.hexColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                         Expanded(
@@ -207,7 +200,7 @@ class SearchScreen extends GetView<SearchController> {
 
   Widget buildSearchHistory(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -223,12 +216,12 @@ class SearchScreen extends GetView<SearchController> {
                       width: 12.w,
                       height: 12.w,
                     ),
-                    SizedBox(width: 8.w),
+                    SizedBox(width: 6.w),
                     Text(
                       '历史记录',
                       style: TextStyle(
                         color: '#333333'.hexColor,
-                        fontSize: 14.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -253,8 +246,8 @@ class SearchScreen extends GetView<SearchController> {
                   },
                   child: SvgPicture.asset(
                     Assets.svg.iconHistoryDelete,
-                    width: 14.w,
-                    height: 14.w,
+                    width: 16.w,
+                    height: 16.w,
                   ),
                 ),
               ],
@@ -316,7 +309,7 @@ class SearchScreen extends GetView<SearchController> {
                 );
               },
             ),
-            SizedBox(height: 16.w),
+            SizedBox(height: 24.w),
           ],
           Row(
             children: [
@@ -325,12 +318,12 @@ class SearchScreen extends GetView<SearchController> {
                 width: 12.w,
                 height: 12.w,
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: 6.w),
               Text(
                 '热搜推荐',
                 style: TextStyle(
                   color: '#333333'.hexColor,
-                  fontSize: 14.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -384,7 +377,6 @@ class SearchScreen extends GetView<SearchController> {
                         style: TextStyle(
                           color: '#557BF6'.hexColor,
                           fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

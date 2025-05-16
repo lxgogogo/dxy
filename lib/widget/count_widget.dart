@@ -485,17 +485,16 @@ class SimpleCountTextReverse extends StatelessWidget {
                 Text(
                   '000',
                   style: TextStyle(
-                    color: const Color(0xff9CACC9),
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                   ),
                 ),
-                SizedBox(width: 2.w),
+                SizedBox(width: 8.w),
                 Text(
                   desc,
                   style: descStyle ??
                       TextStyle(
-                        color: const Color(0xff999999),
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                 ),
               ],
@@ -509,17 +508,16 @@ class SimpleCountTextReverse extends StatelessWidget {
                   Text(
                     '000.0M',
                     style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
-                      fontSize: 12.sp,
+                      fontSize: 10.sp,
                     ),
                   ),
-                  SizedBox(width: 2.w),
+                  SizedBox(width: 8.w),
                   Text(
                     desc,
                     style: descStyle ??
                         TextStyle(
-                          color: const Color(0xff999999),
-                          fontSize: 12.sp,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
                 ],
@@ -534,16 +532,17 @@ class SimpleCountTextReverse extends StatelessWidget {
               desc,
               style: descStyle ??
                   TextStyle(
-                    color: const Color(0xff999999),
+                    color: '#999999'.hexColor,
                     fontSize: 12.sp,
                   ),
             ),
-            SizedBox(width: 2.w),
+            SizedBox(width: 8.w),
             Text(
               count,
               style: TextStyle(
-                color: const Color(0xff999999),
+                color: '#333333'.hexColor,
                 fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

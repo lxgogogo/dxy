@@ -76,7 +76,7 @@ class SearchChildView extends GetView<SearchChildView> {
   Widget _buildTagView(SearchChildController controller) {
     return controller.tagItems.isNotEmpty
         ? ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            padding: EdgeInsets.all(16.w),
             itemBuilder: (_, int index) => GestureDetector(
               onTap: TrackUtils.trackedTap(
                 onTap: () {
@@ -88,12 +88,12 @@ class SearchChildView extends GetView<SearchChildView> {
                 params: controller.tagItems[index].id,
               ),
               child: Container(
-                padding: EdgeInsets.only(bottom: 16.w),
+                padding: EdgeInsets.only(bottom: 12.w),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
                       color: index < controller.tagItems.length - 1
-                          ? '#000000'.hexColor.withOpacity(0.05)
+                          ? '#333333'.hexColor.withOpacity(0.05)
                           : Colors.transparent,
                     ),
                   ),
@@ -106,6 +106,7 @@ class SearchChildView extends GetView<SearchChildView> {
                         style: TextStyle(
                           color: '#333333'.hexColor,
                           fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                         softWrap: true,
                         maxLines: 1,
@@ -116,28 +117,18 @@ class SearchChildView extends GetView<SearchChildView> {
                     SimpleCountTextReverse(
                       count: controller.tagItems[index].viewCount?.abbreviateNumber ?? '0',
                       desc: '阅读',
-                      descStyle: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
                       usePlaceHolder: true,
                     ),
                     SimpleCountTextReverse(
                       count: controller.tagItems[index].commentCount?.abbreviateNumber ?? '0',
                       desc: '讨论',
-                      descStyle: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
                       usePlaceHolder: true,
                     ),
                   ],
                 ),
               ),
             ),
-            separatorBuilder: (_, int index) => SizedBox(height: 16.w),
+            separatorBuilder: (_, int index) => SizedBox(height: 18.w),
             itemCount: controller.tagItems.length,
           )
         : const Center(child: NoDataView());
@@ -146,7 +137,7 @@ class SearchChildView extends GetView<SearchChildView> {
   Widget _buildUserView(SearchChildController controller) {
     return controller.userItems.isNotEmpty
         ? ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            padding: EdgeInsets.all(16.w),
             itemBuilder: (context, index) {
               final item = controller.userItems[index];
               String title = '关注';
@@ -170,13 +161,12 @@ class SearchChildView extends GetView<SearchChildView> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: Text(
                         item.nickname ?? '',
                         style: TextStyle(
                           color: '#333333'.hexColor,
                           fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -213,7 +203,7 @@ class SearchChildView extends GetView<SearchChildView> {
   Widget _buildCourseView(SearchChildController controller) {
     return controller.courses.isNotEmpty
         ? ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+            padding: EdgeInsets.all(16.w),
             itemBuilder: (_, int index) => GestureDetector(
               onTap: TrackUtils.trackedTap(
                 onTap: () {
@@ -228,7 +218,7 @@ class SearchChildView extends GetView<SearchChildView> {
                   border: Border(
                     bottom: BorderSide(
                       color: index < controller.courses.length - 1
-                          ? '#000000'.hexColor.withOpacity(0.05)
+                          ? '#333333'.hexColor.withOpacity(0.05)
                           : Colors.transparent,
                     ),
                   ),
@@ -238,6 +228,7 @@ class SearchChildView extends GetView<SearchChildView> {
                   style: TextStyle(
                     color: '#333333'.hexColor,
                     fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
                   ),
                   softWrap: true,
                   maxLines: 1,
@@ -245,7 +236,7 @@ class SearchChildView extends GetView<SearchChildView> {
                 ),
               ),
             ),
-            separatorBuilder: (_, int index) => SizedBox(height: 16.w),
+            separatorBuilder: (_, int index) => SizedBox(height: 12.w),
             itemCount: controller.courses.length,
           )
         : const Center(child: NoDataView());
@@ -258,7 +249,7 @@ class SearchChildView extends GetView<SearchChildView> {
       );
     }
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      padding: EdgeInsets.all(16.w),
       itemCount: (controller.articles.length / 2).ceil(),
       itemBuilder: (BuildContext context, int index) {
         final int firstIndex = index * 2;
@@ -284,7 +275,7 @@ class SearchChildView extends GetView<SearchChildView> {
                     ),
                   ),
                   if (hasSecond) ...[
-                    SizedBox(width: 12.w),
+                    SizedBox(width: 11.w),
                     Expanded(
                       child: ThreeDBookItem(
                         onTap: () => TrackUtils.trackEvent(
@@ -313,7 +304,7 @@ class SearchChildView extends GetView<SearchChildView> {
       );
     }
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+      padding: EdgeInsets.all(16.w),
       itemCount: (controller.articles.length / 2).ceil(),
       itemBuilder: (BuildContext context, int index) {
         final int firstIndex = index * 2;
@@ -335,7 +326,7 @@ class SearchChildView extends GetView<SearchChildView> {
                 ),
               ),
               if (hasSecond) ...[
-                SizedBox(width: 12.w),
+                SizedBox(width: 11.w),
                 Expanded(
                   child: VideoItem(
                     onTap: () => TrackUtils.trackEvent(

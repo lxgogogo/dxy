@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 44.w,
+                height: 56.w,
                 margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Row(

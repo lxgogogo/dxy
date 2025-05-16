@@ -967,6 +967,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_arrow_down.svg
   String get iconArrowDown => 'assets/svg/icon_arrow_down.svg';
 
+  /// File path: assets/svg/icon_arrow_right.svg
+  String get iconArrowRight => 'assets/svg/icon_arrow_right.svg';
+
+  /// File path: assets/svg/icon_arrow_up.svg
+  String get iconArrowUp => 'assets/svg/icon_arrow_up.svg';
+
   /// File path: assets/svg/icon_back.svg
   String get iconBack => 'assets/svg/icon_back.svg';
 
@@ -1020,6 +1026,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/message_clean.svg
   String get messageClean => 'assets/svg/message_clean.svg';
+
+  /// File path: assets/svg/more.svg
+  String get more => 'assets/svg/more.svg';
 
   /// File path: assets/svg/nav_icon_feed.svg
   String get navIconFeed => 'assets/svg/nav_icon_feed.svg';
@@ -1086,6 +1095,8 @@ class $AssetsSvgGen {
         icScanArea,
         iconArrow,
         iconArrowDown,
+        iconArrowRight,
+        iconArrowUp,
         iconBack,
         iconClose,
         iconComment,
@@ -1104,6 +1115,7 @@ class $AssetsSvgGen {
         like,
         liked,
         messageClean,
+        more,
         navIconFeed,
         navIconFeedAct,
         navIconHome,

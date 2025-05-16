@@ -264,7 +264,8 @@ class _CountLikeAniState extends State<CountLikeAni> {
                 ? Text(
                     '点赞',
                     style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
+                      color: '#999999'.hexColor,
+                      fontSize: 10.sp,
                     ),
                   )
                 : CountText(

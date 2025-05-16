@@ -92,7 +92,7 @@ class _CommentItemState extends State<CommentItem> {
           avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : '',
           borderWidth: 0,
         ),
-        SizedBox(width: 7.w),
+        SizedBox(width: 8.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,7 +103,7 @@ class _CommentItemState extends State<CommentItem> {
                     widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
                     style: TextStyle(
                       color: '#333333'.hexColor,
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -123,12 +123,12 @@ class _CommentItemState extends State<CommentItem> {
                         )),
                 ],
               ),
-              SizedBox(height: 2.w),
+              SizedBox(height: 4.w),
               HtmlWidget(
                 widget.commentBean.contentStr ?? '',
                 textStyle: TextStyle(
-                  color: '#333333'.hexColor.withOpacity(0.7),
-                  fontSize: 12.sp,
+                  color: '#333333'.hexColor,
+                  fontSize: 14.sp,
                 ),
               ),
               if (widget.commentBean.files?.isNotEmpty == true)
@@ -137,10 +137,10 @@ class _CommentItemState extends State<CommentItem> {
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.only(top: 8.w),
                   itemCount: widget.commentBean.files?.length ?? 0,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 5.w,
+                    mainAxisSpacing: 5.w,
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
@@ -152,7 +152,7 @@ class _CommentItemState extends State<CommentItem> {
                         );
                       },
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: widget.commentBean.files?[index].url ?? '',
@@ -163,7 +163,7 @@ class _CommentItemState extends State<CommentItem> {
                     );
                   },
                 ),
-              SizedBox(height: 8.w),
+              SizedBox(height: 4.w),
               Row(
                 children: [
                   Text(
@@ -171,8 +171,8 @@ class _CommentItemState extends State<CommentItem> {
                         ? '${DateUtil.formatDateAlias3(widget.commentBean.createdAt!.millisecondsSinceEpoch, hasHM: true)}发布'
                         : '',
                     style: TextStyle(
-                      color: const Color(0xff9CACC9),
-                      fontSize: 10.w,
+                      color: '#999999'.hexColor,
+                      fontSize: 10.sp,
                     ),
                   ),
                   const Spacer(),
@@ -181,21 +181,14 @@ class _CommentItemState extends State<CommentItem> {
                       count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
                       liked: widget.commentBean.liked ?? false,
                       usePlaceHolder: false,
-                      likeWidget: widget.commentBean.liked ?? false
-                          ? Container(
-                              padding: EdgeInsets.all(5.w),
-                              child: SvgPicture.asset(
-                                Assets.svg.liked,
-                                color: '#567BF6'.hexColor.withOpacity(0.7),
-                              ),
-                            )
-                          : Container(
-                              padding: EdgeInsets.all(5.w),
-                              child: SvgPicture.asset(
-                                Assets.svg.like,
-                                color: '#333333'.hexColor.withOpacity(0.7),
-                              ),
-                            ),
+                      likeWidget: Center(
+                        child: SvgPicture.asset(
+                          widget.commentBean.liked == true ? Assets.svg.liked : Assets.svg.like,
+                          color: '#999999'.hexColor,
+                          width: 14.w,
+                          height: 14.w,
+                        ),
+                      ),
                       onToggleLike: () async {
                         final data = await NetRequest().newContentLike({
                           'relType': 'comment',
@@ -222,7 +215,7 @@ class _CommentItemState extends State<CommentItem> {
                                 TrackUtils.trackEvent(userLogType: '109007', params: widget.sourceId);
                                 break;
                               case SourceType.tool:
-                                // TODO: Handle this case.
+                              // TODO: Handle this case.
                             }
                           } else {
                             ToastUtils.showToast('取消点赞成功');
@@ -233,9 +226,7 @@ class _CommentItemState extends State<CommentItem> {
                         return false;
                       },
                     ),
-                    SizedBox(
-                      width: 16.w,
-                    ),
+                    SizedBox(width: 16.w),
                     GestureDetector(
                       onTap: () {
                         UserStore.of.checkLogin(() {
@@ -255,7 +246,7 @@ class _CommentItemState extends State<CommentItem> {
                               usePlaceHolder: false,
                               iconWidget: SvgPicture.asset(
                                 Assets.svg.feedComment,
-                                color: '#333333'.hexColor.withOpacity(0.7),
+                                color: '#999999'.hexColor,
                                 width: 14.w,
                               ),
                             )
@@ -266,14 +257,15 @@ class _CommentItemState extends State<CommentItem> {
                                 children: [
                                   SvgPicture.asset(
                                     Assets.svg.feedComment,
-                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                    color: '#999999'.hexColor,
                                     width: 14.w,
                                   ),
                                   SizedBox(width: 4.w),
                                   Text(
                                     '回复',
                                     style: TextStyle(
-                                      color: '#333333'.hexColor.withOpacity(0.7),
+                                      color: '#999999'.hexColor,
+                                      fontSize: 10.sp,
                                     ),
                                   ),
                                 ],
@@ -284,7 +276,6 @@ class _CommentItemState extends State<CommentItem> {
                 ],
               ),
               if (widget.commentBean.replies?.isNotEmpty == true) ...[
-                SizedBox(height: 17.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -295,7 +286,7 @@ class _CommentItemState extends State<CommentItem> {
                         final showReplyReport = /*widget.relType == 'thread' &&*/
                             !UserStore.of.isMe(reply.user?.id);
                         return Padding(
-                          padding: EdgeInsets.only(top: 10.w),
+                          padding: EdgeInsets.only(top: 12.w),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -303,7 +294,7 @@ class _CommentItemState extends State<CommentItem> {
                                 avatar: reply.user?.avatar ?? '',
                                 borderWidth: 0,
                               ),
-                              SizedBox(width: 7.w),
+                              SizedBox(width: 8.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -314,36 +305,37 @@ class _CommentItemState extends State<CommentItem> {
                                           reply.user?.nickname ?? '',
                                           style: TextStyle(
                                             color: '#333333'.hexColor,
-                                            fontSize: 12.sp,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                         const Spacer(),
                                         if (showReplyReport)
                                           GestureDetector(
-                                              onTap: () {
-                                                if (widget.commentBean.id != null &&
-                                                    widget.commentBean.user?.id != null) {
-                                                  UserStore.of.checkLogin(() {
-                                                    _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
-                                                  });
-                                                }
-                                              },
-                                              child: Icon(
-                                                Icons.more_horiz,
-                                                color: '#333333'.hexColor.withOpacity(0.7),
-                                              )),
+                                            onTap: () {
+                                              if (widget.commentBean.id != null &&
+                                                  widget.commentBean.user?.id != null) {
+                                                UserStore.of.checkLogin(() {
+                                                  _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                                                });
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              Assets.svg.more,
+                                              width: 12.w,
+                                              height: 12.w,
+                                            ),
+                                          ),
                                       ],
                                     ),
-                                    SizedBox(height: 2.w),
                                     HtmlWidget(
                                       reply.contentStr ?? '',
                                       textStyle: TextStyle(
-                                        color: '#333333'.hexColor.withOpacity(0.7),
-                                        fontSize: 12.sp,
+                                        color: '#333333'.hexColor,
+                                        fontSize: 14.sp,
                                       ),
                                     ),
-                                    SizedBox(height: 8.w),
+                                    // SizedBox(height: 8.w),
                                     Row(
                                       children: [
                                         Text(
@@ -351,29 +343,22 @@ class _CommentItemState extends State<CommentItem> {
                                               ? '${DateUtil.formatDateAlias3(reply.createdAt!.millisecondsSinceEpoch)}发布'
                                               : '',
                                           style: TextStyle(
-                                            color: const Color(0xff9CACC9),
-                                            fontSize: 10.w,
+                                            color: '#999999'.hexColor,
+                                            fontSize: 10.sp,
                                           ),
                                         ),
                                         const Spacer(),
                                         CountLikeAni(
                                           count: reply.likeCount.abbreviateNumber,
                                           liked: reply.liked ?? false,
-                                          likeWidget: reply.liked ?? false
-                                              ? Container(
-                                                  padding: EdgeInsets.all(5.w),
-                                                  child: SvgPicture.asset(
-                                                    Assets.svg.liked,
-                                                    color: '#567BF6'.hexColor.withOpacity(0.7),
-                                                  ),
-                                                )
-                                              : Container(
-                                                  padding: EdgeInsets.all(5.w),
-                                                  child: SvgPicture.asset(
-                                                    Assets.svg.like,
-                                                    color: '#333333'.hexColor.withOpacity(0.7),
-                                                  ),
-                                                ),
+                                          likeWidget: Center(
+                                            child: SvgPicture.asset(
+                                              reply.liked == true ? Assets.svg.liked : Assets.svg.like,
+                                              color: '#999999'.hexColor,
+                                              width: 14.w,
+                                              height: 14.w,
+                                            ),
+                                          ),
                                           usePlaceHolder: false,
                                           onToggleLike: () async {
                                             final data = await NetRequest().newContentLike({
@@ -389,19 +374,23 @@ class _CommentItemState extends State<CommentItem> {
                                                 ToastUtils.showToast('点赞成功');
                                                 switch (widget.sourceType) {
                                                   case SourceType.video:
-                                                    TrackUtils.trackEvent(userLogType: '103009', params: widget.sourceId);
+                                                    TrackUtils.trackEvent(
+                                                        userLogType: '103009', params: widget.sourceId);
                                                     break;
                                                   case SourceType.course:
-                                                    TrackUtils.trackEvent(userLogType: '105008', params: widget.sourceId);
+                                                    TrackUtils.trackEvent(
+                                                        userLogType: '105008', params: widget.sourceId);
                                                     break;
                                                   case SourceType.book:
-                                                    TrackUtils.trackEvent(userLogType: '107009', params: widget.sourceId);
+                                                    TrackUtils.trackEvent(
+                                                        userLogType: '107009', params: widget.sourceId);
                                                     break;
                                                   case SourceType.feed:
-                                                    TrackUtils.trackEvent(userLogType: '109008', params: widget.sourceId);
+                                                    TrackUtils.trackEvent(
+                                                        userLogType: '109008', params: widget.sourceId);
                                                     break;
                                                   case SourceType.tool:
-                                                    // TODO: Handle this case.
+                                                  // TODO: Handle this case.
                                                 }
                                               } else {
                                                 ToastUtils.showToast('取消点赞成功');
@@ -424,7 +413,7 @@ class _CommentItemState extends State<CommentItem> {
                     ),
                     if ((widget.commentBean.replyCount ?? 0) > 2)
                       Container(
-                        margin: EdgeInsets.only(left: 30.w, top: 10.w),
+                        margin: EdgeInsets.only(left: 38.w, top: 4.w),
                         child: Row(
                           children: [
                             if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
@@ -437,15 +426,24 @@ class _CommentItemState extends State<CommentItem> {
                                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xfff2f4f6),
-                                    borderRadius: BorderRadius.circular(50),
+                                    color: '#333333'.hexColor.withOpacity(0.05),
+                                    borderRadius: BorderRadius.circular(24.r),
                                   ),
-                                  child: Text(
-                                    '查看全部回复>',
-                                    style: TextStyle(
-                                      color: '#333333'.hexColor,
-                                      fontSize: 10.sp,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '查看全部回复',
+                                        style: TextStyle(
+                                          color: '#333333'.hexColor,
+                                          fontSize: 10.sp,
+                                        ),
+                                      ),
+                                      SvgPicture.asset(
+                                        Assets.svg.iconArrowRight,
+                                        width: 14.w,
+                                        height: 14.w,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -473,7 +471,11 @@ class _CommentItemState extends State<CommentItem> {
                                           fontSize: 10.sp,
                                         ),
                                       ),
-                                      const Icon(Icons.keyboard_arrow_up),
+                                      SvgPicture.asset(
+                                        Assets.svg.iconArrowUp,
+                                        width: 14.w,
+                                        height: 14.w,
+                                      ),
                                     ],
                                   ),
                                 ),

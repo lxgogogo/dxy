@@ -28,8 +28,6 @@ abstract class Routes {
   static const feedDetail = '/feedDetail';
   static const feedPost = '/feedPost';
   static const personal = '/personal';
-  static const competitionCalendar = '/competitionCalendar';
-  static const competitionDetail = '/competitionDetail';
   static const course = '/course';
   static const videoList = '/videoList';
   static const boolList = '/bookList';

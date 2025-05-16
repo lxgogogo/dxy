@@ -31,21 +31,21 @@ class ThreeDBookItem extends StatelessWidget {
       },
       child: SizedBox(
         width: itemWidth,
-        height: itemWidth / (170 / 216),
+        height: itemWidth / (166 / 212),
         child: Stack(
           alignment: Alignment.center,
           fit: StackFit.expand,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 12.w),
+              margin: EdgeInsets.only(top: 16.w),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
                     color: '#58A5FF'.hexColor.withOpacity(0.1),
-                    blurRadius: 4.r,
-                    offset: Offset(0, 4.w),
+                    blurRadius: 8.63.r,
+                    offset: Offset(0, 4.32.w),
                   )
                 ],
               ),
@@ -62,8 +62,9 @@ class ThreeDBookItem extends StatelessWidget {
                         Text(
                           item.title ?? '',
                           style: TextStyle(
-                            color: '#132449'.hexColor,
-                            fontSize: 16.sp,
+                            color: '#333333'.hexColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -72,13 +73,13 @@ class ThreeDBookItem extends StatelessWidget {
                         Text(
                           item.description ?? '',
                           style: TextStyle(
-                            color: '#132449'.hexColor.withOpacity(0.7),
-                            fontSize: 12.sp,
+                            color: '#666666'.hexColor,
+                            fontSize: 10.sp,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 12.w),
+                        SizedBox(height: 16.w),
                       ],
                     ),
                   )
@@ -89,8 +90,8 @@ class ThreeDBookItem extends StatelessWidget {
               top: 0,
               child: CachedNetworkImage(
                 imageUrl: item.stereoCover ?? '',
-                width: 95.25.w,
-                height: 122.27.w,
+                width: 95.w,
+                height: 122.w,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                 errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),

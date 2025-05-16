@@ -28,7 +28,7 @@ class DurationText extends StatelessWidget {
       formatDuration(durationInSeconds),
       style: TextStyle(
         color: Colors.white,
-        fontSize: 9.sp,
+        fontSize: 10.sp,
       ),
     );
   }

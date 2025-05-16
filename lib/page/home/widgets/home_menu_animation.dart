@@ -8,7 +8,6 @@ import 'package:holdem/gen/assets.gen.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../../utils/track_utils.dart';
-import '../../main/main_screen.dart';
 
 class HomeMenuSlideAnimation extends StatefulWidget {
   final Widget child;
@@ -20,7 +19,6 @@ class HomeMenuSlideAnimation extends StatefulWidget {
 }
 
 class _HomeMenuSlideAnimationState extends State<HomeMenuSlideAnimation> with SingleTickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<Offset>(
@@ -28,30 +26,29 @@ class _HomeMenuSlideAnimationState extends State<HomeMenuSlideAnimation> with Si
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeIn,
       builder: (context, offset, child) => FractionalTranslation(
-          translation: offset,
-          child: SizedBox(
-            width: double.infinity,
-            child: widget.child,
-          ),
+        translation: offset,
+        child: SizedBox(
+          width: double.infinity,
+          child: widget.child,
         ),
+      ),
       child: widget.child,
     );
   }
 }
 
 class HomeMenu extends StatelessWidget {
-
   const HomeMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
         child: Container(
-          color: '#F3F8FF'.hexColor,
+          color: '#F3F8FF'.hexColor.withOpacity(0.9),
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
@@ -121,49 +118,48 @@ class MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 12.w),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(32.r),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10.85, sigmaY: 10.85),
-                child: Container(
-                  width: 112.w,
-                  height: 32.w,
-                  padding: EdgeInsets.only(left: 10.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: '#0050FF'.hexColor.withOpacity(0.1),
-                        offset: Offset(0, 3.27.w),
-                        blurRadius: 6.54.r,
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      color: '#1E1E1E'.hexColor,
-                      fontSize: 14.sp,
+      child: SizedBox(
+        width: 112.w,
+        child: AspectRatio(
+          aspectRatio: 112 / 32,
+          child: Stack(
+            clipBehavior: Clip.none,
+            fit: StackFit.expand,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: '#0050FF'.hexColor.withOpacity(0.1),
+                      offset: Offset(0, 3.27.w),
+                      blurRadius: 6.54.r,
                     ),
+                  ],
+                  borderRadius: BorderRadius.circular(32.r),
+                ),
+                padding: EdgeInsets.only(left: 12.w),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    color: '#1E1E1E'.hexColor,
+                    fontSize: 14.sp,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Image.asset(
-                imagePath,
-                height: 42.w,
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Image.asset(
+                  imagePath,
+                  width: 42.w,
+                  height: 42.w,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

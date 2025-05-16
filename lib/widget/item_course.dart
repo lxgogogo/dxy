@@ -31,7 +31,7 @@ class CourseItem extends StatelessWidget {
                 TrackUtils.trackEvent(userLogType: '104002', params: Get.arguments);
               },
               child: Container(
-                height: 44.w,
+                height: 46.w,
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 margin: EdgeInsets.only(bottom: 6.w),
                 decoration: BoxDecoration(
@@ -51,7 +51,8 @@ class CourseItem extends StatelessWidget {
                       child: Text(
                         collectBean.title!,
                         style: TextStyle(
-                          color: '#132449'.hexColor.withOpacity(0.7),
+                          color: '#333333'.hexColor,
+                          fontWeight: FontWeight.w500,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

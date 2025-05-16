@@ -33,9 +33,9 @@ class _ToolItemState extends State<ToolItem> {
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: '#58A5FF'.hexColor.withOpacity(0.1),
-              blurRadius: 4.r,
-              offset: Offset(0, 4.w),
+              color: '#0050FF'.hexColor.withOpacity(0.1),
+              blurRadius: 13.31.r,
+              offset: Offset(0, 6.65.w),
             )
           ],
         ),
@@ -76,7 +76,7 @@ class _ToolItemState extends State<ToolItem> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: '#333333'.hexColor.withOpacity(0.7),
+                        color: '#666666'.hexColor,
                         fontSize: 12.sp,
                       ),
                     ),
@@ -90,8 +90,8 @@ class _ToolItemState extends State<ToolItem> {
                           '${widget.article.commentCount?.abbreviateNumber}评论',
                         ].join(' · '),
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: '#333333'.hexColor.withOpacity(0.8),
+                          fontSize: 10.sp,
+                          color: '#999999'.hexColor,
                         ),
                       ),
                     ],

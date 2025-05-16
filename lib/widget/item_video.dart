@@ -44,10 +44,10 @@ class VideoItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12.r),
-            child: SizedBox(
-              height: 96.w,
+          AspectRatio(
+            aspectRatio: 166 / 96,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -63,11 +63,11 @@ class VideoItem extends StatelessWidget {
                     bottom: 0,
                     child: ClipRRect(
                       child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                        filter: ImageFilter.blur(sigmaX: 16.23, sigmaY: 16.23),
                         child: Container(
                           height: 22.w,
                           alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
                           color: Colors.white.withOpacity(0.2),
                           child: Row(
                             children: [
@@ -75,14 +75,16 @@ class VideoItem extends StatelessWidget {
                                 width: 10.w,
                                 height: 10.w,
                               ),
-                              Text(
-                                '${item.viewCount?.abbreviateNumber ?? '0'}次播放',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9.sp,
+                              SizedBox(width: 4.w),
+                              Expanded(
+                                child: Text(
+                                  '${item.viewCount?.abbreviateNumber ?? '0'}次播放',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                  ),
                                 ),
                               ),
-                              const Spacer(),
                               DurationText(
                                 durationInSeconds: item.duration ?? 0,
                               ),
@@ -97,7 +99,9 @@ class VideoItem extends StatelessWidget {
                       top: 0,
                       right: 0,
                       child: Container(
-                        padding: EdgeInsets.all(4.w),
+                        height: 22.w,
+                        padding: EdgeInsets.symmetric(horizontal: 7.w),
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -107,8 +111,8 @@ class VideoItem extends StatelessWidget {
                           ),
                           borderRadius: borderRadius ??
                               BorderRadius.only(
-                                bottomLeft: Radius.circular(6.r),
                                 topRight: Radius.circular(12.r),
+                                bottomLeft: Radius.circular(12.r),
                               ),
                         ),
                         child: Text(
@@ -125,17 +129,17 @@ class VideoItem extends StatelessWidget {
             ),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 6.w, bottom: 3.w),
+              padding: EdgeInsets.only(top: 7.w, bottom: 5.w),
               child: Row(
                 children: [
                   if (item.featured == 1)
                     Container(
-                      width: 28.w,
                       height: 18.w,
-                      margin: EdgeInsets.only(right: 2.w),
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      margin: EdgeInsets.only(right: 4.w),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(4.w)), color: ColorStyle.cFF650F),
+                          borderRadius: BorderRadius.all(Radius.circular(4.r)), color: ColorStyle.cFF650F),
                       child: Text(
                         '精选',
                         style: TextStyle(fontSize: 10.sp, color: Colors.white),
@@ -146,7 +150,8 @@ class VideoItem extends StatelessWidget {
                     item.title ?? '',
                     style: TextStyle(
                       color: '#333333'.hexColor,
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -158,8 +163,8 @@ class VideoItem extends StatelessWidget {
               Text(
                 item.createdAt != null ? DateFormat('yy.MM.dd').format(item.createdAt!) : '',
                 style: TextStyle(
-                  color: '#333333'.hexColor.withOpacity(0.3),
-                  fontSize: 9.sp,
+                  color: '#999999'.hexColor,
+                  fontSize: 10.sp,
                 ),
               ),
               const Spacer(),
@@ -204,7 +209,7 @@ class VideoHorizontalItem extends StatelessWidget {
       child: Container(
         height: 92.w,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.white.withOpacity(0.7),
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
@@ -218,7 +223,7 @@ class VideoHorizontalItem extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 154.w,
+              width: 140.w,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -233,7 +238,9 @@ class VideoHorizontalItem extends StatelessWidget {
                       top: 0,
                       right: 0,
                       child: Container(
-                        padding: EdgeInsets.all(4.w),
+                        height: 22.w,
+                        padding: EdgeInsets.symmetric(horizontal: 7.w),
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -241,7 +248,9 @@ class VideoHorizontalItem extends StatelessWidget {
                               '#84BCF9'.hexColor,
                             ],
                           ),
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(6.r)),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(12.r),
+                          ),
                         ),
                         child: Text(
                           '合集',
@@ -266,12 +275,12 @@ class VideoHorizontalItem extends StatelessWidget {
                       children: [
                         if (item.featured == 1)
                           Container(
-                            width: 28.w,
                             height: 18.w,
-                            margin: EdgeInsets.only(right: 2.w),
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            margin: EdgeInsets.only(right: 4.w),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(4.w)), color: ColorStyle.cFF650F),
+                                borderRadius: BorderRadius.all(Radius.circular(4.r)), color: ColorStyle.cFF650F),
                             child: Text(
                               '精选',
                               style: TextStyle(fontSize: 10.sp, color: Colors.white),
@@ -283,7 +292,8 @@ class VideoHorizontalItem extends StatelessWidget {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: '#333333'.hexColor,
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -296,8 +306,8 @@ class VideoHorizontalItem extends StatelessWidget {
                           child: Text(
                             item.createdAt != null ? DateFormat('yy.MM.dd').format(item.createdAt!) : '',
                             style: TextStyle(
-                              color: '#333333'.hexColor.withOpacity(0.3),
-                              fontSize: 9.sp,
+                              color: '#999999'.hexColor,
+                              fontSize: 10.sp,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

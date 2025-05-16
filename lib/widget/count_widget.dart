@@ -28,8 +28,9 @@ class CountComment extends StatelessWidget {
           SvgPicture.asset(
             Assets.svg.iconComment,
             width: 12.w,
+            color: '#999999'.hexColor,
           ),
-          SizedBox(width: 3.w),
+          SizedBox(width: 4.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -204,8 +205,9 @@ class CountLike extends StatelessWidget {
           SvgPicture.asset(
             liked ? Assets.svg.iconLike : Assets.svg.iconLike,
             width: 12.w,
+            color: '#999999'.hexColor,
           ),
-          SizedBox(width: 3.w),
+          SizedBox(width: 4.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
         ],
       ),
@@ -337,8 +339,7 @@ class CountText extends StatelessWidget {
               child: Text(
                 '000.0M',
                 style: TextStyle(
-                  color: '#333333'.hexColor.withOpacity(0.7),
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                 ),
               ),
             ),
@@ -348,8 +349,7 @@ class CountText extends StatelessWidget {
             child: Text(
               '000',
               style: TextStyle(
-                color: const Color(0xff9CACC9),
-                fontSize: 12.sp,
+                fontSize: 10.sp,
               ),
             ),
           ),
@@ -357,7 +357,7 @@ class CountText extends StatelessWidget {
         Text(
           count,
           style: TextStyle(
-            color: '#333333'.hexColor.withOpacity(0.7),
+            color: '#999999'.hexColor,
             fontSize: 12.sp,
           ),
         ),
@@ -437,13 +437,11 @@ class SimpleCountText extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              count,
-              style: TextStyle(
-                color: AppTheme.color_999999,
-                fontSize: 10.sp,
-              )
-            ),
+            Text(count,
+                style: TextStyle(
+                  color: AppTheme.color_999999,
+                  fontSize: 10.sp,
+                )),
             SizedBox(width: 2.w),
             Text(
               desc,

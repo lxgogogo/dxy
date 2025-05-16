@@ -31,70 +31,88 @@ class _BookListScreenState extends State<BookListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommonAppBar.arrowBack(
-        context,
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(Routes.search);
-            },
-            child: Container(
-              margin: EdgeInsets.only(right: 16.w),
-              child: SvgPicture.asset(
-                Assets.svg.iconSearch,
-                width: 24.w,
-                height: 24.w,
-              ),
-            ),
-          ),
-        ],
-      ),
       body: GetBuilder<BookListController>(
         init: BookListController(),
-        builder: (controller) => Stack(
+        builder: (controller) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: 234.w,
-              child: Image.asset(
-                Assets.images.bookBanner.path,
-                fit: BoxFit.cover,
-              ),
-            ),
-            NestedScrollView(
-              controller: controller.scrollController,
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 211.w,
-                    ),
-                  )
-                ];
-              },
-              body: ClipRRect(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 100),
-                    decoration: BoxDecoration(
-                      color: '#F3F8FF'.hexColor.withOpacity(0.7),
-                    ),
-                    child: SmartRefresher(
-                      enablePullDown: false,
-                      enablePullUp: controller.articles.isNotEmpty || !controller.noMore,
-                      controller: controller.refreshController,
-                      onLoading: controller.onLoading,
-                      child: controller.isLoaded
-                          ? controller.articles.isNotEmpty
-                              ? _buildContentView(controller)
-                              : const Center(child: NoDataView())
-                          : const SizedBox(),
+            Container(
+              height: 56.w,
+              margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: Get.back,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: SvgPicture.asset(
+                        Assets.svg.iconBack,
+                        width: 24.w,
+                        height: 24.w,
+                      ),
                     ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.search);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 16.w),
+                      child: SvgPicture.asset(
+                        Assets.svg.iconSearch,
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  Assets.images.bookBanner.image(
+                    height: 234.w,
+                  ),
+                  NestedScrollView(
+                    controller: controller.scrollController,
+                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                      return [
+                        SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 211.w,
+                          ),
+                        )
+                      ];
+                    },
+                    body: ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(controller.isShowHomeMenu ? 0 : 12.r),
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 100),
+                          decoration: BoxDecoration(
+                            color: '#F3F8FF'.hexColor.withOpacity(0.7),
+                          ),
+                          child: SmartRefresher(
+                            enablePullDown: false,
+                            enablePullUp: controller.articles.isNotEmpty || !controller.noMore,
+                            controller: controller.refreshController,
+                            onLoading: controller.onLoading,
+                            child: controller.isLoaded
+                                ? controller.articles.isNotEmpty
+                                    ? _buildContentView(controller)
+                                    : const Center(child: NoDataView())
+                                : const SizedBox(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -106,24 +124,27 @@ class _BookListScreenState extends State<BookListScreen> {
 
 _buildContentView(BookListController controller) {
   return CustomScrollView(
-    physics: const NeverScrollableScrollPhysics(),
+    physics: const ClampingScrollPhysics(),
     slivers: [
-      SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
+      SliverPadding(
+        padding: EdgeInsets.fromLTRB(16.w, 16.w, 16.w, 12.w),
+        sliver: SliverToBoxAdapter(
           child: Row(
             children: [
               Text(
                 '好书推荐',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 18.sp,
+                ),
               ),
-              SizedBox(
-                width: 6.w,
-              ),
-              SvgPicture.asset(
-                Assets.svg.homeTag,
-                width: 34.w,
-              ),
+              // SizedBox(
+              //   width: 6.w,
+              // ),
+              // SvgPicture.asset(
+              //   Assets.svg.homeTag,
+              //   width: 34.w,
+              // ),
               const Spacer(),
               GestureDetector(
                 onTap: controller.loadBooks,
@@ -132,11 +153,11 @@ _buildContentView(BookListController controller) {
                     Text(
                       '换一批',
                       style: TextStyle(
-                        color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                        color: '#999999'.hexColor,
                         fontSize: 12.sp,
                       ),
                     ),
-                    SizedBox(width: 3.w),
+                    SizedBox(width: 4.w),
                     AnimatedBuilder(
                       animation: controller.animationController,
                       builder: (context, child) {
@@ -157,15 +178,14 @@ _buildContentView(BookListController controller) {
           ),
         ),
       ),
-      SliverToBoxAdapter(
-          child: Padding(
+      SliverPadding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: LayoutBuilder(
+        sliver: SliverToBoxAdapter(child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+            final itemWidth = (constraints.maxWidth - 11.w) / 2;
             return Wrap(
-              spacing: 12.w,
-              runSpacing: 12.w,
+              spacing: 11.w,
+              runSpacing: 16.w,
               children: controller.bookItems
                   .map(
                     (e) => ThreeDBookItem(
@@ -179,33 +199,36 @@ _buildContentView(BookListController controller) {
                   .toList(),
             );
           },
-        ),
-      )),
-      SliverToBoxAdapter(
-        child: Container(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w, top: 22.w),
-          child: Row(
-            children: [
-              Text(
-                '更多推荐',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400),
-              ),
-            ],
+        )),
+      ),
+      SliverPadding(
+        padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 12.w),
+        sliver: SliverToBoxAdapter(
+          child: Text(
+            '更多推荐',
+            style: TextStyle(
+              color: '#333333'.hexColor,
+              fontSize: 18.sp,
+            ),
           ),
         ),
       ),
-      SliverList(
+      SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        sliver: SliverList(
           delegate: SliverChildBuilderDelegate(
-        childCount: controller.articles.length,
-        (context, index) {
-          return Container(
-            margin: EdgeInsets.fromLTRB(12.w, 0, 12.w, 12.w),
-            child: BookItem(
-              article: controller.articles[index],
-            ),
-          );
-        },
-      ))
+            childCount: controller.articles.length,
+            (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: 12.w),
+                child: BookItem(
+                  article: controller.articles[index],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     ],
   );
 }

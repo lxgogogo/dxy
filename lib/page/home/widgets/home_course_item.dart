@@ -32,7 +32,7 @@ class HomeCourseItem extends StatelessWidget {
       ),
       child: Container(
         width: itemWidth,
-        height: itemWidth / (170 / 205),
+        height: itemWidth / (166 / 204),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: Assets.images.courseCardBg.provider(),
@@ -47,18 +47,18 @@ class HomeCourseItem extends StatelessWidget {
               width: 44.w,
               height: 44.w,
             ),
-            SizedBox(height: 16.w),
+            SizedBox(height: 12.w),
             Text(
               title,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14.sp,
+                fontSize: 16.sp,
               ),
             ),
             SizedBox(height: 6.w),
             ...subtitles.map(
               (e) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w).copyWith(top: 6.w),
+                padding: EdgeInsets.symmetric(horizontal: 24.w).copyWith(top: 6.w),
                 child: ClipRRect(
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 4.4, sigmaY: 4.4),
@@ -69,34 +69,13 @@ class HomeCourseItem extends StatelessWidget {
                         color: Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(100.r),
                       ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Text(
-                            e,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                          Positioned(
-                            left: 0,
-                            child: ClipOval(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 8.8, sigmaY: 8.8),
-                                child: Container(
-                                  width: 18.w,
-                                  height: 18.w,
-                                  color: Colors.white.withOpacity(0.3),
-                                  alignment: Alignment.center,
-                                  child: SvgPicture.asset(
-                                    Assets.svg.iconLikeWhite,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                      alignment: Alignment.center,
+                      child: Text(
+                        e,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                        ),
                       ),
                     ),
                   ),

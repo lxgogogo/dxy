@@ -967,6 +967,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_arrow_down.svg
   String get iconArrowDown => 'assets/svg/icon_arrow_down.svg';
 
+  /// File path: assets/svg/icon_back.svg
+  String get iconBack => 'assets/svg/icon_back.svg';
+
   /// File path: assets/svg/icon_close.svg
   String get iconClose => 'assets/svg/icon_close.svg';
 
@@ -1083,6 +1086,7 @@ class $AssetsSvgGen {
         icScanArea,
         iconArrow,
         iconArrowDown,
+        iconBack,
         iconClose,
         iconComment,
         iconDelete,
@@ -1121,7 +1125,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  const Assets._();
+  Assets._();
 
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
@@ -1163,7 +1167,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.medium,
+    FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
   }) {

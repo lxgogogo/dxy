@@ -32,18 +32,21 @@ class CourseScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 48.w,
+                height: 56.w,
                 margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      icon: Image.asset(
-                        'assets/images/back.png',
-                        width: 22.w,
-                        height: 22.w,
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16.w),
+                        child: SvgPicture.asset(
+                          Assets.svg.iconBack,
+                          width: 24.w,
+                          height: 24.w,
+                        ),
                       ),
-                      onPressed: Get.back,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -100,7 +103,7 @@ class CourseScreen extends StatelessWidget {
                                 slivers: [
                                   SliverToBoxAdapter(
                                     child: SizedBox(
-                                      height: 12.w,
+                                      height: 4.w,
                                     ),
                                   ),
                                   SliverPersistentHeader(
@@ -114,10 +117,10 @@ class CourseScreen extends StatelessWidget {
                                             color: controller.isShowHomeMenu ? '#F3F8FF'.hexColor : Colors.transparent,
                                             child: SingleChildScrollView(
                                               scrollDirection: Axis.horizontal,
+                                              padding: EdgeInsets.symmetric(horizontal: 16.w),
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(width: 16.w),
                                                   Container(
                                                     height: 32.w,
                                                     margin: EdgeInsets.symmetric(vertical: 12.w),
@@ -133,7 +136,7 @@ class CourseScreen extends StatelessWidget {
                                                                 params: controller.categories[index].id,
                                                               ),
                                                               child: Container(
-                                                                margin: EdgeInsets.only(right: 10.w),
+                                                                margin: EdgeInsets.only(right: 12.w),
                                                                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                                                                 alignment: Alignment.centerLeft,
                                                                 decoration: controller.categorySel == index
@@ -206,7 +209,7 @@ class CourseScreen extends StatelessWidget {
                                       (BuildContext context, int index) {
                                         CourseBean bean = controller.courses[index];
                                         return Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                          padding: EdgeInsets.symmetric(horizontal: 16.w),
                                           margin: EdgeInsets.only(bottom: 18.w),
                                           child: Column(
                                             children: [
@@ -223,13 +226,13 @@ class CourseScreen extends StatelessWidget {
                                                   Text(
                                                     bean.heading!,
                                                     style: TextStyle(
-                                                      color: '#132449'.hexColor,
-                                                      fontSize: 16.sp,
+                                                      color: '#333333'.hexColor,
+                                                      fontSize: 18.sp,
                                                     ),
                                                   )
                                                 ],
                                               ),
-                                              SizedBox(height: 9.w),
+                                              SizedBox(height: 12.w),
                                               CourseItem(article: bean)
                                             ],
                                           ),

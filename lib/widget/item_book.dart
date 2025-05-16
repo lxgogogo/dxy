@@ -37,9 +37,9 @@ class _BookItemState extends State<BookItem> {
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: '#58A5FF'.hexColor.withOpacity(0.1),
-              blurRadius: 4.r,
-              offset: Offset(0, 4.w),
+              color: '#0050FF'.hexColor.withOpacity(0.1),
+              blurRadius: 13.31.r,
+              offset: Offset(0, 6.65.w),
             )
           ],
         ),
@@ -49,7 +49,7 @@ class _BookItemState extends State<BookItem> {
           children: [
             Container(
               clipBehavior: Clip.antiAlias,
-              margin: EdgeInsets.only(right: 18.w),
+              margin: EdgeInsets.only(right: 12.w),
               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8.w))),
               child: CachedNetworkImage(
                 imageUrl: widget.article.cover ?? '',
@@ -81,7 +81,7 @@ class _BookItemState extends State<BookItem> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
+                      color: '#666666'.hexColor,
                       fontSize: 12.sp,
                       height: 1.2,
                     ),
@@ -92,7 +92,7 @@ class _BookItemState extends State<BookItem> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: '#333333'.hexColor.withOpacity(0.7),
+                      color: '#666666'.hexColor,
                       fontSize: 12.sp,
                       height: 1.2,
                     ),
@@ -105,8 +105,8 @@ class _BookItemState extends State<BookItem> {
                             ? DateUtil.formatDateAlias3(widget.article.createdAt!.millisecondsSinceEpoch)
                             : '',
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: '#333333'.hexColor.withOpacity(0.8),
+                          fontSize: 10.sp,
+                          color: '#999999'.hexColor,
                         ),
                       ),
                       const Spacer(),
@@ -116,8 +116,8 @@ class _BookItemState extends State<BookItem> {
                           '${widget.article.commentCount?.abbreviateNumber}评论',
                         ].join(' · '),
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: '#333333'.hexColor.withOpacity(0.8),
+                          fontSize: 10.sp,
+                          color: '#999999'.hexColor,
                         ),
                       ),
                     ],

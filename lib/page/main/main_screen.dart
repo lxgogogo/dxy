@@ -105,27 +105,23 @@ class _MainScreenState extends State<MainScreen> {
                               final badgeCount = UserStore.of.badgeModel.value?.total ?? 0;
                               if (badgeCount > 0) {
                                 return Positioned(
-                                  top: -7.5.w,
-                                  right: -7.5.w,
-                                  child: Container(
-                                    width: 16.w,
-                                    height: 16.w,
-                                    padding: EdgeInsets.all(1.w),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                                      color: Colors.red
-                                    ),
-                                    child: AutoSizeText(
-                                      '${badgeCount > 99 ? '99' : badgeCount}',
-                                      minFontSize: 6,
-                                      style: TextStyle(
-                                        fontSize: 9.sp,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  )
-                                );
+                                    top: -7.5.w,
+                                    right: -7.5.w,
+                                    child: Container(
+                                        width: 16.w,
+                                        height: 16.w,
+                                        padding: EdgeInsets.all(1.w),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(8.w)), color: Colors.red),
+                                        child: AutoSizeText(
+                                          '${badgeCount > 99 ? '99' : badgeCount}',
+                                          minFontSize: 6,
+                                          style: TextStyle(
+                                            fontSize: 9.sp,
+                                            color: Colors.white,
+                                          ),
+                                        )));
                               }
                               return const SizedBox();
                             }),
@@ -159,8 +155,8 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           SvgPicture.asset(
             icon,
-            width: 20.w,
-            height: 20.w,
+            width: 28.w,
+            height: 28.w,
           ),
           if (badge != null) badge,
         ],

@@ -5,8 +5,6 @@ import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/book_detail/book_detail_screen.dart';
 import 'package:holdem/page/bool_list/book_list_screen.dart';
-import 'package:holdem/page/competition_calendar/competition_calendar_screen.dart';
-import 'package:holdem/page/competition_detail/competition_detail_screen.dart';
 import 'package:holdem/page/equity_center/equity_center_view.dart';
 import 'package:holdem/page/feed_detail/feed_detail_screen.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
@@ -133,14 +131,6 @@ class AppPages {
     GetPage(
       name: Routes.personal,
       page: () => const PersonalScreen(),
-    ),
-    GetPage(
-      name: Routes.competitionCalendar,
-      page: () => const CompetitionCalendarScreen(),
-    ),
-    GetPage(
-      name: Routes.competitionDetail,
-      page: () => CompetitionDetailScreen(id: Get.arguments as int?),
     ),
     GetPage(
       name: Routes.course,

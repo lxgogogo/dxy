@@ -21,10 +21,6 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/item_news.dart';
-import 'package:holdem/widget/item_book.dart';
-import 'package:holdem/widget/item_comment.dart';
-import 'package:holdem/widget/item_competition.dart';
-import 'package:holdem/widget/item_tag.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
@@ -75,16 +71,6 @@ class SearchChildView extends GetView<SearchChildView> {
       // case SearchType.competition:
       //   return _buildCompetitionView(controller);
     }
-  }
-
-  Widget _buildCompetitionView(SearchChildController controller) {
-    return controller.competitionItems.isNotEmpty
-        ? ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.w),
-            itemBuilder: (context, index) => CompetitionItem(item: controller.competitionItems[index]),
-            itemCount: controller.competitionItems.length,
-          )
-        : const Center(child: NoDataView());
   }
 
   Widget _buildTagView(SearchChildController controller) {

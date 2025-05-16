@@ -272,11 +272,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 Text(
                                                   '换一批',
                                                   style: TextStyle(
-                                                    color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                                                    color: '#999999'.hexColor,
                                                     fontSize: 12.sp,
                                                   ),
                                                 ),
-                                                SizedBox(width: 3.w),
+                                                SizedBox(width: 4.w),
                                                 AnimatedBuilder(
                                                   animation: controller.animationController,
                                                   builder: (context, child) {
@@ -299,28 +299,28 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                         SizedBox(height: 12.w),
                                         LayoutBuilder(
                                           builder: (BuildContext context, BoxConstraints constraints) {
-                                            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                            final itemWidth = (constraints.maxWidth - 11.w) / 2;
                                             return Wrap(
-                                              spacing: 12.w,
+                                              spacing: 11.w,
                                               runSpacing: 12.w,
                                               children: controller.hotVideos
                                                   .map(
                                                     (e) => SizedBox(
                                                       width: itemWidth,
                                                       child: VideoItem(
-                                                        onTap: () => TrackUtils.trackEvent(userLogType: '101006', params: e.id),
+                                                        onTap: () =>
+                                                            TrackUtils.trackEvent(userLogType: '101006', params: e.id),
                                                         item: ArticleBean(
-                                                          id: e.id,
-                                                          cover: e.cover,
-                                                          viewCount: e.viewCount,
-                                                          duration: e.duration,
-                                                          title: e.title,
-                                                          createdAt: e.createdAt,
-                                                          type: e.type,
-                                                          likeCount: e.likeCount,
-                                                          commentCount: e.commentCount,
-                                                          featured: e.featured
-                                                        ),
+                                                            id: e.id,
+                                                            cover: e.cover,
+                                                            viewCount: e.viewCount,
+                                                            duration: e.duration,
+                                                            title: e.title,
+                                                            createdAt: e.createdAt,
+                                                            type: e.type,
+                                                            likeCount: e.likeCount,
+                                                            commentCount: e.commentCount,
+                                                            featured: e.featured),
                                                       ),
                                                     ),
                                                   )
@@ -328,31 +328,29 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             );
                                           },
                                         ),
-                                        SizedBox(height: 12.w),
-                                        HomeTagListWidget(tagList: controller.tagList, tagOnTap: controller.tagOnTap),
-                                        SizedBox(height: 10.w),
-                                        Column(
+                                        SizedBox(height: 8.w),
+                                        HomeTagListWidget(
+                                          tagList: controller.tagList,
+                                          tagOnTap: controller.tagOnTap,
+                                        ),
+                                        Wrap(
+                                          runSpacing: 12.w,
                                           children: controller.videoItems
-                                              .map((e) => Padding(
-                                                    padding: EdgeInsets.only(top: 6.w),
-                                                    child: VideoHorizontalItem(
-                                                      item: e,
-                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101008', params: e.id),
-                                                    ),
-                                                  ))
+                                              .map((e) => VideoHorizontalItem(
+                                                item: e,
+                                                onTap: () =>
+                                                    TrackUtils.trackEvent(userLogType: '101008', params: e.id),
+                                              ))
                                               .toList(),
                                         ),
-                                        SizedBox(height: 24.w),
-                                        const HomeTitle(
-                                          title: '德州教程',
-                                          subtitle: SizedBox(),
-                                        ),
                                         SizedBox(height: 12.w),
+                                        const HomeTitle(title: '德州教程'),
+                                        SizedBox(height: 16.w),
                                         LayoutBuilder(
                                           builder: (BuildContext context, BoxConstraints constraints) {
-                                            final itemWidth = (constraints.maxWidth - 12.w) / 2;
+                                            final itemWidth = (constraints.maxWidth - 11.w) / 2;
                                             return Wrap(
-                                              spacing: 12.w,
+                                              spacing: 11.w,
                                               runSpacing: 12.w,
                                               children: [
                                                 // 菜鸟上路：基础术语、牌桌礼仪、牌型计算
@@ -411,18 +409,19 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             userLogType: '101013',
                                           ),
                                         ),
-                                        SizedBox(height: 12.w),
+                                        SizedBox(height: 16.w),
                                         LayoutBuilder(
                                           builder: (BuildContext context, BoxConstraints constraints) {
                                             final itemWidth = (constraints.maxWidth - 12.w) / 2;
                                             return Wrap(
-                                              spacing: 12.w,
+                                              spacing: 11.w,
                                               runSpacing: 12.w,
                                               children: controller.bookItems
                                                   .map((e) => ThreeDBookItem(
                                                       itemWidth: itemWidth,
                                                       item: e,
-                                                      onTap: () => TrackUtils.trackEvent(userLogType: '101012', params: e.id)))
+                                                      onTap: () =>
+                                                          TrackUtils.trackEvent(userLogType: '101012', params: e.id)))
                                                   .toList(),
                                             );
                                           },

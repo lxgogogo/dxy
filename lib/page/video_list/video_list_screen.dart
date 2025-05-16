@@ -17,10 +17,6 @@ import '../../widget/common_app_bar.dart';
 import '../../widget/item_video.dart';
 import '../../widget/no_data.dart';
 
-/**
- * Created on 2025/3/6
- * Description:
- */
 class VideoListScreen extends StatefulWidget {
   const VideoListScreen({Key? key}) : super(key: key);
 
@@ -33,39 +29,50 @@ class _VideoListScreenState extends State<VideoListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CommonAppBar.arrowBack(
-        context,
-        title: '',
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(Routes.search);
-            },
-            child: Container(
-              margin: EdgeInsets.only(right: 16.w),
-              child: SvgPicture.asset(
-                Assets.svg.iconSearch,
-                width: 24.w,
-                height: 24.w,
-              ),
-            ),
-          ),
-        ],
-      ),
       body: GetBuilder<VideoListController>(
         init: VideoListController(),
         builder: (controller) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Container(
+                height: 56.w,
+                margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16.w),
+                        child: SvgPicture.asset(
+                          Assets.svg.iconBack,
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.search);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 16.w),
+                        child: SvgPicture.asset(
+                          Assets.svg.iconSearch,
+                          width: 24.w,
+                          height: 24.w,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: Stack(
                   children: [
-                    SizedBox(
+                    Assets.images.videoBanner.image(
                       height: 234.w,
-                      child: Image.asset(
-                        Assets.images.videoBanner.path,
-                        fit: BoxFit.cover,
-                      ),
                     ),
                     NestedScrollView(
                         controller: controller.scrollController,
@@ -115,7 +122,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
       slivers: [
         if (controller.articles.isNotEmpty)
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
+            padding: EdgeInsets.all(16.w),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
@@ -135,7 +142,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
                           ),
                         ),
                         if (hasSecond) ...[
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 11.w),
                           Expanded(
                             child: VideoItem(
                               onTap: () => TrackUtils.trackEvent(userLogType: '102001', params: controller.articles[secondIndex].id),

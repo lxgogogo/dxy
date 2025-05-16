@@ -21,21 +21,12 @@ class HomeTitle extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Row(
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: '#1E1E1E'.hexColor,
-                  fontSize: 20.sp,
-                ),
-              ),
-              SizedBox(width: 6.w),
-              // SvgPicture.asset(
-              //   Assets.svg.homeTag,
-              //   width: 34.w,
-              // ),
-            ],
+          child: Text(
+            title,
+            style: TextStyle(
+              color: '#333333'.hexColor,
+              fontSize: 18.sp,
+            ),
           ),
         ),
         subtitle ??
@@ -46,11 +37,11 @@ class HomeTitle extends StatelessWidget {
                   Text(
                     '更多',
                     style: TextStyle(
-                      color: '#1E1E1E'.hexColor.withOpacity(0.5),
+                      color: '#999999'.hexColor,
                       fontSize: 12.sp,
                     ),
                   ),
-                  SizedBox(width: 3.w),
+                  SizedBox(width: 4.w),
                   SvgPicture.asset(
                     Assets.svg.iconMore,
                     width: 12.w,

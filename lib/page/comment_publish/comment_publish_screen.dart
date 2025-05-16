@@ -45,10 +45,6 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
       init: CommentPublishController(relType, relId, sourceType),
       builder: (logic) {
         return Container(
-          margin: EdgeInsets.only(
-            top: 12.w,
-          ),
-          // padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -57,11 +53,12 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 18.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(height: 12.w),
                 Flexible(
                   child: Container(
                     constraints: BoxConstraints(minHeight: 150.w),
@@ -78,7 +75,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                               placeHolder: DefaultTextBlockStyle(
                                   TextStyle(
                                     fontSize: 14.sp,
-                                    color: '#333333'.hexColor.withOpacity(0.7),
+                                    color: '#999999'.hexColor,
                                   ),
                                   HorizontalSpacing.zero,
                                   VerticalSpacing.zero,
@@ -89,7 +86,6 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                     ),
                   ),
                 ),
-                SizedBox(height: 12.w),
                 imageGallery(),
                 buildBottomToolbar(context),
               ],
@@ -130,17 +126,17 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                             ),
                           ),
                           Positioned(
-                            right: 2,
-                            top: 2,
+                            right: 0,
+                            top: 0,
                             child: GestureDetector(
                               onTap: () => controller.deleteMediaItem(filePath),
                               behavior: HitTestBehavior.translucent,
                               child: Padding(
-                                padding: EdgeInsets.all(4.w),
+                                padding: EdgeInsets.all(6.w),
                                 child: SvgPicture.asset(
                                   Assets.svg.closeBlack,
-                                  width: 12.w,
-                                  height: 12.w,
+                                  width: 20.w,
+                                  height: 20.w,
                                 ),
                               ),
                             ),
@@ -212,68 +208,66 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
   }
 
   Widget buildBottomToolbar(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 4.w, bottom: 30.w),
-      decoration: const BoxDecoration(
-        border: Border.symmetric(
-          horizontal: BorderSide(color: Color(0xffe6e6e6)),
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12.w),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.black.withOpacity(0.05)),
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              if (!controller.isCanOpenPicker()) {
-                ToastUtils.showToast('最多只可上传9张图片');
-                return;
-              }
-              controller.openFilePicker();
-            },
-            child: Container(
-              margin: EdgeInsets.only(
-                right: 16.w,
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () async {
+                if (!controller.isCanOpenPicker()) {
+                  ToastUtils.showToast('最多只可上传9张图片');
+                  return;
+                }
+                controller.openFilePicker();
+              },
+              child: Container(
+                margin: EdgeInsets.only(
+                  right: 16.w,
+                ),
+                child: SvgPicture.asset(
+                  Assets.svg.inputImage,
+                  width: 20.w,
+                  height: 20.w,
+                ),
               ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final result = await Get.toNamed(Routes.atUser);
+                if (result != null) {
+                  controller.quillController.insertAtBlock(data: json.encode(result));
+                }
+              },
               child: SvgPicture.asset(
-                Assets.svg.inputImage,
+                Assets.svg.inputAt,
                 width: 20.w,
                 height: 20.w,
               ),
             ),
-          ),
-          GestureDetector(
-            onTap: () async {
-              final result = await Get.toNamed(Routes.atUser);
-              if (result != null) {
-                controller.quillController.insertAtBlock(data: json.encode(result));
-              }
-            },
-            child: Text(
-              '@',
-              style: TextStyle(fontSize: 16.sp, color: '#333333'.hexColor.withOpacity(0.7)),
-            ),
-          ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {
-              CommonUtils.getDebouncer('publishComment').run(() {
-                controller.submit();
-              });
-            },
-            child: Container(
-              height: 24.w,
-              // margin: EdgeInsets.only(right: 10.w),
-              alignment: Alignment.center,
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                CommonUtils.getDebouncer('publishComment').run(() {
+                  controller.submit();
+                });
+              },
               child: Text(
                 '发布',
                 style: TextStyle(
                   color: '#557BF6'.hexColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 12.sp,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

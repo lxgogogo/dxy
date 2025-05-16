@@ -45,10 +45,11 @@ class NoCommentView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.w),
+          padding: EdgeInsets.only(top: 48.w, bottom: 16.w),
           child: Image.asset(
             image,
-            height: 112.w,
+            width: 116.98.w,
+            height: 136.81.w,
           ),
         ),
         Text(

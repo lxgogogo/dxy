@@ -24,7 +24,7 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CommonAppBar.arrowBack(context,
-            title: controller.isCreate ? '新建收藏分类' : '修改收藏分类',
+            title: controller.isCreate.value ? '新建收藏分类' : '修改收藏分类',
             actions: [
               Obx(() => GestureDetector(
                 onTap: () {
@@ -35,7 +35,7 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Text(
-                    controller.isCreate ? '下一步' : '完成',
+                    controller.isCreate.value ? '下一步' : '完成',
                     style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,

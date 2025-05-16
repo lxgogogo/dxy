@@ -1039,6 +1039,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
 
+  /// File path: assets/svg/input_at.svg
+  String get inputAt => 'assets/svg/input_at.svg';
+
   /// File path: assets/svg/input_image.svg
   String get inputImage => 'assets/svg/input_image.svg';
 
@@ -1143,6 +1146,7 @@ class $AssetsSvgGen {
         iconSearchHistory,
         iconSetting,
         iconWarning,
+        inputAt,
         inputImage,
         like,
         liked,

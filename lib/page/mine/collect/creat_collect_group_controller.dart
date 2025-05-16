@@ -12,13 +12,13 @@ class CreatCollectGroupController extends GetxController {
   final TextEditingController textController = TextEditingController();
 
   RxBool enable = false.obs;
-  bool isCreate = true;
+  RxBool isCreate = true.obs;
   int id = 0;
 
   @override
   void onInit() {
     super.onInit();
-    isCreate = Get.arguments['create'] ?? false;
+    isCreate.value = Get.arguments['create'] ?? false;
     textController.text = Get.arguments['title'] ?? '';
     if (Get.arguments['id'] != null) {
       id = Get.arguments['id'] ?? 0;
@@ -33,7 +33,7 @@ class CreatCollectGroupController extends GetxController {
   }
 
   void signUpOnTap() async {
-    if (isCreate) {
+    if (isCreate.value) {
       Get.toNamed(Routes.finishCreateCollect, arguments: {
         'name': textController.text,
         'create': true

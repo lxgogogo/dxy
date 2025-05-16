@@ -35,7 +35,6 @@ import '../../services/index.dart';
 import '../../stores/config_store.dart';
 import '../../utils/date_util.dart';
 import '../../utils/track_utils.dart';
-import '../../widget/circle_image_with_text.dart';
 import '../../widget/feed_more_action.dart';
 import '../../widget/report_sheet.dart';
 import '../search_tag/widgets/search_tag_child_view.dart';
@@ -54,7 +53,25 @@ class FeedDetailScreen extends StatelessWidget {
         return Scaffold(
           appBar: CommonAppBar.arrowBack(
             context,
-            title: '详情',
+            title: '',
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 16.w),
+                child: FeedMoreAction(
+                  actions: {
+                    '屏蔽该内容': () {
+                      controller._onShield(controller.detailBean!.id!);
+                    },
+                    '屏蔽该用户': () {
+                      controller._onShieldUser(controller.detailBean!.user!.id!);
+                    },
+                    '举报该内容': () {
+                      controller._onReport(controller.detailBean!.id!, controller.detailBean!.user!.id!);
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
           backgroundColor: Colors.white,
           extendBody: true,
@@ -65,7 +82,7 @@ class FeedDetailScreen extends StatelessWidget {
               : controller.detailBean == null
                   ? const SizedBox()
                   : Padding(
-                      padding: EdgeInsets.fromLTRB(18.w, 8.w, 10.w, 86.w),
+                      padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 90.w),
                       child: SmartRefresher(
                         enablePullDown: false,
                         enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
@@ -74,36 +91,13 @@ class FeedDetailScreen extends StatelessWidget {
                         child: CustomScrollView(
                           slivers: [
                             SliverToBoxAdapter(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      controller.detailBean?.title ?? '',
-                                      style: TextStyle(
-                                        color: '#333333'.hexColor,
-                                        fontSize: 20.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  FeedMoreAction(
-                                    actions: {
-                                      '屏蔽该内容': () {
-                                        controller._onShield(controller.detailBean!.id!);
-                                      },
-                                      '屏蔽该用户': () {
-                                        controller._onShieldUser(controller.detailBean!.user!.id!);
-                                      },
-                                      '举报该内容': () {
-                                        controller._onReport(
-                                            controller.detailBean!.id!, controller.detailBean!.user!.id!);
-                                      }
-                                    },
-                                  ),
-                                ],
+                              child: Text(
+                                controller.detailBean?.title ?? '',
+                                style: TextStyle(
+                                  color: '#333333'.hexColor,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                             SliverToBoxAdapter(
@@ -123,26 +117,42 @@ class FeedDetailScreen extends StatelessWidget {
                                                   : '',
                                               style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
                                             )
-                                          : CircleImageWithText(
-                                              imageUrl:
-                                                  (controller.detailBean != null && controller.detailBean!.user != null)
-                                                      ? controller.detailBean!.user!.avatar!
-                                                      : '',
-                                              imageWidth: 20,
-                                              imageHeight: 20,
-                                              topText: controller.detailBean?.user?.nickname ?? '',
-                                              topTextStyle: TextStyle(
-                                                  color: '#535861'.hexColor,
-                                                  fontSize: 12.sp,
-                                                  fontWeight: FontWeight.w600),
-                                              bottomText1: controller.detailBean?.createdAt != null
-                                                  ? '${DateUtil.formatDateAlias3(
-                                                      controller.detailBean!.createdAt!.millisecondsSinceEpoch,
-                                                    )}发布'
-                                                  : '',
-                                              bottomText1Style: TextStyle(color: '#333333'.hexColor, fontSize: 12),
-                                              bottomText2: '',
-                                              bottomText2Style: const TextStyle(),
+                                          : Row(
+                                              children: [
+                                                BorderAvatar(
+                                                    avatar: controller.detailBean?.user?.avatar ?? '',
+                                                    avatarSize: 20.w),
+                                                SizedBox(width: 4.w),
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      Flexible(
+                                                        child: Text(
+                                                          controller.detailBean?.user?.nickname ?? '',
+                                                          style: TextStyle(
+                                                            color: '#666666'.hexColor,
+                                                            fontSize: 12.sp,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 12.w),
+                                                      Text(
+                                                        controller.detailBean?.createdAt != null
+                                                            ? '${DateUtil.formatDateAlias3(
+                                                                controller
+                                                                    .detailBean!.createdAt!.millisecondsSinceEpoch,
+                                                              )}发布'
+                                                            : '',
+                                                        style: TextStyle(
+                                                          color: '#333333'.hexColor.withOpacity(0.7),
+                                                          fontSize: 12.sp,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                     ),
                                   ],
@@ -199,6 +209,10 @@ class FeedDetailScreen extends StatelessWidget {
                                   padding: EdgeInsets.only(top: 12.w),
                                   child: HtmlWidget(
                                     controller.detailBean!.content!,
+                                    textStyle: TextStyle(
+                                      color: '#333333'.hexColor,
+                                      fontSize: 16.sp,
+                                    ),
                                     customStylesBuilder: htmlCustomStyles,
                                     factoryBuilder: () =>
                                         HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
@@ -229,7 +243,7 @@ class FeedDetailScreen extends StatelessWidget {
                               )
                             else
                               SliverToBoxAdapter(
-                                child: SizedBox(height: 16.w),
+                                child: SizedBox(height: 12.w),
                               ),
                             SliverToBoxAdapter(
                               child: Column(

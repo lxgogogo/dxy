@@ -84,17 +84,13 @@ class FeedItem extends StatelessWidget {
                 BorderAvatar(avatar: item.user?.avatar ?? '', avatarSize: 20.w),
                 SizedBox(width: 4.w),
                 Expanded(
-                  child: Row(
-                    children: [
-                      Text(
-                        item.user?.nickname ?? '',
-                        style: TextStyle(
-                          color: '#666666'.hexColor,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    item.user?.nickname ?? '',
+                    style: TextStyle(
+                      color: '#666666'.hexColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],

@@ -129,7 +129,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                                 Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
                               },
                               child: Container(
-                                margin: EdgeInsets.only(right: 8.w),
+                                margin: EdgeInsets.only(right: 4.w),
                                 child: Container(
                                   alignment: Alignment.center,
                                   child: Text(

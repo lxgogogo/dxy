@@ -934,6 +934,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/arrow_back.svg
   String get arrowBack => 'assets/svg/arrow_back.svg';
 
+  /// File path: assets/svg/arrow_down.svg
+  String get arrowDown => 'assets/svg/arrow_down.svg';
+
   /// File path: assets/svg/arrow_left.svg
   String get arrowLeft => 'assets/svg/arrow_left.svg';
 
@@ -976,6 +979,24 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_back.svg
   String get iconBack => 'assets/svg/icon_back.svg';
 
+  /// File path: assets/svg/icon_bottom_comment.svg
+  String get iconBottomComment => 'assets/svg/icon_bottom_comment.svg';
+
+  /// File path: assets/svg/icon_bottom_favorite.svg
+  String get iconBottomFavorite => 'assets/svg/icon_bottom_favorite.svg';
+
+  /// File path: assets/svg/icon_bottom_favorited.svg
+  String get iconBottomFavorited => 'assets/svg/icon_bottom_favorited.svg';
+
+  /// File path: assets/svg/icon_bottom_like.svg
+  String get iconBottomLike => 'assets/svg/icon_bottom_like.svg';
+
+  /// File path: assets/svg/icon_bottom_liked.svg
+  String get iconBottomLiked => 'assets/svg/icon_bottom_liked.svg';
+
+  /// File path: assets/svg/icon_bottom_share.svg
+  String get iconBottomShare => 'assets/svg/icon_bottom_share.svg';
+
   /// File path: assets/svg/icon_close.svg
   String get iconClose => 'assets/svg/icon_close.svg';
 
@@ -996,6 +1017,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_more.svg
   String get iconMore => 'assets/svg/icon_more.svg';
+
+  /// File path: assets/svg/icon_more_vert.svg
+  String get iconMoreVert => 'assets/svg/icon_more_vert.svg';
 
   /// File path: assets/svg/icon_refresh.svg
   String get iconRefresh => 'assets/svg/icon_refresh.svg';
@@ -1084,6 +1108,7 @@ class $AssetsSvgGen {
   /// List of all assets
   List<String> get values => [
         arrowBack,
+        arrowDown,
         arrowLeft,
         arrowRight,
         badge,
@@ -1098,6 +1123,12 @@ class $AssetsSvgGen {
         iconArrowRight,
         iconArrowUp,
         iconBack,
+        iconBottomComment,
+        iconBottomFavorite,
+        iconBottomFavorited,
+        iconBottomLike,
+        iconBottomLiked,
+        iconBottomShare,
         iconClose,
         iconComment,
         iconDelete,
@@ -1105,6 +1136,7 @@ class $AssetsSvgGen {
         iconLike,
         iconLikeWhite,
         iconMore,
+        iconMoreVert,
         iconRefresh,
         iconScan,
         iconSearch,

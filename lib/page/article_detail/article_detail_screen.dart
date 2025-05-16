@@ -114,11 +114,11 @@ class ArticleDetailScreen extends StatelessWidget {
                                   else
                                     SizedBox(height: 16.w),
                                   Text(
-                                    '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
+                                    '评论 ${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
                                     style: TextStyle(
                                       color: '#333333'.hexColor,
                                       fontSize: 12.sp,
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   SizedBox(height: 16.w),

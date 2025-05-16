@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/feed_list/widgets/feed_list_child.dart';
@@ -76,7 +77,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        toolbarHeight: 100,
+        toolbarHeight: 116.w - ScreenUtil().statusBarHeight,
         flexibleSpace: FlexibleSpaceBar(
           background: Image.asset(
             Assets.images.feedBg.path,
@@ -105,7 +106,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    SizedBox(width: 18.w),
+                    SizedBox(width: 16.w),
                     ...List.generate(showBoardInfoList.length, (index) {
                       return GestureDetector(
                         onTap: () {
@@ -129,34 +130,33 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                           );
                         },
                         child: Container(
-                          height: 30.w,
-                          padding: EdgeInsets.symmetric(horizontal: 17.w),
+                          height: 28.w,
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
                           margin: EdgeInsets.only(right: 12.w),
                           alignment: Alignment.center,
                           decoration: selIndex != index
                               ? ShapeDecoration(
-                                  color: '#edeef2'.hexColor,
+                                  color: '#333333'.hexColor.withOpacity(0.05),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24),
+                                    borderRadius: BorderRadius.circular(24.r),
                                   ),
                                 )
                               : BoxDecoration(
                                   borderRadius: BorderRadius.circular(24.w),
-                                  gradient: const LinearGradient(
-                                    begin: Alignment(1.00, 0.00),
-                                    end: Alignment(-1, 0),
+                                  gradient: LinearGradient(
                                     colors: [
-                                      Color(0xFF84BCF9),
-                                      Color(0xFF557BF6),
+                                      '557BF6'.hexColor,
+                                      '84BCF9'.hexColor,
                                     ],
                                   ),
                                 ),
                           child: Text(
                             showBoardInfoList[index].name!,
                             style: TextStyle(
-                                color: selIndex == index ? Colors.white : '#6f6f70'.hexColor,
-                                fontWeight: selIndex == index ? FontWeight.w600 : FontWeight.w500,
-                                fontSize: 12),
+                              color: selIndex == index ? Colors.white : '#333333'.hexColor,
+                              fontWeight: selIndex == index ? FontWeight.w600 : FontWeight.w400,
+                              fontSize: 12.sp,
+                            ),
                           ),
                         ),
                       );
@@ -251,7 +251,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                           child: GestureDetector(
                             onTap: _tipController.showTooltip,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                              padding: EdgeInsets.all(12.w),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -259,13 +259,15 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                                     filters[filterIndex],
                                     style: TextStyle(
                                       fontSize: 12.sp,
-                                      color: '#333333'.hexColor.withOpacity(0.8),
+                                      color: '#666666'.hexColor,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.arrow_drop_down_outlined,
-                                    color: '#333333'.hexColor.withOpacity(0.8),
+                                  SizedBox(width: 4.w),
+                                  SvgPicture.asset(
+                                    Assets.svg.arrowDown,
+                                    width: 10.w,
+                                    height: 10.w,
                                   ),
                                 ],
                               ),
@@ -273,7 +275,6 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                           ),
                         ),
                       ),
-                      SizedBox(height: 12.w),
                       Expanded(child: FeedListChildView(key: _pageKey)),
                     ],
                   )),

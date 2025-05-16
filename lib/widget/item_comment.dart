@@ -110,17 +110,19 @@ class _CommentItemState extends State<CommentItem> {
                   const Spacer(),
                   if (showReport)
                     GestureDetector(
-                        onTap: () {
-                          if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
-                            UserStore.of.checkLogin(() {
-                              _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
-                            });
-                          }
-                        },
-                        child: Icon(
-                          Icons.more_horiz,
-                          color: '#333333'.hexColor.withOpacity(0.7),
-                        )),
+                      onTap: () {
+                        if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
+                          UserStore.of.checkLogin(() {
+                            _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                          });
+                        }
+                      },
+                      child: SvgPicture.asset(
+                        Assets.svg.more,
+                        width: 12.w,
+                        height: 12.w,
+                      ),
+                    ),
                 ],
               ),
               SizedBox(height: 4.w),

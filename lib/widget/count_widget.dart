@@ -86,7 +86,7 @@ class CountCommentBadge extends StatelessWidget {
             Opacity(
               opacity: count != '0' ? 1 : 0,
               child: Transform.translate(
-                offset: Offset(-8.w, -12.w),
+                offset: Offset(-7.w, -12.w),
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 2.w),
                   decoration: BoxDecoration(
@@ -96,7 +96,7 @@ class CountCommentBadge extends StatelessWidget {
                   child: Text(
                     count,
                     style: TextStyle(
-                      color: '##333333'.hexColor.withOpacity(0.7),
+                      color: '#999999'.hexColor,
                       fontSize: 10.sp,
                     ),
                   ),

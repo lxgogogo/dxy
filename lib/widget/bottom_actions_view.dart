@@ -15,6 +15,7 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/track_utils.dart';
 import 'package:holdem/widget/count_widget.dart';
+import 'package:holdem/widget/item_comment.dart';
 
 import '../model/user.dart';
 import '../page/comment_publish/comment_publish_screen.dart';
@@ -43,17 +44,16 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.only(bottom: 16.w),
+      padding: EdgeInsets.only(bottom: 34.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 10.w, bottom: 12.w),
+            padding: EdgeInsets.symmetric(vertical: 12.w),
             decoration: BoxDecoration(
                 color: Colors.white,
-                // borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
                 border: Border(
-                  top: BorderSide(color: const Color(0xffE5E5E5), width: 0.5.w),
+                  top: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
                 )),
             alignment: Alignment.topCenter,
             child: Row(
@@ -62,11 +62,10 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                 if (widget.viewParams.relType != NetRequest.COMMENT_TYPE_THREAD)
                   Container(
                     height: 32.w,
-                    constraints: BoxConstraints(maxWidth: 131.w),
                     padding: EdgeInsets.only(right: 8.w),
                     decoration: BoxDecoration(
                       color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(30.r),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -81,7 +80,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                             child: Text(
                               '德学院官方',
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: 10.sp,
                                 color: '##333333'.hexColor,
                               ),
                               maxLines: 1,
@@ -95,17 +94,18 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                 else
                   Container(
                     height: 32.w,
-                    constraints: BoxConstraints(maxWidth: 131.w),
+                    constraints: BoxConstraints(maxWidth: 101.w),
                     padding: EdgeInsets.only(right: 8.w),
                     decoration: BoxDecoration(
                       color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(16.r),
+                      borderRadius: BorderRadius.circular(30.r),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ClipOval(
-                          child: LoginHelper().getUserAvatar(widget.viewParams.author?.avatar ?? '', 30.w, 30.w),
+                        BorderAvatar(
+                          avatar: widget.viewParams.author?.avatar ?? '',
+                          borderWidth: 0,
                         ),
                         Flexible(
                           child: Padding(
@@ -113,7 +113,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                             child: Text(
                               widget.viewParams.author?.nickname ?? '',
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: 10.sp,
                                 color: '##333333'.hexColor,
                               ),
                               maxLines: 1,
@@ -129,31 +129,18 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                                 Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
                               },
                               child: Container(
-                                margin: EdgeInsets.only(right: 10.w),
-                                child: widget.viewParams.author?.followed == true
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          '已关注',
-                                          style: TextStyle(
-                                            color: '#557BF6'.hexColor,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      )
-                                    : Container(
-                                        height: 28.w,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          '+关注',
-                                          style: TextStyle(
-                                            color: '#557BF6'.hexColor,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
+                                margin: EdgeInsets.only(right: 8.w),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    widget.viewParams.author?.followed == true ? '已关注' : '+关注',
+                                    style: TextStyle(
+                                      color: '#557BF6'.hexColor,
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -191,15 +178,9 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                             padding: EdgeInsets.zero,
                             onTap: onLikeButtonTapped,
                             likeBuilder: (bool isLiked) {
-                              return isLiked
-                                  ? SvgPicture.asset(
-                                      Assets.svg.liked,
-                                      color: '#567BF6'.hexColor.withOpacity(0.7),
-                                    )
-                                  : SvgPicture.asset(
-                                      Assets.svg.like,
-                                      color: '#333333'.hexColor.withOpacity(0.7),
-                                    );
+                              return SvgPicture.asset(
+                                isLiked ? Assets.svg.iconBottomLiked : Assets.svg.iconBottomLike,
+                              );
                             },
                             bubblesColor: const BubblesColor(
                               dotPrimaryColor: Color(0xFF557BF6),
@@ -218,27 +199,20 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                         onTap: _favoriteToggle,
                         child: CountCommentBadge(
                           count: widget.viewParams.favoriteCount.abbreviateNumber,
-                          iconWidget: widget.viewParams.favoriteState == true
-                              ? SvgPicture.asset(
-                                  Assets.svg.stared,
-                                  color: '#567BF6'.hexColor.withOpacity(0.7),
-                                  width: 24.w,
-                                  height: 24.w,
-                                )
-                              : SvgPicture.asset(
-                                  Assets.svg.star,
-                                  color: '#333333'.hexColor.withOpacity(0.7),
-                                  width: 24.w,
-                                  height: 24.w,
-                                ),
+                          iconWidget: SvgPicture.asset(
+                            widget.viewParams.favoriteState == true
+                                ? Assets.svg.iconBottomFavorited
+                                : Assets.svg.iconBottomFavorite,
+                            width: 24.w,
+                            height: 24.w,
+                          ),
                         ),
                       ),
                       GestureDetector(
                         onTap: _toCommentList,
                         child: CountCommentBadge(
                             iconWidget: SvgPicture.asset(
-                              Assets.svg.comment,
-                              color: '#333333'.hexColor,
+                              Assets.svg.iconBottomComment,
                               width: 24.w,
                               height: 24.w,
                             ),
@@ -248,8 +222,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                         onTap: _toShare,
                         child: CountCommentBadge(
                             iconWidget: SvgPicture.asset(
-                              Assets.svg.share,
-                              color: '#333333'.hexColor,
+                              Assets.svg.iconBottomShare,
                               width: 24.w,
                               height: 24.w,
                             ),
@@ -258,9 +231,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 6.w,
-                )
+                SizedBox(width: 6.w)
               ],
             ),
           ),

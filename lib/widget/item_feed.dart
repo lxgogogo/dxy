@@ -47,26 +47,27 @@ class FeedItem extends StatelessWidget {
         onTap?.call();
       },
       child: Container(
-        margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w),
-        padding: EdgeInsets.only(bottom: 16.w),
+        margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 12.w),
+        padding: EdgeInsets.only(bottom: 12.w),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05))),
+          border: Border(bottom: BorderSide(color: '#333333'.hexColor.withOpacity(0.05))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
+                if (item.sign?.isNotEmpty == true) tagWidget(item.sign!),
                 Expanded(
                   child: Text(
                     item.title ?? '',
                     style: TextStyle(
                       color: '#333333'.hexColor,
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -88,12 +89,11 @@ class FeedItem extends StatelessWidget {
                       Text(
                         item.user?.nickname ?? '',
                         style: TextStyle(
-                          color: '#535861'.hexColor,
+                          color: '#666666'.hexColor,
                           fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      if (item.sign?.isNotEmpty == true) tagWidget(item.sign!),
                     ],
                   ),
                 ),
@@ -107,7 +107,7 @@ class FeedItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: '#333333'.hexColor.withOpacity(0.8),
+                  color: '#666666'.hexColor,
                 ),
                 softWrap: true,
               ),
@@ -121,8 +121,8 @@ class FeedItem extends StatelessWidget {
                     (index) {
                       final fileItem = item.files![index];
                       return Container(
-                        width: 150.w,
-                        height: 110.w,
+                        width: 160.w,
+                        height: 90.w,
                         margin: EdgeInsets.only(right: 8.w),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.r),
@@ -155,18 +155,18 @@ class FeedItem extends StatelessWidget {
               ),
             SizedBox(height: 8.w),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (item.createdAt != null)
-                  Padding(
-                    padding: EdgeInsets.only(right: 16.w),
-                    child: Text(
-                      '${DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)}发布',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: '#333333'.hexColor.withOpacity(0.8),
-                      ),
+                  Text(
+                    '${DateUtil.formatDateAlias3(item.createdAt?.millisecondsSinceEpoch ?? 0)}发布',
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: '#999999'.hexColor,
                     ),
-                  ),
+                  )
+                else
+                  const SizedBox(),
                 Text(
                   [
                     '${item.likeCount?.abbreviateNumber ?? '0'}点赞',
@@ -174,8 +174,8 @@ class FeedItem extends StatelessWidget {
                     '${item.favoriteCount?.abbreviateNumber ?? '0'}收藏',
                   ].join(' · '),
                   style: TextStyle(
-                    fontSize: 12.sp,
-                    color: '#333333'.hexColor.withOpacity(0.8),
+                    fontSize: 10.sp,
+                    color: '#999999'.hexColor,
                   ),
                 ),
               ],
@@ -202,18 +202,19 @@ class FeedItem extends StatelessWidget {
       return const SizedBox();
     }
     return Container(
-      margin: EdgeInsets.only(left: 4.w),
-      padding: EdgeInsets.fromLTRB(6.w, 2.w, 6.w, 2.w),
+      height: 18.w,
+      margin: EdgeInsets.only(right: 6.w),
+      padding: EdgeInsets.symmetric(horizontal: 6.w),
       decoration: BoxDecoration(
         color: hex.hexColor,
         borderRadius: BorderRadius.circular(4.r),
       ),
+      alignment: Alignment.center,
       child: Text(
         text,
         style: TextStyle(
           color: Colors.white,
           fontSize: 10.sp,
-          fontWeight: FontWeight.w500,
         ),
       ),
     );

@@ -57,176 +57,183 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                 )
               : controller.detailBean == null
                   ? const SizedBox()
-                  : SmartRefresher(
-                      enablePullDown: false,
-                      enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
-                      controller: controller.refreshController,
-                      onLoading: controller.onLoading,
-                      child: CustomScrollView(
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: ColoredBox(
-                              color: '#D9D9D9'.hexColor.withOpacity(0.2),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(top: 24.w, bottom: 16.w),
-                                    alignment: Alignment.center,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: CachedNetworkImage(
-                                        imageUrl: controller.detailBean?.cover ?? '',
-                                        width: 180.w,
-                                        height: 180.w,
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) =>
-                                            Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                        errorWidget: (context, url, error) =>
-                                            Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 12.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-                                    ),
+                  : Column(
+                      children: [
+                        Expanded(
+                          child: SmartRefresher(
+                            enablePullDown: false,
+                            enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
+                            controller: controller.refreshController,
+                            onLoading: controller.onLoading,
+                            child: CustomScrollView(
+                              slivers: [
+                                SliverToBoxAdapter(
+                                  child: ColoredBox(
+                                    color: '#D9D9D9'.hexColor.withOpacity(0.2),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
-                                        Text(
-                                          controller.detailBean?.title ?? '',
-                                          style: TextStyle(
-                                            color: '#1E1E1E'.hexColor,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
+                                        Container(
+                                          padding: EdgeInsets.only(top: 24.w, bottom: 16.w),
+                                          alignment: Alignment.center,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(4),
+                                            child: CachedNetworkImage(
+                                              imageUrl: controller.detailBean?.cover ?? '',
+                                              width: 180.w,
+                                              height: 180.w,
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                              errorWidget: (context, url, error) =>
+                                                  Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                            ),
                                           ),
                                         ),
-                                        if (controller.detailBean?.description?.isNotEmpty == true)
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 8.w),
-                                            child: Text(
-                                              controller.detailBean?.description ?? '',
-                                              style: TextStyle(
-                                                color: '#333333'.hexColor,
-                                                fontSize: 16.sp,
+                                        Container(
+                                          padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 12.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              Text(
+                                                controller.detailBean?.title ?? '',
+                                                style: TextStyle(
+                                                  color: '#1E1E1E'.hexColor,
+                                                  fontSize: 18.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
-                                              maxLines: 6,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                              if (controller.detailBean?.description?.isNotEmpty == true)
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 8.w),
+                                                  child: Text(
+                                                    controller.detailBean?.description ?? '',
+                                                    style: TextStyle(
+                                                      color: '#333333'.hexColor,
+                                                      fontSize: 16.sp,
+                                                    ),
+                                                    maxLines: 6,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              SizedBox(height: 12.w),
+                                              if (controller.detailBean?.tagList?.isNotEmpty == true)
+                                                TagListView(
+                                                  tagList: controller.detailBean?.tagList ?? [],
+                                                  onTapItem: (model) => TrackUtils.trackEvent(
+                                                    userLogType: '107002',
+                                                    params: model.id,
+                                                  ),
+                                                ),
+                                            ],
                                           ),
-                                        SizedBox(height: 12.w),
-                                        if (controller.detailBean?.tagList?.isNotEmpty == true)
-                                          TagListView(
-                                            tagList: controller.detailBean?.tagList ?? [],
-                                            onTapItem: (model) => TrackUtils.trackEvent(
-                                              userLogType: '107002',
-                                              params: model.id,
-                                            ),
-                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: GestureDetector(
-                              onTap: () {
-                                final androidUrl = controller.detailBean?.tool?.androidUrl ?? '';
-                                final iosUrl = controller.detailBean?.tool?.iosUrl ?? '';
-                                final url = controller.detailBean?.tool?.url ?? '';
-                                if (Platform.isAndroid) {
-                                  launchUrlString(
-                                    androidUrl.isNotEmpty
-                                        ? androidUrl
-                                        : url.isNotEmpty
-                                            ? url
-                                            : iosUrl,
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                } else if (Platform.isIOS) {
-                                  launchUrlString(
-                                    iosUrl.isNotEmpty
-                                        ? iosUrl
-                                        : url.isNotEmpty
-                                            ? url
-                                            : androidUrl,
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                }
-                              },
-                              child: Center(
-                                child: Container(
-                                  width: 160.w,
-                                  height: 46.w,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100.r),
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        '#557BF6'.hexColor,
-                                        '#84BCF9'.hexColor,
-                                      ],
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: '#58A5FF'.hexColor.withOpacity(0.2),
-                                        blurRadius: 6.r,
-                                        offset: Offset(0, 12.w),
-                                      )
-                                    ],
-                                  ),
-                                  child: Text(
-                                    '下载资源',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.sp,
+                                ),
+                                SliverToBoxAdapter(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final androidUrl = controller.detailBean?.tool?.androidUrl ?? '';
+                                      final iosUrl = controller.detailBean?.tool?.iosUrl ?? '';
+                                      final url = controller.detailBean?.tool?.url ?? '';
+                                      if (Platform.isAndroid) {
+                                        launchUrlString(
+                                          androidUrl.isNotEmpty
+                                              ? androidUrl
+                                              : url.isNotEmpty
+                                                  ? url
+                                                  : iosUrl,
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      } else if (Platform.isIOS) {
+                                        launchUrlString(
+                                          iosUrl.isNotEmpty
+                                              ? iosUrl
+                                              : url.isNotEmpty
+                                                  ? url
+                                                  : androidUrl,
+                                          mode: LaunchMode.externalApplication,
+                                        );
+                                      }
+                                    },
+                                    child: Center(
+                                      child: Container(
+                                        width: 160.w,
+                                        height: 46.w,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100.r),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              '#557BF6'.hexColor,
+                                              '#84BCF9'.hexColor,
+                                            ],
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: '#58A5FF'.hexColor.withOpacity(0.2),
+                                              blurRadius: 6.r,
+                                              offset: Offset(0, 12.w),
+                                            )
+                                          ],
+                                        ),
+                                        child: Text(
+                                          '下载资源',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.sp,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          SliverToBoxAdapter(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 16.w),
-                              child: Text(
-                                '评论${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (controller.comments == null)
-                            const SliverToBoxAdapter()
-                          else if (controller.comments?.isNotEmpty == true)
-                            SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                  child: CommentItem(
-                                    commentBean: controller.comments![index],
-                                    sourceType: SourceType.tool,
-                                    sourceId: controller.id,
+                                SliverToBoxAdapter(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 16.w),
+                                    child: Text(
+                                      '评论 ${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
-                                );
-                              },
-                              childCount: controller.comments!.length,
-                            ))
-                          else
-                            const SliverToBoxAdapter(
-                              child: NoCommentView(),
+                                ),
+                                if (controller.comments == null)
+                                  const SliverToBoxAdapter()
+                                else if (controller.comments?.isNotEmpty == true)
+                                  SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                                        child: CommentItem(
+                                          commentBean: controller.comments![index],
+                                          sourceType: SourceType.tool,
+                                          sourceId: controller.id,
+                                        ),
+                                      );
+                                    },
+                                    childCount: controller.comments!.length,
+                                  ))
+                                else
+                                  const SliverToBoxAdapter(
+                                    child: NoCommentView(),
+                                  ),
+                              ],
                             ),
-                        ],
-                      ),
+                          ),
+                        ),
+                        SizedBox(height: 90.w),
+                      ],
                     ),
           bottomNavigationBar: controller.detailBean != null
               ? CommonDetailBottomView(

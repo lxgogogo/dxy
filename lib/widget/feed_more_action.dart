@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/gen/assets.gen.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../stores/user_store.dart';
 
-typedef FeedMoreActions= Map<String, VoidCallback?>;
+typedef FeedMoreActions = Map<String, VoidCallback?>;
 
 class FeedMoreAction extends StatefulWidget {
   final FeedMoreActions actions;
-  const FeedMoreAction({
-    super.key,
-    required this.actions
-  });
+
+  const FeedMoreAction({super.key, required this.actions});
 
   @override
   State<FeedMoreAction> createState() => _FeedMoreActionState();
@@ -20,6 +20,7 @@ class FeedMoreAction extends StatefulWidget {
 
 class _FeedMoreActionState extends State<FeedMoreAction> {
   final SuperTooltipController _tipController = SuperTooltipController();
+
   // List<String> actions = [
   //   '屏蔽该内容',
   //   '屏蔽该用户',
@@ -28,7 +29,7 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
 
   @override
   Widget build(BuildContext context) {
-    final actions= widget.actions.keys.toList();
+    final actions = widget.actions.keys.toList();
     return SuperTooltip(
       showBarrier: true,
       controller: _tipController,
@@ -73,7 +74,7 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
               onTap: () {
                 _tipController.hideTooltip();
 
-               widget.actions[actions[index]]?.call();
+                widget.actions[actions[index]]?.call();
                 // switch (index) {
                 //   case 0:
                 //     widget.onShield?.call();
@@ -89,7 +90,7 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
                 child: Text(
                   item,
                   style: TextStyle(
-                    color:'#333333'.hexColor,
+                    color: '#333333'.hexColor,
                     fontSize: 12.sp,
                   ),
                 ),
@@ -110,16 +111,11 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
           });
         },
         behavior: HitTestBehavior.translucent,
-        child: Container(
-          width: 20.w,
-          height: 20.w,
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.more_vert,
-            size: 16.sp,
-          ),
+        child: SvgPicture.asset(
+          Assets.svg.iconMoreVert,
+          width: 24.w,
+          height: 24.w,
         ),
-
       ),
     );
   }

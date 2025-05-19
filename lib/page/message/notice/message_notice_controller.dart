@@ -106,6 +106,20 @@ class MessageNoticeController extends GetxController {
     EventBusUtil.of.fire(EventRefreshNotice());
   }
 
+  void moreDelete() async {
+  EasyLoading.show(status: '加载中......');
+  await MessageService.noticeMoreDelete({'notifiesId': selectIds});
+  ToastUtils.showToast('删除成功');
+  EasyLoading.dismiss();
+  selectIds.clear();
+  dataList.removeWhere((e) => (e.select ?? false));
+  dataList.refresh();
+  if (dataList.isEmpty) {
+    isDeleting.value = false;
+  }
+  EventBusUtil.of.fire(EventRefreshNotice());
+}
+
   String htmlToPlainText(String htmlString) {
     final document = parse(htmlString);
     return document.body?.text ?? '';
@@ -113,8 +127,10 @@ class MessageNoticeController extends GetxController {
 
   void isDeleteOnTap(context) async {
     if (!isDeleting.value) {
-      isDeleting.value = !isDeleting.value;
-      dataList.refresh();
+      if (dataList.isNotEmpty) {
+        isDeleting.value = !isDeleting.value;
+        dataList.refresh();
+      }
     } else {
       // 执行删除
       if (selectIds.isEmpty) {
@@ -132,6 +148,7 @@ class MessageNoticeController extends GetxController {
             confirmText: '确认删除',
             onConfirm: () {
               Navigator.of(context).pop();
+              moreDelete();
             },
           ),
       );

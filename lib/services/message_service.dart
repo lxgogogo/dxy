@@ -36,6 +36,11 @@ class MessageService {
     return res ?? ResBaseModel.defaultRes;
   }
 
+  static Future noticeMoreDelete(data) async {
+    final res = await HttpUtils.postNew(Api.noticeMoreDelete, params: data);
+    return res ?? ResBaseModel.defaultRes;
+  }
+
   static Future noticeBadge() async {
     final res = await HttpUtils.getNew(Api.noticeBadge);
     final data = res ?? ResBaseModel.defaultRes;;

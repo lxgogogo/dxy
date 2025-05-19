@@ -423,6 +423,10 @@ class $AssetsImagesGen {
   AssetGenImage get iconMineSignBg =>
       const AssetGenImage('assets/images/icon_mine_sign_bg.png');
 
+  /// File path: assets/images/icon_notice_delete.png
+  AssetGenImage get iconNoticeDelete =>
+      const AssetGenImage('assets/images/icon_notice_delete.png');
+
   /// File path: assets/images/icon_notice_system_n.png
   AssetGenImage get iconNoticeSystemN =>
       const AssetGenImage('assets/images/icon_notice_system_n.png');
@@ -818,6 +822,7 @@ class $AssetsImagesGen {
         iconHomeVideo,
         iconMessageSystemDf,
         iconMineSignBg,
+        iconNoticeDelete,
         iconNoticeSystemN,
         iconNoticeUserN,
         iconPlay,
@@ -1173,7 +1178,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
@@ -1215,7 +1220,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

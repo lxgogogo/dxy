@@ -22,8 +22,8 @@ class QuillEditorAtEmbedBuilder extends EmbedBuilder {
     return Text(
       '@${map['nickname']} ',
       style: const TextStyle(
-        fontSize: 12,
-        color: Color(0xff457ef1),
+        fontSize: 16,
+        color: Color(0xff557BF6),
         fontWeight: FontWeight.w600,
       ),
     );

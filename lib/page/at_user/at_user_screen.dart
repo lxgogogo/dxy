@@ -6,6 +6,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/background_container.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 
 import 'package:holdem/widget/search_bar.dart';
@@ -33,7 +34,6 @@ class _AtUserScreenState extends State<AtUserScreen> {
   int pageSize = 20;
 
   List<UserProfile> followOrFanUserList = [];
-  bool _isMounted = false;
 
   bool noMore = false;
   final RefreshController _refreshController = RefreshController();
@@ -53,14 +53,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
   @override
   void initState() {
     super.initState();
-    _isMounted = true;
     _onRefresh();
-  }
-
-  @override
-  void dispose() {
-    _isMounted = false;
-    super.dispose();
   }
 
   @override
@@ -80,10 +73,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
         child: Column(
           children: [
             buildSearchInput(),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(child: listView())
+            Expanded(child: listView()),
           ],
         ),
       ),
@@ -92,7 +82,11 @@ class _AtUserScreenState extends State<AtUserScreen> {
 
   Widget buildSearchInput() {
     return Container(
-      margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.w, bottom: 16.w),
+      padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.w, bottom: 12.w),
+      decoration: BoxDecoration(
+          border: Border(
+        bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 0.5.w),
+      )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +94,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
           Expanded(
             child: Container(
               height: 32.w,
-              padding: EdgeInsets.only(left: 12.w),
+              padding: EdgeInsets.only(left: 12.w, right: 6.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100.r),
                 color: '#333333'.hexColor.withOpacity(0.05),
@@ -132,7 +126,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
                         isDense: true,
                         hintStyle: TextStyle(
                           fontSize: 12.sp,
-                          color: '#333333'.hexColor.withOpacity(0.8),
+                          color: '#333333'.hexColor.withOpacity(0.7),
                         ),
                       ),
                     ),
@@ -162,7 +156,11 @@ class _AtUserScreenState extends State<AtUserScreen> {
             },
             child: Text(
               '取消',
-              style: TextStyle(color: '#557BF6'.hexColor, fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: '#557BF6'.hexColor,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           )
         ],
@@ -230,9 +228,13 @@ class _AtUserScreenState extends State<AtUserScreen> {
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: followOrFanUserList.isNotEmpty
-          ? ListView.builder(
+          ? ListView.separated(
+              padding: EdgeInsets.symmetric(vertical: 12.w),
               itemBuilder: (c, i) => listDataItem(i),
               itemCount: followOrFanUserList.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 16.w);
+              },
             )
           : const NoDataView(),
     );
@@ -244,29 +246,24 @@ class _AtUserScreenState extends State<AtUserScreen> {
           Get.back(result: followOrFanUserList[index]);
         },
         child: Container(
-          height: 58.w,
-          margin: EdgeInsets.symmetric(horizontal: 18.w),
+          margin: EdgeInsets.symmetric(horizontal: 16.w),
           alignment: Alignment.centerLeft,
           child: Row(children: [
-            Container(
-                height: 34.w,
-                width: 34.w,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(17.w), color: Colors.white),
-                child: Center(
-                    child: ClipOval(
-                  child: LoginHelper().getUserAvatar(
-                      followOrFanUserList[index].avatar!.isNotEmpty ? followOrFanUserList[index].avatar! : '',
-                      32.w,
-                      32.w),
-                ))),
-            SizedBox(
-              width: 10.w,
+            BorderAvatar(
+              avatar: followOrFanUserList[index].avatar ?? '',
+              borderWidth: 0,
+              avatarSize: 36.w,
             ),
-            Text(
-              followOrFanUserList[index].nickname!.isNotEmpty ? followOrFanUserList[index].nickname! : '',
-              style: TextStyle(color: '##333333'.hexColor, fontSize: 14.w, fontWeight: FontWeight.w600),
+            SizedBox(width: 8.w),
+            Expanded(
+              child: Text(
+                followOrFanUserList[index].nickname!.isNotEmpty ? followOrFanUserList[index].nickname! : '',
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 14.sp,
+                ),
+              ),
             ),
-            const Spacer(),
             FollowBtn(
                 isFollowed: followOrFanUserList[index].followed!,
                 isFans: followOrFanUserList[index].isfans!,

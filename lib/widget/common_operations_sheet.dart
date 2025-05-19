@@ -49,6 +49,7 @@ class CommonOperationsSheet extends StatelessWidget {
                     },
                     child: Container(
                       height: 48.w,
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border(
@@ -64,6 +65,7 @@ class CommonOperationsSheet extends StatelessWidget {
                           fontSize: 16.sp,
                           color: AppTheme.color_333333,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ));
               })

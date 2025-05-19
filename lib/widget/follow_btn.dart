@@ -9,6 +9,7 @@ class FollowBtn extends StatelessWidget {
   final bool isFollowed;
   final bool isFans;
   final Function onTap;
+
   const FollowBtn({super.key, required this.isFollowed, required this.isFans, required this.onTap});
 
   @override
@@ -27,18 +28,30 @@ class FollowBtn extends StatelessWidget {
         onTap();
       },
       child: Container(
-        width: 70.w,
+        width: 72.w,
         height: 28.w,
         alignment: Alignment.center,
-
         decoration: BoxDecoration(
-          color: isFollowed ? '#EBEBEB'.hexColor : '#557BF6'.hexColor,
-          borderRadius: BorderRadius.circular(4.w),
-        ),// 设置内边距
-        child: Text(title,
-            style: isFollowed
-                ? TextStyle(color:'#333333'.hexColor, fontSize: 12.sp)
-                : TextStyle(color: Colors.white, fontSize: 12.sp)),
+          color: isFollowed
+              ? isFans
+                  ? '#557BF6'.hexColor.withOpacity(0.1)
+                  : '#333333'.hexColor.withOpacity(0.1)
+              : '#557BF6'.hexColor,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        // 设置内边距
+        child: Text(
+          title,
+          style: TextStyle(
+            color: isFollowed
+                ? isFans
+                    ? '#557BF6'.hexColor
+                    : '#333333'.hexColor
+                : Colors.white,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

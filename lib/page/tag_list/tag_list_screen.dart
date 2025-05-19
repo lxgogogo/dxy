@@ -42,17 +42,13 @@ class TagListScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.only(
-                  left: 16.w, right: 16.w, top: 24.w, bottom: 16.w),
+            Padding(
+              padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 24.w, bottom: 20.w),
               child: Row(
                 children: [
                   Text(
                     '添加话题',
-                    style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(color: '#333333'.hexColor, fontSize: 20.sp, fontWeight: FontWeight.w600),
                   ),
                   const Spacer(),
                   GestureDetector(
@@ -60,41 +56,24 @@ class TagListScreen extends StatelessWidget {
                       Get.find<FeedPostController>().addSelectTags(controller.selectedItems);
                       Get.back();
                     },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.w),
-                      decoration: ShapeDecoration(
-                        color: '#557BF6'.hexColor.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)),
-                      ),
-                      child: Text(
-                        '完成',
-                        style: TextStyle(color: '#557BF6'.hexColor),
+                    child: Text(
+                      '完成',
+                      style: TextStyle(
+                        color: '#557BF6'.hexColor,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 18.w),
-              constraints: BoxConstraints(
-                maxHeight: 32.w,
-              ),
-              decoration: ShapeDecoration(
-                color: '#333333'.hexColor.withOpacity(0.05),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50)),
-              ),
-              child: Row(
-                children: [Expanded(child: buildSearchInput(controller))],
-              ),
-            ),
+            buildSearchInput(controller),
+            SizedBox(height: 8.w),
             buildTagList(controller),
             Expanded(
               child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18.w),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: IndexedStack(
                     index: controller.showSearchResult ? 0 : 1,
                     children: [
@@ -105,13 +84,11 @@ class TagListScreen extends StatelessWidget {
                         enablePullUp: true,
                         child: controller.items.isNotEmpty
                             ? ListView.builder(
-                                padding: EdgeInsets.symmetric(vertical: 8.w),
-                                keyboardDismissBehavior:
-                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                padding: EdgeInsets.symmetric(vertical: 7.w),
+                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                 itemCount: controller.items.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return _buildItem(
-                                      controller.items[index], controller);
+                                  return _buildItem(controller.items[index], controller);
                                 },
                               )
                             : const Center(child: NoDataView()),
@@ -123,13 +100,11 @@ class TagListScreen extends StatelessWidget {
                         enablePullUp: true,
                         child: controller.hotItems.isNotEmpty
                             ? ListView.builder(
-                                padding: EdgeInsets.symmetric(vertical: 8.w),
-                                keyboardDismissBehavior:
-                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                padding: EdgeInsets.symmetric(vertical: 7.w),
+                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                                 itemCount: controller.hotItems.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return _buildItem(
-                                      controller.hotItems[index], controller);
+                                  return _buildItem(controller.hotItems[index], controller);
                                 },
                               )
                             : const SizedBox(),
@@ -153,22 +128,25 @@ class TagListScreen extends StatelessWidget {
       },
       behavior: HitTestBehavior.translucent,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.w),
+        padding: EdgeInsets.symmetric(vertical: 5.w),
         child: Row(
           children: [
-            Text(
-              '#${item.name ?? ''}',
-              style: TextStyle(
-                color: '#333333'.hexColor,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Text(
+                '#${item.name ?? ''}',
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-            const Spacer(),
             Text(
               '${_formatViewCount(item.viewCount ?? 0)} 讨论',
               style: TextStyle(
-                  color: '#333333'.hexColor.withOpacity(0.5), fontSize: 12.sp),
+                color: '#999999'.hexColor,
+                fontSize: 12.sp,
+              ),
             )
           ],
         ),
@@ -187,79 +165,80 @@ class TagListScreen extends StatelessWidget {
   }
 
   Widget buildTagList(TagListController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 12.w),
-          child: Text(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
             '还可以添加${Get.find<FeedPostController>().tagMaxLength - controller.selectedItems.length}个标签',
             style: TextStyle(
-                fontSize: 10.sp, color: '#333333'.hexColor.withOpacity(0.5)),
+              fontSize: 10.sp,
+              color: '#999999'.hexColor,
+            ),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.only(bottom: 16.w),
-          margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 12.w),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              border: Border(
-            bottom: BorderSide(
-                color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
-          )),
-          child: Wrap(
-            spacing: 8.0, // 添加水平间距
-            runSpacing: 12.0,
-            children: [
-              ...List.generate(
-                controller.selectedItems.length,
-                (index) {
-                  final tag = controller.selectedItems[index];
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 6.w),
-                        decoration: ShapeDecoration(
-                          color: '#557BF6'.hexColor.withOpacity(0.1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)),
-                        ),
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              tag.name ?? '',
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                color: '#557BF6'.hexColor,
-                                fontWeight: FontWeight.w600,
+          SizedBox(height: 12.w),
+          Container(
+            padding: EdgeInsets.only(bottom: 12.w),
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+                border: Border(
+              bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 0.5.w),
+            )),
+            child: Wrap(
+              spacing: 12.w,
+              runSpacing: 8.w,
+              children: [
+                ...List.generate(
+                  controller.selectedItems.length,
+                  (index) {
+                    final tag = controller.selectedItems[index];
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 28.w,
+                          padding: EdgeInsets.only(left: 12.w, right: 8.w),
+                          decoration: ShapeDecoration(
+                            color: '#557BF6'.hexColor.withOpacity(0.1),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.r)),
+                          ),
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                tag.name ?? '',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: '#557BF6'.hexColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 4.w,
-                            ),
-                            GestureDetector(
-                              onTap: () => controller.removeTag(index),
-                              child: Icon(
-                                Icons.clear,
-                                size: 12.w,
-                                color: '#557BF6'.hexColor,
-                              ),
-                            )
-                          ],
+                              GestureDetector(
+                                onTap: () => controller.removeTag(index),
+                                child: Padding(
+                                  padding: EdgeInsets.all(4.w),
+                                  child: SvgPicture.asset(
+                                    Assets.svg.iconClose,
+                                    width: 10.w,
+                                    height: 10.w,
+                                    color: '#557BF6'.hexColor,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -267,9 +246,10 @@ class TagListScreen extends StatelessWidget {
     return Container(
       height: 32.w,
       padding: EdgeInsets.only(left: 12.w, right: 6.w),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.r),
-        color: '#333333'.hexColor.withOpacity(0.01),
+        color: '#333333'.hexColor.withOpacity(0.05),
       ),
       child: Row(
         children: [
@@ -299,7 +279,7 @@ class TagListScreen extends StatelessWidget {
                 isDense: true,
                 hintStyle: TextStyle(
                   fontSize: 12.sp,
-                  color: '#333333'.hexColor.withOpacity(0.8),
+                  color: '#333333'.hexColor.withOpacity(0.7),
                 ),
               ),
             ),

@@ -10,6 +10,7 @@ class MessageNoticeModel {
   DateTime? createdAt;
   int? isDel;
   int? isReader;
+  bool? select;
 
   MessageNoticeModel({
     this.id,
@@ -20,7 +21,8 @@ class MessageNoticeModel {
     this.content,
     this.createdAt,
     this.isDel,
-    this.isReader
+    this.isReader,
+    this.select
   });
 
   factory MessageNoticeModel.fromJson(Map<String, dynamic> json) {

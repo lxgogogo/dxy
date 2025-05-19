@@ -1,8 +1,10 @@
 import 'package:event_bus/event_bus.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/services/message_service.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:html/parser.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -17,6 +19,12 @@ class MessageNoticeController extends GetxController {
 
   RxBool isSystem = true.obs;
   RxList<MessageNoticeModel> dataList = <MessageNoticeModel>[].obs;
+
+  // 是否删除中
+  RxBool isDeleting = false.obs;
+  RxBool isSelectAll = false.obs;
+  RxInt selectAllCount = 0.obs;
+  List<dynamic> selectIds = [];
 
   @override
   void onInit() {
@@ -58,6 +66,26 @@ class MessageNoticeController extends GetxController {
     dataList.refresh();
   }
 
+  void _getSelectIds() {
+    int selectCount = 0;
+    selectIds.clear();
+    for (int i = 0; i < dataList.length; i++) {
+      final model = dataList[i];
+      if (model.select ?? false) {
+        selectCount++;
+        selectIds.add('${model.id ?? 0}');
+      }
+    }
+    selectAllCount.value = selectIds.length;
+    if (dataList.length == selectCount) {
+      isSelectAll.value = true;
+    } else {
+      isSelectAll.value = false;
+    }
+  }
+
+  // TODO: Public Method
+
   void onRefresh() {
     pageNum = 1;
     _requestData();
@@ -78,8 +106,67 @@ class MessageNoticeController extends GetxController {
     EventBusUtil.of.fire(EventRefreshNotice());
   }
 
+  void moreDelete() async {
+  EasyLoading.show(status: '加载中......');
+  await MessageService.noticeMoreDelete({'notifiesId': selectIds});
+  ToastUtils.showToast('删除成功');
+  EasyLoading.dismiss();
+  selectIds.clear();
+  dataList.removeWhere((e) => (e.select ?? false));
+  dataList.refresh();
+  if (dataList.isEmpty) {
+    isDeleting.value = false;
+  }
+  EventBusUtil.of.fire(EventRefreshNotice());
+}
+
   String htmlToPlainText(String htmlString) {
     final document = parse(htmlString);
     return document.body?.text ?? '';
+  }
+
+  void isDeleteOnTap(context) async {
+    if (!isDeleting.value) {
+      if (dataList.isNotEmpty) {
+        isDeleting.value = !isDeleting.value;
+        dataList.refresh();
+      }
+    } else {
+      // 执行删除
+      if (selectIds.isEmpty) {
+        ToastUtils.showToast('请先选择要删除的消息');
+        return;
+      }
+      await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) =>
+          CommonDialog(
+            title: '删除信件',
+            content:
+            '确定删除全部所选消息吗？',
+            confirmText: '确认删除',
+            onConfirm: () {
+              Navigator.of(context).pop();
+              moreDelete();
+            },
+          ),
+      );
+    }
+  }
+
+  void selectOnTap(int index) {
+    dataList[index].select = !(dataList[index].select ?? false);
+    _getSelectIds();
+    dataList.refresh();
+  }
+
+  void selectAllOnTap() {
+    isSelectAll.value = !isSelectAll.value;
+    for (final model in dataList) {
+      model.select = isSelectAll.value;
+    }
+    _getSelectIds();
+    dataList.refresh();
   }
 }

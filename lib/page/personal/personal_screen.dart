@@ -253,7 +253,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                             },
                             behavior: HitTestBehavior.translucent,
                             child: Text(
-                              '退出登录',
+                              '注销账号',
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: AppTheme.color_999999,

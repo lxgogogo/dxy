@@ -19,8 +19,8 @@ class ConfigStore extends GetxController {
   void onInit() async {
     super.onInit();
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      final noNetwork = !result.contains(ConnectivityResult.none);
-      if (!noNetwork) {
+      final hasNetwork = !result.contains(ConnectivityResult.none);
+      if (hasNetwork) {
         checkOutsideTheWall();
       }
     });

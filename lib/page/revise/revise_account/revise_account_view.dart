@@ -30,7 +30,7 @@ class _ReviseAccountPageState extends State<ReviseAccountPage> {
                 padding: EdgeInsets.only(right: 16.w),
                 color: Colors.transparent,
                 child: Text(
-                  '修改',
+                  '完成',
                   style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,

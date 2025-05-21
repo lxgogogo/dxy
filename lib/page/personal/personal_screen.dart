@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ import '../../utils/net_request.dart';
 import '../../widget/dialog_edit_mobile.dart';
 import '../../widget/dialog_edit_username.dart';
 import '../../widget/dialog_new_tip.dart';
-
+import 'package:holdem/extensions/num_extensions.dart';
 part 'personal_controller.dart';
 
 class PersonalScreen extends StatefulWidget {
@@ -47,228 +48,323 @@ class _PersonalScreenState extends State<PersonalScreen> {
     return GetBuilder<PersonalScreenController>(
       init: PersonalScreenController(),
       builder: (controller) {
-        return Scaffold(
-          appBar: CommonAppBar.arrowBack(context, title: '个人资料'),
-          backgroundColor: '#F7F8FC'.hexColor,
-          body: Obx(
-            () {
-              return Column(
-                children: [
-                  SizedBox(
-                    height: 26.w,
-                  ),
-                  Stack(
+        return Stack(
+          children: [
+            Image.asset(
+              Assets.images.mineHeaderBg.path,
+              width: 1.sw,
+              fit: BoxFit.fitWidth,
+            ),
+            Scaffold(
+              appBar: CommonAppBar.arrowBack(context, title: '个人资料'),
+              backgroundColor: Colors.transparent,
+              body: Obx(
+                    () {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: controller.selectImage,
-                        child: SizedBox(
-                          width: 88.w,
-                          height: 88.w,
-                          child: ClipOval(
-                            child: IndexedStack(
-                              index: controller.imageUrl.isNotEmpty ? 0 : 1,
-
-                              /// 保留新netImage渲染,返回后也能加快加载
-                              sizing: StackFit.expand,
+                      Container(
+                        height: 60.w,
+                        margin: EdgeInsets.symmetric(horizontal: 16.w),
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Stack(
                               children: [
-                                Image.file(
-                                  File(controller.imageUrl),
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                                    fit: BoxFit.fill,
+                                GestureDetector(
+                                  onTap: controller.selectImage,
+                                  child: SizedBox(
+                                    width: 48.w,
+                                    height: 48.w,
+                                    child: ClipOval(
+                                      child: IndexedStack(
+                                        index: controller.imageUrl.isNotEmpty ? 0 : 1,
+
+                                        /// 保留新netImage渲染,返回后也能加快加载
+                                        sizing: StackFit.expand,
+                                        children: [
+                                          Image.file(
+                                            File(controller.imageUrl),
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                          CachedNetworkImage(
+                                            fit: BoxFit.cover,
+                                            imageUrl: UserStore.of.user?.avatar ?? '',
+                                            cacheKey: UserStore.of.user?.avatar ?? '',
+                                            placeholder: (context, url) => const Center(
+                                                child: CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                )),
+                                            errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                CachedNetworkImage(
-                                  fit: BoxFit.cover,
-                                  imageUrl: UserStore.of.user?.avatar ?? '',
-                                  cacheKey: UserStore.of.user?.avatar ?? '',
-                                  placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )),
-                                  errorWidget: (_, __, ___) => Assets.images.imageLoadingDef.image(
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
+                                Positioned(
+                                    left: (48.w - 16.w)/2,
+                                    bottom: 0,
+                                    child: GestureDetector(
+                                      onTap: controller.selectImage,
+                                      child: Image.asset(
+                                        Assets.images.icMineCamera.path,
+                                        width: 16.w,
+                                      ),
+                                    )
+                                )
                               ],
                             ),
+                            SizedBox(width: 8.w),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      constraints: BoxConstraints(
+                                          maxWidth: 1.sw - 32.w - 48.w - 60.w - 24.w
+                                      ),
+                                      child: Text(
+                                        UserStore.of.user?.nickname ?? '',
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppTheme.color_333333,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 84.w,
+                                      height: 22.w,
+                                      margin: EdgeInsets.only(left: 6.w),
+                                      alignment: Alignment.center,
+                                      padding:
+                                      EdgeInsets.symmetric(horizontal: 2.w),
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: AssetImage(Assets
+                                                  .images.iconMineSignBg.path),
+                                              fit: BoxFit.fill)),
+                                      child: AutoSizeText(
+                                        UserStore.of.user?.userLevel?.name ??
+                                            '',
+                                        maxLines: 1,
+                                        minFontSize: 8,
+                                        style: TextStyle(
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(height: 3.w),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(Routes.following,
+                                            arguments: true);
+                                        TrackUtils.trackEvent(
+                                            userLogType: '113004');
+                                      },
+                                      child: Text(
+                                        '关注 ${UserStore.of.user?.followedCount.abbreviateNumber ?? '0'}',
+                                        style: TextStyle(
+                                          color: AppTheme.color_666666,
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(Routes.following,
+                                            arguments: false);
+                                        TrackUtils.trackEvent(
+                                            userLogType: '113005');
+                                      },
+                                      child: Text(
+                                        '粉丝 ${UserStore.of.user?.fansCount.abbreviateNumber ?? '0'}',
+                                        style: TextStyle(
+                                          color: AppTheme.color_666666,
+                                          fontSize: 12.sp,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(12.w).copyWith(top: 0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      _buildRowItem(
+                                        label: '昵称',
+                                        value: UserStore.of.user?.nickname ?? '',
+                                        onTap: () {
+                                          Get.toNamed(Routes.reviseName);
+                                        },
+                                      ),
+                                      Container(
+                                        color: const Color(0xffe6e6e6),
+                                        height: 0.5.w,
+                                      ),
+                                      _buildRowItem(
+                                        label: '账号',
+                                        value: UserStore.of.user?.username ?? '',
+                                        onTap: () {
+                                          Get.toNamed(Routes.reviseAccount);
+                                        },
+                                      ),
+                                      Container(
+                                        color: const Color(0xffe6e6e6),
+                                        height: 0.5.w,
+                                      ),
+                                      _buildRowItem(
+                                        label: '邮箱',
+                                        value: UserStore.of.user?.account ?? '',
+                                        onTap: () {
+                                          Get.toNamed(Routes.reviseEmail);
+                                        },
+                                      ),
+                                      Container(
+                                        color: const Color(0xffe6e6e6),
+                                        height: 0.5.w,
+                                      ),
+                                      _buildRowItem(
+                                        label: '手机号',
+                                        value: UserStore.of.user?.phone ?? '',
+                                        onTap: () {
+                                          Get.toNamed(Routes.revisePhone);
+                                        },
+                                      ),
+                                      Obx(
+                                            () {
+                                          if (ConfigStore.of.isOutsideTheWall.isFalse) {
+                                            return const SizedBox();
+                                          }
+                                          return Column(
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children: [
+                                              SizedBox(height: 32.w),
+                                              Text(
+                                                '第三方账号绑定',
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: '#333333'.hexColor,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              SizedBox(height: 16.w),
+                                              _buildRowButtonItem(
+                                                genImage: Assets.images.iconGoogle,
+                                                label: 'Google',
+                                                onTap: TrackUtils.trackedTap(
+                                                  onTap: () {
+                                                    if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
+                                                    controller.signInWithGoogle(context);
+                                                  },
+                                                  userLogType: '115006',
+                                                  params: '谷歌',
+                                                ),
+                                                isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
+                                              ),
+                                              Container(
+                                                color: const Color(0xffe6e6e6),
+                                                height: 0.5.w,
+                                              ),
+                                              _buildRowButtonItem(
+                                                genImage: Assets.images.iconApple,
+                                                label: 'Apple',
+                                                onTap: TrackUtils.trackedTap(
+                                                  onTap: () {
+                                                    if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
+                                                    controller.signInWithApple(context);
+                                                  },
+                                                  userLogType: '115006',
+                                                  params: '苹果',
+                                                ),
+                                                isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
+                                              ),
+                                              Container(
+                                                color: const Color(0xffe6e6e6),
+                                                height: 0.5.w,
+                                              ),
+                                              _buildRowButtonItem(
+                                                genImage: Assets.images.iconTelegram,
+                                                label: 'Telegram',
+                                                onTap: TrackUtils.trackedTap(
+                                                  onTap: () {
+                                                    if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
+                                                    controller.signInWithTelegram(context);
+                                                  },
+                                                  userLogType: '115006',
+                                                  params: 'TG',
+                                                ),
+                                                isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
+                                              ),
+                                              Container(
+                                                color: const Color(0xffe6e6e6),
+                                                height: 0.5.w,
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16.w),
+                              GestureDetector(
+                                onTap: () {
+                                  controller.loginOut(context);
+                                },
+                                behavior: HitTestBehavior.translucent,
+                                child: Text(
+                                  '注销账号',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: AppTheme.color_999999,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 70.w)
+                            ],
                           ),
                         ),
                       ),
-                      Positioned(
-                        left: (88.w - 16.w)/2,
-                        bottom: 0,
-                        child: GestureDetector(
-                          onTap: controller.selectImage,
-                          child: Image.asset(
-                            Assets.images.icMineCamera.path,
-                            width: 16.w,
-                          ),
-                        )
-                      )
                     ],
-                  ),
-                  SizedBox(height: 12.w),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(12.w).copyWith(top: 0),
-                      margin: EdgeInsets.only(top: 16.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-                      ),
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  _buildRowItem(
-                                    label: '昵称',
-                                    value: UserStore.of.user?.nickname ?? '',
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => DialogEditNickname(
-                                          editContent: UserStore.of.user?.nickname ?? '',
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: const Color(0xffe6e6e6),
-                                    height: 0.5.w,
-                                  ),
-                                  _buildRowItem(
-                                    label: '账号',
-                                    value: UserStore.of.user?.username ?? '',
-                                    onTap: () {
-                                      Get.toNamed(Routes.reviseAccount);
-                                    },
-                                  ),
-                                  Container(
-                                    color: const Color(0xffe6e6e6),
-                                    height: 0.5.w,
-                                  ),
-                                  _buildRowItem(
-                                    label: '邮箱',
-                                    value: UserStore.of.user?.account ?? '',
-                                    onTap: () {
-                                      Get.toNamed(Routes.reviseEmail);
-                                    },
-                                  ),
-                                  Container(
-                                    color: const Color(0xffe6e6e6),
-                                    height: 0.5.w,
-                                  ),
-                                  _buildRowItem(
-                                    label: '手机号',
-                                    value: UserStore.of.user?.phone ?? '',
-                                    onTap: () {
-                                      Get.toNamed(Routes.revisePhone);
-                                    },
-                                  ),
-                                  Obx(
-                                    () {
-                                      if (ConfigStore.of.isOutsideTheWall.isFalse) {
-                                        return const SizedBox();
-                                      }
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          SizedBox(height: 32.w),
-                                          Text(
-                                            '第三方账号绑定',
-                                            style: TextStyle(
-                                              fontSize: 18.sp,
-                                              color: '#333333'.hexColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          SizedBox(height: 16.w),
-                                          _buildRowButtonItem(
-                                            genImage: Assets.images.iconGoogle,
-                                            label: 'Google',
-                                            onTap: TrackUtils.trackedTap(
-                                              onTap: () {
-                                                if (UserStore.of.user?.googleAccount?.isNotEmpty == true) return;
-                                                controller.signInWithGoogle(context);
-                                              },
-                                              userLogType: '115006',
-                                              params: '谷歌',
-                                            ),
-                                            isBind: UserStore.of.user?.googleAccount?.isNotEmpty == true,
-                                          ),
-                                          Container(
-                                            color: const Color(0xffe6e6e6),
-                                            height: 0.5.w,
-                                          ),
-                                          _buildRowButtonItem(
-                                            genImage: Assets.images.iconApple,
-                                            label: 'Apple',
-                                            onTap: TrackUtils.trackedTap(
-                                              onTap: () {
-                                                if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
-                                                controller.signInWithApple(context);
-                                              },
-                                              userLogType: '115006',
-                                              params: '苹果',
-                                            ),
-                                            isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
-                                          ),
-                                          Container(
-                                            color: const Color(0xffe6e6e6),
-                                            height: 0.5.w,
-                                          ),
-                                          _buildRowButtonItem(
-                                            genImage: Assets.images.iconTelegram,
-                                            label: 'Telegram',
-                                            onTap: TrackUtils.trackedTap(
-                                              onTap: () {
-                                                if (UserStore.of.user?.telegramAccount?.isNotEmpty == true) return;
-                                                controller.signInWithTelegram(context);
-                                              },
-                                              userLogType: '115006',
-                                              params: 'TG',
-                                            ),
-                                            isBind: UserStore.of.user?.telegramAccount?.isNotEmpty == true,
-                                          ),
-                                          Container(
-                                            color: const Color(0xffe6e6e6),
-                                            height: 0.5.w,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 16.w),
-                          GestureDetector(
-                            onTap: () {
-                              controller.loginOut(context);
-                            },
-                            behavior: HitTestBehavior.translucent,
-                            child: Text(
-                              '注销账号',
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: AppTheme.color_999999,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 70.w)
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            )
+          ],
         );
       },
     );

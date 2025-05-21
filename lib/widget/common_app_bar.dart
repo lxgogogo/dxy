@@ -16,12 +16,12 @@ class CommonAppBar {
     bool? centerTitle,
     bool hideArrow = false,
     Widget? flexibleSpace,
-    Color? backgroundColor,
     Color? arrowColor,
     Color? titleColor,
     Widget? cusTitle,
     Widget? cusLeading,
     bool hideLeadingOnDesktop = false,
+    Color backgroundColor = Colors.transparent,
   }) =>
       AppBar(
         title: Text(
@@ -47,7 +47,7 @@ class CommonAppBar {
           ),
         ),
         actions: actions,
-        backgroundColor: Colors.transparent,
+        backgroundColor: backgroundColor,
         toolbarHeight: 56.w,
       );
 }

@@ -23,6 +23,7 @@ import 'package:holdem/page/personal/personal_screen.dart';
 import 'package:holdem/page/revise/delete_account/delete_account_view.dart';
 import 'package:holdem/page/revise/revise_account/revise_account_view.dart';
 import 'package:holdem/page/revise/revise_email/revise_email_view.dart';
+import 'package:holdem/page/revise/revise_name/revise_name_view.dart';
 import 'package:holdem/page/revise/revise_password/revise_password_view.dart';
 import 'package:holdem/page/revise/revise_phone/revise_phone_view.dart';
 import 'package:holdem/page/scan/scan_screen.dart';
@@ -204,6 +205,10 @@ class AppPages {
     GetPage(
       name: Routes.deleteAccount,
       page: () => const DeleteAccountPage(),
+    ),
+    GetPage(
+      name: Routes.reviseName,
+      page: () => const ReviseNamePage(),
     ),
   ];
 }

@@ -14,16 +14,11 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/app_theme.dart';
-import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/utils/track_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
-import 'package:holdem/widget/dialog_common.dart';
-import 'package:holdem/widget/dialog_delete_account.dart';
-import 'package:holdem/widget/dialog_edit_email.dart';
 import 'package:holdem/widget/dialog_edit_nickname.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../model/user.dart';
 import '../../routes/app_pages.dart';
@@ -31,9 +26,6 @@ import '../../services/index.dart';
 import '../../stores/config_store.dart';
 import '../../stores/user_store.dart';
 import '../../utils/net_request.dart';
-import '../../widget/dialog_edit_mobile.dart';
-import '../../widget/dialog_edit_username.dart';
-import '../../widget/dialog_new_tip.dart';
 
 part 'personal_controller.dart';
 

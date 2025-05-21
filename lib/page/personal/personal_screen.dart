@@ -208,12 +208,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                         label: '昵称',
                                         value: UserStore.of.user?.nickname ?? '',
                                         onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) => DialogEditNickname(
-                                              editContent: UserStore.of.user?.nickname ?? '',
-                                            ),
-                                          );
+                                          Get.toNamed(Routes.reviseName);
                                         },
                                       ),
                                       Container(

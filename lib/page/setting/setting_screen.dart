@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/routes/app_pages.dart';
-import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/widget/common_app_bar.dart';
-import 'package:holdem/widget/dialog_common.dart';
-import 'package:holdem/widget/dialog_edit_password.dart';
-import 'package:holdem/page/mine/login_helper.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/widget/linear_card.dart';
+import 'package:holdem/widget/common_app_bar.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/event_bus_util.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
-import '../../utils/size_fit.dart';
 import '../../utils/track_utils.dart';
-import '../../widget/dialog_delete_account.dart';
 
 part 'setting_controller.dart';
 

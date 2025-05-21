@@ -45,90 +45,95 @@ class _MineScreenState extends State<MineScreen>
                 width: 1.sw,
                 fit: BoxFit.fitWidth,
               ),
-              Obx(() => FocusDetector(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Obx(() => FocusDetector(
                     onFocusGained: controller.onFocusGained,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: ScreenUtil().statusBarHeight + 4.w),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.equityCenter);
-                              },
-                              child: Container(
-                                width: 84.w,
-                                height: 24.w,
-                                margin: EdgeInsets.only(left: 16.w),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12.w)),
-                                    border: Border.all(
-                                        width: 1.w,
-                                        color: AppTheme.color_557BF6)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      Assets.images.icMinePowerCenter.path,
-                                      width: 16,
-                                      height: 16,
-                                    ),
-                                    SizedBox(width: 2.w),
-                                    Text(
-                                      '权益中心',
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color: AppTheme.color_557BF6),
-                                    )
-                                  ],
+                        SizedBox(height: ScreenUtil().statusBarHeight),
+                        SizedBox(
+                          height: 56.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.equityCenter);
+                                },
+                                child: Container(
+                                  width: 84.w,
+                                  height: 24.w,
+                                  margin: EdgeInsets.only(left: 16.w),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(12.w)),
+                                      border: Border.all(
+                                          width: 1.w,
+                                          color: AppTheme.color_557BF6)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        Assets.images.icMinePowerCenter.path,
+                                        width: 16,
+                                        height: 16,
+                                      ),
+                                      SizedBox(width: 2.w),
+                                      Text(
+                                        '权益中心',
+                                        style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: AppTheme.color_557BF6),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.scan);
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        right: 8.w,
-                                        left: 16.w,
-                                        top: 6.w,
-                                        bottom: 6.w),
-                                    child: SvgPicture.asset(
-                                      Assets.svg.iconScan,
-                                      width: 24.w,
-                                      height: 24.w,
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(Routes.scan);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 8.w,
+                                          left: 16.w,
+                                          top: 6.w,
+                                          bottom: 6.w),
+                                      child: SvgPicture.asset(
+                                        Assets.svg.iconScan,
+                                        width: 24.w,
+                                        height: 24.w,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.setting);
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        right: 16.w,
-                                        left: 8.w,
-                                        top: 6.w,
-                                        bottom: 6.w),
-                                    child: SvgPicture.asset(
-                                      Assets.svg.iconSetting,
-                                      width: 24.w,
-                                      height: 24.w,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(Routes.setting);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 16.w,
+                                          left: 8.w,
+                                          top: 6.w,
+                                          bottom: 6.w),
+                                      child: SvgPicture.asset(
+                                        Assets.svg.iconSetting,
+                                        width: 24.w,
+                                        height: 24.w,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 12.w),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Row(
@@ -168,7 +173,7 @@ class _MineScreenState extends State<MineScreen>
                                     children: [
                                       Container(
                                         constraints: BoxConstraints(
-                                          maxWidth: 1.sw - 32.w - 48.w - 60.w - 24.w
+                                            maxWidth: 1.sw - 32.w - 48.w - 60.w - 24.w
                                         ),
                                         child: Text(
                                           UserStore.of.user?.nickname ?? '',
@@ -247,16 +252,13 @@ class _MineScreenState extends State<MineScreen>
                               )
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   )),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: 178.w),
                   Expanded(
                     child: Container(
+                      margin: EdgeInsets.only(top: 16.w),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius:

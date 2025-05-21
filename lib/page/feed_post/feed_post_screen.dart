@@ -21,8 +21,6 @@ import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
 import '../../model/upload_file.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/net_request.dart';
 import '../../widget/common_operations_sheet.dart';
 

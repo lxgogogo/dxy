@@ -11,8 +11,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../stores/user_store.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/eventbus/EventBusAction.dart';
-import '../../utils/eventbus/EventBusManager.dart';
 import '../../utils/toast_utils.dart';
 import '../../utils/track_utils.dart';
 

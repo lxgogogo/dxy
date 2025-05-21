@@ -1,8 +1,8 @@
 {
   "project_info": {
-    "project_number": "302206761540",
-    "project_id": "dexueyuan-68769",
-    "storage_bucket": "dexueyuan-68769.firebasestorage.app"
+    "project_number": "390652331371",
+    "project_id": "dxy-project-82dc6",
+    "storage_bucket": "dxy-project-82dc6.firebasestorage.app"
   },
   "client": [
     {
@@ -28,18 +28,18 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCqv_vYAQkd6-pLXrNIdJUKvA-YbVrwzEw"
+          "current_key": "AIzaSyAqLuK6BLuWbKSbaOfNrfPXzIyFfMj-wsI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "302206761540-r0abbp2qqtd0sg5huaibf42a2qfccihe.apps.googleusercontent.com",
+              "client_id": "390652331371-5iiof1847g75rnf11vm4kgc104a1mt7t.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "302206761540-tiva7v6fqad94jms3ffirpm8p5b4n7cq.apps.googleusercontent.com",
+              "client_id": "390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.dxy.holdem"

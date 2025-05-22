@@ -22,6 +22,8 @@ class MainController extends GetxController with WidgetsBindingObserver {
     }
     pageController.jumpToPage(index);
 
+    _checkAppVersion();
+
     saveReview();
 
     /// 消息内部自己去刷
@@ -49,6 +51,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
+        _checkAppVersion();
         // if (timer?.isActive != true) {
         //   timer?.cancel();
         //   timer = Timer.periodic(
@@ -95,7 +98,14 @@ class MainController extends GetxController with WidgetsBindingObserver {
   }
 
   @override
+  void onInit() {
+    super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
     eventSubscription?.cancel();
     refreshNoticeSubs?.cancel();
     // timer?.cancel();
@@ -103,58 +113,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
   }
 
   void _checkAppVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String currentVersion = packageInfo.version;
-
-    NetRequest().appVersion((data) {
-      final appVersion = AppVersion.fromJson(data);
-      final latestVersion = Platform.isAndroid ? appVersion.androidVersion : appVersion.iosVersion;
-      if (latestVersion?.isNotEmpty == true) {
-        if (latestVersion!.compareTo(currentVersion) > 0) {
-          if (Get.context == null) return;
-          final forceUpdate = appVersion.forced ?? false;
-          if (forceUpdate) {
-            showDialog(
-              barrierDismissible: false,
-              context: Get.context!,
-              builder: (context) => CommonDialog(
-                title: '更新以获得最佳体验',
-                onConfirm: () {
-                  launchURL(appVersion);
-                },
-                onlyConfirm: true,
-              ),
-            );
-          } else {
-            showDialog(
-              barrierDismissible: false,
-              context: Get.context!,
-              builder: (context) => CommonDialog(
-                title: '有新版本可以更新',
-                confirmText: '立即更新',
-                onConfirm: () {
-                  Navigator.of(context).pop();
-                  launchURL(appVersion);
-                },
-                cancelText: '下次再说',
-              ),
-            );
-          }
-        }
-      }
-    });
-  }
-
-  void launchURL(AppVersion appVersion) {
-    String? url;
-    if (Platform.isAndroid) {
-      url = appVersion.androidUrl;
-    } else {
-      url = appVersion.iosUrl;
-    }
-    if (url?.isNotEmpty == true) {
-      launchUrlString(url!, mode: LaunchMode.externalApplication);
-    }
+    await AppVersionChecker.of.checkVersion();
   }
 
   Future<void> _initAppLinks() async {

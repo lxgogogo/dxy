@@ -189,6 +189,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             GestureDetector(
                               onTap: () {},
                               child: ClipRRect(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(12.r),
+                                ),
                                 child: BackdropFilter(
                                   filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                   child: AnimatedContainer(
@@ -196,9 +199,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                                     decoration: BoxDecoration(
                                       color: '#F3F8FF'.hexColor,
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(12.r),
-                                      ),
                                     ),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -127,4 +127,12 @@ class CommonService {
     final res = await HttpUtils.postNew(Api.benefits, params: data);
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> appVersion({bool showLoading = false}) async {
+    final res = await HttpUtils.postNew(
+      Api.appVersion,
+      showLoading: showLoading,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

@@ -12,7 +12,6 @@ import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
-import 'package:holdem/utils/color_style_util.dart';
 
 import '../../utils/track_utils.dart';
 import '../../widget/custom_underline_tab_indicator.dart';

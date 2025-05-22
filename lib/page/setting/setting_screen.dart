@@ -5,7 +5,6 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/common_utils.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/dialog_common.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -13,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../model/app_version.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/app_version_checker.dart';
 import '../../utils/event_bus_util.dart';
 import '../../utils/track_utils.dart';
 
@@ -77,13 +77,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '修改密码',
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppTheme.color_333333
-                        )
-                      ),
+                      Text('修改密码', style: TextStyle(fontSize: 14.sp, color: AppTheme.color_333333)),
                       ImageIcon(
                         const AssetImage('assets/images/edit_password.png'),
                         size: 12.w,
@@ -107,22 +101,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '检查更新',
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              color: AppTheme.color_333333
-                          )
-                        ),
+                        Text('检查更新', style: TextStyle(fontSize: 14.sp, color: AppTheme.color_333333)),
                         Row(
                           children: [
-                            Text(
-                              '当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: AppTheme.color_333333
-                              )
-                            ),
+                            Text('当前版本 $_currentVersion${_canUpdate ? ' (可更新) ' : ''}',
+                                style: TextStyle(fontSize: 14.sp, color: AppTheme.color_333333)),
                             if (_canUpdate)
                               Container(
                                 width: 7.w,
@@ -152,10 +135,7 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 Text(
                   '联系我们',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: AppTheme.color_333333
-                  ),
+                  style: TextStyle(fontSize: 14.sp, color: AppTheme.color_333333),
                 ),
                 SizedBox(height: 16.w),
                 Row(
@@ -228,62 +208,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void _checkAppVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String currentVersion = packageInfo.version;
-
-    NetRequest().appVersion((data) {
-      AppVersion appVersion = AppVersion.fromJson(data);
-      String latestVersion = (CommonUtils.isAndroid(context) ? appVersion.androidVersion : appVersion.iosVersion) ?? '';
-      if (latestVersion.isNotEmpty == true) {
-        if (latestVersion.compareTo(currentVersion) > 0) {
-          // 强制升级
-          bool forceUpdate = appVersion.forced ?? false;
-          if (forceUpdate) {
-            // 这里可以弹出不可取消的弹窗提示用户升级
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => CommonDialog(
-                title: '更新以获得最佳体验',
-                onConfirm: () {
-                  _launchURL(appVersion);
-                },
-                onlyConfirm: true,
-              ),
-            );
-          } else {
-            // 普通升级
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => CommonDialog(
-                title: '有新版本可以更新',
-                confirmText: '立即更新',
-                onConfirm: () {
-                  Navigator.of(context).pop();
-                  _launchURL(appVersion);
-                },
-                cancelText: '下次再说',
-              ),
-            );
-          }
-        } else {
-          ToastUtils.showToast('当前已经是最新版本');
-        }
-      } else {
-        ToastUtils.showToast('当前已经是最新版本');
-      }
-    });
-  }
-
-  _launchURL(AppVersion appVersion) async {
-    var url = '';
-    if (CommonUtils.isAndroid(context)) {
-      url = appVersion.androidUrl!;
-    } else {
-      url = appVersion.iosUrl!;
-    }
-    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    await AppVersionChecker.of.checkVersion(showTips: true, showLoading: true);
   }
 
   void logout() {
@@ -295,8 +220,8 @@ class _SettingScreenState extends State<SettingScreen> {
         content: '退出登录您将无法查看个人中心等',
         confirmText: '退出',
         onConfirm: () {
-          TrackUtils.trackEvent(userLogType: '117001', params: UserStore.of.user?.id);
           Navigator.of(context).pop();
+          TrackUtils.trackEvent(userLogType: '117001', params: UserStore.of.user?.id);
           NetRequest().logout((data) {
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);

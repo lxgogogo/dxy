@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:app_links/app_links.dart';
@@ -11,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
-import 'package:holdem/model/app_version.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/message/message_screen.dart';
@@ -19,14 +17,10 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/log_util.dart';
-import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../model/message_badge_model.dart';
+import '../../utils/app_version_checker.dart';
 import '../../utils/debounce_throttle_util.dart';
 import '../../utils/event_bus_util.dart';
 import '../../utils/track_utils.dart';

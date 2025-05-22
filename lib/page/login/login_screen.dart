@@ -18,6 +18,7 @@ import '../../model/user.dart';
 import '../../services/index.dart';
 import '../../stores/storage.dart';
 import '../../stores/user_store.dart';
+import '../../utils/app_version_checker.dart';
 import '../../utils/event_bus_util.dart';
 import '../../utils/toast_utils.dart';
 import '../../widget/button.dart';
@@ -65,6 +66,14 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isAuthorizing = false;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await AppVersionChecker.of.checkVersion();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
       builder: (context, bool isKeyboardVisible) {
@@ -93,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Stack(
                   children: [
                     Image.asset(
-                        'assets/images/login_bg.png',
+                      'assets/images/login_bg.png',
                       height: 160.w,
                       fit: BoxFit.contain,
                     ),

@@ -1,0 +1,87 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../model/app_version.dart';
+import '../services/index.dart';
+import '../widget/dialog_common.dart';
+import 'toast_utils.dart';
+
+class AppVersionChecker {
+  static final AppVersionChecker of = AppVersionChecker._();
+
+  AppVersionChecker._();
+
+  bool isVersionInCheck = false;
+
+  bool _ignoreNonForcedUpdate = false;
+
+  Future<void> checkVersion({bool showTips = false, bool showLoading = false}) async {
+    if (isVersionInCheck) return;
+    isVersionInCheck = true;
+    final packageInfo = await PackageInfo.fromPlatform();
+    final currentVersion = packageInfo.version;
+
+    try {
+      final res = await CommonService.of.appVersion(showLoading: showLoading);
+      if (res.isSuccess) {
+        final appVersion = AppVersion.fromJson(res.data);
+        final latestVersion = Platform.isAndroid ? appVersion.androidVersion : appVersion.iosVersion;
+
+        if (latestVersion?.isNotEmpty == true) {
+          if (latestVersion!.compareTo(currentVersion) > 0) {
+            final forceUpdate = appVersion.forced ?? false;
+
+            // 如果用户之前选择了忽略非强制更新，就跳过
+            if (!forceUpdate && _ignoreNonForcedUpdate) {
+              return;
+            }
+
+            if (Get.context == null) return;
+
+            await showDialog(
+              barrierDismissible: !forceUpdate,
+              context: Get.context!,
+              builder: (context) => CommonDialog(
+                title: forceUpdate ? '更新以获得最佳体验' : '有新版本可以更新',
+                content: appVersion.description,
+                confirmText: '立即更新',
+                cancelText: '下次再说',
+                showClose: !forceUpdate,
+                onlyConfirm: forceUpdate,
+                onConfirm: () {
+                  // if (!forceUpdate) Navigator.of(context).pop();
+                  var url = '';
+                  if (Platform.isAndroid) {
+                    url = appVersion.androidUrl!;
+                  } else {
+                    url = appVersion.iosUrl!;
+                  }
+                  launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                },
+                onCancel: () {
+                  if (!forceUpdate) {
+                    _ignoreNonForcedUpdate = true;
+                  }
+                },
+              ),
+            );
+          } else {
+            if (!showTips) return;
+            ToastUtils.showToast('当前已经是最新版本');
+          }
+        } else {
+          if (!showTips) return;
+          ToastUtils.showToast('当前已经是最新版本');
+        }
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } finally {
+      isVersionInCheck = false;
+    }
+  }
+}

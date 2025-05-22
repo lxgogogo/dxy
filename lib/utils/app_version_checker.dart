@@ -17,7 +17,7 @@ class AppVersionChecker {
 
   bool isVersionInCheck = false;
 
-  bool _ignoreNonForcedUpdate = false;
+  String? _ignoredVersion; // 内存中保存忽略的版本号
 
   Future<void> checkVersion({bool showTips = false, bool showLoading = false}) async {
     if (isVersionInCheck) return;
@@ -35,38 +35,41 @@ class AppVersionChecker {
           if (latestVersion!.compareTo(currentVersion) > 0) {
             final forceUpdate = appVersion.forced ?? false;
 
-            // 如果用户之前选择了忽略非强制更新，就跳过
-            if (!forceUpdate && _ignoreNonForcedUpdate) {
+            // 非强制更新时，如果忽略过该版本或更低版本，直接跳过
+            if (!forceUpdate && _ignoredVersion != null && latestVersion.compareTo(_ignoredVersion!) <= 0) {
               return;
             }
 
             if (Get.context == null) return;
 
             await showDialog(
-              barrierDismissible: !forceUpdate,
+              barrierDismissible: false,
               context: Get.context!,
-              builder: (context) => CommonDialog(
-                title: forceUpdate ? '更新以获得最佳体验' : '有新版本可以更新',
-                content: appVersion.description,
-                confirmText: '立即更新',
-                cancelText: '下次再说',
-                showClose: !forceUpdate,
-                onlyConfirm: forceUpdate,
-                onConfirm: () {
-                  // if (!forceUpdate) Navigator.of(context).pop();
-                  var url = '';
-                  if (Platform.isAndroid) {
-                    url = appVersion.androidUrl!;
-                  } else {
-                    url = appVersion.iosUrl!;
-                  }
-                  launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                },
-                onCancel: () {
-                  if (!forceUpdate) {
-                    _ignoreNonForcedUpdate = true;
-                  }
-                },
+              builder: (context) => WillPopScope(
+                onWillPop: () async => false,
+                child: CommonDialog(
+                  title: forceUpdate ? '更新以获得最佳体验' : '有新版本可以更新',
+                  content: appVersion.description,
+                  confirmText: '立即更新',
+                  cancelText: '下次再说',
+                  showClose: false,
+                  onlyConfirm: forceUpdate,
+                  onConfirm: () {
+                    // if (!forceUpdate) Navigator.of(context).pop();
+                    var url = '';
+                    if (Platform.isAndroid) {
+                      url = appVersion.androidUrl!;
+                    } else {
+                      url = appVersion.iosUrl!;
+                    }
+                    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                  },
+                  onCancel: () {
+                    if (!forceUpdate) {
+                      _ignoredVersion = latestVersion; // 只在内存中记录
+                    }
+                  },
+                ),
               ),
             );
           } else {

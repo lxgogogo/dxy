@@ -9,6 +9,7 @@ abstract class Constants {
   static const localTheme = 'storage_theme_mode';
   static const localSecureDeviceId = 'storage_secure_device_id';
   static const localDidAgreeUseApp = 'storage_agree_use_app';
+  static const localIgnoredVersions = 'storage_ignored_versions';
 
   // 密码正则表达式
   static final passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u003A\u003B\u003D\u003C\u003E\u003F\u0040\u005B\u005D\u005E\u005F\u0060\u007B\u007D\u007C\u007E]{8,12}$');

@@ -25,16 +25,19 @@ class AppRoutesUtils {
       showDialog(
           barrierDismissible: false,
           context: Get.context!,
-          builder: (context) => CommonDialog(
-            title: title,
-            content: content,
-            confirmText: '好',
-            onlyConfirm: true,
-            showClose: false,
-            onConfirm: () {
-              Get.close(1);
-              Get.toNamed(Routes.login);
-            }
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+            child: CommonDialog(
+              title: title,
+              content: content,
+              confirmText: '好',
+              onlyConfirm: true,
+              showClose: false,
+              onConfirm: () {
+                Get.close(1);
+                Get.toNamed(Routes.login);
+              }
+            ),
           ));
       return false;
     }

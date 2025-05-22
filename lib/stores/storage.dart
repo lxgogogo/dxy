@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
@@ -78,6 +79,26 @@ extension StorageServiceHive on StorageService {
   Future<bool> putLocalUserStr(String value) async {
     return _put(Constants.localUser, value);
   }
+
+
+  Future<List<String>> getIgnoredVersions() async {
+    final jsonStr = await _box.get(Constants.localIgnoredVersions);
+    if (jsonStr == null || jsonStr.isEmpty) return [];
+    try {
+      return List<String>.from(jsonStr.decode(jsonStr));
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> addIgnoredVersion(String version) async {
+    final versions = await getIgnoredVersions();
+    if (!versions.contains(version)) {
+      versions.add(version);
+      await _box.put(Constants.localIgnoredVersions, json.encode(versions));
+    }
+  }
+
 }
 
 extension _StorageServicePrivate on StorageService {

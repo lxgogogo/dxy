@@ -352,6 +352,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         ToastUtils.showToast(res.msg);
       }
+    } catch (e) {
+      ToastUtils.showToast(e.toString());
     } finally {
       EasyLoading.dismiss();
       isAuthorizing = false;
@@ -394,6 +396,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         ToastUtils.showToast(res.msg);
       }
+    } catch (e) {
+      ToastUtils.showToast(e.toString());
     } finally {
       EasyLoading.dismiss();
       isAuthorizing = false;

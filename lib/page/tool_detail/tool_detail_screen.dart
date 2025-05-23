@@ -249,7 +249,7 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                     commentCount: controller.detailBean?.commentCount ?? 0,
                     shareCount: controller.detailBean?.shareCount ?? 0,
                   ),
-                  sourceType: SourceType.book,
+                  sourceType: SourceType.tool,
                 )
               : const SizedBox(),
         );

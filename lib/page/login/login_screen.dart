@@ -356,7 +356,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (e is FirebaseAuthException) {
-        if (e.code != 'canceled') {
+        if (!e.code.contains('canceled')) {
           ToastUtils.showToast(e.message.toString());
         }
       } else {
@@ -395,7 +395,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (e is FirebaseAuthException) {
-        if (e.code != 'canceled') {
+        // if (e.code != 'canceled' && e.code != 'web-context-canceled') {
+        if (!e.code.contains('canceled')) {
           ToastUtils.showToast(e.message.toString());
         }
       } else {

@@ -39,12 +39,22 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     }
   }
 
+  bool hasNetwork = false;
+
   @override
-  void onReady() {
-    loadData();
+  Future<void> onReady() async {
     super.onReady();
+    final result = await Connectivity().checkConnectivity();
+    hasNetwork = !result.contains(ConnectivityResult.none);
+    if (hasNetwork) loadData();
+    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+      if (!hasNetwork) {
+        final hasNetwork = !result.contains(ConnectivityResult.none);
+        if (hasNetwork) loadData();
+      }
+    });
     scrollController.addListener(() {
-      final isShow = scrollController.offset > (211.w + 24.w + 52.w + 24.w + 52.w - (12.w + 32.w + 12.w));
+      final isShow = scrollController.offset > (211.w + 16.w + 63.w + 16.w + 63.w);
       if (isShowHomeMenu != isShow) {
         isShowHomeMenu = isShow;
         safeUpdate();

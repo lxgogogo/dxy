@@ -47,9 +47,10 @@ class PersonalScreenController extends GetxController {
       final googleUser = await GoogleSignIn().signIn();
       EasyLoading.show(status: 'loading...');
       final googleAuth = await googleUser?.authentication;
+      if (googleAuth == null) return;
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final idTokenResult = await userCredential.user?.getIdTokenResult(true);
@@ -61,17 +62,8 @@ class PersonalScreenController extends GetxController {
         ToastUtils.showToast('绑定成功');
         final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
-        // TrackUtils.trackEvent(userLogType: '115005', params: '谷歌');
       } else {
         ToastUtils.showToast(res.msg);
-        // if (!context.mounted) return;
-        // showDialog(
-        //   context: context,
-        //   builder: (context) => DialogNewTip(
-        //     title: '绑定失败',
-        //     content: res.msg,
-        //   ),
-        // );
       }
     } finally {
       EasyLoading.dismiss();
@@ -80,13 +72,6 @@ class PersonalScreenController extends GetxController {
   }
 
   Future<void> signInWithApple(BuildContext context) async {
-    // final credential = await SignInWithApple.getAppleIDCredential(
-    //   scopes: [
-    //     AppleIDAuthorizationScopes.email,
-    //     AppleIDAuthorizationScopes.fullName,
-    //   ],
-    // );
-    // EasyLoading.show(status: 'loading...');
     try {
       if (isAuthorizing) return;
       isAuthorizing = true;
@@ -100,25 +85,12 @@ class PersonalScreenController extends GetxController {
         type: 'APPLE',
         token: idTokenResult?.token ?? '',
       );
-      // final res = await LoginService.of.thirdLogin(
-      //   type: 'APPLE',
-      //   token: credential.identityToken ?? '',
-      // );
       if (res.isSuccess) {
         ToastUtils.showToast('绑定成功');
         final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
-        // TrackUtils.trackEvent(userLogType: '115005', params: '苹果');
       } else {
         ToastUtils.showToast(res.msg);
-        // if (!context.mounted) return;
-        // showDialog(
-        //   context: context,
-        //   builder: (context) => DialogNewTip(
-        //     title: '绑定失败',
-        //     content: res.msg,
-        //   ),
-        // );
       }
     } finally {
       EasyLoading.dismiss();
@@ -127,37 +99,35 @@ class PersonalScreenController extends GetxController {
   }
 
   Future<void> signInWithTelegram(BuildContext context) async {
-    final token = await Get.toNamed(Routes.telegramLogin);
-    if (token is String) {
-      final res = await LoginService.of.bindThirdLogin(
-        type: 'TELEGRAM',
-        token: token,
-      );
-      EasyLoading.dismiss();
-      if (res.isSuccess) {
-        ToastUtils.showToast('绑定成功');
-        final userProfile = UserProfile.fromJson(res.data);
-        UserStore.of.putUserInfo(userProfile);
-        // TrackUtils.trackEvent(userLogType: '115005', params: 'TG');
-      } else {
-        ToastUtils.showToast(res.msg);
-        // if (!context.mounted) return;
-        // showDialog(
-        //   context: context,
-        //   builder: (context) => DialogNewTip(
-        //     title: '绑定失败',
-        //     content: res.msg,
-        //   ),
-        // );
+    try {
+      if (isAuthorizing) return;
+      isAuthorizing = true;
+      final token = await Get.toNamed(Routes.telegramLogin)?.whenComplete(() {
+        EasyLoading.dismiss();
+      });
+      ;
+      if (token is String) {
+        EasyLoading.show(status: 'loading...');
+        final res = await LoginService.of.bindThirdLogin(
+          type: 'TELEGRAM',
+          token: token,
+        );
+        EasyLoading.dismiss();
+        if (res.isSuccess) {
+          ToastUtils.showToast('绑定成功');
+          final userProfile = UserProfile.fromJson(res.data);
+          UserStore.of.putUserInfo(userProfile);
+        } else {
+          ToastUtils.showToast(res.msg);
+        }
       }
+    } finally {
+      EasyLoading.dismiss();
+      isAuthorizing = false;
     }
   }
 
   void loginOut(context) {
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => const DialogDeleteAccount(),
-    // );
     Get.toNamed(Routes.deleteAccount);
   }
 }

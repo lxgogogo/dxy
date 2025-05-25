@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -331,9 +332,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final googleUser = await GoogleSignIn().signIn();
       EasyLoading.show(status: 'loading...');
       final googleAuth = await googleUser?.authentication;
+      if (googleAuth == null) return;
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
       final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final idTokenResult = await userCredential.user?.getIdTokenResult(true);
@@ -353,7 +355,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ToastUtils.showToast(res.msg);
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      if (e is FirebaseAuthException) {
+        if (e.code != 'canceled') {
+          ToastUtils.showToast(e.message.toString());
+        }
+      } else {
+        ToastUtils.showToast(e.toString());
+      }
     } finally {
       EasyLoading.dismiss();
       isAuthorizing = false;
@@ -361,13 +369,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithApple() async {
-    // final credential = await SignInWithApple.getAppleIDCredential(
-    //   scopes: [
-    //     AppleIDAuthorizationScopes.email,
-    //     AppleIDAuthorizationScopes.fullName,
-    //   ],
-    // );
-    // EasyLoading.show(status: 'loading...');
     try {
       if (isAuthorizing) return;
       isAuthorizing = true;
@@ -381,10 +382,6 @@ class _LoginScreenState extends State<LoginScreen> {
         type: 'APPLE',
         token: idTokenResult?.token ?? '',
       );
-      // final res = await LoginService.of.thirdLogin(
-      //   type: 'APPLE',
-      //   token: credential.identityToken ?? '',
-      // );
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
         StorageService.of.putToken(res.data['token']);
@@ -397,7 +394,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ToastUtils.showToast(res.msg);
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      if (e is FirebaseAuthException) {
+        if (e.code != 'canceled') {
+          ToastUtils.showToast(e.message.toString());
+        }
+      } else {
+        ToastUtils.showToast(e.toString());
+      }
     } finally {
       EasyLoading.dismiss();
       isAuthorizing = false;
@@ -405,24 +408,35 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithTelegram() async {
-    final token = await Get.toNamed(Routes.telegramLogin);
-    if (token is String) {
-      final res = await LoginService.of.thirdLogin(
-        type: 'TELEGRAM',
-        token: token,
-      );
-      EasyLoading.dismiss();
-      if (res.isSuccess) {
-        ToastUtils.showToast('登录成功');
-        StorageService.of.putToken(res.data['token']);
-        final userProfile = UserProfile.fromJson(res.data['user']);
-        UserStore.of.putUserInfo(userProfile);
-        UserStore.of.getUserInfo();
-        EventBusUtil.of.fire(EventLoginSuccess());
-        Get.until((route) => route.settings.name == Routes.main);
-      } else {
-        ToastUtils.showToast(res.msg);
+    try {
+      if (isAuthorizing) return;
+      isAuthorizing = true;
+      final token = await Get.toNamed(Routes.telegramLogin)?.whenComplete(() {
+        EasyLoading.dismiss();
+      });
+      if (token is String) {
+        EasyLoading.show(status: 'loading...');
+        final res = await LoginService.of.thirdLogin(
+          type: 'TELEGRAM',
+          token: token,
+        );
+        if (res.isSuccess) {
+          ToastUtils.showToast('登录成功');
+          StorageService.of.putToken(res.data['token']);
+          final userProfile = UserProfile.fromJson(res.data['user']);
+          UserStore.of.putUserInfo(userProfile);
+          UserStore.of.getUserInfo();
+          EventBusUtil.of.fire(EventLoginSuccess());
+          Get.until((route) => route.settings.name == Routes.main);
+        } else {
+          ToastUtils.showToast(res.msg);
+        }
       }
+    } catch (e) {
+      ToastUtils.showToast(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+      isAuthorizing = false;
     }
   }
 }

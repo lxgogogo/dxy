@@ -80,9 +80,9 @@ class AppVersionChecker {
           if (!showTips) return;
           ToastUtils.showToast('当前已经是最新版本');
         }
-      } else {
+      }/* else {
         ToastUtils.showToast(res.msg);
-      }
+      }*/
     } finally {
       isVersionInCheck = false;
     }

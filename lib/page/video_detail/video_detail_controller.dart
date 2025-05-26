@@ -390,8 +390,12 @@ class VideoDetailController extends GetxController {
   }
 
   void onFocusLost() {
-    // if (!isDisposed) {
-    //   videoController?.pause();
-    // }
+    bool isFullScreen = false;
+    if (videoNotifier.chewieController != null) {
+      isFullScreen = videoNotifier.chewieController!.isFullScreen;
+    }
+    if (!isDisposed && !isFullScreen) {
+      videoController?.pause();
+    }
   }
 }

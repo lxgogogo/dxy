@@ -349,7 +349,7 @@ class VideoNotifier extends ChangeNotifier {
       routePageBuilder: (context, animation, secondaryAnimation, controllerProvider) {
         return ChewieVideo(notifier: this);
       },
-      deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
+      // deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
       deviceOrientationsAfterFullScreen: [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,

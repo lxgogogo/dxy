@@ -147,7 +147,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
           autoPlay: false,
           showOptions: false,
           showControlsOnInitialize: false,
-          deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
+          // deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
           deviceOrientationsAfterFullScreen: [
             DeviceOrientation.portraitUp,
             DeviceOrientation.portraitDown,

@@ -390,8 +390,8 @@ class VideoDetailController extends GetxController {
   }
 
   void onFocusLost() {
-    if (!isDisposed) {
-      videoController?.pause();
-    }
+    // if (!isDisposed) {
+    //   videoController?.pause();
+    // }
   }
 }

@@ -386,7 +386,11 @@ class VideoDetailController extends GetxController {
   }
 
   void onFocusGained() {
-    playVideo();
+    if (isInitialize) {
+      if (videoController?.value.isPlaying == false) {
+        videoController?.play();
+      }
+    }
   }
 
   void onFocusLost() {

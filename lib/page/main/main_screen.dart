@@ -12,6 +12,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
+import 'package:holdem/page/interactive_courses/main_courses/main_courses_view.dart';
 import 'package:holdem/page/message/message_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
@@ -27,6 +28,14 @@ import '../../utils/track_utils.dart';
 import '../mine/mine_screen.dart';
 
 part 'main_controller.dart';
+
+enum MainScreenTabType {
+  home,
+  feed,
+  course,
+  message,
+  mine
+}
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -51,6 +60,7 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   const HomeScreen().keepAlive,
                   const FeedListScreen().keepAlive,
+                  const MainCoursesPage().keepAlive,
                   const MessagePage().keepAlive,
                   const MineScreen().keepAlive,
                 ],
@@ -93,7 +103,11 @@ class _MainScreenState extends State<MainScreen> {
                             label: '论坛',
                           ),
                           _buildBarItem(
-                            icon: controller.tabIndex == 2 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
+                            icon: controller.tabIndex == 2 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                            label: '课程',
+                          ),
+                          _buildBarItem(
+                            icon: controller.tabIndex == 3 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
                             label: '消息',
                             badge: Obx(() {
                               final badgeCount = UserStore.of.badgeModel.value?.total ?? 0;
@@ -121,7 +135,7 @@ class _MainScreenState extends State<MainScreen> {
                             }),
                           ),
                           _buildBarItem(
-                            icon: controller.tabIndex == 3 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
+                            icon: controller.tabIndex == 4 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
                             label: '我的',
                           ),
                         ],

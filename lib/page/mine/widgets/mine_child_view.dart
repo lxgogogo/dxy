@@ -141,7 +141,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
     reqListData();
 
     tabEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
-      if (event.tabIndex == 3) {
+      if (event.tabIndex == 4) {
         _onRefresh();
       }
     });

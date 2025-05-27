@@ -14,7 +14,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
   PageController pageController = PageController();
 
   void onTabBarItem(int index) {
-    if (index == 2 || index == 3) {
+    if (index >= 2) {
       if (!UserStore.of.isLogin) {
         Get.toNamed(Routes.login);
         return;
@@ -27,7 +27,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
     saveReview();
 
     /// 消息内部自己去刷
-    if (index != 2) {
+    if (index != 3) {
       UserStore.of.refreshBadge();
     }
 
@@ -38,10 +38,10 @@ class MainController extends GetxController with WidgetsBindingObserver {
       case 1:
         TrackUtils.trackEvent(userLogType: '100005');
         break;
-      case 2:
+      case 3:
         TrackUtils.trackEvent(userLogType: '100010');
         break;
-      case 3:
+      case 4:
         TrackUtils.trackEvent(userLogType: '100009');
         break;
     }
@@ -179,5 +179,21 @@ class MainController extends GetxController with WidgetsBindingObserver {
         await CommonService.of.saveReview();
       } catch (e) {}
     }
+  }
+
+  String getTabTypeName(int index) {
+    switch (index) {
+      case 0:
+        return 'home';
+      case 1:
+        return 'feed';
+      case 2:
+        return 'course';
+      case 3:
+        return 'message';
+      case 4:
+        return 'mine';
+    }
+    return '';
   }
 }

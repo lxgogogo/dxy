@@ -31,7 +31,7 @@ class MessageChildController extends GetxController {
   void onReady() {
     super.onReady();
     tabEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
-      if (event.tabIndex == 2) {
+      if (event.tabIndex == 3) {
         loadData();
       }
     });

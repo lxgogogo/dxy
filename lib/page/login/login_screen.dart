@@ -104,8 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Image.asset(
                       'assets/images/login_bg.png',
-                      height: 160.w,
-                      fit: BoxFit.contain,
+                      width: 1.sw,
+                      height: 137.w,
+                      fit: BoxFit.fitWidth,
                     ),
                     Positioned(
                       child: SafeArea(
@@ -239,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 disable: disable ?? false,
                 showOpacityAnimation: true,
                 textColor: Colors.white,
-                height: 48.w,
+                height: 50.w,
                 radius: 8.w,
                 title: isLogin ? '登录' : '注册',
                 fontSize: 16.sp,
@@ -267,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 24.w),
+              SizedBox(height: 38.w),
             ],
           );
         }

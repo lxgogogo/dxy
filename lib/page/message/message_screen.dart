@@ -63,7 +63,7 @@ class _MessagePageState extends State<MessagePage>
                             child: Opacity(
                               opacity: controller.unReadCount > 0 ? 1 : 0.3,
                               child: Padding(
-                                padding: EdgeInsets.only(right: 16.w, top: 26.w),
+                                padding: EdgeInsets.only(right: 16.w, top: 16.w),
                                 child: SvgPicture.asset(
                                   Assets.svg.messageClean,
                                 ),
@@ -173,7 +173,7 @@ class _MessagePageState extends State<MessagePage>
 
   Widget _buildNoticeBtnWidget(controller) {
     return Obx(() => Padding(
-          padding: EdgeInsets.only(left: 16.w, top: 12.w),
+          padding: EdgeInsets.only(left: 16.w),
           child: Row(
             children: [
               _buildButtonItemWidget(0, controller.notifiesOfficial.value,

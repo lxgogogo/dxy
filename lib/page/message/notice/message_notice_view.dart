@@ -262,10 +262,10 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                 ? Opacity(
                                     opacity: 0.7,
                                     child: BorderAvatar(
-                                        avatarSize: 42.w,
+                                        avatarSize: 44.w,
                                         avatar: model.sendUserHeadimg ?? ''))
                                 : BorderAvatar(
-                                    avatarSize: 42.w,
+                                    avatarSize: 44.w,
                                     avatar: model.sendUserHeadimg ?? ''),
                             SizedBox(width: 10.w),
                             Expanded(
@@ -297,7 +297,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                       maxLines: 1,
                                       style: TextStyle(
                                         color: AppTheme.color_666666,
-                                        fontSize: 14.sp,
+                                        fontSize: 12.sp,
                                       ))
                                 ],
                               ),

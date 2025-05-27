@@ -96,7 +96,7 @@ class _MessageNoticeDetailPageState extends State<MessageNoticeDetailPage> {
                         Text(
                           dateStr,
                           style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 10.sp,
                               color: ColorStyle.c333333.withOpacity(0.7)),
                         )
                       ],

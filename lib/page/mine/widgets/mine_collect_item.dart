@@ -74,7 +74,7 @@ class MyCollectItem extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w),
-        padding: EdgeInsets.symmetric(vertical: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 16.w).copyWith(bottom: 12.w),
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: '#F2F2F2'.hexColor)),
         ),
@@ -82,140 +82,150 @@ class MyCollectItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if(type != 'book')
-            Text(
-              title ?? '',
-              style: TextStyle(
-                color: AppTheme.color_333333,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
+              Text(
+                title ?? '',
+                style: TextStyle(
+                  color: AppTheme.color_333333,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                softWrap: true,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              softWrap: true,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: 12.w),
-            SizedBox(
-             // height: 66.w,
-              child: Row(
-                children: [
-                  if (imageUrl?.isNotEmpty == true)
-                    Container(
-                      width:type == 'book'?68.w: 88.w,
-                      height:type == 'book'?102.w: 66.w,
-                      margin: EdgeInsets.only(right: 8.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: imageUrl ?? '',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                            errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                          ),
-                          if (item?.content?.type == 'videoList')
-                            Positioned(
-                              top: 2.w,
-                              right: 2.w,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(16.r),
-                                ),
-                                child: Text(
-                                  '合集',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.sp,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+            if (imageUrl?.isNotEmpty == true)
+              SizedBox(height: 8.w)
+            else
+              SizedBox(height: 4.w),
+            Row(
+              children: [
+                if (imageUrl?.isNotEmpty == true)
+                  Container(
+                    width:type == 'book'? 68.w: 88.w,
+                    height:type == 'book'? 102.w: 49.w,
+                    margin: EdgeInsets.only(right: 8.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
-                  Expanded(
-                    child: SizedBox(
-                     // width:type == 'book'?68.w: 88.w,
-                      width: double.infinity,
-                      height:type == 'book'?102.w: 66.w,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if(type == 'book')
-                            ...[
-                              Text(
-                                title ?? '',
-                                style: TextStyle(
-                                  color: AppTheme.color_333333,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                softWrap: true,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: imageUrl ?? '',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                        ),
+                        if (item?.content?.type == 'videoList')
+                          Positioned(
+                            top: 2.w,
+                            right: 2.w,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.w),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(16.r),
                               ),
-                              Text(
-                                '作者:${author ?? ''}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              child: Text(
+                                '合集',
                                 style: TextStyle(
-                                    color: '#333333'.hexColor.withOpacity(0.7),
-                                    fontSize: 12.sp,
-                                    height: 1.2),
-                              ),
-                            ],
-
-                          Text(
-                            content ?? '',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: AppTheme.color_666666,
-                            ),
-                            softWrap: true,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-
-                          Row(
-                            children: [
-                              Text(
-                                DateUtil.formatDateAlias3(createdAt!.millisecondsSinceEpoch,),
-                                style: TextStyle(
+                                  color: Colors.white,
                                   fontSize: 10.sp,
-                                  color: AppTheme.color_999999,
                                 ),
                               ),
-                              const Spacer(),
-                              SimpleCountText(
-                                count: likeCount?.abbreviateNumber ?? '0',
-                                desc: '点赞',
-                              ),
-                              const SimpleDot(),
-                              SimpleCountText(
-                                count: commentCount?.abbreviateNumber ?? '0',
-                                desc: '评论',
-                              ),
-                              // const SimpleDot(),
-                              // SimpleCountText(
-                              //   count: favoriteCount?.abbreviateNumber ?? '0',
-                              //   desc: '收藏',
-                              // ),
-                            ],
+                            ),
                           ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if(type == 'book')
+                        ...[
+                          Padding(
+                            padding: EdgeInsets.only(left: 12.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  title ?? '',
+                                  style: TextStyle(
+                                    color: AppTheme.color_333333,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  softWrap: true,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 10.w),
+                                Text(
+                                  '作者：${author ?? ''}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: '#333333'.hexColor.withOpacity(0.7),
+                                      fontSize: 14.sp,
+                                      height: 1.2),
+                                ),
+                                SizedBox(height: 2.w),
+                              ],
+                            ),
+                          )
+                        ],
+                      Padding(
+                        padding: EdgeInsets.only(left: type == 'book' ? 12.w : 0),
+                        child: Text(
+                          content ?? '',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: AppTheme.color_666666,
+                          ),
+                          softWrap: true,
+                          maxLines: imageUrl?.isNotEmpty == true ? 1 : 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(height: 10.w),
+                      Padding(
+                          padding: EdgeInsets.only(left: type == 'book' ? 12.w : 0),
+                        child: Row(
+                          children: [
+                            Text(
+                              DateUtil.formatDateAlias3(createdAt!.millisecondsSinceEpoch,),
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                color: AppTheme.color_999999,
+                              ),
+                            ),
+                            const Spacer(),
+                            SimpleCountText(
+                              count: likeCount?.abbreviateNumber ?? '0',
+                              desc: '点赞',
+                            ),
+                            const SimpleDot(),
+                            SimpleCountText(
+                              count: commentCount?.abbreviateNumber ?? '0',
+                              desc: '评论',
+                            ),
+                            // const SimpleDot(),
+                            // SimpleCountText(
+                            //   count: favoriteCount?.abbreviateNumber ?? '0',
+                            //   desc: '收藏',
+                            // ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ),
+              ],
+            )
           ],
         ),
       ),

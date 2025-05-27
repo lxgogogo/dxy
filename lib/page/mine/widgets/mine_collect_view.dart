@@ -213,7 +213,7 @@ class _MineCollectViewState extends State<MineCollectView>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 12.w, right: 12.w),
+          padding: EdgeInsets.only(left: 0.w, right: 10.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

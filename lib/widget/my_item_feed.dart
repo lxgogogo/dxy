@@ -35,7 +35,7 @@ class MyFeedItem extends StatelessWidget {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 16.w),
-        padding: EdgeInsets.symmetric(vertical: 16.w),
+        padding: EdgeInsets.symmetric(vertical: 16.w).copyWith(bottom: 12.w),
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: '#F2F2F2'.hexColor)),
         ),
@@ -53,101 +53,102 @@ class MyFeedItem extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(height: 12.w),
-            SizedBox(
-              height: 66.w,
-              child: Row(
-                children: [
-                  if (item.files?.isNotEmpty == true)
-                    Container(
-                      width: 88.w,
-                      height: 66.w,
-                      margin: EdgeInsets.only(right: 8.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: showCover ?? '',
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            placeholder: (context, url) => Assets
-                                .images.imageLoadingDef
-                                .image(fit: BoxFit.fill),
-                            errorWidget: (context, url, error) => Assets
-                                .images.imageLoadingDef
-                                .image(fit: BoxFit.fill),
-                          ),
-                          if (item.files!.first.type == 'video')
-                            Center(
-                              child: Assets.images.playBtn.image(
-                                width: 24.w,
-                                height: 24.w,
-                              ),
-                            ),
-                        ],
-                      ),
+            if (item.files?.isNotEmpty == true)
+              SizedBox(height: 8.w)
+            else
+              SizedBox(height: 4.w),
+            Row(
+              children: [
+                if (item.files?.isNotEmpty == true)
+                  Container(
+                    width: 88.w,
+                    height: 49.w,
+                    margin: EdgeInsets.only(right: 8.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        Text(
-                          item.pureText ?? '',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppTheme.color_666666,
-                          ),
-                          softWrap: true,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        CachedNetworkImage(
+                          imageUrl: showCover ?? '',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          placeholder: (context, url) => Assets
+                              .images.imageLoadingDef
+                              .image(fit: BoxFit.fill),
+                          errorWidget: (context, url, error) => Assets
+                              .images.imageLoadingDef
+                              .image(fit: BoxFit.fill),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              item.createdAt != null
-                                  ? DateUtil.formatDateAlias3(
-                                      item.createdAt?.millisecondsSinceEpoch ??
-                                          0)
-                                  : '',
-                              style: TextStyle(
-                                  fontSize: 10.sp,
-                                  color: AppTheme.color_999999),
+                        if (item.files!.first.type == 'video')
+                          Center(
+                            child: Assets.images.playBtn.image(
+                              width: 24.w,
+                              height: 24.w,
                             ),
-                            Row(
-                              children: [
-                                SimpleCountText(
-                                  count:
-                                      item.likeCount?.abbreviateNumber ?? '0',
-                                  desc: '点赞',
-                                ),
-                                const SimpleDot(),
-                                SimpleCountText(
-                                  count: item.commentCount?.abbreviateNumber ??
-                                      '0',
-                                  desc: '评论',
-                                ),
-                                const SimpleDot(),
-                                SimpleCountText(
-                                  count: item.favoriteCount?.abbreviateNumber ??
-                                      '0',
-                                  desc: '收藏',
-                                ),
-                              ],
-                            )
-                          ],
-                        )
+                          ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.pureText ?? '',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: AppTheme.color_666666,
+                        ),
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 10.w),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /*Text(
+                            item.createdAt != null
+                                ? DateUtil.formatDateAlias3(
+                                item.createdAt?.millisecondsSinceEpoch ??
+                                    0)
+                                : '',
+                            style: TextStyle(
+                                fontSize: 10.sp,
+                                color: AppTheme.color_999999),
+                          ),*/
+                          SizedBox(width: 100.w),
+                          Row(
+                            children: [
+                              SimpleCountText(
+                                count:
+                                item.likeCount?.abbreviateNumber ?? '0',
+                                desc: '点赞',
+                              ),
+                              const SimpleDot(),
+                              SimpleCountText(
+                                count: item.commentCount?.abbreviateNumber ??
+                                    '0',
+                                desc: '评论',
+                              ),
+                              const SimpleDot(),
+                              SimpleCountText(
+                                count: item.favoriteCount?.abbreviateNumber ??
+                                    '0',
+                                desc: '收藏',
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

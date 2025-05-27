@@ -62,6 +62,7 @@ class CourseItem extends StatelessWidget {
                       Assets.svg.iconArrow,
                       width: 14.w,
                       height: 14.w,
+                      color: '#999999'.hexColor,
                     )
                   ],
                 ),

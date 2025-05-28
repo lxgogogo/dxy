@@ -144,6 +144,8 @@ class _LoginContentState extends State<LoginContent> {
 
   @override
   Widget build(BuildContext context) {
+    double inputHeight = 44.w;
+    double tipsSpace = 8.w;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
@@ -169,7 +171,7 @@ class _LoginContentState extends State<LoginContent> {
                   ),
                   SizedBox(height: 16.w),
                   Container(
-                    height: 40.w,
+                    height: inputHeight,
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     decoration: BoxDecoration(
                       color: '#f5f5f5'.hexColor,
@@ -216,20 +218,17 @@ class _LoginContentState extends State<LoginContent> {
                     ),
                   ),
                   Padding(
-                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
-                    child: SizedBox(
-                      height: 16.w,
-                      child: Text(
-                        isShowAccountTips ? type.tips : '',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
-                        ),
+                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
+                    child: Text(
+                      isShowAccountTips ? type.tips : '',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                       ),
-                    ),
+                    )
                   ),
                   Container(
-                    height: 40.w,
+                    height: inputHeight,
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     decoration: BoxDecoration(
                       color: '#f5f5f5'.hexColor,
@@ -272,17 +271,14 @@ class _LoginContentState extends State<LoginContent> {
                     ),
                   ),
                   Padding(
-                    padding: isShowPwTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
-                    child: SizedBox(
-                      height: 16.w,
-                      child: Text(
-                        isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                        ),
+                    padding: isShowPwTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
+                    child: Text(
+                      isShowPwTips ? '*8-12位，须包含大小写字母+数字' : '',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
                       ),
-                    ),
+                    )
                   ),
                   Row(
                     children: [

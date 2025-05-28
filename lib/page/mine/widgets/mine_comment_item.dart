@@ -1,40 +1,17 @@
-import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
-import 'package:holdem/utils/common_utils.dart';
-import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/html_parse_util.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/utils/toast_utils.dart';
-import 'package:holdem/widget/at_text.dart';
-import 'package:holdem/widget/count_widget.dart';
-import 'package:holdem/widget/dialog_confirm.dart';
 import 'package:holdem/widget/item_comment.dart';
-import 'package:holdem/widget/my_item_feed.dart';
-import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../model/board_list.dart';
-import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
-import '../../../model/user.dart';
 import '../../../utils/date_util.dart';
-import '../../../utils/net_request.dart';
-import '../../../widget/item_feed.dart';
-import '../../../widget/no_data.dart';
-import '../login_helper.dart';
 
 class MyCommentItem extends StatelessWidget {
   const MyCommentItem({
@@ -276,7 +253,7 @@ class MyCommentItem extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                   color: AppTheme.color_666666,
                   fontWeight: FontWeight.w600,
                 ),

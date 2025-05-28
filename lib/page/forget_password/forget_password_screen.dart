@@ -163,6 +163,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double inputHeight = 44.w;
+    double tipsSpace = 8.w;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -173,7 +175,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           children: [
             Stack(
               children: [
-                Image.asset('assets/images/login_bg.png'),
+                Image.asset(
+                    'assets/images/login_bg.png',
+                  width: 1.sw,
+                  height: 137.w,
+                  fit: BoxFit.fitWidth,
+                ),
                 Positioned(
                   child: SafeArea(
                     child: Container(
@@ -249,7 +256,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                     SizedBox(height: 16.w),
                     Container(
-                      height: 40.w,
+                      height: inputHeight,
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
@@ -296,21 +303,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
-                      child: SizedBox(
-                        height: 16.w,
-                        child: Text(
-                          isShowAccountTips ? type.tips : '',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
-                          ),
+                      padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
+                      child: Text(
+                        isShowAccountTips ? type.tips : '',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
                         ),
-                      ),
+                      )
                     ),
                     if (type != LoginType.username) ...[
                       Container(
-                        height: 40.w,
+                        height: inputHeight,
                         padding: EdgeInsets.symmetric(horizontal: 12.w),
                         decoration: BoxDecoration(
                           color: '#f5f5f5'.hexColor,
@@ -346,21 +350,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         ),
                       ),
                       Padding(
-                        padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: 10.w) : EdgeInsets.zero,
-                        child: SizedBox(
-                          height: 16.w,
-                          child: Text(
-                            isShowCodeTips ? '*验证码错误' : '',
-                            style: TextStyle(
-                              fontSize: 10.sp,
-                              color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
-                            ),
+                        padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
+                        child: Text(
+                          isShowCodeTips ? '*验证码错误' : '',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
                           ),
-                        ),
+                        )
                       ),
                     ],
                     Container(
-                      height: 40.w,
+                      height: inputHeight,
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
@@ -403,24 +404,21 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.w),
-                      child: SizedBox(
-                        height: 16.w,
-                        child: Text(
-                          isShowPwTips
-                              ? isContainsInvalidChars
-                              ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
-                              : '*至少包含一位大小写字母+数字'
-                              : '*8-12字符，至少包含大小写字母+数字',
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                          ),
+                      padding: EdgeInsets.symmetric(vertical: tipsSpace),
+                      child: Text(
+                        isShowPwTips
+                            ? isContainsInvalidChars
+                            ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
+                            : '*至少包含一位大小写字母+数字'
+                            : '*8-12字符，至少包含大小写字母+数字',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
                         ),
-                      ),
+                      )
                     ),
                     Container(
-                      height: 40.w,
+                      height: inputHeight,
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: '#f5f5f5'.hexColor,
@@ -465,15 +463,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.w),
-                        child: SizedBox(
-                          height: 16.w,
-                          child: Text(
-                            isShowAgainTips ? '*两次输入的密码不一致' : '*8-12字符，至少包含大小写字母+数字',
-                            style: TextStyle(
-                              fontSize: 10.sp,
-                              color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
-                            ),
+                        padding: EdgeInsets.symmetric(vertical: tipsSpace),
+                        child: Text(
+                          isShowAgainTips ? '*两次输入的密码不一致' : '*8-12字符，至少包含大小写字母+数字',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowAgainTips ? Colors.red : '#95A3C4'.hexColor,
                           ),
                         )),
                     SizedBox(height: 24.w),

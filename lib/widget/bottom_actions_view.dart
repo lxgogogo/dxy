@@ -192,7 +192,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                               start: Color(0xFF557BF6),
                               end: Color(0xFF557BF6),
                             ),
-                            likeCountPadding: EdgeInsets.only(left: 0.w),
+                            likeCountPadding: EdgeInsets.zero,
                             countBuilder: (_, __, ___) => const SizedBox()),
                       ),
                       GestureDetector(

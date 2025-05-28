@@ -27,6 +27,7 @@ class AppTheme {
   static const color_0050FF = Color(0xFF0050FF);
   static const color_557BF6 = Color(0xFF557BF6);
   static const color_84BCF9 = Color(0xFF84BCF9);
+  static const color_F7F8FC = Color(0xFFF7F8FC);
 
 
 

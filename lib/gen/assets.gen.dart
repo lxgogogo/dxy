@@ -9,6 +9,39 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsCoursesGen {
+  const $AssetsCoursesGen();
+
+  /// File path: assets/courses/icon_select_courses_1.png
+  AssetGenImage get iconSelectCourses1 =>
+      const AssetGenImage('assets/courses/icon_select_courses_1.png');
+
+  /// File path: assets/courses/icon_select_courses_2.png
+  AssetGenImage get iconSelectCourses2 =>
+      const AssetGenImage('assets/courses/icon_select_courses_2.png');
+
+  /// File path: assets/courses/icon_select_courses_3.png
+  AssetGenImage get iconSelectCourses3 =>
+      const AssetGenImage('assets/courses/icon_select_courses_3.png');
+
+  /// File path: assets/courses/icon_select_courses_4.png
+  AssetGenImage get iconSelectCourses4 =>
+      const AssetGenImage('assets/courses/icon_select_courses_4.png');
+
+  /// File path: assets/courses/icon_select_courses_5.png
+  AssetGenImage get iconSelectCourses5 =>
+      const AssetGenImage('assets/courses/icon_select_courses_5.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        iconSelectCourses1,
+        iconSelectCourses2,
+        iconSelectCourses3,
+        iconSelectCourses4,
+        iconSelectCourses5
+      ];
+}
+
 class $AssetsEquityCenterGen {
   const $AssetsEquityCenterGen();
 
@@ -1182,8 +1215,9 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
+  static const $AssetsCoursesGen courses = $AssetsCoursesGen();
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
@@ -1224,7 +1258,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

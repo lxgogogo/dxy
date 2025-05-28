@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/routes/app_pages.dart';
 
 import 'main_courses_controller.dart';
 
@@ -32,7 +34,21 @@ class _MainCoursesPageState extends State<MainCoursesPage> {
           Text('德学院')
         ],
       ),
-      body: Container()
+      body: Container(
+        alignment: Alignment.center,
+        child: GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.selectCourses);
+          },
+          child: Text(
+            '进入课程选择',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.red
+            ),
+          )
+        ),
+      )
     );
   }
 

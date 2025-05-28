@@ -25,62 +25,62 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Stack(
-          children: [
-            if (controller.isLoading.value)
-              const SizedBox()
-            else
-              Image.asset(
-                controller.bg.value,
-                width: 1.sw,
-                height: 1.sh,
-                fit: BoxFit.fill,
+      children: [
+        if (controller.isLoading.value)
+          const SizedBox()
+        else
+          Image.asset(
+            controller.bg.value,
+            width: 1.sw,
+            height: 1.sh,
+            fit: BoxFit.fill,
+          ),
+        Positioned(
+          bottom: 0,
+          child: Container(
+            width: 1.sw,
+            height: 260.w,
+            color: ColorStyle.cF5F5F5,
+          ),
+        ),
+        Scaffold(
+            backgroundColor: controller.isLoading.value
+                ? Colors.white
+                : Colors.transparent,
+            appBar: CommonAppBar.arrowBack(context, title: '权益中心'),
+            body: controller.isLoading.value
+                ? const Center(
+              child: CupertinoActivityIndicator(color: Colors.grey),
+            )
+                : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildBannerWidget(),
+                  _buildCategoryWidget(),
+                  Container(
+                      margin: EdgeInsets.only(top: 15.w),
+                      decoration: BoxDecoration(
+                          color: ColorStyle.cF5F5F5,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.w),
+                              topRight: Radius.circular(10.w))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDayTaskWidget(),
+                          SizedBox(height: 10.w),
+                          _buildRunWidget(),
+                          SizedBox(height: 10.w),
+                          _buildScoreWidget()
+                        ],
+                      )),
+                  SafeArea(child: SizedBox())
+                ],
               ),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                width: 1.sw,
-                height: 260.w,
-                color: ColorStyle.cF5F5F5,
-              ),
-            ),
-            Scaffold(
-                backgroundColor: controller.isLoading.value
-                    ? Colors.white
-                    : Colors.transparent,
-                appBar: CommonAppBar.arrowBack(context, title: '权益中心'),
-                body: controller.isLoading.value
-                    ? const Center(
-                        child: CupertinoActivityIndicator(color: Colors.grey),
-                      )
-                    : SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildBannerWidget(),
-                            _buildCategoryWidget(),
-                            Container(
-                                margin: EdgeInsets.only(top: 10.w),
-                                decoration: BoxDecoration(
-                                    color: ColorStyle.cF5F5F5,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10.w),
-                                        topRight: Radius.circular(10.w))),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildDayTaskWidget(),
-                                    SizedBox(height: 10.w),
-                                    _buildRunWidget(),
-                                    SizedBox(height: 10.w),
-                                    _buildScoreWidget()
-                                  ],
-                                )),
-                            SafeArea(child: SizedBox())
-                          ],
-                        ),
-                      ))
-          ],
-        ));
+            ))
+      ],
+    ));
   }
 
   @override
@@ -96,7 +96,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       carouselController: controller.carouselController,
       options: CarouselOptions(
           viewportFraction: 0.9,
-          height: 178.w,
+          height: 158.w,
           initialPage: controller.selectIndex,
           clipBehavior: Clip.antiAlias,
           enableInfiniteScroll: false,
@@ -125,12 +125,12 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
         }
         return Stack(
           children: [
-            SizedBox(height: 178.w),
+            SizedBox(height: 158.w),
             Container(
               width: 1.sw * 0.9,
-              height: 148.w,
-              padding: EdgeInsets.only(left: 16.w, top: 16.w, right: 16.w),
-              margin: EdgeInsets.only(left: 6.w, right: 6.w, top: 15.w),
+              height: 158.w,
+              padding: EdgeInsets.only(left: 16.w, top: 8.w, right: 16.w),
+              margin: EdgeInsets.only(left: 6.w, right: 6.w, top: 15.w, bottom: 20.w),
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(item.rollBg ?? ''), fit: BoxFit.fill),
@@ -152,10 +152,10 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                         fontWeight: FontWeight.w600,
                         color: item.titleColor),
                   ),
-                  SizedBox(height: 15.w),
+                  SizedBox(height: 10.w),
                   Container(
-                    height: 24.w,
-                    constraints: BoxConstraints(maxWidth: 86.w),
+                    height: 22.w,
+                    constraints: BoxConstraints(maxWidth: 84.w),
                     padding: EdgeInsets.symmetric(horizontal: 8.w),
                     alignment: Alignment.center,
                     clipBehavior: Clip.antiAlias,
@@ -168,7 +168,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                         minFontSize: 8,
                         maxLines: 1,
                         style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: 10.sp,
                             fontWeight: FontWeight.w500,
                             color: ColorStyle.white)),
                   ),
@@ -206,7 +206,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                   style: TextStyle(
                                       fontSize: 12.sp,
                                       color: (item.titleColor ??
-                                              ColorStyle.c333333)
+                                          ColorStyle.c333333)
                                           .withOpacity(0.5),
                                       fontWeight: FontWeight.w400),
                                 ),
@@ -249,7 +249,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             height: 2.w,
                             decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(1.w)),
+                              BorderRadius.all(Radius.circular(1.w)),
                               color: ColorStyle.c29426A.withOpacity(0.2),
                             ),
                           ),
@@ -258,14 +258,14 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                             height: 2.w,
                             decoration: BoxDecoration(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(1.w)),
+                                BorderRadius.all(Radius.circular(1.w)),
                                 color: ColorStyle.c557BF6),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 15.w)
+                  SizedBox(height: 12.w)
                 ],
               ),
             ),
@@ -273,8 +273,8 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               right: 5.w,
               child: Image.asset(
                 item.levelIcon ?? '',
-                width: 116.w,
-                height: 102.w,
+                width: 106.w,
+                height: 92.w,
                 fit: BoxFit.cover,
               ),
             )
@@ -453,7 +453,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                     Text(
                       title,
                       style:
-                          TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
+                      TextStyle(fontSize: 12.sp, color: ColorStyle.c333333),
                     ),
                     SizedBox(height: 5.w),
                     SizedBox(
@@ -482,6 +482,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 (model.completed ?? false) ? '已完成' : '进行中',
                 style: TextStyle(
                     fontSize: 12.sp,
+                    fontWeight: !(model.completed ?? false) ? FontWeight.w600 : FontWeight.w400,
                     color: (model.completed ?? false)
                         ? ColorStyle.c557BF6.withOpacity(0.7)
                         : ColorStyle.c557BF6),
@@ -592,3 +593,4 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     );
   }
 }
+

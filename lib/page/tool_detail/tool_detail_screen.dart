@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -69,19 +70,19 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                               slivers: [
                                 SliverToBoxAdapter(
                                   child: ColoredBox(
-                                    color: '#D9D9D9'.hexColor.withOpacity(0.2),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    color: Colors.white,
+                                    child: Stack(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.only(top: 24.w, bottom: 16.w),
+                                          color: '#D9D9D9'.hexColor.withOpacity(0.2),
+                                          padding: EdgeInsets.only(top: 24.w, bottom: 110.w),
                                           alignment: Alignment.center,
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(4),
                                             child: CachedNetworkImage(
                                               imageUrl: controller.detailBean?.cover ?? '',
-                                              width: 180.w,
-                                              height: 180.w,
+                                              width: 188.w,
+                                              height: 241.w,
                                               fit: BoxFit.cover,
                                               placeholder: (context, url) =>
                                                   Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
@@ -90,47 +91,65 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 12.w),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                                            children: [
-                                              Text(
-                                                controller.detailBean?.title ?? '',
-                                                style: TextStyle(
-                                                  color: '#1E1E1E'.hexColor,
-                                                  fontSize: 18.sp,
-                                                  fontWeight: FontWeight.w600,
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                          children: [
+                                            SizedBox(height: 241.w),
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                                child: Container(
+                                                  padding: EdgeInsets.fromLTRB(16.w, 24.w, 16.w, 12.w),
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      begin: Alignment.topCenter,
+                                                      end: Alignment.bottomCenter,
+                                                      colors: [
+                                                        Colors.white.withOpacity(0.7),
+                                                        Colors.white,
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                    children: [
+                                                      Text(
+                                                        controller.detailBean?.title ?? '',
+                                                        style: TextStyle(
+                                                          color: '#1E1E1E'.hexColor,
+                                                          fontSize: 18.sp,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      if (controller.detailBean?.description?.isNotEmpty == true)
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top: 8.w),
+                                                          child: Text(
+                                                            controller.detailBean?.description ?? '',
+                                                            style: TextStyle(
+                                                              color: '#333333'.hexColor,
+                                                              fontSize: 16.sp,
+                                                            ),
+                                                            maxLines: 6,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ),
+                                                      SizedBox(height: 12.w),
+                                                      if (controller.detailBean?.tagList?.isNotEmpty == true)
+                                                        TagListView(
+                                                          tagList: controller.detailBean?.tagList ?? [],
+                                                          onTapItem: (model) => TrackUtils.trackEvent(
+                                                            userLogType: '107002',
+                                                            params: model.id,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                              if (controller.detailBean?.description?.isNotEmpty == true)
-                                                Padding(
-                                                  padding: EdgeInsets.only(top: 8.w),
-                                                  child: Text(
-                                                    controller.detailBean?.description ?? '',
-                                                    style: TextStyle(
-                                                      color: '#333333'.hexColor,
-                                                      fontSize: 16.sp,
-                                                    ),
-                                                    maxLines: 6,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              SizedBox(height: 12.w),
-                                              if (controller.detailBean?.tagList?.isNotEmpty == true)
-                                                TagListView(
-                                                  tagList: controller.detailBean?.tagList ?? [],
-                                                  onTapItem: (model) => TrackUtils.trackEvent(
-                                                    userLogType: '107002',
-                                                    params: model.id,
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),

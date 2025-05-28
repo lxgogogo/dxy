@@ -28,7 +28,6 @@ class CountComment extends StatelessWidget {
           SvgPicture.asset(
             Assets.svg.iconComment,
             width: 12.w,
-            color: '#999999'.hexColor,
           ),
           SizedBox(width: 4.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),
@@ -187,12 +186,10 @@ class CountLike extends StatelessWidget {
   const CountLike({
     super.key,
     required this.count,
-    this.liked = false,
     this.usePlaceHolder = true,
   });
 
   final String count;
-  final bool liked;
   final bool usePlaceHolder;
 
   @override
@@ -203,9 +200,8 @@ class CountLike extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            liked ? Assets.svg.iconLike : Assets.svg.iconLike,
+            Assets.svg.iconLike,
             width: 12.w,
-            color: '#999999'.hexColor,
           ),
           SizedBox(width: 4.w),
           CountText(count: count, usePlaceHolder: usePlaceHolder),

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "390652331371-iuveo4eloj9c7a92b7gtplglh292onl7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dxy.depokers",
+            "certificate_hash": "a25f6359d1faeea49f238e0fafc0600643f6ad05"
+          }
+        },
+        {
           "client_id": "390652331371-5iiof1847g75rnf11vm4kgc104a1mt7t.apps.googleusercontent.com",
           "client_type": 3
         }

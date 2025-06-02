@@ -12,7 +12,6 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/feed_list/feed_list_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
-import 'package:holdem/page/interactive_courses/main_courses/main_courses_view.dart';
 import 'package:holdem/page/message/message_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
@@ -25,6 +24,7 @@ import '../../utils/app_version_checker.dart';
 import '../../utils/debounce_throttle_util.dart';
 import '../../utils/event_bus_util.dart';
 import '../../utils/track_utils.dart';
+import '../interactive_courses/main_courses/main_courses_screen.dart';
 import '../mine/mine_screen.dart';
 
 part 'main_controller.dart';
@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   const HomeScreen().keepAlive,
                   const FeedListScreen().keepAlive,
-                  const MainCoursesPage().keepAlive,
+                  const MainCoursesScreen().keepAlive,
                   const MessagePage().keepAlive,
                   const MineScreen().keepAlive,
                 ],
@@ -103,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
                             label: '论坛',
                           ),
                           _buildBarItem(
-                            icon: controller.tabIndex == 2 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                            icon: controller.tabIndex == 2 ? Assets.svg.navIconCourseAct : Assets.svg.navIconCourse,
                             label: '课程',
                           ),
                           _buildBarItem(
@@ -163,8 +163,8 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           SvgPicture.asset(
             icon,
-            width: 28.w,
-            height: 28.w,
+            width: 24.w,
+            height: 24.w,
           ),
           if (badge != null) badge,
         ],

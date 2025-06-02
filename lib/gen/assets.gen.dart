@@ -1058,17 +1058,32 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_camera.svg
   String get iconCamera => 'assets/svg/icon_camera.svg';
 
+  /// File path: assets/svg/icon_challenge.svg
+  String get iconChallenge => 'assets/svg/icon_challenge.svg';
+
+  /// File path: assets/svg/icon_checked.svg
+  String get iconChecked => 'assets/svg/icon_checked.svg';
+
   /// File path: assets/svg/icon_close.svg
   String get iconClose => 'assets/svg/icon_close.svg';
 
   /// File path: assets/svg/icon_comment.svg
   String get iconComment => 'assets/svg/icon_comment.svg';
 
+  /// File path: assets/svg/icon_course_hot.svg
+  String get iconCourseHot => 'assets/svg/icon_course_hot.svg';
+
+  /// File path: assets/svg/icon_course_integral.svg
+  String get iconCourseIntegral => 'assets/svg/icon_course_integral.svg';
+
   /// File path: assets/svg/icon_delete.svg
   String get iconDelete => 'assets/svg/icon_delete.svg';
 
   /// File path: assets/svg/icon_history_delete.svg
   String get iconHistoryDelete => 'assets/svg/icon_history_delete.svg';
+
+  /// File path: assets/svg/icon_knowledge.svg
+  String get iconKnowledge => 'assets/svg/icon_knowledge.svg';
 
   /// File path: assets/svg/icon_like.svg
   String get iconLike => 'assets/svg/icon_like.svg';
@@ -1081,6 +1096,15 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_more_vert.svg
   String get iconMoreVert => 'assets/svg/icon_more_vert.svg';
+
+  /// File path: assets/svg/icon_practice.svg
+  String get iconPractice => 'assets/svg/icon_practice.svg';
+
+  /// File path: assets/svg/icon_rank_1.svg
+  String get iconRank1 => 'assets/svg/icon_rank_1.svg';
+
+  /// File path: assets/svg/icon_rank_2.svg
+  String get iconRank2 => 'assets/svg/icon_rank_2.svg';
 
   /// File path: assets/svg/icon_refresh.svg
   String get iconRefresh => 'assets/svg/icon_refresh.svg';
@@ -1096,6 +1120,18 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_setting.svg
   String get iconSetting => 'assets/svg/icon_setting.svg';
+
+  /// File path: assets/svg/icon_to_challenge.svg
+  String get iconToChallenge => 'assets/svg/icon_to_challenge.svg';
+
+  /// File path: assets/svg/icon_to_knomledge.svg
+  String get iconToKnomledge => 'assets/svg/icon_to_knomledge.svg';
+
+  /// File path: assets/svg/icon_to_practice.svg
+  String get iconToPractice => 'assets/svg/icon_to_practice.svg';
+
+  /// File path: assets/svg/icon_uncheck.svg
+  String get iconUncheck => 'assets/svg/icon_uncheck.svg';
 
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
@@ -1117,6 +1153,12 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/more.svg
   String get more => 'assets/svg/more.svg';
+
+  /// File path: assets/svg/nav_icon_course.svg
+  String get navIconCourse => 'assets/svg/nav_icon_course.svg';
+
+  /// File path: assets/svg/nav_icon_course_act.svg
+  String get navIconCourseAct => 'assets/svg/nav_icon_course_act.svg';
 
   /// File path: assets/svg/nav_icon_feed.svg
   String get navIconFeed => 'assets/svg/nav_icon_feed.svg';
@@ -1194,19 +1236,31 @@ class $AssetsSvgGen {
         iconBottomLiked,
         iconBottomShare,
         iconCamera,
+        iconChallenge,
+        iconChecked,
         iconClose,
         iconComment,
+        iconCourseHot,
+        iconCourseIntegral,
         iconDelete,
         iconHistoryDelete,
+        iconKnowledge,
         iconLike,
         iconLikeWhite,
         iconMore,
         iconMoreVert,
+        iconPractice,
+        iconRank1,
+        iconRank2,
         iconRefresh,
         iconScan,
         iconSearch,
         iconSearchHistory,
         iconSetting,
+        iconToChallenge,
+        iconToKnomledge,
+        iconToPractice,
+        iconUncheck,
         iconWarning,
         inputAt,
         inputImage,
@@ -1214,6 +1268,8 @@ class $AssetsSvgGen {
         liked,
         messageClean,
         more,
+        navIconCourse,
+        navIconCourseAct,
         navIconFeed,
         navIconFeedAct,
         navIconHome,
@@ -1235,7 +1291,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  const Assets._();
+  Assets._();
 
   static const $AssetsCoursesGen courses = $AssetsCoursesGen();
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
@@ -1278,7 +1334,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.medium,
+    FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
   }) {

@@ -1,6 +1,4 @@
-import 'package:get/get.dart';
-
-import 'main_courses_controller.dart';
+part of 'main_courses_screen.dart';
 
 class MainCoursesBinding extends Bindings {
   @override

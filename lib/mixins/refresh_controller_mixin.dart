@@ -6,7 +6,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 mixin RefreshControllerMixin<R> on GetxController {
   late final RefreshController refreshController;
 
-  bool isLoading = true;
+  RxBool isLoadingObs = true.obs;
+
+  bool get isLoading => isLoadingObs.value;
+
   int page = 1;
 
   int get pageSize => 20;
@@ -30,10 +33,10 @@ mixin RefreshControllerMixin<R> on GetxController {
         noMore = false;
         refreshController.resetNoData();
       }
-      isLoading = false;
+      isLoadingObs.value = false;
       safeUpdate();
     } catch (e) {
-      isLoading = false;
+      isLoadingObs.value = false;
       debugPrint('onLoading: $e');
       // DialogUtil.showToast(e.toString());
       refreshController.refreshFailed();

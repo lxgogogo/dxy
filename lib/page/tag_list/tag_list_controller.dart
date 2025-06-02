@@ -57,7 +57,7 @@ class TagListController extends GetxController with RefreshControllerMixin {
   }
   @override
   Future<List?> loadData() async {
-    if (page == 1) items.clear();
+    if (page == 1) hotItems.clear();
     final res = await CommonService.of.tagIndex(
       pageNum: page,
       pageSize: pageSize,

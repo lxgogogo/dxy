@@ -12,6 +12,22 @@ import 'package:flutter/widgets.dart';
 class $AssetsCoursesGen {
   const $AssetsCoursesGen();
 
+  /// File path: assets/courses/icon_course_excus.png
+  AssetGenImage get iconCourseExcus =>
+      const AssetGenImage('assets/courses/icon_course_excus.png');
+
+  /// File path: assets/courses/icon_course_excus_bg.png
+  AssetGenImage get iconCourseExcusBg =>
+      const AssetGenImage('assets/courses/icon_course_excus_bg.png');
+
+  /// File path: assets/courses/icon_courses_true.png
+  AssetGenImage get iconCoursesTrue =>
+      const AssetGenImage('assets/courses/icon_courses_true.png');
+
+  /// File path: assets/courses/icon_courses_wrong.png
+  AssetGenImage get iconCoursesWrong =>
+      const AssetGenImage('assets/courses/icon_courses_wrong.png');
+
   /// File path: assets/courses/icon_select_courses_1.png
   AssetGenImage get iconSelectCourses1 =>
       const AssetGenImage('assets/courses/icon_select_courses_1.png');
@@ -34,6 +50,10 @@ class $AssetsCoursesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        iconCourseExcus,
+        iconCourseExcusBg,
+        iconCoursesTrue,
+        iconCoursesWrong,
         iconSelectCourses1,
         iconSelectCourses2,
         iconSelectCourses3,

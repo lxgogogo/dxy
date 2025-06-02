@@ -24,7 +24,12 @@ class _MainCoursesPageState extends State<MainCoursesPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text('德学院')
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.coursesExercises);
+              },
+              child: Text('德学院'),
+            )
           ],
         ),
         automaticallyImplyLeading: false,

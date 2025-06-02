@@ -28,7 +28,9 @@ class AppTheme {
   static const color_557BF6 = Color(0xFF557BF6);
   static const color_84BCF9 = Color(0xFF84BCF9);
   static const color_F7F8FC = Color(0xFFF7F8FC);
-
+  static const color_39B423 = Color(0xFF39B423);
+  static const color_FFDCDE = Color(0xFFFFDCDE);
+  static const color_D0FFC8 = Color(0xFFD0FFC8);
 
 
   static const TextStyle text3B5078Size23 = TextStyle(

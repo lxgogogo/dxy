@@ -12,6 +12,7 @@ import 'package:holdem/page/feed_post/feed_post_screen.dart';
 import 'package:holdem/page/following/following_screen.dart';
 import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
+import 'package:holdem/page/interactive_courses/course_exercises/course_exercises_view.dart';
 import 'package:holdem/page/interactive_courses/select_courses/select_courses_view.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
@@ -214,6 +215,10 @@ class AppPages {
     GetPage(
       name: Routes.selectCourses,
       page: () => const SelectCoursesPage(),
+    ),
+    GetPage(
+      name: Routes.coursesExercises,
+      page: () => const CourseExercisesPage(),
     ),
   ];
 }

@@ -48,4 +48,5 @@ abstract class Routes {
   static const deleteAccount = '/deleteAccount';
   static const reviseName = '/reviseName';
   static const selectCourses = '/selectCourses';
+  static const coursesExercises = '/coursesExercises';
 }

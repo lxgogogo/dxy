@@ -77,7 +77,7 @@ dependencies:
   focus_detector: ^2.0.1
   firebase_core: ^3.13.0
   firebase_messaging: ^15.2.5
-  flutter_local_notifications: ^19.2.1
+  flutter_local_notifications: ^18.0.1
   sign_in_with_apple: ^6.1.4
   google_sign_in: ^6.2.2
   firebase_auth: ^5.5.2

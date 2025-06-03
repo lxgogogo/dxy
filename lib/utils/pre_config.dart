@@ -10,6 +10,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/storage.dart';
 
+import '../services/index.dart';
 import '../stores/captcha_store.dart';
 import '../stores/config_store.dart';
 import 'env.dart';
@@ -40,7 +41,14 @@ class PreConfig {
         availability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
       }
       if (availability?.value != 5) {
-        await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        ).whenComplete(() {
+          Get.put<FirebaseService>(
+            FirebaseService(),
+            permanent: true,
+          );
+        });
       }
       StorageUtil().init();
       Get.put<UserStore>(

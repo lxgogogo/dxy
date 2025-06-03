@@ -135,4 +135,16 @@ class CommonService {
     );
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> updatePushToken({
+    required String deviceToken,
+  }) async {
+    final res = await HttpUtils.postNew(
+      Api.updatePushToken,
+      params: {
+        'pushToken': deviceToken,
+      },
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

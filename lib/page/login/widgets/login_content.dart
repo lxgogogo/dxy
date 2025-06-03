@@ -330,11 +330,7 @@ class _LoginContentState extends State<LoginContent> {
     if (res.isSuccess) {
       // TrackUtils.trackEvent(userLogType: '118002');
       ToastUtils.showToast('登录成功');
-      StorageService.of.putToken(res.data['token']);
-      final userProfile = UserProfile.fromJson(res.data['user']);
-      UserStore.of.putUserInfo(userProfile);
-      UserStore.of.getUserInfo();
-      EventBusUtil.of.fire(EventLoginSuccess());
+      UserStore.of.loginSuccess(res);
       Get.until((route) => route.settings.name == Routes.main);
     } else {
       // TrackUtils.trackEvent(userLogType: '118004');

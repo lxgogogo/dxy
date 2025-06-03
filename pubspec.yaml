@@ -76,6 +76,8 @@ dependencies:
   #  visibility_detector: ^0.4.0+2
   focus_detector: ^2.0.1
   firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
+  flutter_local_notifications: ^19.2.1
   sign_in_with_apple: ^6.1.4
   google_sign_in: ^6.2.2
   firebase_auth: ^5.5.2
@@ -85,6 +87,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   gt4_flutter_plugin: ^0.1.4
   auto_size_text: ^3.0.0
+
 
 dev_dependencies:
   build_runner: ^2.4.9

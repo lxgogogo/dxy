@@ -9,7 +9,9 @@ import 'package:holdem/stores/storage.dart';
 import 'package:holdem/utils/toast_utils.dart';
 
 import '../model/message_badge_model.dart';
+import '../model/res_base_model.dart';
 import '../services/index.dart';
+import '../utils/event_bus_util.dart';
 import '../utils/net_request.dart';
 
 class UserStore extends GetxController {
@@ -121,5 +123,14 @@ class UserStore extends GetxController {
     } else {
       badgeModel.value = null;
     }
+  }
+
+  void loginSuccess(ResBaseModel res) {
+    StorageService.of.putToken(res.data['token']);
+    FirebaseService.of.initNotifications();
+    final userProfile = UserProfile.fromJson(res.data['user']);
+    UserStore.of.putUserInfo(userProfile);
+    UserStore.of.getUserInfo();
+    EventBusUtil.of.fire(EventLoginSuccess());
   }
 }

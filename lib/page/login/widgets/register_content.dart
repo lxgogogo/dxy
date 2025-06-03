@@ -496,11 +496,7 @@ class _RegisterContentState extends State<RegisterContent> {
     );
     if (res.isSuccess) {
       ToastUtils.showToast('注册成功');
-      StorageService.of.putToken(res.data['token']);
-      final userProfile = UserProfile.fromJson(res.data['user']);
-      UserStore.of.putUserInfo(userProfile);
-      UserStore.of.getUserInfo();
-      EventBusUtil.of.fire(EventLoginSuccess());
+      UserStore.of.loginSuccess(res);
       Get.until((route) => route.settings.name == Routes.main);
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
       // TrackUtils.trackEvent(userLogType: '118005');

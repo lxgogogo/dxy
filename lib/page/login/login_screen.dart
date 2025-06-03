@@ -346,11 +346,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
-        StorageService.of.putToken(res.data['token']);
-        final userProfile = UserProfile.fromJson(res.data['user']);
-        UserStore.of.putUserInfo(userProfile);
-        UserStore.of.getUserInfo();
-        EventBusUtil.of.fire(EventLoginSuccess());
+        UserStore.of.loginSuccess(res);
         Get.until((route) => route.settings.name == Routes.main);
       } else {
         ToastUtils.showToast(res.msg);
@@ -385,11 +381,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (res.isSuccess) {
         ToastUtils.showToast('登录成功');
-        StorageService.of.putToken(res.data['token']);
-        final userProfile = UserProfile.fromJson(res.data['user']);
-        UserStore.of.putUserInfo(userProfile);
-        UserStore.of.getUserInfo();
-        EventBusUtil.of.fire(EventLoginSuccess());
+        UserStore.of.loginSuccess(res);
         Get.until((route) => route.settings.name == Routes.main);
       } else {
         ToastUtils.showToast(res.msg);
@@ -424,11 +416,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         if (res.isSuccess) {
           ToastUtils.showToast('登录成功');
-          StorageService.of.putToken(res.data['token']);
-          final userProfile = UserProfile.fromJson(res.data['user']);
-          UserStore.of.putUserInfo(userProfile);
-          UserStore.of.getUserInfo();
-          EventBusUtil.of.fire(EventLoginSuccess());
+          UserStore.of.loginSuccess(res);
           Get.until((route) => route.settings.name == Routes.main);
         } else {
           ToastUtils.showToast(res.msg);

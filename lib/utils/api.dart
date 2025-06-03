@@ -96,4 +96,7 @@ class Api {
   static const String noticeDelete = '/api/notifies/del';
   static const String noticeMoreDelete = '/api/notifies/batchDel';
   static const String noticeBadge = '/api/message/badge';
+
+  ///push
+  static const String updatePushToken = '/api/user/updatePushToken';
 }

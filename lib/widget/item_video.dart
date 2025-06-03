@@ -266,7 +266,7 @@ class VideoHorizontalItem extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(8.w, 8.w, 8.w, 12.w),
+                padding: EdgeInsets.fromLTRB(8.w, 12.w, 8.w, 8.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

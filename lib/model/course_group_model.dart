@@ -1,14 +1,34 @@
 // To parse this JSON data, do
 //
-//     final selectCoursesModel = selectCoursesModelFromJson(jsonString);
+//     final courseGroupModel = courseGroupModelFromJson(jsonString);
 
 import 'dart:convert';
 
-SelectCoursesModel selectCoursesModelFromJson(String str) => SelectCoursesModel.fromJson(json.decode(str));
+CourseGroupModel courseGroupModelFromJson(String str) => CourseGroupModel.fromJson(json.decode(str));
 
-String selectCoursesModelToJson(SelectCoursesModel data) => json.encode(data.toJson());
+String courseGroupModelToJson(CourseGroupModel data) => json.encode(data.toJson());
 
-class SelectCoursesModel {
+class CourseGroupModel {
+  final String? label;
+  final Value? value;
+
+  CourseGroupModel({
+    this.label,
+    this.value,
+  });
+
+  factory CourseGroupModel.fromJson(Map<String, dynamic> json) => CourseGroupModel(
+    label: json["label"],
+    value: json["value"] == null ? null : Value.fromJson(json["value"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "label": label,
+    "value": value?.toJson(),
+  };
+}
+
+class Value {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? id;
@@ -17,7 +37,7 @@ class SelectCoursesModel {
   final String? des;
   final int? status;
 
-  SelectCoursesModel({
+  Value({
     this.createdAt,
     this.updatedAt,
     this.id,
@@ -27,7 +47,7 @@ class SelectCoursesModel {
     this.status,
   });
 
-  factory SelectCoursesModel.fromJson(Map<String, dynamic> json) => SelectCoursesModel(
+  factory Value.fromJson(Map<String, dynamic> json) => Value(
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     id: json["id"],

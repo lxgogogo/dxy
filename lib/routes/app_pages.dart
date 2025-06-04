@@ -13,7 +13,7 @@ import 'package:holdem/page/following/following_screen.dart';
 import 'package:holdem/page/forget_password/forget_password_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/page/interactive_courses/course_exercises/course_exercises_view.dart';
-import 'package:holdem/page/interactive_courses/select_courses/select_courses_view.dart';
+import 'package:holdem/page/interactive_courses/select_courses/select_courses_screen.dart';
 import 'package:holdem/page/login/login_screen.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/page/message/notice/message_notice_detail_view.dart';
@@ -47,6 +47,7 @@ import '../page/tool_list/tool_list_screen.dart';
 import '../utils/track_utils.dart';
 
 part 'app_routes.dart';
+
 part 'route_observers.dart';
 
 class AppPages {
@@ -129,8 +130,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.feedPost,
-      page: () =>
-          FeedPostScreen(boardInfoList: Get.arguments as List<BoardInfo>),
+      page: () => FeedPostScreen(boardInfoList: Get.arguments as List<BoardInfo>),
     ),
     GetPage(
       name: Routes.personal,
@@ -215,7 +215,8 @@ class AppPages {
     ),
     GetPage(
       name: Routes.selectCourses,
-      page: () => const SelectCoursesPage(),
+      page: () => const SelectCoursesScreen(),
+      binding: SelectCoursesBinding(),
     ),
     GetPage(
       name: Routes.coursesExercises,
@@ -224,7 +225,7 @@ class AppPages {
     GetPage(
       name: Routes.courseDetails,
       page: () => const CourseDetailsScreen(),
-      binding: CourseDetailsBinding()
+      binding: CourseDetailsBinding(),
     ),
   ];
 }

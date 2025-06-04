@@ -1,6 +1,4 @@
-import 'package:get/get.dart';
-
-import 'select_courses_controller.dart';
+part of 'select_courses_screen.dart';
 
 class SelectCoursesBinding extends Bindings {
   @override

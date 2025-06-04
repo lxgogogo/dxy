@@ -17,7 +17,6 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/log_util.dart';
-import 'package:holdem/utils/size_fit.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../utils/app_version_checker.dart';
@@ -29,14 +28,6 @@ import '../mine/mine_screen.dart';
 
 part 'main_controller.dart';
 
-enum MainScreenTabType {
-  home,
-  feed,
-  course,
-  message,
-  mine
-}
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -47,7 +38,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    SizeFit.initialize(context);
     return GetBuilder<MainController>(
       init: MainController(),
       builder: (controller) {

@@ -440,6 +440,22 @@ class $AssetsImagesGen {
   AssetGenImage get iconCollectSelect =>
       const AssetGenImage('assets/images/icon_collect_select.png');
 
+  /// File path: assets/images/icon_course_all.png
+  AssetGenImage get iconCourseAll =>
+      const AssetGenImage('assets/images/icon_course_all.png');
+
+  /// File path: assets/images/icon_course_challenge.png
+  AssetGenImage get iconCourseChallenge =>
+      const AssetGenImage('assets/images/icon_course_challenge.png');
+
+  /// File path: assets/images/icon_course_knowledge.png
+  AssetGenImage get iconCourseKnowledge =>
+      const AssetGenImage('assets/images/icon_course_knowledge.png');
+
+  /// File path: assets/images/icon_course_practice.png
+  AssetGenImage get iconCoursePractice =>
+      const AssetGenImage('assets/images/icon_course_practice.png');
+
   /// File path: assets/images/icon_google.png
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
@@ -866,6 +882,10 @@ class $AssetsImagesGen {
         iconCollectMore,
         iconCollectNormal,
         iconCollectSelect,
+        iconCourseAll,
+        iconCourseChallenge,
+        iconCourseKnowledge,
+        iconCoursePractice,
         iconGoogle,
         iconGoogleCircle,
         iconHomeBook,
@@ -1136,6 +1156,15 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
 
+  /// File path: assets/svg/icon_winning_status_1.svg
+  String get iconWinningStatus1 => 'assets/svg/icon_winning_status_1.svg';
+
+  /// File path: assets/svg/icon_winning_status_2.svg
+  String get iconWinningStatus2 => 'assets/svg/icon_winning_status_2.svg';
+
+  /// File path: assets/svg/icon_winning_status_3.svg
+  String get iconWinningStatus3 => 'assets/svg/icon_winning_status_3.svg';
+
   /// File path: assets/svg/input_at.svg
   String get inputAt => 'assets/svg/input_at.svg';
 
@@ -1262,6 +1291,9 @@ class $AssetsSvgGen {
         iconToPractice,
         iconUncheck,
         iconWarning,
+        iconWinningStatus1,
+        iconWinningStatus2,
+        iconWinningStatus3,
         inputAt,
         inputImage,
         like,

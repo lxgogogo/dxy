@@ -23,6 +23,8 @@ class UserStore extends GetxController {
 
   UserProfile? get user => _user.value ?? UserProfile.fromRawJson(localUserStr.isEmpty ? '{}' : localUserStr);
 
+  bool get hasCourseGroup => user?.courseGroupId != null;
+
   bool isMe(int? otherUserId) {
     return otherUserId != null && otherUserId == user?.id;
   }

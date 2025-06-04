@@ -8,7 +8,6 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/widget/count_widget.dart';
-import 'package:holdem/widget/linear_card.dart';
 
 class NewsItem extends StatelessWidget {
   final ArticleBean item;

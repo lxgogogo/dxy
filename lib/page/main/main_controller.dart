@@ -19,6 +19,12 @@ class MainController extends GetxController with WidgetsBindingObserver {
         Get.toNamed(Routes.login);
         return;
       }
+      if (index == 2) {
+        if (!UserStore.of.hasCourseGroup) {
+          Get.toNamed(Routes.selectCourses);
+          return;
+        }
+      }
     }
     pageController.jumpToPage(index);
 

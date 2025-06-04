@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 
 import '../../../../gen/assets.gen.dart';
+import '../main_courses_screen.dart';
 
 class CourseInfoView extends StatelessWidget {
-  const CourseInfoView({
+  CourseInfoView({
     super.key,
   });
+
+  final MainCoursesController controller = Get.find<MainCoursesController>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class CourseInfoView extends StatelessWidget {
                 ),
               ),
               Text(
-                '完成度：100%',
+                '完成度：${controller.courseProgress * 100}%',
                 style: TextStyle(
                   color: '#666666'.hexColor,
                   fontSize: 12.sp,
@@ -62,7 +66,7 @@ class CourseInfoView extends StatelessWidget {
                   return Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      width: 0.5 * constraints.maxWidth,
+                      width: controller.courseProgress * constraints.maxWidth,
                       color: '#557BF6'.hexColor,
                     ),
                   );
@@ -81,29 +85,29 @@ class CourseInfoView extends StatelessWidget {
                   _buildMenuItem(
                     itemWidth,
                     title: '课程',
-                    content: '8888888',
-                    assetName: Assets.images.logo.path,
+                    content: '${controller.courseTopModel.value?.courseRemaining ?? 0}',
+                    assetName: Assets.images.iconCourseAll.path,
                     backgroundColor: '#EBF5FF'.hexColor,
                   ),
                   _buildMenuItem(
                     itemWidth,
                     title: '知识',
-                    content: '27382',
-                    assetName: Assets.images.logo.path,
+                    content: '${controller.courseTopModel.value?.knowledgeRemaining ?? 0}',
+                    assetName: Assets.images.iconCourseKnowledge.path,
                     backgroundColor: '#FEF1EC'.hexColor,
                   ),
                   _buildMenuItem(
                     itemWidth,
                     title: '练习',
-                    content: '9933',
-                    assetName: Assets.images.logo.path,
+                    content: '${controller.courseTopModel.value?.practiseRemaining ?? 0}',
+                    assetName: Assets.images.iconCoursePractice.path,
                     backgroundColor: '#EEFFEB'.hexColor,
                   ),
                   _buildMenuItem(
                     itemWidth,
                     title: '挑战',
-                    content: '76784',
-                    assetName: Assets.images.logo.path,
+                    content: '${controller.courseTopModel.value?.challengeRemaining ?? 0}',
+                    assetName: Assets.images.iconCourseChallenge.path,
                     backgroundColor: '#FFF7EB'.hexColor,
                   ),
                 ],

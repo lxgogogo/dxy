@@ -1,60 +1,50 @@
-import 'package:get/get.dart';
-import 'package:holdem/gen/assets.gen.dart';
-import 'package:holdem/model/select_courses_model.dart';
+part of 'select_courses_screen.dart';
 
 class SelectCoursesController extends GetxController {
+  RxList<SelectCoursesModel> courseTypes = <SelectCoursesModel>[].obs;
 
-  RxList<SelectCoursesModel> dataList = <SelectCoursesModel>[
-    SelectCoursesModel(
-      name: '德州小白',
-      icon: Assets.courses.iconSelectCourses1.path,
-      content: '第一次接触德州扑克，从零开始',
-      select: true
-    ),
-    SelectCoursesModel(
-        name: '德州小白',
-        icon: Assets.courses.iconSelectCourses2.path,
-        content: '第一次接触德州扑克，从零开始'
-    ),
-    SelectCoursesModel(
-        name: '德州小白',
-        icon: Assets.courses.iconSelectCourses3.path,
-        content: '第一次接触德州扑克，从零开始'
-    ),
-    SelectCoursesModel(
-        name: '德州小白',
-        icon: Assets.courses.iconSelectCourses4.path,
-        content: '第一次接触德州扑克，从零开始'
-    ),
-    SelectCoursesModel(
-        name: '德州小白',
-        icon: Assets.courses.iconSelectCourses5.path,
-        content: '第一次接触德州扑克，从零开始'
-    ),
-  ].obs;
+  RxInt selectedIndex = (-1).obs;
 
   @override
   void onReady() {
-    // TODO: implement onReady
+    getCourseGroup();
     super.onReady();
   }
 
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
-  void onPressed() {
-
-
-  }
-
-  void selectOnTap(e) {
-    for (final model in dataList) {
-      model.select = false;
+  Future<void> getCourseGroup() async {
+    try {
+      final res = await CourseService.of.getCourseGroup();
+      if (res.isSuccess) {
+        final listRes = res.data as List;
+        courseTypes.value = listRes.map((e) => SelectCoursesModel.fromJson(e)).toList();
+      }
+    } catch (e) {
+      courseTypes.value = [];
     }
-    e.select = true;
-    dataList.refresh();
+  }
+
+  void selectOnTap(int index) {
+    selectedIndex.value = index;
+    courseTypes.refresh();
+  }
+
+  Future<void> onPressed() async {
+    if (selectedIndex.value == -1) {
+      ToastUtils.showToast('请选择一个最符合的描述');
+      return;
+    }
+    final id = courseTypes[selectedIndex.value].id;
+    if (id == null) return;
+    try {
+      final res = await CourseService.of.courseGroupChoose(id);
+      if (res.isSuccess) {
+        ToastUtils.showToast('选择成功!');
+        UserStore.of.updateUserInfo({'courseGroupId': id});
+        Get.until((route) => route.settings.name == Routes.main);
+        MainController.of.onTabBarItem(2);
+      }
+    } catch (e) {
+      ToastUtils.showToast('选择失败!');
+    }
   }
 }

@@ -4,21 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/widget/background_container.dart';
-import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
-
-import 'package:holdem/widget/search_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../model/user.dart';
 import '../../model/userdata_list.dart';
-import '../../utils/app_theme.dart';
-import '../../utils/size_fit.dart';
 import '../../widget/follow_btn.dart';
-import '../mine/login_helper.dart';
 
 part 'at_user_controller.dart';
 

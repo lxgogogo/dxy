@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/log_util.dart';
-import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';

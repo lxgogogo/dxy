@@ -3,15 +3,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/model/course_model.dart';
 
 import '../../../../widget/common_image.dart';
 
 class CourseChallengeItem extends StatelessWidget {
+  final CourseModel item;
   final BoxDecoration? boxDecoration;
 
   const CourseChallengeItem({
     super.key,
     this.boxDecoration,
+    required this.item,
   });
 
   @override
@@ -29,14 +32,14 @@ class CourseChallengeItem extends StatelessWidget {
           Row(
             children: [
               CommonImage.net(
-                imageUrl: '',
+                imageUrl: item.icon ?? '',
                 width: 24.w,
                 height: 24.w,
               ),
               SizedBox(width: 8.w),
               Expanded(
                 child: Text(
-                  '课程标题文字最多十字',
+                  item.title ?? '',
                   style: TextStyle(
                     color: '#333333'.hexColor,
                     fontSize: 14.sp,
@@ -112,7 +115,7 @@ class CourseChallengeItem extends StatelessWidget {
                         text: '进度：',
                         children: [
                           TextSpan(
-                            text: '88',
+                            text: '${item.challengeCompleted ?? 0}',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
@@ -120,7 +123,7 @@ class CourseChallengeItem extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '/88',
+                            text: '/${item.challengeTotal ?? 0}',
                           ),
                         ],
                       ),

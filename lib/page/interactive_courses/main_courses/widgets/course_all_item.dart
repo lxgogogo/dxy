@@ -5,15 +5,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/model/course_model.dart';
 
-import '../../../../model/search_top.dart';
 import '../../../../widget/common_image.dart';
 
 class CourseAllItem extends StatelessWidget {
+  final CourseModel item;
   final BoxDecoration? boxDecoration;
 
   const CourseAllItem({
     super.key,
+    required this.item,
     this.boxDecoration,
   });
 
@@ -32,7 +34,7 @@ class CourseAllItem extends StatelessWidget {
           Row(
             children: [
               CommonImage.net(
-                imageUrl: '',
+                imageUrl: item.cover ?? '',
                 radius: 4.r,
                 width: 88.w,
                 height: 88.w,
@@ -44,7 +46,7 @@ class CourseAllItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '课程标题文字最多十字',
+                      item.title ?? '',
                       style: TextStyle(
                         color: '#333333'.hexColor,
                         fontSize: 14.sp,
@@ -55,7 +57,7 @@ class CourseAllItem extends StatelessWidget {
                     ),
                     SizedBox(height: 2.w),
                     Text(
-                      '知识点最多也是十个字',
+                      item.des ?? '',
                       style: TextStyle(
                         color: '#666666'.hexColor,
                         fontSize: 12.sp,
@@ -74,22 +76,22 @@ class CourseAllItem extends StatelessWidget {
               Expanded(
                 child: CourseTypeItem(
                   assetName: Assets.svg.iconKnowledge,
-                  count: 88,
-                  total: 88,
+                  count: item.knowledgeCompleted ?? 0,
+                  total: item.knowledgeTotal ?? 0,
                 ),
               ),
               Expanded(
                 child: CourseTypeItem(
                   assetName: Assets.svg.iconChallenge,
-                  count: 88,
-                  total: 88,
+                  count: item.challengeCompleted ?? 0,
+                  total: item.challengeTotal ?? 0,
                 ),
               ),
               Expanded(
                 child: CourseTypeItem(
                   assetName: Assets.svg.iconPractice,
-                  count: 88,
-                  total: 88,
+                  count: item.practiseCompleted ?? 0,
+                  total: item.practiseTotal ?? 0,
                 ),
               ),
               CourseStatusBtn(
@@ -171,7 +173,7 @@ class CourseStatusBtn extends StatelessWidget {
     if (status == 0) {
       title = '未开始';
       bgColor = '#333333'.hexColor.withOpacity(0.1);
-      textColor = '#333333'.hexColor;
+      textColor = '#999999'.hexColor;
     } else if (status == 1) {
       title = '进行中';
       bgColor = '#557BF6'.hexColor.withOpacity(0.1);

@@ -99,4 +99,10 @@ class Api {
 
   ///push
   static const String updatePushToken = '/api/user/updatePushToken';
+
+  static const String courseGroupIndex = '/api/course/group/index';
+  static const String courseGroupChoose = '/api/course/group/choose';
+  static const String courseDefined = '/api/course/defined';
+  static const String courseIndex = '/api/course/index';
+  static const String courseTop = '/api/course/top';
 }

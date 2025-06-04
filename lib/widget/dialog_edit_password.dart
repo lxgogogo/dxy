@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/size_fit.dart';
-import 'package:holdem/utils/storage.dart';
-import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';
 import '../utils/toast_utils.dart';
-import '../utils/track_utils.dart';
 import 'close_image_button.dart';
 
 class DialogEditPassword extends StatefulWidget {

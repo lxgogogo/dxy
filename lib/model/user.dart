@@ -18,6 +18,7 @@ class UserProfile {
   bool? followed;
   bool? isfans;
   UserLevel? userLevel;
+  int? courseGroupId;
 
   UserProfile({
     this.id,
@@ -30,6 +31,7 @@ class UserProfile {
     this.followed,
     this.isfans,
     this.userLevel,
+    this.courseGroupId,
   });
 
   UserProfile.fromJson(Map<String, dynamic> json) {
@@ -60,9 +62,6 @@ class UserProfile {
     if (json["telegramAccount"] is String) {
       telegramAccount = json["telegramAccount"];
     }
-    if (json["token"] is String) {
-      token = json["token"];
-    }
     if (json["followedCount"] is int) {
       followedCount = json["followedCount"];
     }
@@ -77,6 +76,9 @@ class UserProfile {
     }
     if (json["userLevel"] is Map) {
       userLevel = UserLevel.fromJson(json["userLevel"]);
+    }
+    if (json["courseGroupId"] is int) {
+      courseGroupId = json["courseGroupId"];
     }
   }
 
@@ -97,6 +99,7 @@ class UserProfile {
     _data["followed"] = followed;
     _data["isFans"] = isfans;
     _data["userLevel"] = userLevel?.toJson();
+    _data["courseGroupId"] = courseGroupId;
     return _data;
   }
 

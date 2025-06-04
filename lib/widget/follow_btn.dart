@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/utils/size_fit.dart';
-
-import '../utils/app_theme.dart';
 
 class FollowBtn extends StatelessWidget {
   final bool isFollowed;
@@ -22,7 +19,6 @@ class FollowBtn extends StatelessWidget {
     } else if (isFans && !isFollowed) {
       title = '回关';
     }
-    SizeFit.initialize(context);
     return GestureDetector(
       onTap: () {
         onTap();

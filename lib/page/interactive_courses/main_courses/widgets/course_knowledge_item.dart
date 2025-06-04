@@ -1,19 +1,19 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 
-import '../../../../model/search_top.dart';
+import '../../../../model/course_model.dart';
 import '../../../../widget/common_image.dart';
 
 class CourseKnowledgeItem extends StatelessWidget {
+  final CourseModel item;
   final BoxDecoration? boxDecoration;
 
   const CourseKnowledgeItem({
     super.key,
+    required this.item,
     this.boxDecoration,
   });
 
@@ -32,7 +32,7 @@ class CourseKnowledgeItem extends StatelessWidget {
           Row(
             children: [
               CommonImage.net(
-                imageUrl: '',
+                imageUrl: item.icon ?? '',
                 radius: 4.r,
                 width: 44.w,
                 height: 44.w,
@@ -44,7 +44,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '课程标题文字最多十字',
+                      item.title ?? '',
                       style: TextStyle(
                         color: '#333333'.hexColor,
                         fontSize: 14.sp,
@@ -55,7 +55,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                     ),
                     SizedBox(height: 2.w),
                     Text(
-                      '知识点最多也是十个字',
+                      item.des ?? '',
                       style: TextStyle(
                         color: '#666666'.hexColor,
                         fontSize: 12.sp,
@@ -132,7 +132,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                         text: '进度：',
                         children: [
                           TextSpan(
-                            text: '88',
+                            text: '${item.knowledgeCompleted ?? 0}',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
@@ -140,7 +140,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '/88',
+                            text: '/${item.knowledgeTotal ?? 0}',
                           ),
                         ],
                       ),
@@ -158,7 +158,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                         ),
                         SizedBox(width: 4.w),
                         Text(
-                          '8888888',
+                          '${item.knowledgeCompleted ?? 0}',
                           style: TextStyle(
                             color: '#333333'.hexColor,
                             fontSize: 12.sp,
@@ -198,23 +198,23 @@ class CourseKnowledgeItem extends StatelessWidget {
                   child: Wrap(
                     spacing: 13.w,
                     children: List.generate(
-                      12,
+                      item.knowledgeTotal ?? 0,
                       (index) {
+                        final isCompleted = index < (item.knowledgeCompleted ?? 0);
                         return Container(
                           width: 24.w,
                           height: 24.w,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: index.isEven
-                                ? '#557BF6'.hexColor.withOpacity(0.1)
-                                : '#333333'.hexColor.withOpacity(0.1),
+                            color:
+                                isCompleted ? '#557BF6'.hexColor.withOpacity(0.1) : '#333333'.hexColor.withOpacity(0.1),
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             '$index',
                             style: TextStyle(
                               fontSize: 12.sp,
-                              color: index.isEven ? '#557BF6'.hexColor : '#333333'.hexColor,
+                              color: isCompleted ? '#557BF6'.hexColor : '#333333'.hexColor,
                             ),
                           ),
                         );

@@ -10,6 +10,7 @@ import 'package:holdem/page/interactive_courses/main_courses/widgets/course_prac
 import 'package:holdem/widget/common_app_bar.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../model/course_model.dart';
 
 part 'course_details_binding.dart';
 
@@ -73,6 +74,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                     ),
                   ],
                 ),
+                item: CourseModel(),
               ),
               SizedBox(height: 16.w),
               CourseKnowledgeItem(
@@ -87,6 +89,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                     ),
                   ],
                 ),
+                item: CourseModel(),
               ),
               SizedBox(height: 16.w),
               CoursePracticeItem(
@@ -101,6 +104,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                     ),
                   ],
                 ),
+                item: CourseModel(),
               ),
               SizedBox(height: 16.w),
               CourseChallengeItem(
@@ -115,6 +119,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                     ),
                   ],
                 ),
+                item: CourseModel(),
               ),
               SizedBox(height: 16.w),
             ],

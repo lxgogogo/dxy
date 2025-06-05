@@ -1,13 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_exercises_model.dart';
+import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
+import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/widget/button.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'course_exercises_controller.dart';
 
@@ -31,116 +36,157 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Obx(() => Container(
-              margin: EdgeInsets.only(top: 56.w),
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CupertinoActivityIndicator(color: Colors.grey),
+            );
+          }
+          double width = 1.sw - 126.w;
+          double progress = width * ((controller.currentPage+1)/controller.totalPage);
+          return Container(
+            margin: EdgeInsets.only(top: 56.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Image.asset(
+                        Assets.images.labelClose.path,
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: width,
+                            height: 8.w,
+                            decoration: BoxDecoration(
+                                color:
+                                AppTheme.color_333333.withOpacity(0.05),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(20.w))),
+                          ),
+                          Container(
+                            width: progress,
+                            height: 8.w,
+                            decoration: BoxDecoration(
+                                color: AppTheme.color_557BF6,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(20.w))),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    SizedBox(
+                        width: 50.w,
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              Assets.courses.iconCourseExcus.path,
+                              width: 16.w,
+                              height: 16.w,
+                            ),
+                            SizedBox(width: 5.w),
+                            AutoSizeText(
+                              '${controller.integral}',
+                              minFontSize: 7,
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: AppTheme.color_666666),
+                            )
+                          ],
+                        ))
+                  ],
+                ),
+                Expanded(
+                  child: PageView(
+                    controller: controller.pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      ...controller.practiseList.map((model) {
+                        return _buildPageWidget(model);
+                      })
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          );
+        }));
+  }
+
+  Widget _buildPageWidget(model) {
+    return Column(
+      children: [
+        SizedBox(height: 20.w),
+        Expanded(
+          child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Text(
+                    model.title ?? '',
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.color_333333),
+                  ),
+                  SizedBox(height: 10.w),
+                  HtmlWidget(
+                    model.content ?? '',
+                    customStylesBuilder: htmlCustomStyles,
+                    factoryBuilder: () => HtmlFactoryBuilder(
+                      context,
+                      content: model.content ?? '',
+                    ),
+                    customWidgetBuilder: (element) {
+                      if (element.localName == 'table') {
+                        return const SizedBox();
+                      }
+                      return null;
+                    },
+                    onTapUrl: (String url) async {
+                      return launchUrlString(url, mode: LaunchMode.externalApplication);
+                    },
+                  ),
+                  SizedBox(height: 50.w),
+                  Wrap(
+                    runSpacing: 10.w,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Image.asset(
-                          Assets.images.labelClose.path,
-                          width: 24.w,
-                          height: 24.w,
-                        ),
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 8.w,
-                              decoration: BoxDecoration(
-                                  color:
-                                      AppTheme.color_333333.withOpacity(0.05),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.w))),
-                            ),
-                            Container(
-                              width: 100.w,
-                              height: 8.w,
-                              decoration: BoxDecoration(
-                                  color: AppTheme.color_557BF6,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.w))),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 10.w),
-                      SizedBox(
-                          width: 50,
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                Assets.courses.iconCourseExcus.path,
-                                width: 16.w,
-                                height: 16.w,
-                              ),
-                              SizedBox(width: 5.w),
-                              AutoSizeText(
-                                '88',
-                                minFontSize: 7,
-                                style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: AppTheme.color_666666),
-                              )
-                            ],
-                          ))
+                      ...controller.dataList.map((e) {
+                        return _buildButtonWidget(e);
+                      })
                     ],
-                  ),
-                  SizedBox(height: 20.w),
-                  Expanded(
-                    child: SingleChildScrollView(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '如下图，谁获胜呢？如下图，谁获胜呢？如下图，谁获胜呢？如下图，谁获胜呢？如下图，谁获胜呢？如下图，谁获胜呢？如下图，谁获胜...',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.color_333333),
-                        ),
-                        SizedBox(height: 10.w),
-                        Image.asset(
-                          Assets.courses.iconCourseExcusBg.path,
-                          width: 1.sw,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        SizedBox(height: 50.w),
-                        Wrap(
-                          runSpacing: 10.w,
-                          children: [
-                            ...controller.dataList.map((e) {
-                              return _buildButtonWidget(e);
-                            })
-                          ],
-                        )
-                      ],
-                    )),
-                  ),
-                  CustomButton(
-                    onPressed: controller.onPressed,
-                    disable: false,
-                    showOpacityAnimation: true,
-                    textColor: Colors.white,
-                    height: 50.w,
-                    radius: 8.w,
-                    title: '提交',
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(height: 70.w)
+                  )
                 ],
-              ),
-            )));
+              )),
+        ),
+        CustomButton(
+          onPressed: controller.onPressed,
+          disable: false,
+          showOpacityAnimation: true,
+          textColor: Colors.white,
+          height: 50.w,
+          radius: 8.w,
+          title: '提交',
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w600,
+        ),
+        SizedBox(height: 70.w)
+      ],
+    );
   }
 
   Widget _buildButtonWidget(CourseExerciseAnswerModel model) {

@@ -15,6 +15,7 @@ import '../../../model/course_group_model.dart';
 import '../../../model/course_model.dart';
 import '../../../model/course_top_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../../routes/app_routes_utils.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/log_util.dart';
 import '../../../widget/common_operations_sheet.dart';

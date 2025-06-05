@@ -16,25 +16,17 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   RxBool hasLoaded = false.obs;
 
-  @override
-  void onReady() {
-    _loadData(isFirstLoad: true).whenComplete(() {
-      hasLoaded.value = true;
-    });
-    super.onReady();
-  }
-
   void onFocusGained() {
-    if (hasLoaded.value) {
-      _loadData(isFirstLoad: false);
-    }
+    _loadData(isFirstLoad: !hasLoaded.value);
   }
 
   Future<void> _loadData({bool isFirstLoad = false}) async {
     await Future.wait([
       getCourseTop(),
       getCourseGroup(isFirstLoad: isFirstLoad),
-    ]);
+    ]).whenComplete(() {
+      hasLoaded.value = true;
+    });
   }
 
   Future<void> getCourseGroup({bool isFirstLoad = false}) async {
@@ -117,11 +109,9 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     try {
       final res = await CourseService.of.courseRead(id);
       if (res.isSuccess) {
-        if (item.contentType == 'article') {
-          Get.toNamed(Routes.articleDetail, arguments: item.contentId);
-        } else if (item.contentType == 'video' || item.contentType == 'videoList') {
-          Get.toNamed(Routes.videoDetail, arguments: {'id': item.contentId});
-        }
+        final contentType = item.contentType;
+        final contentId = item.contentId;
+        AppRoutesUtils.toDetail(contentType, contentId);
       }
     } catch (e) {
       Log.e(e.toString());

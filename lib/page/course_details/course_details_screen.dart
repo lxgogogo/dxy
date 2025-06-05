@@ -15,6 +15,7 @@ import 'package:holdem/widget/common_app_bar.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/course_model.dart';
 import '../../routes/app_pages.dart';
+import '../../routes/app_routes_utils.dart';
 import '../../services/course_service.dart';
 import '../../utils/log_util.dart';
 import '../../utils/toast_utils.dart';
@@ -48,25 +49,26 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
               title: controller.detailBean?.title ?? '',
               centerTitle: false,
               actions: [
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      Assets.svg.iconCourseIntegral,
-                      width: 16.w,
-                      height: 16.w,
-                    ),
-                    SizedBox(width: 8.w),
-                    Text(
-                      '${controller.detailBean?.integral ?? 0}',
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w700,
+                if (controller.detailBean != null)
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        Assets.svg.iconCourseIntegral,
+                        width: 16.w,
+                        height: 16.w,
                       ),
-                    ),
-                    SizedBox(width: 16.w),
-                  ],
-                ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        '${controller.detailBean?.integral ?? 0}',
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                    ],
+                  ),
               ],
             ),
             backgroundColor: '#F7F8FC'.hexColor,

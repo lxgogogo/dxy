@@ -2,23 +2,19 @@ part of 'course_details_screen.dart';
 
 class CourseDetailsController extends GetxController {
   late int? id;
-  bool loaded = false;
 
   bool noNetwork = false;
 
   CourseModel? detailBean;
 
   @override
-  void onReady() {
+  void onInit() {
+    super.onInit();
     id = Get.arguments?['id'] as int?;
-    dataInit();
-    super.onReady();
   }
 
   void onFocusGained() {
-    if (loaded) {
-      requestDetail(showLoading: false);
-    }
+    requestDetail();
   }
 
   Future<void> dataInit() async {
@@ -28,19 +24,19 @@ class CourseDetailsController extends GetxController {
       safeUpdate();
       return;
     }
-    requestDetail(showLoading: false);
+    requestDetail();
   }
 
-  requestDetail({bool showLoading = true}) async {
+  requestDetail() async {
     if (id == null) return;
     try {
-      final res = await CourseService.of.courseInfo(id);
+      final res = await CourseService.of.courseInfo(id, showLoading: false);
       if (res.isSuccess) {
         detailBean = CourseModel.fromJson(res.data);
+        safeUpdate();
       }
-    } finally {
-      loaded = true;
-      safeUpdate();
+    } catch (e) {
+      Log.e(e.toString());
     }
   }
 
@@ -74,17 +70,9 @@ class CourseDetailsController extends GetxController {
     try {
       final res = await CourseService.of.courseRead(id);
       if (res.isSuccess) {
-        if (detailBean!.knowledge!.contentType == 'article') {
-          Get.toNamed(
-            Routes.articleDetail,
-            arguments: detailBean!.knowledge!.contentId,
-          );
-        } else if (detailBean!.knowledge!.contentType == 'video' || detailBean!.knowledge!.contentType == 'videoList') {
-          Get.toNamed(
-            Routes.videoDetail,
-            arguments: {'id': detailBean!.knowledge!.contentId},
-          );
-        }
+        final contentType = detailBean!.knowledge!.contentType;
+        final contentId = detailBean!.knowledge!.contentId;
+        AppRoutesUtils.toDetail(contentType, contentId);
       }
     } catch (e) {
       Log.e(e.toString());

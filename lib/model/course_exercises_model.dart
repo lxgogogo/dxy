@@ -1,29 +1,103 @@
 
+import 'dart:convert';
+
+class CourseExerciseAllModel {
+
+  int? id;
+  int? total;
+  int? completed;
+  int? integral;
+  List<CourseExerciseModel>? practiseList;
+
+  CourseExerciseAllModel({
+    this.id,
+    this.total,
+    this.completed,
+    this.integral,
+    this.practiseList,
+  });
+
+  CourseExerciseAllModel.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["total"] is int) {
+      total = json["total"];
+    }
+    if (json["completed"] is int) {
+      completed = json["completed"];
+    }
+    if (json["integral"] is int) {
+      integral = json["integral"];
+    }
+    if (json['practiseList'] is List) {
+      practiseList = (json["practiseList"] as List).map((e) => CourseExerciseModel.fromJson(e)).toList();
+    }
+
+  }
+
+}
+
 class CourseExerciseModel {
 
+  int? id;
+  String? title;
+  String? content;
+  List<CourseExerciseAnswerModel>? options;
 
+  CourseExerciseModel({
+    this.id,
+    this.title,
+    this.content,
+    this.options,
+  });
+
+  CourseExerciseModel.fromJson(Map<String, dynamic> map) {
+    if (map["id"] is int) {
+      id = map["id"];
+    }
+    if (map["title"] is String) {
+      title = map["title"];
+    }
+    if (map["content"] is String) {
+      content = map["content"];
+    }
+    if (map['options'] is String) {
+      final data = json.decode(map['options']);
+      options = (data as List).map((e) => CourseExerciseAnswerModel.fromJson(e)).toList();
+    }
+
+  }
 }
 
 class CourseExerciseAnswerModel {
 
+  String? id;
   String? title;
   bool? select;
   bool? submit;
   bool? isCorrect;
+  bool? editing;
+
 
   CourseExerciseAnswerModel({
+    this.id,
     this.title,
     this.submit,
     this.select,
-    this.isCorrect
+    this.isCorrect,
+    this.editing
   });
 
   CourseExerciseAnswerModel.fromJson(Map<String, dynamic> json) {
-    if (json["title"] is String) {
-      title = json["title"];
+    if (json["id"] is String) {
+      id = json["id"];
     }
-    if (json["isCorrect"] is bool) {
-      isCorrect = json["isCorrect"];
+    if (json["innerText"] is String) {
+      title = json["innerText"];
+    }
+    if (json["editing"] is bool) {
+      isCorrect = json["editing"];
     }
   }
 
@@ -32,5 +106,44 @@ class CourseExerciseAnswerModel {
     _data["title"] = title;
     _data["isCorrect"] = isCorrect;
     return _data;
+  }
+}
+
+class CourseAnswerModel {
+  int? id;
+  int? status;
+  bool? answer;
+  String? answerStr;
+  String? text;
+  String? pairsText;
+
+  CourseAnswerModel({
+    this.id,
+    this.status,
+    this.answer,
+    this.answerStr,
+    this.text,
+    this.pairsText
+  });
+
+  CourseAnswerModel.fromJson(Map<String, dynamic> json) {
+    if (json["id"] is int) {
+      id = json["id"];
+    }
+    if (json["status"] is int) {
+      status = json["status"];
+    }
+    if (json["answer"] is bool) {
+      answer = json["answer"];
+    }
+    if (json["answerStr"] is String) {
+      answerStr = json["answerStr"];
+    }
+    if (json["text"] is String) {
+      text = json["text"];
+    }
+    if (json["pairsText"] is String) {
+      pairsText = json["pairsText"];
+    }
   }
 }

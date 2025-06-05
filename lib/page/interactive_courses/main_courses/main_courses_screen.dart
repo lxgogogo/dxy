@@ -101,33 +101,38 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                       ),
                     ),
                     SizedBox(width: 12.w),
-                    Container(
-                      height: 34.w,
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      decoration: BoxDecoration(
-                        color: '#333333'.hexColor.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(40.r),
-                      ),
-                      alignment: Alignment.center,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            Assets.svg.iconCourseIntegral,
-                            width: 16.w,
-                            height: 16.w,
-                          ),
-                          SizedBox(width: 8.w),
-                          Text(
-                            '${controller.courseTopModel.value?.integral ?? 0}',
-                            style: TextStyle(
-                              color: '#666666'.hexColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w700,
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.coursesExercises);
+                      },
+                      child: Container(
+                        height: 34.w,
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        decoration: BoxDecoration(
+                          color: '#333333'.hexColor.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(40.r),
+                        ),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              Assets.svg.iconCourseIntegral,
+                              width: 16.w,
+                              height: 16.w,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 8.w),
+                            Text(
+                              '${controller.courseTopModel.value?.integral ?? 0}',
+                              style: TextStyle(
+                                color: '#666666'.hexColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ],
               ),

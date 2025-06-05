@@ -105,4 +105,6 @@ class Api {
   static const String courseDefined = '/api/course/defined';
   static const String courseIndex = '/api/course/index';
   static const String courseTop = '/api/course/top';
+  static const String coursePractise = '/api/course/practise';
+  static const String courseAnswer = '/api/course/answer';
 }

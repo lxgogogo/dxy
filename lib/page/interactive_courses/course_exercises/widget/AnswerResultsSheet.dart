@@ -6,19 +6,24 @@ import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
 class AnswerResultsSheet {
-  static show(bool isCorrect, Function sureOnTap) {
+  static show(bool isCorrect, String answerStr, Function sureOnTap) {
     Get.bottomSheet(
         isDismissible: false,
         barrierColor: Colors.transparent,
-        AnswerResultsWidget(isCorrect: isCorrect, sureOnTap: sureOnTap));
+        AnswerResultsWidget(
+            isCorrect: isCorrect, answerStr: answerStr, sureOnTap: sureOnTap));
   }
 }
 
 class AnswerResultsWidget extends StatelessWidget {
   final bool isCorrect;
+  final String answerStr;
   final Function sureOnTap;
   const AnswerResultsWidget(
-      {super.key, this.isCorrect = true, required this.sureOnTap});
+      {super.key,
+      this.isCorrect = true,
+      this.answerStr = '',
+      required this.sureOnTap});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +58,7 @@ class AnswerResultsWidget extends StatelessWidget {
             if (!isCorrect) ...[
               SizedBox(height: 10.w),
               Text(
-                '正确答案：玩家A获胜',
+                '正确答案：$answerStr',
                 style: TextStyle(
                     fontSize: 16.sp,
                     color:

@@ -1,3 +1,4 @@
+import '../model/course_exercises_model.dart';
 import '../model/res_base_model.dart';
 import '../utils/api.dart';
 import '../utils/http_utils.dart';
@@ -56,6 +57,25 @@ class CourseService {
       Api.courseTop,
     );
     return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<CourseExerciseAllModel> coursePractise(String id) async {
+    final res = await HttpUtils.postNew(
+      Api.coursePractise,
+      params: {'id': id}
+    );
+    CourseExerciseAllModel model = CourseExerciseAllModel.fromJson(res?.data);
+    return model;
+  }
+
+  Future<CourseAnswerModel> courseAnswer(data) async {
+    final res = await HttpUtils.postNew(
+      Api.courseAnswer,
+      params: data,
+      showLoading: true
+    );
+    CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
+    return model;
   }
 
 }

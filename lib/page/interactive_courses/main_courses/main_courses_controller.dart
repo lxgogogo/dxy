@@ -131,6 +131,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   void toPractice(CourseModel item) {
     final id = item.id;
     if (id == null) return;
+    Get.toNamed(Routes.coursesExercises);
   }
 
   void toChallenge(CourseModel item) {

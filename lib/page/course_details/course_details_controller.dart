@@ -94,6 +94,7 @@ class CourseDetailsController extends GetxController {
   void toPractice() {
     final id = detailBean!.practise!.id;
     if (id == null) return;
+    Get.toNamed(Routes.coursesExercises);
   }
 
   void toChallenge() {

@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '390652331371',
     projectId: 'dxy-project-82dc6',
     storageBucket: 'dxy-project-82dc6.firebasestorage.app',
-    androidClientId: '390652331371-iuveo4eloj9c7a92b7gtplglh292onl7.apps.googleusercontent.com',
+    androidClientId: '390652331371-foqudl398pc638is8e6b92vsga7lscqc.apps.googleusercontent.com',
     iosClientId: '390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com',
     iosBundleId: 'com.dxy.holdem',
   );

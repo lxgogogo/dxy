@@ -106,7 +106,7 @@ class VideoDetailController extends GetxController {
 
   void requestData({bool showLoading = true}) {
     if (showLoading) {
-      EasyLoading.show(status: 'loading...');
+      EasyLoading.show();
     }
     Future.wait([
       requestDetail(),

@@ -322,10 +322,6 @@ class _MineScreenState extends State<MineScreen>
                               }),
                             ),
                           ),
-                          SizedBox(
-                            height: kBottomNavigationBarHeight +
-                                ScreenUtil().bottomBarHeight,
-                          ),
                         ],
                       ),
                     ),

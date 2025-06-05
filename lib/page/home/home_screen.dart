@@ -428,9 +428,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           },
                                         ),
                                         SizedBox(height: 32.w),
-                                        SizedBox(
-                                          height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight,
-                                        ),
                                       ],
                                     ),
                                   ),

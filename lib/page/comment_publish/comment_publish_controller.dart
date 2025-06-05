@@ -74,7 +74,7 @@ class CommentPublishController extends GetxController {
       ToastUtils.showToast('评论内容不能为空');
       return;
     }
-    EasyLoading.show(status: 'loading...');
+    EasyLoading.show();
 
     //图片类型：
     if (imageData.isNotEmpty) {

@@ -156,10 +156,6 @@ class _MessagePageState extends State<MessagePage>
                         }),
                       ),
                     ),
-                    SizedBox(
-                      height: kBottomNavigationBarHeight +
-                          ScreenUtil().bottomBarHeight,
-                    ),
                   ],
                 ));
           },

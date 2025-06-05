@@ -97,7 +97,7 @@ class MessageNoticeController extends GetxController {
   }
 
   void delete(MessageNoticeModel model) async {
-    EasyLoading.show(status: '加载中......');
+    EasyLoading.show();
     await MessageService.noticeDelete({'notifiesId': model.id});
     ToastUtils.showToast('删除成功');
     EasyLoading.dismiss();
@@ -107,7 +107,7 @@ class MessageNoticeController extends GetxController {
   }
 
   void moreDelete() async {
-  EasyLoading.show(status: '加载中......');
+  EasyLoading.show();
   await MessageService.noticeMoreDelete({'notifiesId': selectIds});
   ToastUtils.showToast('删除成功');
   EasyLoading.dismiss();

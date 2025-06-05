@@ -15,6 +15,7 @@ import '../../../routes/app_pages.dart';
 import '../../../services/course_service.dart';
 
 part 'select_courses_binding.dart';
+
 part 'select_courses_controller.dart';
 
 class SelectCoursesScreen extends StatefulWidget {
@@ -82,31 +83,22 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
             color: controller.selectedIndex.value == index ? ColorStyle.c557BF6 : Colors.transparent,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
           children: [
-            Row(
-              children: [
-                CommonImage.net(
-                  imageUrl: e.icon ?? '',
-                  width: 32.w,
-                  height: 32.w,
-                ),
-                SizedBox(width: 8.w),
-                Text(
-                  e.des ?? '',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                    color: ColorStyle.c333333,
-                  ),
-                )
-              ],
+            CommonImage.net(
+              imageUrl: e.icon ?? '',
+              width: 32.w,
+              height: 32.w,
             ),
-            SizedBox(height: 8.w),
-            Text(
-              e.des ?? '',
-              style: TextStyle(fontSize: 12.sp, color: AppTheme.color_666666),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                e.des ?? '',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: ColorStyle.c333333,
+                ),
+              ),
             )
           ],
         ),

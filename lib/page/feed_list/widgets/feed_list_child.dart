@@ -205,7 +205,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: boardPostList.isNotEmpty == true || !noMore,
-      footer: const SpecialClassicFooter(),
+      // footer: const SpecialClassicFooter(),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,

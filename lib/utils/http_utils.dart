@@ -45,7 +45,7 @@ class HttpUtils {
   }) async {
     try {
       if (showLoading) {
-        EasyLoading.show(status: 'loading...');
+        EasyLoading.show();
       }
       var ret = await Http().post(
         path,
@@ -93,7 +93,7 @@ class HttpUtils {
     FailureCallback? onFail,
   }) async {
     if (showLoading) {
-      EasyLoading.show(status: 'loading...', maskType: EasyLoadingMaskType.clear);
+      EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
     var ret = await Http().postFile(
       path,
@@ -135,7 +135,7 @@ class HttpUtils {
     Response response;
     try {
       if (showLoading) {
-        EasyLoading.show(status: 'loading...', maskType: EasyLoadingMaskType.clear);
+        EasyLoading.show(maskType: EasyLoadingMaskType.clear);
       }
       response = await Http.dio.post(url, data: params ?? {}, options: options);
 
@@ -161,7 +161,7 @@ class HttpUtils {
     Response response;
     try {
       if (showLoading) {
-        EasyLoading.show(status: 'loading...', maskType: EasyLoadingMaskType.clear);
+        EasyLoading.show(maskType: EasyLoadingMaskType.clear);
       }
       response = await Http.dio.post(url, data: params ?? {}, options: options);
 

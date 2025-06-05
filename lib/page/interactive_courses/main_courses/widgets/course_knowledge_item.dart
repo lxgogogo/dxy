@@ -10,11 +10,13 @@ import '../../../../widget/common_image.dart';
 class CourseKnowledgeItem extends StatelessWidget {
   final CourseModel item;
   final BoxDecoration? boxDecoration;
+  final VoidCallback? onTap;
 
   const CourseKnowledgeItem({
     super.key,
     required this.item,
     this.boxDecoration,
+    this.onTap,
   });
 
   @override
@@ -55,7 +57,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                     ),
                     SizedBox(height: 2.w),
                     Text(
-                      item.des ?? '',
+                      item.infoTitle ?? '',
                       style: TextStyle(
                         color: '#666666'.hexColor,
                         fontSize: 12.sp,
@@ -67,6 +69,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                 ),
               ),
               GestureDetector(
+                onTap: onTap,
                 child: Container(
                   height: 28.w,
                   padding: EdgeInsets.all(1.r),
@@ -123,6 +126,7 @@ class CourseKnowledgeItem extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 12.w),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,7 +136,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                         text: '进度：',
                         children: [
                           TextSpan(
-                            text: '${item.knowledgeCompleted ?? 0}',
+                            text: '${item.completed ?? 0}',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
@@ -140,7 +144,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '/${item.knowledgeTotal ?? 0}',
+                            text: '/${item.total ?? 0}',
                           ),
                         ],
                       ),
@@ -158,7 +162,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                         ),
                         SizedBox(width: 4.w),
                         Text(
-                          '${item.knowledgeCompleted ?? 0}',
+                          '${item.integral ?? 0}',
                           style: TextStyle(
                             color: '#333333'.hexColor,
                             fontSize: 12.sp,
@@ -184,7 +188,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                         return Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            width: 0.8 * constraints.maxWidth,
+                            width: item.progress * constraints.maxWidth,
                             color: '#557BF6'.hexColor,
                           ),
                         );
@@ -198,9 +202,9 @@ class CourseKnowledgeItem extends StatelessWidget {
                   child: Wrap(
                     spacing: 13.w,
                     children: List.generate(
-                      item.knowledgeTotal ?? 0,
+                      item.total ?? 0,
                       (index) {
-                        final isCompleted = index < (item.knowledgeCompleted ?? 0);
+                        final isCompleted = index < (item.completed ?? 0);
                         return Container(
                           width: 24.w,
                           height: 24.w,
@@ -211,7 +215,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           child: Text(
-                            '$index',
+                            '${index + 1}',
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: isCompleted ? '#557BF6'.hexColor : '#333333'.hexColor,

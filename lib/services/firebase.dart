@@ -11,9 +11,9 @@ class FirebaseService extends GetxService {
   final _firebaseMessaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   final _androidChannel = const AndroidNotificationChannel(
-    '德学院',
-    '德学院 Android',
-    description: "德学院 Android description",
+    'depokers',
+    'depokers Android',
+    description: "depokers Android description",
   );
 
   String? fCMToken;

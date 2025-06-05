@@ -99,7 +99,7 @@ class CollectListController extends GetxController {
   }
 
   void _deleteCollect() async {
-    EasyLoading.show(status: '加载中...');
+    EasyLoading.show();
     final res = await CollectService.deleteCategory({'id': id});
     EasyLoading.dismiss();
     if (res.isSuccess) {
@@ -112,7 +112,7 @@ class CollectListController extends GetxController {
   }
 
   void _deleteCollectList({String tips = '移出成功'}) async {
-    EasyLoading.show(status: '加载中...');
+    EasyLoading.show();
     final res = await CollectService.saveCategoryCollect({
       'id': id,
       'deleteIdList': selectIds

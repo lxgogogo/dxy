@@ -121,7 +121,7 @@ class FinishCreatCollectGroupController extends GetxController {
       ToastUtils.showToast('请选择一条收藏内容新增');
       return;
     }
-    EasyLoading.show(status: '加载中...');
+    EasyLoading.show();
     var map = {
       'name': name,
       'addFavoriteList': selectIds

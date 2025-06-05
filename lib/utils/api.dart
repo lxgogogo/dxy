@@ -103,6 +103,9 @@ class Api {
   static const String courseGroupIndex = '/api/course/group/index';
   static const String courseGroupChoose = '/api/course/group/choose';
   static const String courseDefined = '/api/course/defined';
-  static const String courseIndex = '/api/course/index';
   static const String courseTop = '/api/course/top';
+  static const String courseIndex = '/api/course/index';
+  static const String courseRead = '/api/course/read';
+  static const String courseStart = '/api/course/start';
+  static const String courseInfo = '/api/course/info';
 }

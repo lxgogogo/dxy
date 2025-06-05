@@ -10,11 +10,13 @@ import '../../../../widget/common_image.dart';
 class CourseChallengeItem extends StatelessWidget {
   final CourseModel item;
   final BoxDecoration? boxDecoration;
+  final VoidCallback? onTap;
 
   const CourseChallengeItem({
     super.key,
     this.boxDecoration,
     required this.item,
+    this.onTap,
   });
 
   @override
@@ -50,6 +52,7 @@ class CourseChallengeItem extends StatelessWidget {
                 ),
               ),
               GestureDetector(
+                onTap: onTap,
                 child: Container(
                   height: 28.w,
                   padding: EdgeInsets.all(1.r),
@@ -115,7 +118,7 @@ class CourseChallengeItem extends StatelessWidget {
                         text: '进度：',
                         children: [
                           TextSpan(
-                            text: '${item.challengeCompleted ?? 0}',
+                            text: '${item.completed ?? 0}',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
@@ -123,7 +126,7 @@ class CourseChallengeItem extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '/${item.challengeTotal ?? 0}',
+                            text: '/${item.total ?? 0}',
                           ),
                         ],
                       ),
@@ -149,7 +152,7 @@ class CourseChallengeItem extends StatelessWidget {
                         return Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            width: 0.8 * constraints.maxWidth,
+                            width: item.progress * constraints.maxWidth,
                             color: '#557BF6'.hexColor,
                           ),
                         );
@@ -160,12 +163,13 @@ class CourseChallengeItem extends StatelessWidget {
                 Wrap(
                   runSpacing: 12.w,
                   children: List.generate(
-                    3,
+                    item.challengeIndexDtoList?.length ?? 0,
                     (index) {
+                      final childItem = item.challengeIndexDtoList![index];
                       return Row(
                         children: [
                           SvgPicture.asset(
-                            index.isEven ? Assets.svg.iconChecked : Assets.svg.iconUncheck,
+                            childItem.status == 1 ? Assets.svg.iconChecked : Assets.svg.iconUncheck,
                             width: 16.w,
                             height: 16.w,
                           ),
@@ -173,7 +177,7 @@ class CourseChallengeItem extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.only(left: 8.w, right: 24.w),
                               child: Text(
-                                '挑战名称最多可以十五个中文字数',
+                                childItem.content ?? '',
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   color: Colors.black,
@@ -190,7 +194,7 @@ class CourseChallengeItem extends StatelessWidget {
                               ),
                               SizedBox(width: 4.w),
                               Text(
-                                '8888888',
+                                '${childItem.integral ?? 0}',
                                 style: TextStyle(
                                   color: '#333333'.hexColor,
                                   fontSize: 12.sp,

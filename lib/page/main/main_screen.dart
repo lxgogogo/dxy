@@ -44,15 +44,22 @@ class _MainScreenState extends State<MainScreen> {
         return Scaffold(
           body: Stack(
             children: [
-              PageView(
-                controller: controller.pageController,
-                physics: const NeverScrollableScrollPhysics(),
+              Column(
                 children: [
-                  const HomeScreen().keepAlive,
-                  const FeedListScreen().keepAlive,
-                  const MainCoursesScreen().keepAlive,
-                  const MessagePage().keepAlive,
-                  const MineScreen().keepAlive,
+                  Expanded(
+                    child: PageView(
+                      controller: controller.pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        const HomeScreen().keepAlive,
+                        const FeedListScreen().keepAlive,
+                        const MainCoursesScreen().keepAlive,
+                        const MessagePage().keepAlive,
+                        const MineScreen().keepAlive,
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight),
                 ],
               ),
               Positioned(

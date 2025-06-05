@@ -30,7 +30,7 @@ class CommonService {
     bool isShowLoading = false,
   }) async {
     if (isShowLoading) {
-      EasyLoading.show(status: 'loading...');
+      EasyLoading.show();
     }
     final res = await HttpUtils.postNew(Api.tagIndex, params: {
       'pageNum': pageNum,
@@ -53,7 +53,7 @@ class CommonService {
     bool isShowLoading = false,
   }) async {
     if (isShowLoading) {
-      EasyLoading.show(status: 'loading...');
+      EasyLoading.show();
     }
     final res = await HttpUtils.postNew(Api.searchTop, params: {
       'pageNum': pageNum,
@@ -70,7 +70,7 @@ class CommonService {
   }
 
   Future<ResBaseModel> reportDefined() async {
-    EasyLoading.show(status: 'loading...');
+    EasyLoading.show();
     final res = await HttpUtils.postNew(Api.reportDefined).whenComplete(() {
       EasyLoading.dismiss();
     });
@@ -78,7 +78,7 @@ class CommonService {
   }
 
   Future<ResBaseModel> reportCreate(String relType, int id, int userId, {required String? reason}) async {
-    EasyLoading.show(status: 'loading...');
+    EasyLoading.show();
     final res = await HttpUtils.postNew(Api.reportCreate, params: {
       'relType': relType,
       'relId': id,

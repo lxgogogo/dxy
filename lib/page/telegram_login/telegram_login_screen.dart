@@ -37,7 +37,7 @@ class TelegramLoginScreen extends StatelessWidget {
                       clearCache: true,
                     ),
                     onLoadStart: (controller, url) {
-                      EasyLoading.show(status: '加载中...');
+                      EasyLoading.show();
                       controller.injectCSSCode(source: ':root {touch-action: pan-x pan-y;height: 100%}');
                     },
                     onLoadStop: (controller, url) async {

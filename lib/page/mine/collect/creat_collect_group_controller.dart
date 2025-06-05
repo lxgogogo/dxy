@@ -39,7 +39,7 @@ class CreatCollectGroupController extends GetxController {
         'create': true
       });
     } else {
-      EasyLoading.show(status: '加载中...');
+      EasyLoading.show();
       final res = await CollectService.saveCategoryCollect({
         'name': textController.text,
         'id': id

@@ -14,32 +14,39 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   final RxList<CourseModel> items = <CourseModel>[].obs;
 
-  RxBool isLoaded = false.obs;
+  RxBool hasLoaded = false.obs;
 
   @override
   void onReady() {
-    initData();
+    _loadData(isFirstLoad: true).whenComplete(() {
+      hasLoaded.value = true;
+    });
     super.onReady();
   }
 
-  void initData() {
-    isLoaded.value = false;
-    Future.wait([
-      getCourseTop(),
-      getCourseGroup(),
-    ]).whenComplete(() {
-      isLoaded.value = true;
-    });
+  void onFocusGained() {
+    if (hasLoaded.value) {
+      _loadData(isFirstLoad: false);
+    }
   }
 
-  Future<void> getCourseGroup() async {
+  Future<void> _loadData({bool isFirstLoad = false}) async {
+    await Future.wait([
+      getCourseTop(),
+      getCourseGroup(isFirstLoad: isFirstLoad),
+    ]);
+  }
+
+  Future<void> getCourseGroup({bool isFirstLoad = false}) async {
     try {
       final res = await CourseService.of.courseDefined();
       if (res.isSuccess) {
         final listRes = res.data?['courseGroup'] as List? ?? [];
         courseGroups = listRes.map((e) => CourseGroupModel.fromJson(e)).toList();
         if (courseGroups.isNotEmpty) {
-          courseGroup.value = courseGroups.first;
+          if (isFirstLoad) {
+            courseGroup.value = courseGroups.first;
+          }
           onRefresh();
         }
       }
@@ -62,7 +69,6 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   @override
   Future<List?> loadData() async {
-    if (page == 1) items.clear();
     final type = courseGroup.value?.value?.des;
     final res = await CourseService.of.courseIndex(
       type,
@@ -70,8 +76,9 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       pageSize: pageSize,
     );
     if (res.isSuccess) {
-      final listRes = res.data?['ALL']['list'] as List? ?? [];
+      final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
+      if (page == 1) items.clear();
       items.addAll(records);
       return records;
     }
@@ -80,10 +87,54 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   void onChangeType(CourseGroupModel type) {
     courseGroup.value = type;
-    onRefresh();
+    EasyLoading.show();
+    onRefresh().whenComplete(() {
+      EasyLoading.dismiss();
+    });
   }
 
-  void toCourseDetail() {
-    Get.toNamed(Routes.courseDetails);
+  void toCourseDetail(CourseModel item) {
+    Get.toNamed(Routes.courseDetails, arguments: {'id': item.id});
+  }
+
+  Future<void> onStartCourse(CourseModel item) async {
+    final id = item.id;
+    if (id == null) return;
+    try {
+      final res = await CourseService.of.courseStart(id);
+      if (res.isSuccess) {
+        item.state = 1;
+        items.refresh();
+      }
+    } catch (e) {
+      Log.e(e.toString());
+    }
+  }
+
+  Future<void> toKnowledge(CourseModel item) async {
+    final id = item.id;
+    if (id == null) return;
+    try {
+      final res = await CourseService.of.courseRead(id);
+      if (res.isSuccess) {
+        if (item.contentType == 'article') {
+          Get.toNamed(Routes.articleDetail, arguments: item.contentId);
+        } else if (item.contentType == 'video' || item.contentType == 'videoList') {
+          Get.toNamed(Routes.videoDetail, arguments: {'id': item.contentId});
+        }
+      }
+    } catch (e) {
+      Log.e(e.toString());
+    }
+  }
+
+  void toPractice(CourseModel item) {
+    final id = item.id;
+    if (id == null) return;
+  }
+
+  void toChallenge(CourseModel item) {
+    final id = item.id;
+    if (id == null) return;
   }
 }

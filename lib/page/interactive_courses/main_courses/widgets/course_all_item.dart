@@ -12,11 +12,13 @@ import '../../../../widget/common_image.dart';
 class CourseAllItem extends StatelessWidget {
   final CourseModel item;
   final BoxDecoration? boxDecoration;
+  final VoidCallback? onTap;
 
   const CourseAllItem({
     super.key,
     required this.item,
     this.boxDecoration,
+    this.onTap,
   });
 
   @override
@@ -33,11 +35,25 @@ class CourseAllItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              CommonImage.net(
-                imageUrl: item.cover ?? '',
-                radius: 4.r,
-                width: 88.w,
-                height: 88.w,
+              Stack(
+                children: [
+                  CommonImage.net(
+                    imageUrl: item.cover ?? '',
+                    radius: 4.r,
+                    width: 88.w,
+                    height: 50.w,
+                  ),
+                  if (item.icon?.isNotEmpty == true)
+                    Positioned(
+                      left: 4.w,
+                      top: 4.w,
+                      child: CommonImage.net(
+                        imageUrl: item.icon ?? '',
+                        width: 12.w,
+                        height: 12.w,
+                      ),
+                    ),
+                ],
               ),
               SizedBox(width: 8.w),
               Expanded(
@@ -78,6 +94,7 @@ class CourseAllItem extends StatelessWidget {
                   assetName: Assets.svg.iconKnowledge,
                   count: item.knowledgeCompleted ?? 0,
                   total: item.knowledgeTotal ?? 0,
+                  status: item.state,
                 ),
               ),
               Expanded(
@@ -85,6 +102,7 @@ class CourseAllItem extends StatelessWidget {
                   assetName: Assets.svg.iconChallenge,
                   count: item.challengeCompleted ?? 0,
                   total: item.challengeTotal ?? 0,
+                  status: item.state,
                 ),
               ),
               Expanded(
@@ -92,11 +110,12 @@ class CourseAllItem extends StatelessWidget {
                   assetName: Assets.svg.iconPractice,
                   count: item.practiseCompleted ?? 0,
                   total: item.practiseTotal ?? 0,
+                  status: item.state,
                 ),
               ),
               CourseStatusBtn(
-                status: Random().nextInt(3),
-                onTap: () {},
+                status: item.state,
+                onTap: onTap,
               ),
             ],
           )
@@ -112,11 +131,15 @@ class CourseTypeItem extends StatelessWidget {
     required this.assetName,
     required this.count,
     required this.total,
+    required this.status,
   });
 
   final String assetName;
   final num count;
   final num total;
+
+  //0 未开始   1进行中  2已完成
+  final int? status;
 
   @override
   Widget build(BuildContext context) {
@@ -132,10 +155,10 @@ class CourseTypeItem extends StatelessWidget {
           SizedBox(width: 4.w),
           Text.rich(
             TextSpan(
-              text: '$count',
+              text: status == 0 ? '' : '$count/',
               children: [
                 TextSpan(
-                  text: '/$total',
+                  text: '$total',
                   style: TextStyle(
                     color: '#666666'.hexColor,
                     fontSize: 12.sp,
@@ -156,7 +179,8 @@ class CourseTypeItem extends StatelessWidget {
 }
 
 class CourseStatusBtn extends StatelessWidget {
-  final int status;
+  //0 未开始   1进行中  2已完成
+  final int? status;
   final VoidCallback? onTap;
 
   const CourseStatusBtn({
@@ -184,7 +208,11 @@ class CourseStatusBtn extends StatelessWidget {
       textColor = Colors.white;
     }
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (status == 0) {
+          onTap?.call();
+        }
+      },
       child: Container(
         width: 72.w,
         height: 28.w,

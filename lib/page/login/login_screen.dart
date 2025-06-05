@@ -331,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (isAuthorizing) return;
       isAuthorizing = true;
       final googleUser = await GoogleSignIn().signIn();
-      EasyLoading.show(status: 'loading...');
+      EasyLoading.show();
       final googleAuth = await googleUser?.authentication;
       if (googleAuth == null) return;
       final credential = GoogleAuthProvider.credential(
@@ -373,7 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ..addScope('email')
         ..addScope('name');
       final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
-      EasyLoading.show(status: 'loading...');
+      EasyLoading.show();
       final idTokenResult = await auth.user?.getIdTokenResult(true);
       final res = await LoginService.of.thirdLogin(
         type: 'APPLE',
@@ -409,7 +409,7 @@ class _LoginScreenState extends State<LoginScreen> {
         EasyLoading.dismiss();
       });
       if (token is String) {
-        EasyLoading.show(status: 'loading...');
+        EasyLoading.show();
         final res = await LoginService.of.thirdLogin(
           type: 'TELEGRAM',
           token: token,

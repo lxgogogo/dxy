@@ -233,7 +233,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   void tagOnTap(value) async {
-    EasyLoading.show(status: '加载中......');
+    EasyLoading.show();
     tagId = value.id ?? 0;
     await loadVideos();
     EasyLoading.dismiss();

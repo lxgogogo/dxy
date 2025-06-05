@@ -58,4 +58,36 @@ class CourseService {
     return res ?? ResBaseModel.defaultRes;
   }
 
+  Future<ResBaseModel> courseRead(int? id) async {
+    final res = await HttpUtils.postNew(
+      Api.courseRead,
+      params: {
+        "id": id, //课程id
+      },
+      showLoading: true,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> courseStart(int? id) async {
+    final res = await HttpUtils.postNew(
+      Api.courseStart,
+      params: {
+        "id": id, //课程id
+      },
+      showLoading: true,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
+
+  Future<ResBaseModel> courseInfo(int? id, {bool showLoading = true}) async {
+    final res = await HttpUtils.postNew(
+      Api.courseInfo,
+      params: {
+        "id": id, //课程id
+      },
+      showLoading: showLoading,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

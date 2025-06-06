@@ -77,7 +77,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       children: [
                                         Container(
                                           color: '#D9D9D9'.hexColor.withOpacity(0.2),
-                                          padding: EdgeInsets.only(top: 24.w, bottom: 110.w),
+                                          margin: EdgeInsets.only(top: 24.w, bottom: 110.w),
                                           alignment: Alignment.center,
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(4),

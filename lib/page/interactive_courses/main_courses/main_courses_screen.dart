@@ -179,7 +179,12 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                             }),
                             GestureDetector(
                               onTap: () {
+                                int? selectedIndex;
+                                if (controller.courseGroup.value != null) {
+                                  selectedIndex = controller.courseGroups.indexOf(controller.courseGroup.value!);
+                                }
                                 showCommonOperationsSheet(
+                                  selectedIndex: selectedIndex,
                                   items: controller.courseGroups.map((e) => e.label ?? '').toList(),
                                   onSelectItem: (int index) {
                                     controller.onChangeType(controller.courseGroups[index]);

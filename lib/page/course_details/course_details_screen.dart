@@ -6,10 +6,6 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/interactive_courses/main_courses/widgets/course_all_item.dart';
-import 'package:holdem/page/interactive_courses/main_courses/widgets/course_challenge_item.dart';
-import 'package:holdem/page/interactive_courses/main_courses/widgets/course_knowledge_item.dart';
-import 'package:holdem/page/interactive_courses/main_courses/widgets/course_practice_item.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
 import '../../gen/assets.gen.dart';
@@ -20,6 +16,10 @@ import '../../services/course_service.dart';
 import '../../utils/log_util.dart';
 import '../../utils/toast_utils.dart';
 import '../../widget/no_network.dart';
+import 'widgets/course_all_item.dart';
+import 'widgets/course_challenge_item.dart';
+import 'widgets/course_knowledge_item.dart';
+import 'widgets/course_practice_item.dart';
 
 part 'course_details_binding.dart';
 
@@ -49,26 +49,26 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
               title: controller.detailBean?.title ?? '',
               centerTitle: false,
               actions: [
-                if (controller.detailBean != null)
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        Assets.svg.iconCourseIntegral,
-                        width: 16.w,
-                        height: 16.w,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        '${controller.detailBean?.integral ?? 0}',
-                        style: TextStyle(
-                          color: '#333333'.hexColor,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                    ],
-                  ),
+                // if (controller.detailBean != null)
+                //   Row(
+                //     children: [
+                //       SvgPicture.asset(
+                //         Assets.svg.iconCourseIntegral,
+                //         width: 16.w,
+                //         height: 16.w,
+                //       ),
+                //       SizedBox(width: 8.w),
+                //       Text(
+                //         '${controller.detailBean?.integral ?? 0}',
+                //         style: TextStyle(
+                //           color: '#333333'.hexColor,
+                //           fontSize: 14.sp,
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //       SizedBox(width: 16.w),
+                //     ],
+                //   ),
               ],
             ),
             backgroundColor: '#F7F8FC'.hexColor,
@@ -84,36 +84,14 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              CourseAllItem(
-                                boxDecoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16.r),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: '#58A5FF'.hexColor.withOpacity(0.1),
-                                      blurRadius: 8.63.r,
-                                      offset: Offset(0, 4.32.w),
-                                    ),
-                                  ],
-                                ),
+                              CourseDetailAllItem(
                                 item: controller.detailBean!,
                                 onTap: () => controller.onStartCourse(),
                               ),
                               if (controller.detailBean!.knowledge != null)
                                 Padding(
                                   padding: EdgeInsets.only(top: 16.w),
-                                  child: CourseKnowledgeItem(
-                                    boxDecoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: '#58A5FF'.hexColor.withOpacity(0.1),
-                                          blurRadius: 8.63.r,
-                                          offset: Offset(0, 4.32.w),
-                                        ),
-                                      ],
-                                    ),
+                                  child: CourseDetailKnowledgeItem(
                                     item: controller.detailBean!.knowledge!,
                                     onTap: controller.toKnowledge,
                                   ),
@@ -122,17 +100,6 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(top: 16.w),
                                   child: CoursePracticeItem(
-                                    boxDecoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: '#58A5FF'.hexColor.withOpacity(0.1),
-                                          blurRadius: 8.63.r,
-                                          offset: Offset(0, 4.32.w),
-                                        ),
-                                      ],
-                                    ),
                                     item: controller.detailBean!.practise!,
                                     onTap: controller.toPractice,
                                   ),
@@ -140,18 +107,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                               if (controller.detailBean!.challenge != null)
                                 Padding(
                                   padding: EdgeInsets.only(top: 16.w),
-                                  child: CourseChallengeItem(
-                                    boxDecoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: '#58A5FF'.hexColor.withOpacity(0.1),
-                                          blurRadius: 8.63.r,
-                                          offset: Offset(0, 4.32.w),
-                                        ),
-                                      ],
-                                    ),
+                                  child: CourseDetailChallengeItem(
                                     item: controller.detailBean!.challenge!,
                                     onTap: controller.toChallenge,
                                   ),

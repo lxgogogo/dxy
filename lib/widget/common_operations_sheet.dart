@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
 void showCommonOperationsSheet({
   required List<String> items,
   required Function(int index) onSelectItem,
+  int? selectedIndex,
 }) {
   Get.bottomSheet(
     CommonOperationsSheet(
       items: items,
       onSelectItem: onSelectItem,
+      selectedIndex: selectedIndex,
     ),
     barrierColor: Colors.black.withOpacity(0.4),
   );
@@ -20,11 +23,13 @@ void showCommonOperationsSheet({
 class CommonOperationsSheet extends StatelessWidget {
   final List<String> items;
   final Function(int index) onSelectItem;
+  final int? selectedIndex;
 
   const CommonOperationsSheet({
     super.key,
     required this.items,
     required this.onSelectItem,
+    this.selectedIndex,
   });
 
   @override
@@ -42,6 +47,7 @@ class CommonOperationsSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ...items.map((e) {
+                final index = items.indexOf(e);
                 return GestureDetector(
                     onTap: () {
                       onSelectItem(items.indexOf(e));
@@ -63,7 +69,8 @@ class CommonOperationsSheet extends StatelessWidget {
                         e,
                         style: TextStyle(
                           fontSize: 16.sp,
-                          color: AppTheme.color_333333,
+                          color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
+                          fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
                         ),
                         textAlign: TextAlign.center,
                       ),

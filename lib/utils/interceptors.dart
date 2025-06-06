@@ -99,13 +99,7 @@ class LogsInterceptors extends InterceptorsWrapper {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
-    Log.d("onRequest baseUrl: ${options.baseUrl}");
-    Log.d("onRequest path: ${options.path}");
-    Log.d('onRequest header: ${options.headers}');
-    Log.d('onRequest params: ${options.queryParameters}');
-    if (options.data != null) {
-      Log.d('onRequest data: ${options.data}');
-    }
+    Log.d('onRequest: ${options.baseUrl}${options.path} ${options.data}');
     super.onRequest(options, handler);
   }
 

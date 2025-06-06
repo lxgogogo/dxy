@@ -4,8 +4,7 @@
 
 import 'dart:convert';
 
-CourseModel courseModelFromJson(String str) =>
-    CourseModel.fromJson(json.decode(str));
+CourseModel courseModelFromJson(String str) => CourseModel.fromJson(json.decode(str));
 
 String courseModelToJson(CourseModel data) => json.encode(data.toJson());
 
@@ -74,7 +73,7 @@ class CourseModel {
         title: json["title"],
         des: json["des"],
         cover: json["cover"],
-        state: json["state"],
+        state: json["state"] ?? json["status"],
         knowledgeTotal: json["knowledgeTotal"],
         knowledgeCompleted: json["knowledgeCompleted"],
         practiseTotal: json["practiseTotal"],
@@ -90,17 +89,11 @@ class CourseModel {
         integral: json["integral"],
         challengeIndexDtoList: json["challengeIndexDtoList"] == null
             ? []
-            : List<ChallengeIndexDtoList>.from(json["challengeIndexDtoList"]!
-                .map((x) => ChallengeIndexDtoList.fromJson(x))),
-        knowledge: json["knowledge"] == null
-            ? null
-            : CourseModel.fromJson(json["knowledge"]),
-        practise: json["practise"] == null
-            ? null
-            : CourseModel.fromJson(json["practise"]),
-        challenge: json["challenge"] == null
-            ? null
-            : CourseModel.fromJson(json["challenge"]),
+            : List<ChallengeIndexDtoList>.from(
+                json["challengeIndexDtoList"]!.map((x) => ChallengeIndexDtoList.fromJson(x))),
+        knowledge: json["knowledge"] == null ? null : CourseModel.fromJson(json["knowledge"]),
+        practise: json["practise"] == null ? null : CourseModel.fromJson(json["practise"]),
+        challenge: json["challenge"] == null ? null : CourseModel.fromJson(json["challenge"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -124,9 +117,8 @@ class CourseModel {
         "total": total,
         "completed": completed,
         "integral": integral,
-        "challengeIndexDtoList": challengeIndexDtoList == null
-            ? []
-            : List<dynamic>.from(challengeIndexDtoList!.map((x) => x.toJson())),
+        "challengeIndexDtoList":
+            challengeIndexDtoList == null ? [] : List<dynamic>.from(challengeIndexDtoList!.map((x) => x.toJson())),
         "knowledge": knowledge?.toJson(),
         "practise": practise?.toJson(),
         "challenge": challenge?.toJson(),
@@ -146,8 +138,7 @@ class ChallengeIndexDtoList {
     this.integral,
   });
 
-  factory ChallengeIndexDtoList.fromJson(Map<String, dynamic> json) =>
-      ChallengeIndexDtoList(
+  factory ChallengeIndexDtoList.fromJson(Map<String, dynamic> json) => ChallengeIndexDtoList(
         id: json["id"],
         status: json["status"],
         content: json["content"],

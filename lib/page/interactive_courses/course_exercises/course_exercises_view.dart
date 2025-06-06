@@ -39,7 +39,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
     return Scaffold(body: Obx(() {
       double width = 1.sw - 126.w;
       double progress = 0;
-      if (controller.totalPage > 0) {
+      if (controller.totalPage > 0 && controller.practiseList.isNotEmpty) {
         progress = width * ((controller.completed.value) / controller.totalPage);
       }
       return Container(

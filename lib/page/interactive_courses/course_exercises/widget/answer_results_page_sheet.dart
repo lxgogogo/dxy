@@ -87,17 +87,7 @@ class AnswerResultsPageWidget extends StatelessWidget {
                         ],
                       )),
                   Positioned(
-                      top: top + 450.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.close(0);
-                        },
-                        child: Image.asset(
-                            'assets/courses/icon_results_close.png',
-                            width: 32.w),
-                      )),
-                  Positioned(
-                    top: top + 520.w,
+                    bottom: 20.w,
                     child: CustomButton(
                       width: 1.sw - 32.w,
                       onPressed: () {
@@ -147,15 +137,22 @@ class AnswerResultsPageWidget extends StatelessWidget {
                         width: 1.sw),
                   ),
                   Positioned(
-                      top: top + 490.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          sureOnTap();
-                        },
-                        child: Image.asset(
-                            'assets/courses/icon_results_close.png',
-                            width: 32.w),
-                      )),
+                    bottom: 20.w,
+                    child: CustomButton(
+                      width: 1.sw - 32.w,
+                      onPressed: () {
+                        sureOnTap();
+                      },
+                      disable: false,
+                      showOpacityAnimation: true,
+                      textColor: Colors.white,
+                      height: 50.w,
+                      radius: 8.w,
+                      title: '继续',
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
                 ],
               )));
     }
@@ -194,17 +191,7 @@ class AnswerResultsPageWidget extends StatelessWidget {
                           color: Colors.white),
                     )),
                 Positioned(
-                    top: top + 420.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.close(0);
-                      },
-                      child: Image.asset(
-                          'assets/courses/icon_results_close.png',
-                          width: 32.w),
-                    )),
-                Positioned(
-                  top: top + 510.w,
+                  bottom: 20.w,
                   child: CustomButton(
                     width: 1.sw - 32.w,
                     onPressed: () {

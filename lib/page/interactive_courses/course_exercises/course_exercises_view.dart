@@ -43,7 +43,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
             );
           }
           double width = 1.sw - 126.w;
-          double progress = width * ((controller.currentPage+1)/controller.totalPage);
+          double progress = width * ((controller.currentPage)/controller.totalPage);
           return Container(
             margin: EdgeInsets.only(top: 56.w),
             padding: EdgeInsets.symmetric(horizontal: 16.w),

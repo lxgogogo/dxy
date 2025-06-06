@@ -1,33 +1,23 @@
-part of 'course_details_screen.dart';
+part of 'winning_streak_screen.dart';
 
-class CourseDetailsController extends GetxController {
+class WinningStreakController extends GetxController {
   late int? id;
-
-  bool noNetwork = false;
 
   CourseModel? detailBean;
 
   @override
   void onInit() {
-    super.onInit();
     id = Get.arguments?['id'] as int?;
+    super.onInit();
   }
 
-  void onFocusGained() {
-    requestDetail();
+  @override
+  void onReady() {
+    loadData();
+    super.onReady();
   }
 
-  Future<void> dataInit() async {
-    final events = await Connectivity().checkConnectivity();
-    noNetwork = events.contains(ConnectivityResult.none);
-    if (noNetwork) {
-      safeUpdate();
-      return;
-    }
-    requestDetail();
-  }
-
-  requestDetail() async {
+  Future<void> loadData() async {
     if (id == null) return;
     try {
       final res = await CourseService.of.courseInfo(id, showLoading: false);
@@ -38,16 +28,6 @@ class CourseDetailsController extends GetxController {
     } catch (e) {
       Log.e(e.toString());
     }
-  }
-
-  Future<void> refreshData() async {
-    final events = await Connectivity().checkConnectivity();
-    noNetwork = events.contains(ConnectivityResult.none);
-    if (noNetwork) {
-      ToastUtils.showToast('请检查网络');
-      return;
-    }
-    requestDetail();
   }
 
   Future<void> onStartCourse() async {
@@ -82,8 +62,7 @@ class CourseDetailsController extends GetxController {
   void toPractice() {
     final id = detailBean!.practise!.id;
     if (id == null) return;
-    Get.toNamed(Routes.coursesExercises,
-        arguments: {'id': detailBean?.practise?.courseId});
+    Get.toNamed(Routes.coursesExercises, arguments: {'id': detailBean?.practise?.courseId});
   }
 
   void toChallenge() {

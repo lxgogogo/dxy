@@ -58,7 +58,7 @@ class CourseDetailAllItem extends StatelessWidget {
                   assetName: Assets.svg.iconKnowledge,
                   count: item.knowledgeCompleted ?? 0,
                   total: item.knowledgeTotal ?? 0,
-                  status: item.state,
+                  status: item.status,
                 ),
               ),
               Expanded(
@@ -66,7 +66,7 @@ class CourseDetailAllItem extends StatelessWidget {
                   assetName: Assets.svg.iconChallenge,
                   count: item.challengeCompleted ?? 0,
                   total: item.challengeTotal ?? 0,
-                  status: item.state,
+                  status: item.status,
                 ),
               ),
               Expanded(
@@ -74,11 +74,11 @@ class CourseDetailAllItem extends StatelessWidget {
                   assetName: Assets.svg.iconPractice,
                   count: item.practiseCompleted ?? 0,
                   total: item.practiseTotal ?? 0,
-                  status: item.state,
+                  status: item.status,
                 ),
               ),
               CourseStatusBtn(
-                status: item.state,
+                status: item.status,
                 onTap: onTap,
               ),
             ],

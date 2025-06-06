@@ -95,7 +95,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     try {
       final res = await CourseService.of.courseStart(id);
       if (res.isSuccess) {
-        item.state = 1;
+        item.status = 1;
         items.refresh();
       }
     } catch (e) {

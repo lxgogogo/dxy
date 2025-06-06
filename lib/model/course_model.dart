@@ -15,7 +15,7 @@ class CourseModel {
   final String? title;
   final String? des;
   final String? cover;
-  int? state;
+  int? status;
   final int? knowledgeTotal;
   final int? knowledgeCompleted;
   final int? practiseTotal;
@@ -46,7 +46,7 @@ class CourseModel {
     this.title,
     this.des,
     this.cover,
-    this.state,
+    this.status,
     this.knowledgeTotal,
     this.knowledgeCompleted,
     this.practiseTotal,
@@ -73,7 +73,7 @@ class CourseModel {
         title: json["title"],
         des: json["des"],
         cover: json["cover"],
-        state: json["state"] ?? json["status"],
+        status: json["status"],
         knowledgeTotal: json["knowledgeTotal"],
         knowledgeCompleted: json["knowledgeCompleted"],
         practiseTotal: json["practiseTotal"],
@@ -103,7 +103,7 @@ class CourseModel {
         "title": title,
         "des": des,
         "cover": cover,
-        "state": state,
+        "state": status,
         "knowledgeTotal": knowledgeTotal,
         "knowledgeCompleted": knowledgeCompleted,
         "practiseTotal": practiseTotal,

@@ -47,7 +47,6 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
             appBar: CommonAppBar.arrowBack(
               context,
               title: controller.detailBean?.title ?? '',
-              centerTitle: false,
               actions: [
                 // if (controller.detailBean != null)
                 //   Row(

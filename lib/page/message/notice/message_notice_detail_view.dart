@@ -64,32 +64,34 @@ class _MessageNoticeDetailPageState extends State<MessageNoticeDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                            width: rightWidth,
-                            padding: EdgeInsets.all(12.w),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8.w)),
-                                border: Border.all(
-                                    width: 0.5.w,
-                                    color: ColorStyle.c333333.withOpacity(0.1))),
-                            child: HtmlWidget(
-                              controller.detailData.value.content  ?? '',
-                              customStylesBuilder: htmlCustomStyles,
-                              factoryBuilder: () => HtmlFactoryBuilder(
-                                context,
-                                content: controller.detailData.value.content  ?? '',
-                              ),
-                              customWidgetBuilder: (dom.Element element) {
-                                if (element.localName == 'table') {
-                                  return const SizedBox();
-                                }
-                                return null;
-                              },
-                              onTapUrl: (String url) async {
-                                return launchUrlString(url, mode: LaunchMode.externalApplication);
-                              },
+                        SelectionArea(
+                            child: Container(
+                                width: rightWidth,
+                                padding: EdgeInsets.all(12.w),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8.w)),
+                                    border: Border.all(
+                                        width: 0.5.w,
+                                        color: ColorStyle.c333333.withOpacity(0.1))),
+                                child: HtmlWidget(
+                                  controller.detailData.value.content  ?? '',
+                                  customStylesBuilder: htmlCustomStyles,
+                                  factoryBuilder: () => HtmlFactoryBuilder(
+                                    context,
+                                    content: controller.detailData.value.content  ?? '',
+                                  ),
+                                  customWidgetBuilder: (dom.Element element) {
+                                    if (element.localName == 'table') {
+                                      return const SizedBox();
+                                    }
+                                    return null;
+                                  },
+                                  onTapUrl: (String url) async {
+                                    return launchUrlString(url, mode: LaunchMode.externalApplication);
+                                  },
+                                )
                             )
                         ),
                         SizedBox(height: 5.w),

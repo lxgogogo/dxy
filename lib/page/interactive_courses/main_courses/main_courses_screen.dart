@@ -61,46 +61,49 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                     Assets.images.logoText.image(width: 91.75.w),
                     const Spacer(),
                     if (controller.hasLoaded.value) ...[
-                      Container(
-                        height: 34.w,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        decoration: BoxDecoration(
-                          color: '#333333'.hexColor.withOpacity(0.05),
-                          borderRadius: BorderRadius.circular(40.r),
-                        ),
-                        alignment: Alignment.center,
-                        child: Row(
-                          children: [
-                            switch (controller.courseTopModel.value?.winningStatus) {
-                              1 => SvgPicture.asset(
-                                  Assets.svg.iconWinningStatus1,
-                                  width: 16.w,
-                                  height: 16.w,
+                      GestureDetector(
+                        onTap: controller.toWinningStreak,
+                        child: Container(
+                          height: 34.w,
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          decoration: BoxDecoration(
+                            color: '#333333'.hexColor.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(40.r),
+                          ),
+                          alignment: Alignment.center,
+                          child: Row(
+                            children: [
+                              switch (controller.courseTopModel.value?.winningStatus) {
+                                1 => SvgPicture.asset(
+                                    Assets.svg.iconWinningStatus1,
+                                    width: 16.w,
+                                    height: 16.w,
+                                  ),
+                                2 => SvgPicture.asset(
+                                    Assets.svg.iconWinningStatus2,
+                                    width: 16.w,
+                                    height: 16.w,
+                                  ),
+                                3 => SvgPicture.asset(
+                                    Assets.svg.iconWinningStatus3,
+                                    width: 16.w,
+                                    height: 16.w,
+                                  ),
+                                _ => const SizedBox(),
+                              },
+                              // if ((controller.courseTopModel.value?.winningDay ?? 0) > 0) ...[
+                              SizedBox(width: 8.w),
+                              Text(
+                                '${controller.courseTopModel.value?.winningDay ?? 0}',
+                                style: TextStyle(
+                                  color: '#666666'.hexColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                              2 => SvgPicture.asset(
-                                  Assets.svg.iconWinningStatus2,
-                                  width: 16.w,
-                                  height: 16.w,
-                                ),
-                              3 => SvgPicture.asset(
-                                  Assets.svg.iconWinningStatus3,
-                                  width: 16.w,
-                                  height: 16.w,
-                                ),
-                              _ => const SizedBox(),
-                            },
-                            // if ((controller.courseTopModel.value?.winningDay ?? 0) > 0) ...[
-                            SizedBox(width: 8.w),
-                            Text(
-                              '${controller.courseTopModel.value?.winningDay ?? 0}',
-                              style: TextStyle(
-                                color: '#666666'.hexColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w700,
                               ),
-                            ),
-                            // ],
-                          ],
+                              // ],
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(width: 12.w),

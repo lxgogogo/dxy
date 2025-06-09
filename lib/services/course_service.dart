@@ -93,22 +93,25 @@ class CourseService {
   }
 
   Future<CourseExerciseAllModel> coursePractise(String id) async {
-    final res = await HttpUtils.postNew(
-      Api.coursePractise,
-      params: {'id': id}
-    );
+    final res = await HttpUtils.postNew(Api.coursePractise, params: {'id': id});
     CourseExerciseAllModel model = CourseExerciseAllModel.fromJson(res?.data);
     return model;
   }
 
   Future<CourseAnswerModel> courseAnswer(data) async {
-    final res = await HttpUtils.postNew(
-      Api.courseAnswer,
-      params: data,
-      showLoading: true
-    );
+    final res = await HttpUtils.postNew(Api.courseAnswer, params: data, showLoading: true);
     CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
     return model;
   }
 
+  Future<ResBaseModel> coursePunch(String monthDate, {bool showLoading = true}) async {
+    final res = await HttpUtils.postNew(
+      Api.coursePunch,
+      params: {
+        "monthDate": monthDate,
+      },
+      showLoading: showLoading,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

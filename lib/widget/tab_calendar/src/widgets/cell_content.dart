@@ -3,9 +3,8 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-
-import '../customization/calendar_builders.dart';
-import '../customization/calendar_style.dart';
+import 'package:holdem/widget/tab_calendar/src/customization/calendar_builders.dart';
+import 'package:holdem/widget/tab_calendar/src/customization/calendar_style.dart';
 
 class CellContent extends StatelessWidget {
   final DateTime day;
@@ -25,7 +24,7 @@ class CellContent extends StatelessWidget {
   final CalendarBuilders calendarBuilders;
 
   const CellContent({
-    Key? key,
+    super.key,
     required this.day,
     required this.focusedDay,
     required this.calendarStyle,
@@ -41,7 +40,7 @@ class CellContent extends StatelessWidget {
     required this.isHoliday,
     required this.isWeekend,
     this.locale,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class CellContent extends StatelessWidget {
     final margin = calendarStyle.cellMargin;
     final padding = calendarStyle.cellPadding;
     final alignment = calendarStyle.cellAlignment;
-    final duration = const Duration(milliseconds: 250);
+    const duration = Duration(milliseconds: 250);
 
     if (isDisabled) {
       cell = calendarBuilders.disabledBuilder?.call(context, day, focusedDay) ??
@@ -76,16 +75,6 @@ class CellContent extends StatelessWidget {
             decoration: calendarStyle.disabledDecoration,
             alignment: alignment,
             child: Text(text, style: calendarStyle.disabledTextStyle),
-          );
-    } else if (isSelected) {
-      cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
-          AnimatedContainer(
-            duration: duration,
-            margin: margin,
-            padding: padding,
-            decoration: calendarStyle.selectedDecoration,
-            alignment: alignment,
-            child: Text(text, style: calendarStyle.selectedTextStyle),
           );
     } else if (isRangeStart) {
       cell =
@@ -107,6 +96,16 @@ class CellContent extends StatelessWidget {
             decoration: calendarStyle.rangeEndDecoration,
             alignment: alignment,
             child: Text(text, style: calendarStyle.rangeEndTextStyle),
+          );
+    } else if (isSelected) {
+      cell = calendarBuilders.selectedBuilder?.call(context, day, focusedDay) ??
+          AnimatedContainer(
+            duration: duration,
+            margin: margin,
+            padding: padding,
+            decoration: calendarStyle.selectedDecoration,
+            alignment: alignment,
+            child: Text(text, style: calendarStyle.selectedTextStyle),
           );
     } else if (isToday && isTodayHighlighted) {
       cell = calendarBuilders.todayBuilder?.call(context, day, focusedDay) ??

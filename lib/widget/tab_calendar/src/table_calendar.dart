@@ -3,26 +3,31 @@
 
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:holdem/widget/simple_gesture_detector.dart';
 import 'package:intl/intl.dart';
-
-import 'customization/calendar_builders.dart';
-import 'customization/calendar_style.dart';
-import 'customization/days_of_week_style.dart';
-import 'customization/header_style.dart';
-import 'shared/utils.dart';
-import 'table_calendar_base.dart';
-import 'widgets/calendar_header.dart';
-import 'widgets/cell_content.dart';
+import 'package:holdem/widget/tab_calendar/src/customization/calendar_builders.dart';
+import 'package:holdem/widget/tab_calendar/src/customization/calendar_style.dart';
+import 'package:holdem/widget/tab_calendar/src/customization/days_of_week_style.dart';
+import 'package:holdem/widget/tab_calendar/src/customization/header_style.dart';
+import 'package:holdem/widget/tab_calendar/src/shared/utils.dart';
+import 'package:holdem/widget/tab_calendar/src/table_calendar_base.dart';
+import 'package:holdem/widget/tab_calendar/src/widgets/calendar_header.dart';
+import 'package:holdem/widget/tab_calendar/src/widgets/cell_content.dart';
 
 /// Signature for `onDaySelected` callback. Contains the selected day and focused day.
-typedef OnDaySelected = void Function(DateTime selectedDay, DateTime focusedDay);
+typedef OnDaySelected = void Function(
+  DateTime selectedDay,
+  DateTime focusedDay,
+);
 
 /// Signature for `onRangeSelected` callback.
 /// Contains start and end of the selected range, as well as currently focused day.
-typedef OnRangeSelected = void Function(DateTime? start, DateTime? end, DateTime focusedDay);
+typedef OnRangeSelected = void Function(
+  DateTime? start,
+  DateTime? end,
+  DateTime focusedDay,
+);
 
 /// Modes that range selection can operate in.
 enum RangeSelectionMode { disabled, toggledOff, toggledOn, enforced }
@@ -160,6 +165,11 @@ class TableCalendar<T> extends StatefulWidget {
   /// * `RangeSelectionMode.enforced` - range selection is always on.
   final RangeSelectionMode rangeSelectionMode;
 
+  /// Allows to load events for days that are not enabled
+  /// If `true` it will ignore `enabledDayPredicate` when calling `eventLoader`.
+  /// If `false` then `enabledDayPredicate` will be used to check when to call `eventLoader`
+  final bool loadEventsForDisabledDays;
+
   /// Function that assigns a list of events to a specified day.
   final List<T> Function(DateTime day)? eventLoader;
 
@@ -205,12 +215,12 @@ class TableCalendar<T> extends StatefulWidget {
 
   /// Creates a `TableCalendar` widget.
   TableCalendar({
-    Key? key,
+    super.key,
     required DateTime focusedDay,
     required DateTime firstDay,
     required DateTime lastDay,
     DateTime? currentDay,
-    this.locale = 'zh_CN',
+    this.locale,
     this.rangeStartDay,
     this.rangeEndDay,
     this.weekendDays = const [DateTime.saturday, DateTime.sunday],
@@ -227,8 +237,8 @@ class TableCalendar<T> extends StatefulWidget {
     this.sixWeekMonthsEnforced = false,
     this.shouldFillViewport = false,
     this.weekNumbersVisible = false,
-    this.rowHeight = 56.0,
-    this.daysOfWeekHeight = 38.0,
+    this.rowHeight = 52.0,
+    this.daysOfWeekHeight = 16.0,
     this.formatAnimationDuration = const Duration(milliseconds: 200),
     this.formatAnimationCurve = Curves.linear,
     this.pageAnimationDuration = const Duration(milliseconds: 300),
@@ -244,9 +254,10 @@ class TableCalendar<T> extends StatefulWidget {
     this.daysOfWeekStyle = const DaysOfWeekStyle(),
     this.calendarStyle = const CalendarStyle(),
     this.calendarBuilders = const CalendarBuilders(),
-    this.rangeSelectionMode = RangeSelectionMode.disabled,
+    this.rangeSelectionMode = RangeSelectionMode.toggledOff,
     this.eventLoader,
     this.enabledDayPredicate,
+    this.loadEventsForDisabledDays = false,
     this.selectedDayPredicate,
     this.holidayPredicate,
     this.onRangeSelected,
@@ -261,17 +272,19 @@ class TableCalendar<T> extends StatefulWidget {
     this.onCalendarCreated,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
-        assert(weekendDays.isNotEmpty
-            ? weekendDays.every((day) => day >= DateTime.monday && day <= DateTime.sunday)
-            : true),
+        assert(
+          weekendDays.isEmpty ||
+              weekendDays.every(
+                (day) => day >= DateTime.monday && day <= DateTime.sunday,
+              ),
+        ),
         focusedDay = normalizeDate(focusedDay),
         firstDay = normalizeDate(firstDay),
         lastDay = normalizeDate(lastDay),
-        currentDay = currentDay ?? DateTime.now(),
-        super(key: key);
+        currentDay = currentDay ?? DateTime.now();
 
   @override
-  _TableCalendarState<T> createState() => _TableCalendarState<T>();
+  State<TableCalendar<T>> createState() => _TableCalendarState<T>();
 }
 
 class _TableCalendarState<T> extends State<TableCalendar<T>> {
@@ -311,13 +324,16 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   bool get _isRangeSelectionToggleable =>
-      _rangeSelectionMode == RangeSelectionMode.toggledOn || _rangeSelectionMode == RangeSelectionMode.toggledOff;
+      _rangeSelectionMode == RangeSelectionMode.toggledOn ||
+      _rangeSelectionMode == RangeSelectionMode.toggledOff;
 
   bool get _isRangeSelectionOn =>
-      _rangeSelectionMode == RangeSelectionMode.toggledOn || _rangeSelectionMode == RangeSelectionMode.enforced;
+      _rangeSelectionMode == RangeSelectionMode.toggledOn ||
+      _rangeSelectionMode == RangeSelectionMode.enforced;
 
   bool get _shouldBlockOutsideDays =>
-      !widget.calendarStyle.outsideDaysVisible && widget.calendarFormat == CalendarFormat.month;
+      !widget.calendarStyle.outsideDaysVisible &&
+      widget.calendarFormat == CalendarFormat.month;
 
   void _swipeCalendarFormat(SwipeDirection direction) {
     if (widget.onFormatChanged != null) {
@@ -442,14 +458,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
+    return Column(
+      children: [
+        if (widget.headerVisible)
           ValueListenableBuilder<DateTime>(
             valueListenable: _focusedDay,
             builder: (context, value, _) {
@@ -459,7 +470,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                 onLeftChevronTap: _onLeftChevronTap,
                 onRightChevronTap: _onRightChevronTap,
                 onHeaderTap: () => widget.onHeaderTapped?.call(value),
-                onHeaderLongPress: () => widget.onHeaderLongPressed?.call(value),
+                onHeaderLongPress: () =>
+                    widget.onHeaderLongPressed?.call(value),
                 headerStyle: widget.headerStyle,
                 availableCalendarFormats: widget.availableCalendarFormats,
                 calendarFormat: widget.calendarFormat,
@@ -475,45 +487,47 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               );
             },
           ),
-          Flexible(
-            flex: widget.shouldFillViewport ? 1 : 0,
-            child: TableCalendarBase(
-              onCalendarCreated: (pageController) {
-                _pageController = pageController;
-                widget.onCalendarCreated?.call(pageController);
-              },
-              focusedDay: _focusedDay.value,
-              calendarFormat: widget.calendarFormat,
-              availableGestures: widget.availableGestures,
-              firstDay: widget.firstDay,
-              lastDay: widget.lastDay,
-              startingDayOfWeek: widget.startingDayOfWeek,
-              dowDecoration: widget.daysOfWeekStyle.decoration,
-              rowDecoration: widget.calendarStyle.rowDecoration,
-              tableBorder: widget.calendarStyle.tableBorder,
-              tablePadding: widget.calendarStyle.tablePadding,
-              dowVisible: widget.daysOfWeekVisible,
-              dowHeight: widget.daysOfWeekHeight,
-              rowHeight: widget.rowHeight,
-              formatAnimationDuration: widget.formatAnimationDuration,
-              formatAnimationCurve: widget.formatAnimationCurve,
-              pageAnimationEnabled: widget.pageAnimationEnabled,
-              pageAnimationDuration: widget.pageAnimationDuration,
-              pageAnimationCurve: widget.pageAnimationCurve,
-              availableCalendarFormats: widget.availableCalendarFormats,
-              simpleSwipeConfig: widget.simpleSwipeConfig,
-              sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
-              onVerticalSwipe: _swipeCalendarFormat,
-              onPageChanged: (focusedDay) {
-                _focusedDay.value = focusedDay;
-                widget.onPageChanged?.call(focusedDay);
-              },
-              weekNumbersVisible: widget.weekNumbersVisible,
-              weekNumberBuilder: (BuildContext context, DateTime day) {
-                final weekNumber = _calculateWeekNumber(day);
-                Widget? cell = widget.calendarBuilders.weekNumberBuilder?.call(context, weekNumber);
+        Flexible(
+          flex: widget.shouldFillViewport ? 1 : 0,
+          child: TableCalendarBase(
+            onCalendarCreated: (pageController) {
+              _pageController = pageController;
+              widget.onCalendarCreated?.call(pageController);
+            },
+            focusedDay: _focusedDay.value,
+            calendarFormat: widget.calendarFormat,
+            availableGestures: widget.availableGestures,
+            firstDay: widget.firstDay,
+            lastDay: widget.lastDay,
+            startingDayOfWeek: widget.startingDayOfWeek,
+            dowDecoration: widget.daysOfWeekStyle.decoration,
+            rowDecoration: widget.calendarStyle.rowDecoration,
+            tableBorder: widget.calendarStyle.tableBorder,
+            tablePadding: widget.calendarStyle.tablePadding,
+            dowVisible: widget.daysOfWeekVisible,
+            dowHeight: widget.daysOfWeekHeight,
+            rowHeight: widget.rowHeight,
+            formatAnimationDuration: widget.formatAnimationDuration,
+            formatAnimationCurve: widget.formatAnimationCurve,
+            pageAnimationEnabled: widget.pageAnimationEnabled,
+            pageAnimationDuration: widget.pageAnimationDuration,
+            pageAnimationCurve: widget.pageAnimationCurve,
+            availableCalendarFormats: widget.availableCalendarFormats,
+            simpleSwipeConfig: widget.simpleSwipeConfig,
+            sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
+            onVerticalSwipe: _swipeCalendarFormat,
+            onPageChanged: (focusedDay) {
+              _focusedDay.value = focusedDay;
+              widget.onPageChanged?.call(focusedDay);
+            },
+            weekNumbersVisible: widget.weekNumbersVisible,
+            weekNumberBuilder: (BuildContext context, DateTime day) {
+              final weekNumber = _calculateWeekNumber(day);
+              final cell = widget.calendarBuilders.weekNumberBuilder
+                  ?.call(context, weekNumber);
 
-                cell ??= Padding(
+              return cell ??
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Center(
                       child: Text(
@@ -522,46 +536,44 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                       ),
                     ),
                   );
+            },
+            dowBuilder: (BuildContext context, DateTime day) {
+              Widget? dowCell =
+                  widget.calendarBuilders.dowBuilder?.call(context, day);
 
-                return cell;
-              },
-              dowBuilder: (BuildContext context, DateTime day) {
-                Widget? dowCell = widget.calendarBuilders.dowBuilder?.call(context, day);
+              if (dowCell == null) {
+                final weekdayString = widget.daysOfWeekStyle.dowTextFormatter
+                        ?.call(day, widget.locale) ??
+                    DateFormat.E(widget.locale).format(day);
 
-                if (dowCell == null) {
-                  final weekdayString = widget.daysOfWeekStyle.dowTextFormatter?.call(day, widget.locale) ??
-                      DateFormat.E(widget.locale).format(day);
+                final isWeekend =
+                    _isWeekend(day, weekendDays: widget.weekendDays);
 
-                  final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
-
-                  dowCell = Center(
-                    child: ExcludeSemantics(
-                      child: Text(
-                        weekdayString.replaceAll('周', ''),
-                        style: const TextStyle(
-                          color: Color(0xffaab2c0),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                dowCell = Center(
+                  child: ExcludeSemantics(
+                    child: Text(
+                      weekdayString,
+                      style: isWeekend
+                          ? widget.daysOfWeekStyle.weekendStyle
+                          : widget.daysOfWeekStyle.weekdayStyle,
                     ),
-                  );
-                }
-
-                return dowCell;
-              },
-              dayBuilder: (context, day, focusedMonth) {
-                return GestureDetector(
-                  behavior: widget.dayHitTestBehavior,
-                  onTap: () => _onDayTapped(day),
-                  onLongPress: () => _onDayLongPressed(day),
-                  child: _buildCell(day, focusedMonth),
+                  ),
                 );
-              },
-            ),
+              }
+
+              return dowCell;
+            },
+            dayBuilder: (context, day, focusedMonth) {
+              return GestureDetector(
+                behavior: widget.dayHitTestBehavior,
+                onTap: () => _onDayTapped(day),
+                onLongPress: () => _onDayLongPressed(day),
+                child: _buildCell(day, focusedMonth),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -574,7 +586,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final shorterSide = constraints.maxHeight > constraints.maxWidth ? constraints.maxWidth : constraints.maxHeight;
+        final shorterSide = constraints.maxHeight > constraints.maxWidth
+            ? constraints.maxWidth
+            : constraints.maxHeight;
 
         final children = <Widget>[];
 
@@ -585,7 +599,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isRangeStart = isSameDay(day, widget.rangeStartDay);
         final isRangeEnd = isSameDay(day, widget.rangeEndDay);
 
-        Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder?.call(context, day, isWithinRange);
+        Widget? rangeHighlight = widget.calendarBuilders.rangeHighlightBuilder
+            ?.call(context, day, isWithinRange);
 
         if (rangeHighlight == null) {
           if (isWithinRange) {
@@ -596,7 +611,8 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
                   end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
                 ),
                 height:
-                    (shorterSide - widget.calendarStyle.cellMargin.vertical) * widget.calendarStyle.rangeHighlightScale,
+                    (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                        widget.calendarStyle.rangeHighlightScale,
                 color: widget.calendarStyle.rangeHighlightColor,
               ),
             );
@@ -611,7 +627,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
 
-        Widget content = CellContent(
+        final content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
           day: day,
           focusedDay: focusedDay,
@@ -632,15 +648,17 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         children.add(content);
 
-        if (!isDisabled) {
+        if (widget.loadEventsForDisabledDays || !isDisabled) {
           final events = widget.eventLoader?.call(day) ?? [];
-          Widget? markerWidget = widget.calendarBuilders.markerBuilder?.call(context, day, events);
+          Widget? markerWidget =
+              widget.calendarBuilders.markerBuilder?.call(context, day, events);
 
           if (events.isNotEmpty && markerWidget == null) {
             final center = constraints.maxHeight / 2;
 
             final markerSize = widget.calendarStyle.markerSize ??
-                (shorterSide - widget.calendarStyle.cellMargin.vertical) * widget.calendarStyle.markerSizeScale;
+                (shorterSide - widget.calendarStyle.cellMargin.vertical) *
+                    widget.calendarStyle.markerSizeScale;
 
             final markerAutoAlignmentTop = center +
                 (shorterSide - widget.calendarStyle.cellMargin.vertical) / 2 -
@@ -650,9 +668,15 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
               top: widget.calendarStyle.markersAutoAligned
                   ? markerAutoAlignmentTop
                   : widget.calendarStyle.markersOffset.top,
-              bottom: widget.calendarStyle.markersAutoAligned ? null : widget.calendarStyle.markersOffset.bottom,
-              start: widget.calendarStyle.markersAutoAligned ? null : widget.calendarStyle.markersOffset.start,
-              end: widget.calendarStyle.markersAutoAligned ? null : widget.calendarStyle.markersOffset.end,
+              bottom: widget.calendarStyle.markersAutoAligned
+                  ? null
+                  : widget.calendarStyle.markersOffset.bottom,
+              start: widget.calendarStyle.markersAutoAligned
+                  ? null
+                  : widget.calendarStyle.markersOffset.start,
+              end: widget.calendarStyle.markersAutoAligned
+                  ? null
+                  : widget.calendarStyle.markersOffset.end,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: events
@@ -670,15 +694,18 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
 
         return Stack(
           alignment: widget.calendarStyle.markersAlignment,
+          clipBehavior: widget.calendarStyle.canMarkersOverflow
+              ? Clip.none
+              : Clip.hardEdge,
           children: children,
-          clipBehavior: widget.calendarStyle.canMarkersOverflow ? Clip.none : Clip.hardEdge,
         );
       },
     );
   }
 
   Widget _buildSingleMarker(DateTime day, T event, double markerSize) {
-    return widget.calendarBuilders.singleMarkerBuilder?.call(context, day, event) ??
+    return widget.calendarBuilders.singleMarkerBuilder
+            ?.call(context, day, event) ??
         Container(
           width: markerSize,
           height: markerSize,
@@ -695,7 +722,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   int _dayOfYear(DateTime date) {
-    return normalizeDate(date).difference(DateTime.utc(date.year, 1, 1)).inDays + 1;
+    return normalizeDate(date).difference(DateTime.utc(date.year)).inDays + 1;
   }
 
   bool _isWithinRange(DateTime day, DateTime start, DateTime end) {
@@ -711,19 +738,27 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
   }
 
   bool _isDayDisabled(DateTime day) {
-    return day.isBefore(widget.firstDay) || day.isAfter(widget.lastDay) || !_isDayAvailable(day);
+    return day.isBefore(widget.firstDay) ||
+        day.isAfter(widget.lastDay) ||
+        !_isDayAvailable(day);
   }
 
   bool _isDayAvailable(DateTime day) {
-    return widget.enabledDayPredicate == null ? true : widget.enabledDayPredicate!(day);
+    if (widget.enabledDayPredicate == null) {
+      return true;
+    }
+
+    return widget.enabledDayPredicate!(day);
   }
 
   DateTime _firstDayOfMonth(DateTime month) {
-    return DateTime.utc(month.year, month.month, 1);
+    return DateTime.utc(month.year, month.month);
   }
 
   DateTime _lastDayOfMonth(DateTime month) {
-    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1) : DateTime.utc(month.year + 1, 1, 1);
+    final date = month.month < 12
+        ? DateTime.utc(month.year, month.month + 1)
+        : DateTime.utc(month.year + 1);
     return date.subtract(const Duration(days: 1));
   }
 

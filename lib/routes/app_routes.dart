@@ -50,4 +50,5 @@ abstract class Routes {
   static const selectCourses = '/selectCourses';
   static const coursesExercises = '/coursesExercises';
   static const courseDetails = '/courseDetails';
+  static const winningStreak = '/winningStreak';
 }

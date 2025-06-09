@@ -28,6 +28,50 @@ class $AssetsCoursesGen {
   AssetGenImage get iconCoursesWrong =>
       const AssetGenImage('assets/courses/icon_courses_wrong.png');
 
+  /// File path: assets/courses/icon_results_arrow.png
+  AssetGenImage get iconResultsArrow =>
+      const AssetGenImage('assets/courses/icon_results_arrow.png');
+
+  /// File path: assets/courses/icon_results_bg_jiang.png
+  AssetGenImage get iconResultsBgJiang =>
+      const AssetGenImage('assets/courses/icon_results_bg_jiang.png');
+
+  /// File path: assets/courses/icon_results_bg_jiang2.png
+  AssetGenImage get iconResultsBgJiang2 =>
+      const AssetGenImage('assets/courses/icon_results_bg_jiang2.png');
+
+  /// File path: assets/courses/icon_results_bg_jiang3.png
+  AssetGenImage get iconResultsBgJiang3 =>
+      const AssetGenImage('assets/courses/icon_results_bg_jiang3.png');
+
+  /// File path: assets/courses/icon_results_bg_sang.png
+  AssetGenImage get iconResultsBgSang =>
+      const AssetGenImage('assets/courses/icon_results_bg_sang.png');
+
+  /// File path: assets/courses/icon_results_close.png
+  AssetGenImage get iconResultsClose =>
+      const AssetGenImage('assets/courses/icon_results_close.png');
+
+  /// File path: assets/courses/icon_results_liandui.png
+  AssetGenImage get iconResultsLiandui =>
+      const AssetGenImage('assets/courses/icon_results_liandui.png');
+
+  /// File path: assets/courses/icon_results_liandui1.png
+  AssetGenImage get iconResultsLiandui1 =>
+      const AssetGenImage('assets/courses/icon_results_liandui1.png');
+
+  /// File path: assets/courses/icon_results_title.png
+  AssetGenImage get iconResultsTitle =>
+      const AssetGenImage('assets/courses/icon_results_title.png');
+
+  /// File path: assets/courses/icon_results_title1.png
+  AssetGenImage get iconResultsTitle1 =>
+      const AssetGenImage('assets/courses/icon_results_title1.png');
+
+  /// File path: assets/courses/icon_results_title3.png
+  AssetGenImage get iconResultsTitle3 =>
+      const AssetGenImage('assets/courses/icon_results_title3.png');
+
   /// File path: assets/courses/icon_select_courses_1.png
   AssetGenImage get iconSelectCourses1 =>
       const AssetGenImage('assets/courses/icon_select_courses_1.png');
@@ -54,6 +98,17 @@ class $AssetsCoursesGen {
         iconCourseExcusBg,
         iconCoursesTrue,
         iconCoursesWrong,
+        iconResultsArrow,
+        iconResultsBgJiang,
+        iconResultsBgJiang2,
+        iconResultsBgJiang3,
+        iconResultsBgSang,
+        iconResultsClose,
+        iconResultsLiandui,
+        iconResultsLiandui1,
+        iconResultsTitle,
+        iconResultsTitle1,
+        iconResultsTitle3,
         iconSelectCourses1,
         iconSelectCourses2,
         iconSelectCourses3,
@@ -1024,6 +1079,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/badge.svg
   String get badge => 'assets/svg/badge.svg';
 
+  /// File path: assets/svg/bg_day_decoration.svg
+  String get bgDayDecoration => 'assets/svg/bg_day_decoration.svg';
+
   /// File path: assets/svg/close_black.svg
   String get closeBlack => 'assets/svg/close_black.svg';
 
@@ -1074,6 +1132,12 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_bottom_share.svg
   String get iconBottomShare => 'assets/svg/icon_bottom_share.svg';
+
+  /// File path: assets/svg/icon_calendar_left.svg
+  String get iconCalendarLeft => 'assets/svg/icon_calendar_left.svg';
+
+  /// File path: assets/svg/icon_calendar_right.svg
+  String get iconCalendarRight => 'assets/svg/icon_calendar_right.svg';
 
   /// File path: assets/svg/icon_camera.svg
   String get iconCamera => 'assets/svg/icon_camera.svg';
@@ -1247,6 +1311,7 @@ class $AssetsSvgGen {
         arrowLeft,
         arrowRight,
         badge,
+        bgDayDecoration,
         closeBlack,
         clubs,
         comment,
@@ -1264,6 +1329,8 @@ class $AssetsSvgGen {
         iconBottomLike,
         iconBottomLiked,
         iconBottomShare,
+        iconCalendarLeft,
+        iconCalendarRight,
         iconCamera,
         iconChallenge,
         iconChecked,

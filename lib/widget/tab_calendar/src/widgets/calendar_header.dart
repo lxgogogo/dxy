@@ -1,12 +1,13 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-
-import '../customization/header_style.dart';
-import '../shared/utils.dart' show CalendarFormat, DayBuilder;
+import 'package:holdem/widget/tab_calendar/src/customization/header_style.dart';
+import 'package:holdem/widget/tab_calendar/src/shared/utils.dart'
+    show CalendarFormat, DayBuilder;
+import 'package:holdem/widget/tab_calendar/src/widgets/custom_icon_button.dart';
+import 'package:holdem/widget/tab_calendar/src/widgets/format_button.dart';
 
 class CalendarHeader extends StatelessWidget {
   final dynamic locale;
@@ -22,7 +23,7 @@ class CalendarHeader extends StatelessWidget {
   final DayBuilder? headerTitleBuilder;
 
   const CalendarHeader({
-    Key? key,
+    super.key,
     this.locale,
     required this.focusedMonth,
     required this.calendarFormat,
@@ -34,47 +35,61 @@ class CalendarHeader extends StatelessWidget {
     required this.onFormatButtonTap,
     required this.availableCalendarFormats,
     this.headerTitleBuilder,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final text =
-        headerStyle.titleTextFormatter?.call(focusedMonth, locale) ?? DateFormat.yMMMM(locale).format(focusedMonth);
+    final text = headerStyle.titleTextFormatter?.call(focusedMonth, locale) ??
+        DateFormat.yMMMM(locale).format(focusedMonth);
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 5),
+    return Container(
+      decoration: headerStyle.decoration,
+      margin: headerStyle.headerMargin,
+      padding: headerStyle.headerPadding,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          InkWell(
-            onTap: onLeftChevronTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: SvgPicture.asset(
-                'assets/svg/arrow_left.svg',
-                width: 13,
-                height: 13,
+          if (headerStyle.leftChevronVisible)
+            CustomIconButton(
+              icon: headerStyle.leftChevronIcon,
+              onTap: onLeftChevronTap,
+              margin: headerStyle.leftChevronMargin,
+              padding: headerStyle.leftChevronPadding,
+            ),
+          Expanded(
+            child: headerTitleBuilder?.call(context, focusedMonth) ??
+                GestureDetector(
+                  onTap: onHeaderTap,
+                  onLongPress: onHeaderLongPress,
+                  child: Text(
+                    text,
+                    style: headerStyle.titleTextStyle,
+                    textAlign: headerStyle.titleCentered
+                        ? TextAlign.center
+                        : TextAlign.start,
+                  ),
+                ),
+          ),
+          if (headerStyle.formatButtonVisible &&
+              availableCalendarFormats.length > 1)
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: FormatButton(
+                onTap: onFormatButtonTap,
+                availableCalendarFormats: availableCalendarFormats,
+                calendarFormat: calendarFormat,
+                decoration: headerStyle.formatButtonDecoration,
+                padding: headerStyle.formatButtonPadding,
+                textStyle: headerStyle.formatButtonTextStyle,
+                showsNextFormat: headerStyle.formatButtonShowsNext,
               ),
             ),
-          ),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Color(0xff2a2a2a),
-              fontSize: 16,
+          if (headerStyle.rightChevronVisible)
+            CustomIconButton(
+              icon: headerStyle.rightChevronIcon,
+              onTap: onRightChevronTap,
+              margin: headerStyle.rightChevronMargin,
+              padding: headerStyle.rightChevronPadding,
             ),
-          ),
-          InkWell(
-            onTap: onRightChevronTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: SvgPicture.asset(
-                'assets/svg/arrow_right.svg',
-                width: 13,
-                height: 13,
-              ),
-            ),
-          ),
         ],
       ),
     );

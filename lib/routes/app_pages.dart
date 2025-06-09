@@ -37,6 +37,7 @@ import 'package:holdem/page/splash/splash_screen.dart';
 import 'package:holdem/page/terms_privacy/terms_privacy_screen.dart';
 import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/page/video_list/video_list_screen.dart';
+import 'package:holdem/page/winning_streak/winning_streak_screen.dart';
 import 'package:holdem/services/index.dart';
 
 import '../page/course/course_screen.dart';
@@ -226,6 +227,11 @@ class AppPages {
       name: Routes.courseDetails,
       page: () => const CourseDetailsScreen(),
       binding: CourseDetailsBinding(),
+    ),
+    GetPage(
+      name: Routes.winningStreak,
+      page: () => const WinningStreakScreen(),
+      binding: WinningStreakBinding(),
     ),
   ];
 }

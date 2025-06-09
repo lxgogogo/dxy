@@ -2,25 +2,33 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:flutter/widgets.dart';
-
-import '../shared/utils.dart' show DayBuilder, FocusedDayBuilder;
+import 'package:holdem/widget/tab_calendar/src/shared/utils.dart' show DayBuilder, FocusedDayBuilder;
 
 /// Signature for a function that creates a single event marker for a given `day`.
 /// Contains a single `event` associated with that `day`.
 typedef SingleMarkerBuilder<T> = Widget? Function(
-    BuildContext context, DateTime day, T event);
+  BuildContext context,
+  DateTime day,
+  T event,
+);
 
 /// Signature for a function that creates an event marker for a given `day`.
 /// Contains a list of `events` associated with that `day`.
 typedef MarkerBuilder<T> = Widget? Function(
-    BuildContext context, DateTime day, List<T> events);
+  BuildContext context,
+  DateTime day,
+  List<T> events,
+);
 
 /// Signature for a function that creates a background highlight for a given `day`.
 ///
 /// Used for highlighting current range selection.
 /// Contains a value determining if the given `day` falls within the selected range.
 typedef HighlightBuilder = Widget? Function(
-    BuildContext context, DateTime day, bool isWithinRange);
+  BuildContext context,
+  DateTime day,
+  bool isWithinRange,
+);
 
 /// Class containing all custom builders for `TableCalendar`.
 class CalendarBuilders<T> {
@@ -79,8 +87,7 @@ class CalendarBuilders<T> {
   final DayBuilder? headerTitleBuilder;
 
   /// Custom builder for number of the week labels.
-  final Widget? Function(BuildContext context, int weekNumber)?
-      weekNumberBuilder;
+  final Widget? Function(BuildContext context, int weekNumber)? weekNumberBuilder;
 
   /// Creates `CalendarBuilders` for `TableCalendar` widget.
   const CalendarBuilders({

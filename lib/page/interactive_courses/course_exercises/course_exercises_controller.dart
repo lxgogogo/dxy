@@ -108,6 +108,7 @@ class CourseExercisesController extends GetxController {
             AnswerResultsPageSheet.show(1, integral: integral, () {
               Get.close(0);
               Get.close(0);
+              _result();
             });
           }
         } else {

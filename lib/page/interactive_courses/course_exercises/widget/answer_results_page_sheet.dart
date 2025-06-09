@@ -173,7 +173,7 @@ class AnswerResultsPageWidget extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Image.asset('assets/courses/icon_results_bg_sang.png',
+                      Image.asset('assets/courses/icon_results_bg_sang2.png',
                           width: 340.w),
                       Image.asset('assets/courses/icon_results_bg_jiang3.png',
                           width: 200.w),

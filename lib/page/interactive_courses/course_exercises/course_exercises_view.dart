@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_exercises_model.dart';
@@ -157,13 +158,6 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                model.title ?? '',
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.color_333333),
-              ),
               SizedBox(height: 10.w),
               HtmlWidget(
                 model.content ?? '',
@@ -195,16 +189,24 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
             ],
           )),
         ),
-        CustomButton(
-          onPressed: controller.onPressed,
-          disable: false,
-          showOpacityAnimation: true,
-          textColor: Colors.white,
-          height: 50.w,
-          radius: 8.w,
-          title: '提交',
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w600,
+        GestureDetector(
+          onTap: controller.onPressed,
+          child: Container(
+            height: 50.w,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: ColorStyle.c557BF6,
+              borderRadius: BorderRadius.all(Radius.circular(8.w))
+            ),
+            child: Text(
+              '提交',
+              style: TextStyle(
+                fontSize: 16.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
         ),
         SizedBox(height: 70.w)
       ],

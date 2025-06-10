@@ -15,10 +15,10 @@ class CourseExercisesController extends GetxController {
       <CourseExerciseAnswerModel>[].obs;
   CourseExerciseAnswerModel? selectAnswerModel;
   RxBool submit = false.obs;
-  int currentPage = 0;
+  RxInt currentPage = 0.obs;
   int totalPage = 0;
   int integral = 0;
-  RxInt completed = 0.obs;
+  int completed = 0;
   // 连队次数
   int companiesNumber = 0;
   RxBool isLoading = true.obs;
@@ -34,10 +34,14 @@ class CourseExercisesController extends GetxController {
     CourseService.of.coursePractise('$id').then((data) {
       totalPage = data.total ?? 0;
       integral = data.integral ?? 0;
-      completed.value = data.completed ?? 0;
+      completed = data.completed ?? 0;
+      currentPage.value = completed;
       practiseList.value = data.practiseList ?? [];
       if (practiseList.isNotEmpty) {
-        dataList.value = practiseList[currentPage].options ?? [];
+        dataList.value = practiseList[currentPage.value].options ?? [];
+        if (currentPage.value < practiseList.length) {
+          pageController.jumpToPage(currentPage.value);
+        }
       }
     }).whenComplete(() {
       isLoading.value = false;
@@ -51,28 +55,28 @@ class CourseExercisesController extends GetxController {
     }
     dataList.refresh();
     selectAnswerModel = null;
-    if (currentPage < practiseList.length) {
-      pageController.jumpToPage(currentPage);
+    if (currentPage.value < practiseList.length) {
+      pageController.jumpToPage(currentPage.value);
     }
   }
 
   // TODO: Public Method
   void onPressed() async {
-    if (currentPage >= practiseList.length) {
+    if (currentPage.value >= practiseList.length) {
       ToastUtils.showToast('所有题目已练习完了！');
     }
     if (selectAnswerModel == null) {
       ToastUtils.showToast('请选择答案!');
       return;
     }
-    final model = practiseList[currentPage];
+    final model = practiseList[currentPage.value];
     final data = await CourseService.of.courseAnswer(
         {'id': model.id, 'answer': selectAnswerModel?.title ?? ''});
     submit.value = true;
     selectAnswerModel?.isCorrect = data.answer ?? false;
     dataList.refresh();
     // 答题逻辑，不管对错，继续下一题
-    currentPage += 1;
+    currentPage.value += 1;
     if (data.answer == false) {
       // 答题错误记录
       companiesNumber = 0;
@@ -97,14 +101,14 @@ class CourseExercisesController extends GetxController {
         _result();
       });
     } else {
-      if (currentPage >= practiseList.length) {
+      if (currentPage.value >= practiseList.length) {
         // 答题结束
         companiesNumber = 0;
         if (errorDataList.isEmpty) {
           // 已经完成过不在弹窗
-          if (completed.value != totalPage) {
+          if (completed != totalPage) {
             // 全对
-            completed.value = totalPage;
+            completed = totalPage;
             AnswerResultsPageSheet.show(1, integral: integral, () {
               Get.close(0);
               Get.close(0);
@@ -117,7 +121,9 @@ class CourseExercisesController extends GetxController {
             Get.close(0);
             Get.close(0);
             _result();
-            currentPage = 0;
+            currentPage.value = 0;
+            completed = 0;
+            totalPage = errorDataList.length;
             pageController.jumpToPage(0);
             practiseList.value = errorDataList;
             practiseList.refresh();

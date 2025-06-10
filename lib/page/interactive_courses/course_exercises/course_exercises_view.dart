@@ -41,7 +41,8 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
       double width = 1.sw - 126.w;
       double progress = 0;
       if (controller.totalPage > 0 && controller.practiseList.isNotEmpty) {
-        progress = width * ((controller.completed.value) / controller.totalPage);
+        progress =
+            width * ((controller.currentPage.value) / controller.totalPage);
       }
       return Container(
         margin: EdgeInsets.only(top: 56.w),
@@ -195,16 +196,18 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
             height: 50.w,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: ColorStyle.c557BF6,
-              borderRadius: BorderRadius.all(Radius.circular(8.w))
-            ),
+                color: controller.selectAnswerModel == null
+                    ? ColorStyle.c333333.withOpacity(0.1)
+                    : ColorStyle.c557BF6,
+                borderRadius: BorderRadius.all(Radius.circular(8.w))),
             child: Text(
               '提交',
               style: TextStyle(
-                fontSize: 16.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.w600
-              ),
+                  fontSize: 16.sp,
+                  color: controller.selectAnswerModel == null
+                      ? AppTheme.color_999999
+                      : Colors.white,
+                  fontWeight: FontWeight.w600),
             ),
           ),
         ),

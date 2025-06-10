@@ -609,39 +609,33 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
         (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 3,
       );
 
-  /// 获取最早的签到日期
-  DateTime? _getFirstSignInDate(List<PractiseList> practiseList) {
-    try {
-      return practiseList
-          .where((e) => e.type == 1 && e.punchDate != null)
-          .map((e) => e.punchDate!)
-          .reduce((a, b) => a.isBefore(b) ? a : b);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /// 获取最晚的签到日期
-  DateTime? _getLastSignInDate(List<PractiseList> practiseList) {
-    try {
-      return practiseList
-          .where((e) => e.type == 1 && e.punchDate != null)
-          .map((e) => e.punchDate!)
-          .reduce((a, b) => a.isAfter(b) ? a : b);
-    } catch (e) {
-      return null;
-    }
-  }
-
   /// 判断是否是签到范围的开始日期
   bool _isSignInRangeStart(DateTime day, List<PractiseList> practiseList) {
-    final firstDate = _getFirstSignInDate(practiseList);
-    return firstDate != null && DateUtils.isSameDay(day, firstDate);
+    // 检查前一天
+    final previousDay = day.subtract(const Duration(days: 1));
+    final hasPreviousSignIn =
+        practiseList.any((e) => DateUtils.isSameDay(previousDay, e.punchDate) && (e.type == 1 || e.type == 2));
+
+    // 检查当天是否有签到或冻结
+    final hasCurrentSignIn =
+        practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
+
+    // 如果当天有签到/冻结，且前一天没有，则为开始日期
+    return hasCurrentSignIn && !hasPreviousSignIn;
   }
 
   /// 判断是否是签到范围的结束日期
   bool _isSignInRangeEnd(DateTime day, List<PractiseList> practiseList) {
-    final lastDate = _getLastSignInDate(practiseList);
-    return lastDate != null && DateUtils.isSameDay(day, lastDate);
+    // 检查后一天
+    final nextDay = day.add(const Duration(days: 1));
+    final hasNextSignIn =
+        practiseList.any((e) => DateUtils.isSameDay(nextDay, e.punchDate) && (e.type == 1 || e.type == 2));
+
+    // 检查当天是否有签到或冻结
+    final hasCurrentSignIn =
+        practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
+
+    // 如果当天有签到/冻结，且后一天没有，则为结束日期
+    return hasCurrentSignIn && !hasNextSignIn;
   }
 }

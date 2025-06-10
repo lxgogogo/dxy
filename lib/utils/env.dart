@@ -9,6 +9,28 @@ enum ApiEnv {
 
 ApiEnv _kApiEnv = ApiEnv.test;
 
+// 从环境变量或构建配置中获取环境设置
+void initEnv(String? env) {
+  if (env != null) {
+    switch (env.toLowerCase()) {
+      case 'dev':
+        _kApiEnv = ApiEnv.dev;
+        break;
+      case 'test':
+        _kApiEnv = ApiEnv.test;
+        break;
+      case 'prod1':
+        _kApiEnv = ApiEnv.prod1;
+        break;
+      case 'prod2':
+        _kApiEnv = ApiEnv.prod2;
+        break;
+      default:
+        _kApiEnv = ApiEnv.test;
+    }
+  }
+}
+
 ApiEnv get kAPiEnv => _kApiEnv;
 
 class Env {

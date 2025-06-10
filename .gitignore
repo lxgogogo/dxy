@@ -45,3 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 !/pubspec.lock
+
+# Release packages
+/release-package/
+
+# Build scripts
+/build_release.sh

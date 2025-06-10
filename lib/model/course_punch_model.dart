@@ -14,6 +14,7 @@ class CoursePunchModel {
   final List<int>? target;
   final int? punchTotal;
   final int? integralTotal;
+  final int? status;
   final List<PractiseList>? practiseList;
 
   CoursePunchModel({
@@ -22,15 +23,19 @@ class CoursePunchModel {
     this.target,
     this.punchTotal,
     this.integralTotal,
+    this.status,
     this.practiseList,
   });
 
   factory CoursePunchModel.fromJson(Map<String, dynamic> json) => CoursePunchModel(
     winnerDay: json["winnerDay"],
+    // winnerDay: 0,
     tipText: json["tipText"],
     target: json["target"] == null ? [] : List<int>.from(json["target"]!.map((x) => x)),
+    // target: [1,7,14,30,50],
     punchTotal: json["punchTotal"],
     integralTotal: json["integralTotal"],
+    status: json["status"],
     practiseList: json["practiseList"] == null ? [] : List<PractiseList>.from(json["practiseList"]!.map((x) => PractiseList.fromJson(x))),
   );
 
@@ -40,6 +45,7 @@ class CoursePunchModel {
     "target": target == null ? [] : List<dynamic>.from(target!.map((x) => x)),
     "punchTotal": punchTotal,
     "integralTotal": integralTotal,
+    "status": status,
     "practiseList": practiseList == null ? [] : List<dynamic>.from(practiseList!.map((x) => x.toJson())),
   };
 }

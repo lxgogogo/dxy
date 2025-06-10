@@ -16,10 +16,6 @@ class $AssetsCoursesGen {
   AssetGenImage get iconCourseExcus =>
       const AssetGenImage('assets/courses/icon_course_excus.png');
 
-  /// File path: assets/courses/icon_course_excus_bg.png
-  AssetGenImage get iconCourseExcusBg =>
-      const AssetGenImage('assets/courses/icon_course_excus_bg.png');
-
   /// File path: assets/courses/icon_courses_true.png
   AssetGenImage get iconCoursesTrue =>
       const AssetGenImage('assets/courses/icon_courses_true.png');
@@ -47,6 +43,10 @@ class $AssetsCoursesGen {
   /// File path: assets/courses/icon_results_bg_sang.png
   AssetGenImage get iconResultsBgSang =>
       const AssetGenImage('assets/courses/icon_results_bg_sang.png');
+
+  /// File path: assets/courses/icon_results_bg_sang2.png
+  AssetGenImage get iconResultsBgSang2 =>
+      const AssetGenImage('assets/courses/icon_results_bg_sang2.png');
 
   /// File path: assets/courses/icon_results_close.png
   AssetGenImage get iconResultsClose =>
@@ -95,7 +95,6 @@ class $AssetsCoursesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         iconCourseExcus,
-        iconCourseExcusBg,
         iconCoursesTrue,
         iconCoursesWrong,
         iconResultsArrow,
@@ -103,6 +102,7 @@ class $AssetsCoursesGen {
         iconResultsBgJiang2,
         iconResultsBgJiang3,
         iconResultsBgSang,
+        iconResultsBgSang2,
         iconResultsClose,
         iconResultsLiandui,
         iconResultsLiandui1,
@@ -1154,6 +1154,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_comment.svg
   String get iconComment => 'assets/svg/icon_comment.svg';
 
+  /// File path: assets/svg/icon_course_calendar.svg
+  String get iconCourseCalendar => 'assets/svg/icon_course_calendar.svg';
+
   /// File path: assets/svg/icon_course_hot.svg
   String get iconCourseHot => 'assets/svg/icon_course_hot.svg';
 
@@ -1336,6 +1339,7 @@ class $AssetsSvgGen {
         iconChecked,
         iconClose,
         iconComment,
+        iconCourseCalendar,
         iconCourseHot,
         iconCourseIntegral,
         iconDelete,

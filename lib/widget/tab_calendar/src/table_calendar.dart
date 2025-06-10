@@ -606,14 +606,20 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           if (isWithinRange) {
             rangeHighlight = Center(
               child: Container(
-                margin: EdgeInsetsDirectional.only(
-                  start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
-                  end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
+                // margin: EdgeInsetsDirectional.only(
+                //   start: isRangeStart ? constraints.maxWidth * 0.5 : 0.0,
+                //   end: isRangeEnd ? constraints.maxWidth * 0.5 : 0.0,
+                // ),
+                decoration: BoxDecoration(
+                  color: widget.calendarStyle.rangeHighlightColor,
+                  borderRadius: BorderRadius.horizontal(
+                    left: isRangeStart ? const Radius.circular(40) : Radius.zero,
+                    right: isRangeEnd ? const Radius.circular(40) : Radius.zero,
+                  ),
                 ),
                 height:
                     (shorterSide - widget.calendarStyle.cellMargin.vertical) *
                         widget.calendarStyle.rangeHighlightScale,
-                color: widget.calendarStyle.rangeHighlightColor,
               ),
             );
           }

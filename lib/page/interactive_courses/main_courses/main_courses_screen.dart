@@ -8,6 +8,8 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/services/course_service.dart';
+import 'package:holdem/widget/button.dart';
+import 'package:intl/intl.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../../mixins/refresh_controller_mixin.dart';
@@ -16,6 +18,7 @@ import '../../../model/course_model.dart';
 import '../../../model/course_top_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../routes/app_routes_utils.dart';
+import '../../../stores/storage.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/log_util.dart';
 import '../../../widget/common_operations_sheet.dart';
@@ -171,12 +174,16 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                         Row(
                           children: [
                             Obx(() {
-                              return Text(
-                                controller.courseGroup.value?.label ?? '',
-                                style: TextStyle(
-                                  color: '#000000'.hexColor,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
+                              return Flexible(
+                                child: Text(
+                                  controller.courseGroup.value?.label ?? '',
+                                  style: TextStyle(
+                                    color: '#000000'.hexColor,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               );
                             }),

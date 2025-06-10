@@ -14,6 +14,7 @@ class CourseTopModel {
   final int? knowledgeRemaining; //剩余知识
   final int? practiseRemaining; //剩余练习
   final int? challengeRemaining; //剩余挑战
+  final int? integralPunch;
 
   CourseTopModel({
     this.winningDay,
@@ -25,6 +26,7 @@ class CourseTopModel {
     this.knowledgeRemaining,
     this.practiseRemaining,
     this.challengeRemaining,
+    this.integralPunch,
   });
 
   factory CourseTopModel.fromJson(Map<String, dynamic> json) => CourseTopModel(
@@ -37,6 +39,7 @@ class CourseTopModel {
         knowledgeRemaining: json["knowledgeRemaining"],
         practiseRemaining: json["practiseRemaining"],
         challengeRemaining: json["challengeRemaining"],
+        integralPunch: json["integralPunch"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class CourseTopModel {
         "knowledgeRemaining": knowledgeRemaining,
         "practiseRemaining": practiseRemaining,
         "challengeRemaining": challengeRemaining,
+        "integralPunch": integralPunch,
       };
 }

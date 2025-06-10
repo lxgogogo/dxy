@@ -54,8 +54,7 @@ class CommonOperationsSheet extends StatelessWidget {
                       Get.back();
                     },
                     child: Container(
-                      height: 48.w,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border(

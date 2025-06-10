@@ -1,14 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
-import '../../gen/assets.gen.dart';
 import '../../model/course_model.dart';
 import '../../routes/app_pages.dart';
 import '../../routes/app_routes_utils.dart';
@@ -22,7 +20,6 @@ import 'widgets/course_knowledge_item.dart';
 import 'widgets/course_practice_item.dart';
 
 part 'course_details_binding.dart';
-
 part 'course_details_controller.dart';
 
 class CourseDetailsScreen extends StatefulWidget {
@@ -47,28 +44,6 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
             appBar: CommonAppBar.arrowBack(
               context,
               title: controller.detailBean?.title ?? '',
-              actions: [
-                // if (controller.detailBean != null)
-                //   Row(
-                //     children: [
-                //       SvgPicture.asset(
-                //         Assets.svg.iconCourseIntegral,
-                //         width: 16.w,
-                //         height: 16.w,
-                //       ),
-                //       SizedBox(width: 8.w),
-                //       Text(
-                //         '${controller.detailBean?.integral ?? 0}',
-                //         style: TextStyle(
-                //           color: '#333333'.hexColor,
-                //           fontSize: 14.sp,
-                //           fontWeight: FontWeight.w700,
-                //         ),
-                //       ),
-                //       SizedBox(width: 16.w),
-                //     ],
-                //   ),
-              ],
             ),
             backgroundColor: '#F7F8FC'.hexColor,
             body: controller.noNetwork

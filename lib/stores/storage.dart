@@ -99,6 +99,13 @@ extension StorageServiceHive on StorageService {
     }
   }
 
+  Future<void> setLastPopupDate(String date) async {
+    await _box.put(Constants.localLastPopupDate, date);
+  }
+
+  Future<String> getLastPopupDate() async {
+    return _box.get(Constants.localLastPopupDate, defaultValue: '');
+  }
 }
 
 extension _StorageServicePrivate on StorageService {

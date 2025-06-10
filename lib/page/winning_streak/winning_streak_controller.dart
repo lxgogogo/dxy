@@ -2,7 +2,7 @@ part of 'winning_streak_screen.dart';
 
 class WinningStreakController extends GetxController {
   Rx<CoursePunchModel?> detailBean = Rx<CoursePunchModel?>(null);
-
+  final Rx<DateTime> _focusedDay = Rx<DateTime>(DateTime.now().subtract(Duration(days: 30)));
   @override
   void onReady() {
     loadData();

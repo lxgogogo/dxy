@@ -48,6 +48,3 @@ app.*.map.json
 
 # Release packages
 /release-package/
-
-# Build scripts
-/build_release.sh

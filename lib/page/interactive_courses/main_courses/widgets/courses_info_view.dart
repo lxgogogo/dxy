@@ -43,7 +43,7 @@ class CourseInfoView extends StatelessWidget {
                 ),
               ),
               Text(
-                '完成度：${controller.courseProgress * 100}%',
+                '完成度：${(controller.courseProgress * 100).toStringAsFixed(0)}%',
                 style: TextStyle(
                   color: '#666666'.hexColor,
                   fontSize: 12.sp,
@@ -88,6 +88,9 @@ class CourseInfoView extends StatelessWidget {
                     content: '${controller.courseTopModel.value?.courseRemaining ?? 0}',
                     assetName: Assets.images.iconCourseAll.path,
                     backgroundColor: '#EBF5FF'.hexColor,
+                    onTap: () {
+                      _toChangeType('course');
+                    },
                   ),
                   _buildMenuItem(
                     itemWidth,
@@ -95,6 +98,9 @@ class CourseInfoView extends StatelessWidget {
                     content: '${controller.courseTopModel.value?.knowledgeRemaining ?? 0}',
                     assetName: Assets.images.iconCourseKnowledge.path,
                     backgroundColor: '#FEF1EC'.hexColor,
+                    onTap: () {
+                      _toChangeType('knowledge');
+                    },
                   ),
                   _buildMenuItem(
                     itemWidth,
@@ -102,6 +108,9 @@ class CourseInfoView extends StatelessWidget {
                     content: '${controller.courseTopModel.value?.practiseRemaining ?? 0}',
                     assetName: Assets.images.iconCoursePractice.path,
                     backgroundColor: '#EEFFEB'.hexColor,
+                    onTap: () {
+                      _toChangeType('practise');
+                    },
                   ),
                   _buildMenuItem(
                     itemWidth,
@@ -109,6 +118,9 @@ class CourseInfoView extends StatelessWidget {
                     content: '${controller.courseTopModel.value?.challengeRemaining ?? 0}',
                     assetName: Assets.images.iconCourseChallenge.path,
                     backgroundColor: '#FFF7EB'.hexColor,
+                    onTap: () {
+                      _toChangeType('challenge');
+                    },
                   ),
                 ],
               );
@@ -119,54 +131,67 @@ class CourseInfoView extends StatelessWidget {
     );
   }
 
+  void _toChangeType(String s) {
+    if (controller.courseGroups.isNotEmpty) {
+      final index = controller.courseGroups.indexWhere((e) => e.value?.des == s);
+      if (index != -1) {
+        controller.onChangeType(controller.courseGroups[index]);
+      }
+    }
+  }
+
   Widget _buildMenuItem(
     double width, {
     required String title,
     required String content,
     required String assetName,
     required Color backgroundColor,
+    VoidCallback? onTap,
   }) {
-    return SizedBox(
-      width: width,
-      child: AspectRatio(
-        aspectRatio: 150 / 64,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.r),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        color: '#666666'.hexColor,
-                        fontSize: 12.sp,
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: width,
+        child: AspectRatio(
+          aspectRatio: 150 / 64,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: '#666666'.hexColor,
+                          fontSize: 12.sp,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4.w),
-                    Text(
-                      content,
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w700,
+                      SizedBox(height: 4.w),
+                      Text(
+                        content,
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Image.asset(
-                assetName,
-                width: 40.w,
-                height: 40.w,
-              ),
-            ],
+                Image.asset(
+                  assetName,
+                  width: 40.w,
+                  height: 40.w,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -310,7 +310,8 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                                 onTap: () => controller.toCourseDetail(item),
                                                 child: CourseAllItem(
                                                   item: item,
-                                                  onTap: () => controller.onStartCourse(item),
+                                                  onTap: () => controller.toCourseDetail(item),
+                                                  // onTap: () => controller.onStartCourse(item),
                                                 ),
                                               );
                                             },

@@ -1,12 +1,4 @@
-// To parse this JSON data, do
-//
-//     final coursePunchModel = coursePunchModelFromJson(jsonString);
-
 import 'dart:convert';
-
-CoursePunchModel coursePunchModelFromJson(String str) => CoursePunchModel.fromJson(json.decode(str));
-
-String coursePunchModelToJson(CoursePunchModel data) => json.encode(data.toJson());
 
 class CoursePunchModel {
   final int? winnerDay;
@@ -28,26 +20,25 @@ class CoursePunchModel {
   });
 
   factory CoursePunchModel.fromJson(Map<String, dynamic> json) => CoursePunchModel(
-    winnerDay: json["winnerDay"],
-    // winnerDay: 0,
-    tipText: json["tipText"],
-    target: json["target"] == null ? [] : List<int>.from(json["target"]!.map((x) => x)),
-    // target: [1,7,14,30,50],
-    punchTotal: json["punchTotal"],
-    integralTotal: json["integralTotal"],
-    status: json["status"],
-    practiseList: json["practiseList"] == null ? [] : List<PractiseList>.from(json["practiseList"]!.map((x) => PractiseList.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "winnerDay": winnerDay,
-    "tipText": tipText,
-    "target": target == null ? [] : List<dynamic>.from(target!.map((x) => x)),
-    "punchTotal": punchTotal,
-    "integralTotal": integralTotal,
-    "status": status,
-    "practiseList": practiseList == null ? [] : List<dynamic>.from(practiseList!.map((x) => x.toJson())),
-  };
+        winnerDay: json["winnerDay"],
+        // winnerDay: 5,
+        tipText: json["tipText"],
+        target: json["target"] == null ? [] : List<int>.from(json["target"]!.map((x) => x)),
+        // target: [1, 7, 14, 30, 50],
+        punchTotal: json["punchTotal"],
+        integralTotal: json["integralTotal"],
+        status: json["status"],
+        practiseList: json["practiseList"] == null ? [] : List<PractiseList>.from(json["practiseList"]!.map((x) => PractiseList.fromJson(x))),
+        // practiseList: List<PractiseList>.from([
+        //   {"type": 1, "punchDate": "2025-06-14"},
+        //   {"type": 1, "punchDate": "2025-06-15"},
+        //   {"type": 2, "punchDate": "2025-06-16"},
+        //   {"type": 1, "punchDate": "2025-06-17"},
+        //   {"type": 1, "punchDate": "2025-06-18"},
+        //   {"type": 1, "punchDate": "2025-06-19"},
+        //   {"type": 1, "punchDate": "2025-06-20"},
+        // ].map((x) => PractiseList.fromJson(x))),
+      );
 }
 
 class PractiseList {
@@ -60,12 +51,7 @@ class PractiseList {
   });
 
   factory PractiseList.fromJson(Map<String, dynamic> json) => PractiseList(
-    type: json["type"],
-    punchDate: json["punchDate"] == null ? null : DateTime.parse(json["punchDate"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "type": type,
-    "punchDate": "${punchDate!.year.toString().padLeft(4, '0')}-${punchDate!.month.toString().padLeft(2, '0')}-${punchDate!.day.toString().padLeft(2, '0')}",
-  };
+        type: json["type"],
+        punchDate: json["punchDate"] == null ? null : DateTime.tryParse(json["punchDate"])?.toLocal(),
+      );
 }

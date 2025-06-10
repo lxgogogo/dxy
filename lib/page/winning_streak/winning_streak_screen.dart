@@ -14,6 +14,7 @@ import '../../services/course_service.dart';
 import '../../utils/log_util.dart';
 
 part 'winning_streak_binding.dart';
+
 part 'winning_streak_controller.dart';
 
 class WinningStreakScreen extends StatefulWidget {
@@ -338,42 +339,46 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
               child: TableCalendar(
                 firstDay: kFirstDay,
                 lastDay: kLastDay,
-                focusedDay: controller._focusedDay.value,
-                selectedDayPredicate: (day) => isSameDay(controller._focusedDay.value.add(Duration(days: 1)), day),
-                rangeStartDay: controller._focusedDay.value.subtract(Duration(days: 10)),
-                rangeEndDay: controller._focusedDay.value.add(Duration(days: 10)),
+                focusedDay: controller.focusedDay.value,
+                // selectedDayPredicate: (day) => isSameDay(controller._focusedDay.value.add(Duration(days: 1)), day),
+                // rangeStartDay: controller._focusedDay.value.subtract(Duration(days: 10)),
+                // rangeEndDay: controller._focusedDay.value.add(Duration(days: 10)),
                 rangeSelectionMode: RangeSelectionMode.disabled,
-                holidayPredicate: (day) => isSameDay(controller._focusedDay.value.add(Duration(days: 2)), day),
+                // holidayPredicate: (day) => isSameDay(controller._focusedDay.value.add(Duration(days: 2)), day),
+                onPageChanged: (DateTime focusedDay) {
+                  controller.focusedDay.value = focusedDay;
+                  controller.loadData(focusedDay);
+                },
                 locale: 'zh',
                 rowHeight: 28.w + 12,
                 daysOfWeekHeight: 42.w,
-                calendarStyle: CalendarStyle(
+                calendarStyle: const CalendarStyle(
                   outsideDaysVisible: false,
-                  rangeStartDecoration: BoxDecoration(
-                    // color: '#557BF6'.hexColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(40.r),
-                  ),
-                  rangeStartTextStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  rangeHighlightColor: '#557BF6'.hexColor.withOpacity(0.1),
-                  rangeEndDecoration: BoxDecoration(
-                    // color: '#557BF6'.hexColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(40.r),
-                  ),
-                  rangeEndTextStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  todayDecoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: Colors.transparent, width: 2.w),
-                      bottom: BorderSide(color: '557BF6'.hexColor, width: 2.w),
-                    ),
-                  ),
+                  // rangeStartDecoration: BoxDecoration(
+                  //   // color: '#557BF6'.hexColor.withOpacity(0.1),
+                  //   borderRadius: BorderRadius.circular(40.r),
+                  // ),
+                  // rangeStartTextStyle: TextStyle(
+                  //   color: Colors.white,
+                  //   fontSize: 12.sp,
+                  //   fontWeight: FontWeight.w600,
+                  // ),
+                  // rangeHighlightColor: '#557BF6'.hexColor.withOpacity(0.1),
+                  // rangeEndDecoration: BoxDecoration(
+                  //   // color: '#557BF6'.hexColor.withOpacity(0.1),
+                  //   borderRadius: BorderRadius.circular(40.r),
+                  // ),
+                  // rangeEndTextStyle: TextStyle(
+                  //   color: Colors.white,
+                  //   fontSize: 12.sp,
+                  //   fontWeight: FontWeight.w600,
+                  // ),
+                  // todayDecoration: BoxDecoration(
+                  //   border: Border(
+                  //     top: BorderSide(color: Colors.transparent, width: 2.w),
+                  //     bottom: BorderSide(color: '557BF6'.hexColor, width: 2.w),
+                  //   ),
+                  // ),
                 ),
                 headerStyle: HeaderStyle(
                   titleCentered: true,
@@ -410,105 +415,172 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                   },
                 ),
                 calendarBuilders: CalendarBuilders(
-                  todayBuilder: (BuildContext context, DateTime day, DateTime focusedDay) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      alignment: Alignment.center,
-                      child: Container(
-                        height: 28.w,
+                  prioritizedBuilder: (BuildContext context, DateTime day, DateTime focusedDay) {
+                    final today = DateTime.now();
+                    final practiseList = controller.detailBean.value?.practiseList ?? [];
+                    final bool isToday = DateUtils.isSameDay(day, today);
+                    final bool isSignInDay = _isSignInDay(day, practiseList);
+                    final bool isFreezingDay = _isFreezingDay(day, practiseList);
+                    final bool isNextDay = _isNextDay(day, practiseList);
+                    final bool isRangeStart = _isSignInRangeStart(day, practiseList);
+                    final bool isRangeEnd = _isSignInRangeEnd(day, practiseList);
+                    if (isSignInDay) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
                         alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height: 2.w),
-                            Text(
-                              DateFormat('d').format(day),
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w600,
-                                color: '#333333'.hexColor,
-                              ),
-                            ),
-                            Container(
-                              width: 18.w,
-                              height: 2.w,
-                              decoration: BoxDecoration(
-                                color: '#557BF6'.hexColor,
-                                borderRadius: BorderRadius.circular(2.r),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  selectedBuilder: (BuildContext context, DateTime day, DateTime focusedDay) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: 24.w,
-                        height: 24.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: '#557BF6'.hexColor,
-                          borderRadius: BorderRadius.circular(1.55.r),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height: 2.w),
-                            Text(
-                              DateFormat('d').format(day),
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              width: 18.w,
-                              height: 2.w,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(2.r),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                  holidayBuilder: (BuildContext context, DateTime day, DateTime focusedDay) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: 28.w,
-                        height: 28.w,
-                        padding: EdgeInsets.all(3.r),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: '#999999'.hexColor.withOpacity(0.1),
-                        ),
                         child: Container(
-                          alignment: Alignment.center,
+                          height: 28.w,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: '#333333'.hexColor.withOpacity(0.1),
+                            borderRadius: isRangeStart
+                                ? BorderRadius.horizontal(left: Radius.circular(40.r))
+                                : isRangeEnd
+                                    ? BorderRadius.horizontal(right: Radius.circular(40.r))
+                                    : BorderRadius.zero,
+                            color: '#557BF6'.hexColor.withOpacity(0.1),
                           ),
-                          child: Text(
-                            DateFormat('d').format(day),
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (isToday) SizedBox(height: 2.w),
+                              Text(
+                                DateFormat('d').format(day),
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: isSignInDay ? '#557BF6'.hexColor : '#333333'.hexColor,
+                                ),
+                              ),
+                              if (isToday)
+                                Container(
+                                  width: 18.w,
+                                  height: 2.w,
+                                  decoration: BoxDecoration(
+                                    color: '#557BF6'.hexColor,
+                                    borderRadius: BorderRadius.circular(2.r),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else if (isFreezingDay) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 28.w,
+                          decoration: BoxDecoration(
+                            borderRadius: isRangeStart
+                                ? BorderRadius.horizontal(left: Radius.circular(40.r))
+                                : isRangeEnd
+                                    ? BorderRadius.horizontal(right: Radius.circular(40.r))
+                                    : BorderRadius.zero,
+                            color: '#557BF6'.hexColor.withOpacity(0.1),
+                          ),
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 28.w,
+                            height: 28.w,
+                            padding: EdgeInsets.all(3.r),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: '#999999'.hexColor.withOpacity(0.1),
+                            ),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: '#333333'.hexColor.withOpacity(0.1),
+                              ),
+                              child: Text(
+                                DateFormat('d').format(day),
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    } else if (isNextDay) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 28.w,
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 24.w,
+                            height: 24.w,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: '#557BF6'.hexColor,
+                              borderRadius: BorderRadius.circular(1.55.r),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (isToday) SizedBox(height: 2.w),
+                                Text(
+                                  DateFormat('d').format(day),
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                if (isToday)
+                                  Container(
+                                    width: 18.w,
+                                    height: 2.w,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(2.r),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    if (isToday) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 28.w,
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (isToday) SizedBox(height: 2.w),
+                              Text(
+                                DateFormat('d').format(day),
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: isSignInDay ? '#557BF6'.hexColor : '#333333'.hexColor,
+                                ),
+                              ),
+                              if (isToday)
+                                Container(
+                                  width: 18.w,
+                                  height: 2.w,
+                                  decoration: BoxDecoration(
+                                    color: '#557BF6'.hexColor,
+                                    borderRadius: BorderRadius.circular(2.r),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
@@ -523,5 +595,53 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
   void dispose() {
     Get.delete<WinningStreakController>();
     super.dispose();
+  }
+
+  bool _isSignInDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
+        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 1,
+      );
+
+  bool _isFreezingDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
+        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 2,
+      );
+
+  bool _isNextDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
+        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 3,
+      );
+
+  /// 获取最早的签到日期
+  DateTime? _getFirstSignInDate(List<PractiseList> practiseList) {
+    try {
+      return practiseList
+          .where((e) => e.type == 1 && e.punchDate != null)
+          .map((e) => e.punchDate!)
+          .reduce((a, b) => a.isBefore(b) ? a : b);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// 获取最晚的签到日期
+  DateTime? _getLastSignInDate(List<PractiseList> practiseList) {
+    try {
+      return practiseList
+          .where((e) => e.type == 1 && e.punchDate != null)
+          .map((e) => e.punchDate!)
+          .reduce((a, b) => a.isAfter(b) ? a : b);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// 判断是否是签到范围的开始日期
+  bool _isSignInRangeStart(DateTime day, List<PractiseList> practiseList) {
+    final firstDate = _getFirstSignInDate(practiseList);
+    return firstDate != null && DateUtils.isSameDay(day, firstDate);
+  }
+
+  /// 判断是否是签到范围的结束日期
+  bool _isSignInRangeEnd(DateTime day, List<PractiseList> practiseList) {
+    final lastDate = _getLastSignInDate(practiseList);
+    return lastDate != null && DateUtils.isSameDay(day, lastDate);
   }
 }

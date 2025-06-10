@@ -8,11 +8,11 @@ import 'widget/AnswerResultsSheet.dart';
 import 'widget/answer_results_page_sheet.dart';
 
 class CourseExercisesController extends GetxController {
-
   final PageController pageController = PageController();
   RxList<CourseExerciseModel> practiseList = <CourseExerciseModel>[].obs;
   List<CourseExerciseModel> errorDataList = [];
-  RxList<CourseExerciseAnswerModel> dataList = <CourseExerciseAnswerModel>[].obs;
+  RxList<CourseExerciseAnswerModel> dataList =
+      <CourseExerciseAnswerModel>[].obs;
   CourseExerciseAnswerModel? selectAnswerModel;
   RxBool submit = false.obs;
   int currentPage = 0;
@@ -44,7 +44,6 @@ class CourseExercisesController extends GetxController {
     });
   }
 
-
   void _result() {
     submit.value = false;
     for (final m in dataList) {
@@ -67,15 +66,13 @@ class CourseExercisesController extends GetxController {
       return;
     }
     final model = practiseList[currentPage];
-    final data = await CourseService.of.courseAnswer({
-      'id': model.id,
-      'answer': selectAnswerModel?.title ?? ''
-    });
+    final data = await CourseService.of.courseAnswer(
+        {'id': model.id, 'answer': selectAnswerModel?.title ?? ''});
     submit.value = true;
     selectAnswerModel?.isCorrect = data.answer ?? false;
     dataList.refresh();
     // 答题逻辑，不管对错，继续下一题
-    currentPage+=1;
+    currentPage += 1;
     if (data.answer == false) {
       // 答题错误记录
       companiesNumber = 0;
@@ -84,7 +81,10 @@ class CourseExercisesController extends GetxController {
       companiesNumber++;
     }
     // 结果弹窗
-    AnswerResultsSheet.show(data.answer ?? false, data.answerStr ?? '', (isCorrect) {
+    String str = (data.answer ?? false) ? '泰裤辣！' : '不正确';
+    AnswerResultsSheet.show(
+        data.answer ?? false, data.answerStr ?? '', data.text ?? str,
+        (isCorrect) {
       Get.close(0);
       _result();
     });

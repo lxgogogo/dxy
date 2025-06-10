@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/widget/button.dart';
 
 class AnswerResultsPageSheet {
@@ -88,20 +89,28 @@ class AnswerResultsPageWidget extends StatelessWidget {
                       )),
                   Positioned(
                     bottom: 20.w,
-                    child: CustomButton(
-                      width: 1.sw - 32.w,
-                      onPressed: () {
+                    child: GestureDetector(
+                      onTap: () {
                         sureOnTap();
                       },
-                      disable: false,
-                      showOpacityAnimation: true,
-                      textColor: Colors.white,
-                      height: 50.w,
-                      radius: 8.w,
-                      title: '继续',
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                      child: Container(
+                        width: 1.sw - 32.w,
+                        height: 50.w,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: ColorStyle.c557BF6,
+                            borderRadius: BorderRadius.all(Radius.circular(8.w))
+                        ),
+                        child: Text(
+                          '继续',
+                          style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                    )
                   )
                 ],
               )));
@@ -138,19 +147,27 @@ class AnswerResultsPageWidget extends StatelessWidget {
                   ),
                   Positioned(
                     bottom: 20.w,
-                    child: CustomButton(
-                      width: 1.sw - 32.w,
-                      onPressed: () {
+                    child: GestureDetector(
+                      onTap: () {
                         sureOnTap();
                       },
-                      disable: false,
-                      showOpacityAnimation: true,
-                      textColor: Colors.white,
-                      height: 50.w,
-                      radius: 8.w,
-                      title: '继续',
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
+                      child: Container(
+                        width: 1.sw - 32.w,
+                        height: 50.w,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: ColorStyle.c557BF6,
+                            borderRadius: BorderRadius.all(Radius.circular(8.w))
+                        ),
+                        child: Text(
+                          '继续',
+                          style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
                     ),
                   )
                 ],
@@ -192,20 +209,28 @@ class AnswerResultsPageWidget extends StatelessWidget {
                     )),
                 Positioned(
                   bottom: 20.w,
-                  child: CustomButton(
-                    width: 1.sw - 32.w,
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       sureOnTap();
                     },
-                    disable: false,
-                    showOpacityAnimation: true,
-                    textColor: Colors.white,
-                    height: 50.w,
-                    radius: 8.w,
-                    title: '继续',
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
+                    child: Container(
+                      width: 1.sw - 32.w,
+                      height: 50.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: ColorStyle.c557BF6,
+                          borderRadius: BorderRadius.all(Radius.circular(8.w))
+                      ),
+                      child: Text(
+                        '继续',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600
+                        ),
+                      ),
+                    ),
+                  )
                 )
               ],
             )));

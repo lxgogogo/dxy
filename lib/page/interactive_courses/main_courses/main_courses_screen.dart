@@ -285,9 +285,12 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                             itemCount: controller.items.length,
                                             itemBuilder: (BuildContext context, int index) {
                                               final item = controller.items[index];
-                                              return CoursePracticeItem(
-                                                item: item,
+                                              return GestureDetector(
                                                 onTap: () => controller.toPractice(item),
+                                                child: CoursePracticeItem(
+                                                  item: item,
+                                                  onTap: () => controller.toPractice(item),
+                                                ),
                                               );
                                             },
                                             separatorBuilder: (_, __) => SizedBox(height: 12.w),

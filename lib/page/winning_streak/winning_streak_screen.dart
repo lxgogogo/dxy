@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/course_punch_model.dart';
 import 'package:holdem/utils/utils.dart';
@@ -442,7 +443,7 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (isToday) SizedBox(height: 2.w),
+                              if (isToday) SizedBox(height: 4.w),
                               Text(
                                 DateFormat('d').format(day),
                                 style: TextStyle(
@@ -453,11 +454,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                               ),
                               if (isToday)
                                 Container(
-                                  width: 18.w,
-                                  height: 2.w,
+                                  width: 4.w,
+                                  height: 4.w,
                                   decoration: BoxDecoration(
                                     color: '#557BF6'.hexColor,
-                                    borderRadius: BorderRadius.circular(2.r),
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
                             ],
@@ -535,11 +536,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                                 ),
                                 if (isToday)
                                   Container(
-                                    width: 18.w,
-                                    height: 2.w,
-                                    decoration: BoxDecoration(
+                                    width: 4.w,
+                                    height: 4.w,
+                                    decoration: const BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(2.r),
+                                      shape: BoxShape.circle,
                                     ),
                                   ),
                               ],
@@ -558,7 +559,7 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (isToday) SizedBox(height: 2.w),
+                              if (isToday) SizedBox(height: 4.w),
                               Text(
                                 DateFormat('d').format(day),
                                 style: TextStyle(
@@ -569,11 +570,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                               ),
                               if (isToday)
                                 Container(
-                                  width: 18.w,
-                                  height: 2.w,
+                                  width: 4.w,
+                                  height: 4.w,
                                   decoration: BoxDecoration(
                                     color: '#557BF6'.hexColor,
-                                    borderRadius: BorderRadius.circular(2.r),
+                                    shape: BoxShape.circle,
                                   ),
                                 ),
                             ],

@@ -19,26 +19,24 @@ class FirebaseService extends GetxService {
   String? fCMToken;
 
   Future<void> uploadFCMToken() async {
-    final res = await CommonService.of.updatePushToken(deviceToken: fCMToken ?? '');
-    if (res.isSuccess) {
-    } else {
-      ToastUtils.showToast(res.msg);
+    try {
+      final res = await CommonService.of.updatePushToken(deviceToken: fCMToken ?? '');
+      if (res.isSuccess) {
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } catch (e) {
+      Log.e(e.toString());
     }
   }
 
   // 初始化，获取设备token
   Future<void> initNotifications() async {
-    NotificationSettings settings = await _firebaseMessaging.requestPermission();
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(provisional: true);
 
-    /// authorized：用户授予了权限。
-    /// denied：用户拒绝了权限。
-    /// notDetermined：用户尚未选择是否要授予权限。
-    /// provisional：用户授予了临时权限。
-    // 注意：在 Android 13 之前的版本中，如果用户未在操作系统设置中停用应用的通知，
-    // 则 authorizationStatus 会返回 authorized。
-    // 在 Android 13 及更高版本中，无法确定用户是否已选择授予/拒绝权限。
-    // denied 值表示未确定或已拒绝的权限状态，您需要自行跟踪是否已发出权限请求。
-    Log.d('User granted permission: ${settings.authorizationStatus}');
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      return;
+    }
 
     bool canInit = false;
     if (Platform.isIOS) {
@@ -64,7 +62,7 @@ class FirebaseService extends GetxService {
 
     // 打开app时，会执行该回调，获取消息（通常是程序终止时，点击消息打开app的回调）
     _firebaseMessaging.getInitialMessage().then(
-          (RemoteMessage? message) {
+      (RemoteMessage? message) {
         if (message == null) return; // 没有消息不执行后操作
         handleMessage(message);
       },
@@ -74,7 +72,7 @@ class FirebaseService extends GetxService {
 
     /// 前台消息，android不会通知，所以需要自定义本地通知（iOS没有前台消息，iOS的前台消息和后台运行时一样的效果）
     FirebaseMessaging.onMessage.listen(
-          (RemoteMessage message) {
+      (RemoteMessage message) {
         final notification = message.notification;
         if (notification == null) return;
         if (Platform.isIOS) return;
@@ -117,7 +115,7 @@ class FirebaseService extends GetxService {
       },
     );
     final platform =
-    _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+        _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     await platform?.createNotificationChannel(_androidChannel);
   }
 }

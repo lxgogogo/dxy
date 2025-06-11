@@ -42,7 +42,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
       double progress = 0;
       if (controller.totalPage > 0 && controller.practiseList.isNotEmpty) {
         progress =
-            width * ((controller.currentPage.value) / controller.totalPage);
+            width * ((controller.currentPage.value+ controller.completed) / controller.totalPage);
       }
       return Container(
         margin: EdgeInsets.only(top: 56.w),

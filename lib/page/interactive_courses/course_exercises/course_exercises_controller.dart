@@ -68,6 +68,7 @@ class CourseExercisesController extends GetxController {
     final data = await CourseService.of.courseAnswer(
         {'id': model.id, 'answer': selectAnswerModel?.title ?? ''});
     submit.value = true;
+    dataList.value = model.options ?? [];
     selectAnswerModel?.isCorrect = data.answer ?? false;
     dataList.refresh();
     // 答题逻辑，不管对错，继续下一题
@@ -88,7 +89,7 @@ class CourseExercisesController extends GetxController {
       _result();
     });
     // 效果弹窗
-    if (companiesNumber == 5) {
+    if ((data.pairsText ?? '').isNotEmpty) {
       // 是否连对5题
       AnswerResultsPageSheet.show(2, () {
         Get.close(0);
@@ -115,14 +116,15 @@ class CourseExercisesController extends GetxController {
           AnswerResultsPageSheet.show(0, () {
             Get.close(0);
             Get.close(0);
-            _result();
             currentPage.value = 0;
             completed = 0;
             totalPage = errorDataList.length;
             pageController.jumpToPage(0);
             practiseList.value = errorDataList;
+            dataList.value = errorDataList[0].options ?? [];
             practiseList.refresh();
             errorDataList = [];
+            _result();
           });
         }
       }

@@ -53,7 +53,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       final res = await CourseService.of.courseTop();
       if (res.isSuccess) {
         courseTopModel.value = CourseTopModel.fromJson(res.data);
-        if ((courseTopModel.value!.integralPunch ?? 0) >= 0) {
+        if ((courseTopModel.value!.integralPunch ?? 0) > 0) {
           // 这里判断是否需要弹窗
           final now = DateTime.now();
           final lastPopupDateStr = await StorageService.of.getLastPopupDate();

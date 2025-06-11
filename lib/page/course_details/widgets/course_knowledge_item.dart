@@ -200,7 +200,7 @@ class CourseDetailKnowledgeItem extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   physics: const ClampingScrollPhysics(),
                   child: Wrap(
-                    spacing: 13.w,
+                    spacing: 5.w,
                     children: List.generate(
                       item.total ?? 0,
                       (index) {

@@ -129,9 +129,7 @@ class UserStore extends GetxController {
 
   void loginSuccess(ResBaseModel res) {
     StorageService.of.putToken(res.data['token']);
-    if (FirebaseService.of.initialized) {
-      FirebaseService.of.initNotifications();
-    }
+    FirebaseService.of.initNotifications();
     final userProfile = UserProfile.fromJson(res.data['user']);
     UserStore.of.putUserInfo(userProfile);
     UserStore.of.getUserInfo();

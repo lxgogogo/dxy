@@ -38,18 +38,16 @@ class PreConfig {
       );
       GooglePlayServicesAvailability? availability;
       if (Platform.isAndroid) {
-        availability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
+        availability = await GoogleApiAvailability.instance
+            .checkGooglePlayServicesAvailability();
       }
       if (availability?.value != 5) {
-        await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ).whenComplete(() {
-          Get.put<FirebaseService>(
-            FirebaseService(),
-            permanent: true,
-          );
-        });
+        await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
       }
+      Get.put<FirebaseService>(
+        FirebaseService(),
+        permanent: true,
+      );
       StorageUtil().init();
       Get.put<UserStore>(
         UserStore(),

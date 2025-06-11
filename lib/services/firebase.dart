@@ -8,7 +8,6 @@ part of services;
 class FirebaseService extends GetxService {
   static FirebaseService get of => Get.find();
 
-  final _firebaseMessaging = FirebaseMessaging.instance;
   final _localNotifications = FlutterLocalNotificationsPlugin();
   final _androidChannel = const AndroidNotificationChannel(
     'depokers',
@@ -32,36 +31,43 @@ class FirebaseService extends GetxService {
 
   // 初始化，获取设备token
   Future<void> initNotifications() async {
-    NotificationSettings settings = await _firebaseMessaging.requestPermission(provisional: true);
+    try {
+      final settings = await FirebaseMessaging.instance.requestPermission(provisional: true);
 
-    if (settings.authorizationStatus == AuthorizationStatus.denied) {
-      return;
-    }
-
-    bool canInit = false;
-    if (Platform.isIOS) {
-      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-      Log.d('apnsToken: $apnsToken');
-      if (apnsToken != null) {
-        canInit = true;
+      if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        return;
       }
-    } else if (Platform.isAndroid) {
-      canInit = true;
-    }
-    if (canInit) {
-      await _firebaseMessaging.getAPNSToken();
-      fCMToken = await _firebaseMessaging.getToken();
-      initPushNotifications();
-      initLocalNotifications();
-      uploadFCMToken();
+      bool canInit = false;
+      if (Platform.isIOS) {
+        final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+        Log.d('apnsToken: $apnsToken');
+        if (apnsToken != null) {
+          canInit = true;
+        }
+      } else if (Platform.isAndroid) {
+        final availability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
+        if (availability.value != 5) {
+          canInit = true;
+        }
+      }
+      if (canInit) {
+        await FirebaseMessaging.instance.getAPNSToken();
+        fCMToken = await FirebaseMessaging.instance.getToken();
+        initPushNotifications();
+        initLocalNotifications();
+        uploadFCMToken();
+      }
+    } catch (e) {
+      Log.e(e.toString());
     }
   }
 
   Future initPushNotifications() async {
-    await _firebaseMessaging.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
     // 打开app时，会执行该回调，获取消息（通常是程序终止时，点击消息打开app的回调）
-    _firebaseMessaging.getInitialMessage().then(
+    FirebaseMessaging.instance.getInitialMessage().then(
       (RemoteMessage? message) {
         if (message == null) return; // 没有消息不执行后操作
         handleMessage(message);

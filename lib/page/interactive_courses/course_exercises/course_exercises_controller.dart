@@ -35,13 +35,9 @@ class CourseExercisesController extends GetxController {
       totalPage = data.total ?? 0;
       integral = data.integral ?? 0;
       completed = data.completed ?? 0;
-      currentPage.value = completed;
       practiseList.value = data.practiseList ?? [];
       if (practiseList.isNotEmpty) {
         dataList.value = practiseList[currentPage.value].options ?? [];
-        if (currentPage.value < practiseList.length) {
-          pageController.jumpToPage(currentPage.value);
-        }
       }
     }).whenComplete(() {
       isLoading.value = false;
@@ -66,7 +62,6 @@ class CourseExercisesController extends GetxController {
       ToastUtils.showToast('所有题目已练习完了！');
     }
     if (selectAnswerModel == null) {
-      ToastUtils.showToast('请选择答案!');
       return;
     }
     final model = practiseList[currentPage.value];

@@ -143,7 +143,7 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      '连胜目标！',
+                      '连胜目标',
                       style: TextStyle(
                         color: '#000000'.hexColor,
                         fontSize: 18.sp,

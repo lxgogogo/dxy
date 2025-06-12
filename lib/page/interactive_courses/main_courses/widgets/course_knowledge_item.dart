@@ -9,25 +9,20 @@ import '../../../../widget/common_image.dart';
 
 class CourseKnowledgeItem extends StatelessWidget {
   final CourseModel item;
-  final BoxDecoration? boxDecoration;
-  final VoidCallback? onTap;
 
   const CourseKnowledgeItem({
     super.key,
     required this.item,
-    this.boxDecoration,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.w).copyWith(right: 0),
-      decoration: boxDecoration ??
-          BoxDecoration(
-            color: '#F9FCFF'.hexColor,
-            borderRadius: BorderRadius.circular(8.r),
-          ),
+      decoration: BoxDecoration(
+        color: '#F9FCFF'.hexColor,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -68,54 +63,51 @@ class CourseKnowledgeItem extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: onTap,
+              Container(
+                height: 28.w,
+                padding: EdgeInsets.all(1.r),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+                  gradient: LinearGradient(
+                    colors: [
+                      '#557BF6'.hexColor.withOpacity(0.4),
+                      '#557BF6'.hexColor.withOpacity(0),
+                    ],
+                  ),
+                ),
                 child: Container(
-                  height: 28.w,
-                  padding: EdgeInsets.all(1.r),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                    gradient: LinearGradient(
-                      colors: [
-                        '#557BF6'.hexColor.withOpacity(0.4),
-                        '#557BF6'.hexColor.withOpacity(0),
-                      ],
-                    ),
+                    color: Colors.white,
                   ),
                   child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                      color: Colors.white,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                        gradient: LinearGradient(
-                          colors: [
-                            '#557BF6'.hexColor.withOpacity(0.2),
-                            '#557BF6'.hexColor.withOpacity(0),
-                          ],
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            Assets.svg.iconToKnomledge,
-                            width: 16.w,
-                            height: 16.w,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            '观看视频',
-                            style: TextStyle(
-                              color: '#557BF6'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                      gradient: LinearGradient(
+                        colors: [
+                          '#557BF6'.hexColor.withOpacity(0.2),
+                          '#557BF6'.hexColor.withOpacity(0),
                         ],
                       ),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          Assets.svg.iconToKnomledge,
+                          width: 16.w,
+                          height: 16.w,
+                        ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          '观看${item.contentType.sourceTypeDesc}',
+                          style: TextStyle(
+                            color: '#557BF6'.hexColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

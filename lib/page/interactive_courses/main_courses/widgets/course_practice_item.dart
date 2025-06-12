@@ -12,21 +12,17 @@ import '../../../../widget/common_image.dart';
 
 class CoursePracticeItem extends StatelessWidget {
   final CourseModel item;
-  final BoxDecoration? boxDecoration;
-  final VoidCallback? onTap;
 
   const CoursePracticeItem({
     super.key,
-    this.boxDecoration,
     required this.item,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.w).copyWith(right: 0),
-      decoration: boxDecoration ??
+      decoration:
           BoxDecoration(
             color: '#F9FCFF'.hexColor,
             borderRadius: BorderRadius.circular(8.r),
@@ -71,54 +67,51 @@ class CoursePracticeItem extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: onTap,
+              Container(
+                height: 28.w,
+                padding: EdgeInsets.all(1.r),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+                  gradient: LinearGradient(
+                    colors: [
+                      '#557BF6'.hexColor.withOpacity(0.4),
+                      '#557BF6'.hexColor.withOpacity(0),
+                    ],
+                  ),
+                ),
                 child: Container(
-                  height: 28.w,
-                  padding: EdgeInsets.all(1.r),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                    gradient: LinearGradient(
-                      colors: [
-                        '#557BF6'.hexColor.withOpacity(0.4),
-                        '#557BF6'.hexColor.withOpacity(0),
-                      ],
-                    ),
+                    color: Colors.white,
                   ),
                   child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                      color: Colors.white,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                        gradient: LinearGradient(
-                          colors: [
-                            '#557BF6'.hexColor.withOpacity(0.2),
-                            '#557BF6'.hexColor.withOpacity(0),
-                          ],
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            Assets.svg.iconToPractice,
-                            width: 16.w,
-                            height: 16.w,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            '去答题',
-                            style: TextStyle(
-                              color: '#557BF6'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                      gradient: LinearGradient(
+                        colors: [
+                          '#557BF6'.hexColor.withOpacity(0.2),
+                          '#557BF6'.hexColor.withOpacity(0),
                         ],
                       ),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          Assets.svg.iconToPractice,
+                          width: 16.w,
+                          height: 16.w,
+                        ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          '去答题',
+                          style: TextStyle(
+                            color: '#557BF6'.hexColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

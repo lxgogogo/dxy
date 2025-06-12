@@ -9,12 +9,16 @@ void showCommonOperationsSheet({
   required List<String> items,
   required Function(int index) onSelectItem,
   int? selectedIndex,
+  double maxHeight = double.infinity,
 }) {
   Get.bottomSheet(
-    CommonOperationsSheet(
-      items: items,
-      onSelectItem: onSelectItem,
-      selectedIndex: selectedIndex,
+    ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      child: CommonOperationsSheet(
+        items: items,
+        onSelectItem: onSelectItem,
+        selectedIndex: selectedIndex,
+      ),
     ),
     barrierColor: Colors.black.withOpacity(0.4),
   );

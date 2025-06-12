@@ -58,6 +58,8 @@ class CourseDetailsController extends GetxController {
       if (res.isSuccess) {
         detailBean!.status = 1;
         safeUpdate();
+      } else {
+        ToastUtils.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());
@@ -73,6 +75,8 @@ class CourseDetailsController extends GetxController {
         final contentType = detailBean!.knowledge!.contentType;
         final contentId = detailBean!.knowledge!.contentId;
         AppRoutesUtils.toDetail(contentType, contentId);
+      } else {
+        ToastUtils.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());
@@ -82,8 +86,7 @@ class CourseDetailsController extends GetxController {
   void toPractice() {
     final id = detailBean!.practise!.id;
     if (id == null) return;
-    Get.toNamed(Routes.coursesExercises,
-        arguments: {'id': detailBean?.id});
+    Get.toNamed(Routes.coursesExercises, arguments: {'id': detailBean?.id});
   }
 
   void toChallenge() {

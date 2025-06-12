@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
@@ -33,13 +34,13 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
     return Scaffold(
       backgroundColor: AppTheme.color_F7F8FC,
       appBar: CommonAppBar.arrowBack(context, title: '请选择一个最符合的描述'),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 8.w),
-          Expanded(
-            child: Obx(
-              () => ListView.separated(
+      body: Obx(() {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8.w),
+            Expanded(
+              child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: 16.w),
                 itemCount: controller.courseTypes.length,
                 itemBuilder: (context, int index) => _buildListItemWidget(
@@ -49,22 +50,38 @@ class _SelectCoursesScreenState extends State<SelectCoursesScreen> {
                 separatorBuilder: (_, __) => SizedBox(height: 16.w),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
-            child: CustomButton(
-              onPressed: controller.onPressed,
-              title: '继续',
-              height: 48.w,
-              radius: 8.w,
-              textColor: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
+            GestureDetector(
+              onTap: controller.onPressed,
+              child: Container(
+                height: 48.w,
+                margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: controller.selectedIndex.value == -1 ? '#333333'.hexColor.withOpacity(0.1) : null,
+                  gradient: controller.selectedIndex.value == -1
+                      ? null
+                      : LinearGradient(
+                          colors: [
+                            '#557BF6'.hexColor,
+                            '#84BCF9'.hexColor,
+                          ],
+                        ),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  '继续',
+                  style: TextStyle(
+                    color: controller.selectedIndex.value == -1 ? '#999999'.hexColor : Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 50.w)
-        ],
-      ),
+            SizedBox(height: 50.w)
+          ],
+        );
+      }),
     );
   }
 

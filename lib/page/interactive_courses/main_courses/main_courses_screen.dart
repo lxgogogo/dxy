@@ -19,8 +19,8 @@ import '../../../model/course_top_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../routes/app_routes_utils.dart';
 import '../../../stores/storage.dart';
-import '../../../utils/event_bus_util.dart';
 import '../../../utils/log_util.dart';
+import '../../../utils/toast_utils.dart';
 import '../../../widget/common_operations_sheet.dart';
 import '../../../widget/common_refresher.dart';
 import '../../../widget/no_data.dart';
@@ -194,6 +194,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                   selectedIndex = controller.courseGroups.indexOf(controller.courseGroup.value!);
                                 }
                                 showCommonOperationsSheet(
+                                  maxHeight: 238.w,
                                   selectedIndex: selectedIndex,
                                   items: controller.courseGroups.map((e) => e.label ?? '').toList(),
                                   onSelectItem: (int index) {
@@ -240,9 +241,11 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                             itemCount: controller.items.length,
                                             itemBuilder: (BuildContext context, int index) {
                                               final item = controller.items[index];
-                                              return CourseKnowledgeItem(
-                                                item: item,
+                                              return GestureDetector(
                                                 onTap: () => controller.toKnowledge(item),
+                                                child: CourseKnowledgeItem(
+                                                  item: item,
+                                                ),
                                               );
                                             },
                                             separatorBuilder: (_, __) => SizedBox(height: 12.w),
@@ -262,10 +265,9 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                             itemBuilder: (BuildContext context, int index) {
                                               final item = controller.items[index];
                                               return GestureDetector(
-                                                onTap: () => controller.toCourseDetail(item),
+                                                onTap: () => controller.toChallenge(item),
                                                 child: CourseChallengeItem(
                                                   item: item,
-                                                  onTap: () => controller.toChallenge(item),
                                                 ),
                                               );
                                             },
@@ -289,7 +291,6 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                                 onTap: () => controller.toPractice(item),
                                                 child: CoursePracticeItem(
                                                   item: item,
-                                                  onTap: () => controller.toPractice(item),
                                                 ),
                                               );
                                             },
@@ -313,8 +314,6 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                                 onTap: () => controller.toCourseDetail(item),
                                                 child: CourseAllItem(
                                                   item: item,
-                                                  onTap: () => controller.toCourseDetail(item),
-                                                  // onTap: () => controller.onStartCourse(item),
                                                 ),
                                               );
                                             },

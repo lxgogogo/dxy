@@ -168,6 +168,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       if (res.isSuccess) {
         item.status = 1;
         items.refresh();
+      } else {
+        ToastUtils.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());
@@ -183,6 +185,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         final contentType = item.contentType;
         final contentId = item.contentId;
         AppRoutesUtils.toDetail(contentType, contentId);
+      } else {
+        ToastUtils.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());

@@ -11,25 +11,20 @@ import '../../../../widget/common_image.dart';
 
 class CourseAllItem extends StatelessWidget {
   final CourseModel item;
-  final BoxDecoration? boxDecoration;
-  final VoidCallback? onTap;
 
   const CourseAllItem({
     super.key,
     required this.item,
-    this.boxDecoration,
-    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.w),
-      decoration: boxDecoration ??
-          BoxDecoration(
-            color: '#F9FCFF'.hexColor,
-            borderRadius: BorderRadius.circular(8.r),
-          ),
+      decoration: BoxDecoration(
+        color: '#F9FCFF'.hexColor,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -115,7 +110,6 @@ class CourseAllItem extends StatelessWidget {
               ),
               CourseStatusBtn(
                 status: item.status,
-                onTap: onTap,
               ),
             ],
           )
@@ -181,12 +175,10 @@ class CourseTypeItem extends StatelessWidget {
 class CourseStatusBtn extends StatelessWidget {
   //0 未开始   1进行中  2已完成
   final int? status;
-  final VoidCallback? onTap;
 
   const CourseStatusBtn({
     super.key,
     required this.status,
-    this.onTap,
   });
 
   @override
@@ -207,28 +199,21 @@ class CourseStatusBtn extends StatelessWidget {
       bgColor = '#557BF6'.hexColor;
       textColor = Colors.white;
     }
-    return GestureDetector(
-      onTap: () {
-        if (status == 0) {
-          onTap?.call();
-        }
-      },
-      child: Container(
-        width: 72.w,
-        height: 28.w,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        // 设置内边距
-        child: Text(
-          title,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-          ),
+    return Container(
+      width: 72.w,
+      height: 28.w,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      // 设置内边距
+      child: Text(
+        title,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

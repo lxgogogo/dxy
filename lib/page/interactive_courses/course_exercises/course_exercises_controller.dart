@@ -92,7 +92,6 @@ class CourseExercisesController extends GetxController {
     if ((data.pairsText ?? '').isNotEmpty) {
       // 是否连对5题
       AnswerResultsPageSheet.show(2,
-          companiesNumber: companiesNumber,
           pairsText: data.pairsText ?? '', () {
         Get.close(0);
         Get.close(0);

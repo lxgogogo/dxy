@@ -5,8 +5,7 @@ import 'package:holdem/utils/color_style_util.dart';
 
 class AnswerResultsPageSheet {
   static show(int pageType, Function sureOnTap,
-      {int integral = 0, int companiesNumber = 0, String pairsText = ''}) {
-    print('companiesNumber:$companiesNumber');
+      {int integral = 0, String pairsText = ''}) {
     Get.dialog(
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.8),
@@ -14,7 +13,6 @@ class AnswerResultsPageSheet {
           pageType: pageType,
           sureOnTap: sureOnTap,
           integral: integral,
-          companiesNumber: companiesNumber,
           pairsText: pairsText,
         ));
   }
@@ -24,7 +22,6 @@ class AnswerResultsPageWidget extends StatelessWidget {
   // 0 - 失败 1 - 成功 2 - 连对5题
   final int pageType;
   final int integral;
-  final int companiesNumber;
   final String pairsText;
   final Function sureOnTap;
   const AnswerResultsPageWidget(
@@ -32,7 +29,6 @@ class AnswerResultsPageWidget extends StatelessWidget {
       required this.pageType,
       required this.sureOnTap,
       this.integral = 0,
-      this.companiesNumber = 0,
       this.pairsText = ''});
 
   @override
@@ -123,6 +119,11 @@ class AnswerResultsPageWidget extends StatelessWidget {
                 ],
               )));
     } else if (pageType == 2) {
+      int companiesNumber = getCompaniesNumber();
+      String icon = 'assets/courses/icon_results_bg_jiang_title$companiesNumber.png';
+      if (companiesNumber ==  10) {
+        icon = 'assets/courses/icon_results_bg_jiang_title10.png';
+      }
       return Center(
           child: SizedBox(
               width: 1.sw,
@@ -144,16 +145,24 @@ class AnswerResultsPageWidget extends StatelessWidget {
                             width: 340.w),
                         Image.asset('assets/courses/icon_results_bg_jiang.png',
                             width: 200.w),
-                        Image.asset('assets/courses/icon_results_bg_jiang_title$companiesNumber.png',
-                            width: 32.w),
+                        Image.asset(icon,
+                            width: 30.w)
                       ],
                     ),
                   ),
                   Positioned(
                     top: top + 290.w,
-                    child: Image.asset(
-                        'assets/courses/icon_results_liandui.png',
-                        width: 1.sw),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                            'assets/courses/icon_results_liandui.png',
+                            width: 1.sw),
+                        Image.asset(
+                            'assets/courses/icon_results_liandui_text$companiesNumber.png',
+                            width: 151.w)
+                      ],
+                    )
                   ),
                   Positioned(
                     bottom: 20.w,
@@ -241,5 +250,29 @@ class AnswerResultsPageWidget extends StatelessWidget {
                     ))
               ],
             )));
+  }
+
+
+  int getCompaniesNumber() {
+    if (pairsText.contains('一') || pairsText.contains('1')) {
+      return 1;
+    } else if (pairsText.contains('二') || pairsText.contains('2')) {
+      return 2;
+    } else if (pairsText.contains('三') || pairsText.contains('3')) {
+      return 3;
+    } else if (pairsText.contains('四') || pairsText.contains('4')) {
+      return 4;
+    } else if (pairsText.contains('五') || pairsText.contains('5')) {
+      return 5;
+    } else if (pairsText.contains('六') || pairsText.contains('6')) {
+      return 6;
+    } else if (pairsText.contains('七') || pairsText.contains('7')) {
+      return 7;
+    } else if (pairsText.contains('八') || pairsText.contains('8')) {
+      return 8;
+    } else if (pairsText.contains('九') || pairsText.contains('9')) {
+      return 9;
+    }
+    return 10;
   }
 }

@@ -196,8 +196,8 @@ class CourseStatusBtn extends StatelessWidget {
       textColor = '#557BF6'.hexColor;
     } else if (status == 2) {
       title = '已完成';
-      bgColor = '#557BF6'.hexColor;
-      textColor = Colors.white;
+      bgColor = '#333333'.hexColor.withOpacity(0.1);
+      textColor = '#333333'.hexColor;
     }
     return Container(
       width: 72.w,

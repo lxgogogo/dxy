@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
 void showCommonOperationsSheet({
@@ -10,6 +9,7 @@ void showCommonOperationsSheet({
   required Function(int index) onSelectItem,
   int? selectedIndex,
   double maxHeight = double.infinity,
+  OperationItemBuilder? itemBuilder,
 }) {
   Get.bottomSheet(
     ConstrainedBox(
@@ -18,22 +18,27 @@ void showCommonOperationsSheet({
         items: items,
         onSelectItem: onSelectItem,
         selectedIndex: selectedIndex,
+        itemBuilder: itemBuilder,
       ),
     ),
     barrierColor: Colors.black.withOpacity(0.4),
   );
 }
 
+typedef OperationItemBuilder = Widget Function(int index);
+
 class CommonOperationsSheet extends StatelessWidget {
   final List<String> items;
   final Function(int index) onSelectItem;
   final int? selectedIndex;
+  final OperationItemBuilder? itemBuilder;
 
   const CommonOperationsSheet({
     super.key,
     required this.items,
     required this.onSelectItem,
     this.selectedIndex,
+    this.itemBuilder,
   });
 
   @override
@@ -54,7 +59,7 @@ class CommonOperationsSheet extends StatelessWidget {
                 final index = items.indexOf(e);
                 return GestureDetector(
                     onTap: () {
-                      onSelectItem(items.indexOf(e));
+                      onSelectItem(index);
                       Get.back();
                     },
                     child: Container(
@@ -68,15 +73,17 @@ class CommonOperationsSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: Text(
-                        e,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
-                          fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                      child: itemBuilder != null
+                          ? itemBuilder!(index)
+                          : Text(
+                              e,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
+                                fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                     ));
               })
             ],

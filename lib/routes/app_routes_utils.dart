@@ -113,7 +113,7 @@ class AppRoutesUtils {
             ));
   }
 
-  static void toDetail(String? contentType, int? contentId) {
+  static void toDetail(String? contentType, int? contentId, {int? intChildId}) {
     if (contentType == null || contentId == null) return;
     if (contentType == 'book') {
       Get.toNamed(Routes.bookDetail, arguments: contentId);
@@ -122,7 +122,7 @@ class AppRoutesUtils {
     } else if (contentType == 'tool') {
       Get.toNamed(Routes.toolDetail, arguments: contentId);
     } else if (contentType == 'video' || contentType == 'videoList') {
-      Get.toNamed(Routes.videoDetail, arguments: {'id': contentId});
+      Get.toNamed(Routes.videoDetail, arguments: {'id': contentId, 'childId': intChildId});
     } else if (contentType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: contentId);
     }

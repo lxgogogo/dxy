@@ -39,7 +39,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
           if (isFirstLoad) {
             courseGroup.value = courseGroups.first;
           }
-          onRefresh();
+          await onRefresh();
         }
       }
     } catch (e) {
@@ -151,7 +151,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   void onChangeType(CourseGroupModel type) {
     courseGroup.value = type;
     EasyLoading.show();
-    onRefresh().whenComplete(() {
+    _loadData(isFirstLoad: !hasLoaded.value).whenComplete(() {
       EasyLoading.dismiss();
     });
   }
@@ -184,7 +184,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       if (res.isSuccess) {
         final contentType = item.contentType;
         final contentId = item.contentId;
-        AppRoutesUtils.toDetail(contentType, contentId);
+        final intChildId = item.contentId;
+        AppRoutesUtils.toDetail(contentType, contentId, intChildId: intChildId);
       } else {
         ToastUtils.showToast(res.msg);
       }

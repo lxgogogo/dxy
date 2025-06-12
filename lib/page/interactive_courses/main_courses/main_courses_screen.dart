@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/services/course_service.dart';
 import 'package:holdem/widget/button.dart';
+import 'package:holdem/widget/common_image.dart';
 import 'package:intl/intl.dart';
 
 import '../../../gen/assets.gen.dart';
@@ -199,6 +200,32 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                   items: controller.courseGroups.map((e) => e.label ?? '').toList(),
                                   onSelectItem: (int index) {
                                     controller.onChangeType(controller.courseGroups[index]);
+                                  },
+                                  itemBuilder: (int index) {
+                                    final item = controller.courseGroups[index];
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        if (item.value?.icon?.isNotEmpty == true)
+                                          CommonImage.net(
+                                            imageUrl: item.value?.icon ?? '',
+                                            width: 16.w,
+                                            height: 16.w,
+                                          ),
+                                        SizedBox(width: 8.w),
+                                        Flexible(
+                                          child: Text(
+                                            item.label ?? '',
+                                            style: TextStyle(
+                                              fontSize: 16.sp,
+                                              color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
+                                              fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
+                                    );
                                   },
                                 );
                               },

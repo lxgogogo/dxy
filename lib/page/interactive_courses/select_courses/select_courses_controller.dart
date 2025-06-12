@@ -38,7 +38,6 @@ class SelectCoursesController extends GetxController {
     try {
       final res = await CourseService.of.courseGroupChoose(id);
       if (res.isSuccess) {
-        ToastUtils.showToast('选择成功!');
         UserStore.of.updateUserInfo({'courseGroupId': id});
         Get.until((route) => route.settings.name == Routes.main);
         MainController.of.onTabBarItem(2);

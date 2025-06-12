@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/color_style_util.dart';
-import 'package:holdem/widget/button.dart';
 
 class AnswerResultsPageSheet {
-  static show(int pageType, Function sureOnTap, {int integral = 0}) {
+  static show(int pageType, Function sureOnTap,
+      {int integral = 0, int companiesNumber = 0, String pairsText = ''}) {
+    print('companiesNumber:$companiesNumber');
     Get.dialog(
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.8),
         AnswerResultsPageWidget(
-            pageType: pageType, sureOnTap: sureOnTap, integral: integral));
+          pageType: pageType,
+          sureOnTap: sureOnTap,
+          integral: integral,
+          companiesNumber: companiesNumber,
+          pairsText: pairsText,
+        ));
   }
 }
 
@@ -18,12 +24,16 @@ class AnswerResultsPageWidget extends StatelessWidget {
   // 0 - 失败 1 - 成功 2 - 连对5题
   final int pageType;
   final int integral;
+  final int companiesNumber;
+  final String pairsText;
   final Function sureOnTap;
   const AnswerResultsPageWidget(
       {super.key,
       required this.pageType,
       required this.sureOnTap,
-      this.integral = 0});
+      this.integral = 0,
+      this.companiesNumber = 0,
+      this.pairsText = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -88,30 +98,28 @@ class AnswerResultsPageWidget extends StatelessWidget {
                         ],
                       )),
                   Positioned(
-                    bottom: 20.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        sureOnTap();
-                      },
-                      child: Container(
-                        width: 1.sw - 32.w,
-                        height: 50.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: ColorStyle.c557BF6,
-                            borderRadius: BorderRadius.all(Radius.circular(8.w))
-                        ),
-                        child: Text(
-                          '继续',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600
+                      bottom: 20.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          sureOnTap();
+                        },
+                        child: Container(
+                          width: 1.sw - 32.w,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: ColorStyle.c557BF6,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.w))),
+                          child: Text(
+                            '继续',
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
-                      ),
-                    )
-                  )
+                      ))
                 ],
               )));
     } else if (pageType == 2) {
@@ -136,6 +144,8 @@ class AnswerResultsPageWidget extends StatelessWidget {
                             width: 340.w),
                         Image.asset('assets/courses/icon_results_bg_jiang.png',
                             width: 200.w),
+                        Image.asset('assets/courses/icon_results_bg_jiang_title$companiesNumber.png',
+                            width: 32.w),
                       ],
                     ),
                   ),
@@ -157,15 +167,14 @@ class AnswerResultsPageWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color: ColorStyle.c557BF6,
-                            borderRadius: BorderRadius.all(Radius.circular(8.w))
-                        ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.w))),
                         child: Text(
                           '继续',
                           style: TextStyle(
                               fontSize: 16.sp,
                               color: Colors.white,
-                              fontWeight: FontWeight.w600
-                          ),
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -208,30 +217,28 @@ class AnswerResultsPageWidget extends StatelessWidget {
                           color: Colors.white),
                     )),
                 Positioned(
-                  bottom: 20.w,
-                  child: GestureDetector(
-                    onTap: () {
-                      sureOnTap();
-                    },
-                    child: Container(
-                      width: 1.sw - 32.w,
-                      height: 50.w,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: ColorStyle.c557BF6,
-                          borderRadius: BorderRadius.all(Radius.circular(8.w))
-                      ),
-                      child: Text(
-                        '继续',
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600
+                    bottom: 20.w,
+                    child: GestureDetector(
+                      onTap: () {
+                        sureOnTap();
+                      },
+                      child: Container(
+                        width: 1.sw - 32.w,
+                        height: 50.w,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: ColorStyle.c557BF6,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.w))),
+                        child: Text(
+                          '继续',
+                          style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
-                    ),
-                  )
-                )
+                    ))
               ],
             )));
   }

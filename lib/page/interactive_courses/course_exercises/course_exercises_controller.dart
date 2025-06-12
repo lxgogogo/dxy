@@ -110,6 +110,7 @@ class CourseExercisesController extends GetxController {
               Get.close(0);
               Get.close(0);
               _result();
+              Get.back();
             });
           }
         } else {

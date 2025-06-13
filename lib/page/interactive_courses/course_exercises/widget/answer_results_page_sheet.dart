@@ -165,6 +165,34 @@ class AnswerResultsPageWidget extends StatelessWidget {
                     )
                   ),
                   Positioned(
+                      top: top + 380.w,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '连击奖励：',
+                            style:
+                            TextStyle(fontSize: 14.sp, color: Colors.white),
+                          ),
+                          SizedBox(width: 10.w),
+                          Image.asset(
+                            'assets/courses/icon_results_arrow.png',
+                            width: 16.w,
+                          ),
+                          SizedBox(width: 20.w),
+                          Image.asset(
+                            'assets/courses/icon_course_excus.png',
+                            width: 16.w,
+                          ),
+                          SizedBox(width: 5.w),
+                          Text(
+                            '$integral',
+                            style:
+                            TextStyle(fontSize: 14.sp, color: Colors.white),
+                          ),
+                        ],
+                      )),
+                  Positioned(
                     bottom: 20.w,
                     child: GestureDetector(
                       onTap: () {

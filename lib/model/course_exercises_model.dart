@@ -116,6 +116,7 @@ class CourseAnswerModel {
   String? answerStr;
   String? text;
   String? pairsText;
+  int? pairsIntegral;
 
   CourseAnswerModel({
     this.id,
@@ -123,7 +124,8 @@ class CourseAnswerModel {
     this.answer,
     this.answerStr,
     this.text,
-    this.pairsText
+    this.pairsText,
+    this.pairsIntegral
   });
 
   CourseAnswerModel.fromJson(Map<String, dynamic> json) {
@@ -132,6 +134,9 @@ class CourseAnswerModel {
     }
     if (json["status"] is int) {
       status = json["status"];
+    }
+    if (json["pairsIntegral"] is int) {
+      pairsIntegral = json["pairsIntegral"];
     }
     if (json["answer"] is bool) {
       answer = json["answer"];

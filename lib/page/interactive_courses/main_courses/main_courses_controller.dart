@@ -1,6 +1,8 @@
 part of 'main_courses_screen.dart';
 
 class MainCoursesController extends GetxController with RefreshControllerMixin {
+  static MainCoursesController get of => Get.find<MainCoursesController>();
+
   Rx<CourseTopModel?> courseTopModel = Rx<CourseTopModel?>(null);
 
   double get courseProgress {
@@ -21,36 +23,47 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   @override
   void onReady() {
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
-      _loadData(isFirstLoad: true);
+      if (!hasLoaded.value) {
+        _loadData(needResetGroup: true);
+      }
     });
     super.onReady();
   }
 
   void onFocusGained() {
-    _loadData(isFirstLoad: !hasLoaded.value);
+    if (hasLoaded.value) {
+      _loadData(needResetGroup: false);
+    } else {
+      _loadData(needResetGroup: true).whenComplete(() {
+        hasLoaded.value = true;
+      });
+    }
   }
 
-  Future<void> _loadData({bool isFirstLoad = false}) async {
-    if (isFirstLoad) {
-      hasLoaded.value = false;
-    }
+  Future<void> _loadData({bool needResetGroup = false}) async {
     await Future.wait([
       getCourseTop(),
-      getCourseGroup(isFirstLoad: isFirstLoad),
-    ]).whenComplete(() {
-      hasLoaded.value = true;
-    });
+      getCourseGroup(needResetGroup: needResetGroup),
+    ]);
   }
 
-  Future<void> getCourseGroup({bool isFirstLoad = false}) async {
+  Future<void> getCourseGroup({bool needResetGroup = false}) async {
     try {
       final res = await CourseService.of.courseDefined();
       if (res.isSuccess) {
         final listRes = res.data?['courseGroup'] as List? ?? [];
         courseGroups = listRes.map((e) => CourseGroupModel.fromJson(e)).toList();
         if (courseGroups.isNotEmpty) {
-          if (isFirstLoad) {
-            courseGroup.value = courseGroups.first;
+          final id = await StorageService.of.getSelectedCourseGroupId();
+          if (id != null) {
+            courseGroup.value = courseGroups.firstWhereOrNull((e) => e.value?.des == id.toString());
+            await StorageService.of.setSelectedCourseGroupId(null);
+
+            courseGroup.value ??= courseGroups.first;
+          } else {
+            if (needResetGroup) {
+              courseGroup.value = courseGroups.first;
+            }
           }
           await onRefresh();
         }
@@ -164,7 +177,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   void onChangeType(CourseGroupModel type) {
     courseGroup.value = type;
     EasyLoading.show();
-    _loadData(isFirstLoad: !hasLoaded.value).whenComplete(() {
+    _loadData(needResetGroup: !hasLoaded.value).whenComplete(() {
       EasyLoading.dismiss();
     });
   }

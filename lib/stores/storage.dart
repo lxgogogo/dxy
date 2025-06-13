@@ -80,7 +80,6 @@ extension StorageServiceHive on StorageService {
     return _put(Constants.localUser, value);
   }
 
-
   Future<List<String>> getIgnoredVersions() async {
     final jsonStr = await _box.get(Constants.localIgnoredVersions);
     if (jsonStr == null || jsonStr.isEmpty) return [];
@@ -105,6 +104,14 @@ extension StorageServiceHive on StorageService {
 
   Future<String> getLastPopupDate() async {
     return _box.get(Constants.localLastPopupDate, defaultValue: '');
+  }
+
+  Future<void> setSelectedCourseGroupId(int? id) async {
+    await _box.put(Constants.localSelectedCourseGroupId, id);
+  }
+
+  Future<int?> getSelectedCourseGroupId() async {
+    return _box.get(Constants.localSelectedCourseGroupId);
   }
 }
 

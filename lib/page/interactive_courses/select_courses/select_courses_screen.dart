@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/main/main_screen.dart';
+import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
@@ -14,6 +15,7 @@ import 'package:holdem/widget/common_image.dart';
 import '../../../model/select_courses_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/course_service.dart';
+import '../main_courses/main_courses_screen.dart';
 
 part 'select_courses_binding.dart';
 

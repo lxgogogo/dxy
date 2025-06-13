@@ -13,6 +13,7 @@ import '../../gen/assets.gen.dart';
 import '../../services/course_service.dart';
 
 part 'winning_streak_binding.dart';
+
 part 'winning_streak_controller.dart';
 
 class WinningStreakScreen extends StatefulWidget {
@@ -429,11 +430,10 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                         child: Container(
                           height: 28.w,
                           decoration: BoxDecoration(
-                            borderRadius: isRangeStart
-                                ? BorderRadius.horizontal(left: Radius.circular(40.r))
-                                : isRangeEnd
-                                    ? BorderRadius.horizontal(right: Radius.circular(40.r))
-                                    : BorderRadius.zero,
+                            borderRadius: BorderRadius.horizontal(
+                              left: isRangeStart ? Radius.circular(40.r) : Radius.zero,
+                              right: isRangeEnd ? Radius.circular(40.r) : Radius.zero,
+                            ),
                             color: '#557BF6'.hexColor.withOpacity(0.1),
                           ),
                           alignment: Alignment.center,
@@ -632,7 +632,6 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     // 检查当天是否有签到或冻结
     final hasCurrentSignIn =
         practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
-
     // 如果当天有签到/冻结，且后一天没有，则为结束日期
     return hasCurrentSignIn && !hasNextSignIn;
   }

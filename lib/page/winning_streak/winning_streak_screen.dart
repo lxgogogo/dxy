@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/course_punch_model.dart';
 import 'package:holdem/utils/utils.dart';
@@ -12,10 +11,8 @@ import 'package:intl/intl.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../services/course_service.dart';
-import '../../utils/log_util.dart';
 
 part 'winning_streak_binding.dart';
-
 part 'winning_streak_controller.dart';
 
 class WinningStreakScreen extends StatefulWidget {
@@ -63,7 +60,7 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                         children: [
                           switch (controller.detailBean.value?.status) {
                             1 => Padding(
-                                padding: EdgeInsets.only(left: 12.w),
+                                padding: EdgeInsets.only(right: 12.w),
                                 child: SvgPicture.asset(
                                   Assets.svg.iconWinningStatus1,
                                   width: 28.w,
@@ -71,7 +68,7 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                                 ),
                               ),
                             2 => Padding(
-                                padding: EdgeInsets.only(left: 12.w),
+                                padding: EdgeInsets.only(right: 12.w),
                                 child: SvgPicture.asset(
                                   Assets.svg.iconWinningStatus2,
                                   width: 28.w,
@@ -79,7 +76,7 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                                 ),
                               ),
                             3 => Padding(
-                                padding: EdgeInsets.only(left: 12.w),
+                                padding: EdgeInsets.only(right: 12.w),
                                 child: SvgPicture.asset(
                                   Assets.svg.iconWinningStatus3,
                                   width: 28.w,

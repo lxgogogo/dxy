@@ -26,6 +26,7 @@ class CourseModel {
   final String? infoTitle;
   final String? contentType;
   final int? contentId;
+  final int? subContentId;
   final int? total;
   final int? completed;
   final int? integral;
@@ -57,6 +58,7 @@ class CourseModel {
     this.infoTitle,
     this.contentType,
     this.contentId,
+    this.subContentId,
     this.total,
     this.completed,
     this.integral,
@@ -84,6 +86,7 @@ class CourseModel {
         infoTitle: json["infoTitle"],
         contentType: json["contentType"],
         contentId: json["contentId"],
+        subContentId: json["subContentId"],
         total: json["total"],
         completed: json["completed"],
         integral: json["integral"],
@@ -114,6 +117,7 @@ class CourseModel {
         "infoTitle": infoTitle,
         "contentType": contentType,
         "contentId": contentId,
+        "subContentId": subContentId,
         "total": total,
         "completed": completed,
         "integral": integral,

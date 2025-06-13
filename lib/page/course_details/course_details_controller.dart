@@ -74,8 +74,8 @@ class CourseDetailsController extends GetxController {
       if (res.isSuccess) {
         final contentType = detailBean!.knowledge!.contentType;
         final contentId = detailBean!.knowledge!.contentId;
-        final intChildId = detailBean!.knowledge!.contentId;
-        AppRoutesUtils.toDetail(contentType, contentId, intChildId: intChildId);
+        final subContentId = detailBean!.knowledge!.subContentId;
+        AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
       } else {
         ToastUtils.showToast(res.msg);
       }

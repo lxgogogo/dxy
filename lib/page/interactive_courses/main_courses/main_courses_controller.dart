@@ -16,11 +16,24 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   RxBool hasLoaded = false.obs;
 
+  StreamSubscription? refreshEvent;
+
+  @override
+  void onReady() {
+    refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
+      _loadData(isFirstLoad: true);
+    });
+    super.onReady();
+  }
+
   void onFocusGained() {
     _loadData(isFirstLoad: !hasLoaded.value);
   }
 
   Future<void> _loadData({bool isFirstLoad = false}) async {
+    if (isFirstLoad) {
+      hasLoaded.value = false;
+    }
     await Future.wait([
       getCourseTop(),
       getCourseGroup(isFirstLoad: isFirstLoad),
@@ -184,8 +197,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       if (res.isSuccess) {
         final contentType = item.contentType;
         final contentId = item.contentId;
-        final intChildId = item.contentId;
-        AppRoutesUtils.toDetail(contentType, contentId, intChildId: intChildId);
+        final subContentId = item.subContentId;
+        AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
       } else {
         ToastUtils.showToast(res.msg);
       }

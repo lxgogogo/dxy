@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,7 +7,7 @@ import 'package:holdem/utils/color_style_util.dart';
 
 class AnswerResultsPageSheet {
   static show(int pageType, Function sureOnTap,
-      {int integral = 0, String pairsText = ''}) {
+      {int integral = 0, String pairsText = '', bool showPairsTips = false}) {
     Get.dialog(
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.8),
@@ -14,6 +16,7 @@ class AnswerResultsPageSheet {
           sureOnTap: sureOnTap,
           integral: integral,
           pairsText: pairsText,
+          showPairsTips: showPairsTips,
         ));
   }
 }
@@ -23,13 +26,15 @@ class AnswerResultsPageWidget extends StatelessWidget {
   final int pageType;
   final int integral;
   final String pairsText;
+  final bool showPairsTips;
   final Function sureOnTap;
   const AnswerResultsPageWidget(
       {super.key,
       required this.pageType,
       required this.sureOnTap,
       this.integral = 0,
-      this.pairsText = ''});
+      this.pairsText = '',
+      this.showPairsTips = false});
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +65,11 @@ class AnswerResultsPageWidget extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: top + 250.w,
-                    child: Image.asset(
-                        'assets/courses/icon_results_liandui1.png',
-                        width: 1.sw),
+                    top: top + 270.w,
+                    child: Image.asset(_evenPairsIcon(), width: 1.sw)
                   ),
                   Positioned(
-                      top: top + 380.w,
+                      top: top + 390.w,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -120,10 +123,8 @@ class AnswerResultsPageWidget extends StatelessWidget {
               )));
     } else if (pageType == 2) {
       int companiesNumber = getCompaniesNumber();
-      String icon = 'assets/courses/icon_results_bg_jiang_title$companiesNumber.png';
-      if (companiesNumber ==  10) {
-        icon = 'assets/courses/icon_results_bg_jiang_title10.png';
-      }
+      String icon =
+          'assets/courses/icon_results_bg_jiang_title$companiesNumber.png';
       return Center(
           child: SizedBox(
               width: 1.sw,
@@ -143,55 +144,44 @@ class AnswerResultsPageWidget extends StatelessWidget {
                       children: [
                         Image.asset('assets/courses/icon_results_bg_sang.png',
                             width: 340.w),
-                        Image.asset('assets/courses/icon_results_bg_jiang.png',
-                            width: 200.w),
-                        Image.asset(icon,
-                            width: 30.w)
+                        Image.asset(icon, width: 200.w)
                       ],
                     ),
                   ),
                   Positioned(
-                    top: top + 290.w,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset(
-                            'assets/courses/icon_results_liandui.png',
-                            width: 1.sw),
-                        Image.asset(
-                            'assets/courses/icon_results_liandui_text$companiesNumber.png',
-                            width: 151.w)
-                      ],
-                    )
-                  ),
-                  Positioned(
-                      top: top + 380.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '连击奖励：',
-                            style:
-                            TextStyle(fontSize: 14.sp, color: Colors.white),
-                          ),
-                          SizedBox(width: 10.w),
-                          Image.asset(
-                            'assets/courses/icon_results_arrow.png',
-                            width: 16.w,
-                          ),
-                          SizedBox(width: 20.w),
-                          Image.asset(
-                            'assets/courses/icon_course_excus.png',
-                            width: 16.w,
-                          ),
-                          SizedBox(width: 5.w),
-                          Text(
-                            '$integral',
-                            style:
-                            TextStyle(fontSize: 14.sp, color: Colors.white),
-                          ),
-                        ],
-                      )),
+                      top: top + 270.w,
+                      child: Image.asset(
+                          'assets/courses/icon_results_liandui_text$companiesNumber.png',
+                          width: 1.sw)),
+                  if (showPairsTips)
+                    Positioned(
+                        top: top + 390.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '连击奖励：',
+                              style: TextStyle(
+                                  fontSize: 14.sp, color: Colors.white),
+                            ),
+                            SizedBox(width: 10.w),
+                            Image.asset(
+                              'assets/courses/icon_results_arrow.png',
+                              width: 16.w,
+                            ),
+                            SizedBox(width: 20.w),
+                            Image.asset(
+                              'assets/courses/icon_course_excus.png',
+                              width: 16.w,
+                            ),
+                            SizedBox(width: 5.w),
+                            Text(
+                              '$integral',
+                              style: TextStyle(
+                                  fontSize: 14.sp, color: Colors.white),
+                            ),
+                          ],
+                        )),
                   Positioned(
                     bottom: 20.w,
                     child: GestureDetector(
@@ -280,7 +270,6 @@ class AnswerResultsPageWidget extends StatelessWidget {
             )));
   }
 
-
   int getCompaniesNumber() {
     if (pairsText.contains('一') || pairsText.contains('1')) {
       return 1;
@@ -302,5 +291,11 @@ class AnswerResultsPageWidget extends StatelessWidget {
       return 9;
     }
     return 10;
+  }
+
+  String _evenPairsIcon() {
+    final random = Random();
+    int randomNumber = random.nextInt(5) + 1;
+    return 'assets/courses/icon_results_even_pairs_text$randomNumber.png';
   }
 }

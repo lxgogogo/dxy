@@ -89,8 +89,11 @@ class CourseExercisesController extends GetxController {
   // 是否连对
   void _evenPairs(data, {bool end = false}) {
     if ((data.pairsText ?? '').isNotEmpty) {
+      bool showPairsTips = data.integral == 1 ? true : false;
       AnswerResultsPageSheet.show(2,
-          pairsText: data.pairsText ?? '', integral: data.pairsIntegral ?? 0, () {
+          pairsText: data.pairsText ?? '',
+          integral: data.pairsIntegral ?? 0,
+          showPairsTips: showPairsTips, () {
         Get.close(0);
         Get.close(0);
         _result();
@@ -112,7 +115,7 @@ class CourseExercisesController extends GetxController {
     final model = practiseList[currentPage.value];
     final data = await CourseService.of.courseAnswer(
         {'id': model.id, 'answer': selectAnswerModel?.title ?? ''});
-    if (data.id == null) {
+    if (data.id == null || data.status == null) {
       return;
     }
     submit.value = true;

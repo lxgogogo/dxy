@@ -57,6 +57,50 @@ class CourseExercisesController extends GetxController {
     }
   }
 
+  void _endAlert(data) {
+    companiesNumber = 0;
+    if (errorDataList.isEmpty) {
+      // 全对
+      completed = totalPage;
+      AnswerResultsPageSheet.show(1, integral: integral, () {
+        Get.close(0);
+        Get.close(0);
+        _result();
+        Get.back();
+      });
+    } else {
+      // 错题重刷
+      AnswerResultsPageSheet.show(0, () {
+        Get.close(0);
+        Get.close(0);
+        currentPage.value = 0;
+        completed = 0;
+        totalPage = errorDataList.length;
+        pageController.jumpToPage(0);
+        practiseList.value = errorDataList;
+        dataList.value = errorDataList[0].options ?? [];
+        practiseList.refresh();
+        errorDataList = [];
+        _result();
+      });
+    }
+  }
+
+  // 是否连对
+  void _evenPairs(data, {bool end = false}) {
+    if ((data.pairsText ?? '').isNotEmpty) {
+      AnswerResultsPageSheet.show(2,
+          pairsText: data.pairsText ?? '', integral: data.pairsIntegral ?? 0, () {
+        Get.close(0);
+        Get.close(0);
+        _result();
+        if (end) {
+          _endAlert(data);
+        }
+      });
+    }
+  }
+
   // TODO: Public Method
   void onPressed() async {
     if (currentPage.value >= practiseList.length) {
@@ -68,6 +112,9 @@ class CourseExercisesController extends GetxController {
     final model = practiseList[currentPage.value];
     final data = await CourseService.of.courseAnswer(
         {'id': model.id, 'answer': selectAnswerModel?.title ?? ''});
+    if (data.id == null) {
+      return;
+    }
     submit.value = true;
     selectAnswerModel?.isCorrect = data.answer ?? false;
     dataList.refresh();
@@ -88,48 +135,16 @@ class CourseExercisesController extends GetxController {
       Get.close(0);
       _result();
     });
-    // 效果弹窗
-    if ((data.pairsText ?? '').isNotEmpty) {
-      // 是否连对5题
-      AnswerResultsPageSheet.show(2,
-          pairsText: data.pairsText ?? '', () {
-        Get.close(0);
-        Get.close(0);
-        _result();
-      });
-    } else {
-      if (currentPage.value >= practiseList.length) {
-        // 答题结束
-        companiesNumber = 0;
-        if (errorDataList.isEmpty) {
-          // 已经完成过不在弹窗
-          if (completed != totalPage) {
-            // 全对
-            completed = totalPage;
-            AnswerResultsPageSheet.show(1, integral: integral, () {
-              Get.close(0);
-              Get.close(0);
-              _result();
-              Get.back();
-            });
-          }
-        } else {
-          // 错题重刷
-          AnswerResultsPageSheet.show(0, () {
-            Get.close(0);
-            Get.close(0);
-            currentPage.value = 0;
-            completed = 0;
-            totalPage = errorDataList.length;
-            pageController.jumpToPage(0);
-            practiseList.value = errorDataList;
-            dataList.value = errorDataList[0].options ?? [];
-            practiseList.refresh();
-            errorDataList = [];
-            _result();
-          });
-        }
+    if (currentPage.value >= practiseList.length) {
+      // 答题结束
+      if ((data.pairsText ?? '').isNotEmpty) {
+        _evenPairs(data, end: true);
+      } else {
+        _endAlert(data);
       }
+    } else {
+      // 答题未结束
+      _evenPairs(data);
     }
   }
 

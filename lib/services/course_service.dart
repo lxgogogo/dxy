@@ -1,8 +1,10 @@
+import 'package:holdem/utils/toast_utils.dart';
+import 'package:oktoast/oktoast.dart';
+
 import '../model/course_exercises_model.dart';
 import '../model/res_base_model.dart';
 import '../utils/api.dart';
 import '../utils/http_utils.dart';
-import '../utils/toast_utils.dart';
 
 class CourseService {
   static final CourseService of = CourseService._();
@@ -101,11 +103,12 @@ class CourseService {
 
   Future<CourseAnswerModel> courseAnswer(data) async {
     final res = await HttpUtils.postNew(Api.courseAnswer, params: data, showLoading: true);
-    if (res?.isSuccess != true && res?.msg.isNotEmpty != true) {
-      ToastUtils.showToast(res!.msg);
+    if (res?.isSuccess == true) {
+      CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
+      return model;
     }
-    CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
-    return model;
+    ToastUtils.showToast(res?.msg ?? '');
+    return CourseAnswerModel();
   }
 
   Future<ResBaseModel> coursePunch(String monthDate, {bool showLoading = true}) async {

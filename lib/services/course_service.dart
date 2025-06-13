@@ -2,6 +2,7 @@ import '../model/course_exercises_model.dart';
 import '../model/res_base_model.dart';
 import '../utils/api.dart';
 import '../utils/http_utils.dart';
+import '../utils/toast_utils.dart';
 
 class CourseService {
   static final CourseService of = CourseService._();
@@ -100,6 +101,9 @@ class CourseService {
 
   Future<CourseAnswerModel> courseAnswer(data) async {
     final res = await HttpUtils.postNew(Api.courseAnswer, params: data, showLoading: true);
+    if (res?.isSuccess != true && res?.msg.isNotEmpty != true) {
+      ToastUtils.showToast(res!.msg);
+    }
     CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
     return model;
   }

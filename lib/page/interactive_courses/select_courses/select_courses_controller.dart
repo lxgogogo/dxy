@@ -41,6 +41,8 @@ class SelectCoursesController extends GetxController {
         UserStore.of.updateUserInfo({'courseGroupId': id});
         Get.until((route) => route.settings.name == Routes.main);
         MainController.of.onTabBarItem(2);
+      } else {
+        ToastUtils.showToast(res.msg);
       }
     } catch (e) {
       ToastUtils.showToast('选择失败!');

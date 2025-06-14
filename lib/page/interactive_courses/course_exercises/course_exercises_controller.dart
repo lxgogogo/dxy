@@ -89,10 +89,10 @@ class CourseExercisesController extends GetxController {
   // 是否连对
   void _evenPairs(data, {bool end = false}) {
     if ((data.pairsText ?? '').isNotEmpty) {
-      bool showPairsTips = data.integral == 1 ? true : false;
+      bool showPairsTips = data.integral > 0 ? true : false;
       AnswerResultsPageSheet.show(2,
           pairsText: data.pairsText ?? '',
-          integral: data.pairsIntegral ?? 0,
+          integral: data.integral ?? 0,
           showPairsTips: showPairsTips, () {
         Get.close(0);
         Get.close(0);

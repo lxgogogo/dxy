@@ -53,18 +53,24 @@ class CourseExercisesController extends GetxController {
     selectAnswerModel = null;
     if (currentPage.value < practiseList.length) {
       dataList.value = practiseList[currentPage.value].options ?? [];
+      for (final m in dataList) {
+        m.select = false;
+      }
       pageController.jumpToPage(currentPage.value);
     }
   }
 
-  void _endAlert(data) {
+  void _endAlert(data, {bool evenPairs = false}) {
     companiesNumber = 0;
     if (errorDataList.isEmpty) {
       // 全对
       completed = totalPage;
       AnswerResultsPageSheet.show(1, integral: integral, () {
         Get.close(0);
-        Get.close(0);
+        // 判断是否最后答完有连对弹窗
+        if (!evenPairs) {
+          Get.close(0);
+        }
         _result();
         Get.back();
       });
@@ -72,7 +78,10 @@ class CourseExercisesController extends GetxController {
       // 错题重刷
       AnswerResultsPageSheet.show(0, () {
         Get.close(0);
-        Get.close(0);
+        // 判断是否最后答完有连对弹窗
+        if (!evenPairs) {
+          Get.close(0);
+        }
         currentPage.value = 0;
         completed = 0;
         totalPage = errorDataList.length;
@@ -98,7 +107,7 @@ class CourseExercisesController extends GetxController {
         Get.close(0);
         _result();
         if (end) {
-          _endAlert(data);
+          _endAlert(data, evenPairs: true);
         }
       });
     }

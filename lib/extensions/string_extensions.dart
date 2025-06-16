@@ -57,15 +57,15 @@ extension SourceTypeExt on String? {
     if (this == 'thread') {
       return '帖子';
     } else if (this == 'article') {
-      return '资讯';
+      return '文章';
     } else if (this == 'video') {
       return '视频';
     } else if (this == 'videoList') {
       return '视频合集';
     } else if (this == 'book') {
-      return '书籍';
+      return '文章';
     } else if (this == 'tool') {
-      return '工具';
+      return '文章';
     }
     return '资源';
   } 

@@ -32,10 +32,10 @@ class CourseExercisesController extends GetxController {
   void _requestData() async {
     int id = Get.arguments['id'] ?? 0;
     CourseService.of.coursePractise('$id').then((data) {
-      totalPage = data.total ?? 0;
       integral = data.integral ?? 0;
       completed = data.completed ?? 0;
       practiseList.value = data.practiseList ?? [];
+      totalPage = practiseList.length;
       if (practiseList.isNotEmpty) {
         dataList.value = practiseList[currentPage.value].options ?? [];
       }

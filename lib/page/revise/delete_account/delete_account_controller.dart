@@ -50,9 +50,9 @@ class DeleteAccountController extends GetxController {
     final res = await UserService.of.deleteAccount();
     if (res.isSuccess) {
       ToastUtils.showToast('注销成功');
-      EventBusUtil.of.fire(EventResetMainTab());
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
+      EventBusUtil.of.fire(EventLogout());
     } else {
       ToastUtils.showToast(res.msg);
     }

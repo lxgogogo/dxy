@@ -88,7 +88,7 @@ class MainController extends GetxController with WidgetsBindingObserver {
         EventBusUtil.of.fire(EventChangeMainTab(tabIndex));
       });
     });
-    eventSubscription = EventBusUtil.of.on<EventResetMainTab>().listen((event) {
+    eventSubscription = EventBusUtil.of.on<EventLogout>().listen((event) {
       pageController.jumpToPage(0);
     });
     refreshNoticeSubs = EventBusUtil.of.on<EventRefreshNotice>().listen((event) {

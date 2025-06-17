@@ -225,7 +225,7 @@ class _SettingScreenState extends State<SettingScreen> {
           NetRequest().logout((data) {
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);
-            EventBusUtil.of.fire(EventResetMainTab());
+            EventBusUtil.of.fire(EventLogout());
           });
         },
         cancelText: '取消',

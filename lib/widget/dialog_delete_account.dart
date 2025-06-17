@@ -246,7 +246,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
     final res = await UserService.of.deleteAccount();
     if (res.isSuccess) {
       ToastUtils.showToast('注销成功');
-      EventBusUtil.of.fire(EventResetMainTab());
+      EventBusUtil.of.fire(EventLogout());
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
     } else {

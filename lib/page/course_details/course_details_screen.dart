@@ -13,6 +13,7 @@ import '../../routes/app_routes_utils.dart';
 import '../../services/course_service.dart';
 import '../../utils/log_util.dart';
 import '../../utils/toast_utils.dart';
+import '../../widget/dialog_common.dart';
 import '../../widget/no_network.dart';
 import 'widgets/course_all_item.dart';
 import 'widgets/course_challenge_item.dart';
@@ -60,7 +61,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                             children: [
                               CourseDetailAllItem(
                                 item: controller.detailBean!,
-                                onTap: () => controller.onStartCourse(),
+                                onTap: () => controller.onStartCourse(context),
                               ),
                               if (controller.detailBean!.knowledge != null)
                                 Padding(

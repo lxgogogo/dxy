@@ -62,7 +62,7 @@ class ResponseInterceptors extends InterceptorsWrapper {
             ToastUtils.showToast(msg ?? '请先登录');
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);
-            EventBusUtil.of.fire(EventResetMainTab());
+            EventBusUtil.of.fire(EventLogout());
             Get.toNamed(Routes.login);
           });
         } else if (code == 402) {
@@ -79,10 +79,14 @@ class ResponseInterceptors extends InterceptorsWrapper {
               if (isConfirm == true) {
                 UserStore.of.clearUserStorage();
                 Get.until((route) => route.settings.name == Routes.main);
-                EventBusUtil.of.fire(EventResetMainTab());
+                EventBusUtil.of.fire(EventLogout());
                 Get.toNamed(Routes.login);
               }
             }
+          });
+        } else if (code == 405) {
+          DebounceThrottle.debounce(() async {
+            UserStore.of.getUserInfo();
           });
         }
       }
@@ -99,6 +103,7 @@ class LogsInterceptors extends InterceptorsWrapper {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) {
+    Log.d('onRequest header: ${options.headers}');
     Log.d('onRequest: ${options.baseUrl}${options.path} ${options.data}');
     super.onRequest(options, handler);
   }

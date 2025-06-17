@@ -52,7 +52,7 @@ class EventRefreshSearchResult {
 }
 
 /// event
-class EventResetMainTab {}
+class EventLogout {}
 
 class EventChangeMainTab {
   final int tabIndex;

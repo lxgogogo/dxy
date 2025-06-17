@@ -36,7 +36,7 @@ class CourseDetailAllItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            item.infoTitle ?? '',
+            item.des ?? '',
             style: TextStyle(
               color: '#333333'.hexColor,
               fontSize: 14.sp,

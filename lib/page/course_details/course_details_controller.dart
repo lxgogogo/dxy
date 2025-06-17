@@ -50,20 +50,31 @@ class CourseDetailsController extends GetxController {
     requestDetail();
   }
 
-  Future<void> onStartCourse() async {
+  Future<void> onStartCourse(BuildContext context) async {
     final id = detailBean?.id;
     if (id == null) return;
-    try {
-      final res = await CourseService.of.courseStart(id);
-      if (res.isSuccess) {
-        detailBean!.status = 1;
-        safeUpdate();
-      } else {
-        ToastUtils.showToast(res.msg);
-      }
-    } catch (e) {
-      Log.e(e.toString());
-    }
+    await showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (context) => CommonDialog(
+        title: '开始学习',
+        content: '是否开始学习该课程',
+        onConfirm: () async {
+          Navigator.of(context).pop();
+          try {
+            final res = await CourseService.of.courseStart(id);
+            if (res.isSuccess) {
+              detailBean!.status = 1;
+              safeUpdate();
+            } else {
+              ToastUtils.showToast(res.msg);
+            }
+          } catch (e) {
+            Log.e(e.toString());
+          }
+        },
+      ),
+    );
   }
 
   Future<void> toKnowledge() async {

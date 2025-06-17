@@ -23,9 +23,9 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   @override
   void onReady() {
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
-      if (!hasLoaded.value) {
-        _loadData(needResetGroup: true);
-      }
+      // if (!hasLoaded.value) {
+      _loadData(needResetGroup: true);
+      // }
     });
     super.onReady();
   }
@@ -164,10 +164,10 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       pageNum: page,
       pageSize: pageSize,
     );
+    if (page == 1) items.clear();
     if (res.isSuccess) {
       final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
-      if (page == 1) items.clear();
       items.addAll(records);
       return records;
     }
@@ -177,8 +177,10 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   void onChangeType(CourseGroupModel type) {
     courseGroup.value = type;
     EasyLoading.show();
-    _loadData(needResetGroup: !hasLoaded.value).whenComplete(() {
+    hasLoaded.value = false;
+    _loadData().whenComplete(() {
       EasyLoading.dismiss();
+      hasLoaded.value = true;
     });
   }
 

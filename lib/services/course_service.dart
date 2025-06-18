@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -104,10 +105,17 @@ class CourseService {
   Future<CourseAnswerModel> courseAnswer(data) async {
     final res = await HttpUtils.postNew(Api.courseAnswer, params: data, showLoading: true);
     if (res?.isSuccess == true) {
-      CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
-      return model;
+      if (res?.data == null) {
+        Get.back();
+        ToastUtils.showToast('当前课程内容已被更改，请稍后再试');
+        return CourseAnswerModel();
+      } else {
+        CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
+        return model;
+      }
+    } else {
+      ToastUtils.showToast(res?.msg ?? '');
     }
-    ToastUtils.showToast(res?.msg ?? '');
     return CourseAnswerModel();
   }
 

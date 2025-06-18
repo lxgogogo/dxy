@@ -24,7 +24,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   void onReady() {
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
       // if (!hasLoaded.value) {
-      _loadData(needResetGroup: true);
+      fetchData(needResetGroup: true);
       // }
     });
     super.onReady();
@@ -32,19 +32,102 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   void onFocusGained() {
     if (hasLoaded.value) {
-      _loadData(needResetGroup: false);
+      fetchData(needResetGroup: false);
     } else {
-      _loadData(needResetGroup: true).whenComplete(() {
+      fetchData(needResetGroup: true).whenComplete(() {
         hasLoaded.value = true;
       });
     }
   }
 
-  Future<void> _loadData({bool needResetGroup = false}) async {
+  Future<void> fetchData({bool needResetGroup = false}) async {
     await Future.wait([
       getCourseTop(),
       getCourseGroup(needResetGroup: needResetGroup),
-    ]);
+    ]).whenComplete(() async {
+      if (courseTopModel.value?.courseGroupId == null) {
+        await UserStore.of.updateUserInfo({'courseGroupId': null});
+        Future.delayed(const Duration(milliseconds: 500)).whenComplete(() {
+          MainController.of.onTabBarItem(0);
+          final homeScroller = HomeController.of.scrollController;
+          if (homeScroller.hasClients) {
+            homeScroller.jumpTo(0);
+          }
+        });
+        return;
+      }
+      if ((courseTopModel.value!.integralPunch ?? 0) > 0) {
+        // 这里判断是否需要弹窗
+        final now = DateTime.now();
+        final lastPopupDateStr = await StorageService.of.getLastPopupDate();
+        if (lastPopupDateStr.isNotEmpty) {
+          final lastPopupDate = DateTime.parse(lastPopupDateStr);
+          if (now.day <= lastPopupDate.day) {
+            return;
+          }
+        }
+        Get.bottomSheet(
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+              color: Colors.white,
+            ),
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 64.w,
+                    height: 64.w,
+                    margin: EdgeInsets.symmetric(vertical: 24.w),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: '#FF6200'.hexColor.withOpacity(0.1)),
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset(
+                      Assets.svg.iconCourseHot,
+                      width: 36.w,
+                      height: 36.w,
+                    ),
+                  ),
+                  Text(
+                    '我们已为你保住了连胜',
+                    style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 12.w),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 32.w),
+                    child: Text(
+                      '已使用${courseTopModel.value?.integralPunch ?? 0}积分保住连胜，今天马上完成课程延续连胜吧！',
+                      style: TextStyle(
+                        color: '#666666'.hexColor,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+                    child: CustomButton(
+                      onPressed: onContinue,
+                      textColor: Colors.white,
+                      height: 48.w,
+                      radius: 8.w,
+                      title: '继续',
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          barrierColor: Colors.black.withOpacity(0.4),
+        );
+      }
+    });
   }
 
   Future<void> getCourseGroup({bool needResetGroup = false}) async {
@@ -79,77 +162,6 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       final res = await CourseService.of.courseTop();
       if (res.isSuccess) {
         courseTopModel.value = CourseTopModel.fromJson(res.data);
-        if ((courseTopModel.value!.integralPunch ?? 0) > 0) {
-          // 这里判断是否需要弹窗
-          final now = DateTime.now();
-          final lastPopupDateStr = await StorageService.of.getLastPopupDate();
-          if (lastPopupDateStr.isNotEmpty) {
-            final lastPopupDate = DateTime.parse(lastPopupDateStr);
-            if (now.day <= lastPopupDate.day) {
-              return;
-            }
-          }
-          Get.bottomSheet(
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-                color: Colors.white,
-              ),
-              child: SafeArea(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 64.w,
-                      height: 64.w,
-                      margin: EdgeInsets.symmetric(vertical: 24.w),
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: '#FF6200'.hexColor.withOpacity(0.1)),
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(
-                        Assets.svg.iconCourseHot,
-                        width: 36.w,
-                        height: 36.w,
-                      ),
-                    ),
-                    Text(
-                      '我们已为你保住了连胜',
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 12.w),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 32.w),
-                      child: Text(
-                        '已使用${courseTopModel.value?.integralPunch ?? 0}积分保住连胜，今天马上完成课程延续连胜吧！',
-                        style: TextStyle(
-                          color: '#666666'.hexColor,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
-                      child: CustomButton(
-                        onPressed: onContinue,
-                        textColor: Colors.white,
-                        height: 48.w,
-                        radius: 8.w,
-                        title: '继续',
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            barrierColor: Colors.black.withOpacity(0.4),
-          );
-        }
       }
     } catch (e) {
       courseTopModel.value = null;
@@ -178,7 +190,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     courseGroup.value = type;
     EasyLoading.show();
     hasLoaded.value = false;
-    _loadData().whenComplete(() {
+    fetchData().whenComplete(() {
       EasyLoading.dismiss();
       hasLoaded.value = true;
     });

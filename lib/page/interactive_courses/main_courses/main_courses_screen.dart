@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/services/course_service.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_image.dart';
@@ -20,12 +21,14 @@ import '../../../model/course_top_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../routes/app_routes_utils.dart';
 import '../../../stores/storage.dart';
+import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/toast_utils.dart';
 import '../../../widget/common_operations_sheet.dart';
 import '../../../widget/common_refresher.dart';
 import '../../../widget/no_data.dart';
+import '../../home/home_screen.dart';
 import 'widgets/course_all_item.dart';
 import 'widgets/course_challenge_item.dart';
 import 'widgets/course_knowledge_item.dart';
@@ -33,7 +36,6 @@ import 'widgets/course_practice_item.dart';
 import 'widgets/courses_info_view.dart';
 
 part 'main_courses_binding.dart';
-
 part 'main_courses_controller.dart';
 
 class MainCoursesScreen extends StatefulWidget {
@@ -65,54 +67,9 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                   children: [
                     Assets.images.logoText.image(width: 91.75.w),
                     const Spacer(),
-                    if (controller.hasLoaded.value) ...[
-                      GestureDetector(
-                        onTap: controller.toWinningStreak,
-                        child: Container(
-                          height: 34.w,
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          decoration: BoxDecoration(
-                            color: '#333333'.hexColor.withOpacity(0.05),
-                            borderRadius: BorderRadius.circular(40.r),
-                          ),
-                          alignment: Alignment.center,
-                          child: Row(
-                            children: [
-                              switch (controller.courseTopModel.value?.winningStatus) {
-                                1 => SvgPicture.asset(
-                                    Assets.svg.iconWinningStatus1,
-                                    width: 16.w,
-                                    height: 16.w,
-                                  ),
-                                2 => SvgPicture.asset(
-                                    Assets.svg.iconWinningStatus2,
-                                    width: 16.w,
-                                    height: 16.w,
-                                  ),
-                                3 => SvgPicture.asset(
-                                    Assets.svg.iconWinningStatus3,
-                                    width: 16.w,
-                                    height: 16.w,
-                                  ),
-                                _ => const SizedBox(),
-                              },
-                              // if ((controller.courseTopModel.value?.winningDay ?? 0) > 0) ...[
-                              SizedBox(width: 8.w),
-                              Text(
-                                '${controller.courseTopModel.value?.winningDay ?? 0}',
-                                style: TextStyle(
-                                  color: '#666666'.hexColor,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              // ],
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Container(
+                    GestureDetector(
+                      onTap: controller.toWinningStreak,
+                      child: Container(
                         height: 34.w,
                         padding: EdgeInsets.symmetric(horizontal: 12.w),
                         decoration: BoxDecoration(
@@ -122,24 +79,67 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                         alignment: Alignment.center,
                         child: Row(
                           children: [
-                            SvgPicture.asset(
-                              Assets.svg.iconCourseIntegral,
-                              width: 16.w,
-                              height: 16.w,
-                            ),
+                            switch (controller.courseTopModel.value?.winningStatus) {
+                              1 => SvgPicture.asset(
+                                  Assets.svg.iconWinningStatus1,
+                                  width: 16.w,
+                                  height: 16.w,
+                                ),
+                              2 => SvgPicture.asset(
+                                  Assets.svg.iconWinningStatus2,
+                                  width: 16.w,
+                                  height: 16.w,
+                                ),
+                              3 => SvgPicture.asset(
+                                  Assets.svg.iconWinningStatus3,
+                                  width: 16.w,
+                                  height: 16.w,
+                                ),
+                              _ => const SizedBox(),
+                            },
+                            // if ((controller.courseTopModel.value?.winningDay ?? 0) > 0) ...[
                             SizedBox(width: 8.w),
                             Text(
-                              '${controller.courseTopModel.value?.integral ?? 0}',
+                              '${controller.courseTopModel.value?.winningDay ?? 0}',
                               style: TextStyle(
                                 color: '#666666'.hexColor,
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
+                            // ],
                           ],
                         ),
                       ),
-                    ],
+                    ),
+                    SizedBox(width: 12.w),
+                    Container(
+                      height: 34.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      decoration: BoxDecoration(
+                        color: '#333333'.hexColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(40.r),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            Assets.svg.iconCourseIntegral,
+                            width: 16.w,
+                            height: 16.w,
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            '${controller.courseTopModel.value?.integral ?? 0}',
+                            style: TextStyle(
+                              color: '#666666'.hexColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -255,6 +255,9 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                         Expanded(
                           child: Obx(
                             () {
+                              if (!controller.hasLoaded.value) {
+                                return const SizedBox();
+                              }
                               final des = controller.courseGroup.value?.value?.des;
                               return switch (des) {
                                 'knowledge' => CommonRefresher(
@@ -263,24 +266,22 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     enablePullDown: false,
                                     enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.hasLoaded.value
-                                        ? controller.items.isNotEmpty
-                                            ? ListView.separated(
-                                                padding: EdgeInsets.zero,
-                                                itemCount: controller.items.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final item = controller.items[index];
-                                                  return GestureDetector(
-                                                    onTap: () => controller.toKnowledge(item),
-                                                    child: CourseKnowledgeItem(
-                                                      item: item,
-                                                    ),
-                                                  );
-                                                },
-                                                separatorBuilder: (_, __) => SizedBox(height: 12.w),
-                                              )
-                                            : const Center(child: NoDataView())
-                                        : const SizedBox(),
+                                    child: controller.items.isNotEmpty
+                                        ? ListView.separated(
+                                            padding: EdgeInsets.zero,
+                                            itemCount: controller.items.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.items[index];
+                                              return GestureDetector(
+                                                onTap: () => controller.toKnowledge(item),
+                                                child: CourseKnowledgeItem(
+                                                  item: item,
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
+                                          )
+                                        : const Center(child: NoDataView()),
                                   ),
                                 'challenge' => CommonRefresher(
                                     controller: controller.refreshController,
@@ -288,24 +289,22 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     enablePullDown: false,
                                     enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.hasLoaded.value
-                                        ? controller.items.isNotEmpty
-                                            ? ListView.separated(
-                                                padding: EdgeInsets.zero,
-                                                itemCount: controller.items.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final item = controller.items[index];
-                                                  return GestureDetector(
-                                                    onTap: () => controller.toChallenge(item),
-                                                    child: CourseChallengeItem(
-                                                      item: item,
-                                                    ),
-                                                  );
-                                                },
-                                                separatorBuilder: (_, __) => SizedBox(height: 12.w),
-                                              )
-                                            : const Center(child: NoDataView())
-                                        : const SizedBox(),
+                                    child: controller.items.isNotEmpty
+                                        ? ListView.separated(
+                                            padding: EdgeInsets.zero,
+                                            itemCount: controller.items.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.items[index];
+                                              return GestureDetector(
+                                                onTap: () => controller.toChallenge(item),
+                                                child: CourseChallengeItem(
+                                                  item: item,
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
+                                          )
+                                        : const Center(child: NoDataView()),
                                   ),
                                 'practise' => CommonRefresher(
                                     controller: controller.refreshController,
@@ -313,24 +312,22 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     enablePullDown: false,
                                     enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.hasLoaded.value
-                                        ? controller.items.isNotEmpty
-                                            ? ListView.separated(
-                                                padding: EdgeInsets.zero,
-                                                itemCount: controller.items.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final item = controller.items[index];
-                                                  return GestureDetector(
-                                                    onTap: () => controller.toPractice(item),
-                                                    child: CoursePracticeItem(
-                                                      item: item,
-                                                    ),
-                                                  );
-                                                },
-                                                separatorBuilder: (_, __) => SizedBox(height: 12.w),
-                                              )
-                                            : const Center(child: NoDataView())
-                                        : const SizedBox(),
+                                    child: controller.items.isNotEmpty
+                                        ? ListView.separated(
+                                            padding: EdgeInsets.zero,
+                                            itemCount: controller.items.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.items[index];
+                                              return GestureDetector(
+                                                onTap: () => controller.toPractice(item),
+                                                child: CoursePracticeItem(
+                                                  item: item,
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
+                                          )
+                                        : const Center(child: NoDataView()),
                                   ),
                                 _ => CommonRefresher(
                                     controller: controller.refreshController,
@@ -338,24 +335,22 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     enablePullDown: false,
                                     enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.hasLoaded.value
-                                        ? controller.items.isNotEmpty
-                                            ? ListView.separated(
-                                                padding: EdgeInsets.zero,
-                                                itemCount: controller.items.length,
-                                                itemBuilder: (BuildContext context, int index) {
-                                                  final item = controller.items[index];
-                                                  return GestureDetector(
-                                                    onTap: () => controller.toCourseDetail(item),
-                                                    child: CourseAllItem(
-                                                      item: item,
-                                                    ),
-                                                  );
-                                                },
-                                                separatorBuilder: (_, __) => SizedBox(height: 12.w),
-                                              )
-                                            : const Center(child: NoDataView())
-                                        : const SizedBox(),
+                                    child: controller.items.isNotEmpty
+                                        ? ListView.separated(
+                                            padding: EdgeInsets.zero,
+                                            itemCount: controller.items.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.items[index];
+                                              return GestureDetector(
+                                                onTap: () => controller.toCourseDetail(item),
+                                                child: CourseAllItem(
+                                                  item: item,
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
+                                          )
+                                        : const Center(child: NoDataView()),
                                   ),
                               };
                             },

@@ -1,6 +1,8 @@
 part of 'home_screen.dart';
 
 class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
+  static HomeController get of => Get.find<HomeController>();
+
   final ScrollController scrollController = ScrollController();
 
   List<BannerBean> banners = [];

@@ -5,6 +5,7 @@ CourseTopModel courseTopModelFromJson(String str) => CourseTopModel.fromJson(jso
 String courseTopModelToJson(CourseTopModel data) => json.encode(data.toJson());
 
 class CourseTopModel {
+  final int? courseGroupId;
   final int? winningDay; //连胜日
   final int? winningStatus; //连胜状态 1：置灰 2：冰冻 3：活跃
   final int? integral; //积分
@@ -17,6 +18,7 @@ class CourseTopModel {
   final int? integralPunch;
 
   CourseTopModel({
+    this.courseGroupId,
     this.winningDay,
     this.winningStatus,
     this.integral,
@@ -30,6 +32,7 @@ class CourseTopModel {
   });
 
   factory CourseTopModel.fromJson(Map<String, dynamic> json) => CourseTopModel(
+        courseGroupId: json["courseGroupId"],
         winningDay: json["winningDay"],
         winningStatus: json["winningStatus"],
         integral: json["integral"],
@@ -43,6 +46,7 @@ class CourseTopModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "courseGroupId": courseGroupId,
         "winningDay": winningDay,
         "winningStatus": winningStatus,
         "integral": integral,

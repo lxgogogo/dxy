@@ -39,10 +39,13 @@ class SelectCoursesController extends GetxController {
       final res = await CourseService.of.courseGroupChoose(id);
       if (res.isSuccess) {
         await StorageService.of.setSelectedCourseGroupId(id);
-        UserStore.of.updateUserInfo({'courseGroupId': id});
+        await UserStore.of.updateUserInfo({'courseGroupId': id});
         Get.until((route) => route.settings.name == Routes.main);
         MainController.of.onTabBarItem(2);
       } else {
+        if (res.code == 405) {
+          MainCoursesController.of.fetchData(needResetGroup: true);
+        }
         ToastUtils.showToast(res.msg);
       }
     } catch (e) {

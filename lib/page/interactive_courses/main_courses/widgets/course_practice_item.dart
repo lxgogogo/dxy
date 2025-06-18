@@ -54,16 +54,18 @@ class CoursePracticeItem extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 2.w),
-                    Text(
-                      item.infoTitle ?? '',
-                      style: TextStyle(
-                        color: '#666666'.hexColor,
-                        fontSize: 12.sp,
+                    if (item.infoTitle?.isNotEmpty == true) ...[
+                      SizedBox(height: 2.w),
+                      Text(
+                        item.infoTitle ?? '',
+                        style: TextStyle(
+                          color: '#666666'.hexColor,
+                          fontSize: 12.sp,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    ],
                   ],
                 ),
               ),

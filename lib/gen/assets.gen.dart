@@ -495,22 +495,6 @@ class $AssetsImagesGen {
   AssetGenImage get iconCollectSelect =>
       const AssetGenImage('assets/images/icon_collect_select.png');
 
-  /// File path: assets/images/icon_course_all.png
-  AssetGenImage get iconCourseAll =>
-      const AssetGenImage('assets/images/icon_course_all.png');
-
-  /// File path: assets/images/icon_course_challenge.png
-  AssetGenImage get iconCourseChallenge =>
-      const AssetGenImage('assets/images/icon_course_challenge.png');
-
-  /// File path: assets/images/icon_course_knowledge.png
-  AssetGenImage get iconCourseKnowledge =>
-      const AssetGenImage('assets/images/icon_course_knowledge.png');
-
-  /// File path: assets/images/icon_course_practice.png
-  AssetGenImage get iconCoursePractice =>
-      const AssetGenImage('assets/images/icon_course_practice.png');
-
   /// File path: assets/images/icon_google.png
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
@@ -937,10 +921,6 @@ class $AssetsImagesGen {
         iconCollectMore,
         iconCollectNormal,
         iconCollectSelect,
-        iconCourseAll,
-        iconCourseChallenge,
-        iconCourseKnowledge,
-        iconCoursePractice,
         iconGoogle,
         iconGoogleCircle,
         iconHomeBook,
@@ -1044,11 +1024,77 @@ class $AssetsImagesGen {
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
+  /// File path: assets/lottie/course_fail.json
+  String get courseFail => 'assets/lottie/course_fail.json';
+
+  /// File path: assets/lottie/course_perfect_1.json
+  String get coursePerfect1 => 'assets/lottie/course_perfect_1.json';
+
+  /// File path: assets/lottie/course_perfect_2.json
+  String get coursePerfect2 => 'assets/lottie/course_perfect_2.json';
+
+  /// File path: assets/lottie/course_perfect_3.json
+  String get coursePerfect3 => 'assets/lottie/course_perfect_3.json';
+
+  /// File path: assets/lottie/course_perfect_4.json
+  String get coursePerfect4 => 'assets/lottie/course_perfect_4.json';
+
+  /// File path: assets/lottie/course_perfect_5.json
+  String get coursePerfect5 => 'assets/lottie/course_perfect_5.json';
+
+  /// File path: assets/lottie/course_result_1.json
+  String get courseResult1 => 'assets/lottie/course_result_1.json';
+
+  /// File path: assets/lottie/course_result_10.json
+  String get courseResult10 => 'assets/lottie/course_result_10.json';
+
+  /// File path: assets/lottie/course_result_2.json
+  String get courseResult2 => 'assets/lottie/course_result_2.json';
+
+  /// File path: assets/lottie/course_result_3.json
+  String get courseResult3 => 'assets/lottie/course_result_3.json';
+
+  /// File path: assets/lottie/course_result_4.json
+  String get courseResult4 => 'assets/lottie/course_result_4.json';
+
+  /// File path: assets/lottie/course_result_5.json
+  String get courseResult5 => 'assets/lottie/course_result_5.json';
+
+  /// File path: assets/lottie/course_result_6.json
+  String get courseResult6 => 'assets/lottie/course_result_6.json';
+
+  /// File path: assets/lottie/course_result_7.json
+  String get courseResult7 => 'assets/lottie/course_result_7.json';
+
+  /// File path: assets/lottie/course_result_8.json
+  String get courseResult8 => 'assets/lottie/course_result_8.json';
+
+  /// File path: assets/lottie/course_result_9.json
+  String get courseResult9 => 'assets/lottie/course_result_9.json';
+
   /// File path: assets/lottie/play_video.json
   String get playVideo => 'assets/lottie/play_video.json';
 
   /// List of all assets
-  List<String> get values => [playVideo];
+  List<String> get values => [
+        courseFail,
+        coursePerfect1,
+        coursePerfect2,
+        coursePerfect3,
+        coursePerfect4,
+        coursePerfect5,
+        courseResult1,
+        courseResult10,
+        courseResult2,
+        courseResult3,
+        courseResult4,
+        courseResult5,
+        courseResult6,
+        courseResult7,
+        courseResult8,
+        courseResult9,
+        playVideo
+      ];
 }
 
 class $AssetsSoundsGen {
@@ -1154,14 +1200,26 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_comment.svg
   String get iconComment => 'assets/svg/icon_comment.svg';
 
+  /// File path: assets/svg/icon_course_all.svg
+  String get iconCourseAll => 'assets/svg/icon_course_all.svg';
+
   /// File path: assets/svg/icon_course_calendar.svg
   String get iconCourseCalendar => 'assets/svg/icon_course_calendar.svg';
+
+  /// File path: assets/svg/icon_course_challenge.svg
+  String get iconCourseChallenge => 'assets/svg/icon_course_challenge.svg';
 
   /// File path: assets/svg/icon_course_hot.svg
   String get iconCourseHot => 'assets/svg/icon_course_hot.svg';
 
   /// File path: assets/svg/icon_course_integral.svg
   String get iconCourseIntegral => 'assets/svg/icon_course_integral.svg';
+
+  /// File path: assets/svg/icon_course_knowledge.svg
+  String get iconCourseKnowledge => 'assets/svg/icon_course_knowledge.svg';
+
+  /// File path: assets/svg/icon_course_practice.svg
+  String get iconCoursePractice => 'assets/svg/icon_course_practice.svg';
 
   /// File path: assets/svg/icon_delete.svg
   String get iconDelete => 'assets/svg/icon_delete.svg';
@@ -1339,9 +1397,13 @@ class $AssetsSvgGen {
         iconChecked,
         iconClose,
         iconComment,
+        iconCourseAll,
         iconCourseCalendar,
+        iconCourseChallenge,
         iconCourseHot,
         iconCourseIntegral,
+        iconCourseKnowledge,
+        iconCoursePractice,
         iconDelete,
         iconHistoryDelete,
         iconKnowledge,

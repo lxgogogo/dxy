@@ -63,17 +63,17 @@ class CourseDetailAllItem extends StatelessWidget {
               ),
               Expanded(
                 child: CourseTypeItem(
-                  assetName: Assets.svg.iconChallenge,
-                  count: item.challengeCompleted ?? 0,
-                  total: item.challengeTotal ?? 0,
+                  assetName: Assets.svg.iconPractice,
+                  count: item.practiseCompleted ?? 0,
+                  total: item.practiseTotal ?? 0,
                   status: item.status,
                 ),
               ),
               Expanded(
                 child: CourseTypeItem(
-                  assetName: Assets.svg.iconPractice,
-                  count: item.practiseCompleted ?? 0,
-                  total: item.practiseTotal ?? 0,
+                  assetName: Assets.svg.iconChallenge,
+                  count: item.challengeCompleted ?? 0,
+                  total: item.challengeTotal ?? 0,
                   status: item.status,
                 ),
               ),

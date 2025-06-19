@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 
@@ -86,7 +87,7 @@ class CourseInfoView extends StatelessWidget {
                     itemWidth,
                     title: '课程',
                     content: '${controller.courseTopModel.value?.courseRemaining ?? 0}',
-                    assetName: Assets.images.iconCourseAll.path,
+                    assetName: Assets.svg.iconCourseAll,
                     backgroundColor: '#EBF5FF'.hexColor,
                     onTap: () {
                       _toChangeType('course');
@@ -96,7 +97,7 @@ class CourseInfoView extends StatelessWidget {
                     itemWidth,
                     title: '知识',
                     content: '${controller.courseTopModel.value?.knowledgeRemaining ?? 0}',
-                    assetName: Assets.images.iconCourseKnowledge.path,
+                    assetName: Assets.svg.iconCourseKnowledge,
                     backgroundColor: '#FEF1EC'.hexColor,
                     onTap: () {
                       _toChangeType('knowledge');
@@ -106,8 +107,8 @@ class CourseInfoView extends StatelessWidget {
                     itemWidth,
                     title: '练习',
                     content: '${controller.courseTopModel.value?.practiseRemaining ?? 0}',
-                    assetName: Assets.images.iconCoursePractice.path,
-                    backgroundColor: '#EEFFEB'.hexColor,
+                    assetName: Assets.svg.iconCoursePractice,
+                    backgroundColor: '#EBFCFF'.hexColor,
                     onTap: () {
                       _toChangeType('practise');
                     },
@@ -116,8 +117,8 @@ class CourseInfoView extends StatelessWidget {
                     itemWidth,
                     title: '挑战',
                     content: '${controller.courseTopModel.value?.challengeRemaining ?? 0}',
-                    assetName: Assets.images.iconCourseChallenge.path,
-                    backgroundColor: '#FFF7EB'.hexColor,
+                    assetName: Assets.svg.iconCourseChallenge,
+                    backgroundColor: '#F6EBFF'.hexColor,
                     onTap: () {
                       _toChangeType('challenge');
                     },
@@ -185,7 +186,7 @@ class CourseInfoView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Image.asset(
+                SvgPicture.asset(
                   assetName,
                   width: 40.w,
                   height: 40.w,

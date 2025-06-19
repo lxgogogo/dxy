@@ -73,8 +73,8 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                     top: 0,
                     child: Lottie.asset(
                       _evenPairsIcon(),
-                      width: 2.sw,
-                      fit: BoxFit.fitWidth,
+                      width: 1.2.sw,
+                      fit: BoxFit.contain,
                       repeat: false,
                       animate: true,
                     ),
@@ -148,8 +148,8 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                     top: 0,
                     child: Lottie.asset(
                       json,
-                      width: 2.sw,
-                      fit: BoxFit.fitWidth,
+                      width: 1.2.sw,
+                      fit: BoxFit.contain,
                       repeat: false,
                       animate: true,
                     ),
@@ -223,8 +223,8 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                   top: top,
                   child: Lottie.asset(
                     'assets/lottie/course_fail.json',
-                    width: 1.23.sw,
-                    fit: BoxFit.fitWidth,
+                    width: 1.2.sw,
+                    fit: BoxFit.contain,
                     repeat: false,
                     animate: true,
                   ),

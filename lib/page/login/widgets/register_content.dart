@@ -257,15 +257,14 @@ class _RegisterContentState extends State<RegisterContent> {
                     ),
                   ),
                   Padding(
-                    padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
-                    child: Text(
-                      isShowAccountTips ? type.tips : '',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
-                      ),
-                    )
-                  ),
+                      padding: isShowAccountTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
+                      child: Text(
+                        isShowAccountTips ? type.tips : '',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: isShowAccountTips ? Colors.red : '#95A3C4'.hexColor,
+                        ),
+                      )),
                   if (type != LoginType.username) ...[
                     Container(
                       height: inputHeight,
@@ -304,15 +303,14 @@ class _RegisterContentState extends State<RegisterContent> {
                       ),
                     ),
                     Padding(
-                      padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
-                      child: Text(
-                        isShowCodeTips ? '*验证码错误' : '',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
-                        ),
-                      )
-                    ),
+                        padding: isShowCodeTips ? EdgeInsets.symmetric(vertical: tipsSpace) : EdgeInsets.zero,
+                        child: Text(
+                          isShowCodeTips ? '*验证码错误' : '',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isShowCodeTips ? Colors.red : '#95A3C4'.hexColor,
+                          ),
+                        )),
                   ],
                   Container(
                     height: inputHeight,
@@ -358,19 +356,18 @@ class _RegisterContentState extends State<RegisterContent> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: tipsSpace),
-                    child: Text(
-                      isShowPwTips
-                          ? isContainsInvalidChars
-                          ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
-                          : '*至少包含一位大小写字母+数字'
-                          : '*8-12字符，至少包含大小写字母+数字',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
-                      ),
-                    )
-                  ),
+                      padding: EdgeInsets.symmetric(vertical: tipsSpace),
+                      child: Text(
+                        isShowPwTips
+                            ? isContainsInvalidChars
+                                ? '*仅允许英文字母、数字及特殊字符如@#\$%!'
+                                : '*至少包含一位大小写字母+数字'
+                            : '*8-12字符，至少包含大小写字母+数字',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: isShowPwTips ? Colors.red : '#95A3C4'.hexColor,
+                        ),
+                      )),
                   Container(
                     height: inputHeight,
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -426,33 +423,36 @@ class _RegisterContentState extends State<RegisterContent> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: UserTerms(
-                          onTermsCheck: onTermsCheck,
-                          didAgreeTerms: didAgreeTerms,
-                          reviewTerms: reviewTerms,
-                          reviewPrivacy: reviewPrivacy,
-                        ),
-                      ),
-                      if (!isUsername)
-                        GestureDetector(
-                          onTap: TrackUtils.trackedTap(
-                            onTap: () {
-                              Get.toNamed(Routes.forgetPassword);
-                            },
-                            userLogType: '118003',
-                          ),
-                          child: Text(
-                            '忘记密码?',
-                            style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
-                          ),
-                        ),
-                    ],
-                  ),
                 ],
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 12.w),
+            child: Row(
+              children: [
+                Expanded(
+                  child: UserTerms(
+                    onTermsCheck: onTermsCheck,
+                    didAgreeTerms: didAgreeTerms,
+                    reviewTerms: reviewTerms,
+                    reviewPrivacy: reviewPrivacy,
+                  ),
+                ),
+                if (!isUsername)
+                  GestureDetector(
+                    onTap: TrackUtils.trackedTap(
+                      onTap: () {
+                        Get.toNamed(Routes.forgetPassword);
+                      },
+                      userLogType: '118003',
+                    ),
+                    child: Text(
+                      '忘记密码?',
+                      style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+                    ),
+                  ),
+              ],
             ),
           ),
           widget.buttonBuilder(onPressed: register, disable: _isLoginDisable),

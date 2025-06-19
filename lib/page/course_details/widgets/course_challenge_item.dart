@@ -38,7 +38,7 @@ class CourseDetailChallengeItem extends StatelessWidget {
           Row(
             children: [
               SvgPicture.asset(
-                Assets.svg.iconPractice,
+                Assets.svg.iconChallenge,
                 width: 16.w,
                 height: 16.w,
               ),

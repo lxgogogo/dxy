@@ -27,11 +27,6 @@ class CourseExercisesController extends GetxController {
   void onReady() {
     super.onReady();
     _requestData();
-    // Future.delayed(const Duration(milliseconds: 1500), () {
-    //   AnswerResultsPageSheet.show(0, integral: integral, () {
-    //     Get.close(0);
-    //   });
-    // });
   }
 
   void _requestData() async {

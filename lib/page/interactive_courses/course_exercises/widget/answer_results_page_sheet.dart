@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/color_style_util.dart';
+import 'package:lottie/lottie.dart';
 
 class AnswerResultsPageSheet {
   static show(int pageType, Function sureOnTap,
       {int integral = 0, String pairsText = '', bool showPairsTips = false}) {
     Get.dialog(
         barrierDismissible: false,
-        barrierColor: Colors.black.withOpacity(0.8),
+        barrierColor: Colors.black.withOpacity(0.65),
         AnswerResultsPageWidget(
           pageType: pageType,
           sureOnTap: sureOnTap,
@@ -21,7 +22,7 @@ class AnswerResultsPageSheet {
   }
 }
 
-class AnswerResultsPageWidget extends StatelessWidget {
+class AnswerResultsPageWidget extends StatefulWidget {
   // 0 - 失败 1 - 成功 2 - 连对5题
   final int pageType;
   final int integral;
@@ -37,9 +38,30 @@ class AnswerResultsPageWidget extends StatelessWidget {
       this.showPairsTips = false});
 
   @override
+  State<StatefulWidget> createState() {
+    return _AnswerResultsPageWidgetState();
+  }
+}
+
+class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
+
+  bool _showBtn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _showBtn = true;
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     double top = 86.w;
-    if (pageType == 1) {
+    if (widget.pageType == 1) {
       return Center(
           child: SizedBox(
               width: 1.sw,
@@ -48,83 +70,73 @@ class AnswerResultsPageWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Positioned(
-                    top: top,
-                    child: Image.asset('assets/courses/icon_results_title1.png',
-                        width: 180.w),
-                  ),
-                  Positioned(
-                    top: top,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset('assets/courses/icon_results_bg_sang.png',
-                            width: 340.w),
-                        Image.asset('assets/courses/icon_results_bg_jiang2.png',
-                            width: 200.w),
-                      ],
+                    top: 0,
+                    child: Lottie.asset(
+                      _evenPairsIcon(),
+                      width: 2.sw,
+                      fit: BoxFit.fitWidth,
+                      repeat: false,
+                      animate: true,
                     ),
                   ),
-                  Positioned(
-                    top: top + 270.w,
-                    child: Image.asset(_evenPairsIcon(), width: 1.sw)
-                  ),
-                  Positioned(
-                      top: top + 390.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '连击奖励：',
-                            style:
-                                TextStyle(fontSize: 14.sp, color: Colors.white),
+                  if (_showBtn)...[
+                    Positioned(
+                        top: top + 330.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '连击奖励：',
+                              style:
+                              TextStyle(fontSize: 14.sp, color: Colors.white),
+                            ),
+                            SizedBox(width: 10.w),
+                            Image.asset(
+                              'assets/courses/icon_results_arrow.png',
+                              width: 16.w,
+                            ),
+                            SizedBox(width: 20.w),
+                            Image.asset(
+                              'assets/courses/icon_course_excus.png',
+                              width: 16.w,
+                            ),
+                            SizedBox(width: 5.w),
+                            Text(
+                              '${widget.integral}',
+                              style:
+                              TextStyle(fontSize: 14.sp, color: Colors.white),
+                            ),
+                          ],
+                        )),
+                    Positioned(
+                        bottom: 20.w,
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.sureOnTap();
+                          },
+                          child: Container(
+                            width: 1.sw - 32.w,
+                            height: 50.w,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: ColorStyle.c557BF6,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(8.w))),
+                            child: Text(
+                              '继续',
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
-                          SizedBox(width: 10.w),
-                          Image.asset(
-                            'assets/courses/icon_results_arrow.png',
-                            width: 16.w,
-                          ),
-                          SizedBox(width: 20.w),
-                          Image.asset(
-                            'assets/courses/icon_course_excus.png',
-                            width: 16.w,
-                          ),
-                          SizedBox(width: 5.w),
-                          Text(
-                            '$integral',
-                            style:
-                                TextStyle(fontSize: 14.sp, color: Colors.white),
-                          ),
-                        ],
-                      )),
-                  Positioned(
-                      bottom: 20.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          sureOnTap();
-                        },
-                        child: Container(
-                          width: 1.sw - 32.w,
-                          height: 50.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: ColorStyle.c557BF6,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.w))),
-                          child: Text(
-                            '继续',
-                            style: TextStyle(
-                                fontSize: 16.sp,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ))
+                        ))
+                  ]
                 ],
               )));
-    } else if (pageType == 2) {
+    } else if (widget.pageType == 2) {
       int companiesNumber = getCompaniesNumber();
-      String icon =
-          'assets/courses/icon_results_bg_jiang_title$companiesNumber.png';
+      String json = 'assets/lottie/course_result_$companiesNumber.json';
       return Center(
           child: SizedBox(
               width: 1.sw,
@@ -133,29 +145,19 @@ class AnswerResultsPageWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Positioned(
-                    top: top,
-                    child: Image.asset('assets/courses/icon_results_title.png',
-                        width: 180.w),
-                  ),
-                  Positioned(
-                    top: top,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset('assets/courses/icon_results_bg_sang.png',
-                            width: 340.w),
-                        Image.asset(icon, width: 200.w)
-                      ],
+                    top: 0,
+                    child: Lottie.asset(
+                      json,
+                      width: 2.sw,
+                      fit: BoxFit.fitWidth,
+                      repeat: false,
+                      animate: true,
                     ),
                   ),
-                  Positioned(
-                      top: top + 270.w,
-                      child: Image.asset(
-                          'assets/courses/icon_results_liandui_text$companiesNumber.png',
-                          width: 1.sw)),
-                  if (showPairsTips)
-                    Positioned(
-                        top: top + 390.w,
+                  if (widget.showPairsTips)
+                    if (_showBtn)
+                      Positioned(
+                        top: top + 330.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -176,36 +178,37 @@ class AnswerResultsPageWidget extends StatelessWidget {
                             ),
                             SizedBox(width: 5.w),
                             Text(
-                              '$integral',
+                              '${widget.integral}',
                               style: TextStyle(
                                   fontSize: 14.sp, color: Colors.white),
                             ),
                           ],
                         )),
-                  Positioned(
-                    bottom: 20.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        sureOnTap();
-                      },
-                      child: Container(
-                        width: 1.sw - 32.w,
-                        height: 50.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: ColorStyle.c557BF6,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.w))),
-                        child: Text(
-                          '继续',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
+                  if (_showBtn)
+                    Positioned(
+                      bottom: 20.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.sureOnTap();
+                        },
+                        child: Container(
+                          width: 1.sw - 32.w,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: ColorStyle.c557BF6,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8.w))),
+                          child: Text(
+                            '继续',
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
-                    ),
-                  )
+                    )
                 ],
               )));
     }
@@ -218,76 +221,61 @@ class AnswerResultsPageWidget extends StatelessWidget {
               children: [
                 Positioned(
                   top: top,
-                  child: Image.asset('assets/courses/icon_results_title3.png',
-                      width: 180.w),
-                ),
-                Positioned(
-                  top: top,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.asset('assets/courses/icon_results_bg_sang2.png',
-                          width: 340.w),
-                      Image.asset('assets/courses/icon_results_bg_jiang3.png',
-                          width: 200.w),
-                    ],
+                  child: Lottie.asset(
+                    'assets/lottie/course_fail.json',
+                    width: 1.23.sw,
+                    fit: BoxFit.fitWidth,
+                    repeat: false,
+                    animate: true,
                   ),
                 ),
-                Positioned(
-                    top: top + 300.w,
-                    child: Text(
-                      '再刷一遍\n失手的题目吧!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 28.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
-                    )),
-                Positioned(
-                    bottom: 20.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        sureOnTap();
-                      },
-                      child: Container(
-                        width: 1.sw - 32.w,
-                        height: 50.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: ColorStyle.c557BF6,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.w))),
-                        child: Text(
-                          '继续',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
+                if (_showBtn)...[
+                  Positioned(
+                      bottom: 20.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.sureOnTap();
+                        },
+                        child: Container(
+                          width: 1.sw - 32.w,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: ColorStyle.c557BF6,
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8.w))),
+                          child: Text(
+                            '继续',
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                    ))
+                      ))
+                ]
               ],
             )));
   }
 
   int getCompaniesNumber() {
-    if (pairsText.contains('一') || pairsText.contains('1')) {
+    if (widget.pairsText.contains('一') || widget.pairsText.contains('1')) {
       return 1;
-    } else if (pairsText.contains('二') || pairsText.contains('2')) {
+    } else if (widget.pairsText.contains('二') || widget.pairsText.contains('2')) {
       return 2;
-    } else if (pairsText.contains('三') || pairsText.contains('3')) {
+    } else if (widget.pairsText.contains('三') || widget.pairsText.contains('3')) {
       return 3;
-    } else if (pairsText.contains('四') || pairsText.contains('4')) {
+    } else if (widget.pairsText.contains('四') || widget.pairsText.contains('4')) {
       return 4;
-    } else if (pairsText.contains('五') || pairsText.contains('5')) {
+    } else if (widget.pairsText.contains('五') || widget.pairsText.contains('5')) {
       return 5;
-    } else if (pairsText.contains('六') || pairsText.contains('6')) {
+    } else if (widget.pairsText.contains('六') || widget.pairsText.contains('6')) {
       return 6;
-    } else if (pairsText.contains('七') || pairsText.contains('7')) {
+    } else if (widget.pairsText.contains('七') || widget.pairsText.contains('7')) {
       return 7;
-    } else if (pairsText.contains('八') || pairsText.contains('8')) {
+    } else if (widget.pairsText.contains('八') || widget.pairsText.contains('8')) {
       return 8;
-    } else if (pairsText.contains('九') || pairsText.contains('9')) {
+    } else if (widget.pairsText.contains('九') || widget.pairsText.contains('9')) {
       return 9;
     }
     return 10;
@@ -296,6 +284,6 @@ class AnswerResultsPageWidget extends StatelessWidget {
   String _evenPairsIcon() {
     final random = Random();
     int randomNumber = random.nextInt(5) + 1;
-    return 'assets/courses/icon_results_even_pairs_text$randomNumber.png';
+    return 'assets/lottie/course_perfect_$randomNumber.json';
   }
 }

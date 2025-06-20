@@ -1,10 +1,12 @@
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vibration/vibration.dart';
 
 class AnswerResultsPageSheet {
   static show(int pageType, Function sureOnTap,
@@ -44,18 +46,45 @@ class AnswerResultsPageWidget extends StatefulWidget {
 }
 
 class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
-
+  final _audioPlayer = AudioPlayer();
   bool _showBtn = false;
+
+  void _playSound(String name) async {
+    await _audioPlayer.play(AssetSource('sounds/$name.mp3'));
+  }
+
+  void _vibrate() async {
+    if (await Vibration.hasVibrator()) { // 检查设备支持
+      print('震动500ms===');
+      Vibration.vibrate(duration: 500); // 震动500ms
+    }
+  }
+
+  // TODO: Build Widget
 
   @override
   void initState() {
     super.initState();
+    if (widget.pageType == 1) {
+      _playSound('final_victory');
+    } else if (widget.pageType == 2) {
+      _playSound('combo');
+      _vibrate();
+    } else {
+      _playSound('retry');
+    }
     Future.delayed(const Duration(milliseconds: 500), () {
       _showBtn = true;
       if (mounted) {
         setState(() {});
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
   @override

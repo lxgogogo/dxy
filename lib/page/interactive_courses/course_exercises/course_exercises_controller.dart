@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:holdem/model/course_exercises_model.dart';
 import 'package:holdem/services/course_service.dart';
 import 'package:holdem/utils/toast_utils.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'widget/AnswerResultsSheet.dart';
 import 'widget/answer_results_page_sheet.dart';
@@ -22,11 +23,18 @@ class CourseExercisesController extends GetxController {
   // 连队次数
   int companiesNumber = 0;
   RxBool isLoading = true.obs;
+  final audioPlayer = AudioPlayer();
 
   @override
   void onReady() {
     super.onReady();
     _requestData();
+  }
+
+  @override
+  void onClose() {
+    audioPlayer.dispose();
+    super.onClose();
   }
 
   void _requestData() async {
@@ -113,6 +121,10 @@ class CourseExercisesController extends GetxController {
     }
   }
 
+  void _playSound(String name) async {
+    await audioPlayer.play(AssetSource('sounds/$name.mp3'));
+  }
+
   // TODO: Public Method
   void onPressed() async {
     if (currentPage.value >= practiseList.length) {
@@ -136,8 +148,10 @@ class CourseExercisesController extends GetxController {
       // 答题错误记录
       companiesNumber = 0;
       errorDataList.add(model);
+      _playSound('wrong');
     } else {
       companiesNumber++;
+      _playSound('correct');
     }
     // 结果弹窗
     String str = (data.answer ?? false) ? '泰裤辣！' : '不正确';

@@ -195,7 +195,8 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                             likeCountPadding: EdgeInsets.zero,
                             countBuilder: (_, __, ___) => const SizedBox()),
                       ),
-                      GestureDetector(
+                      if (UserStore.of.user?.id != widget.viewParams.author?.id)
+                        GestureDetector(
                         onTap: _favoriteToggle,
                         child: CountCommentBadge(
                           count: widget.viewParams.favoriteCount.abbreviateNumber,

@@ -23,8 +23,9 @@ class CloseImageButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.translucent,
-      child: Padding(
-        padding: padding ?? const EdgeInsets.all(12),
+      child: Container(
+        color: Colors.transparent,
+        padding: padding ?? const EdgeInsets.all(12).copyWith(left: 20, bottom: 20),
         child: SvgPicture.asset(
           Assets.svg.iconClose,
           width: width,

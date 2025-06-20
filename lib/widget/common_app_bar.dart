@@ -37,12 +37,18 @@ class CommonAppBar {
         leading: GestureDetector(
           onTap: Get.back,
           behavior: HitTestBehavior.translucent,
-          child: Center(
-            child: SvgPicture.asset(
-              Assets.svg.iconBack,
-              width: 24.w,
-              height: 24.w,
-              color: arrowColor,
+          child: Container(
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  Assets.svg.iconBack,
+                  width: 24.w,
+                  height: 24.w,
+                  color: arrowColor,
+                )
+              ],
             ),
           ),
         ),

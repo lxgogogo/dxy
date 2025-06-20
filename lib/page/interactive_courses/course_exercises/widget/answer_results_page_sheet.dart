@@ -68,8 +68,10 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
     if (widget.pageType == 1) {
       _playSound('final_victory');
     } else if (widget.pageType == 2) {
-      _playSound('combo');
-      _vibrate();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _playSound('combo');
+        _vibrate();
+      });
     } else {
       _playSound('retry');
     }

@@ -20,6 +20,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   StreamSubscription? refreshEvent;
 
+  bool isFetching = false;
+
   @override
   void onReady() {
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
@@ -171,11 +173,16 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   @override
   Future<List?> loadData() async {
     final type = courseGroup.value?.value?.des;
-    final res = await CourseService.of.courseIndex(
+    isFetching = true;
+    final res = await CourseService.of
+        .courseIndex(
       type,
       pageNum: page,
       pageSize: pageSize,
-    );
+    )
+        .whenComplete(() {
+      isFetching = false;
+    });
     if (page == 1) items.clear();
     if (res.isSuccess) {
       final listRes = res.data?['list'] as List? ?? [];

@@ -7,6 +7,8 @@ class CourseDetailsController extends GetxController {
 
   CourseModel? detailBean;
 
+  bool isFetching = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -29,14 +31,15 @@ class CourseDetailsController extends GetxController {
 
   requestDetail() async {
     if (id == null) return;
+    isFetching = true;
     try {
       final res = await CourseService.of.courseInfo(id, showLoading: false);
       if (res.isSuccess) {
         detailBean = CourseModel.fromJson(res.data);
         safeUpdate();
       }
-    } catch (e) {
-      Log.e(e.toString());
+    } finally {
+      isFetching = false;
     }
   }
 
@@ -51,6 +54,7 @@ class CourseDetailsController extends GetxController {
   }
 
   Future<void> onStartCourse(BuildContext context) async {
+    if (isFetching) return;
     final id = detailBean?.id;
     if (id == null) return;
     await showDialog(
@@ -78,6 +82,7 @@ class CourseDetailsController extends GetxController {
   }
 
   Future<void> toKnowledge() async {
+    if (isFetching) return;
     final id = detailBean!.knowledge!.id;
     if (id == null) return;
     try {
@@ -96,12 +101,14 @@ class CourseDetailsController extends GetxController {
   }
 
   void toPractice() {
+    if (isFetching) return;
     final id = detailBean!.practise!.id;
     if (id == null) return;
     Get.toNamed(Routes.coursesExercises, arguments: {'id': detailBean?.id});
   }
 
   void toChallenge() {
+    if (isFetching) return;
     final id = detailBean!.challenge!.id;
     if (id == null) return;
   }

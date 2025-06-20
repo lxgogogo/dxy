@@ -19,71 +19,74 @@ class CourseDetailAllItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: '#58A5FF'.hexColor.withOpacity(0.1),
-            blurRadius: 8.63.r,
-            offset: Offset(0, 4.32.w),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            item.des ?? '',
-            style: TextStyle(
-              color: '#333333'.hexColor,
-              fontSize: 14.sp,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: '#58A5FF'.hexColor.withOpacity(0.1),
+              blurRadius: 8.63.r,
+              offset: Offset(0, 4.32.w),
             ),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(height: 12.w),
-          Row(
-            children: [
-              CommonImage.net(
-                imageUrl: item.icon ?? '',
-                width: 20.w,
-                height: 20.w,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              item.des ?? '',
+              style: TextStyle(
+                color: '#333333'.hexColor,
+                fontSize: 14.sp,
               ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: CourseTypeItem(
-                  assetName: Assets.svg.iconKnowledge,
-                  count: item.knowledgeCompleted ?? 0,
-                  total: item.knowledgeTotal ?? 0,
-                  status: item.status,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 12.w),
+            Row(
+              children: [
+                CommonImage.net(
+                  imageUrl: item.icon ?? '',
+                  width: 20.w,
+                  height: 20.w,
                 ),
-              ),
-              Expanded(
-                child: CourseTypeItem(
-                  assetName: Assets.svg.iconPractice,
-                  count: item.practiseCompleted ?? 0,
-                  total: item.practiseTotal ?? 0,
-                  status: item.status,
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: CourseTypeItem(
+                    assetName: Assets.svg.iconKnowledge,
+                    count: item.knowledgeCompleted ?? 0,
+                    total: item.knowledgeTotal ?? 0,
+                    status: item.status,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: CourseTypeItem(
-                  assetName: Assets.svg.iconChallenge,
-                  count: item.challengeCompleted ?? 0,
-                  total: item.challengeTotal ?? 0,
-                  status: item.status,
+                Expanded(
+                  child: CourseTypeItem(
+                    assetName: Assets.svg.iconPractice,
+                    count: item.practiseCompleted ?? 0,
+                    total: item.practiseTotal ?? 0,
+                    status: item.status,
+                  ),
                 ),
-              ),
-              CourseStatusBtn(
-                status: item.status,
-                onTap: onTap,
-              ),
-            ],
-          )
-        ],
+                Expanded(
+                  child: CourseTypeItem(
+                    assetName: Assets.svg.iconChallenge,
+                    count: item.challengeCompleted ?? 0,
+                    total: item.challengeTotal ?? 0,
+                    status: item.status,
+                  ),
+                ),
+                CourseStatusBtn(
+                  status: item.status,
+                  onTap: onTap,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

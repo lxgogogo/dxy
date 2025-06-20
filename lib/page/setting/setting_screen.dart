@@ -143,11 +143,11 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     buildSocialIcon(
                       'assets/images/ic_facebook.png',
-                      url: 'https://www.facebook.com/dexueyuan/?locale=zh_TW',
+                      url: 'https://www.facebook.com/profile.php?id=61575061943316&locale=zh_TW',
                     ),
                     buildSocialIcon(
                       'assets/images/ic_twitter.png',
-                      url: 'https://x.com/dpoker_club?s=21&t=u-3l2w44NuA9Tu0UcJ-jdQ',
+                      url: 'https://x.com/depokers_com',
                     ),
                     // buildSocialIcon(
                     //   'assets/images/ic_tiktok.png',

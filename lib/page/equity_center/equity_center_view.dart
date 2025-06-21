@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/app_theme.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../model/equity_center_model.dart';
@@ -471,23 +472,37 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 ),
               ],
             ),
-            Container(
-              width: 72.w,
-              height: 28.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                  color: ColorStyle.c557BF6.withOpacity(0.1)),
-              child: Text(
-                (model.completed ?? false) ? '已完成' : '进行中',
-                style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: !(model.completed ?? false) ? FontWeight.w600 : FontWeight.w400,
-                    color: (model.completed ?? false)
-                        ? ColorStyle.c557BF6.withOpacity(0.7)
-                        : ColorStyle.c557BF6),
-              ),
-            )
+            if (model.completed == false)
+              Container(
+                width: 72.w,
+                height: 28.w,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                    color: ColorStyle.c557BF6.withOpacity(0.1)),
+                child: Text(
+                  '进行中',
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: !(model.completed ?? false) ? FontWeight.w600 : FontWeight.w400,
+                      color: (model.completed ?? false)
+                          ? ColorStyle.c557BF6.withOpacity(0.7)
+                          : ColorStyle.c557BF6),
+                ),
+              )
+            else
+              Container(
+                width: 72.w,
+                height: 28.w,
+                alignment: Alignment.center,
+                child: Text(
+                  '已完成',
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppTheme.color_999999),
+                ),
+              )
           ],
         ));
   }

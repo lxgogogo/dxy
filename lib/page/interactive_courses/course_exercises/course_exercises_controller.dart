@@ -52,6 +52,12 @@ class CourseExercisesController extends GetxController {
     });
   }
 
+  // 答错需要重新请求接口
+  void _requestErrorData() {
+    int id = Get.arguments['id'] ?? 0;
+    CourseService.of.coursePractise('$id');
+  }
+
   void _result() {
     submit.value = false;
     for (final m in dataList) {
@@ -98,6 +104,7 @@ class CourseExercisesController extends GetxController {
         dataList.value = errorDataList[0].options ?? [];
         practiseList.refresh();
         errorDataList = [];
+        _requestErrorData();
         _result();
       });
     }

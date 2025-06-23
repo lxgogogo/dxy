@@ -84,30 +84,33 @@ class CourseAllItem extends StatelessWidget {
           SizedBox(height: 8.w),
           Row(
             children: [
-              Expanded(
-                child: CourseTypeItem(
-                  assetName: Assets.svg.iconKnowledge,
-                  count: item.knowledgeCompleted ?? 0,
-                  total: item.knowledgeTotal ?? 0,
-                  status: item.status,
+              if ((item.knowledgeTotal ?? 0) > 0)
+                Expanded(
+                  child: CourseTypeItem(
+                    assetName: Assets.svg.iconKnowledge,
+                    count: item.knowledgeCompleted ?? 0,
+                    total: item.knowledgeTotal ?? 0,
+                    status: item.status,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: CourseTypeItem(
-                  assetName: Assets.svg.iconPractice,
-                  count: item.practiseCompleted ?? 0,
-                  total: item.practiseTotal ?? 0,
-                  status: item.status,
+              if ((item.practiseTotal ?? 0) > 0)
+                Expanded(
+                  child: CourseTypeItem(
+                    assetName: Assets.svg.iconPractice,
+                    count: item.practiseCompleted ?? 0,
+                    total: item.practiseTotal ?? 0,
+                    status: item.status,
+                  ),
                 ),
-              ),
-              Expanded(
-                child: CourseTypeItem(
-                  assetName: Assets.svg.iconChallenge,
-                  count: item.challengeCompleted ?? 0,
-                  total: item.challengeTotal ?? 0,
-                  status: item.status,
+              if ((item.challengeTotal ?? 0) > 0)
+                Expanded(
+                  child: CourseTypeItem(
+                    assetName: Assets.svg.iconChallenge,
+                    count: item.challengeCompleted ?? 0,
+                    total: item.challengeTotal ?? 0,
+                    status: item.status,
+                  ),
                 ),
-              ),
               CourseStatusBtn(
                 status: item.status,
               ),
@@ -187,13 +190,13 @@ class CourseStatusBtn extends StatelessWidget {
     Color bgColor = Colors.transparent;
     Color textColor = Colors.transparent;
     if (status == 0) {
-      title = '未开始';
-      bgColor = '#333333'.hexColor.withOpacity(0.1);
-      textColor = '#999999'.hexColor;
-    } else if (status == 1) {
-      title = '进行中';
+      title = '待开始';
       bgColor = '#557BF6'.hexColor.withOpacity(0.1);
       textColor = '#557BF6'.hexColor;
+    } else if (status == 1) {
+      title = '进行中';
+      bgColor = '#557BF6'.hexColor;
+      textColor = Colors.white;
     } else if (status == 2) {
       title = '已完成';
       bgColor = '#333333'.hexColor.withOpacity(0.1);

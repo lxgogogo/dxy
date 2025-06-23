@@ -55,30 +55,33 @@ class CourseDetailAllItem extends StatelessWidget {
                   height: 20.w,
                 ),
                 SizedBox(width: 12.w),
-                Expanded(
-                  child: CourseTypeItem(
-                    assetName: Assets.svg.iconKnowledge,
-                    count: item.knowledgeCompleted ?? 0,
-                    total: item.knowledgeTotal ?? 0,
-                    status: item.status,
+                if ((item.knowledgeTotal ?? 0) > 0)
+                  Expanded(
+                    child: CourseTypeItem(
+                      assetName: Assets.svg.iconKnowledge,
+                      count: item.knowledgeCompleted ?? 0,
+                      total: item.knowledgeTotal ?? 0,
+                      status: item.status,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: CourseTypeItem(
-                    assetName: Assets.svg.iconPractice,
-                    count: item.practiseCompleted ?? 0,
-                    total: item.practiseTotal ?? 0,
-                    status: item.status,
+                if ((item.practiseTotal ?? 0) > 0)
+                  Expanded(
+                    child: CourseTypeItem(
+                      assetName: Assets.svg.iconPractice,
+                      count: item.practiseCompleted ?? 0,
+                      total: item.practiseTotal ?? 0,
+                      status: item.status,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: CourseTypeItem(
-                    assetName: Assets.svg.iconChallenge,
-                    count: item.challengeCompleted ?? 0,
-                    total: item.challengeTotal ?? 0,
-                    status: item.status,
+                if ((item.challengeTotal ?? 0) > 0)
+                  Expanded(
+                    child: CourseTypeItem(
+                      assetName: Assets.svg.iconChallenge,
+                      count: item.challengeCompleted ?? 0,
+                      total: item.challengeTotal ?? 0,
+                      status: item.status,
+                    ),
                   ),
-                ),
                 CourseStatusBtn(
                   status: item.status,
                   onTap: onTap,

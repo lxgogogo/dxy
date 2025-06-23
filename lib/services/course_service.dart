@@ -129,4 +129,12 @@ class CourseService {
     );
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> courseRemind({bool showLoading = true}) async {
+    final res = await HttpUtils.postNew(
+      Api.courseRemind,
+      showLoading: showLoading,
+    );
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

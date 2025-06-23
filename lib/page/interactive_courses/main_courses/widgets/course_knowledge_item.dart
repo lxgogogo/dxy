@@ -102,7 +102,7 @@ class CourseKnowledgeItem extends StatelessWidget {
                         ),
                         SizedBox(width: 4.w),
                         Text(
-                          '观看${item.contentType.sourceTypeDesc}',
+                          item.contentType.sourceActionTypeDesc,
                           style: TextStyle(
                             color: '#557BF6'.hexColor,
                             fontSize: 12.sp,

@@ -43,10 +43,12 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   }
 
   Future<void> fetchData({bool needResetGroup = false}) async {
+    isFetching = true;
     await Future.wait([
       getCourseTop(),
       getCourseGroup(needResetGroup: needResetGroup),
     ]).whenComplete(() async {
+      isFetching = false;
       if (courseTopModel.value?.courseGroupId == null) {
         await UserStore.of.updateUserInfo({'courseGroupId': null});
         Future.delayed(const Duration(milliseconds: 500)).whenComplete(() {
@@ -59,15 +61,15 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         return;
       }
       if ((courseTopModel.value!.integralPunch ?? 0) > 0) {
-        // 这里判断是否需要弹窗
-        final now = DateTime.now();
-        final lastPopupDateStr = await StorageService.of.getLastPopupDate();
-        if (lastPopupDateStr.isNotEmpty) {
-          final lastPopupDate = DateTime.parse(lastPopupDateStr);
-          if (now.day <= lastPopupDate.day) {
-            return;
-          }
-        }
+        // // 这里判断是否需要弹窗
+        // final now = DateTime.now();
+        // final lastPopupDateStr = await StorageService.of.getLastPopupDate();
+        // if (lastPopupDateStr.isNotEmpty) {
+        //   final lastPopupDate = DateTime.parse(lastPopupDateStr);
+        //   if (now.day <= lastPopupDate.day) {
+        //     return;
+        //   }
+        // }
         Get.bottomSheet(
           Container(
             decoration: BoxDecoration(
@@ -127,6 +129,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
             ),
           ),
           barrierColor: Colors.black.withOpacity(0.4),
+          isDismissible: false,
         );
       }
     });
@@ -173,16 +176,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   @override
   Future<List?> loadData() async {
     final type = courseGroup.value?.value?.des;
-    isFetching = true;
-    final res = await CourseService.of
-        .courseIndex(
+    final res = await CourseService.of.courseIndex(
       type,
       pageNum: page,
       pageSize: pageSize,
-    )
-        .whenComplete(() {
-      isFetching = false;
-    });
+    );
     if (page == 1) items.clear();
     if (res.isSuccess) {
       final listRes = res.data?['list'] as List? ?? [];
@@ -208,6 +206,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   }
 
   Future<void> onStartCourse(CourseModel item) async {
+    if (isFetching) return;
     final id = item.id;
     if (id == null) return;
     try {
@@ -224,6 +223,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   }
 
   Future<void> toKnowledge(CourseModel item) async {
+    if (isFetching) return;
     final id = item.id;
     if (id == null) return;
     try {
@@ -242,12 +242,14 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   }
 
   void toPractice(CourseModel item) {
+    if (isFetching) return;
     final id = item.id;
     if (id == null) return;
     Get.toNamed(Routes.coursesExercises, arguments: {'id': item.courseId ?? 0});
   }
 
   void toChallenge(CourseModel item) {
+    if (isFetching) return;
     final id = item.id;
     if (id == null) return;
   }
@@ -257,9 +259,19 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   }
 
   Future<void> onContinue() async {
-    Get.back();
-    final now = DateTime.now();
-    final nowFormatter = DateFormat('yyyy-MM-dd').format(now);
-    await StorageService.of.setLastPopupDate(nowFormatter);
+    try {
+      final res = await CourseService.of.courseRemind(showLoading: true);
+      if (res.isSuccess) {
+        Get.back();
+      } else {
+        ToastUtils.showToast(res.msg);
+      }
+    } catch (e) {
+      ToastUtils.showToast(e.toString());
+    }
+    // Get.back();
+    // final now = DateTime.now();
+    // final nowFormatter = DateFormat('yyyy-MM-dd').format(now);
+    // await StorageService.of.setLastPopupDate(nowFormatter);
   }
 }

@@ -111,4 +111,5 @@ class Api {
   static const String coursePractise = '/api/course/practise';
   static const String courseAnswer = '/api/course/answer';
   static const String coursePunch = '/api/course/punch';
+  static const String courseRemind = '/api/course/remind';
 }

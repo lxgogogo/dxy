@@ -53,20 +53,20 @@ extension UrlParametersString on String? {
 
 
 extension SourceTypeExt on String? {
-  String get sourceTypeDesc {
+  String get sourceActionTypeDesc {
     if (this == 'thread') {
-      return '帖子';
+      return '观看帖子';
     } else if (this == 'article') {
-      return '文章';
+      return '阅读文章';
     } else if (this == 'video') {
-      return '视频';
+      return '观看视频';
     } else if (this == 'videoList') {
-      return '视频合集';
+      return '观看视频合集';
     } else if (this == 'book') {
-      return '文章';
+      return '阅读文章';
     } else if (this == 'tool') {
-      return '文章';
+      return '阅读文章';
     }
-    return '资源';
+    return '观看资源';
   } 
 }

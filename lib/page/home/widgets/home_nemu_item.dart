@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/widget/scale_button_wraper.dart';
 
 class HomeMenuItem extends StatelessWidget {
   const HomeMenuItem({
@@ -22,7 +23,7 @@ class HomeMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ScaleButtonWrapper(
       onTap: onTap,
       child: Stack(
         clipBehavior: Clip.none,

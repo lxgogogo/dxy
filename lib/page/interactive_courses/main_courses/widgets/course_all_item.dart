@@ -152,7 +152,7 @@ class CourseTypeItem extends StatelessWidget {
           SizedBox(width: 4.w),
           Text.rich(
             TextSpan(
-              text: status == 0 ? '' : '$count/',
+              text: status == 1 ? '$count/' : '',
               children: [
                 TextSpan(
                   text: '$total',
@@ -200,7 +200,7 @@ class CourseStatusBtn extends StatelessWidget {
     } else if (status == 2) {
       title = '已完成';
       bgColor = '#333333'.hexColor.withOpacity(0.1);
-      textColor = '#333333'.hexColor;
+      textColor = '#999999'.hexColor;
     }
     return Container(
       width: 72.w,

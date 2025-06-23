@@ -25,9 +25,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   @override
   void onReady() {
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
-      // if (!hasLoaded.value) {
-      fetchData(needResetGroup: true);
-      // }
+      courseTopModel.value = null;
+      courseGroups = [];
+      courseGroup.value = null;
+      items.value = [];
+      hasLoaded.value = false;
     });
     super.onReady();
   }

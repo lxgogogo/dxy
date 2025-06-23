@@ -12,8 +12,10 @@ import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
+import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'course_exercises_controller.dart';
@@ -100,7 +102,19 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
                               color: AppTheme.color_557BF6,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.w))),
-                        )
+                        ),
+                        if (controller.isCorrect.value)
+                          Positioned(
+                              left: -65+progress,
+                              child: Lottie.asset(
+                                  'assets/lottie/progressbar_lizi.json',
+                                  width: 20.w,
+                                  height: 8.w,
+                                  fit: BoxFit.fitHeight,
+                                  repeat: true,
+                                  animate: true
+                              )
+                          )
                       ],
                     ),
                   ),

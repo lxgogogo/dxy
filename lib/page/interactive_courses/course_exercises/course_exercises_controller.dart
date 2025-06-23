@@ -23,6 +23,7 @@ class CourseExercisesController extends GetxController {
   // 连队次数
   int companiesNumber = 0;
   RxBool isLoading = true.obs;
+  RxBool isCorrect = false.obs;
   final audioPlayer = AudioPlayer();
 
   @override
@@ -159,6 +160,11 @@ class CourseExercisesController extends GetxController {
     } else {
       companiesNumber++;
       _playSound('correct');
+      // 进度条效果
+      isCorrect.value = true;
+      Future.delayed(const Duration(milliseconds: 800), () {
+        isCorrect.value = false;
+      });
     }
     // 结果弹窗
     String str = (data.answer ?? false) ? '泰裤辣！' : '不正确';

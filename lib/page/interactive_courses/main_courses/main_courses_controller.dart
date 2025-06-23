@@ -14,7 +14,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   List<CourseGroupModel> courseGroups = [];
   Rx<CourseGroupModel?> courseGroup = Rx<CourseGroupModel?>(null);
 
-  final RxList<CourseModel> items = <CourseModel>[].obs;
+  final RxList<CourseModel> courseItems = <CourseModel>[].obs;
 
   RxBool hasLoaded = false.obs;
 
@@ -28,7 +28,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       courseTopModel.value = null;
       courseGroups = [];
       courseGroup.value = null;
-      items.value = [];
+      courseItems.value = [];
       hasLoaded.value = false;
     });
     super.onReady();
@@ -183,11 +183,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       pageNum: page,
       pageSize: pageSize,
     );
-    if (page == 1) items.clear();
+    if (page == 1) courseItems.clear();
     if (res.isSuccess) {
       final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
-      items.addAll(records);
+      courseItems.addAll(records);
       return records;
     }
     return null;
@@ -215,7 +215,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       final res = await CourseService.of.courseStart(id);
       if (res.isSuccess) {
         item.status = 1;
-        items.refresh();
+        courseItems.refresh();
       } else {
         ToastUtils.showToast(res.msg);
       }

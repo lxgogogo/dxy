@@ -175,7 +175,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Obx(() {
-                          if (controller.courseGroups.isEmpty) {
+                          if (controller.courseGroup.value == null) {
                             return const SizedBox();
                           }
                           return GestureDetector(
@@ -218,14 +218,14 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     controller: controller.refreshController,
                                     onLoading: controller.onLoading,
                                     enablePullDown: false,
-                                    enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
+                                    enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.items.isNotEmpty
+                                    child: controller.courseItems.isNotEmpty
                                         ? ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount: controller.items.length,
+                                            itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {
-                                              final item = controller.items[index];
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
                                                 onTap: () => controller.toKnowledge(item),
                                                 child: CourseKnowledgeItem(
@@ -241,14 +241,14 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     controller: controller.refreshController,
                                     onLoading: controller.onLoading,
                                     enablePullDown: false,
-                                    enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
+                                    enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.items.isNotEmpty
+                                    child: controller.courseItems.isNotEmpty
                                         ? ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount: controller.items.length,
+                                            itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {
-                                              final item = controller.items[index];
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
                                                 onTap: () => controller.toChallenge(item),
                                                 child: CourseChallengeItem(
@@ -264,14 +264,14 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     controller: controller.refreshController,
                                     onLoading: controller.onLoading,
                                     enablePullDown: false,
-                                    enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
+                                    enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.items.isNotEmpty
+                                    child: controller.courseItems.isNotEmpty
                                         ? ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount: controller.items.length,
+                                            itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {
-                                              final item = controller.items[index];
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
                                                 onTap: () => controller.toPractice(item),
                                                 child: CoursePracticeItem(
@@ -287,14 +287,14 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                     controller: controller.refreshController,
                                     onLoading: controller.onLoading,
                                     enablePullDown: false,
-                                    enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
+                                    enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                     isLoading: controller.isLoading,
-                                    child: controller.items.isNotEmpty
+                                    child: controller.courseItems.isNotEmpty
                                         ? ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount: controller.items.length,
+                                            itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {
-                                              final item = controller.items[index];
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
                                                 onTap: () => controller.toCourseDetail(item),
                                                 child: CourseAllItem(
@@ -325,7 +325,9 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
   void _onSelectCourse() {
     int? selectedIndex;
     if (controller.courseGroup.value != null) {
-      selectedIndex = controller.courseGroups.indexOf(controller.courseGroup.value!);
+      selectedIndex = controller.courseGroups.indexWhere(
+        (e) => e.value?.des == controller.courseGroup.value!.value?.des,
+      );
     }
     showCommonOperationsSheet(
       maxHeight: 238.w,

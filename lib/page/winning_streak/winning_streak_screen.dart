@@ -516,8 +516,8 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                             height: 24.w,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
+                              shape: BoxShape.circle,
                               color: '#557BF6'.hexColor,
-                              borderRadius: BorderRadius.circular(1.55.r),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,

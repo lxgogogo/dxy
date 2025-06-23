@@ -33,13 +33,13 @@
 			</array>
 		</dict>
 		<dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-            	<string>com.googleusercontent.apps.390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8</string>
-            </array>
-        </dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -79,6 +79,8 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>GIDClientID</key>
-    <string>390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com</string>
+	<string>390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>需要震动权限</string>
 </dict>
 </plist>

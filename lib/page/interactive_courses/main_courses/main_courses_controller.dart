@@ -235,6 +235,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         final contentId = item.contentId;
         final subContentId = item.subContentId;
         AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
+        fetchData(needResetGroup: false);
       } else {
         ToastUtils.showToast(res.msg);
       }

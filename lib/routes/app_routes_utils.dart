@@ -113,18 +113,19 @@ class AppRoutesUtils {
             ));
   }
 
-  static void toDetail(String? contentType, int? contentId, {int? subContentId}) {
-    if (contentType == null || contentId == null) return;
+  static Future<T?>? toDetail<T>(String? contentType, int? contentId, {int? subContentId}) {
+    if (contentType == null || contentId == null) return null;
     if (contentType == 'book') {
-      Get.toNamed(Routes.bookDetail, arguments: contentId);
+      return Get.toNamed(Routes.bookDetail, arguments: contentId);
     } else if (contentType == 'article') {
-      Get.toNamed(Routes.articleDetail, arguments: contentId);
+      return Get.toNamed(Routes.articleDetail, arguments: contentId);
     } else if (contentType == 'tool') {
-      Get.toNamed(Routes.toolDetail, arguments: contentId);
+      return Get.toNamed(Routes.toolDetail, arguments: contentId);
     } else if (contentType == 'video' || contentType == 'videoList') {
-      Get.toNamed(Routes.videoDetail, arguments: {'id': contentId, 'childId': subContentId});
+      return Get.toNamed(Routes.videoDetail, arguments: {'id': contentId, 'childId': subContentId});
     } else if (contentType == 'thread') {
-      Get.toNamed(Routes.feedDetail, arguments: contentId);
+      return Get.toNamed(Routes.feedDetail, arguments: contentId);
     }
+    return null;
   }
 }

@@ -25,6 +25,7 @@ import '../../routes/app_pages.dart';
 import '../../services/index.dart';
 import '../../stores/config_store.dart';
 import '../../stores/user_store.dart';
+import '../../utils/env.dart';
 import '../../utils/net_request.dart';
 
 part 'personal_controller.dart';

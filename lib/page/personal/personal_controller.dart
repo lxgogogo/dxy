@@ -41,6 +41,10 @@ class PersonalScreenController extends GetxController {
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
+    if (Env.isAndroidAAb) {
+      await thirdWebLogin('GOOGLE', Env.googleLogin);
+      return;
+    }
     try {
       if (isAuthorizing) return;
       isAuthorizing = true;
@@ -72,6 +76,10 @@ class PersonalScreenController extends GetxController {
   }
 
   Future<void> signInWithApple(BuildContext context) async {
+    if (Env.isAndroidAAb) {
+      await thirdWebLogin('APPLE', Env.appleLogin);
+      return;
+    }
     try {
       if (isAuthorizing) return;
       isAuthorizing = true;
@@ -102,7 +110,10 @@ class PersonalScreenController extends GetxController {
     try {
       if (isAuthorizing) return;
       isAuthorizing = true;
-      final token = await Get.toNamed(Routes.telegramLogin)?.whenComplete(() {
+      final token = await Get.toNamed(
+        Routes.webLogin,
+        arguments: {'type': 'TELEGRAM', 'authUrl': Env.telegramLogin},
+      )?.whenComplete(() {
         EasyLoading.dismiss();
       });
       ;
@@ -121,6 +132,41 @@ class PersonalScreenController extends GetxController {
           ToastUtils.showToast(res.msg);
         }
       }
+    } finally {
+      EasyLoading.dismiss();
+      isAuthorizing = false;
+    }
+  }
+
+  Future<void> thirdWebLogin(
+    String type,
+    String url,
+  ) async {
+    if (isAuthorizing) return;
+    isAuthorizing = true;
+    try {
+      final token = await Get.toNamed(
+        Routes.webLogin,
+        arguments: {'type': type, 'authUrl': url},
+      )?.whenComplete(() {
+        EasyLoading.dismiss();
+      });
+      if (token is String) {
+        EasyLoading.show();
+        final res = await LoginService.of.thirdLogin(
+          type: type,
+          token: token,
+        );
+        if (res.isSuccess) {
+          ToastUtils.showToast('绑定成功');
+          final userProfile = UserProfile.fromJson(res.data);
+          UserStore.of.putUserInfo(userProfile);
+        } else {
+          ToastUtils.showToast(res.msg);
+        }
+      }
+    } catch (e) {
+      ToastUtils.showToast(e.toString());
     } finally {
       EasyLoading.dismiss();
       isAuthorizing = false;

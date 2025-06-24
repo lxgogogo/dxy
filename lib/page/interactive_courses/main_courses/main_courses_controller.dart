@@ -22,6 +22,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   bool isFetching = false;
 
+  ScrollController scrollController = ScrollController();
+
   @override
   void onReady() {
     refreshEvent = EventBusUtil.of.on<EventLoginSuccess>().listen((event) {

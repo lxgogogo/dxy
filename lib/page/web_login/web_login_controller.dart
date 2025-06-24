@@ -1,9 +1,19 @@
-part of 'telegram_login_screen.dart';
+part of 'web_login_screen.dart';
 
 class TelegramLoginController extends GetxController {
   bool isInit = false;
 
   // late WebViewController webViewController;
+
+  late String type;
+  late String url;
+
+  @override
+  void onInit() {
+    super.onInit();
+    type = Get.arguments?['type'] as String? ?? '';
+    url = Get.arguments?['authUrl'] as String? ?? '';
+  }
 
   @override
   void onReady() {

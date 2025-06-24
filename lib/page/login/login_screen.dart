@@ -20,6 +20,7 @@ import '../../services/index.dart';
 import '../../stores/storage.dart';
 import '../../stores/user_store.dart';
 import '../../utils/app_version_checker.dart';
+import '../../utils/env.dart';
 import '../../utils/event_bus_util.dart';
 import '../../utils/toast_utils.dart';
 import '../../widget/button.dart';
@@ -327,9 +328,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithGoogle() async {
+    if (Env.isAndroidAAb) {
+      await thirdWebLogin('GOOGLE', Env.googleLogin);
+      return;
+    }
+    if (isAuthorizing) return;
+    isAuthorizing = true;
     try {
-      if (isAuthorizing) return;
-      isAuthorizing = true;
       final googleUser = await GoogleSignIn().signIn();
       EasyLoading.show();
       final googleAuth = await googleUser?.authentication;
@@ -366,9 +371,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithApple() async {
+    if (Env.isAndroidAAb) {
+      await thirdWebLogin('APPLE', Env.appleLogin);
+      return;
+    }
+    if (isAuthorizing) return;
+    isAuthorizing = true;
     try {
-      if (isAuthorizing) return;
-      isAuthorizing = true;
       final appleProvider = AppleAuthProvider()
         ..addScope('email')
         ..addScope('name');
@@ -402,16 +411,54 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithTelegram() async {
+    if (isAuthorizing) return;
+    isAuthorizing = true;
     try {
-      if (isAuthorizing) return;
-      isAuthorizing = true;
-      final token = await Get.toNamed(Routes.telegramLogin)?.whenComplete(() {
+      final token = await Get.toNamed(
+        Routes.webLogin,
+        arguments: {'type': 'TELEGRAM', 'authUrl': Env.telegramLogin},
+      )?.whenComplete(() {
         EasyLoading.dismiss();
       });
       if (token is String) {
         EasyLoading.show();
         final res = await LoginService.of.thirdLogin(
           type: 'TELEGRAM',
+          token: token,
+        );
+        if (res.isSuccess) {
+          ToastUtils.showToast('登录成功');
+          UserStore.of.loginSuccess(res);
+          Get.until((route) => route.settings.name == Routes.main);
+        } else {
+          ToastUtils.showToast(res.msg);
+        }
+      }
+    } catch (e) {
+      ToastUtils.showToast(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+      isAuthorizing = false;
+    }
+  }
+
+  Future<void> thirdWebLogin(
+    String type,
+    String url,
+  ) async {
+    if (isAuthorizing) return;
+    isAuthorizing = true;
+    try {
+      final token = await Get.toNamed(
+        Routes.webLogin,
+        arguments: {'type': type, 'authUrl': url},
+      )?.whenComplete(() {
+        EasyLoading.dismiss();
+      });
+      if (token is String) {
+        EasyLoading.show();
+        final res = await LoginService.of.thirdLogin(
+          type: type,
           token: token,
         );
         if (res.isSuccess) {

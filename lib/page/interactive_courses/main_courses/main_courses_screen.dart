@@ -147,6 +147,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
               SizedBox(height: 10.w),
               Expanded(
                 child: NestedScrollView(
+                  controller: controller.scrollController,
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
                     return [
                       SliverToBoxAdapter(

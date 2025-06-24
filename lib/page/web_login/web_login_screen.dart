@@ -8,10 +8,10 @@ import 'package:holdem/widget/common_app_bar.dart';
 
 import '../../utils/env.dart';
 
-part 'telegram_login_controller.dart';
+part 'web_login_controller.dart';
 
-class TelegramLoginScreen extends StatelessWidget {
-  const TelegramLoginScreen({
+class WebLoginScreen extends StatelessWidget {
+  const WebLoginScreen({
     super.key,
   });
 
@@ -23,14 +23,17 @@ class TelegramLoginScreen extends StatelessWidget {
         return Scaffold(
             appBar: CommonAppBar.arrowBack(
               context,
-              title: 'Telegram',
+              title: controller.type,
             ),
             body: controller.isInit
                 ? InAppWebView(
                     initialUrlRequest: URLRequest(
-                      url: WebUri(Env.telegramLogin),
+                      url: WebUri(controller.url),
                     ),
                     initialSettings: InAppWebViewSettings(
+                      javaScriptEnabled: true,
+                      javaScriptCanOpenWindowsAutomatically: true,
+                      userAgent: "random",
                       supportZoom: false,
                       useHybridComposition: false,
                       cacheEnabled: false,

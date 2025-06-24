@@ -99,21 +99,21 @@ mkdir -p "$target_directory"
 # 打包函数
 build_apk() {
     echo "🔧 开始打包 Android APK (环境: $ENV)..."
-    fvm flutter build apk --release --dart-define=ENV=$ENV
+    fvm flutter build apk --release --dart-define=ENV=$ENV --dart-define=PLATFORM_TYPE=android_apk
     mv build/app/outputs/flutter-apk/app-release.apk "$target_directory/${name}_${version_clean}_${ENV}.apk"
     echo "✅ Android APK 打包完成"
 }
 
 build_aab() {
     echo "🔧 开始打包 Android AAB (环境: $ENV)..."
-    fvm flutter build appbundle --release --dart-define=ENV=$ENV
+    fvm flutter build appbundle --release --dart-define=ENV=$ENV --dart-define=PLATFORM_TYPE=android_aab
     mv build/app/outputs/bundle/release/app-release.aab "$target_directory/${name}_${version_clean}_${ENV}.aab"
     echo "✅ Android AAB 打包完成"
 }
 
 build_ipa() {
     echo "🔧 开始打包 iOS IPA (环境: $ENV)..."
-    fvm flutter build ipa --release --dart-define=ENV=$ENV
+    fvm flutter build ipa --release --dart-define=ENV=$ENV --dart-define=PLATFORM_TYPE=ios_ipa
     mv build/ios/ipa/*.ipa "$target_directory/${name}_${version_clean}_${ENV}.ipa"
     echo "✅ iOS IPA 打包完成"
 }

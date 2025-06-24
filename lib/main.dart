@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,13 +14,16 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'utils/pre_config.dart';
 import 'utils/env.dart';
 
-void main() {
+void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  // await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   // 从环境变量中获取环境配置
   const env = String.fromEnvironment('ENV', defaultValue: 'test');
+  const platformType = String.fromEnvironment('PLATFORM_TYPE');
   initEnv(env);
+  initPlatformType(platformType);
   
   PreConfig.init().then((value) {
     runApp(const MyApp());

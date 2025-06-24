@@ -42,7 +42,7 @@ import 'package:holdem/services/index.dart';
 
 import '../page/course/course_screen.dart';
 import '../page/course_details/course_details_screen.dart';
-import '../page/telegram_login/telegram_login_screen.dart';
+import '../page/web_login/web_login_screen.dart';
 import '../page/tool_detail/tool_detail_screen.dart';
 import '../page/tool_list/tool_list_screen.dart';
 import '../utils/track_utils.dart';
@@ -178,8 +178,8 @@ class AppPages {
       page: () => const EquityCenterPage(),
     ),
     GetPage(
-      name: Routes.telegramLogin,
-      page: () => const TelegramLoginScreen(),
+      name: Routes.webLogin,
+      page: () => const WebLoginScreen(),
     ),
     GetPage(
       name: Routes.noticeList,

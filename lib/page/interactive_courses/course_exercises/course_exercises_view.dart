@@ -200,10 +200,12 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
                     return _buildButtonWidget(e);
                   })
                 ],
-              )
+              ),
+              SizedBox(height: 10.w),
             ],
           )),
         ),
+        SizedBox(height: 10.w),
         GestureDetector(
           onTap: controller.onPressed,
           child: Container(
@@ -225,7 +227,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
             ),
           ),
         ),
-        SizedBox(height: 70.w)
+        SizedBox(height: 60.w)
       ],
     );
   }

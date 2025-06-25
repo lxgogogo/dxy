@@ -20,7 +20,11 @@ class CourseDetailAllItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (item.status == 0) {
+          onTap?.call();
+        }
+      },
       child: Container(
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(

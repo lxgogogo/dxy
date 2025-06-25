@@ -100,7 +100,7 @@ class _CommentItemState extends State<CommentItem> {
               Row(
                 children: [
                   Text(
-                    widget.commentBean.user != null ? widget.commentBean.user!.nickname! : '',
+                    widget.commentBean.user?.nickname ??  '',
                     style: TextStyle(
                       color: '#333333'.hexColor,
                       fontSize: 14.sp,

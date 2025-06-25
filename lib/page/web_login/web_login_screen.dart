@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
-import '../../utils/env.dart';
 
 part 'web_login_controller.dart';
 

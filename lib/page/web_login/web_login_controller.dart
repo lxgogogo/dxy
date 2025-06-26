@@ -3,7 +3,7 @@ part of 'web_login_screen.dart';
 class TelegramLoginController extends GetxController {
   bool isInit = false;
 
-  // late WebViewController webViewController;
+  InAppWebViewController? _webViewController;
 
   late String type;
   late String url;
@@ -17,24 +17,6 @@ class TelegramLoginController extends GetxController {
 
   @override
   void onReady() {
-    // webViewController = WebViewController()
-    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    //   ..setNavigationDelegate(
-    //     NavigationDelegate(
-    //         // onProgress: (int progress) {},
-    //         // onPageStarted: (String url) {},
-    //         // onPageFinished: (String url) {},
-    //         // onHttpError: (HttpResponseError error) {},
-    //         // // onWebResourceError: (WebResourceError error) {},
-    //         // onNavigationRequest: (NavigationRequest request) {},
-    //         ),
-    //   )
-    //   ..addJavaScriptChannel('NativeBridge', onMessageReceived: (message) {
-    //     print('xxx $message');
-    //   })
-    //   ..loadRequest(
-    //     Uri.parse(Env.telegramLogin),
-    //   );
     clearCache().whenComplete(() {
       isInit = true;
       safeUpdate();
@@ -42,8 +24,30 @@ class TelegramLoginController extends GetxController {
     super.onReady();
   }
 
-  handleJavaScriptCallback(List<dynamic> arguments) {
+  void handleNativeBridge(List<dynamic> arguments) {
     Get.back(result: arguments.firstOrNull);
+  }
+
+  void handleOpenWebView(List<dynamic> arguments) {
+    if (arguments.isNotEmpty) {
+      String targetUrl = arguments.first.toString();
+      if (GetUtils.isURL(targetUrl)) {
+        try {
+          _webViewController?.loadUrl(urlRequest: URLRequest(url: WebUri(targetUrl)));
+          return;
+        } catch (e) {
+          ToastUtils.showToast('URL加载失败: $e');
+        }
+      } else {
+        ToastUtils.showToast('无效的URL格式: $targetUrl');
+      }
+    } else {
+      ToastUtils.showToast('无效的参数');
+    }
+  }
+
+  void setWebViewController(InAppWebViewController controller) {
+    _webViewController = controller;
   }
 
   Future<void> clearCache() async {

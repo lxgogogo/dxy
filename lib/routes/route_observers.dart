@@ -3,7 +3,9 @@ part of 'app_pages.dart';
 class AppRouteObserver<R extends Route<dynamic>> extends RouteObserver<R> {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    CommonService.of.saveReview();
+    if (route.settings.name != Routes.splash) {
+      CommonService.of.saveReview();
+    }
     final name = route.settings.name ?? '';
     if (name.isNotEmpty) Routes.history.add(name);
     switch (name) {
@@ -35,7 +37,9 @@ class AppRouteObserver<R extends Route<dynamic>> extends RouteObserver<R> {
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    CommonService.of.saveReview();
+    if (newRoute?.settings.name != Routes.splash) {
+      CommonService.of.saveReview();
+    }
     if (newRoute != null) {
       final index = Routes.history.indexWhere((element) {
         return element == oldRoute?.settings.name;

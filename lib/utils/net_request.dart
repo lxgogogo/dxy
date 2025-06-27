@@ -16,7 +16,7 @@ typedef FailureCallback = void Function(String errorMsg);
 
 class NetRequest {
   Future courseCategory(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.indexCategory, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.indexCategory, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -28,7 +28,7 @@ class NetRequest {
   }
 
   Future indexList(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.indexList, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.indexList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -39,7 +39,7 @@ class NetRequest {
     }
   }
   Future hotVideo(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.hotVideo,params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.hotVideo,params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -50,7 +50,7 @@ class NetRequest {
     }
   }
   Future bookSuggest(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.hotVideo,params: params, showLoading: showLoading);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.hotVideo,params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -62,7 +62,7 @@ class NetRequest {
   }
 
   Future competitionLoop(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.competitionLoop, params: params, showLoading: showLoading);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.competitionLoop, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -74,7 +74,7 @@ class NetRequest {
   }
 
   Future competitionRelated(Map<String, Object> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.competitionRelated, params: params);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.competitionRelated, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -98,7 +98,7 @@ class NetRequest {
   }
 
   Future contentShow(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.contentShow, params: params, showLoading: showLoading);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.contentShow, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -108,7 +108,7 @@ class NetRequest {
   }
 
   Future indexBanner(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.indexBanner, params: params, showLoading: showLoading);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.indexBanner, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -120,7 +120,7 @@ class NetRequest {
   }
 
   Future bookRecommend(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.bookSuggest, params: params, showLoading: showLoading);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.bookSuggest, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -132,7 +132,7 @@ class NetRequest {
   }
 
   Future messageList(Map<String, Object> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.messageList, params: params,showLoading: showLoading);
+    Map<dynamic, dynamic> response = await HttpUtils.post(Api.messageList, params: params,showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -155,7 +155,7 @@ class NetRequest {
   }
 
   Future contentLike(Map<String, dynamic> params, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.like, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.like, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -163,7 +163,7 @@ class NetRequest {
   }
 
   Future newContentLike(Map<String, dynamic> params) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.like, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.like, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     return response['data'];
   }
@@ -178,7 +178,7 @@ class NetRequest {
   Future getBoardData(SuccessCallback onSuccess, {bool showLoading = true}) async {
     Map<String, Object> params = {};
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.boardList, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.boardList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -203,7 +203,7 @@ class NetRequest {
   static const String BOARD_SORT_LIKE = "like";
 
   Future getThreadListByBoard(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadList, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.threadList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -216,7 +216,7 @@ class NetRequest {
 
   ///帖子详情
   Future threadShow(Map<String, dynamic> params, SuccessCallback onSuccess, {bool showLoading = true}) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadShow, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.threadShow, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("threadShow===>$response");
@@ -232,7 +232,7 @@ class NetRequest {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
-    Map<String, dynamic> response = await HttpUtils.postFile(Api.uploadFile,
+    final response = await HttpUtils.postFile(Api.uploadFile,
         params: params, onSendProgress: onSendProgress, showLoading: false, onFail: onFail);
 
     util_response.Response resp = util_response.Response.fromJson(response);
@@ -248,7 +248,7 @@ class NetRequest {
 
   Future uploadBytesFile(
       var data, SuccessCallback onSuccess, FailureCallback onFail, ProgressCallback onSendProgress) async {
-    Map<String, dynamic> response =
+    final response =
         await HttpUtils.postBytesFile(Api.uploadFile, data, params: {}, onSendProgress: onSendProgress, onFail: onFail);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -271,7 +271,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.followedList, params: params);
+    final response = await HttpUtils.post(Api.followedList, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("followedList===>$response");
@@ -295,7 +295,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.fansList, params: params);
+    final response = await HttpUtils.post(Api.fansList, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("fansList===>$response");
@@ -313,7 +313,7 @@ class NetRequest {
     params['userId'] = userId;
     params['state'] = state;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.followerToggle, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.followerToggle, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     LogUtils.printAll("followerToggle params===>$params");
     if (resp.code == 200) {
@@ -347,7 +347,7 @@ class NetRequest {
     params['filters'] = filters;
 
     LogUtils.printAll("userFavoriteList params===>$params");
-    Map<String, dynamic> response = await HttpUtils.post(Api.userFavoriteList, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.userFavoriteList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userFavoriteList===>$response");
@@ -360,7 +360,7 @@ class NetRequest {
   }
 
   Future delFavorite(int id, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.delFavorite, params: {"id": id});
+    final response = await HttpUtils.post(Api.delFavorite, params: {"id": id});
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -384,7 +384,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.userCommentList, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.userCommentList, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -405,7 +405,7 @@ class NetRequest {
     filters['relId'] = relId;
     filters['relType'] = relType;
     params['filters'] = filters;
-    Map<String, dynamic> response = await HttpUtils.post(Api.commentList, params: params);
+    final response = await HttpUtils.post(Api.commentList, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       onSuccess(response['data']);
@@ -431,7 +431,7 @@ class NetRequest {
     params['type'] = type;
     params['email'] = account;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.sendCode, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.sendCode, params: params, showLoading: false);
     LogUtils.printAll("sendCode===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -446,7 +446,7 @@ class NetRequest {
     params['password'] = password;
     params['code'] = code;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.register, params: params);
+    final response = await HttpUtils.post(Api.register, params: params);
     LogUtils.printAll("registerAccount===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -465,7 +465,7 @@ class NetRequest {
     params['account'] = account;
     params['password'] = password;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.login, params: params);
+    final response = await HttpUtils.post(Api.login, params: params);
     LogUtils.printAll("userLogin===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -480,7 +480,7 @@ class NetRequest {
 
   ///退出登录
   Future logout(SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.post(Api.logout);
+    final response = await HttpUtils.post(Api.logout);
     LogUtils.printAll("logout===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -497,7 +497,7 @@ class NetRequest {
   Future getUserInfo(SuccessCallback onSuccess, FailureCallback onFailure) async {
     final id = UserStore.of.user?.id;
     if (id == null) return;
-    Map<String, dynamic> response = await HttpUtils.post(Api.user, params: {'id': id}, showLoading: false);
+    final response = await HttpUtils.post(Api.user, params: {'id': id}, showLoading: false);
     LogUtils.printAll("getUserInfo===>$response");
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -512,7 +512,7 @@ class NetRequest {
 
   ///更新图像 FILE
   Future updateAvatarBytesFile(var data, SuccessCallback onSuccess) async {
-    Map<String, dynamic> response = await HttpUtils.postBytesFile(Api.updateAvatar, data, params: {});
+    final response = await HttpUtils.postBytesFile(Api.updateAvatar, data, params: {});
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("updateAvatar===>$response");
@@ -530,7 +530,7 @@ class NetRequest {
     Map<String, Object> params = {};
     params['file'] = filePath;
 
-    Map<String, dynamic> response = await HttpUtils.postFile(Api.updateAvatar,
+    final response = await HttpUtils.postFile(Api.updateAvatar,
         params: params, showLoading: true, onSendProgress: onSendProgress, onFail: onFail);
 
     util_response.Response resp = util_response.Response.fromJson(response);
@@ -550,7 +550,7 @@ class NetRequest {
     Map<String, Object> params = {};
     params['nickname'] = nickname;
 
-    Map<String, dynamic> response = await HttpUtils.post(
+    final response = await HttpUtils.post(
         Api.userUpdate, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
@@ -569,7 +569,7 @@ class NetRequest {
     params['email'] = email;
     params['code'] = code;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.updateEmail, params: params);
+    final response = await HttpUtils.post(Api.updateEmail, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userUpdate===>$response");
@@ -587,7 +587,7 @@ class NetRequest {
     params['account'] = account;
     params['code'] = code;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.deleteAccount, params: params);
+    final response = await HttpUtils.post(Api.deleteAccount, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userUpdate===>$response");
@@ -603,7 +603,7 @@ class NetRequest {
   Future appVersion(SuccessCallback onSuccess) async {
     Map<String, Object> params = {};
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.appVersion, params: params);
+    final response = await HttpUtils.post(Api.appVersion, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("appVersion===>$response");
@@ -627,7 +627,7 @@ class NetRequest {
     }
     params['filters'] = filters;
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.userSearch, params: params, showLoading: showLoading);
+    final response = await HttpUtils.post(Api.userSearch, params: params, showLoading: showLoading);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("userSearch===>$response");
@@ -661,7 +661,7 @@ class NetRequest {
 
     LogUtils.printAll("commentCreate params===>$params");
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.commentCreate, params: params);
+    final response = await HttpUtils.post(Api.commentCreate, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("commentCreate===>$response");
@@ -678,7 +678,7 @@ class NetRequest {
     Map<String, dynamic> params = {};
     params['id'] = id; //// 收藏id
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.favoriteDelete, params: params);
+    final response = await HttpUtils.post(Api.favoriteDelete, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("favoriteDelete===>$response");
@@ -693,7 +693,7 @@ class NetRequest {
   Future threadDelete(int? id, SuccessCallback onSuccess) async {
     Map<String, dynamic> params = {};
     params['id'] = id;
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadDelete, params: params);
+    final response = await HttpUtils.post(Api.threadDelete, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("deleteThread===>$response");
@@ -708,7 +708,7 @@ class NetRequest {
   Future commentDelete(int? id, SuccessCallback onSuccess) async {
     Map<String, dynamic> params = {};
     params['id'] = id;
-    Map<String, dynamic> response = await HttpUtils.post(Api.commentDelete, params: params);
+    final response = await HttpUtils.post(Api.commentDelete, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("commentDelete===>$response");
@@ -732,7 +732,7 @@ class NetRequest {
 
     LogUtils.printAll("favoriteToggle params===>$params");
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.favoriteToggle, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.favoriteToggle, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("favoriteToggle===>$response");
@@ -756,7 +756,7 @@ class NetRequest {
 
     LogUtils.printAll("updatePassword params===>$params");
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.updatePassword, params: params);
+    final response = await HttpUtils.post(Api.updatePassword, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("updatePassword===>$response");
@@ -777,7 +777,7 @@ class NetRequest {
 
     LogUtils.printAll("resetPassword params===>$params");
 
-    Map<String, dynamic> response = await HttpUtils.post(Api.resetPassword, params: params);
+    final response = await HttpUtils.post(Api.resetPassword, params: params);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("resetPassword===>$response");
@@ -793,7 +793,7 @@ class NetRequest {
     Map<String, dynamic> params = {};
     params['id'] = id;
     params['type'] = 'share';
-    Map<String, dynamic> response = await HttpUtils.post(Api.upCount, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.upCount, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("upCount===>$response");
@@ -809,7 +809,7 @@ class NetRequest {
     Map<String, dynamic> params = {};
     params['id'] = id;
     params['type'] = 'share';
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadUpCount, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.threadUpCount, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       LogUtils.printAll("threadUpCount===>$response");
@@ -858,7 +858,7 @@ class NetRequest {
     params['files'] = files.map((e) => {'url': e}).toList();
     params['at'] = atList;
     params['tagIds'] = tagIds;
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: true);
+    final response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: true);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       ToastUtils.showToast('发布成功');
@@ -874,7 +874,7 @@ class NetRequest {
   Future<bool> shieldFeed(int id) async {
     Map<String, Object> params = {};
     params['id'] = id;
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadShield, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.threadShield, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       // ToastUtils.showToast('屏蔽成功');
@@ -890,7 +890,7 @@ class NetRequest {
   Future<bool> shieldUser(int id) async {
     Map<String, Object> params = {};
     params['id'] = id;
-    Map<String, dynamic> response = await HttpUtils.post(Api.threadUserShield, params: params, showLoading: false);
+    final response = await HttpUtils.post(Api.threadUserShield, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
       // ToastUtils.showToast('屏蔽成功');

@@ -29,27 +29,29 @@ class HomeTitle extends StatelessWidget {
             ),
           ),
         ),
-        subtitle ??
-            GestureDetector(
-              onTap: onTap,
-              child: Row(
-                children: [
-                  Text(
-                    '更多',
-                    style: TextStyle(
-                      color: '#999999'.hexColor,
-                      fontSize: 12.sp,
-                    ),
+        if (subtitle != null)
+          subtitle!
+        else if (onTap != null)
+          GestureDetector(
+            onTap: onTap,
+            child: Row(
+              children: [
+                Text(
+                  '更多',
+                  style: TextStyle(
+                    color: '#999999'.hexColor,
+                    fontSize: 12.sp,
                   ),
-                  SizedBox(width: 4.w),
-                  SvgPicture.asset(
-                    Assets.svg.iconMore,
-                    width: 12.w,
-                    height: 12.w,
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(width: 4.w),
+                SvgPicture.asset(
+                  Assets.svg.iconMore,
+                  width: 12.w,
+                  height: 12.w,
+                ),
+              ],
             ),
+          ),
       ],
     );
   }

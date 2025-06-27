@@ -198,7 +198,10 @@ class SearchChildController extends GetxController with GetSingleTickerProviderS
         userItems[index].followed = !followed;
         safeUpdate();
         if (!followed) {
+          ToastUtils.showToast('关注成功');
           TrackUtils.trackEvent(userLogType: '111005', params: userItems[index].id!);
+        } else {
+          ToastUtils.showToast('取消关注成功');
         }
       });
     });

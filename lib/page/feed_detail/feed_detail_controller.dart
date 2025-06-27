@@ -232,6 +232,11 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
       final followed = detailBean?.user?.followed ?? false;
       NetRequest().followerToggle(detailBean!.user!.id!, !followed, (data) {
         detailBean?.user?.followed = !followed;
+        if (!followed) {
+          ToastUtils.showToast('关注成功');
+        } else {
+          ToastUtils.showToast('取消关注成功');
+        }
         safeUpdate();
         TrackUtils.trackEvent(userLogType: '108003');
       });

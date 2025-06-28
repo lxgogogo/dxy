@@ -257,6 +257,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     if (isFetching) return;
     final id = item.id;
     if (id == null) return;
+    CourseChallengeAlert.show(id);
   }
 
   void toWinningStreak() {

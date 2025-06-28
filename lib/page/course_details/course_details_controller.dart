@@ -112,5 +112,6 @@ class CourseDetailsController extends GetxController {
     if (isFetching) return;
     final id = detailBean!.challenge!.id;
     if (id == null) return;
+    CourseChallengeAlert.show(id);
   }
 }

@@ -30,6 +30,7 @@ import '../../../widget/common_refresher.dart';
 import '../../../widget/no_data.dart';
 import '../../home/home_screen.dart';
 import 'widgets/course_all_item.dart';
+import 'widgets/course_challenge_alert.dart';
 import 'widgets/course_challenge_item.dart';
 import 'widgets/course_knowledge_item.dart';
 import 'widgets/course_practice_item.dart';

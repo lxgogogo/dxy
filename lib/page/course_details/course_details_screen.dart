@@ -15,6 +15,7 @@ import '../../utils/log_util.dart';
 import '../../utils/toast_utils.dart';
 import '../../widget/dialog_common.dart';
 import '../../widget/no_network.dart';
+import '../interactive_courses/main_courses/widgets/course_challenge_alert.dart';
 import 'widgets/course_all_item.dart';
 import 'widgets/course_challenge_item.dart';
 import 'widgets/course_knowledge_item.dart';

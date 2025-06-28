@@ -50,7 +50,11 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
   bool _showBtn = false;
 
   void _playSound(String name) async {
+    await _audioPlayer.release(); // 每次播放前释放
     await _audioPlayer.play(AssetSource('sounds/$name.mp3'));
+    await _audioPlayer.onPlayerStateChanged.firstWhere(
+            (state) => state == PlayerState.completed
+    );
   }
 
   void _vibrate() async {

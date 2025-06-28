@@ -130,7 +130,11 @@ class CourseExercisesController extends GetxController {
   }
 
   void _playSound(String name) async {
+    await audioPlayer.release(); // 每次播放前释放
     await audioPlayer.play(AssetSource('sounds/$name.mp3'));
+    await audioPlayer.onPlayerStateChanged.firstWhere(
+            (state) => state == PlayerState.completed
+    );
   }
 
   // TODO: Public Method

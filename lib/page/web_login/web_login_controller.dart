@@ -25,7 +25,25 @@ class TelegramLoginController extends GetxController {
   }
 
   void handleNativeBridge(List<dynamic> arguments) {
-    Get.back(result: arguments.firstOrNull);
+    final encodeString = arguments.firstOrNull;
+    dynamic result;
+    try {
+      switch (type) {
+        case 'GOOGLE':
+          result = jsonDecode(encodeString)?['data']?['code'];
+          break;
+        case 'APPLE':
+          result = jsonDecode(encodeString)?['data']?['code'];
+          break;
+        case 'TELEGRAM':
+          result = arguments.firstOrNull;
+          break;
+      }
+    } catch (e) {
+      result = null;
+    }
+
+    Get.back(result: result);
   }
 
   void handleOpenWebView(List<dynamic> arguments) {

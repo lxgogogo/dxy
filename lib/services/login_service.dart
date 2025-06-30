@@ -67,12 +67,14 @@ class LoginService {
   Future<ResBaseModel> thirdLogin({
     required String type,
     required String token,
+    bool? isOrigin,
   }) async {
     final res = await HttpUtils.postNew(
       Api.thirdLogin,
       params: {
         "thirdLoginType": type,
         "accessToken": token,
+        if (isOrigin != null) "isOrigin": isOrigin,
       },
     );
     return res ?? ResBaseModel.defaultRes;
@@ -81,12 +83,14 @@ class LoginService {
   Future<ResBaseModel> bindThirdLogin({
     required String type,
     required String token,
+    bool? isOrigin,
   }) async {
     final res = await HttpUtils.postNew(
       Api.bindThirdLogin,
       params: {
         "thirdLoginType": type,
         "accessToken": token,
+        if (isOrigin != null) "isOrigin": isOrigin,
       },
     );
     return res ?? ResBaseModel.defaultRes;

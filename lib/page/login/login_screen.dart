@@ -299,16 +299,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 36.w,
                     ),
                   ),
-                  // if (Platform.isIOS) ...[
-                  SizedBox(width: 36.w),
-                  GestureDetector(
-                    onTap: signInWithApple,
-                    child: Assets.images.iconAppleCircle.image(
-                      width: 36.w,
-                      height: 36.w,
+                  if (!Env.isAndroidAAb) ...[
+                    SizedBox(width: 36.w),
+                    GestureDetector(
+                      onTap: signInWithApple,
+                      child: Assets.images.iconAppleCircle.image(
+                        width: 36.w,
+                        height: 36.w,
+                      ),
                     ),
-                  ),
-                  // ],
+                  ],
                   SizedBox(width: 36.w),
                   GestureDetector(
                     onTap: signInWithTelegram,
@@ -460,6 +460,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final res = await LoginService.of.thirdLogin(
           type: type,
           token: token,
+          isOrigin: true,
         );
         if (res.isSuccess) {
           ToastUtils.showToast('登录成功');

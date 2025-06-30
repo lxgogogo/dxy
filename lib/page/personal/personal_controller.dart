@@ -153,9 +153,10 @@ class PersonalScreenController extends GetxController {
       });
       if (token is String) {
         EasyLoading.show();
-        final res = await LoginService.of.thirdLogin(
+        final res = await LoginService.of.bindThirdLogin(
           type: type,
           token: token,
+          isOrigin: true,
         );
         if (res.isSuccess) {
           ToastUtils.showToast('绑定成功');

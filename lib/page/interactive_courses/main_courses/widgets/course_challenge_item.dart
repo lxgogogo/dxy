@@ -9,10 +9,12 @@ import '../../../../widget/common_image.dart';
 
 class CourseChallengeItem extends StatelessWidget {
   final CourseModel item;
+  final Function onTap;
 
   const CourseChallengeItem({
     super.key,
     required this.item,
+    required this.onTap
   });
 
   @override
@@ -158,44 +160,49 @@ class CourseChallengeItem extends StatelessWidget {
                     item.challengeIndexDtoList?.length ?? 0,
                     (index) {
                       final childItem = item.challengeIndexDtoList![index];
-                      return Row(
-                        children: [
-                          SvgPicture.asset(
-                            childItem.status == 1 ? Assets.svg.iconChecked : Assets.svg.iconUncheck,
-                            width: 16.w,
-                            height: 16.w,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 8.w, right: 24.w),
-                              child: Text(
-                                childItem.content ?? '',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
+                      return GestureDetector(
+                        onTap: () {
+                          onTap(item,childItem);
+                        },
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              childItem.status == 1 ? Assets.svg.iconChecked : Assets.svg.iconUncheck,
+                              width: 16.w,
+                              height: 16.w,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.w, right: 24.w),
+                                child: Text(
+                                  childItem.content ?? '',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                Assets.svg.iconCourseIntegral,
-                                width: 16.w,
-                                height: 16.w,
-                              ),
-                              SizedBox(width: 4.w),
-                              Text(
-                                '${childItem.integral ?? 0}',
-                                style: TextStyle(
-                                  color: '#333333'.hexColor,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w700,
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.svg.iconCourseIntegral,
+                                  width: 16.w,
+                                  height: 16.w,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                SizedBox(width: 4.w),
+                                Text(
+                                  '${childItem.integral ?? 0}',
+                                  style: TextStyle(
+                                    color: '#333333'.hexColor,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),

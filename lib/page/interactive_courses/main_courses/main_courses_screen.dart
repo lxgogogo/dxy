@@ -255,6 +255,9 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           onTap: () => controller.toChallenge(item),
                                           child: CourseChallengeItem(
                                             item: item,
+                                            onTap: (value1, value2) {
+                                              controller.toChallengeItem(value1,value2);
+                                            },
                                           ),
                                         );
                                       },

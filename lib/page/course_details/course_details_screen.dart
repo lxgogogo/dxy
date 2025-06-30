@@ -86,6 +86,9 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   child: CourseDetailChallengeItem(
                                     item: controller.detailBean!.challenge!,
                                     onTap: controller.toChallenge,
+                                    itemOnTap: (value1, value2) {
+                                      controller.toChallengeItem(value1, value2);
+                                    }
                                   ),
                                 ),
                             ],

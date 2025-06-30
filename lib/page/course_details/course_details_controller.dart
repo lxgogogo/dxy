@@ -91,7 +91,8 @@ class CourseDetailsController extends GetxController {
         final contentType = detailBean!.knowledge!.contentType;
         final contentId = detailBean!.knowledge!.contentId;
         final subContentId = detailBean!.knowledge!.subContentId;
-        AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
+        AppRoutesUtils.toDetail(contentType, contentId,
+            subContentId: subContentId);
         requestDetail();
       } else {
         ToastUtils.showToast(res.msg);
@@ -112,6 +113,16 @@ class CourseDetailsController extends GetxController {
     if (isFetching) return;
     final id = detailBean!.challenge!.id;
     if (id == null) return;
-    CourseChallengeAlert.show(id);
+  }
+
+  void toChallengeItem(CourseModel item, ChallengeIndexDtoList model) {
+    final id = model.id;
+    if (id == null) return;
+    CourseChallengeAlert.show(id,
+        title: model.content ?? '', content: model.desc ?? '', callBack: () {
+      model.status = 1;
+      safeUpdate();
+      requestDetail();
+    });
   }
 }

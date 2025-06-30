@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-CourseModel courseModelFromJson(String str) => CourseModel.fromJson(json.decode(str));
+CourseModel courseModelFromJson(String str) =>
+    CourseModel.fromJson(json.decode(str));
 
 String courseModelToJson(CourseModel data) => json.encode(data.toJson());
 
@@ -73,7 +74,7 @@ class CourseModel {
         courseId: json["courseId"],
         icon: json["icon"],
         title: json["title"],
-        des: json["des"],
+        des: json["desc"],
         cover: json["cover"],
         status: json["status"],
         knowledgeTotal: json["knowledgeTotal"],
@@ -92,11 +93,17 @@ class CourseModel {
         integral: json["integral"],
         challengeIndexDtoList: json["challengeIndexDtoList"] == null
             ? []
-            : List<ChallengeIndexDtoList>.from(
-                json["challengeIndexDtoList"]!.map((x) => ChallengeIndexDtoList.fromJson(x))),
-        knowledge: json["knowledge"] == null ? null : CourseModel.fromJson(json["knowledge"]),
-        practise: json["practise"] == null ? null : CourseModel.fromJson(json["practise"]),
-        challenge: json["challenge"] == null ? null : CourseModel.fromJson(json["challenge"]),
+            : List<ChallengeIndexDtoList>.from(json["challengeIndexDtoList"]!
+                .map((x) => ChallengeIndexDtoList.fromJson(x))),
+        knowledge: json["knowledge"] == null
+            ? null
+            : CourseModel.fromJson(json["knowledge"]),
+        practise: json["practise"] == null
+            ? null
+            : CourseModel.fromJson(json["practise"]),
+        challenge: json["challenge"] == null
+            ? null
+            : CourseModel.fromJson(json["challenge"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,7 +111,7 @@ class CourseModel {
         "courseId": courseId,
         "icon": icon,
         "title": title,
-        "des": des,
+        "desc": des,
         "cover": cover,
         "state": status,
         "knowledgeTotal": knowledgeTotal,
@@ -121,8 +128,9 @@ class CourseModel {
         "total": total,
         "completed": completed,
         "integral": integral,
-        "challengeIndexDtoList":
-            challengeIndexDtoList == null ? [] : List<dynamic>.from(challengeIndexDtoList!.map((x) => x.toJson())),
+        "challengeIndexDtoList": challengeIndexDtoList == null
+            ? []
+            : List<dynamic>.from(challengeIndexDtoList!.map((x) => x.toJson())),
         "knowledge": knowledge?.toJson(),
         "practise": practise?.toJson(),
         "challenge": challenge?.toJson(),
@@ -131,22 +139,26 @@ class CourseModel {
 
 class ChallengeIndexDtoList {
   final int? id;
-  final int? status;
+  int? status;
   final String? content;
   final int? integral;
+  final String? desc;
 
   ChallengeIndexDtoList({
     this.id,
     this.status,
     this.content,
     this.integral,
+    this.desc,
   });
 
-  factory ChallengeIndexDtoList.fromJson(Map<String, dynamic> json) => ChallengeIndexDtoList(
+  factory ChallengeIndexDtoList.fromJson(Map<String, dynamic> json) =>
+      ChallengeIndexDtoList(
         id: json["id"],
         status: json["status"],
         content: json["content"],
         integral: json["integral"],
+        desc: json['desc'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -154,5 +166,6 @@ class ChallengeIndexDtoList {
         "status": status,
         "content": content,
         "integral": integral,
+        "desc": desc,
       };
 }

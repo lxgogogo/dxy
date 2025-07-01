@@ -64,9 +64,11 @@ class _MessagePageState extends State<MessagePage>
                               opacity: controller.unReadCount > 0 ? 1 : 0.3,
                               child: Padding(
                                 padding: EdgeInsets.only(right: 16.w, top: 16.w),
-                                child: SvgPicture.asset(
-                                  Assets.svg.messageClean,
-                                ),
+                                child: Image.asset(
+                                  'assets/images/message_clean.png',
+                                  width: 24.w,
+                                  height: 24.w,
+                                )
                               ),
                             ),
                           );

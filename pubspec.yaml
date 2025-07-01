@@ -2,7 +2,7 @@ name: holdem
 description: A new Flutter project.
 publish_to: none
 
-version: 1.7.2+234
+version: 1.7.2+235
 
 environment:
   sdk: '>=3.0.6 <4.0.0'

@@ -439,19 +439,19 @@ class _RegisterContentState extends State<RegisterContent> {
                     reviewPrivacy: reviewPrivacy,
                   ),
                 ),
-                if (!isUsername)
-                  GestureDetector(
-                    onTap: TrackUtils.trackedTap(
-                      onTap: () {
-                        Get.toNamed(Routes.forgetPassword);
-                      },
-                      userLogType: '118003',
-                    ),
-                    child: Text(
-                      '忘记密码?',
-                      style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
-                    ),
-                  ),
+                // if (!isUsername)
+                //   GestureDetector(
+                //     onTap: TrackUtils.trackedTap(
+                //       onTap: () {
+                //         Get.toNamed(Routes.forgetPassword);
+                //       },
+                //       userLogType: '118003',
+                //     ),
+                //     child: Text(
+                //       '忘记密码?',
+                //       style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
+                //     ),
+                //   ),
               ],
             ),
           ),

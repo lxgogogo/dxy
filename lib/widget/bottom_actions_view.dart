@@ -94,7 +94,6 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                 else
                   Container(
                     height: 32.w,
-                    constraints: BoxConstraints(maxWidth: 101.w),
                     padding: EdgeInsets.only(right: 8.w),
                     decoration: BoxDecoration(
                       color: '#333333'.hexColor.withOpacity(0.05),
@@ -108,8 +107,9 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                           borderWidth: 0,
                         ),
                         Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 60.w),
+                            margin: EdgeInsets.symmetric(horizontal: 4.w),
                             child: Text(
                               widget.viewParams.author?.nickname ?? '',
                               style: TextStyle(

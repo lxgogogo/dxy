@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
@@ -42,7 +43,7 @@ class MyCollectItem extends StatelessWidget {
     } else if (item?.relType == 'content') {
       title = item?.content?.title;
       content = item?.content?.description;
-      author=item?.content?.author;
+      author = item?.content?.author;
       createdAt = item?.content?.createdAt;
       likeCount = item?.content?.likeCount;
       commentCount = item?.content?.commentCount;
@@ -58,7 +59,6 @@ class MyCollectItem extends StatelessWidget {
           if (id == null) return;
           Get.toNamed(Routes.feedDetail, arguments: id);
         } else if (item?.relType == 'content') {
-
           final id = item?.content?.id;
           if (id == null) return;
           if (type == 'article') {
@@ -81,7 +81,7 @@ class MyCollectItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if(type != 'book')
+            if (type != 'book')
               Text(
                 title ?? '',
                 style: TextStyle(
@@ -93,16 +93,13 @@ class MyCollectItem extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-            if (imageUrl?.isNotEmpty == true)
-              SizedBox(height: 8.w)
-            else
-              SizedBox(height: 4.w),
+            if (imageUrl?.isNotEmpty == true) SizedBox(height: 8.w) else SizedBox(height: 4.w),
             Row(
               children: [
                 if (imageUrl?.isNotEmpty == true)
                   Container(
-                    width:type == 'book'? 68.w: 88.w,
-                    height:type == 'book'? 102.w: 49.w,
+                    width: type == 'book' ? 68.w : 88.w,
+                    height: type == 'book' ? 102.w : 49.w,
                     margin: EdgeInsets.only(right: 8.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.r),
@@ -118,6 +115,14 @@ class MyCollectItem extends StatelessWidget {
                           placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                           errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                         ),
+                        if (item?.content?.type == 'video' || item?.content?.type == 'videoList')
+                          Center(
+                            child: SvgPicture.asset(
+                              Assets.svg.iconVideoPlay,
+                              width: 28.w,
+                              height: 28.w,
+                            ),
+                          ),
                         if (item?.content?.type == 'videoList')
                           Positioned(
                             top: 2.w,
@@ -141,89 +146,87 @@ class MyCollectItem extends StatelessWidget {
                     ),
                   ),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if(type == 'book')
-                        ...[
-                          Padding(
-                            padding: EdgeInsets.only(left: 12.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  title ?? '',
-                                  style: TextStyle(
-                                    color: AppTheme.color_333333,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  softWrap: true,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 10.w),
-                                Text(
-                                  '作者：${author ?? ''}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: '#333333'.hexColor.withOpacity(0.7),
-                                      fontSize: 14.sp,
-                                      height: 1.2),
-                                ),
-                                SizedBox(height: 2.w),
-                              ],
-                            ),
-                          )
-                        ],
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (type == 'book') ...[
                       Padding(
-                        padding: EdgeInsets.only(left: type == 'book' ? 12.w : 0),
-                        child: Text(
-                          content ?? '',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: AppTheme.color_666666,
-                          ),
-                          softWrap: true,
-                          maxLines: imageUrl?.isNotEmpty == true ? 1 : 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      SizedBox(height: 10.w),
-                      Padding(
-                          padding: EdgeInsets.only(left: type == 'book' ? 12.w : 0),
-                        child: Row(
+                        padding: EdgeInsets.only(left: 12.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              DateUtil.formatDateAlias3(createdAt!.millisecondsSinceEpoch,),
+                              title ?? '',
                               style: TextStyle(
-                                fontSize: 10.sp,
-                                color: AppTheme.color_999999,
+                                color: AppTheme.color_333333,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
                               ),
+                              softWrap: true,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            const Spacer(),
-                            SimpleCountText(
-                              count: likeCount?.abbreviateNumber ?? '0',
-                              desc: '点赞',
+                            SizedBox(height: 10.w),
+                            Text(
+                              '作者：${author ?? ''}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  TextStyle(color: '#333333'.hexColor.withOpacity(0.7), fontSize: 14.sp, height: 1.2),
                             ),
-                            const SimpleDot(),
-                            SimpleCountText(
-                              count: commentCount?.abbreviateNumber ?? '0',
-                              desc: '评论',
-                            ),
-                            // const SimpleDot(),
-                            // SimpleCountText(
-                            //   count: favoriteCount?.abbreviateNumber ?? '0',
-                            //   desc: '收藏',
-                            // ),
+                            SizedBox(height: 2.w),
                           ],
                         ),
                       )
                     ],
-                  )
-                ),
+                    Padding(
+                      padding: EdgeInsets.only(left: type == 'book' ? 12.w : 0),
+                      child: Text(
+                        content ?? '',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: AppTheme.color_666666,
+                        ),
+                        softWrap: true,
+                        maxLines: imageUrl?.isNotEmpty == true ? 1 : 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(height: 10.w),
+                    Padding(
+                      padding: EdgeInsets.only(left: type == 'book' ? 12.w : 0),
+                      child: Row(
+                        children: [
+                          Text(
+                            DateUtil.formatDateAlias3(
+                              createdAt!.millisecondsSinceEpoch,
+                            ),
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              color: AppTheme.color_999999,
+                            ),
+                          ),
+                          const Spacer(),
+                          SimpleCountText(
+                            count: likeCount?.abbreviateNumber ?? '0',
+                            desc: '点赞',
+                          ),
+                          const SimpleDot(),
+                          SimpleCountText(
+                            count: commentCount?.abbreviateNumber ?? '0',
+                            desc: '评论',
+                          ),
+                          // const SimpleDot(),
+                          // SimpleCountText(
+                          //   count: favoriteCount?.abbreviateNumber ?? '0',
+                          //   desc: '收藏',
+                          // ),
+                        ],
+                      ),
+                    )
+                  ],
+                )),
               ],
             )
           ],

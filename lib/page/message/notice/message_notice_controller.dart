@@ -145,7 +145,7 @@ class MessageNoticeController extends GetxController {
             title: '删除信件',
             content:
             '确定删除全部所选消息吗？',
-            confirmText: '确认删除',
+            confirmText: '确认',
             onConfirm: () {
               Navigator.of(context).pop();
               moreDelete();

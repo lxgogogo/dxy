@@ -125,34 +125,34 @@ _buildContentView(BookListController controller) {
               //   width: 34.w,
               // ),
               const Spacer(),
-              GestureDetector(
-                onTap: controller.loadBooks,
-                child: Row(
-                  children: [
-                    Text(
-                      '换一批',
-                      style: TextStyle(
-                        color: '#999999'.hexColor,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    AnimatedBuilder(
-                      animation: controller.animationController,
-                      builder: (context, child) {
-                        return Transform.rotate(
-                          angle: controller.isSwitching ? controller.animationController.value * 2 * pi : 0,
-                          child: SvgPicture.asset(
-                            Assets.svg.iconRefresh,
-                            width: 12.w,
-                            height: 12.w,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              )
+              // GestureDetector(
+              //   onTap: controller.loadBooks,
+              //   child: Row(
+              //     children: [
+              //       Text(
+              //         '换一批',
+              //         style: TextStyle(
+              //           color: '#999999'.hexColor,
+              //           fontSize: 12.sp,
+              //         ),
+              //       ),
+              //       SizedBox(width: 4.w),
+              //       AnimatedBuilder(
+              //         animation: controller.animationController,
+              //         builder: (context, child) {
+              //           return Transform.rotate(
+              //             angle: controller.isSwitching ? controller.animationController.value * 2 * pi : 0,
+              //             child: SvgPicture.asset(
+              //               Assets.svg.iconRefresh,
+              //               width: 12.w,
+              //               height: 12.w,
+              //             ),
+              //           );
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ),

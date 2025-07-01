@@ -67,8 +67,9 @@ class CountDownView extends GetView<CountDownController> {
         child: Text(
           '获取验证码',
           style: TextStyle(
-            fontSize: 10.sp,
+            fontSize: 12.sp,
             color: '#557BF6'.hexColor,
+            fontWeight: FontWeight.w600,
           ),
         ),
       );

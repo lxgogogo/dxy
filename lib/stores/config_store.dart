@@ -7,6 +7,7 @@ import 'package:holdem/services/index.dart';
 
 import '../model/report_type_model.dart';
 import '../utils/log_util.dart';
+import '../utils/toast_utils.dart';
 
 class ConfigStore extends GetxController {
   static ConfigStore get of => Get.find();
@@ -19,16 +20,13 @@ class ConfigStore extends GetxController {
   void onInit() async {
     super.onInit();
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      final hasNetwork = !result.contains(ConnectivityResult.none);
-      if (hasNetwork) {
+      final noNetwork = result.contains(ConnectivityResult.none);
+      if (noNetwork) {
+        ToastUtils.showToast('网络异常');
+      } else {
         checkOutsideTheWall();
       }
     });
-    // final events = await Connectivity().checkConnectivity();
-    // final noNetwork = events.contains(ConnectivityResult.none);
-    // if (!noNetwork) {
-    //   checkOutsideTheWall();
-    // }
   }
 
   Future<void> checkOutsideTheWall() async {

@@ -175,7 +175,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                                             title: '删除信件',
                                             content:
                                             '确定删除【${controller.dataList[i].sendUserName ?? ''}】发来的信件吗？',
-                                            confirmText: '确认删除',
+                                            confirmText: '确认',
                                             onConfirm: () {
                                               Navigator.of(context).pop();
                                               controller.delete(

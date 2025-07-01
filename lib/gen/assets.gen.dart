@@ -1075,6 +1075,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/play_video.json
   String get playVideo => 'assets/lottie/play_video.json';
 
+  /// File path: assets/lottie/progressbar_lizi.json
+  String get progressbarLizi => 'assets/lottie/progressbar_lizi.json';
+
   /// List of all assets
   List<String> get values => [
         courseFail,
@@ -1093,18 +1096,34 @@ class $AssetsLottieGen {
         courseResult7,
         courseResult8,
         courseResult9,
-        playVideo
+        playVideo,
+        progressbarLizi
       ];
 }
 
 class $AssetsSoundsGen {
   const $AssetsSoundsGen();
 
+  /// File path: assets/sounds/combo.mp3
+  String get combo => 'assets/sounds/combo.mp3';
+
+  /// File path: assets/sounds/correct.mp3
+  String get correct => 'assets/sounds/correct.mp3';
+
   /// File path: assets/sounds/di.mp3
   String get di => 'assets/sounds/di.mp3';
 
+  /// File path: assets/sounds/final_victory.mp3
+  String get finalVictory => 'assets/sounds/final_victory.mp3';
+
+  /// File path: assets/sounds/retry.mp3
+  String get retry => 'assets/sounds/retry.mp3';
+
+  /// File path: assets/sounds/wrong.mp3
+  String get wrong => 'assets/sounds/wrong.mp3';
+
   /// List of all assets
-  List<String> get values => [di];
+  List<String> get values => [combo, correct, di, finalVictory, retry, wrong];
 }
 
 class $AssetsSvgGen {
@@ -1278,6 +1297,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_uncheck.svg
   String get iconUncheck => 'assets/svg/icon_uncheck.svg';
 
+  /// File path: assets/svg/icon_video_play.svg
+  String get iconVideoPlay => 'assets/svg/icon_video_play.svg';
+
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
 
@@ -1423,6 +1445,7 @@ class $AssetsSvgGen {
         iconToKnomledge,
         iconToPractice,
         iconUncheck,
+        iconVideoPlay,
         iconWarning,
         iconWinningStatus1,
         iconWinningStatus2,

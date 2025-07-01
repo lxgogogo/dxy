@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
@@ -232,6 +233,13 @@ class VideoHorizontalItem extends StatelessWidget {
                     imageUrl: item.cover ?? '',
                     placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                     errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                  ),
+                  Center(
+                    child: SvgPicture.asset(
+                      Assets.svg.iconVideoPlay,
+                      width: 28.w,
+                      height: 28.w,
+                    ),
                   ),
                   if (item.type == 'videoList')
                     Positioned(

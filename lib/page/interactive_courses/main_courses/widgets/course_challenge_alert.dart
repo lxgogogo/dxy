@@ -6,21 +6,27 @@ import 'package:holdem/services/course_service.dart';
 import 'package:holdem/utils/toast_utils.dart';
 
 class CourseChallengeAlert {
-  static show(id,
+  static show(id, status,
       {String title = '', String content = '', Function? callBack}) {
     Get.dialog(CourseChallengeWidget(
-        id: id, title: title, content: content, callBack: callBack));
+        id: id,
+        status: status,
+        title: title,
+        content: content,
+        callBack: callBack));
   }
 }
 
 class CourseChallengeWidget extends StatefulWidget {
   final int id;
+  final int status;
   final String title;
   final String content;
   final Function? callBack;
   const CourseChallengeWidget(
       {super.key,
       required this.id,
+      required this.status,
       required this.content,
       required this.title,
       this.callBack});
@@ -96,30 +102,32 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(
-                  onTap: () {
-                    _courseChallenge();
-                  },
-                  child: Container(
-                    width: 96.w,
-                    height: 36.w,
-                    decoration: ShapeDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.w),
+                if (widget.status != 1)...[
+                  InkWell(
+                    onTap: () {
+                      _courseChallenge();
+                    },
+                    child: Container(
+                      width: 96.w,
+                      height: 36.w,
+                      decoration: ShapeDecoration(
+                        color: '#333333'.hexColor.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.w),
+                        ),
                       ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '直接完成',
-                      style: TextStyle(
-                        color: '#333333'.hexColor.withOpacity(0.7),
-                        fontSize: 14.sp,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '直接完成',
+                        style: TextStyle(
+                          color: '#333333'.hexColor.withOpacity(0.7),
+                          fontSize: 14.sp,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 24.w),
+                  SizedBox(width: 24.w)
+                ],
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();

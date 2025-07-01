@@ -118,7 +118,7 @@ class CourseDetailsController extends GetxController {
   void toChallengeItem(CourseModel item, ChallengeIndexDtoList model) {
     final id = model.id;
     if (id == null) return;
-    CourseChallengeAlert.show(id,
+    CourseChallengeAlert.show(id, model.status,
         title: model.content ?? '', content: model.desc ?? '', callBack: () {
       model.status = 1;
       safeUpdate();

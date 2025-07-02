@@ -48,55 +48,55 @@ class CourseChallengeItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Container(
-                height: 28.w,
-                padding: EdgeInsets.all(1.r),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                  gradient: LinearGradient(
-                    colors: [
-                      '#557BF6'.hexColor.withOpacity(0.4),
-                      '#557BF6'.hexColor.withOpacity(0),
-                    ],
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                    color: Colors.white,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                      gradient: LinearGradient(
-                        colors: [
-                          '#557BF6'.hexColor.withOpacity(0.2),
-                          '#557BF6'.hexColor.withOpacity(0),
-                        ],
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          Assets.svg.iconToChallenge,
-                          width: 16.w,
-                          height: 16.w,
-                        ),
-                        SizedBox(width: 4.w),
-                        Text(
-                          '去挑战',
-                          style: TextStyle(
-                            color: '#557BF6'.hexColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: 28.w,
+              //   padding: EdgeInsets.all(1.r),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+              //     gradient: LinearGradient(
+              //       colors: [
+              //         '#557BF6'.hexColor.withOpacity(0.4),
+              //         '#557BF6'.hexColor.withOpacity(0),
+              //       ],
+              //     ),
+              //   ),
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+              //       color: Colors.white,
+              //     ),
+              //     child: Container(
+              //       padding: EdgeInsets.symmetric(horizontal: 8.w),
+              //       decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+              //         gradient: LinearGradient(
+              //           colors: [
+              //             '#557BF6'.hexColor.withOpacity(0.2),
+              //             '#557BF6'.hexColor.withOpacity(0),
+              //           ],
+              //         ),
+              //       ),
+              //       child: Row(
+              //         children: [
+              //           SvgPicture.asset(
+              //             Assets.svg.iconToChallenge,
+              //             width: 16.w,
+              //             height: 16.w,
+              //           ),
+              //           SizedBox(width: 4.w),
+              //           Text(
+              //             '去挑战',
+              //             style: TextStyle(
+              //               color: '#557BF6'.hexColor,
+              //               fontSize: 12.sp,
+              //               fontWeight: FontWeight.w600,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           SizedBox(height: 12.w),

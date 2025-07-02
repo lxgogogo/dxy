@@ -8,8 +8,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   double get courseProgress {
     if (courseTopModel.value == null) return 0;
     if (courseTopModel.value!.courseTotal == 0) return 0;
-    return (courseTopModel.value?.courseCompleted ?? 0) /
-        (courseTopModel.value!.courseTotal ?? 0);
+    return (courseTopModel.value?.courseCompleted ?? 0) / (courseTopModel.value!.courseTotal ?? 0);
   }
 
   List<CourseGroupModel> courseGroups = [];
@@ -90,9 +89,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
                     width: 64.w,
                     height: 64.w,
                     margin: EdgeInsets.symmetric(vertical: 24.w),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: '#FF6200'.hexColor.withOpacity(0.1)),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: '#FF6200'.hexColor.withOpacity(0.1)),
                     alignment: Alignment.center,
                     child: SvgPicture.asset(
                       Assets.svg.iconCourseHot,
@@ -120,8 +117,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
                     ),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
                     child: CustomButton(
                       onPressed: onContinue,
                       textColor: Colors.white,
@@ -148,13 +144,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       final res = await CourseService.of.courseDefined();
       if (res.isSuccess) {
         final listRes = res.data?['courseGroup'] as List? ?? [];
-        courseGroups =
-            listRes.map((e) => CourseGroupModel.fromJson(e)).toList();
+        courseGroups = listRes.map((e) => CourseGroupModel.fromJson(e)).toList();
         if (courseGroups.isNotEmpty) {
           final id = await StorageService.of.getSelectedCourseGroupId();
           if (id != null) {
-            courseGroup.value = courseGroups
-                .firstWhereOrNull((e) => e.value?.des == id.toString());
+            courseGroup.value = courseGroups.firstWhereOrNull((e) => e.value?.des == id.toString());
             await StorageService.of.setSelectedCourseGroupId(null);
 
             courseGroup.value ??= courseGroups.first;
@@ -212,7 +206,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   }
 
   void toCourseDetail(CourseModel item) {
-    Get.toNamed(Routes.courseDetails, arguments: {'id': item.id});
+    Get.toNamed(Routes.courseDetails, arguments: {'id': item.id})?.whenComplete(() {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
+    });
   }
 
   Future<void> onStartCourse(CourseModel item) async {
@@ -239,12 +237,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     try {
       final res = await CourseService.of.courseRead(id);
       if (res.isSuccess) {
+        fetchData(needResetGroup: false);
         final contentType = item.contentType;
         final contentId = item.contentId;
         final subContentId = item.subContentId;
-        AppRoutesUtils.toDetail(contentType, contentId,
-            subContentId: subContentId);
-        fetchData(needResetGroup: false);
+        AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
       } else {
         ToastUtils.showToast(res.msg);
       }
@@ -269,8 +266,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   void toChallengeItem(CourseModel item, ChallengeIndexDtoList model) {
     final id = model.id;
     if (id == null) return;
-    CourseChallengeAlert.show(id, model.status,
-        title: model.content ?? '', content: model.desc ?? '', callBack: () {
+    CourseChallengeAlert.show(id, model.status, title: model.content ?? '', content: model.desc ?? '', callBack: () {
       model.status = 1;
       courseItems.refresh();
     });

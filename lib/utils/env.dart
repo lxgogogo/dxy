@@ -72,8 +72,7 @@ class Env {
   static bool get useBadCertificate => kDebugMode;
 
   // 判断是否是Android aab平台
-  static bool get isAndroidAAb => false;
-  // static bool get isAndroidAAb => _kPlatformType == PlatformType.androidAab;
+  static bool get isAndroidAAb => _kPlatformType == PlatformType.androidAab;
 
   // 判断是否是Android apk平台
   static bool get isAndroid => _kPlatformType == PlatformType.androidApk;

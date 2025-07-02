@@ -153,6 +153,7 @@ class CourseExercisesController extends GetxController {
     }
     submit.value = true;
     selectAnswerModel?.isCorrect = data.answer ?? false;
+    integral = data.integralTotal ?? 0;
     dataList.refresh();
     // 答题逻辑，不管对错，继续下一题
     currentPage.value += 1;

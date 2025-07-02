@@ -273,6 +273,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       page = 1;
       getCourseTop();
       loadData();
+    }, errorBack: () {
+      page = 1;
+      courseItems.refresh();
+      getCourseTop();
+      loadData();
     });
   }
 

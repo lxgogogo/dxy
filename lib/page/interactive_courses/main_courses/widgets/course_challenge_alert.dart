@@ -7,7 +7,10 @@ import 'package:holdem/utils/toast_utils.dart';
 
 class CourseChallengeAlert {
   static show(id, status,
-      {String title = '', String content = '', Function? callBack}) {
+      {String title = '',
+      String content = '',
+      Function? callBack,
+      Function? errorBack}) {
     Get.dialog(CourseChallengeWidget(
         id: id,
         status: status,
@@ -23,13 +26,15 @@ class CourseChallengeWidget extends StatefulWidget {
   final String title;
   final String content;
   final Function? callBack;
+  final Function? errorBack;
   const CourseChallengeWidget(
       {super.key,
       required this.id,
       required this.status,
       required this.content,
       required this.title,
-      this.callBack});
+      this.callBack,
+      this.errorBack});
 
   @override
   State<StatefulWidget> createState() {
@@ -41,10 +46,18 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
   void _courseChallenge() {
     CourseService.of.courseChallenge(widget.id).then((value) {
       if (value.isSuccess) {
-        ToastUtils.showToast('已完成挑战');
-        Navigator.of(context).pop();
-        if (widget.callBack != null) {
-          widget.callBack!();
+        if (value.data == null) {
+          Navigator.of(context).pop();
+          ToastUtils.showToast('当前课程内容已被更改,请稍后再试');
+          if (widget.errorBack != null) {
+            widget.errorBack!();
+          }
+        } else {
+          ToastUtils.showToast('已完成挑战');
+          Navigator.of(context).pop();
+          if (widget.callBack != null) {
+            widget.callBack!();
+          }
         }
       } else {
         ToastUtils.showToast(value.msg);
@@ -102,7 +115,7 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (widget.status != 1)...[
+                if (widget.status != 1) ...[
                   InkWell(
                     onTap: () {
                       _courseChallenge();

@@ -118,6 +118,7 @@ class CourseAnswerModel {
   String? pairsText;
   int? pairsIntegral;
   int? integral;
+  int? integralTotal;
 
   CourseAnswerModel({
     this.id,
@@ -127,7 +128,8 @@ class CourseAnswerModel {
     this.text,
     this.pairsText,
     this.pairsIntegral,
-    this.integral
+    this.integral,
+    this.integralTotal
   });
 
   CourseAnswerModel.fromJson(Map<String, dynamic> json) {
@@ -142,6 +144,9 @@ class CourseAnswerModel {
     }
     if (json["integral"] is int) {
       integral = json["integral"];
+    }
+    if (json["integralTotal"] is int) {
+      integralTotal = json["integralTotal"];
     }
     if (json["answer"] is bool) {
       answer = json["answer"];

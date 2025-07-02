@@ -153,7 +153,6 @@ class CourseExercisesController extends GetxController {
     }
     submit.value = true;
     selectAnswerModel?.isCorrect = data.answer ?? false;
-    integral = data.integralTotal ?? 0;
     dataList.refresh();
     // 答题逻辑，不管对错，继续下一题
     currentPage.value += 1;
@@ -163,6 +162,7 @@ class CourseExercisesController extends GetxController {
       errorDataList.add(model);
       _playSound('wrong');
     } else {
+      integral = data.integralTotal ?? 0;
       companiesNumber++;
       _playSound('correct');
       // 进度条效果

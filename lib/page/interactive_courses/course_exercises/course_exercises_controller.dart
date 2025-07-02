@@ -19,7 +19,7 @@ class CourseExercisesController extends GetxController {
   RxInt currentPage = 0.obs;
   int totalPage = 0;
   int integral = 0;
-  int completed = 0;
+  RxInt completed = 0.obs;
   // 连队次数
   int companiesNumber = 0;
   RxBool isLoading = true.obs;
@@ -42,21 +42,16 @@ class CourseExercisesController extends GetxController {
     int id = Get.arguments['id'] ?? 0;
     CourseService.of.coursePractise('$id').then((data) {
       integral = data.integral ?? 0;
-      completed = data.completed ?? 0;
+      completed.value = data.completed ?? 0;
+      totalPage = data.total ?? 0;
       practiseList.value = data.practiseList ?? [];
-      totalPage = practiseList.length;
+      print('practiseList: ${practiseList.length}');
       if (practiseList.isNotEmpty) {
         dataList.value = practiseList[currentPage.value].options ?? [];
       }
     }).whenComplete(() {
       isLoading.value = false;
     });
-  }
-
-  // 答错需要重新请求接口
-  void _requestErrorData() {
-    int id = Get.arguments['id'] ?? 0;
-    CourseService.of.coursePractise('$id');
   }
 
   void _result() {
@@ -79,7 +74,6 @@ class CourseExercisesController extends GetxController {
     companiesNumber = 0;
     if (errorDataList.isEmpty) {
       // 全对
-      completed = totalPage;
       AnswerResultsPageSheet.show(1, integral: integral, () {
         Get.close(0);
         // 判断是否最后答完有连对弹窗
@@ -98,15 +92,14 @@ class CourseExercisesController extends GetxController {
           Get.close(0);
         }
         currentPage.value = 0;
-        completed = 0;
-        totalPage = errorDataList.length;
+        submit.value = false;
+        for (final m in dataList) {
+          m.select = false;
+        }
+        dataList.refresh();
+        selectAnswerModel = null;
         pageController.jumpToPage(0);
-        practiseList.value = errorDataList;
-        dataList.value = errorDataList[0].options ?? [];
-        practiseList.refresh();
-        errorDataList = [];
-        _requestErrorData();
-        _result();
+        _requestData();
       });
     }
   }

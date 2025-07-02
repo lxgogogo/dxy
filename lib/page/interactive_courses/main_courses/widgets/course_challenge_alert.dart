@@ -104,7 +104,7 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
                 child: SingleChildScrollView(
                     child: Text(
               widget.content,
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: TextStyle(
                 color: '#333333'.hexColor,
                 fontSize: 14.w,

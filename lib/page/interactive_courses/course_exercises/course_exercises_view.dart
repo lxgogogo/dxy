@@ -43,8 +43,9 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
       double width = 1.sw - 126.w;
       double progress = 0;
       if (controller.totalPage > 0 && controller.practiseList.isNotEmpty) {
-        progress =
-            width * (controller.currentPage.value / controller.totalPage);
+        progress = width *
+            ((controller.currentPage.value + controller.completed.value) /
+                controller.totalPage);
       }
       return Container(
         margin: EdgeInsets.only(top: 56.w),
@@ -105,16 +106,14 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
                         ),
                         if (controller.isCorrect.value)
                           Positioned(
-                              left: -65+progress,
+                              left: -65 + progress,
                               child: Lottie.asset(
                                   'assets/lottie/progressbar_lizi.json',
                                   width: 20.w,
                                   height: 8.w,
                                   fit: BoxFit.fitHeight,
                                   repeat: true,
-                                  animate: true
-                              )
-                          )
+                                  animate: true))
                       ],
                     ),
                   ),

@@ -270,6 +270,9 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       model.status = 1;
       item.completed = (item.completed ?? 0)+1;
       courseItems.refresh();
+      page = 1;
+      getCourseTop();
+      loadData();
     });
   }
 

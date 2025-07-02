@@ -117,41 +117,38 @@ class CourseTypeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (count != total) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 3.w),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              assetName,
-              width: 16.w,
-              height: 16.w,
-            ),
-            SizedBox(width: 4.w),
-            Text.rich(
-              TextSpan(
-                text: status == 1 ? '$count/' : '',
-                children: [
-                  TextSpan(
-                    text: '$total',
-                    style: TextStyle(
-                      color: '#666666'.hexColor,
-                      fontSize: 12.sp,
-                    ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 3.w),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            assetName,
+            width: 16.w,
+            height: 16.w,
+          ),
+          SizedBox(width: 4.w),
+          Text.rich(
+            TextSpan(
+              text: status == 1 ? '$count/' : '',
+              children: [
+                TextSpan(
+                  text: '$total',
+                  style: TextStyle(
+                    color: '#666666'.hexColor,
+                    fontSize: 12.sp,
                   ),
-                ],
-              ),
-              style: TextStyle(
-                color: '#333333'.hexColor,
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w700,
-              ),
-            )
-          ],
-        ),
-      );
-    }
-    return const SizedBox();
+                ),
+              ],
+            ),
+            style: TextStyle(
+              color: '#333333'.hexColor,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w700,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 

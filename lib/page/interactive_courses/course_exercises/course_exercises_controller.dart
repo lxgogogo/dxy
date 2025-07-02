@@ -162,7 +162,6 @@ class CourseExercisesController extends GetxController {
       errorDataList.add(model);
       _playSound('wrong');
     } else {
-      integral = data.integralTotal ?? 0;
       companiesNumber++;
       _playSound('correct');
       // 进度条效果

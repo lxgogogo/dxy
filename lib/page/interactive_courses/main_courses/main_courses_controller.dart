@@ -268,6 +268,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     if (id == null) return;
     CourseChallengeAlert.show(id, model.status, title: model.content ?? '', content: model.desc ?? '', callBack: () {
       model.status = 1;
+      item.completed = (item.completed ?? 0)+1;
       courseItems.refresh();
     });
   }

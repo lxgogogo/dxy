@@ -41,7 +41,7 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
   void _courseChallenge() {
     CourseService.of.courseChallenge(widget.id).then((value) {
       if (value.isSuccess) {
-        ToastUtils.showToast('已完成');
+        ToastUtils.showToast('已完成挑战');
         Navigator.of(context).pop();
         if (widget.callBack != null) {
           widget.callBack!();

@@ -21,6 +21,10 @@ class CourseDetailChallengeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int integral = 0;
+    for (ChallengeIndexDtoList m in item.challengeIndexDtoList ?? []) {
+      integral += (m.integral ?? 0);
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -96,7 +100,7 @@ class CourseDetailChallengeItem extends StatelessWidget {
                           ),
                           SizedBox(width: 4.w),
                           Text(
-                            '${item.integral ?? 0}',
+                            '$integral',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,

@@ -121,6 +121,7 @@ class CourseDetailsController extends GetxController {
     CourseChallengeAlert.show(id, model.status,
         title: model.content ?? '', content: model.desc ?? '', callBack: () {
       model.status = 1;
+      item.completed = (item.completed ?? 0)+1;
       safeUpdate();
       requestDetail();
     });

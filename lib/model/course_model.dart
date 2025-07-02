@@ -29,7 +29,7 @@ class CourseModel {
   final int? contentId;
   final int? subContentId;
   final int? total;
-  final int? completed;
+  int? completed;
   final int? integral;
   final List<ChallengeIndexDtoList>? challengeIndexDtoList;
   final CourseModel? knowledge;

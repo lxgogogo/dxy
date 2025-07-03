@@ -72,7 +72,7 @@ class CourseExercisesController extends GetxController {
 
   void _endAlert(data, {bool evenPairs = false}) {
     companiesNumber = 0;
-    if (errorDataList.isEmpty) {
+    if (data.status == 2) {
       // 全对
       AnswerResultsPageSheet.show(1, integral: integral, () {
         Get.close(0);
@@ -83,7 +83,7 @@ class CourseExercisesController extends GetxController {
         _result();
         Get.back();
       });
-    } else {
+    } else if (data.status == 3){
       // 错题重刷
       AnswerResultsPageSheet.show(0, () {
         Get.close(0);

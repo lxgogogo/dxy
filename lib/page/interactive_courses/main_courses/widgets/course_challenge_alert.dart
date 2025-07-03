@@ -12,11 +12,13 @@ class CourseChallengeAlert {
       Function? callBack,
       Function? errorBack}) {
     Get.dialog(CourseChallengeWidget(
-        id: id,
-        status: status,
-        title: title,
-        content: content,
-        callBack: callBack));
+      id: id,
+      status: status,
+      title: title,
+      content: content,
+      callBack: callBack,
+      errorBack: errorBack,
+    ));
   }
 }
 

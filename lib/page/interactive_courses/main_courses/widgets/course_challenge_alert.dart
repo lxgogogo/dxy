@@ -6,11 +6,7 @@ import 'package:holdem/services/course_service.dart';
 import 'package:holdem/utils/toast_utils.dart';
 
 class CourseChallengeAlert {
-  static show(id, status,
-      {String title = '',
-      String content = '',
-      Function? callBack,
-      Function? errorBack}) {
+  static show(id, status, {String title = '', String content = '', Function? callBack, Function? errorBack}) {
     Get.dialog(CourseChallengeWidget(
       id: id,
       status: status,
@@ -29,6 +25,7 @@ class CourseChallengeWidget extends StatefulWidget {
   final String content;
   final Function? callBack;
   final Function? errorBack;
+
   const CourseChallengeWidget(
       {super.key,
       required this.id,
@@ -77,12 +74,13 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 518.w,
+        constraints: BoxConstraints(maxHeight: 518.w),
         margin: EdgeInsets.only(left: 32.w, right: 32.w),
         padding: EdgeInsets.symmetric(horizontal: 30.w),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(16.r)),
-            color: Colors.white),
+          borderRadius: BorderRadius.all(Radius.circular(16.r)),
+          color: Colors.white,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,7 +100,7 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
               ),
             ),
             SizedBox(height: 20.w),
-            Expanded(
+            Flexible(
                 child: SingleChildScrollView(
                     child: Text(
               widget.content,

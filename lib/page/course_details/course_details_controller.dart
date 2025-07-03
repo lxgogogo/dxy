@@ -125,7 +125,7 @@ class CourseDetailsController extends GetxController {
       safeUpdate();
       requestDetail();
     }, errorBack: () {
-      requestDetail();
+      Get.back();
     });
   }
 }

@@ -82,9 +82,5 @@
 	<string>390652331371-r6o659f9mhpqisjs5rna14h0mt97agk8.apps.googleusercontent.com</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>需要震动权限</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
 </dict>
 </plist>

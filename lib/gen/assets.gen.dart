@@ -632,6 +632,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoutBtn =>
       const AssetGenImage('assets/images/logout_btn.png');
 
+  /// File path: assets/images/message_clean.png
+  AssetGenImage get messageClean =>
+      const AssetGenImage('assets/images/message_clean.png');
+
   /// File path: assets/images/message_top.png
   AssetGenImage get messageTop =>
       const AssetGenImage('assets/images/message_top.png');
@@ -957,6 +961,7 @@ class $AssetsImagesGen {
         logoText,
         logout,
         logoutBtn,
+        messageClean,
         messageTop,
         mineHeaderBg,
         more,
@@ -1300,6 +1305,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_video_play.svg
   String get iconVideoPlay => 'assets/svg/icon_video_play.svg';
 
+  /// File path: assets/svg/icon_video_playing.svg
+  String get iconVideoPlaying => 'assets/svg/icon_video_playing.svg';
+
   /// File path: assets/svg/icon_warning.svg
   String get iconWarning => 'assets/svg/icon_warning.svg';
 
@@ -1446,6 +1454,7 @@ class $AssetsSvgGen {
         iconToPractice,
         iconUncheck,
         iconVideoPlay,
+        iconVideoPlaying,
         iconWarning,
         iconWinningStatus1,
         iconWinningStatus2,

@@ -34,6 +34,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../utils/track_utils.dart';
+import 'widgets/video_child_list_sheet.dart';
 
 part 'video_detail_controller.dart';
 
@@ -139,113 +140,61 @@ class VideoDetailScreen extends StatelessWidget {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    '选集',
-                                                    style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: '#333333'.hexColor,
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8.w),
-                                                // Image.asset(
-                                                //   Assets.images.collection.path,
-                                                //   width: 12.w,
-                                                //   height: 12.w,
-                                                //   color: '#2a2a2a'.hexColor,
-                                                // ),
-                                                Text(
-                                                  '正在播放',
-                                                  style: TextStyle(
-                                                    fontSize: 12.sp,
-                                                    color: '#999999'.hexColor,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '【${controller.playVideoIndex + 1}】/全${controller.detailBean!.videoList!.length}集',
-                                                  style: TextStyle(
-                                                    fontSize: 12.sp,
-                                                    color: '#999999'.hexColor,
-                                                  ),
-                                                ),
-                                                SvgPicture.asset(
-                                                  Assets.svg.iconArrowRight,
-                                                  width: 14,
-                                                  height: 14.w,
-                                                  color: '#999999'.hexColor,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 8.w),
-                                          SizedBox(
-                                            height: 64.w,
-                                            child: ListView.separated(
-                                              controller: controller.autoScrollController,
-                                              scrollDirection: Axis.horizontal,
-                                              itemCount: controller.detailBean!.videoList!.length,
-                                              itemBuilder: (BuildContext context, int index) {
-                                                final video = controller.detailBean!.videoList![index];
-                                                final isSelected = controller.playVideoIndex == index;
-                                                return AutoScrollTag(
-                                                  key: ValueKey(index),
-                                                  controller: controller.autoScrollController,
-                                                  index: index,
-                                                  child: GestureDetector(
-                                                    onTap: TrackUtils.trackedTap(
-                                                      onTap: () => controller.selectVide(index),
-                                                      userLogType: '103001',
-                                                      params: controller.detailBean!.videoList![index].id,
-                                                    ),
-                                                    child: Container(
-                                                      width: 134.w,
-                                                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                                      decoration: BoxDecoration(
-                                                        color: '#333333'.hexColor.withOpacity(0.05),
-                                                        borderRadius: BorderRadius.circular(12.r),
-                                                      ),
-                                                      alignment: Alignment.center,
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            if (isSelected)
-                                                              WidgetSpan(
-                                                                alignment: PlaceholderAlignment.middle,
-                                                                child: Padding(
-                                                                  padding: EdgeInsets.all(4.w),
-                                                                  child: Lottie.asset(
-                                                                    'assets/lottie/play_video.json',
-                                                                    width: 10.w,
-                                                                    repeat: true,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            TextSpan(
-                                                              text: video.title ?? '',
-                                                              style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                color: isSelected
-                                                                    ? '#557BF6'.hexColor
-                                                                    : '#333333'.hexColor,
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
-                                                      ),
-                                                    ),
-                                                  ),
+                                          GestureDetector(
+                                            onTap: () => showVideoChildListSheet(
+                                              items: controller.detailBean!.videoList!,
+                                              selectedIndex: controller.playVideoIndex,
+                                              onSelectItem: (int index) {
+                                                controller.selectVide(index);
+                                                TrackUtils.trackEvent(
+                                                  userLogType: '103001',
+                                                  params: controller.detailBean!.videoList![index].id,
                                                 );
                                               },
-                                              separatorBuilder: (_, int index) => SizedBox(width: 12.w),
+                                            ),
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
+                                              decoration: BoxDecoration(
+                                                color: '#333333'.hexColor.withOpacity(0.05),
+                                                borderRadius: BorderRadius.circular(8.r),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      '合集·${controller.detailBean!.videoList![controller.playVideoIndex].title}',
+                                                      style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: '#333333'.hexColor,
+                                                      ),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 12.w),
+                                                  SvgPicture.asset(
+                                                    Assets.svg.iconVideoPlaying,
+                                                    width: 16.w,
+                                                    height: 16.w,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                                    child: Text(
+                                                      '${controller.playVideoIndex + 1}/${controller.detailBean!.videoList!.length}',
+                                                      style: TextStyle(
+                                                        fontSize: 12.sp,
+                                                        color: '#999999'.hexColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SvgPicture.asset(
+                                                    Assets.svg.iconArrowRight,
+                                                    width: 16.w,
+                                                    height: 16.w,
+                                                    color: '#999999'.hexColor,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                           SizedBox(height: 24.w),

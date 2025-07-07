@@ -36,7 +36,8 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
             title: controller.isSystem.value ? '官方通知' : '用户私信',
             actions: [
               Obx(() {
-                if (controller.isSystem.value) {
+                if (controller.isSystem.value &&
+                    controller.dataList.isNotEmpty) {
                   return GestureDetector(
                       onTap: () {
                         controller.isDeleteOnTap(context);
@@ -165,7 +166,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                             motion: const ScrollMotion(),
                             extentRatio: 60.w / maxWidth,
                             children: [
-                              GestureDetector(
+                                GestureDetector(
                                   onTap: () async {
                                     await showDialog(
                                       barrierDismissible: true,

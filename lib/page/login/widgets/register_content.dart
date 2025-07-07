@@ -239,7 +239,7 @@ class _RegisterContentState extends State<RegisterContent> {
                               border: InputBorder.none,
                               isCollapsed: true,
                               isDense: true,
-                              hintText: type.hint,
+                              hintText: type.hint2,
                               hintStyle: TextStyle(fontSize: 12.sp, color: '#bfbfbf'.hexColor),
                               contentPadding: EdgeInsets.fromLTRB(0.w, 0, 10.w, 0),
                             ),

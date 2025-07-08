@@ -1080,6 +1080,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/play_video.json
   String get playVideo => 'assets/lottie/play_video.json';
 
+  /// File path: assets/lottie/play_video_grey.json
+  String get playVideoGrey => 'assets/lottie/play_video_grey.json';
+
   /// File path: assets/lottie/progressbar_lizi.json
   String get progressbarLizi => 'assets/lottie/progressbar_lizi.json';
 
@@ -1102,6 +1105,7 @@ class $AssetsLottieGen {
         courseResult8,
         courseResult9,
         playVideo,
+        playVideoGrey,
         progressbarLizi
       ];
 }

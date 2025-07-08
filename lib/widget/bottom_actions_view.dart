@@ -44,7 +44,6 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.only(bottom: 34.w),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

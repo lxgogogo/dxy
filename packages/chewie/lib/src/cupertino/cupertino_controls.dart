@@ -489,7 +489,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
     return Padding(
       padding: const EdgeInsets.only(right: 12.0),
       child: Text(
-        '-${formatDuration(position)}',
+        formatDuration(position),
         style: TextStyle(color: iconColor, fontSize: 12.0),
       ),
     );

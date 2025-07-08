@@ -48,7 +48,11 @@ class ScanController extends GetxController {
       final barcodeCapture = await controller.analyzeImage(xFile.path);
       if (barcodeCapture != null) {
         onDetect(barcodeCapture);
+      } else {
+        ToastUtils.showToast('无法识别图片，请重新上传');
       }
+    } else {
+      ToastUtils.showToast('无法识别图片，请重新上传');
     }
   }
 }

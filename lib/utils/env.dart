@@ -73,6 +73,7 @@ class Env {
 
   // 判断是否是Android aab平台
   static bool get isAndroidAAb => _kPlatformType == PlatformType.androidAab;
+  // static bool get isAndroidAAb => true;
 
   // 判断是否是Android apk平台
   static bool get isAndroid => _kPlatformType == PlatformType.androidApk;
@@ -108,5 +109,5 @@ class Env {
 
   static String telegramLogin = 'https://telegram-login-dev.dx252.com?type=app';
   static String googleLogin = 'https://google-login-dev.dx252.com?type=app';
-  static String appleLogin = 'https://apple-login-dev.dx252.com?type=app';
+  static String appleLogin = 'https://apple-login-dev.dx252.com';
 }

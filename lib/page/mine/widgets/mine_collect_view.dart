@@ -315,7 +315,7 @@ class _MineCollectViewState extends State<MineCollectView>
                                       builder: (context) => CommonDialog(
                                         title: '删除收藏',
                                         content: '确定要删除这个收藏吗？',
-                                        confirmText: '确认删除',
+                                        confirmText: '确认',
                                         onConfirm: () {
                                           Navigator.of(context).pop();
                                           NetRequest().favoriteDelete(

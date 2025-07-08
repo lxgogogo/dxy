@@ -235,7 +235,7 @@ class SearchScreen extends GetView<SearchController> {
                       builder: (context) => CommonDialog(
                         title: '删除历史',
                         content: '确定要删除全部历史吗？',
-                        confirmText: '确认删除',
+                        confirmText: '确认',
                         onConfirm: () {
                           Navigator.of(context).pop();
                           controller.deleteAllHistory();

@@ -209,7 +209,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                         : widget.tabIndex == 1
                                             ? '确定要删除这个收藏吗？'
                                             : '确定要删除这个评论吗？',
-                                    confirmText: '确认删除',
+                                    confirmText: '确认',
                                     onConfirm: () {
                                       Navigator.of(context).pop();
                                       if (widget.tabIndex == 0) {

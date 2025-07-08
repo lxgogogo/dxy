@@ -119,7 +119,7 @@ class _CollectListPageState extends State<CollectListPage> {
                                         builder: (context) => CommonDialog(
                                           title: '删除收藏',
                                           content: '确定要删除这个收藏吗？',
-                                          confirmText: '确认删除',
+                                          confirmText: '确认',
                                           onConfirm: () {
                                             Navigator.of(context).pop();
                                             controller.deleteItem(i);

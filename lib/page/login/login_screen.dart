@@ -41,12 +41,11 @@ enum LoginType {
   final String hint;
   final String hint2;
 
-  const LoginType(this.typeName, this.typeOtherName, this.typeOtherName2,
-      this.typeValue, this.tips, this.hint, this.hint2);
+  const LoginType(
+      this.typeName, this.typeOtherName, this.typeOtherName2, this.typeValue, this.tips, this.hint, this.hint2);
 }
 
-typedef CustomButtonBuilder = Widget Function(
-    {VoidCallback? onPressed, bool? disable});
+typedef CustomButtonBuilder = Widget Function({VoidCallback? onPressed, bool? disable});
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -146,11 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               '登录',
                               style: TextStyle(
                                 fontSize: isLogin ? 18.sp : 14.sp,
-                                fontWeight:
-                                    isLogin ? FontWeight.w600 : FontWeight.w400,
-                                color: isLogin
-                                    ? '#333333'.hexColor
-                                    : '#333333'.hexColor,
+                                fontWeight: isLogin ? FontWeight.w600 : FontWeight.w400,
+                                color: isLogin ? '#333333'.hexColor : '#333333'.hexColor,
                               ),
                             ),
                             Container(
@@ -158,9 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 2.w,
                               margin: EdgeInsets.only(top: 4.w),
                               decoration: BoxDecoration(
-                                color: isLogin
-                                    ? '#557BF6'.hexColor
-                                    : Colors.transparent,
+                                color: isLogin ? '#557BF6'.hexColor : Colors.transparent,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(1.5.r),
                                 ),
@@ -184,12 +178,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               '注册',
                               style: TextStyle(
                                 fontSize: isLogin ? 14.sp : 18.sp,
-                                fontWeight: !isLogin
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                color: !isLogin
-                                    ? '#333333'.hexColor
-                                    : '#333333'.hexColor,
+                                fontWeight: !isLogin ? FontWeight.w600 : FontWeight.w400,
+                                color: !isLogin ? '#333333'.hexColor : '#333333'.hexColor,
                               ),
                             ),
                             Container(
@@ -197,9 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 2.w,
                               margin: EdgeInsets.only(top: 4.w),
                               decoration: BoxDecoration(
-                                color: !isLogin
-                                    ? '#557BF6'.hexColor
-                                    : Colors.transparent,
+                                color: !isLogin ? '#557BF6'.hexColor : Colors.transparent,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(1.5.r),
                                 ),
@@ -266,13 +254,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         isLogin ? '没有账号？' : '已有账号？',
-                        style: TextStyle(
-                            fontSize: 12.sp, color: '#333333'.hexColor),
+                        style: TextStyle(fontSize: 12.sp, color: '#333333'.hexColor),
                       ),
                       Text(
                         isLogin ? '去注册' : '去登录',
-                        style: TextStyle(
-                            fontSize: 12.sp, color: '#557BF6'.hexColor),
+                        style: TextStyle(fontSize: 12.sp, color: '#557BF6'.hexColor),
                       ),
                     ],
                   ),
@@ -308,16 +294,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 36.w,
                     ),
                   ),
-                  if (!Env.isAndroidAAb) ...[
-                    SizedBox(width: 36.w),
-                    GestureDetector(
-                      onTap: signInWithApple,
-                      child: Assets.images.iconAppleCircle.image(
-                        width: 36.w,
-                        height: 36.w,
-                      ),
+                  SizedBox(width: 36.w),
+                  GestureDetector(
+                    onTap: signInWithApple,
+                    child: Assets.images.iconAppleCircle.image(
+                      width: 36.w,
+                      height: 36.w,
                     ),
-                  ],
+                  ),
                   SizedBox(width: 36.w),
                   GestureDetector(
                     onTap: signInWithTelegram,
@@ -352,8 +336,7 @@ class _LoginScreenState extends State<LoginScreen> {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       final idTokenResult = await userCredential.user?.getIdTokenResult(true);
       final res = await LoginService.of.thirdLogin(
         type: 'GOOGLE',
@@ -391,8 +374,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final appleProvider = AppleAuthProvider()
         ..addScope('email')
         ..addScope('name');
-      final auth =
-          await FirebaseAuth.instance.signInWithProvider(appleProvider);
+      final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
       EasyLoading.show();
       final idTokenResult = await auth.user?.getIdTokenResult(true);
       final res = await LoginService.of.thirdLogin(

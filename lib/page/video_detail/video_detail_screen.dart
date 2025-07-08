@@ -289,12 +289,13 @@ class VideoNotifier extends ChangeNotifier {
 
   ChewieController? get chewieController => _chewieController;
 
-  void initChewieController(videoPlayerController) {
+  void initChewieController(videoPlayerController, Function fullScreenCallBack) {
     _chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       autoPlay: true,
       showOptions: false,
       showControlsOnInitialize: false,
+      fullScreenCallBack: fullScreenCallBack,
       routePageBuilder: (context, animation, secondaryAnimation, controllerProvider) {
         return ChewieVideo(notifier: this);
       },

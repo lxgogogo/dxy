@@ -265,6 +265,7 @@ class ChewieState extends State<Chewie> {
 class ChewieController extends ChangeNotifier {
   ChewieController({
     required this.videoPlayerController,
+    this.fullScreenCallBack,
     this.optionsTranslation,
     this.aspectRatio,
     this.autoInitialize = false,
@@ -425,6 +426,8 @@ class ChewieController extends ChangeNotifier {
   /// If false, the options button in MaterialUI and MaterialDesktopUI
   /// won't be shown.
   final bool showOptions;
+
+  final Function? fullScreenCallBack;
 
   /// Pass your translations for the options like:
   /// - PlaybackSpeed
@@ -633,6 +636,10 @@ class ChewieController extends ChangeNotifier {
   void toggleFullScreen() {
     _isFullScreen = !_isFullScreen;
     notifyListeners();
+    if (fullScreenCallBack != null) {
+      fullScreenCallBack!(_isFullScreen);
+    }
+
   }
 
   void togglePause() {

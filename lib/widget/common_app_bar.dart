@@ -35,7 +35,13 @@ class CommonAppBar {
         ),
         centerTitle: centerTitle,
         leading: GestureDetector(
-          onTap: Get.back,
+          onTap: () {
+            if (onBack != null) {
+              onBack();
+            } else {
+              Get.back();
+            }
+          },
           behavior: HitTestBehavior.translucent,
           child: Container(
             color: Colors.transparent,

@@ -28,14 +28,23 @@ class EquityCenterController extends GetxController {
   int levelPoints = 0;
   int integral = 0;
   RxBool isLoading = true.obs;
+  bool backHome = false;
 
   @override
   void onReady() {
+    _init();
     _requestData();
     super.onReady();
   }
 
   // TODO: Private Method
+
+  void _init() {
+    if (Get.arguments != null && Get.arguments['backHome'] != null) {
+      backHome = Get.arguments['backHome'] ?? false;
+      print('backHome:$backHome');
+    }
+  }
 
   void _requestData() async {
     final res = await EquityCenterService.userEquity();
@@ -169,6 +178,15 @@ class EquityCenterController extends GetxController {
   }
 
   // TODO: Public Method
+
+  void onBack() {
+    if (backHome) {
+      Get.back();
+      Get.back();
+    } else {
+      Get.back();
+    }
+  }
 
   void onPageChanged(int index) {
     bg.value = bannerList[index].bg ?? '';

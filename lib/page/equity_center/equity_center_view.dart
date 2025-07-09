@@ -48,7 +48,8 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
             backgroundColor: controller.isLoading.value
                 ? Colors.white
                 : Colors.transparent,
-            appBar: CommonAppBar.arrowBack(context, title: '权益中心'),
+            appBar: CommonAppBar.arrowBack(
+                context, title: '权益中心', onBack: controller.onBack),
             body: controller.isLoading.value
                 ? const Center(
               child: CupertinoActivityIndicator(color: Colors.grey),

@@ -152,17 +152,22 @@ class VideoDetailScreen extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           GestureDetector(
-                                            onTap: () => showVideoChildListSheet(
-                                              items: controller.detailBean!.videoList!,
-                                              selectedIndex: controller.playVideoIndex,
-                                              onSelectItem: (int index) {
-                                                controller.selectVide(index);
-                                                TrackUtils.trackEvent(
-                                                  userLogType: '103001',
-                                                  params: controller.detailBean!.videoList![index].id,
-                                                );
-                                              },
-                                            ),
+                                            onTap: () {
+                                              if (!controller.haveWatchPower.value) {
+                                                return;
+                                              }
+                                              showVideoChildListSheet(
+                                                items: controller.detailBean!.videoList!,
+                                                selectedIndex: controller.playVideoIndex,
+                                                onSelectItem: (int index) {
+                                                  controller.selectVide(index);
+                                                  TrackUtils.trackEvent(
+                                                    userLogType: '103001',
+                                                    params: controller.detailBean!.videoList![index].id,
+                                                  );
+                                                },
+                                              );
+                                            },
                                             child: Container(
                                               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
                                               decoration: BoxDecoration(

@@ -30,7 +30,7 @@ class AppRoutesUtils {
                     content: content,
                     confirmText: '好',
                     onlyConfirm: true,
-                    showClose: false,
+                    showClose: true,
                     onConfirm: () {
                       Get.close(1);
                       Get.toNamed(Routes.login);
@@ -57,7 +57,7 @@ class AppRoutesUtils {
                 title: '当前下载书籍已达上限',
                 content: '您当前的身份为$powerName\n请提升用户等级获得更多权限',
                 confirmText: '好',
-                showClose: false,
+                showClose: true,
                 onConfirm: () {
                   Get.close(1);
                   Get.toNamed(Routes.equityCenter);
@@ -104,12 +104,11 @@ class AppRoutesUtils {
         builder: (context) => CommonDialog(
               title: title,
               content: content,
+              onlyConfirm: true,
               confirmText: '好',
-              showClose: false,
               onConfirm: () {
                 Get.toNamed(Routes.equityCenter);
-              },
-              cancelText: '取消',
+              }
             ));
   }
 

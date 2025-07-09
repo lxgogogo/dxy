@@ -25,6 +25,7 @@ import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
+import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
@@ -51,11 +52,11 @@ class VideoDetailScreen extends StatelessWidget {
           onFocusGained: controller.onFocusGained,
           onFocusLost: controller.onFocusLost,
           child: Scaffold(
-            // appBar: CommonAppBar.arrowBack(
-            //   context,
-            //   title: '详情',
-            // ),
-            extendBodyBehindAppBar: true,
+            appBar: CommonAppBar.arrowBack(
+              context,
+              title: '详情',
+            ),
+            backgroundColor: Colors.white,
             extendBody: true,
             body: controller.noNetwork
                 ? NoNetworkView(
@@ -64,7 +65,7 @@ class VideoDetailScreen extends StatelessWidget {
                 : controller.detailBean == null
                     ? const SizedBox()
                     : Padding(
-                        padding: EdgeInsets.only(bottom: 90.w),
+                        padding: EdgeInsets.fromLTRB(16.w, 16.w, 16.w, 90.w),
                         child: SmartRefresher(
                           enablePullDown: false,
                           enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
@@ -73,187 +74,169 @@ class VideoDetailScreen extends StatelessWidget {
                           child: CustomScrollView(
                             slivers: [
                               SliverToBoxAdapter(
-                                child: GestureDetector(
-                                  onTap: controller.playVideo,
-                                  child: Container(
-                                      padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                                      color: Colors.black,
-                                      child: Stack(
-                                        children: [
-                                          SizedBox(
-                                            height: 200.w,
-                                            child: Obx(() {
-                                              if (!controller.haveWatchPower.value) {
-                                                return CachedNetworkImage(
-                                                  imageUrl: controller.detailBean?.cover ?? '',
-                                                  height: 192.w,
-                                                  fit: BoxFit.cover,
-                                                  placeholder: (context, url) =>
-                                                      Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                                  errorWidget: (context, url, error) =>
-                                                      Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                                                );
-                                              }
-                                              return controller.videoNotifier.chewieController != null
-                                                  ? ChewieVideo(
-                                                      notifier: controller.videoNotifier,
-                                                    )
-                                                  : const Center(
-                                                      child: CircularProgressIndicator(),
-                                                    );
-                                            }),
-                                          ),
-                                          Positioned(
-                                            left: 0,
-                                            top: 0,
-                                            child: GestureDetector(
-                                              onTap: Get.back,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Container(
-                                                height: kToolbarHeight,
-                                                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                                child: SvgPicture.asset(
-                                                  Assets.svg.iconBack,
-                                                  width: 24.w,
-                                                  height: 24.w,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                ),
-                              ),
-                              SliverPadding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                sliver: SliverToBoxAdapter(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      SizedBox(height: 16.w),
-                                      Text(
-                                        controller.detailBean?.title ?? '',
-                                        style: TextStyle(
-                                          color: '#333333'.hexColor,
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      controller.detailBean?.title ?? '',
+                                      style: TextStyle(
+                                        color: '#1E1E1E'.hexColor,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      SizedBox(height: 12.w),
-                                      Text(
-                                        controller.detailBean?.description ?? '',
-                                        style: TextStyle(
-                                          color: '#333333'.hexColor,
-                                          fontSize: 16.sp,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      if (controller.detailBean?.tagList?.isNotEmpty == true)
-                                        TagListView(
-                                          tagList: controller.detailBean?.tagList ?? [],
-                                          onTapItem: (model) => TrackUtils.trackEvent(
-                                            userLogType: '103002',
-                                            params: model.id,
+                                    ),
+                                    GestureDetector(
+                                      onTap: controller.playVideo,
+                                      child: Container(
+                                          height: 192.w,
+                                          margin: EdgeInsets.symmetric(vertical: 12.w),
+                                          clipBehavior: Clip.hardEdge,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.circular(16.r),
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     color: const Color(0xffa2b9d0).withOpacity(0.64),
+                                            //     offset: Offset(0, 1.w),
+                                            //     blurRadius: 2.r,
+                                            //     spreadRadius: -1.w,
+                                            //   ),
+                                            //   BoxShadow(
+                                            //     color: const Color(0xffffffff),
+                                            //     offset: Offset(0, -1.w),
+                                            //     blurRadius: 2.r,
+                                            //     spreadRadius: 0,
+                                            //   ),
+                                            // ],
                                           ),
-                                        ),
-                                      if (controller.detailBean?.videoList?.isNotEmpty == true)
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () => showVideoChildListSheet(
-                                                items: controller.detailBean!.videoList!,
-                                                selectedIndex: controller.playVideoIndex,
-                                                onSelectItem: (int index) {
-                                                  controller.selectVide(index);
-                                                  TrackUtils.trackEvent(
-                                                    userLogType: '103001',
-                                                    params: controller.detailBean!.videoList![index].id,
+                                          child: Obx(() {
+                                            if (!controller.haveWatchPower.value) {
+                                              return CachedNetworkImage(
+                                                imageUrl: controller.detailBean?.cover ?? '',
+                                                width: 1.sw - 32.w,
+                                                height: 192.w,
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                                errorWidget: (context, url, error) =>
+                                                    Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                              );
+                                            }
+                                            return controller.videoNotifier.chewieController != null
+                                                ? ChewieVideo(
+                                                    notifier: controller.videoNotifier,
+                                                  )
+                                                : const Center(
+                                                    child: CircularProgressIndicator(),
                                                   );
-                                                },
-                                              ),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
-                                                decoration: BoxDecoration(
-                                                  color: '#333333'.hexColor.withOpacity(0.05),
-                                                  borderRadius: BorderRadius.circular(8.r),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        '合集·${controller.detailBean!.videoList![controller.playVideoIndex].title}',
-                                                        style: TextStyle(
-                                                          fontSize: 14.sp,
-                                                          color: '#333333'.hexColor,
-                                                        ),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 12.w),
-                                                    Lottie.asset(
-                                                      Assets.lottie.playVideoGrey,
-                                                      width: 16.w,
-                                                      repeat: true,
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                                      child: Text(
-                                                        '${controller.playVideoIndex + 1}/${controller.detailBean!.videoList!.length}',
-                                                        style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: '#999999'.hexColor,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SvgPicture.asset(
-                                                      Assets.svg.iconArrowRight,
-                                                      width: 16.w,
-                                                      height: 16.w,
-                                                      color: '#999999'.hexColor,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 24.w),
-                                          ],
-                                        ),
-                                      Text(
-                                        '评论 ${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
-                                        style: TextStyle(
-                                          color: '#333333'.hexColor,
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w600,
+                                          })),
+                                    ),
+                                    Text(
+                                      controller.detailBean?.description ?? '',
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    if (controller.detailBean?.tagList?.isNotEmpty == true)
+                                      TagListView(
+                                        tagList: controller.detailBean?.tagList ?? [],
+                                        onTapItem: (model) => TrackUtils.trackEvent(
+                                          userLogType: '103002',
+                                          params: model.id,
                                         ),
                                       ),
-                                      SizedBox(height: 16.w),
-                                    ],
-                                  ),
+                                    if (controller.detailBean?.videoList?.isNotEmpty == true)
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () => showVideoChildListSheet(
+                                              items: controller.detailBean!.videoList!,
+                                              selectedIndex: controller.playVideoIndex,
+                                              onSelectItem: (int index) {
+                                                controller.selectVide(index);
+                                                TrackUtils.trackEvent(
+                                                  userLogType: '103001',
+                                                  params: controller.detailBean!.videoList![index].id,
+                                                );
+                                              },
+                                            ),
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
+                                              decoration: BoxDecoration(
+                                                color: '#333333'.hexColor.withOpacity(0.05),
+                                                borderRadius: BorderRadius.circular(8.r),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      '合集 · ${controller.detailBean!.videoList![controller.playVideoIndex].title}',
+                                                      style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: '#333333'.hexColor,
+                                                      ),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 12.w),
+                                                  SvgPicture.asset(
+                                                    Assets.svg.iconVideoPlaying,
+                                                    width: 16.w,
+                                                    height: 16.w,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                                    child: Text(
+                                                      '${controller.playVideoIndex + 1}/${controller.detailBean!.videoList!.length}',
+                                                      style: TextStyle(
+                                                        fontSize: 12.sp,
+                                                        color: '#999999'.hexColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SvgPicture.asset(
+                                                    Assets.svg.iconArrowRight,
+                                                    width: 16.w,
+                                                    height: 16.w,
+                                                    color: '#999999'.hexColor,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 24.w),
+                                        ],
+                                      ),
+                                    Text(
+                                      '评论 ${controller.detailBean?.commentCount?.abbreviateNumber ?? '0'}条',
+                                      style: TextStyle(
+                                        color: '#333333'.hexColor,
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(height: 16.w),
+                                  ],
                                 ),
                               ),
                               if (controller.comments == null)
                                 const SliverToBoxAdapter()
                               else if (controller.comments?.isNotEmpty == true)
-                                SliverPadding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                                  sliver: SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                      return CommentItem(
-                                        commentBean: controller.comments![index],
-                                        sourceType: SourceType.video,
-                                        sourceId: controller.id,
-                                      );
-                                    },
-                                    childCount: controller.comments!.length,
-                                  )),
-                                )
+                                SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return CommentItem(
+                                      commentBean: controller.comments![index],
+                                      sourceType: SourceType.video,
+                                      sourceId: controller.id,
+                                    );
+                                  },
+                                  childCount: controller.comments!.length,
+                                ))
                               else
                                 const SliverToBoxAdapter(
                                   child: NoCommentView(),

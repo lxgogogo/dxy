@@ -191,7 +191,7 @@ class VideoDetailScreen extends StatelessWidget {
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        '合集·${controller.detailBean!.videoList![controller.playVideoIndex].title}',
+                                                        '合集 · ${controller.detailBean!.videoList![controller.playVideoIndex].title}',
                                                         style: TextStyle(
                                                           fontSize: 14.sp,
                                                           color: '#333333'.hexColor,

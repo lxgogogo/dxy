@@ -281,19 +281,25 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                                 color: '#333333'.hexColor.withOpacity(0.05),
                                                 height: 1.w,
                                               ),
-                                              _buildRowButtonItem(
-                                                genImage: Assets.images.iconApple,
-                                                label: 'Apple',
-                                                onTap: TrackUtils.trackedTap(
-                                                  onTap: () {
-                                                    if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
-                                                    controller.signInWithApple(context);
-                                                  },
-                                                  userLogType: '115006',
-                                                  params: '苹果',
+                                              if (!Env.isAndroidAAb) ...[
+                                                _buildRowButtonItem(
+                                                  genImage: Assets.images.iconApple,
+                                                  label: 'Apple',
+                                                  onTap: TrackUtils.trackedTap(
+                                                    onTap: () {
+                                                      if (UserStore.of.user?.appleAccount?.isNotEmpty == true) return;
+                                                      controller.signInWithApple(context);
+                                                    },
+                                                    userLogType: '115006',
+                                                    params: '苹果',
+                                                  ),
+                                                  isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
                                                 ),
-                                                isBind: UserStore.of.user?.appleAccount?.isNotEmpty == true,
-                                              ),
+                                                Container(
+                                                  color: '#333333'.hexColor.withOpacity(0.05),
+                                                  height: 1.w,
+                                                ),
+                                              ],
                                               Container(
                                                 color: '#333333'.hexColor.withOpacity(0.05),
                                                 height: 1.w,

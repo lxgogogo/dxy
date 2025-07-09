@@ -92,10 +92,14 @@ class AppRoutesUtils {
   }
 
   // 观看视频权限
-  static void haveVideoWatch({String title = '当前观看视频已达上限'}) {
+  static void haveVideoWatch({int featured = 0}) {
     String powerName = UserStore.of.user?.userLevel?.name ?? '';
     if (powerName.isEmpty) {
       powerName = '一般用户';
+    }
+    String title = '当前观看视频已达上限';
+    if (featured == 1) {
+      title = '当前观看精选视频已达上限';
     }
     String content = '您当前的身份为$powerName\n请提升用户等级获得更多权限';
     showDialog(

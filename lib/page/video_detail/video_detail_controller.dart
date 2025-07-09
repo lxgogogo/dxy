@@ -192,7 +192,7 @@ class VideoDetailController extends GetxController {
               _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
             } else {
               haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch();
+              AppRoutesUtils.haveVideoWatch(featured: featured);
             }
           } else {
             if (videoWatch != 0) {
@@ -200,7 +200,7 @@ class VideoDetailController extends GetxController {
               _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
             } else {
               haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch();
+              AppRoutesUtils.haveVideoWatch(featured: featured);
             }
           }
         }
@@ -213,7 +213,7 @@ class VideoDetailController extends GetxController {
               _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
             } else {
               haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch();
+              AppRoutesUtils.haveVideoWatch(featured: featured);
             }
           } else {
             if (videoWatch != 0) {
@@ -221,7 +221,7 @@ class VideoDetailController extends GetxController {
               _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
             } else {
               haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch();
+              AppRoutesUtils.haveVideoWatch(featured: featured);
             }
           }
         }

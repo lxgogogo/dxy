@@ -294,7 +294,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 36.w,
                     ),
                   ),
-                  SizedBox(width: 36.w),
                   if (!Env.isAndroidAAb) ...[
                     SizedBox(width: 36.w),
                     GestureDetector(

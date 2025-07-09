@@ -141,6 +141,8 @@ class VideoDetailScreen extends StatelessWidget {
                                           color: '#333333'.hexColor,
                                           fontSize: 16.sp,
                                         ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       if (controller.detailBean?.tagList?.isNotEmpty == true)
                                         TagListView(

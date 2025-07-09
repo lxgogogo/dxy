@@ -151,7 +151,7 @@ class VideoDetailController extends GetxController {
           } else {
             if (!haveWatchAlert) {
               haveWatchAlert = true;
-              AppRoutesUtils.haveLogin(title: '请登录后观看', content: '您当前的身份为访客\n登录后即可观看精选视频');
+              AppRoutesUtils.haveLogin(title: '请登录后观看', content: '您当前的身份为访客\n请登录后观看');
             }
           }
         }

@@ -45,6 +45,8 @@ class VideoDetailController extends GetxController {
   // 0-普通视频 1-精选视频
   int videoType = 0;
   bool isDisposed = false;
+  bool isFullScreen = false;
+  bool fullScreenOnTap = false;
 
   @override
   void onInit() {
@@ -233,7 +235,10 @@ class VideoDetailController extends GetxController {
     videoController = VideoPlayerController.networkUrl(Uri.parse(link))
       ..addListener(videoListener)
       ..initialize().then((_) {
-        videoNotifier.initChewieController(videoController!);
+        videoNotifier.initChewieController(videoController!, (value){
+          isFullScreen = value;
+          fullScreenOnTap = true;
+        });
         isInitialize = true;
         safeUpdate();
         if (!hasUploadEvent) {
@@ -387,20 +392,24 @@ class VideoDetailController extends GetxController {
   }
 
   void onFocusGained() {
-    if (isInitialize) {
-      if (videoController?.value.isPlaying == false) {
-        videoController?.play();
+    if (!fullScreenOnTap) {
+      if (isInitialize) {
+        if (videoController?.value.isPlaying == false) {
+          videoController?.play();
+        }
       }
+    } else {
+      fullScreenOnTap = false;
     }
   }
 
   void onFocusLost() {
-    bool isFullScreen = false;
-    if (videoNotifier.chewieController != null) {
-      isFullScreen = videoNotifier.chewieController!.isFullScreen;
-    }
-    if (!isDisposed && !isFullScreen) {
-      videoController?.pause();
+    if (!fullScreenOnTap) {
+      if (!isDisposed && videoController?.value.isPlaying == true) {
+        videoController?.pause();
+      }
+    } else {
+      fullScreenOnTap = false;
     }
   }
 }

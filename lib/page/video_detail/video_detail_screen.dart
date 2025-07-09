@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,6 @@ import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
-import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
@@ -84,7 +84,15 @@ class VideoDetailScreen extends StatelessWidget {
                                             height: 200.w,
                                             child: Obx(() {
                                               if (!controller.haveWatchPower.value) {
-                                                return const SizedBox();
+                                                return CachedNetworkImage(
+                                                  imageUrl: controller.detailBean?.cover ?? '',
+                                                  height: 192.w,
+                                                  fit: BoxFit.cover,
+                                                  placeholder: (context, url) =>
+                                                      Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                                  errorWidget: (context, url, error) =>
+                                                      Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                                                );
                                               }
                                               return controller.videoNotifier.chewieController != null
                                                   ? ChewieVideo(

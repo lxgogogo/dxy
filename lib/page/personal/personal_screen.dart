@@ -281,7 +281,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                                 color: '#333333'.hexColor.withOpacity(0.05),
                                                 height: 1.w,
                                               ),
-                                              if (!Env.isAndroidAAb) ...[
                                                 _buildRowButtonItem(
                                                   genImage: Assets.images.iconApple,
                                                   label: 'Apple',
@@ -299,7 +298,6 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                                   color: '#333333'.hexColor.withOpacity(0.05),
                                                   height: 1.w,
                                                 ),
-                                              ],
                                               Container(
                                                 color: '#333333'.hexColor.withOpacity(0.05),
                                                 height: 1.w,

@@ -17,8 +17,8 @@ class ConfigStore extends GetxController {
   List<ReportTypeModel> reportTypes = [];
 
   @override
-  void onInit() async {
-    super.onInit();
+  void onReady() async {
+    super.onReady();
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       final noNetwork = result.contains(ConnectivityResult.none);
       if (noNetwork) {

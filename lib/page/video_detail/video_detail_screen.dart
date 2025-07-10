@@ -159,7 +159,9 @@ class VideoDetailScreen extends StatelessWidget {
                                             userLogType: '103002',
                                             params: model.id,
                                           ),
-                                        ),
+                                        )
+                                      else
+                                        SizedBox(height: 12.w),
                                       if (controller.detailBean?.videoList?.isNotEmpty == true)
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -14,8 +15,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'utils/pre_config.dart';
 import 'utils/env.dart';
 
-
-
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +25,7 @@ void main() async {
   const platformType = String.fromEnvironment('PLATFORM_TYPE');
   initEnv(env);
   initPlatformType(platformType);
-  
+
   PreConfig.init().then((value) {
     runApp(const MyApp());
   });
@@ -43,8 +42,49 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return RefreshConfiguration(
           headerBuilder: () => const ClassicHeader(),
-          footerBuilder: () => const ClassicFooter(
-            noDataText: '—— 已经到底啦 ——',
+          footerBuilder: () => CustomFooter(
+            builder: (context, mode) {
+              Widget body;
+              TextStyle style = TextStyle(color: Colors.grey, fontSize: 14.sp);
+              if (mode == LoadStatus.idle) {
+                body = Text(
+                  '加载更多',
+                  style: style
+                );
+              } else if (mode == LoadStatus.loading) {
+                body = const CupertinoActivityIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text(
+                  '再试一次',
+                  style: style,
+                );
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text(
+                  '加载更多',
+                  style: style,
+                );
+              } else {
+                body = Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(width: 20.w, height: 0.5.w, color: Colors.grey),
+                    Text(
+                      ' 已经到底啦 ',
+                      style: style,
+                    ),
+                    Container(width: 20.w, height: 0.5.w, color: Colors.grey),
+                  ],
+                );
+              }
+              final navBarDistance =
+                  kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight;
+              return Container(
+                height: 50 + navBarDistance,
+                padding: EdgeInsets.only(bottom: navBarDistance),
+                alignment: Alignment.center,
+                child: body,
+              );
+            },
           ),
           // shouldFooterFollowWhenNotFull: (state) {
           //   // If you want load more with noMoreData state ,may be you should return false
@@ -68,11 +108,13 @@ class MyApp extends StatelessWidget {
                 Locale('en', 'US'),
                 Locale('zh', 'CN'),
               ],
-              localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
+              localeResolutionCallback:
+                  (locale, Iterable<Locale> supportedLocales) {
                 return locale;
               },
               theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
+                colorScheme:
+                    ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
                 useMaterial3: true,
                 visualDensity: VisualDensity.compact,
                 focusColor: Colors.transparent,
@@ -94,7 +136,8 @@ class MyApp extends StatelessWidget {
               builder: EasyLoading.init(
                 builder: (BuildContext context, Widget? child) {
                   return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                    data: MediaQuery.of(context)
+                        .copyWith(textScaler: TextScaler.noScaling),
                     child: ScrollConfiguration(
                       behavior: NoShadowScrollBehavior(),
                       child: child ?? const Material(),
@@ -114,7 +157,8 @@ class MyApp extends StatelessWidget {
 
 class NoShadowScrollBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     switch (getPlatform(context)) {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

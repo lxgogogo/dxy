@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
@@ -102,6 +103,8 @@ class ToolListScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ).scrollToTopWrapper(
+              controller.scrollController,
             ),
           ],
         ),

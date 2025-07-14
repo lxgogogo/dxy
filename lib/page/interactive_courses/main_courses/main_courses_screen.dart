@@ -11,6 +11,7 @@ import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/services/course_service.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_image.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:intl/intl.dart';
 
 import '../../../gen/assets.gen.dart';
@@ -313,6 +314,8 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                       ],
                     ),
                   ),
+                ).scrollToTopWrapper(
+                  controller.scrollController,
                 ),
               ),
             ],

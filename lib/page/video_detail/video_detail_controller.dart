@@ -36,6 +36,8 @@ class VideoDetailController extends GetxController {
   int pageSize = 10;
   bool noMore = false;
 
+  final ScrollController scrollController = ScrollController();
+
   // 是否有观影权限
   RxBool haveWatchPower = true.obs;
 

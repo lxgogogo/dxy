@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../widget/common_app_bar.dart';
@@ -44,6 +45,7 @@ class _FinishCreatCollectGroupPageState
           )
         ]),
         body: Obx(() => SmartRefresher(
+            scrollController: controller.scrollController,
             enablePullDown: true,
             enablePullUp: true,
             controller: controller.refreshController,
@@ -55,7 +57,9 @@ class _FinishCreatCollectGroupPageState
                     itemBuilder: (c, i) {
                       return _buildItemWidget(i);
                     },
-                    itemCount: controller.collectList.length))));
+                    itemCount: controller.collectList.length)).scrollToTopWrapper(
+          controller.scrollController,
+        )));
   }
 
   @override

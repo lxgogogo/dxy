@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/net_request.dart';
@@ -19,6 +20,7 @@ class FinishCreatCollectGroupController extends GetxController {
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
+  final ScrollController scrollController = ScrollController();
   RxBool loaded = false.obs;
   String name = '';
   bool create = true;

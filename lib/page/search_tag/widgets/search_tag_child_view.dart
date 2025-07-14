@@ -19,6 +19,7 @@ import 'package:holdem/widget/item_book.dart';
 import 'package:holdem/widget/item_feed.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/track_utils.dart';
@@ -39,11 +40,14 @@ class SearchTagChildView extends GetView<SearchTagChildView> {
       init: SearchTagChildController(type, tagModel),
       builder: (controller) {
         return SmartRefresher(
+          scrollController: controller.scrollController,
           enablePullDown: false,
           enablePullUp: true,
           controller: controller.refreshController,
           onLoading: controller.onLoading,
           child: controller.isLoaded ? _buildView(controller) : const SizedBox(),
+        ).scrollToTopWrapper(
+          controller.scrollController,
         );
       },
     );

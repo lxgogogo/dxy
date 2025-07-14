@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
@@ -95,6 +96,7 @@ class _CollectListPageState extends State<CollectListPage> {
         final maxWidth = constraints.maxWidth;
         return SlidableAutoCloseBehavior(
             child: Obx(() => SmartRefresher(
+                scrollController: controller.scrollController,
                 enablePullDown: true,
                 enablePullUp: true,
                 controller: controller.refreshController,
@@ -137,7 +139,9 @@ class _CollectListPageState extends State<CollectListPage> {
                               ),
                               child: _buildItemWidget(i));
                         },
-                        itemCount: controller.collectList.length))));
+                        itemCount: controller.collectList.length)).scrollToTopWrapper(
+              controller.scrollController,
+            )));
       },
     );
   }

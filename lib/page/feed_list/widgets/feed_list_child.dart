@@ -6,6 +6,7 @@ import 'package:holdem/model/board_list.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
@@ -17,7 +18,6 @@ import '../../../widget/report_sheet.dart';
 import '../../../widget/special_classic_footer.dart';
 
 class FeedListChildView extends StatefulWidget {
-
   const FeedListChildView({super.key});
 
   @override
@@ -36,7 +36,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   List<BoardBean> boardPostList = [];
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
-  final ScrollController _listController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   StreamSubscription? tabEvent;
   StreamSubscription? postFeedEvent;
@@ -58,8 +58,8 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   }
 
   void refreshData(int id, String order) {
-    if (_listController.hasClients) {
-      _listController.jumpTo(0.0);
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(0.0);
     }
     pageId = id;
     tabIdValue = id;
@@ -68,8 +68,8 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   }
 
   void refreshFilter(String order) {
-    if (_listController.hasClients) {
-      _listController.jumpTo(0.0);
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(0.0);
     }
     boardSort = order;
     _onRefresh();
@@ -106,7 +106,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   void dispose() {
     tabEvent?.cancel();
     postFeedEvent?.cancel();
-    _listController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -209,7 +209,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
-      scrollController: _listController,
+      scrollController: scrollController,
       child: isLoaded
           ? boardPostList.isNotEmpty
               ? CustomScrollView(
@@ -247,6 +247,8 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
                 )
               : const Center(child: NoDataView())
           : const SizedBox(),
+    ).scrollToTopWrapper(
+      scrollController,
     );
   }
 

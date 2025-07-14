@@ -24,6 +24,7 @@ import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:holdem/widget/transparent_pointer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -436,6 +437,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             )
                           ],
                         ),
+                      ).scrollToTopWrapper(
+                        controller.scrollController,
                       ),
                     ),
                     if (controller.isShowHomeMenu)

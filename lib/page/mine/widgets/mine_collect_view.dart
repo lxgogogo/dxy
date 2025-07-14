@@ -11,6 +11,7 @@ import 'package:holdem/services/collect_service.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -41,6 +42,9 @@ class _MineCollectViewState extends State<MineCollectView>
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
+
+  final ScrollController scrollController = ScrollController();
+
   bool _isMounted = false;
   bool _showFavorite = false;
 
@@ -291,6 +295,7 @@ class _MineCollectViewState extends State<MineCollectView>
         final maxWidth = constraints.maxWidth;
         return SlidableAutoCloseBehavior(
           child: SmartRefresher(
+              scrollController: scrollController,
               enablePullDown: true,
               enablePullUp: true,
               controller: _refreshController,
@@ -342,7 +347,9 @@ class _MineCollectViewState extends State<MineCollectView>
                             ),
                             child: MyCollectItem(item: collectList[i]));
                       },
-                      itemCount: collectList.length)),
+                      itemCount: collectList.length)).scrollToTopWrapper(
+            scrollController,
+          ),
         );
       },
     );

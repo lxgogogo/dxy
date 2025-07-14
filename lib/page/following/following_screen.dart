@@ -7,6 +7,7 @@ import 'package:holdem/model/user.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../stores/user_store.dart';
@@ -34,6 +35,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   bool noMore = false;
   final RefreshController _refreshController = RefreshController();
+
+  final ScrollController scrollController = ScrollController();
 
   void _onRefresh() async {
     pageNum = 1;
@@ -137,6 +140,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
       ),
       backgroundColor: Colors.white,
       body: SmartRefresher(
+        scrollController: scrollController,
         enablePullDown: true,
         enablePullUp: items.isNotEmpty == true || !noMore,
         controller: _refreshController,
@@ -178,6 +182,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
                 separatorBuilder: (_, __) => SizedBox(height: 16.w),
               )
             : const Center(child: NoDataView()),
+      ).scrollToTopWrapper(
+        scrollController,
       ),
     );
   }

@@ -28,6 +28,7 @@ import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -66,6 +67,7 @@ class VideoDetailScreen extends StatelessWidget {
                     : Padding(
                         padding: EdgeInsets.only(bottom: 90.w),
                         child: SmartRefresher(
+                          scrollController: controller.scrollController,
                           enablePullDown: false,
                           enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
                           controller: controller.refreshController,
@@ -269,6 +271,8 @@ class VideoDetailScreen extends StatelessWidget {
                                 ),
                             ],
                           ),
+                        ).scrollToTopWrapper(
+                          controller.scrollController,
                         ),
                       ),
             bottomSheet: controller.detailBean != null

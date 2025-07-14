@@ -13,6 +13,9 @@ class TagListController extends GetxController with RefreshControllerMixin {
   int searchPageNum = 1;
   bool searchNoMore = false;
 
+  final ScrollController searchScrollController = ScrollController();
+  final ScrollController hotScrollController = ScrollController();
+
   @override
   void onInit() {
     searchRefreshController = RefreshController();
@@ -32,13 +35,15 @@ class TagListController extends GetxController with RefreshControllerMixin {
     onRefresh();
     intTagList();
   }
-  void intTagList(){
+
+  void intTagList() {
     final selectTags = Get.find<FeedPostController>().tagList;
-    if(selectTags.isNotEmpty){
+    if (selectTags.isNotEmpty) {
       selectedItems.addAll(selectTags);
       safeUpdate();
     }
   }
+
   void addSelectTag(TagModel tag) {
     if (selectedItems.length >= 10) {
       showToast('最多只能选择10个标签');
@@ -51,10 +56,12 @@ class TagListController extends GetxController with RefreshControllerMixin {
     selectedItems.add(tag);
     safeUpdate();
   }
+
   void removeTag(int index) {
     selectedItems.removeAt(index);
     safeUpdate();
   }
+
   @override
   Future<List?> loadData() async {
     if (page == 1) hotItems.clear();

@@ -9,6 +9,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/item_comment.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../utils/color_style_util.dart';
@@ -132,6 +133,7 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
   Widget _buildNoticeListWidget() {
     if (controller.isSystem.value) {
       return Obx(() => SmartRefresher(
+          scrollController: controller.scrollController,
           enablePullDown: true,
           enablePullUp: true,
           controller: controller.refreshController,
@@ -143,13 +145,16 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
               itemBuilder: (c, i) {
                 return _buildListItemWidget(i);
               },
-              itemCount: controller.dataList.length)));
+              itemCount: controller.dataList.length)).scrollToTopWrapper(
+        controller.scrollController,
+      ));
     }
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
         return SlidableAutoCloseBehavior(
             child: Obx(() => SmartRefresher(
+                scrollController: controller.scrollController,
                 enablePullDown: true,
                 enablePullUp: true,
                 controller: controller.refreshController,
@@ -200,7 +205,9 @@ class _MessageNoticePageState extends State<MessageNoticePage> {
                           ),
                           child: _buildListItemWidget(i));
                     },
-                    itemCount: controller.dataList.length))));
+                    itemCount: controller.dataList.length)).scrollToTopWrapper(
+              controller.scrollController,
+            )));
       },
     );
   }

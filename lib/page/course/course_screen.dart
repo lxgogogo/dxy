@@ -11,6 +11,7 @@ import 'package:holdem/model/index_category.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/track_utils.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../model/course.dart';
@@ -230,6 +231,8 @@ class CourseScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+              ).scrollToTopWrapper(
+                controller.scrollController,
               ),
             ],
           ),

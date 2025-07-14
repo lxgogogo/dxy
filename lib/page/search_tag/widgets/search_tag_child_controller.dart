@@ -17,6 +17,9 @@ class SearchTagChildController extends GetxController with GetSingleTickerProvid
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
+
+  final ScrollController scrollController = ScrollController();
+
   bool isLoaded = false;
   StreamSubscription? eventSubscription;
 

@@ -13,6 +13,7 @@ import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/common_refresher.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -78,6 +79,7 @@ class TagListScreen extends StatelessWidget {
                     index: controller.showSearchResult ? 0 : 1,
                     children: [
                       CommonRefresher(
+                        scrollController: controller.searchScrollController,
                         controller: controller.searchRefreshController,
                         onLoading: controller.onSearchLoading,
                         enablePullDown: false,
@@ -92,8 +94,11 @@ class TagListScreen extends StatelessWidget {
                                 },
                               )
                             : const Center(child: NoDataView()),
+                      ).scrollToTopWrapper(
+                        controller.searchScrollController,
                       ),
                       CommonRefresher(
+                        scrollController: controller.hotScrollController,
                         controller: controller.refreshController,
                         onLoading: controller.onLoading,
                         enablePullDown: false,
@@ -108,6 +113,8 @@ class TagListScreen extends StatelessWidget {
                                 },
                               )
                             : const SizedBox(),
+                      ).scrollToTopWrapper(
+                        controller.hotScrollController,
                       ),
                     ],
                   )),

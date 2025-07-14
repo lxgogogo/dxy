@@ -17,6 +17,8 @@ class MessageNoticeController extends GetxController {
   int pageNum = 1;
   int pageSize = 20;
 
+  final ScrollController scrollController = ScrollController();
+
   RxBool isSystem = true.obs;
   RxList<MessageNoticeModel> dataList = <MessageNoticeModel>[].obs;
 

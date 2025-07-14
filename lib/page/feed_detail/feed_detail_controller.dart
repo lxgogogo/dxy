@@ -20,6 +20,8 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
   int pageSize = 10;
   bool noMore = false;
 
+  final ScrollController scrollController = ScrollController();
+
   @override
   void onInit() async {
     id = Get.arguments as int?;

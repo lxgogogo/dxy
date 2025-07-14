@@ -6,6 +6,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
@@ -30,6 +31,8 @@ class _AtUserScreenState extends State<AtUserScreen> {
 
   bool noMore = false;
   final RefreshController _refreshController = RefreshController();
+
+  final ScrollController scrollController = ScrollController();
 
   final TextEditingController searchController = TextEditingController();
 
@@ -215,6 +218,7 @@ class _AtUserScreenState extends State<AtUserScreen> {
   ///列表数据
   Widget listView() {
     return SmartRefresher(
+      scrollController: scrollController,
       enablePullDown: true,
       enablePullUp: followOrFanUserList.isNotEmpty == true || !noMore,
       controller: _refreshController,
@@ -230,6 +234,8 @@ class _AtUserScreenState extends State<AtUserScreen> {
               },
             )
           : const NoDataView(),
+    ).scrollToTopWrapper(
+      scrollController,
     );
   }
 

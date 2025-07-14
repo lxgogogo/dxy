@@ -17,6 +17,8 @@ class BookDetailController extends GetxController {
   int pageSize = 10;
   bool noMore = false;
 
+  final ScrollController scrollController = ScrollController();
+
   @override
   void onInit() {
     id = Get.arguments as int?;

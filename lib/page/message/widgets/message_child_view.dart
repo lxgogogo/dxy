@@ -11,6 +11,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
@@ -57,6 +58,8 @@ class MessageChildViewState extends State<MessageChildView> {
               // itemExtent: 160.0,
               itemCount: widget.controller.items.length,
             ),
+    ).scrollToTopWrapper(
+      widget.controller.scrollController,
     );
   }
 

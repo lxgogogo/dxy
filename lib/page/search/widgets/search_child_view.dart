@@ -24,6 +24,7 @@ import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/item_news.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/no_data.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -43,12 +44,14 @@ class SearchChildView extends GetView<SearchChildView> {
       init: SearchChildController(type),
       builder: (controller) {
         return SmartRefresher(
+          scrollController: controller.scrollController,
           enablePullDown: false,
           enablePullUp: controller.items.isNotEmpty == true || !controller.noMore,
           controller: controller.refreshController,
-          scrollController: controller.scrollController,
           onLoading: controller.onLoading,
           child: controller.isLoaded ? _buildView(controller) : const SizedBox(),
+        ).scrollToTopWrapper(
+          controller.scrollController,
         );
       },
     );

@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/video_list/video_list_controller.dart';
 import 'package:holdem/utils/log_util.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../gen/assets.gen.dart';
@@ -87,7 +88,9 @@ class _VideoListScreenState extends State<VideoListScreen> {
                         ),
                       ),
                     ),
-                  )),
+                  )).scrollToTopWrapper(
+                controller.scrollController,
+              ),
             ],
           );
         },

@@ -24,6 +24,8 @@ class CollectListController extends GetxController {
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
+  final ScrollController scrollController = ScrollController();
+
   RxBool loaded = false.obs;
   RxBool enable = false.obs;
   // 是否删除中

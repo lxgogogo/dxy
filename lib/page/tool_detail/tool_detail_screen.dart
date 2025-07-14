@@ -24,6 +24,7 @@ import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -63,6 +64,7 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                       children: [
                         Expanded(
                           child: SmartRefresher(
+                            scrollController: controller.scrollController,
                             enablePullDown: false,
                             enablePullUp: controller.comments?.isNotEmpty == true || !controller.noMore,
                             controller: controller.refreshController,
@@ -252,6 +254,8 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                   ),
                               ],
                             ),
+                          ).scrollToTopWrapper(
+                            controller.scrollController,
                           ),
                         ),
                         SizedBox(height: 90.w),

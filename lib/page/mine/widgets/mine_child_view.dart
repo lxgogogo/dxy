@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/board_list.dart';
@@ -33,6 +34,9 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
   int pageNum = 1;
   int pageSize = 20;
   bool noMore = false;
+
+  final ScrollController scrollController = ScrollController();
+
   bool _isMounted = false;
 
   List<BoardBean> boardPostList = [];
@@ -170,6 +174,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
         final maxWidth = constraints.maxWidth;
         return SlidableAutoCloseBehavior(
           child: SmartRefresher(
+            scrollController: scrollController,
             enablePullDown: true,
             enablePullUp: true,
             controller: _refreshController,
@@ -266,6 +271,8 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                             ? collectList.length
                             : commentDataList.length,
                   ),
+          ).scrollToTopWrapper(
+            scrollController,
           ),
         );
       },

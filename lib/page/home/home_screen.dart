@@ -128,32 +128,37 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 return SizedBox(
                                   height: 234.w,
                                   child: Swiper(
-                                    itemCount: controller.banners.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return GestureDetector(
-                                        onTap: TrackUtils.trackedTap(
-                                          onTap: controller.jumpPage,
-                                          userLogType: '101001',
-                                          params: controller.banners[index].jumpValue,
-                                        ),
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl: controller.banners[index].imgMobile ?? '',
-                                          fadeOutDuration: Duration.zero,
-                                          fadeInDuration: Duration.zero,
-                                          cacheKey: controller.banners[index].imgMobile ?? '',
-                                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(
-                                            fit: BoxFit.fill,
+                                      itemCount: controller.banners.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return GestureDetector(
+                                          onTap: TrackUtils.trackedTap(
+                                            onTap: controller.jumpPage,
+                                            userLogType: '101001',
+                                            params: controller.banners[index].jumpValue,
                                           ),
-                                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                          child: CachedNetworkImage(
                                             fit: BoxFit.cover,
+                                            imageUrl: controller.banners[index].imgMobile ?? '',
+                                            fadeOutDuration: Duration.zero,
+                                            fadeInDuration: Duration.zero,
+                                            cacheKey: controller.banners[index].imgMobile ?? '',
+                                            placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+                                              fit: BoxFit.fill,
+                                            ),
+                                            errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    autoplay: true,
-                                    onIndexChanged: controller.onIndexChanged,
-                                  ),
+                                        );
+                                      },
+                                      autoplay: true,
+                                      onIndexChanged: controller.onIndexChanged,
+                                      pagination: SwiperPagination(
+                                        margin: EdgeInsets.only(bottom: 23.w),
+                                          builder: DotSwiperPaginationBuilder(
+                                        color: '#333333'.hexColor.withOpacity(0.05),
+                                        activeColor: '#557BF6'.hexColor,
+                                      ))),
                                 );
                               },
                             ),
@@ -339,10 +344,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           runSpacing: 12.w,
                                           children: controller.videoItems
                                               .map((e) => VideoHorizontalItem(
-                                                item: e,
-                                                onTap: () =>
-                                                    TrackUtils.trackEvent(userLogType: '101008', params: e.id),
-                                              ))
+                                                    item: e,
+                                                    onTap: () =>
+                                                        TrackUtils.trackEvent(userLogType: '101008', params: e.id),
+                                                  ))
                                               .toList(),
                                         ),
                                         SizedBox(height: 12.w),

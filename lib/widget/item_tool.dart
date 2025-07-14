@@ -8,6 +8,8 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
 
+import 'count_widget.dart';
+
 // ignore: must_be_immutable
 class ToolItem extends StatefulWidget {
   ArticleBean article;
@@ -82,17 +84,19 @@ class _ToolItemState extends State<ToolItem> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        [
-                          '${widget.article.likeCount?.abbreviateNumber}点赞',
-                          '${widget.article.commentCount?.abbreviateNumber}评论',
-                        ].join(' · '),
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: '#999999'.hexColor,
-                        ),
+                      const Spacer(),
+                      CountView(
+                        count: widget.article.viewCount.abbreviateNumber,
+                        usePlaceHolder: false,
+                      ),
+                      CountLike(
+                        count: widget.article.likeCount.abbreviateNumber,
+                        usePlaceHolder: false,
+                      ),
+                      CountComment(
+                        count: widget.article.commentCount.abbreviateNumber,
+                        usePlaceHolder: false,
                       ),
                     ],
                   ),

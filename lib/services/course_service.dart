@@ -130,10 +130,11 @@ class CourseService {
     return res ?? ResBaseModel.defaultRes;
   }
 
-  Future<ResBaseModel> courseRemind({bool showLoading = true}) async {
+  Future<ResBaseModel> courseRemind(params,{bool showLoading = true}) async {
     final res = await HttpUtils.postNew(
       Api.courseRemind,
       showLoading: showLoading,
+      params: params
     );
     return res ?? ResBaseModel.defaultRes;
   }

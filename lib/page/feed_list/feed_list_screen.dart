@@ -44,7 +44,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   ];
   List<String> filterCode = [
     'time',
-    'hot',
+    'popular',
     'comment',
     'like',
   ];

@@ -14,7 +14,7 @@ enum PlatformType {
   unknown,
 }
 
-ApiEnv _kApiEnv = ApiEnv.test;
+ApiEnv _kApiEnv = ApiEnv.dev;
 PlatformType _kPlatformType = PlatformType.unknown;
 
 // 从环境变量或构建配置中获取环境设置

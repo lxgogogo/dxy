@@ -287,7 +287,9 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   Future<void> onContinue() async {
     try {
-      final res = await CourseService.of.courseRemind(showLoading: true);
+      final res = await CourseService.of.courseRemind({
+        'remindType': 'top'
+      },showLoading: true);
       if (res.isSuccess) {
         Get.back();
       } else {

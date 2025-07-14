@@ -194,8 +194,8 @@ class User {
     if (json["nickname"] is String) {
       nickname = json["nickname"];
     }
-    if (json["followed"] is bool) {
-      followed = json["followed"];
+    if (json["isFans"] is bool) {
+      followed = json["isFans"];
     }
   }
 
@@ -204,7 +204,7 @@ class User {
     _data["id"] = id;
     _data["avatar"] = avatar;
     _data["nickname"] = nickname;
-    _data["followed"] = followed;
+    _data["isFans"] = followed;
     return _data;
   }
 }

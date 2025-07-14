@@ -38,8 +38,15 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
 
   List<String> filters = [
     '最近更新',
+    '热度最高',
     '回帖最多',
     '点赞最多',
+  ];
+  List<String> filterCode = [
+    'time',
+    'hot',
+    'comment',
+    'like',
   ];
   int filterIndex = 0;
 
@@ -112,11 +119,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                         onTap: () {
                           selIndex = index;
                           setState(() {});
-                          final order = filterIndex == 0
-                              ? 'time'
-                              : filterIndex == 1
-                                  ? 'comment'
-                                  : 'like';
+                          final order = filterCode[filterIndex];
                           final boardId = showBoardInfoList[selIndex].id;
                           if (boardId == null) return;
                           _pageKey.currentState?.refreshData(
@@ -182,11 +185,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                               onSelectItem: (int index) {
                                 if (filterIndex != index) {
                                   filterIndex = index;
-                                  String order = filterIndex == 0
-                                      ? 'time'
-                                      : filterIndex == 1
-                                          ? 'comment'
-                                          : 'like';
+                                  String order = filterCode[filterIndex];
                                   _pageKey.currentState?.refreshFilter(order);
                                 }
                               },

@@ -257,9 +257,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       return Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                                         child: CommentItem(
+                                          commentsData: controller.comments ?? [],
                                           commentBean: controller.comments![index],
                                           sourceType: SourceType.book,
                                           sourceId: controller.id,
+                                            followOnTap: controller.followOnTap
                                         ),
                                       );
                                     },

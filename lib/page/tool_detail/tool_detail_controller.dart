@@ -139,4 +139,8 @@ class ToolDetailController extends GetxController {
       safeUpdate();
     }
   }
+
+  void followOnTap() {
+    safeUpdate();
+  }
 }

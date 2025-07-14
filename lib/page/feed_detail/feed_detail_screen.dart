@@ -268,10 +268,12 @@ class FeedDetailScreen extends StatelessWidget {
                                   delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int index) {
                                   return CommentItem(
+                                    commentsData: controller.comments ?? [],
                                     commentBean: controller.comments![index],
                                     relType: 'thread',
                                     sourceType: SourceType.feed,
                                     sourceId: controller.id,
+                                    followOnTap: controller.followOnTap,
                                   );
                                 },
                                 childCount: controller.comments!.length,

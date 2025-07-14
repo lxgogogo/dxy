@@ -139,4 +139,8 @@ class BookDetailController extends GetxController {
       safeUpdate();
     }
   }
+
+  void followOnTap() {
+    safeUpdate();
+  }
 }

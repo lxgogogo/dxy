@@ -14,6 +14,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
+import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/widget/report_sheet.dart';
 
 import '../services/index.dart';
@@ -23,16 +24,20 @@ import '../utils/toast_utils.dart';
 import '../utils/track_utils.dart';
 
 class CommentItem extends StatefulWidget {
+  final List<CommentBean> commentsData;
   final CommentBean commentBean;
   final bool isReply;
   final String relType;
   final SourceType sourceType;
   final int? sourceId;
+  final Function followOnTap;
 
   const CommentItem({
     super.key,
+    required this.commentsData,
     required this.commentBean,
     required this.sourceType,
+    required this.followOnTap,
     this.sourceId,
     this.relType = '',
     this.isReply = false,
@@ -80,6 +85,37 @@ class _CommentItemState extends State<CommentItem> {
     );
   }
 
+  void _followToggle(int id, bool followed, Function callBack) {
+    UserStore.of.checkLogin(() {
+      NetRequest().followerToggle(id, followed, (data) {
+        if (followed) {
+          ToastUtils.showToast('关注成功');
+        } else {
+          ToastUtils.showToast('取消关注成功');
+        }
+        _updateFollowData(id, followed);
+        callBack(followed);
+      });
+    });
+  }
+
+  void _updateFollowData(int id, bool followed) {
+    for (final m in widget.commentsData) {
+      if (m.user?.id == id) {
+        m.user?.followed = followed;
+      }
+    }
+    for (final m in widget.commentBean.replies ?? []) {
+      if (m.user?.id == id) {
+        m.user?.followed = followed;
+      }
+    }
+    if (mounted) {
+      setState(() {});
+    }
+    widget.followOnTap();
+  }
+
   @override
   Widget build(BuildContext context) {
     final showReport = /*widget.relType == 'thread' &&*/
@@ -89,7 +125,9 @@ class _CommentItemState extends State<CommentItem> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         BorderAvatar(
-          avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : '',
+          avatar: widget.commentBean.user != null
+              ? widget.commentBean.user!.avatar!
+              : '',
           borderWidth: 0,
         ),
         SizedBox(width: 8.w),
@@ -102,7 +140,7 @@ class _CommentItemState extends State<CommentItem> {
                   Row(
                     children: [
                       Text(
-                        widget.commentBean.user?.nickname ??  '',
+                        widget.commentBean.user?.nickname ?? '',
                         style: TextStyle(
                           color: '#333333'.hexColor,
                           fontSize: 14.sp,
@@ -111,17 +149,49 @@ class _CommentItemState extends State<CommentItem> {
                       ),
                       if ((widget.commentBean.user?.id ?? 0) != 0)
                         Visibility(
-                          visible: !UserStore.of.isMe(widget.commentBean.user?.id),//
+                          visible: !UserStore.of
+                              .isMe(widget.commentBean.user?.id), //
                           child: GestureDetector(
-                            onTap: () {
-                              //Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                            onTap: () async {
+                              String title = '关注';
+                              if (widget.commentBean.user?.followed == true) {
+                                title = '取消关注';
+                              }
+                              await showDialog(
+                                barrierDismissible: true,
+                                context: context,
+                                builder: (context) => CommonDialog(
+                                  title: '',
+                                  content:
+                                      '$title${widget.commentBean.user?.nickname ?? ''}',
+                                  confirmText: '确认',
+                                  onConfirm: () {
+                                    Get.close(0);
+                                    if (mounted) {
+                                      setState(() {
+                                        widget.commentBean.user?.followed =
+                                            !(widget.commentBean.user
+                                                    ?.followed ??
+                                                false);
+                                      });
+                                    }
+                                    _followToggle(
+                                        widget.commentBean.user?.id ?? 0,
+                                        widget.commentBean.user?.followed ??
+                                            false,
+                                        (value) {});
+                                  },
+                                ),
+                              );
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 4.w),
                               child: Container(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  widget.commentBean.user?.followed == true ? '已关注' : '+关注',
+                                  widget.commentBean.user?.followed == true
+                                      ? '已关注'
+                                      : '+关注',
                                   style: TextStyle(
                                     color: '#557BF6'.hexColor,
                                     fontSize: 10.sp,
@@ -138,9 +208,11 @@ class _CommentItemState extends State<CommentItem> {
                   if (showReport)
                     GestureDetector(
                       onTap: () {
-                        if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
+                        if (widget.commentBean.id != null &&
+                            widget.commentBean.user?.id != null) {
                           UserStore.of.checkLogin(() {
-                            _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                            _onReport(widget.commentBean.id!,
+                                widget.commentBean.user!.id!);
                           });
                         }
                       },
@@ -176,7 +248,10 @@ class _CommentItemState extends State<CommentItem> {
                       onTap: () {
                         MediaHelper().imagePerView(
                           context,
-                          widget.commentBean.files?.map((e) => e.url ?? '').toList() ?? [],
+                          widget.commentBean.files
+                                  ?.map((e) => e.url ?? '')
+                                  .toList() ??
+                              [],
                           index,
                         );
                       },
@@ -185,8 +260,12 @@ class _CommentItemState extends State<CommentItem> {
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: widget.commentBean.files?[index].url ?? '',
-                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          placeholder: (context, url) => Assets
+                              .images.imageLoadingDef
+                              .image(fit: BoxFit.fill),
+                          errorWidget: (context, url, error) => Assets
+                              .images.imageLoadingDef
+                              .image(fit: BoxFit.fill),
                         ),
                       ),
                     );
@@ -207,12 +286,15 @@ class _CommentItemState extends State<CommentItem> {
                   const Spacer(),
                   if (!widget.isReply) ...[
                     CountLikeAni(
-                      count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
+                      count:
+                          widget.commentBean.likeCount?.abbreviateNumber ?? '0',
                       liked: widget.commentBean.liked ?? false,
                       usePlaceHolder: false,
                       likeWidget: Center(
                         child: SvgPicture.asset(
-                          widget.commentBean.liked == true ? Assets.svg.liked : Assets.svg.like,
+                          widget.commentBean.liked == true
+                              ? Assets.svg.liked
+                              : Assets.svg.like,
                           color: '#999999'.hexColor,
                           width: 14.w,
                           height: 14.w,
@@ -222,26 +304,36 @@ class _CommentItemState extends State<CommentItem> {
                         final data = await NetRequest().newContentLike({
                           'relType': 'comment',
                           'relId': widget.commentBean.id,
-                          'state': widget.commentBean.liked == true ? false : true
+                          'state':
+                              widget.commentBean.liked == true ? false : true
                         });
                         if (data is int) {
                           widget.commentBean.liked = !widget.commentBean.liked!;
                           int count = widget.commentBean.likeCount!;
-                          widget.commentBean.likeCount = widget.commentBean.liked! ? count + 1 : count - 1;
+                          widget.commentBean.likeCount =
+                              widget.commentBean.liked! ? count + 1 : count - 1;
                           if (widget.commentBean.liked == true) {
                             ToastUtils.showToast('点赞成功');
                             switch (widget.sourceType) {
                               case SourceType.video:
-                                TrackUtils.trackEvent(userLogType: '103008', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '103008',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.course:
-                                TrackUtils.trackEvent(userLogType: '105007', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '105007',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.book:
-                                TrackUtils.trackEvent(userLogType: '107008', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '107008',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.feed:
-                                TrackUtils.trackEvent(userLogType: '109007', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '109007',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.tool:
                               // TODO: Handle this case.
@@ -271,7 +363,9 @@ class _CommentItemState extends State<CommentItem> {
                       },
                       child: (widget.commentBean.replyCount ?? 0) > 0
                           ? CountReply(
-                              count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
+                              count: widget.commentBean.replyCount
+                                      ?.abbreviateNumber ??
+                                  '0',
                               usePlaceHolder: false,
                               iconWidget: SvgPicture.asset(
                                 Assets.svg.feedComment,
@@ -326,7 +420,8 @@ class _CommentItemState extends State<CommentItem> {
                               SizedBox(width: 8.w),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Row(
                                       children: [
@@ -340,39 +435,86 @@ class _CommentItemState extends State<CommentItem> {
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                            //if ((reply.user?.id ?? 0) != 0)
-                                            Visibility(
-                                              visible: true,//!UserStore.of.isMe(reply.user?.id)
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  //Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
-                                                },
-                                                child: Container(
-                                                  margin: EdgeInsets.only(left: 4.w),
+                                            if ((reply.user?.id ?? 0) != 0)
+                                              Visibility(
+                                                visible: !UserStore.of
+                                                    .isMe(reply.user?.id),
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    String title = '关注';
+                                                    if (reply.user?.followed ==
+                                                        true) {
+                                                      title = '取消关注';
+                                                    }
+                                                    await showDialog(
+                                                      barrierDismissible: true,
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          CommonDialog(
+                                                        title: '',
+                                                        content:
+                                                            '$title${reply.user?.nickname ?? ''}',
+                                                        confirmText: '确认',
+                                                        onConfirm: () {
+                                                          Get.close(0);
+                                                          if (mounted) {
+                                                            setState(() {
+                                                              reply.user
+                                                                  ?.followed = !(reply
+                                                                      .user
+                                                                      ?.followed ??
+                                                                  false);
+                                                            });
+                                                          }
+                                                          _followToggle(
+                                                              reply.user?.id ??
+                                                                  0,
+                                                              reply.user
+                                                                      ?.followed ??
+                                                                  false,
+                                                              (value) {});
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
                                                   child: Container(
-                                                    alignment: Alignment.center,
-                                                    child: Text(
-                                                      reply.user?.followed == true ? '已关注' : '+关注',
-                                                      style: TextStyle(
-                                                        color: '#557BF6'.hexColor,
-                                                        fontSize: 10.sp,
-                                                        fontWeight: FontWeight.w600,
+                                                    margin: EdgeInsets.only(
+                                                        left: 4.w),
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        reply.user?.followed ==
+                                                                true
+                                                            ? '已关注'
+                                                            : '+关注',
+                                                        style: TextStyle(
+                                                          color: '#557BF6'
+                                                              .hexColor,
+                                                          fontSize: 10.sp,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                         const Spacer(),
                                         if (showReplyReport)
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget.commentBean.id != null &&
-                                                  widget.commentBean.user?.id != null) {
+                                              if (widget.commentBean.id !=
+                                                      null &&
+                                                  widget.commentBean.user?.id !=
+                                                      null) {
                                                 UserStore.of.checkLogin(() {
-                                                  _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                                                  _onReport(
+                                                      widget.commentBean.id!,
+                                                      widget.commentBean.user!
+                                                          .id!);
                                                 });
                                               }
                                             },
@@ -405,11 +547,14 @@ class _CommentItemState extends State<CommentItem> {
                                         ),
                                         const Spacer(),
                                         CountLikeAni(
-                                          count: reply.likeCount.abbreviateNumber,
+                                          count:
+                                              reply.likeCount.abbreviateNumber,
                                           liked: reply.liked ?? false,
                                           likeWidget: Center(
                                             child: SvgPicture.asset(
-                                              reply.liked == true ? Assets.svg.liked : Assets.svg.like,
+                                              reply.liked == true
+                                                  ? Assets.svg.liked
+                                                  : Assets.svg.like,
                                               color: '#999999'.hexColor,
                                               width: 14.w,
                                               height: 14.w,
@@ -417,33 +562,46 @@ class _CommentItemState extends State<CommentItem> {
                                           ),
                                           usePlaceHolder: false,
                                           onToggleLike: () async {
-                                            final data = await NetRequest().newContentLike({
+                                            final data = await NetRequest()
+                                                .newContentLike({
                                               'relType': 'comment',
                                               'relId': reply.id,
-                                              'state': reply.liked == true ? false : true
+                                              'state': reply.liked == true
+                                                  ? false
+                                                  : true
                                             });
                                             if (data is int) {
                                               reply.liked = !reply.liked!;
                                               int count = reply.likeCount!;
-                                              reply.likeCount = reply.liked! ? count + 1 : count - 1;
+                                              reply.likeCount = reply.liked!
+                                                  ? count + 1
+                                                  : count - 1;
                                               if (reply.liked == true) {
                                                 ToastUtils.showToast('点赞成功');
                                                 switch (widget.sourceType) {
                                                   case SourceType.video:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '103009', params: widget.sourceId);
+                                                        userLogType: '103009',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.course:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '105008', params: widget.sourceId);
+                                                        userLogType: '105008',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.book:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '107009', params: widget.sourceId);
+                                                        userLogType: '107009',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.feed:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '109008', params: widget.sourceId);
+                                                        userLogType: '109008',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.tool:
                                                   // TODO: Handle this case.
@@ -472,14 +630,16 @@ class _CommentItemState extends State<CommentItem> {
                         margin: EdgeInsets.only(left: 38.w, top: 4.w),
                         child: Row(
                           children: [
-                            if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
+                            if ((widget.commentBean.replyCount ?? 0) >
+                                (widget.commentBean.replies?.length ?? 0)) ...[
                               GestureDetector(
                                 onTap: () {
                                   getReplyList();
                                 },
                                 child: Container(
                                   height: 22.w,
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: '#333333'.hexColor.withOpacity(0.05),
@@ -507,12 +667,15 @@ class _CommentItemState extends State<CommentItem> {
                               GestureDetector(
                                 onTap: () {
                                   pageNum = 1;
-                                  widget.commentBean.replies = List.of(widget.commentBean.replies?.take(2) ?? []);
+                                  widget.commentBean.replies = List.of(
+                                      widget.commentBean.replies?.take(2) ??
+                                          []);
                                   setState(() {});
                                 },
                                 child: Container(
                                   height: 22.w,
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: const Color(0xfff2f4f6),
@@ -612,8 +775,10 @@ class BorderAvatar extends StatelessWidget {
           // cacheKey: avatar,
           // memCacheWidth: avatarSize.toInt(),
           // memCacheHeight: avatarSize.toInt(),
-          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          placeholder: (context, url) =>
+              Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          errorWidget: (context, url, error) =>
+              Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
         ),
       ),
     );

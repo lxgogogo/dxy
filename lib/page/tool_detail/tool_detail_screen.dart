@@ -15,6 +15,7 @@ import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_routes_utils.dart';
+import 'package:holdem/utils/common_util.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/utils/toast_utils.dart';
@@ -235,9 +236,11 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                                       return Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                                         child: CommentItem(
+                                          commentsData: controller.comments ?? [],
                                           commentBean: controller.comments![index],
                                           sourceType: SourceType.tool,
                                           sourceId: controller.id,
+                                          followOnTap: controller.followOnTap,
                                         ),
                                       );
                                     },

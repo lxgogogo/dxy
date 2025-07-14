@@ -132,6 +132,10 @@ class ArticleDetailController extends GetxController with StayReportGetxMixin {
     }
   }
 
+  void followOnTap() {
+    safeUpdate();
+  }
+
   @override
   void onStayReported() {
     // TrackUtils.trackEvent(userLogType: '109010', params: id);

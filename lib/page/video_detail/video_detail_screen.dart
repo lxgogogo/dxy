@@ -253,9 +253,11 @@ class VideoDetailScreen extends StatelessWidget {
                                       delegate: SliverChildBuilderDelegate(
                                     (BuildContext context, int index) {
                                       return CommentItem(
+                                        commentsData: controller.comments ?? [],
                                         commentBean: controller.comments![index],
                                         sourceType: SourceType.video,
                                         sourceId: controller.id,
+                                        followOnTap: controller.followOnTap,
                                       );
                                     },
                                     childCount: controller.comments!.length,

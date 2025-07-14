@@ -412,4 +412,8 @@ class VideoDetailController extends GetxController {
       fullScreenOnTap = false;
     }
   }
+
+  void followOnTap() {
+    safeUpdate();
+  }
 }

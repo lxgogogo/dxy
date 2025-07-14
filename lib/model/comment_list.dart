@@ -175,11 +175,13 @@ class User {
   int? id;
   String? avatar;
   String? nickname;
+  bool? followed;
 
   User({
     this.id,
     this.avatar,
     this.nickname,
+    this.followed
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -192,6 +194,9 @@ class User {
     if (json["nickname"] is String) {
       nickname = json["nickname"];
     }
+    if (json["followed"] is bool) {
+      followed = json["followed"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -199,6 +204,7 @@ class User {
     _data["id"] = id;
     _data["avatar"] = avatar;
     _data["nickname"] = nickname;
+    _data["followed"] = followed;
     return _data;
   }
 }

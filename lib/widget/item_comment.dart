@@ -99,13 +99,40 @@ class _CommentItemState extends State<CommentItem> {
             children: [
               Row(
                 children: [
-                  Text(
-                    widget.commentBean.user?.nickname ??  '',
-                    style: TextStyle(
-                      color: '#333333'.hexColor,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        widget.commentBean.user?.nickname ??  '',
+                        style: TextStyle(
+                          color: '#333333'.hexColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if ((widget.commentBean.user?.id ?? 0) != 0)
+                        Visibility(
+                          visible: !UserStore.of.isMe(widget.commentBean.user?.id),//
+                          child: GestureDetector(
+                            onTap: () {
+                              //Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(left: 4.w),
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  widget.commentBean.user?.followed == true ? '已关注' : '+关注',
+                                  style: TextStyle(
+                                    color: '#557BF6'.hexColor,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                   const Spacer(),
                   if (showReport)
@@ -303,13 +330,40 @@ class _CommentItemState extends State<CommentItem> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text(
-                                          reply.user?.nickname ?? '',
-                                          style: TextStyle(
-                                            color: '#333333'.hexColor,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              reply.user?.nickname ?? '',
+                                              style: TextStyle(
+                                                color: '#333333'.hexColor,
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            //if ((reply.user?.id ?? 0) != 0)
+                                            Visibility(
+                                              visible: true,//!UserStore.of.isMe(reply.user?.id)
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  //Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(left: 4.w),
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    child: Text(
+                                                      reply.user?.followed == true ? '已关注' : '+关注',
+                                                      style: TextStyle(
+                                                        color: '#557BF6'.hexColor,
+                                                        fontSize: 10.sp,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         const Spacer(),
                                         if (showReplyReport)

@@ -41,6 +41,7 @@ class CourseExercisesController extends GetxController {
   void _requestData() async {
     int id = Get.arguments['id'] ?? 0;
     int infoId = Get.arguments['infoId'] ?? 0;
+    print('infoId:$infoId');
     final data = {'id': '$id'};
     if (infoId > 0) {
       data['infoId'] = '$infoId';
@@ -144,8 +145,12 @@ class CourseExercisesController extends GetxController {
       return;
     }
     final model = practiseList[currentPage.value];
-    final data = await CourseService.of.courseAnswer(
-        {'id': model.id, 'answer': selectAnswerModel?.title ?? ''});
+    int infoId = Get.arguments['infoId'] ?? 0;
+    final req = {'id': model.id, 'answer': selectAnswerModel?.title ?? ''};
+    if (infoId > 0) {
+      req['review'] = true;
+    }
+    final data = await CourseService.of.courseAnswer(req);
     if (data.id == null || data.status == null) {
       return;
     }

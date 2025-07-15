@@ -31,10 +31,11 @@ import 'package:holdem/widget/no_network.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../model/recommend_video_model.dart';
 import '../../utils/track_utils.dart';
+import 'widgets/recommended_videos_widget.dart';
 import 'widgets/video_child_list_sheet.dart';
 
 part 'video_detail_controller.dart';
@@ -60,7 +61,7 @@ class VideoDetailScreen extends StatelessWidget {
             extendBody: true,
             body: controller.noNetwork
                 ? NoNetworkView(
-                    onRefresh: controller.refreshData,
+                    onRefresh: () => controller.loadData(isRefresh: true),
                   )
                 : controller.detailBean == null
                     ? const SizedBox()
@@ -300,28 +301,42 @@ class VideoDetailScreen extends StatelessWidget {
 }
 
 class ChewieVideo extends StatelessWidget {
+  final bool isFullScreen;
   final VideoNotifier _videoNotifier;
 
-  const ChewieVideo({super.key, notifier}) : _videoNotifier = notifier;
+  const ChewieVideo({super.key, notifier, this.isFullScreen = false}) : _videoNotifier = notifier;
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-        listenable: _videoNotifier,
-        builder: (context, child) {
-          // final orientation = MediaQuery.of(context).orientation;
-          // _videoNotifier.chewieController!.isFullScreen = orientation != Orientation.landscape;
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Container(
-              alignment: Alignment.center,
-              color: Colors.black,
-              child: Chewie(
-                controller: _videoNotifier.chewieController!,
+    return GetBuilder<VideoDetailController>(builder: (controller) {
+      return Stack(
+        children: [
+          ListenableBuilder(
+              listenable: _videoNotifier,
+              builder: (context, child) {
+                // final orientation = MediaQuery.of(context).orientation;
+                // _videoNotifier.chewieController!.isFullScreen = orientation != Orientation.landscape;
+                return Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  body: Container(
+                    alignment: Alignment.center,
+                    color: Colors.black,
+                    child: Chewie(
+                      controller: _videoNotifier.chewieController!,
+                    ),
+                  ),
+                );
+              }),
+          if (controller.isPlayComplete)
+            Positioned.fill(
+              child: RecommendedVideosWidget(
+                detailBean: controller.detailBean,
+                videos: controller.recommendedVideos,
               ),
             ),
-          );
-        });
+        ],
+      );
+    });
   }
 }
 
@@ -338,7 +353,7 @@ class VideoNotifier extends ChangeNotifier {
       showControlsOnInitialize: false,
       fullScreenCallBack: fullScreenCallBack,
       routePageBuilder: (context, animation, secondaryAnimation, controllerProvider) {
-        return ChewieVideo(notifier: this);
+        return ChewieVideo(notifier: this, isFullScreen: true);
       },
       // deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
       deviceOrientationsAfterFullScreen: [

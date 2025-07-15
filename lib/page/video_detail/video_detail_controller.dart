@@ -1,23 +1,33 @@
 part of 'video_detail_screen.dart';
 
 class VideoDetailController extends GetxController {
+  static VideoDetailController get of => Get.find();
+
   int? id;
   int? childId;
 
-  ArticleDetailBean? detailBean;
-  VideoPlayerController? videoController;
-  ChewieController? chewieController;
+  bool noNetwork = false;
 
-  List<CommentBean>? comments;
-  bool isInitialize = false;
-  bool hasUploadEvent = false;
+  final ScrollController scrollController = ScrollController();
 
   StreamSubscription? _eventSubscription;
 
-  final autoScrollController = AutoScrollController(
-    axis: Axis.horizontal,
-    suggestedRowHeight: 148.w,
-  );
+  ArticleDetailBean? detailBean;
+  int playVideoIndex = 0;
+
+  bool _isVideoInitialized = false;
+  final VideoNotifier videoNotifier = VideoNotifier();
+  VideoPlayerController? videoController;
+  ChewieController? chewieController;
+  bool hasUploadEvent = false;
+  bool isPlayComplete = false;
+  RxList<RecommendVideoModel> recommendedVideos = <RecommendVideoModel>[].obs;
+
+  List<CommentBean>? comments;
+  final RefreshController refreshController = RefreshController();
+  int _pageNum = 1;
+  int pageSize = 10;
+  bool noMore = false;
 
   String get shareLink {
     String shareUrlSuffix = '';
@@ -26,17 +36,6 @@ class VideoDetailController extends GetxController {
     }
     return 'details/${detailBean?.type}-$id$shareUrlSuffix';
   }
-
-  bool noNetwork = false;
-
-  final VideoNotifier videoNotifier = VideoNotifier();
-
-  final RefreshController refreshController = RefreshController();
-  int pageNum = 1;
-  int pageSize = 10;
-  bool noMore = false;
-
-  final ScrollController scrollController = ScrollController();
 
   // 是否有观影权限
   RxBool haveWatchPower = true.obs;
@@ -59,27 +58,7 @@ class VideoDetailController extends GetxController {
       detailBean?.commentCount = (detailBean?.commentCount ?? 0) + 1;
       onRefresh();
     });
-    dataInit();
-  }
-
-  Future<void> dataInit() async {
-    final events = await Connectivity().checkConnectivity();
-    noNetwork = events.contains(ConnectivityResult.none);
-    if (noNetwork) {
-      safeUpdate();
-      return;
-    }
-    requestData(showLoading: false);
-  }
-
-  Future<void> refreshData() async {
-    final events = await Connectivity().checkConnectivity();
-    noNetwork = events.contains(ConnectivityResult.none);
-    if (noNetwork) {
-      ToastUtils.showToast('请检查网络');
-      return;
-    }
-    requestData();
+    loadData();
   }
 
   @override
@@ -95,6 +74,35 @@ class VideoDetailController extends GetxController {
     super.onClose();
   }
 
+  Future<void> loadData({bool isRefresh = false}) async {
+    final events = await Connectivity().checkConnectivity();
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      if (isRefresh) {
+        ToastUtils.showToast('请检查网络');
+      } else {
+        safeUpdate();
+      }
+      return;
+    }
+    requestData(showLoading: isRefresh);
+  }
+
+  void requestData({bool showLoading = true}) {
+    if (showLoading) {
+      EasyLoading.show();
+    }
+    Future.wait([
+      requestDetail(),
+      _loadComments(),
+      loadRecommendedVideos(),
+    ]).whenComplete(() {
+      if (showLoading) {
+        EasyLoading.dismiss();
+      }
+    });
+  }
+
   void _uploadVideoReport() async {
     if (detailBean != null && videoController != null) {
       int videoType = detailBean?.featured ?? 0;
@@ -106,20 +114,6 @@ class VideoDetailController extends GetxController {
         }
       }
     }
-  }
-
-  void requestData({bool showLoading = true}) {
-    if (showLoading) {
-      EasyLoading.show();
-    }
-    Future.wait([
-      requestDetail(),
-      loadComments(),
-    ]).whenComplete(() {
-      if (showLoading) {
-        EasyLoading.dismiss();
-      }
-    });
   }
 
   Future<void> requestDetail() async {
@@ -179,11 +173,6 @@ class VideoDetailController extends GetxController {
           final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
           if (index != -1) {
             playVideoIndex = index;
-            autoScrollController.scrollToIndex(
-              playVideoIndex,
-              duration: const Duration(microseconds: 1),
-              preferPosition: AutoScrollPosition.end,
-            );
           }
         }
         if (!haveWatchAlert) {
@@ -232,16 +221,17 @@ class VideoDetailController extends GetxController {
   }
 
   void _initController(String link) {
-    isInitialize = false;
+    _isVideoInitialized = false;
+    isPlayComplete = false;
     safeUpdate();
     videoController = VideoPlayerController.networkUrl(Uri.parse(link))
       ..addListener(videoListener)
       ..initialize().then((_) {
-        videoNotifier.initChewieController(videoController!, (value){
+        videoNotifier.initChewieController(videoController!, (value) {
           isFullScreen = value;
           fullScreenOnTap = true;
         });
-        isInitialize = true;
+        _isVideoInitialized = true;
         safeUpdate();
         if (!hasUploadEvent) {
           hasUploadEvent = true;
@@ -249,8 +239,6 @@ class VideoDetailController extends GetxController {
         }
       });
   }
-
-  int reportedMinutes = 0; // 已上报分钟数
 
   void videoListener() {
     if (videoController == null) return;
@@ -260,25 +248,19 @@ class VideoDetailController extends GetxController {
       if (currentDuration >= totalDuration) {
         if (detailBean?.videoList?.isNotEmpty == true) {
           if (playVideoIndex == detailBean!.videoList!.length - 1) {
+            isPlayComplete = true;
+            safeUpdate();
             return;
             // playVideoIndex = 0;
           } else {
             playVideoIndex += 1;
           }
-          autoScrollController.scrollToIndex(
-            playVideoIndex,
-            duration: const Duration(microseconds: 1),
-            preferPosition: AutoScrollPosition.end,
-          );
           safeUpdate();
           _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+        } else {
+          isPlayComplete = true;
+          safeUpdate();
         }
-        return;
-      }
-      // 上报逻辑：每满1分钟上报一次，最多上报到3分钟
-      if (currentDuration >= 60 * (reportedMinutes + 1) && reportedMinutes < 3) {
-        reportedMinutes++;
-        // TrackUtils.trackEvent(userLogType: '103012', params: [id.toString(), reportedMinutes].join(','));
       }
     }
   }
@@ -301,7 +283,7 @@ class VideoDetailController extends GetxController {
   }
 
   void playVideo() {
-    if (isInitialize) {
+    if (_isVideoInitialized) {
       if (videoController?.value.isPlaying == true) {
         videoController?.pause();
       } else {
@@ -310,28 +292,56 @@ class VideoDetailController extends GetxController {
     }
   }
 
-  int playVideoIndex = 0;
-
-  void onPageChanged(int value) {
-    playVideoIndex = value;
-    safeUpdate();
-  }
-
   Future<void> selectVide(int index) async {
     if (playVideoIndex == index) return;
-    autoScrollController.scrollToIndex(
-      index,
-      duration: const Duration(microseconds: 1),
-      preferPosition: AutoScrollPosition.end,
-    );
     playVideoIndex = index;
     safeUpdate();
     _startVideoPlayer(detailBean!.videoList![index].sourceUrl ?? '');
   }
 
+  Future<void> loadRecommendedVideos() async {
+    final res = await VideoService.of.recommendedVideos(id: 31);
+    if (res.isSuccess) {
+      final listRes = res.data as List;
+      final records = listRes.map((e) => RecommendVideoModel.fromJson(e)).toList();
+      if (records.isNotEmpty) {
+        recommendedVideos.assignAll(records.take(3));
+        safeUpdate();
+      }
+    }
+  }
+
+  void onFocusGained() {
+    if (!fullScreenOnTap) {
+      if (_isVideoInitialized) {
+        if (videoController?.value.isPlaying == false) {
+          videoController?.play();
+        }
+      }
+    } else {
+      fullScreenOnTap = false;
+    }
+  }
+
+  void onFocusLost() {
+    if (!fullScreenOnTap) {
+      if (!isDisposed && videoController?.value.isPlaying == true) {
+        videoController?.pause();
+      }
+    } else {
+      fullScreenOnTap = false;
+    }
+  }
+
+  void followOnTap() {
+    safeUpdate();
+  }
+}
+
+extension CommentLogic on VideoDetailController {
   void onRefresh() async {
-    pageNum = 1;
-    loadComments();
+    _pageNum = 1;
+    _loadComments();
   }
 
   void onLoading() async {
@@ -339,16 +349,16 @@ class VideoDetailController extends GetxController {
       refreshController.loadNoData();
       return;
     }
-    pageNum++;
-    loadComments();
+    _pageNum++;
+    _loadComments();
   }
 
-  Future<void> loadComments() async {
+  Future<void> _loadComments() async {
     try {
       int recordsSize = 0;
       await NetRequest().commentList(
         {
-          'pageNum': pageNum,
+          'pageNum': _pageNum,
           'pageSize': pageSize,
           'filters': {
             'relType': 'content',
@@ -361,14 +371,14 @@ class VideoDetailController extends GetxController {
             data['list'].map((comment) => CommentBean.fromJson(comment)),
           );
           recordsSize = dataList.length;
-          if (pageNum == 1) {
+          if (_pageNum == 1) {
             comments = dataList;
           }
           comments?.addAll(dataList);
           safeUpdate();
         },
       );
-      if (pageNum == 1) {
+      if (_pageNum == 1) {
         refreshController.refreshCompleted();
         if (recordsSize < pageSize) {
           noMore = true;
@@ -391,31 +401,5 @@ class VideoDetailController extends GetxController {
     } finally {
       safeUpdate();
     }
-  }
-
-  void onFocusGained() {
-    if (!fullScreenOnTap) {
-      if (isInitialize) {
-        if (videoController?.value.isPlaying == false) {
-          videoController?.play();
-        }
-      }
-    } else {
-      fullScreenOnTap = false;
-    }
-  }
-
-  void onFocusLost() {
-    if (!fullScreenOnTap) {
-      if (!isDisposed && videoController?.value.isPlaying == true) {
-        videoController?.pause();
-      }
-    } else {
-      fullScreenOnTap = false;
-    }
-  }
-
-  void followOnTap() {
-    safeUpdate();
   }
 }

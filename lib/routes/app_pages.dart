@@ -123,7 +123,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.videoDetail,
-      page: () => const VideoDetailScreen(),
+      page: () => VideoDetailScreen(),
     ),
     GetPage(
       name: Routes.feedDetail,

@@ -22,3 +22,4 @@ part 'common_service.dart';
 part 'firebase.dart';
 part 'login_service.dart';
 part 'user_service.dart';
+part 'video_service.dart';

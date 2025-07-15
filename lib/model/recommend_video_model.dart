@@ -1,17 +1,40 @@
-import 'package:flutter_quill/flutter_quill.dart';
+import 'dart:convert';
 
-class AttributeModel {
-  final Attribute attribute;
-  final String title;
-  final String? icon;
-  final List<AttributeModel> children;
-  bool isSelected;
+class RecommendVideoModel {
+  final int? id;
+  final String? title;
+  final String? cover;
 
-  AttributeModel(
+  RecommendVideoModel({
+    this.id,
     this.title,
-    this.attribute, {
-    this.icon,
-    this.isSelected = false,
-    this.children = const [],
+    this.cover,
   });
+
+  RecommendVideoModel copyWith({
+    int? id,
+    String? title,
+    String? cover,
+  }) =>
+      RecommendVideoModel(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        cover: cover ?? this.cover,
+      );
+
+  factory RecommendVideoModel.fromRawJson(String str) => RecommendVideoModel.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory RecommendVideoModel.fromJson(Map<String, dynamic> json) => RecommendVideoModel(
+    id: json["id"],
+    title: json["title"],
+    cover: json["cover"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "title": title,
+    "cover": cover,
+  };
 }

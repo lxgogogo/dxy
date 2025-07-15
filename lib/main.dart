@@ -21,7 +21,7 @@ void main() async {
 
   // await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   // 从环境变量中获取环境配置
-  const env = String.fromEnvironment('ENV', defaultValue: 'dev');
+  const env = String.fromEnvironment('ENV', defaultValue: 'test');
   const platformType = String.fromEnvironment('PLATFORM_TYPE');
   initEnv(env);
   initPlatformType(platformType);

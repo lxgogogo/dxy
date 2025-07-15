@@ -70,6 +70,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   child: CourseDetailKnowledgeItem(
                                     item: controller.detailBean!.knowledge!,
                                     onTap: controller.toKnowledge,
+                                    selectOnTap: controller.toKnowledgeSelect
                                   ),
                                 ),
                               if (controller.detailBean!.practise != null)
@@ -78,6 +79,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   child: CoursePracticeItem(
                                     item: controller.detailBean!.practise!,
                                     onTap: controller.toPractice,
+                                    selectOnTap: controller.toPracticeSelect
                                   ),
                                 ),
                               if (controller.detailBean!.challenge != null)

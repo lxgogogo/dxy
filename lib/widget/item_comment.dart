@@ -11,6 +11,8 @@ import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/comment_input/comment_input_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
@@ -161,7 +163,7 @@ class _CommentItemState extends State<CommentItem> {
                                 barrierDismissible: true,
                                 context: context,
                                 builder: (context) => CommonDialog(
-                                  title: '',
+                                  title: title,
                                   content:
                                       '$title${widget.commentBean.user?.nickname ?? ''}',
                                   confirmText: '确认',
@@ -176,8 +178,7 @@ class _CommentItemState extends State<CommentItem> {
                                     }
                                     _followToggle(
                                         widget.commentBean.user?.id ?? 0,
-                                        widget.commentBean.followed ??
-                                            false,
+                                        widget.commentBean.followed ?? false,
                                         (value) {});
                                   },
                                 ),
@@ -186,16 +187,38 @@ class _CommentItemState extends State<CommentItem> {
                             child: Container(
                               margin: EdgeInsets.only(left: 4.w),
                               child: Container(
-                                alignment: Alignment.center,
+                                width: 56.w,
+                                height: 22.w,
+                                alignment:
+                                Alignment.center,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.all(
+                                        Radius
+                                            .circular(
+                                            8.w)),
+                                    border: Border.all(
+                                        width: 1,
+                                        color: ColorStyle
+                                            .c333333
+                                            .withOpacity(
+                                            0.1))),
                                 child: Text(
                                   widget.commentBean.followed == true
                                       ? '已关注'
-                                      : '+关注',
+                                      : '关注',
                                   style: TextStyle(
-                                    color: '#557BF6'.hexColor,
+                                    color: widget.commentBean
+                                        .followed ==
+                                        true
+                                        ? AppTheme
+                                        .color_999999
+                                        : '#557BF6'
+                                        .hexColor,
                                     fontSize: 10.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                    fontWeight:
+                                    FontWeight.w600,
+                                  )
                                 ),
                               ),
                             ),
@@ -441,7 +464,8 @@ class _CommentItemState extends State<CommentItem> {
                                                 child: GestureDetector(
                                                   onTap: () async {
                                                     String title = '关注';
-                                                    if (reply.followed == true) {
+                                                    if (reply.followed ==
+                                                        true) {
                                                       title = '取消关注';
                                                     }
                                                     await showDialog(
@@ -457,14 +481,16 @@ class _CommentItemState extends State<CommentItem> {
                                                           Get.close(0);
                                                           if (mounted) {
                                                             setState(() {
-                                                              reply.followed = !(reply.followed ??
-                                                                  false);
+                                                              reply.followed =
+                                                                  !(reply.followed ??
+                                                                      false);
                                                             });
                                                           }
                                                           _followToggle(
                                                               reply.user?.id ??
                                                                   0,
-                                                              reply.followed ?? false,
+                                                              reply.followed ??
+                                                                  false,
                                                               (value) {});
                                                         },
                                                       ),
@@ -474,15 +500,34 @@ class _CommentItemState extends State<CommentItem> {
                                                     margin: EdgeInsets.only(
                                                         left: 4.w),
                                                     child: Container(
+                                                      width: 56.w,
+                                                      height: 22.w,
                                                       alignment:
                                                           Alignment.center,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          8.w)),
+                                                          border: Border.all(
+                                                              width: 1,
+                                                              color: ColorStyle
+                                                                  .c333333
+                                                                  .withOpacity(
+                                                                      0.1))),
                                                       child: Text(
                                                         reply.followed == true
                                                             ? '已关注'
-                                                            : '+关注',
+                                                            : '关注',
                                                         style: TextStyle(
-                                                          color: '#557BF6'
-                                                              .hexColor,
+                                                          color: reply
+                                                                      .followed ==
+                                                                  true
+                                                              ? AppTheme
+                                                                  .color_999999
+                                                              : '#557BF6'
+                                                                  .hexColor,
                                                           fontSize: 10.sp,
                                                           fontWeight:
                                                               FontWeight.w600,

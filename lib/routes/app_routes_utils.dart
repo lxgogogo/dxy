@@ -106,30 +106,56 @@ class AppRoutesUtils {
         barrierDismissible: false,
         context: Get.context!,
         builder: (context) => CommonDialog(
-              title: title,
-              content: content,
-              onlyConfirm: true,
-              confirmText: '好',
-              showClose: false,
-              onConfirm: () {
-                Get.close(0);
-                Get.toNamed(Routes.equityCenter, arguments: {'backHome': true});
-              }
-            ));
+            title: title,
+            content: content,
+            onlyConfirm: true,
+            confirmText: '好',
+            showClose: false,
+            onConfirm: () {
+              Get.close(0);
+              Get.toNamed(Routes.equityCenter, arguments: {'backHome': true});
+            }));
   }
 
-  static Future<T?>? toDetail<T>(String? contentType, int? contentId, {int? subContentId}) {
+  static Future<T?>? toDetail<T>(String? contentType, int? contentId,
+      {int? subContentId, Function? callBack}) {
     if (contentType == null || contentId == null) return null;
     if (contentType == 'book') {
-      return Get.toNamed(Routes.bookDetail, arguments: contentId);
+      return Get.toNamed(Routes.bookDetail, arguments: contentId)?.then((value) {
+        if (callBack != null) {
+          callBack(value);
+        }
+        return null;
+      });
     } else if (contentType == 'article') {
-      return Get.toNamed(Routes.articleDetail, arguments: contentId);
+      return Get.toNamed(Routes.articleDetail, arguments: contentId)?.then((value) {
+        if (callBack != null) {
+          callBack(value);
+        }
+        return null;
+      });
     } else if (contentType == 'tool') {
-      return Get.toNamed(Routes.toolDetail, arguments: contentId);
+      return Get.toNamed(Routes.toolDetail, arguments: contentId)?.then((value) {
+        if (callBack != null) {
+          callBack(value);
+        }
+        return null;
+      });
     } else if (contentType == 'video' || contentType == 'videoList') {
-      return Get.toNamed(Routes.videoDetail, arguments: {'id': contentId, 'childId': subContentId});
+      return Get.toNamed(Routes.videoDetail,
+          arguments: {'id': contentId, 'childId': subContentId})?.then((value) {
+        if (callBack != null) {
+          callBack(value);
+        }
+        return null;
+      });
     } else if (contentType == 'thread') {
-      return Get.toNamed(Routes.feedDetail, arguments: contentId);
+      return Get.toNamed(Routes.feedDetail, arguments: contentId)?.then((value) {
+        if (callBack != null) {
+          callBack(value);
+        }
+        return null;
+      });
     }
     return null;
   }

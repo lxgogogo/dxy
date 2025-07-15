@@ -13,14 +13,7 @@ class CourseDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     id = Get.arguments?['id'] as int?;
-  }
-
-  void onFocusGained() {
-    bool isFinish = (detailBean?.knowledge?.total ?? 0) > 0 &&
-        detailBean?.knowledge?.completed == detailBean?.knowledge?.total;
-    if (!isFinish) {
-      requestDetail();
-    }
+    requestDetail();
   }
 
   Future<void> dataInit() async {
@@ -39,14 +32,42 @@ class CourseDetailsController extends GetxController {
     try {
       final res = await CourseService.of.courseInfo(id, showLoading: false);
       if (res.isSuccess) {
+        // 先判断哪个选中(缓存起来)
+        KnowledgeIndexDtoList? selectKnow;
+        KnowledgeIndexDtoList? selectPractise;
+        if (detailBean != null) {
+          CourseModel know = detailBean?.knowledge ?? CourseModel();
+          final knowledgeIndexDtoList = know.knowledgeIndexDtoList ?? [];
+          for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
+            final model = knowledgeIndexDtoList[i];
+            if (model.select == true) {
+              selectKnow = model;
+            }
+          }
+          CourseModel practise = detailBean?.practise ?? CourseModel();
+          final practiseIndexDtoList = practise.practiseIndexDtoList ?? [];
+          for (int i = 0; i < practiseIndexDtoList.length; i++) {
+            final model = practiseIndexDtoList[i];
+            if (model.select == true) {
+              selectPractise = model;
+            }
+          }
+        }
+        // 获取数据
         detailBean = CourseModel.fromJson(res.data);
         CourseModel know = detailBean?.knowledge ?? CourseModel();
         final knowledgeIndexDtoList = know.knowledgeIndexDtoList ?? [];
         for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
           final model = knowledgeIndexDtoList[i];
           model.select = false;
-          if (i == knowledgeIndexDtoList.length - 1) {
-            model.select = true;
+          if (selectKnow != null) {
+            if (model.id == selectKnow.id) {
+              model.select = true;
+            }
+          } else {
+            if (i == knowledgeIndexDtoList.length - 1) {
+              model.select = true;
+            }
           }
         }
         CourseModel practise = detailBean?.practise ?? CourseModel();
@@ -54,8 +75,14 @@ class CourseDetailsController extends GetxController {
         for (int i = 0; i < practiseIndexDtoList.length; i++) {
           final model = practiseIndexDtoList[i];
           model.select = false;
-          if (i == practiseIndexDtoList.length - 1) {
-            model.select = true;
+          if (selectPractise != null) {
+            if (model.id == selectPractise.id) {
+              model.select = true;
+            }
+          } else {
+            if (i == practiseIndexDtoList.length - 1) {
+              model.select = true;
+            }
           }
         }
         safeUpdate();
@@ -123,8 +150,9 @@ class CourseDetailsController extends GetxController {
           final contentId = detailBean!.knowledge!.contentId;
           final subContentId = detailBean!.knowledge!.subContentId;
           AppRoutesUtils.toDetail(contentType, contentId,
-              subContentId: subContentId);
-          requestDetail();
+              subContentId: subContentId,callBack: (value) {
+                requestDetail();
+              });
         } else {
           ToastUtils.showToast(res.msg);
         }
@@ -161,7 +189,11 @@ class CourseDetailsController extends GetxController {
     if (isFinish) {
       data['infoId'] = detailBean?.practise?.id ?? 0;
     }
-    Get.toNamed(Routes.coursesExercises, arguments: data);
+    Get.toNamed(Routes.coursesExercises, arguments: data)?.then((value){
+      if (!isFinish) {
+        requestDetail();
+      }
+    });
   }
 
   void toPracticeSelect(value){

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/utils/color_style_util.dart';
 
 import '../../../../model/course_model.dart';
 import '../../../../model/search_top.dart';
@@ -13,15 +14,19 @@ import '../../../../widget/common_image.dart';
 class CoursePracticeItem extends StatelessWidget {
   final CourseModel item;
   final VoidCallback? onTap;
+  final Function? selectOnTap;
 
   const CoursePracticeItem({
     super.key,
     required this.item,
     this.onTap,
+    this.selectOnTap
   });
 
   @override
   Widget build(BuildContext context) {
+    bool isFinish = (item.total ?? 0) > 0 && item.completed == item.total;
+    final practiseIndexDtoList = item.practiseIndexDtoList ?? [];
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -73,55 +78,62 @@ class CoursePracticeItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Container(
-                  height: 28.w,
-                  padding: EdgeInsets.all(1.r),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                    gradient: LinearGradient(
-                      colors: [
-                        '#557BF6'.hexColor.withOpacity(0.4),
-                        '#557BF6'.hexColor.withOpacity(0),
-                      ],
-                    ),
-                  ),
-                  child: Container(
+                if (isFinish)
+                  Image.asset(
+                    'assets/courses/icon_courses_finished.png',
+                    height: 28.w,
+                    fit: BoxFit.fitHeight,
+                  )
+                else
+                  Container(
+                    height: 28.w,
+                    padding: EdgeInsets.all(1.r),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                      color: Colors.white,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                        gradient: LinearGradient(
-                          colors: [
-                            '#557BF6'.hexColor.withOpacity(0.2),
-                            '#557BF6'.hexColor.withOpacity(0),
-                          ],
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            Assets.svg.iconToPractice,
-                            width: 16.w,
-                            height: 16.w,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            '去答题',
-                            style: TextStyle(
-                              color: '#557BF6'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                      gradient: LinearGradient(
+                        colors: [
+                          '#557BF6'.hexColor.withOpacity(0.4),
+                          '#557BF6'.hexColor.withOpacity(0),
                         ],
                       ),
                     ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+                        color: Colors.white,
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
+                          gradient: LinearGradient(
+                            colors: [
+                              '#557BF6'.hexColor.withOpacity(0.2),
+                              '#557BF6'.hexColor.withOpacity(0),
+                            ],
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              Assets.svg.iconToPractice,
+                              width: 16.w,
+                              height: 16.w,
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              '去答题',
+                              style: TextStyle(
+                                color: '#557BF6'.hexColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
             SizedBox(height: 12.w),
@@ -207,23 +219,40 @@ class CoursePracticeItem extends StatelessWidget {
                         item.total ?? 0,
                         (index) {
                           final isCompleted = index < (item.completed ?? 0);
-                          return Container(
-                            width: 24.w,
-                            height: 24.w,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isCompleted
-                                  ? '#557BF6'.hexColor.withOpacity(0.1)
-                                  : '#333333'.hexColor.withOpacity(0.1),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${index + 1}',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: isCompleted ? '#557BF6'.hexColor : '#333333'.hexColor,
+                          var m;
+                          if (isFinish) {
+                            m = practiseIndexDtoList[index];
+                          }
+                          return GestureDetector(
+                            onTap: () {
+                              if (isFinish && selectOnTap != null) {
+                                selectOnTap!(m);
+                              }
+                            },
+                            child: Container(
+                              width: 24.w,
+                              height: 24.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: m?.select == true
+                                    ? ColorStyle.c557BF6
+                                    : isCompleted
+                                    ? '#557BF6'.hexColor.withOpacity(0.1)
+                                    : '#333333'.hexColor.withOpacity(0.1),
                               ),
-                            ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: m?.select == true
+                                      ? Colors.white
+                                      : isCompleted
+                                      ? '#557BF6'.hexColor
+                                      : '#333333'.hexColor,
+                                ),
+                              ),
+                            )
                           );
                         },
                       ),

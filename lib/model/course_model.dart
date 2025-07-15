@@ -10,7 +10,7 @@ CourseModel courseModelFromJson(String str) =>
 String courseModelToJson(CourseModel data) => json.encode(data.toJson());
 
 class CourseModel {
-  final int? id;
+  int? id;
   final int? courseId;
   final String? icon;
   final String? title;
@@ -24,9 +24,9 @@ class CourseModel {
   final int? challengeTotal;
   final int? challengeCompleted;
   final int? type;
-  final String? infoTitle;
-  final String? contentType;
-  final int? contentId;
+  String? infoTitle;
+  String? contentType;
+  int? contentId;
   final int? subContentId;
   final int? total;
   int? completed;
@@ -35,39 +35,42 @@ class CourseModel {
   final CourseModel? knowledge;
   final CourseModel? practise;
   final CourseModel? challenge;
+  List<KnowledgeIndexDtoList>? knowledgeIndexDtoList;
+  List<KnowledgeIndexDtoList>? practiseIndexDtoList;
 
   double get progress {
     if ((total ?? 0) == 0) return 0;
     return (completed ?? 0) / (total ?? 0);
   }
 
-  CourseModel({
-    this.id,
-    this.courseId,
-    this.icon,
-    this.title,
-    this.des,
-    this.cover,
-    this.status,
-    this.knowledgeTotal,
-    this.knowledgeCompleted,
-    this.practiseTotal,
-    this.practiseCompleted,
-    this.challengeTotal,
-    this.challengeCompleted,
-    this.type,
-    this.infoTitle,
-    this.contentType,
-    this.contentId,
-    this.subContentId,
-    this.total,
-    this.completed,
-    this.integral,
-    this.challengeIndexDtoList,
-    this.knowledge,
-    this.practise,
-    this.challenge,
-  });
+  CourseModel(
+      {this.id,
+      this.courseId,
+      this.icon,
+      this.title,
+      this.des,
+      this.cover,
+      this.status,
+      this.knowledgeTotal,
+      this.knowledgeCompleted,
+      this.practiseTotal,
+      this.practiseCompleted,
+      this.challengeTotal,
+      this.challengeCompleted,
+      this.type,
+      this.infoTitle,
+      this.contentType,
+      this.contentId,
+      this.subContentId,
+      this.total,
+      this.completed,
+      this.integral,
+      this.challengeIndexDtoList,
+      this.knowledge,
+      this.practise,
+      this.challenge,
+      this.knowledgeIndexDtoList,
+      this.practiseIndexDtoList});
 
   factory CourseModel.fromJson(Map<String, dynamic> json) => CourseModel(
         id: json["id"],
@@ -95,6 +98,14 @@ class CourseModel {
             ? []
             : List<ChallengeIndexDtoList>.from(json["challengeIndexDtoList"]!
                 .map((x) => ChallengeIndexDtoList.fromJson(x))),
+        knowledgeIndexDtoList: json["knowledgeIndexDtoList"] == null
+            ? []
+            : List<KnowledgeIndexDtoList>.from(json["knowledgeIndexDtoList"]!
+                .map((x) => KnowledgeIndexDtoList.fromJson(x))),
+        practiseIndexDtoList: json["practiseIndexDtoList"] == null
+            ? []
+            : List<KnowledgeIndexDtoList>.from(json["practiseIndexDtoList"]!
+                .map((x) => KnowledgeIndexDtoList.fromJson(x))),
         knowledge: json["knowledge"] == null
             ? null
             : CourseModel.fromJson(json["knowledge"]),
@@ -131,9 +142,41 @@ class CourseModel {
         "challengeIndexDtoList": challengeIndexDtoList == null
             ? []
             : List<dynamic>.from(challengeIndexDtoList!.map((x) => x.toJson())),
+        "knowledgeIndexDtoList": knowledgeIndexDtoList == null
+            ? []
+            : List<dynamic>.from(knowledgeIndexDtoList!.map((x) => x.toJson())),
+        "practiseIndexDtoList": practiseIndexDtoList == null
+            ? []
+            : List<dynamic>.from(practiseIndexDtoList!.map((x) => x.toJson())),
         "knowledge": knowledge?.toJson(),
         "practise": practise?.toJson(),
         "challenge": challenge?.toJson(),
+      };
+}
+
+class KnowledgeIndexDtoList {
+  final int? id;
+  int? contentId;
+  final String? title;
+  final String? contentType;
+  bool? select;
+
+  KnowledgeIndexDtoList(
+      {this.id, this.contentId, this.title, this.contentType, this.select});
+
+  factory KnowledgeIndexDtoList.fromJson(Map<String, dynamic> json) =>
+      KnowledgeIndexDtoList(
+        id: json["id"],
+        contentId: json["contentId"],
+        contentType: json["contentType"],
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "contentId": contentId,
+        "contentType": contentType,
+        "title": title
       };
 }
 

@@ -96,8 +96,8 @@ class CourseService {
     return res ?? ResBaseModel.defaultRes;
   }
 
-  Future<CourseExerciseAllModel> coursePractise(String id) async {
-    final res = await HttpUtils.postNew(Api.coursePractise, params: {'id': id});
+  Future<CourseExerciseAllModel> coursePractise(params) async {
+    final res = await HttpUtils.postNew(Api.coursePractise, params: params);
     CourseExerciseAllModel model = CourseExerciseAllModel.fromJson(res?.data);
     return model;
   }

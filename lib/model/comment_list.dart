@@ -50,6 +50,7 @@ class CommentBean {
   bool? liked;
   CommentBean? parentComment;
   int? delType;
+  bool? followed;
 
   bool get isDeleted => delType != 3 && delType != 6 && delType != 7;
 
@@ -72,6 +73,7 @@ class CommentBean {
     this.replies,
     this.parentComment,
     this.delType,
+    this.followed
   });
 
   CommentBean.fromJson(Map<String, dynamic> json) {
@@ -132,6 +134,10 @@ class CommentBean {
       liked = json["liked"];
     }
 
+    if (json["followed"] is bool) {
+      followed = json["followed"];
+    }
+
     if (json["at"] is List) {
       at = json["at"] == null ? null : (json["at"] as List).map((e) => e.toString()).toList();
     }
@@ -167,6 +173,7 @@ class CommentBean {
     _data['liked'] = liked;
     _data['replies'] = replies;
     _data['thread'] = thread;
+    _data['followed'] = followed;
     return _data;
   }
 }
@@ -175,13 +182,11 @@ class User {
   int? id;
   String? avatar;
   String? nickname;
-  bool? followed;
 
   User({
     this.id,
     this.avatar,
-    this.nickname,
-    this.followed
+    this.nickname
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -194,9 +199,6 @@ class User {
     if (json["nickname"] is String) {
       nickname = json["nickname"];
     }
-    if (json["isFans"] is bool) {
-      followed = json["isFans"];
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -204,7 +206,6 @@ class User {
     _data["id"] = id;
     _data["avatar"] = avatar;
     _data["nickname"] = nickname;
-    _data["isFans"] = followed;
     return _data;
   }
 }

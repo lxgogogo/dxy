@@ -102,12 +102,12 @@ class _CommentItemState extends State<CommentItem> {
   void _updateFollowData(int id, bool followed) {
     for (final m in widget.commentsData) {
       if (m.user?.id == id) {
-        m.user?.followed = followed;
+        m.followed = followed;
       }
     }
     for (final m in widget.commentBean.replies ?? []) {
       if (m.user?.id == id) {
-        m.user?.followed = followed;
+        m.followed = followed;
       }
     }
     if (mounted) {
@@ -154,7 +154,7 @@ class _CommentItemState extends State<CommentItem> {
                           child: GestureDetector(
                             onTap: () async {
                               String title = '关注';
-                              if (widget.commentBean.user?.followed == true) {
+                              if (widget.commentBean.followed == true) {
                                 title = '取消关注';
                               }
                               await showDialog(
@@ -169,15 +169,14 @@ class _CommentItemState extends State<CommentItem> {
                                     Get.close(0);
                                     if (mounted) {
                                       setState(() {
-                                        widget.commentBean.user?.followed =
-                                            !(widget.commentBean.user
-                                                    ?.followed ??
+                                        widget.commentBean.followed =
+                                            !(widget.commentBean.followed ??
                                                 false);
                                       });
                                     }
                                     _followToggle(
                                         widget.commentBean.user?.id ?? 0,
-                                        widget.commentBean.user?.followed ??
+                                        widget.commentBean.followed ??
                                             false,
                                         (value) {});
                                   },
@@ -189,7 +188,7 @@ class _CommentItemState extends State<CommentItem> {
                               child: Container(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  widget.commentBean.user?.followed == true
+                                  widget.commentBean.followed == true
                                       ? '已关注'
                                       : '+关注',
                                   style: TextStyle(
@@ -442,8 +441,7 @@ class _CommentItemState extends State<CommentItem> {
                                                 child: GestureDetector(
                                                   onTap: () async {
                                                     String title = '关注';
-                                                    if (reply.user?.followed ==
-                                                        true) {
+                                                    if (reply.followed == true) {
                                                       title = '取消关注';
                                                     }
                                                     await showDialog(
@@ -451,7 +449,7 @@ class _CommentItemState extends State<CommentItem> {
                                                       context: context,
                                                       builder: (context) =>
                                                           CommonDialog(
-                                                        title: '',
+                                                        title: title,
                                                         content:
                                                             '$title${reply.user?.nickname ?? ''}',
                                                         confirmText: '确认',
@@ -459,19 +457,14 @@ class _CommentItemState extends State<CommentItem> {
                                                           Get.close(0);
                                                           if (mounted) {
                                                             setState(() {
-                                                              reply.user
-                                                                  ?.followed = !(reply
-                                                                      .user
-                                                                      ?.followed ??
+                                                              reply.followed = !(reply.followed ??
                                                                   false);
                                                             });
                                                           }
                                                           _followToggle(
                                                               reply.user?.id ??
                                                                   0,
-                                                              reply.user
-                                                                      ?.followed ??
-                                                                  false,
+                                                              reply.followed ?? false,
                                                               (value) {});
                                                         },
                                                       ),
@@ -484,8 +477,7 @@ class _CommentItemState extends State<CommentItem> {
                                                       alignment:
                                                           Alignment.center,
                                                       child: Text(
-                                                        reply.user?.followed ==
-                                                                true
+                                                        reply.followed == true
                                                             ? '已关注'
                                                             : '+关注',
                                                         style: TextStyle(

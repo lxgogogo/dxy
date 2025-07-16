@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,9 +10,9 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'utils/pre_config.dart';
+
 import 'utils/env.dart';
+import 'utils/pre_config.dart';
 
 void main() async {
   usePathUrlStrategy();
@@ -47,10 +46,7 @@ class MyApp extends StatelessWidget {
               Widget body;
               TextStyle style = TextStyle(color: Colors.grey, fontSize: 14.sp);
               if (mode == LoadStatus.idle) {
-                body = Text(
-                  '加载更多',
-                  style: style
-                );
+                body = Text('加载更多', style: style);
               } else if (mode == LoadStatus.loading) {
                 body = const CupertinoActivityIndicator();
               } else if (mode == LoadStatus.failed) {
@@ -76,8 +72,7 @@ class MyApp extends StatelessWidget {
                   ],
                 );
               }
-              final navBarDistance =
-                  kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight;
+              final navBarDistance = kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight;
               return Container(
                 height: 50 + navBarDistance,
                 padding: EdgeInsets.only(bottom: navBarDistance),
@@ -108,13 +103,11 @@ class MyApp extends StatelessWidget {
                 Locale('en', 'US'),
                 Locale('zh', 'CN'),
               ],
-              localeResolutionCallback:
-                  (locale, Iterable<Locale> supportedLocales) {
+              localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
                 return locale;
               },
               theme: ThemeData(
-                colorScheme:
-                    ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
+                colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
                 useMaterial3: true,
                 visualDensity: VisualDensity.compact,
                 focusColor: Colors.transparent,
@@ -136,8 +129,7 @@ class MyApp extends StatelessWidget {
               builder: EasyLoading.init(
                 builder: (BuildContext context, Widget? child) {
                   return MediaQuery(
-                    data: MediaQuery.of(context)
-                        .copyWith(textScaler: TextScaler.noScaling),
+                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
                     child: ScrollConfiguration(
                       behavior: NoShadowScrollBehavior(),
                       child: child ?? const Material(),
@@ -157,8 +149,7 @@ class MyApp extends StatelessWidget {
 
 class NoShadowScrollBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
     switch (getPlatform(context)) {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

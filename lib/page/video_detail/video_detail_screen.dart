@@ -34,6 +34,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../model/recommend_video_model.dart';
+import '../../utils/env.dart';
 import '../../utils/track_utils.dart';
 import 'widgets/recommended_videos_widget.dart';
 import 'widgets/video_child_list_sheet.dart';
@@ -330,8 +331,14 @@ class ChewieVideo extends StatelessWidget {
           if (controller.isPlayComplete)
             Positioned.fill(
               child: RecommendedVideosWidget(
-                detailBean: controller.detailBean,
                 videos: controller.recommendedVideos,
+                onVideoTap: controller.onRecommendedVideoTap,
+                liked: controller.detailBean?.liked ?? false,
+                likeToggle: controller.onLikeButtonTapped,
+                favorited: controller.detailBean?.favorited ?? false,
+                favoriteToggle: controller.favoriteToggle,
+                toShare: controller.toShare,
+                isFullScreen: isFullScreen,
               ),
             ),
         ],

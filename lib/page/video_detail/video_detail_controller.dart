@@ -336,6 +336,84 @@ class VideoDetailController extends GetxController {
   void followOnTap() {
     safeUpdate();
   }
+
+  void onRecommendedVideoTap(RecommendVideoModel recommendVideo) {}
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    final success = await _likeToggle.call();
+    return success ? !isLiked : isLiked;
+  }
+
+  Future<bool> _likeToggle() async {
+    if (detailBean == null) {
+      return false;
+    }
+    final data = await NetRequest().newContentLike({
+      'relType': NetRequest.COMMENT_TYPE_CONTENT,
+      'relId': detailBean!.id,
+      'state': detailBean!.liked ?? false ? false : true,
+    });
+    if (data is int) {
+      if (detailBean!.liked != true) {
+        ToastUtils.showToast('点赞成功');
+        TrackUtils.trackEvent(userLogType: '103003', params: detailBean!.id);
+      } else {
+        ToastUtils.showToast('取消点赞成功');
+      }
+      if (detailBean!.liked == true) {
+        detailBean!.liked = false;
+        detailBean!.likeCount = (detailBean!.likeCount ?? 0) - 1;
+      } else {
+        detailBean!.liked = true;
+        detailBean!.likeCount = (detailBean!.likeCount ?? 0) + 1;
+      }
+      safeUpdate();
+      return true;
+    }
+    return false;
+  }
+
+  void favoriteToggle() {
+    if (detailBean == null) {
+      return;
+    }
+    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
+      return;
+    }
+    NetRequest().favoriteToggle(
+      NetRequest.COMMENT_TYPE_CONTENT,
+      detailBean!.id,
+      !(detailBean!.favorited ?? false),
+      (data) {
+        if (detailBean!.favorited != true) {
+          ToastUtils.showToast('收藏成功');
+        } else {
+          ToastUtils.showToast('取消收藏成功');
+        }
+        if (detailBean!.favorited == true) {
+          detailBean!.favorited = false;
+          detailBean!.favoriteCount = (detailBean!.favoriteCount ?? 0) - 1;
+        } else {
+          detailBean!.favorited = true;
+          detailBean!.favoriteCount = (detailBean!.favoriteCount ?? 0) + 1;
+        }
+        safeUpdate();
+      },
+      (msg) {
+        AppRoutesUtils.haveCollect();
+      },
+    );
+  }
+
+  void toShare() {
+    NetRequest().upCount(detailBean!.id, (data) async {
+      await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${VideoDetailController.of.shareLink}'));
+      ToastUtils.showToast('分享成功，链接已复制');
+      TrackUtils.trackEvent(userLogType: '103005', params: detailBean!.id);
+      detailBean!.shareCount = (detailBean!.shareCount ?? 0) + 1;
+      safeUpdate();
+    });
+  }
 }
 
 extension CommentLogic on VideoDetailController {

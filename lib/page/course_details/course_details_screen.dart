@@ -40,58 +40,59 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
       init: CourseDetailsController(),
       tag: '${Get.arguments}',
       builder: (controller) {
-        return Scaffold(
-          appBar: CommonAppBar.arrowBack(
-            context,
-            title: controller.detailBean?.title ?? '',
-          ),
-          backgroundColor: '#F7F8FC'.hexColor,
-          body: controller.noNetwork
-              ? NoNetworkView(
-            onRefresh: controller.refreshData,
-          )
-              : controller.detailBean == null
-              ? const SizedBox()
-              : SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CourseDetailAllItem(
-                    item: controller.detailBean!,
-                    onTap: () => controller.onStartCourse(context),
-                  ),
-                  if (controller.detailBean!.knowledge != null)
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.w),
-                      child: CourseDetailKnowledgeItem(
-                          item: controller.detailBean!.knowledge!,
-                          onTap: controller.toKnowledge,
-                          selectOnTap: controller.toKnowledgeSelect
-                      ),
+        return FocusDetector(
+          onFocusGained: controller.onFocusGained,
+          child: Scaffold(
+            appBar: CommonAppBar.arrowBack(
+              context,
+              title: controller.detailBean?.title ?? '',
+            ),
+            backgroundColor: '#F7F8FC'.hexColor,
+            body: controller.noNetwork
+                ? NoNetworkView(
+              onRefresh: controller.refreshData,
+            )
+                : controller.detailBean == null
+                ? const SizedBox()
+                : SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CourseDetailAllItem(
+                      item: controller.detailBean!,
+                      onTap: () => controller.onStartCourse(context),
                     ),
-                  if (controller.detailBean!.practise != null)
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.w),
-                      child: CoursePracticeItem(
-                          item: controller.detailBean!.practise!,
-                          onTap: controller.toPractice,
-                          selectOnTap: controller.toPracticeSelect
+                    if (controller.detailBean!.knowledge != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 16.w),
+                        child: CourseDetailKnowledgeItem(
+                            item: controller.detailBean!.knowledge!,
+                            onTap: controller.toKnowledge
+                        ),
                       ),
-                    ),
-                  if (controller.detailBean!.challenge != null)
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.w),
-                      child: CourseDetailChallengeItem(
-                          item: controller.detailBean!.challenge!,
-                          onTap: controller.toChallenge,
-                          itemOnTap: (value1, value2) {
-                            controller.toChallengeItem(value1, value2);
-                          }
+                    if (controller.detailBean!.practise != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 16.w),
+                        child: CoursePracticeItem(
+                            item: controller.detailBean!.practise!,
+                            onTap: controller.toPractice
+                        ),
                       ),
-                    ),
-                ],
+                    if (controller.detailBean!.challenge != null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 16.w),
+                        child: CourseDetailChallengeItem(
+                            item: controller.detailBean!.challenge!,
+                            onTap: controller.toChallenge,
+                            itemOnTap: (value1, value2) {
+                              controller.toChallengeItem(value1, value2);
+                            }
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -13,9 +13,6 @@ class CourseDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     id = Get.arguments?['id'] as int?;
-  }
-
-  void onFocusGained() {
     requestDetail();
   }
 
@@ -35,7 +32,59 @@ class CourseDetailsController extends GetxController {
     try {
       final res = await CourseService.of.courseInfo(id, showLoading: false);
       if (res.isSuccess) {
+        // 先判断哪个选中(缓存起来)
+        KnowledgeIndexDtoList? selectKnow;
+        KnowledgeIndexDtoList? selectPractise;
+        if (detailBean != null) {
+          CourseModel know = detailBean?.knowledge ?? CourseModel();
+          final knowledgeIndexDtoList = know.knowledgeIndexDtoList ?? [];
+          for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
+            final model = knowledgeIndexDtoList[i];
+            if (model.select == true) {
+              selectKnow = model;
+            }
+          }
+          CourseModel practise = detailBean?.practise ?? CourseModel();
+          final practiseIndexDtoList = practise.practiseIndexDtoList ?? [];
+          for (int i = 0; i < practiseIndexDtoList.length; i++) {
+            final model = practiseIndexDtoList[i];
+            if (model.select == true) {
+              selectPractise = model;
+            }
+          }
+        }
+        // 获取数据
         detailBean = CourseModel.fromJson(res.data);
+        CourseModel know = detailBean?.knowledge ?? CourseModel();
+        final knowledgeIndexDtoList = know.knowledgeIndexDtoList ?? [];
+        for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
+          final model = knowledgeIndexDtoList[i];
+          model.select = false;
+          if (selectKnow != null) {
+            if (model.id == selectKnow.id) {
+              model.select = true;
+            }
+          } else {
+            if (i == knowledgeIndexDtoList.length - 1) {
+              model.select = true;
+            }
+          }
+        }
+        CourseModel practise = detailBean?.practise ?? CourseModel();
+        final practiseIndexDtoList = practise.practiseIndexDtoList ?? [];
+        for (int i = 0; i < practiseIndexDtoList.length; i++) {
+          final model = practiseIndexDtoList[i];
+          model.select = false;
+          if (selectPractise != null) {
+            if (model.id == selectPractise.id) {
+              model.select = true;
+            }
+          } else {
+            if (i == practiseIndexDtoList.length - 1) {
+              model.select = true;
+            }
+          }
+        }
         safeUpdate();
       }
     } finally {
@@ -85,28 +134,80 @@ class CourseDetailsController extends GetxController {
     if (isFetching) return;
     final id = detailBean!.knowledge!.id;
     if (id == null) return;
-    try {
-      final res = await CourseService.of.courseRead(id);
-      if (res.isSuccess) {
-        final contentType = detailBean!.knowledge!.contentType;
-        final contentId = detailBean!.knowledge!.contentId;
-        final subContentId = detailBean!.knowledge!.subContentId;
-        AppRoutesUtils.toDetail(contentType, contentId,
-            subContentId: subContentId);
-        requestDetail();
-      } else {
-        ToastUtils.showToast(res.msg);
+    bool isFinish = (detailBean?.knowledge?.total ?? 0) > 0 &&
+        detailBean?.knowledge?.completed == detailBean?.knowledge?.total;
+    if (isFinish) {
+      final contentType = detailBean!.knowledge!.contentType;
+      final contentId = detailBean!.knowledge!.contentId;
+      final subContentId = detailBean!.knowledge!.subContentId;
+      AppRoutesUtils.toDetail(contentType, contentId,
+          subContentId: subContentId);
+    } else {
+      try {
+        final res = await CourseService.of.courseRead(id);
+        if (res.isSuccess) {
+          final contentType = detailBean!.knowledge!.contentType;
+          final contentId = detailBean!.knowledge!.contentId;
+          final subContentId = detailBean!.knowledge!.subContentId;
+          AppRoutesUtils.toDetail(contentType, contentId,
+              subContentId: subContentId,callBack: (value) {
+                requestDetail();
+              });
+        } else {
+          ToastUtils.showToast(res.msg);
+        }
+      } catch (e) {
+        Log.e(e.toString());
       }
-    } catch (e) {
-      Log.e(e.toString());
     }
+  }
+
+  void toKnowledgeSelect(value) {
+    CourseModel know = detailBean?.knowledge ?? CourseModel();
+    final knowledgeIndexDtoList = know.knowledgeIndexDtoList ?? [];
+    for (final model in knowledgeIndexDtoList) {
+      model.select = false;
+    }
+    detailBean?.knowledge?.id = value.id ?? 0;
+    detailBean?.knowledge?.infoTitle = value.title ?? '';
+    detailBean?.knowledge?.contentType = value.contentType ?? '';
+    detailBean?.knowledge?.contentId = value.contentId ?? 0;
+    value.select = true;
+    safeUpdate();
   }
 
   void toPractice() {
     if (isFetching) return;
     final id = detailBean!.practise!.id;
     if (id == null) return;
-    Get.toNamed(Routes.coursesExercises, arguments: {'id': detailBean?.id});
+    bool isFinish = (detailBean?.practise?.total ?? 0) > 0 &&
+        detailBean?.practise?.completed == detailBean?.practise?.total;
+    final data = {
+      'id': detailBean?.id,
+      'infoId': detailBean?.practise?.id
+    };
+    if (isFinish) {
+      data['infoId'] = detailBean?.practise?.id ?? 0;
+    }
+    Get.toNamed(Routes.coursesExercises, arguments: data)?.then((value){
+      if (!isFinish) {
+        requestDetail();
+      }
+    });
+  }
+
+  void toPracticeSelect(value){
+    CourseModel know = detailBean?.practise ?? CourseModel();
+    final practiseIndexDtoList = know.practiseIndexDtoList ?? [];
+    for (final model in practiseIndexDtoList) {
+      model.select = false;
+    }
+    detailBean?.practise?.id = value.id ?? 0;
+    detailBean?.practise?.infoTitle = value.title ?? '';
+    detailBean?.practise?.contentType = value.contentType ?? '';
+    detailBean?.practise?.contentId = value.contentId ?? 0;
+    value.select = true;
+    safeUpdate();
   }
 
   void toChallenge() {

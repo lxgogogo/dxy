@@ -72,8 +72,10 @@ class MessageController extends GetxController with GetSingleTickerProviderState
   }
 
   void getNoticeBadge() async {
-    final res =  await MessageService.noticeBadge();
-    notifiesOfficial.value = res['notifiesOfficial'];
-    notifiesPrivate.value = res['notifiesPrivate'];
+    if (UserStore.of.isLogin) {
+      final res =  await MessageService.noticeBadge();
+      notifiesOfficial.value = res['notifiesOfficial'];
+      notifiesPrivate.value = res['notifiesPrivate'];
+    }
   }
 }

@@ -14,16 +14,15 @@ class MainController extends GetxController with WidgetsBindingObserver {
   PageController pageController = PageController();
 
   void onTabBarItem(int index) {
-    if (index >= 2) {
+    if (index > 2) {
       if (!UserStore.of.isLogin) {
         Get.toNamed(Routes.login);
         return;
       }
-      if (index == 2) {
-        if (!UserStore.of.hasCourseGroup) {
-          Get.toNamed(Routes.selectCourses);
-          return;
-        }
+    } else if (index == 2 && UserStore.of.isLogin) {
+      if (!UserStore.of.hasCourseGroup) {
+        Get.toNamed(Routes.selectCourses);
+        return;
       }
     }
     pageController.jumpToPage(index);

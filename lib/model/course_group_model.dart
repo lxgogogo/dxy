@@ -36,6 +36,7 @@ class Value {
   final String? icon;
   final String? des;
   final int? status;
+  int? tourist;
 
   Value({
     this.createdAt,
@@ -45,6 +46,7 @@ class Value {
     this.icon,
     this.des,
     this.status,
+    this.tourist
   });
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
@@ -55,6 +57,7 @@ class Value {
     icon: json["icon"],
     des: json["des"],
     status: json["status"],
+    tourist: json["tourist"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +68,6 @@ class Value {
     "icon": icon,
     "des": des,
     "status": status,
+    "tourist": tourist,
   };
 }

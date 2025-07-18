@@ -47,7 +47,7 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
     final events = await Connectivity().checkConnectivity();
     noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
-      ToastUtils.showToast('请检查网络');
+      DialogUtil.showToast('请检查网络');
       return;
     }
     requestDetail();
@@ -64,14 +64,14 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
   Future<void> _onShield(int id) async {
     final success = await NetRequest().shieldFeed(id);
     if (success) {
-      ToastUtils.showToast('屏蔽成功');
+      DialogUtil.showToast('屏蔽成功');
     }
   }
 
   Future<void> _onShieldUser(int id) async {
     final success = await NetRequest().shieldUser(id);
     if (success) {
-      ToastUtils.showToast('屏蔽成功');
+      DialogUtil.showToast('屏蔽成功');
     }
   }
 
@@ -89,7 +89,7 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
               reason: reportTypes[index].value,
             );
             if (res.isSuccess) {
-              ToastUtils.showToast('举报成功，我们将会在24小时内受理');
+              DialogUtil.showToast('举报成功，我们将会在24小时内受理');
             }
           } finally {
             Get.back();
@@ -107,7 +107,7 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
       showLoading: showLoading,
       (data) async {
         if (data == null) {
-          ToastUtils.showToast('该帖子已删除');
+          DialogUtil.showToast('该帖子已删除');
           Get.back();
           return;
         }
@@ -235,9 +235,9 @@ class FeedDetailController extends GetxController with StayReportGetxMixin {
       NetRequest().followerToggle(detailBean!.user!.id!, !followed, (data) {
         detailBean?.user?.followed = !followed;
         if (!followed) {
-          ToastUtils.showToast('关注成功');
+          DialogUtil.showToast('关注成功');
         } else {
-          ToastUtils.showToast('取消关注成功');
+          DialogUtil.showToast('取消关注成功');
         }
         safeUpdate();
         TrackUtils.trackEvent(userLogType: '108003');

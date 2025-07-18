@@ -9,7 +9,7 @@ import 'package:holdem/widget/shadow_wrapper.dart';
 import '../constants.dart';
 import '../services/index.dart';
 import '../utils/event_bus_util.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'close_image_button.dart';
 
 class DialogDeleteAccount extends StatefulWidget {
@@ -240,17 +240,17 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
 
   void _submit() async {
     if (_isDisable) {
-      ToastUtils.showToast('请输入$deleteText');
+      DialogUtil.showToast('请输入$deleteText');
       return;
     }
     final res = await UserService.of.deleteAccount();
     if (res.isSuccess) {
-      ToastUtils.showToast('注销成功');
+      DialogUtil.showToast('注销成功');
       EventBusUtil.of.fire(EventLogout());
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_api_availability/google_api_availability.dart';
@@ -16,7 +16,7 @@ import 'package:holdem/utils/http_utils.dart';
 
 import '../model/catpcha_result.dart';
 import '../utils/log_util.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 
 part 'common_service.dart';
 part 'firebase.dart';

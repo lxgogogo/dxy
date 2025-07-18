@@ -96,7 +96,7 @@ class CourseDetailsController extends GetxController {
     final events = await Connectivity().checkConnectivity();
     noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
-      ToastUtils.showToast('请检查网络');
+      DialogUtil.showToast('请检查网络');
       return;
     }
     requestDetail();
@@ -120,7 +120,7 @@ class CourseDetailsController extends GetxController {
               detailBean!.status = 1;
               safeUpdate();
             } else {
-              ToastUtils.showToast(res.msg);
+              DialogUtil.showToast(res.msg);
             }
           } catch (e) {
             Log.e(e.toString());
@@ -154,7 +154,7 @@ class CourseDetailsController extends GetxController {
                 requestDetail();
               });
         } else {
-          ToastUtils.showToast(res.msg);
+          DialogUtil.showToast(res.msg);
         }
       } catch (e) {
         Log.e(e.toString());

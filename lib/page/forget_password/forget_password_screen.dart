@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/button.dart';
 
 import '../../constants.dart';
@@ -495,28 +495,28 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   void registerOrConfirm() async {
     var account = _controllerAccount.text;
     if (account.isEmpty) {
-      ToastUtils.showToast('邮箱不能为空');
+      DialogUtil.showToast('邮箱不能为空');
       return;
     }
     var code = _controllerCode.text;
     if (type != LoginType.username) {
       if (code.isEmpty) {
-        ToastUtils.showToast('验证码不能为空');
+        DialogUtil.showToast('验证码不能为空');
         return;
       }
     }
     var password = _controllerPw.text;
     if (password.isEmpty) {
-      ToastUtils.showToast('密码不能为空');
+      DialogUtil.showToast('密码不能为空');
       return;
     }
     var againPassword = _controllerAgainPw.text;
     if (againPassword.isEmpty) {
-      ToastUtils.showToast('请输入确认密码');
+      DialogUtil.showToast('请输入确认密码');
       return;
     }
     if (password != againPassword) {
-      ToastUtils.showToast('两次输入的密码不一致');
+      DialogUtil.showToast('两次输入的密码不一致');
       return;
     }
     final res = await LoginService.of.resetPassword(
@@ -526,11 +526,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       code: code,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('重置密码成功');
+      DialogUtil.showToast('重置密码成功');
       Get.back();
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

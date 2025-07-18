@@ -4,7 +4,7 @@ import 'package:holdem/constants.dart';
 import 'package:holdem/page/count_down/count_down_view.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 class RevisePhoneController extends GetxController {
   bool isDisable = true;
@@ -67,12 +67,12 @@ class RevisePhoneController extends GetxController {
       code: code,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('修改成功');
+      DialogUtil.showToast('修改成功');
       UserStore.of.getUserInfo();
       Get.back();
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 

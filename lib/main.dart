@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:get/get.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'utils/env.dart';
@@ -85,61 +85,60 @@ class MyApp extends StatelessWidget {
           //   // If you want load more with noMoreData state ,may be you should return false
           //   return false;
           // },
-          child: OKToast(
-            child: GetMaterialApp(
-              title: '德学院',
-              debugShowCheckedModeBanner: false,
-              navigatorObservers: [
-                Routes.observer,
-              ],
-              localizationsDelegates: const [
-                RefreshLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                FlutterQuillLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('en', 'US'),
-                Locale('zh', 'CN'),
-              ],
-              localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
-                return locale;
-              },
-              theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
-                useMaterial3: true,
-                visualDensity: VisualDensity.compact,
-                focusColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                hintColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                appBarTheme: AppBarTheme(
-                  scrolledUnderElevation: 0.0,
-                  titleTextStyle: TextStyle(
-                    fontSize: 16.sp,
-                    color: Color(0xff2C2C2C),
-                  ),
+          child: GetMaterialApp(
+            title: '德学院',
+            debugShowCheckedModeBanner: false,
+            navigatorObservers: [
+              FlutterSmartDialog.observer,
+              Routes.observer,
+            ],
+            localizationsDelegates: const [
+              RefreshLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              FlutterQuillLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('zh', 'CN'),
+            ],
+            localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
+              return locale;
+            },
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
+              useMaterial3: true,
+              visualDensity: VisualDensity.compact,
+              focusColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              hintColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              appBarTheme: AppBarTheme(
+                scrolledUnderElevation: 0.0,
+                titleTextStyle: TextStyle(
+                  fontSize: 16.sp,
+                  color: Color(0xff2C2C2C),
                 ),
-                // 设置最大宽度为 960px
-                // 可根据需求调整该值
               ),
-              // home: WebFitPage(child: SplashScreen()),
-              builder: EasyLoading.init(
-                builder: (BuildContext context, Widget? child) {
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-                    child: ScrollConfiguration(
-                      behavior: NoShadowScrollBehavior(),
-                      child: child ?? const Material(),
-                    ),
-                  );
-                },
-              ),
-              initialRoute: AppPages.initial,
-              getPages: AppPages.pages,
+              // 设置最大宽度为 960px
+              // 可根据需求调整该值
             ),
+            // home: WebFitPage(child: SplashScreen()),
+            builder: FlutterSmartDialog.init(
+              builder: (BuildContext context, Widget? child) {
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                  child: ScrollConfiguration(
+                    behavior: NoShadowScrollBehavior(),
+                    child: child ?? const Material(),
+                  ),
+                );
+              },
+            ),
+            initialRoute: AppPages.initial,
+            getPages: AppPages.pages,
           ),
         );
       },

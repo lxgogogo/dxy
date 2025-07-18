@@ -15,7 +15,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../gen/assets.gen.dart';
 import '../../services/index.dart';
 import '../../utils/debounce_throttle_util.dart';
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 import 'widgets/scan_area_clipper.dart';
 
 part 'scan_controller.dart';

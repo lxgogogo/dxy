@@ -8,7 +8,7 @@ import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../stores/user_store.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'close_image_button.dart';
 
 class DialogEditNickname extends StatefulWidget {
@@ -206,11 +206,11 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
   void _submitUpdate() {
     String nickname = controller.text;
     if (nickname.characters.length > 10) {
-      ToastUtils.showToast('昵称不能超过10个字');
+      DialogUtil.showToast('昵称不能超过10个字');
       return;
     }
     NetRequest().userUpdate(nickname, (data) {
-      ToastUtils.showToast('修改成功');
+      DialogUtil.showToast('修改成功');
       UserStore.of.getUserInfo();
       Navigator.pop(context);
     });

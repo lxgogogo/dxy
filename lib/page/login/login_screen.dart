@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -22,7 +22,7 @@ import '../../stores/user_store.dart';
 import '../../utils/app_version_checker.dart';
 import '../../utils/env.dart';
 import '../../utils/event_bus_util.dart';
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 import '../../widget/button.dart';
 import 'widgets/login_content.dart';
 
@@ -329,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
     isAuthorizing = true;
     try {
       final googleUser = await GoogleSignIn().signIn();
-      EasyLoading.show();
+      DialogUtil.showLoading();
       final googleAuth = await googleUser?.authentication;
       if (googleAuth == null) return;
       final credential = GoogleAuthProvider.credential(
@@ -343,22 +343,22 @@ class _LoginScreenState extends State<LoginScreen> {
         token: idTokenResult?.token ?? '',
       );
       if (res.isSuccess) {
-        ToastUtils.showToast('登录成功');
+        DialogUtil.showToast('登录成功');
         UserStore.of.loginSuccess(res);
         Get.until((route) => route.settings.name == Routes.main);
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
       if (e is FirebaseAuthException) {
         if (!e.code.contains('canceled')) {
-          ToastUtils.showToast(e.message.toString());
+          DialogUtil.showToast(e.message.toString());
         }
       } else {
-        ToastUtils.showToast(e.toString());
+        DialogUtil.showToast(e.toString());
       }
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }
@@ -375,30 +375,30 @@ class _LoginScreenState extends State<LoginScreen> {
         ..addScope('email')
         ..addScope('name');
       final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
-      EasyLoading.show();
+      DialogUtil.showLoading();
       final idTokenResult = await auth.user?.getIdTokenResult(true);
       final res = await LoginService.of.thirdLogin(
         type: 'APPLE',
         token: idTokenResult?.token ?? '',
       );
       if (res.isSuccess) {
-        ToastUtils.showToast('登录成功');
+        DialogUtil.showToast('登录成功');
         UserStore.of.loginSuccess(res);
         Get.until((route) => route.settings.name == Routes.main);
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
       if (e is FirebaseAuthException) {
         // if (e.code != 'canceled' && e.code != 'web-context-canceled') {
         if (!e.code.contains('canceled')) {
-          ToastUtils.showToast(e.message.toString());
+          DialogUtil.showToast(e.message.toString());
         }
       } else {
-        ToastUtils.showToast(e.toString());
+        DialogUtil.showToast(e.toString());
       }
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }
@@ -411,26 +411,26 @@ class _LoginScreenState extends State<LoginScreen> {
         Routes.webLogin,
         arguments: {'type': 'TELEGRAM', 'authUrl': Env.telegramLogin},
       )?.whenComplete(() {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       });
       if (token is String) {
-        EasyLoading.show();
+        DialogUtil.showLoading();
         final res = await LoginService.of.thirdLogin(
           type: 'TELEGRAM',
           token: token,
         );
         if (res.isSuccess) {
-          ToastUtils.showToast('登录成功');
+          DialogUtil.showToast('登录成功');
           UserStore.of.loginSuccess(res);
           Get.until((route) => route.settings.name == Routes.main);
         } else {
-          ToastUtils.showToast(res.msg);
+          DialogUtil.showToast(res.msg);
         }
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      DialogUtil.showToast(e.toString());
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }
@@ -446,27 +446,27 @@ class _LoginScreenState extends State<LoginScreen> {
         Routes.webLogin,
         arguments: {'type': type, 'authUrl': url},
       )?.whenComplete(() {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       });
       if (token is String) {
-        EasyLoading.show();
+        DialogUtil.showLoading();
         final res = await LoginService.of.thirdLogin(
           type: type,
           token: token,
           isOrigin: true,
         );
         if (res.isSuccess) {
-          ToastUtils.showToast('登录成功');
+          DialogUtil.showToast('登录成功');
           UserStore.of.loginSuccess(res);
           Get.until((route) => route.settings.name == Routes.main);
         } else {
-          ToastUtils.showToast(res.msg);
+          DialogUtil.showToast(res.msg);
         }
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      DialogUtil.showToast(e.toString());
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }

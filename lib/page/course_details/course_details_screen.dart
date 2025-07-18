@@ -12,7 +12,7 @@ import '../../routes/app_pages.dart';
 import '../../routes/app_routes_utils.dart';
 import '../../services/course_service.dart';
 import '../../utils/log_util.dart';
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 import '../../widget/dialog_common.dart';
 import '../../widget/no_network.dart';
 import '../interactive_courses/main_courses/widgets/course_challenge_alert.dart';

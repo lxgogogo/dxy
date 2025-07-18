@@ -12,7 +12,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../stores/user_store.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 import '../../utils/track_utils.dart';
 
 part 'following_controller.dart';
@@ -219,10 +219,10 @@ class _FollowingScreenState extends State<FollowingScreen> {
             false,
             (data) {
               if (items[index].followed ?? false) {
-                ToastUtils.showToast('取消关注成功');
+                DialogUtil.showToast('取消关注成功');
                 TrackUtils.trackEvent(userLogType: '113009');
               } else {
-                ToastUtils.showToast('关注成功');
+                DialogUtil.showToast('关注成功');
                 TrackUtils.trackEvent(userLogType: '113010');
               }
               items[index].followed = !items[index].followed!;
@@ -237,10 +237,10 @@ class _FollowingScreenState extends State<FollowingScreen> {
             !items[index].followed!,
             (data) {
               if (items[index].followed ?? false) {
-                ToastUtils.showToast('取消关注成功');
+                DialogUtil.showToast('取消关注成功');
                 TrackUtils.trackEvent(userLogType: '113009');
               } else {
-                ToastUtils.showToast('关注成功');
+                DialogUtil.showToast('关注成功');
                 TrackUtils.trackEvent(userLogType: '113010');
               }
               items[index].followed = !items[index].followed!;

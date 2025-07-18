@@ -7,7 +7,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/html_parse_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/item_comment.dart';
 
 import '../../../model/comment_list.dart';
@@ -81,7 +81,7 @@ class MyCommentItem extends StatelessWidget {
       onTap: () {
         if (item.id == null) return;
         if (item.isDeleted) {
-          ToastUtils.showToast('该$typeName已被删除');
+          DialogUtil.showToast('该$typeName已被删除');
           return;
         }
         final id = item.resourceId;

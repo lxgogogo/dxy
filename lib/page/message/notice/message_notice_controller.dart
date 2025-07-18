@@ -1,9 +1,9 @@
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:get/get.dart';
 import 'package:holdem/services/message_service.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/dialog_common.dart';
 import 'package:html/parser.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -99,20 +99,20 @@ class MessageNoticeController extends GetxController {
   }
 
   void delete(MessageNoticeModel model) async {
-    EasyLoading.show();
+    DialogUtil.showLoading();
     await MessageService.noticeDelete({'notifiesId': model.id});
-    ToastUtils.showToast('删除成功');
-    EasyLoading.dismiss();
+    DialogUtil.showToast('删除成功');
+    DialogUtil.dismiss();
     dataList.remove(model);
     dataList.refresh();
     EventBusUtil.of.fire(EventRefreshNotice());
   }
 
   void moreDelete() async {
-  EasyLoading.show();
+  DialogUtil.showLoading();
   await MessageService.noticeMoreDelete({'notifiesId': selectIds});
-  ToastUtils.showToast('删除成功');
-  EasyLoading.dismiss();
+  DialogUtil.showToast('删除成功');
+  DialogUtil.dismiss();
   selectIds.clear();
   dataList.removeWhere((e) => (e.select ?? false));
   dataList.refresh();
@@ -136,7 +136,7 @@ class MessageNoticeController extends GetxController {
     } else {
       // 执行删除
       if (selectIds.isEmpty) {
-        ToastUtils.showToast('请先选择要删除的消息');
+        DialogUtil.showToast('请先选择要删除的消息');
         return;
       }
       await showDialog(

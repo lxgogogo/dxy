@@ -12,7 +12,7 @@ import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 import '../../utils/track_utils.dart';
 
 part 'comment_input_controller.dart';

@@ -79,7 +79,7 @@ class VideoDetailController extends GetxController {
     noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
       if (isRefresh) {
-        ToastUtils.showToast('请检查网络');
+        DialogUtil.showToast('请检查网络');
       } else {
         safeUpdate();
       }
@@ -90,7 +90,7 @@ class VideoDetailController extends GetxController {
 
   void requestData({bool showLoading = true}) {
     if (showLoading) {
-      EasyLoading.show();
+      DialogUtil.showLoading();
     }
     Future.wait([
       requestDetail(),
@@ -98,7 +98,7 @@ class VideoDetailController extends GetxController {
       loadRecommendedVideos(),
     ]).whenComplete(() {
       if (showLoading) {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       }
     });
   }
@@ -122,7 +122,7 @@ class VideoDetailController extends GetxController {
       showLoading: false,
       (data) async {
         if (data == null) {
-          ToastUtils.showToast('该视频已删除');
+          DialogUtil.showToast('该视频已删除');
           Get.back();
           return;
         }
@@ -355,10 +355,10 @@ class VideoDetailController extends GetxController {
     });
     if (data is int) {
       if (detailBean!.liked != true) {
-        ToastUtils.showToast('点赞成功');
+        DialogUtil.showToast('点赞成功');
         TrackUtils.trackEvent(userLogType: '103003', params: detailBean!.id);
       } else {
-        ToastUtils.showToast('取消点赞成功');
+        DialogUtil.showToast('取消点赞成功');
       }
       if (detailBean!.liked == true) {
         detailBean!.liked = false;
@@ -386,9 +386,9 @@ class VideoDetailController extends GetxController {
       !(detailBean!.favorited ?? false),
       (data) {
         if (detailBean!.favorited != true) {
-          ToastUtils.showToast('收藏成功');
+          DialogUtil.showToast('收藏成功');
         } else {
-          ToastUtils.showToast('取消收藏成功');
+          DialogUtil.showToast('取消收藏成功');
         }
         if (detailBean!.favorited == true) {
           detailBean!.favorited = false;
@@ -408,7 +408,7 @@ class VideoDetailController extends GetxController {
   void toShare() {
     NetRequest().upCount(detailBean!.id, (data) async {
       await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${VideoDetailController.of.shareLink}'));
-      ToastUtils.showToast('分享成功，链接已复制');
+      DialogUtil.showToast('分享成功，链接已复制');
       TrackUtils.trackEvent(userLogType: '103005', params: detailBean!.id);
       detailBean!.shareCount = (detailBean!.shareCount ?? 0) + 1;
       safeUpdate();

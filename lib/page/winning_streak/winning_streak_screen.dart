@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/course_punch_model.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/utils/utils.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_app_bar.dart';

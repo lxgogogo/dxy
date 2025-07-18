@@ -110,7 +110,7 @@ class MessageChildController extends GetxController {
     try {
       final res = await CommonService.of.messageReadAll(messageType.type);
       if (res.isSuccess) {
-        ToastUtils.showToast('消息已变更为已读！');
+        DialogUtil.showToast('消息已变更为已读！');
         for (final item in items) {
           item.readStatus = 1;
         }

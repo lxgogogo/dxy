@@ -25,7 +25,11 @@ class MainController extends GetxController with WidgetsBindingObserver {
         return;
       }
     }
-    pageController.jumpToPage(index);
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.ease,
+    );
 
     _checkAppVersion();
 

@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/app_version.dart';
 import '../services/index.dart';
 import '../widget/dialog_common.dart';
-import 'toast_utils.dart';
 
 class AppVersionChecker {
   static final AppVersionChecker of = AppVersionChecker._();
@@ -74,14 +74,14 @@ class AppVersionChecker {
             );
           } else {
             if (!showTips) return;
-            ToastUtils.showToast('当前已经是最新版本');
+            DialogUtil.showToast('当前已经是最新版本');
           }
         } else {
           if (!showTips) return;
-          ToastUtils.showToast('当前已经是最新版本');
+          DialogUtil.showToast('当前已经是最新版本');
         }
       }/* else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }*/
     } finally {
       isVersionInCheck = false;

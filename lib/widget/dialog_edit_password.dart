@@ -5,7 +5,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'close_image_button.dart';
 
 class DialogEditPassword extends StatefulWidget {
@@ -521,7 +521,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
       return;
     }
     NetRequest().updatePassword(_controllerOriginalPw.text, _controllerPw.text, (data) {
-      ToastUtils.showToast('修改密码成功');
+      DialogUtil.showToast('修改密码成功');
       Navigator.of(context).pop();
     });
   }

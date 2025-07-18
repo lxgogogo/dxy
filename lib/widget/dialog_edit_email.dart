@@ -9,7 +9,7 @@ import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';
 import '../services/index.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'close_image_button.dart';
 
 class DialogEditEmail extends StatefulWidget {
@@ -419,13 +419,13 @@ class _DialogEditEmailState extends State<DialogEditEmail>
       code: code,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('绑定成功');
+      DialogUtil.showToast('绑定成功');
       UserStore.of.getUserInfo();
       Get.back();
       Get.delete<CountDownController>(
           tag: '$verifyType$verifyCodeType', force: true);
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

@@ -22,7 +22,6 @@ dependencies:
     path: ./plugins/vsc_quill_delta_to_html
   flutter_widget_from_html: ^0.15.3
   pull_to_refresh: ^2.0.0
-  flutter_easyloading: ^3.0.5
   carousel_slider: ^5.0.0
   shimmer: ^3.0.0
   cached_network_image: ^3.3.1
@@ -48,7 +47,6 @@ dependencies:
   package_info_plus: ^8.0.0
   flutter_html: ^3.0.0-beta.2
   url_launcher: ^6.2.6
-  oktoast: ^3.4.0
   share_plus: ^10.1.2
   universal_html: ^2.2.4
   http: any
@@ -89,6 +87,7 @@ dependencies:
   auto_size_text: ^3.0.0
   audioplayers: ^5.2.1
   vibration: ^2.0.0
+  flutter_smart_dialog: ^4.9.8+8
 
 
 dev_dependencies:

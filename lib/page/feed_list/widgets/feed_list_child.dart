@@ -11,7 +11,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
 import '../../../stores/config_store.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../../../widget/item_feed.dart';
 import '../../../widget/report_sheet.dart';
@@ -189,7 +189,7 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
               reason: reportTypes[index].value,
             );
             if (res.isSuccess) {
-              ToastUtils.showToast('举报成功，我们将会在24小时内受理');
+              DialogUtil.showToast('举报成功，我们将会在24小时内受理');
             }
           } finally {
             Get.back();

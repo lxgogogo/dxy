@@ -9,7 +9,7 @@ import 'package:holdem/widget/shadow_wrapper.dart';
 import '../constants.dart';
 import '../services/index.dart';
 import '../stores/user_store.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'close_image_button.dart';
 import 'dialog_edit_password.dart';
 
@@ -361,11 +361,11 @@ class _DialogEditUsernameState extends State<DialogEditUsername> with SingleTick
       // password: password,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('绑定成功');
+      DialogUtil.showToast('绑定成功');
       UserStore.of.getUserInfo();
       Get.back();
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

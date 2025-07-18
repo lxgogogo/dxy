@@ -5,7 +5,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 class DeleteAccountController extends GetxController {
 
@@ -44,17 +44,17 @@ class DeleteAccountController extends GetxController {
 
   void reviseOnTap() async {
     if (isDisable) {
-      ToastUtils.showToast('请输入$deleteText');
+      DialogUtil.showToast('请输入$deleteText');
       return;
     }
     final res = await UserService.of.deleteAccount();
     if (res.isSuccess) {
-      ToastUtils.showToast('注销成功');
+      DialogUtil.showToast('注销成功');
       UserStore.of.clearUserStorage();
       Get.until((route) => route.settings.name == Routes.main);
       EventBusUtil.of.fire(EventLogout());
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

@@ -44,7 +44,7 @@ class ArticleDetailController extends GetxController with StayReportGetxMixin {
     final events = await Connectivity().checkConnectivity();
     noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
-      ToastUtils.showToast('请检查网络');
+      DialogUtil.showToast('请检查网络');
       return;
     }
     requestDetail();
@@ -59,7 +59,7 @@ class ArticleDetailController extends GetxController with StayReportGetxMixin {
   requestDetail({bool showLoading = true}) {
     NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) {
       if (data == null) {
-        ToastUtils.showToast('该文章已删除');
+        DialogUtil.showToast('该文章已删除');
         Get.back();
         return;
       }

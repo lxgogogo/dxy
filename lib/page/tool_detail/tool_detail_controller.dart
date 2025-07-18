@@ -44,7 +44,7 @@ class ToolDetailController extends GetxController {
     final events = await Connectivity().checkConnectivity();
     noNetwork = events.contains(ConnectivityResult.none);
     if (noNetwork) {
-      ToastUtils.showToast('请检查网络');
+      DialogUtil.showToast('请检查网络');
       return;
     }
     requestDetail();
@@ -59,7 +59,7 @@ class ToolDetailController extends GetxController {
   requestDetail({bool showLoading = true}) {
     NetRequest().contentShow({'id': id}, showLoading: showLoading, (data) {
       if (data == null) {
-        ToastUtils.showToast('该工具已删除');
+        DialogUtil.showToast('该工具已删除');
         Get.back();
         return;
       }

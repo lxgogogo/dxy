@@ -13,7 +13,7 @@ import '../../../stores/captcha_store.dart';
 import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../login_screen.dart';
 import 'type_selector.dart';
@@ -329,12 +329,12 @@ class _LoginContentState extends State<LoginContent> {
     );
     if (res.isSuccess) {
       // TrackUtils.trackEvent(userLogType: '118002');
-      ToastUtils.showToast('登录成功');
+      DialogUtil.showToast('登录成功');
       UserStore.of.loginSuccess(res);
       Get.until((route) => route.settings.name == Routes.main);
     } else {
       // TrackUtils.trackEvent(userLogType: '118004');
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

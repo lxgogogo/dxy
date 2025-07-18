@@ -7,7 +7,7 @@ import 'package:holdem/stores/storage.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/common_image.dart';
 

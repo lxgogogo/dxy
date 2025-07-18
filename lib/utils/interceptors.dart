@@ -12,7 +12,7 @@ import 'package:holdem/utils/debounce_throttle_util.dart';
 import 'package:holdem/utils/devices_util.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/log_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/dialog_tip.dart';
 import 'package:intl/intl.dart';
 
@@ -59,7 +59,7 @@ class ResponseInterceptors extends InterceptorsWrapper {
       if (Get.currentRoute != Routes.login) {
         if (code == 401) {
           DebounceThrottle.debounce(() {
-            ToastUtils.showToast(msg ?? '请先登录');
+            DialogUtil.showToast(msg ?? '请先登录');
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);
             EventBusUtil.of.fire(EventLogout());

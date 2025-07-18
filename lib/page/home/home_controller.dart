@@ -235,9 +235,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   void tagOnTap(value) async {
-    EasyLoading.show();
+    DialogUtil.showLoading();
     tagId = value.id ?? 0;
     await loadVideos();
-    EasyLoading.dismiss();
+    DialogUtil.dismiss();
   }
 }

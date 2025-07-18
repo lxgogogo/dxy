@@ -13,7 +13,7 @@ import '../../../model/board_list.dart';
 import '../../../model/collect_page_model.dart';
 import '../../../model/comment_list.dart';
 import '../../../utils/net_request.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../../../widget/dialog_common.dart';
 import '../../../widget/my_item_feed.dart';
@@ -220,7 +220,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                       if (widget.tabIndex == 0) {
                                         NetRequest().threadDelete(boardPostList[i].id, (data) {
                                           if (_isMounted) {
-                                            ToastUtils.showToast('删除成功');
+                                            DialogUtil.showToast('删除成功');
                                             boardPostList.removeAt(i);
                                             setState(() {});
                                           }
@@ -228,7 +228,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                       } else if (widget.tabIndex == 1) {
                                         NetRequest().favoriteDelete(collectList[i].id, (data) {
                                           if (_isMounted) {
-                                            ToastUtils.showToast('删除成功');
+                                            DialogUtil.showToast('删除成功');
                                             collectList.removeAt(i);
                                             setState(() {});
                                             TrackUtils.trackEvent(userLogType: '113007');
@@ -237,7 +237,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                                       } else if (widget.tabIndex == 2) {
                                         NetRequest().commentDelete(commentDataList[i].id, (data) {
                                           if (_isMounted) {
-                                            ToastUtils.showToast('删除成功');
+                                            DialogUtil.showToast('删除成功');
                                             commentDataList.removeAt(i);
                                             setState(() {});
                                             TrackUtils.trackEvent(userLogType: '113008');

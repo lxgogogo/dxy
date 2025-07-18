@@ -47,7 +47,7 @@ class CountDownController extends GetxController with WidgetsBindingObserver {
         countdown(countdownDuration);
         _startTimer();
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
       if (kDebugMode) {

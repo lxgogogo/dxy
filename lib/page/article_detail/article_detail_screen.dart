@@ -15,7 +15,7 @@ import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';

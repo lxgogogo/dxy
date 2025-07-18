@@ -12,7 +12,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/storage.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../utils/track_utils.dart';

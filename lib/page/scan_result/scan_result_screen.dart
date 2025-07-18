@@ -8,7 +8,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
 import '../../services/index.dart';
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 
 part 'scan_result_controller.dart';
 

@@ -243,14 +243,14 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     }
     if (canSelect) {
       courseGroup.value = type;
-      EasyLoading.show();
+      DialogUtil.showLoading();
       hasLoaded.value = false;
       fetchData().whenComplete(() {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
         hasLoaded.value = true;
       });
     } else {
-      ToastUtils.showToast('登录解锁全部内容');
+      DialogUtil.showToast('登录解锁全部内容');
     }
   }
 
@@ -272,7 +272,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         item.status = 1;
         courseItems.refresh();
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());
@@ -292,7 +292,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         final subContentId = item.subContentId;
         AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());
@@ -342,10 +342,10 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       if (res.isSuccess) {
         Get.back();
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      DialogUtil.showToast(e.toString());
     }
     // Get.back();
     // final now = DateTime.now();

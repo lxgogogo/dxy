@@ -15,7 +15,7 @@ import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../services/index.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../message_screen.dart';
 import 'item_common_message.dart';

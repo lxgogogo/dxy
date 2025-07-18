@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/collect_page_model.dart';
@@ -116,14 +116,14 @@ class FinishCreatCollectGroupController extends GetxController {
 
   void finishOnTap() async {
     if (!create && collectList.isEmpty) {
-      ToastUtils.showToast('收藏内容已无可收藏内容');
+      DialogUtil.showToast('收藏内容已无可收藏内容');
       return;
     }
     if (!create && selectIds.isEmpty) {
-      ToastUtils.showToast('请选择一条收藏内容新增');
+      DialogUtil.showToast('请选择一条收藏内容新增');
       return;
     }
-    EasyLoading.show();
+    DialogUtil.showLoading();
     var map = {
       'name': name,
       'addFavoriteList': selectIds
@@ -135,18 +135,18 @@ class FinishCreatCollectGroupController extends GetxController {
       };
     }
     final res = await CollectService.saveCategoryCollect(map);
-    EasyLoading.dismiss();
+    DialogUtil.dismiss();
     if (res.isSuccess) {
       if (create) {
-        ToastUtils.showToast('保存成功');
+        DialogUtil.showToast('保存成功');
         Get.until((route) => route.settings.name == Routes.main);
       } else {
-        ToastUtils.showToast('添加成功');
+        DialogUtil.showToast('添加成功');
         EventBusUtil.of.fire(EventRefreshName(name));
         Get.back();
       }
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

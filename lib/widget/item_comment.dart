@@ -22,7 +22,7 @@ import 'package:holdem/widget/report_sheet.dart';
 import '../services/index.dart';
 import '../stores/config_store.dart';
 import '../utils/date_util.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import '../utils/track_utils.dart';
 
 class CommentItem extends StatefulWidget {
@@ -77,7 +77,7 @@ class _CommentItemState extends State<CommentItem> {
               reason: reportTypes[index].value,
             );
             if (res.isSuccess) {
-              ToastUtils.showToast('举报成功，我们将会在24小时内受理');
+              DialogUtil.showToast('举报成功，我们将会在24小时内受理');
             }
           } finally {
             Get.back();
@@ -91,9 +91,9 @@ class _CommentItemState extends State<CommentItem> {
     UserStore.of.checkLogin(() {
       NetRequest().followerToggle(id, followed, (data) {
         if (followed) {
-          ToastUtils.showToast('关注成功');
+          DialogUtil.showToast('关注成功');
         } else {
-          ToastUtils.showToast('取消关注成功');
+          DialogUtil.showToast('取消关注成功');
         }
         _updateFollowData(id, followed);
         callBack(followed);
@@ -322,7 +322,7 @@ class _CommentItemState extends State<CommentItem> {
                           widget.commentBean.likeCount =
                               widget.commentBean.liked! ? count + 1 : count - 1;
                           if (widget.commentBean.liked == true) {
-                            ToastUtils.showToast('点赞成功');
+                            DialogUtil.showToast('点赞成功');
                             switch (widget.sourceType) {
                               case SourceType.video:
                                 TrackUtils.trackEvent(
@@ -348,7 +348,7 @@ class _CommentItemState extends State<CommentItem> {
                               // TODO: Handle this case.
                             }
                           } else {
-                            ToastUtils.showToast('取消点赞成功');
+                            DialogUtil.showToast('取消点赞成功');
                           }
                           setState(() {});
                           return true;
@@ -603,7 +603,7 @@ class _CommentItemState extends State<CommentItem> {
                                                   ? count + 1
                                                   : count - 1;
                                               if (reply.liked == true) {
-                                                ToastUtils.showToast('点赞成功');
+                                                DialogUtil.showToast('点赞成功');
                                                 switch (widget.sourceType) {
                                                   case SourceType.video:
                                                     TrackUtils.trackEvent(
@@ -633,7 +633,7 @@ class _CommentItemState extends State<CommentItem> {
                                                   // TODO: Handle this case.
                                                 }
                                               } else {
-                                                ToastUtils.showToast('取消点赞成功');
+                                                DialogUtil.showToast('取消点赞成功');
                                               }
                                               setState(() {});
                                               return true;

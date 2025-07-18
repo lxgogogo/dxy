@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/constants.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 class RevisePasswordController extends GetxController {
   bool isDisable = true;
@@ -82,7 +82,7 @@ class RevisePasswordController extends GetxController {
       return;
     }
     NetRequest().updatePassword(controllerOriginalPw.text, controllerPw.text, (data) {
-      ToastUtils.showToast('修改密码成功');
+      DialogUtil.showToast('修改密码成功');
       Navigator.of(context).pop();
     });
   }

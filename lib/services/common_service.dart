@@ -30,7 +30,7 @@ class CommonService {
     bool isShowLoading = false,
   }) async {
     if (isShowLoading) {
-      EasyLoading.show();
+      DialogUtil.showLoading();
     }
     final res = await HttpUtils.postNew(Api.tagIndex, params: {
       'pageNum': pageNum,
@@ -40,7 +40,7 @@ class CommonService {
       }
     }).whenComplete(() {
       if (isShowLoading) {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       }
     });
     return res ?? ResBaseModel.defaultRes;
@@ -53,7 +53,7 @@ class CommonService {
     bool isShowLoading = false,
   }) async {
     if (isShowLoading) {
-      EasyLoading.show();
+      DialogUtil.showLoading();
     }
     final res = await HttpUtils.postNew(Api.searchTop, params: {
       'pageNum': pageNum,
@@ -63,29 +63,29 @@ class CommonService {
       }
     }).whenComplete(() {
       if (isShowLoading) {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       }
     });
     return res ?? ResBaseModel.defaultRes;
   }
 
   Future<ResBaseModel> reportDefined() async {
-    EasyLoading.show();
+    DialogUtil.showLoading();
     final res = await HttpUtils.postNew(Api.reportDefined).whenComplete(() {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
     });
     return res ?? ResBaseModel.defaultRes;
   }
 
   Future<ResBaseModel> reportCreate(String relType, int id, int userId, {required String? reason}) async {
-    EasyLoading.show();
+    DialogUtil.showLoading();
     final res = await HttpUtils.postNew(Api.reportCreate, params: {
       'relType': relType,
       'relId': id,
       'relUserId': userId,
       'reason': reason,
     }).whenComplete(() {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
     });
     return res ?? ResBaseModel.defaultRes;
   }

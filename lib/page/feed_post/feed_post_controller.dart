@@ -81,21 +81,21 @@ class FeedPostController extends GetxController {
     final imageList = HtmlParseUtil.of.imageList(richText);
 
     if (currentBord == null || currentBord?.id == -1) {
-      ToastUtils.showToast('请选择发帖板块');
+      DialogUtil.showToast('请选择发帖板块');
       return;
     }
 
     if (title.isEmpty || title.length < 5) {
-      ToastUtils.showToast('请输入5-31个字符标题');
+      DialogUtil.showToast('请输入5-31个字符标题');
       return;
     }
 
     if (content == '<p><br/></p>') {
-      ToastUtils.showToast('帖子内容不能为空');
+      DialogUtil.showToast('帖子内容不能为空');
       return;
     }
     if (pureText.length < 10) {
-      ToastUtils.showToast('帖子内容长度不能小于10个字符');
+      DialogUtil.showToast('帖子内容长度不能小于10个字符');
       return;
     }
     if (isClickPublish) {
@@ -125,7 +125,7 @@ class FeedPostController extends GetxController {
   Future<void> onImageInsertCallback(String image, QuillController controller) async {
     final fileLength = await File(image).length();
     if (fileLength > 10 * 1024 * 1024) {
-      ToastUtils.showToast('上传图片不得超过10M');
+      DialogUtil.showToast('上传图片不得超过10M');
       return;
     }
     final res = await NetRequest().uploadImage(image);

@@ -54,13 +54,13 @@ class TelegramLoginController extends GetxController {
         _webViewController?.loadUrl(urlRequest: URLRequest(url: WebUri(targetUrl)));
         return;
       } catch (e) {
-        ToastUtils.showToast('URL加载失败: $e');
+        DialogUtil.showToast('URL加载失败: $e');
       }
       // } else {
-      //   ToastUtils.showToast('无效的URL格式: $targetUrl');
+      //   DialogUtil.showToast('无效的URL格式: $targetUrl');
       // }
     } else {
-      ToastUtils.showToast('无效的参数');
+      DialogUtil.showToast('无效的参数');
     }
   }
 

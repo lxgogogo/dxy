@@ -82,7 +82,7 @@ class SearchController extends GetxController with GetSingleTickerProviderStateM
   void onSearch(BuildContext context) {
     String keyword = controller.text;
     if (keyword.isEmpty) {
-      ToastUtils.showToast("请输入搜索内容");
+      DialogUtil.showToast("请输入搜索内容");
       return;
     }
     if (historyItems.length < 6) {

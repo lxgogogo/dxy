@@ -46,11 +46,11 @@ class TagListController extends GetxController with RefreshControllerMixin {
 
   void addSelectTag(TagModel tag) {
     if (selectedItems.length >= 10) {
-      showToast('最多只能选择10个标签');
+      DialogUtil.showToast('最多只能选择10个标签');
       return;
     }
     if (selectedItems.any((e) => e.id == tag.id)) {
-      ToastUtils.showToast('不可重复插入同一话题');
+      DialogUtil.showToast('不可重复插入同一话题');
       return;
     }
     selectedItems.add(tag);

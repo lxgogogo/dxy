@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:holdem/constants.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 class ReviseAccountController extends GetxController {
   final TextEditingController controllerAccount = TextEditingController();
@@ -45,11 +45,11 @@ class ReviseAccountController extends GetxController {
       // password: password,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('绑定成功');
+      DialogUtil.showToast('绑定成功');
       UserStore.of.getUserInfo();
       Get.back();
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +13,7 @@ import 'package:holdem/model/user.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/event_bus_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
@@ -221,7 +221,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
             GestureDetector(
               onTap: () async {
                 if (!controller.isCanOpenPicker()) {
-                  ToastUtils.showToast('最多只可上传9张图片');
+                  DialogUtil.showToast('最多只可上传9张图片');
                   return;
                 }
                 controller.openFilePicker();

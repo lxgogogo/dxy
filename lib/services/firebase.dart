@@ -22,7 +22,7 @@ class FirebaseService extends GetxService {
       final res = await CommonService.of.updatePushToken(deviceToken: fCMToken ?? '');
       if (res.isSuccess) {
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
       Log.e(e.toString());

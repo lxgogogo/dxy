@@ -20,19 +20,19 @@ class PersonalScreenController extends GetxController {
     if (picked != null) {
       final fileLength = await picked.length();
       if (fileLength > 10 * 1024 * 1024) {
-        ToastUtils.showToast('上传头像不得超过10M');
+        DialogUtil.showToast('上传头像不得超过10M');
         return;
       }
       if (picked.path.isNotEmpty) {
         await NetRequest().updateAvatar(picked.path, (data) {
           imageUrl = picked.path;
-          ToastUtils.showToast('上传成功');
+          DialogUtil.showToast('上传成功');
           final url = data?['url'];
           if (url is String) {
             UserStore.of.updateUserInfo({'avatar': url});
           }
         }, (errMsg) {
-          ToastUtils.showToast('上传文件失败，请重新上传');
+          DialogUtil.showToast('上传文件失败，请重新上传');
         }, (int sent, int total) {}).whenComplete(() {
           safeUpdate();
         });
@@ -49,7 +49,7 @@ class PersonalScreenController extends GetxController {
       if (isAuthorizing) return;
       isAuthorizing = true;
       final googleUser = await GoogleSignIn().signIn();
-      EasyLoading.show();
+      DialogUtil.showLoading();
       final googleAuth = await googleUser?.authentication;
       if (googleAuth == null) return;
       final credential = GoogleAuthProvider.credential(
@@ -63,14 +63,14 @@ class PersonalScreenController extends GetxController {
         token: idTokenResult?.token ?? '',
       );
       if (res.isSuccess) {
-        ToastUtils.showToast('绑定成功');
+        DialogUtil.showToast('绑定成功');
         final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }
@@ -87,21 +87,21 @@ class PersonalScreenController extends GetxController {
         ..addScope('email')
         ..addScope('name');
       final auth = await FirebaseAuth.instance.signInWithProvider(appleProvider);
-      EasyLoading.show();
+      DialogUtil.showLoading();
       final idTokenResult = await auth.user?.getIdTokenResult(true);
       final res = await LoginService.of.bindThirdLogin(
         type: 'APPLE',
         token: idTokenResult?.token ?? '',
       );
       if (res.isSuccess) {
-        ToastUtils.showToast('绑定成功');
+        DialogUtil.showToast('绑定成功');
         final userProfile = UserProfile.fromJson(res.data);
         UserStore.of.putUserInfo(userProfile);
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }
@@ -114,26 +114,26 @@ class PersonalScreenController extends GetxController {
         Routes.webLogin,
         arguments: {'type': 'TELEGRAM', 'authUrl': Env.telegramLogin},
       )?.whenComplete(() {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       });
       ;
       if (token is String) {
-        EasyLoading.show();
+        DialogUtil.showLoading();
         final res = await LoginService.of.bindThirdLogin(
           type: 'TELEGRAM',
           token: token,
         );
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
         if (res.isSuccess) {
-          ToastUtils.showToast('绑定成功');
+          DialogUtil.showToast('绑定成功');
           final userProfile = UserProfile.fromJson(res.data);
           UserStore.of.putUserInfo(userProfile);
         } else {
-          ToastUtils.showToast(res.msg);
+          DialogUtil.showToast(res.msg);
         }
       }
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }
@@ -149,27 +149,27 @@ class PersonalScreenController extends GetxController {
         Routes.webLogin,
         arguments: {'type': type, 'authUrl': url},
       )?.whenComplete(() {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       });
       if (token is String) {
-        EasyLoading.show();
+        DialogUtil.showLoading();
         final res = await LoginService.of.bindThirdLogin(
           type: type,
           token: token,
           isOrigin: true,
         );
         if (res.isSuccess) {
-          ToastUtils.showToast('绑定成功');
+          DialogUtil.showToast('绑定成功');
           final userProfile = UserProfile.fromJson(res.data);
           UserStore.of.putUserInfo(userProfile);
         } else {
-          ToastUtils.showToast(res.msg);
+          DialogUtil.showToast(res.msg);
         }
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      DialogUtil.showToast(e.toString());
     } finally {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       isAuthorizing = false;
     }
   }

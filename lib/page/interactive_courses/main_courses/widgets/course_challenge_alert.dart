@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/services/course_service.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 class CourseChallengeAlert {
   static show(id, status, {String title = '', String content = '', Function? callBack, Function? errorBack}) {
@@ -47,19 +47,19 @@ class _CourseChallengeWidgetState extends State<CourseChallengeWidget> {
       if (value.isSuccess) {
         if (value.data == null) {
           Navigator.of(context).pop();
-          ToastUtils.showToast('当前课程内容已被更改,请稍后再试');
+          DialogUtil.showToast('当前课程内容已被更改,请稍后再试');
           if (widget.errorBack != null) {
             widget.errorBack!();
           }
         } else {
-          ToastUtils.showToast('已完成挑战');
+          DialogUtil.showToast('已完成挑战');
           Navigator.of(context).pop();
           if (widget.callBack != null) {
             widget.callBack!();
           }
         }
       } else {
-        ToastUtils.showToast(value.msg);
+        DialogUtil.showToast(value.msg);
       }
     });
   }

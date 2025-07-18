@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
-import 'package:holdem/utils/toast_utils.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 import '../model/course_exercises_model.dart';
 import '../model/res_base_model.dart';
@@ -107,14 +106,14 @@ class CourseService {
     if (res?.isSuccess == true) {
       if (res?.data == null) {
         Get.back();
-        ToastUtils.showToast('当前课程内容已被更改，请稍后再试');
+        DialogUtil.showToast('当前课程内容已被更改，请稍后再试');
         return CourseAnswerModel();
       } else {
         CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
         return model;
       }
     } else {
-      ToastUtils.showToast(res?.msg ?? '');
+      DialogUtil.showToast(res?.msg ?? '');
     }
     return CourseAnswerModel();
   }
@@ -130,23 +129,13 @@ class CourseService {
     return res ?? ResBaseModel.defaultRes;
   }
 
-  Future<ResBaseModel> courseRemind(params,{bool showLoading = true}) async {
-    final res = await HttpUtils.postNew(
-      Api.courseRemind,
-      showLoading: showLoading,
-      params: params
-    );
+  Future<ResBaseModel> courseRemind(params, {bool showLoading = true}) async {
+    final res = await HttpUtils.postNew(Api.courseRemind, showLoading: showLoading, params: params);
     return res ?? ResBaseModel.defaultRes;
   }
 
   Future<ResBaseModel> courseChallenge(int id) async {
-    final res = await HttpUtils.postNew(
-      Api.courseChallenge,
-      showLoading: true,
-      params: {
-        'id': id
-      }
-    );
+    final res = await HttpUtils.postNew(Api.courseChallenge, showLoading: true, params: {'id': id});
     return res ?? ResBaseModel.defaultRes;
   }
 }

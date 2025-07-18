@@ -13,7 +13,7 @@ import 'package:holdem/page/at_user/at_user_screen.dart';
 import 'package:holdem/page/tag_list/tag_list_screen.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/html_parse_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
@@ -231,7 +231,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
                         }
                       }
                       if (count == 9) {
-                        ToastUtils.showToast('最多只可上传9张图片');
+                        DialogUtil.showToast('最多只可上传9张图片');
                         return;
                       }
                       buttonExtraOptions?.onPressed?.call();

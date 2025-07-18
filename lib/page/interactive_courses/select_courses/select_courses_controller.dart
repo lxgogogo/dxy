@@ -30,7 +30,7 @@ class SelectCoursesController extends GetxController {
 
   Future<void> onPressed() async {
     if (selectedIndex.value == -1) {
-      ToastUtils.showToast('请选择一个最符合的描述');
+      DialogUtil.showToast('请选择一个最符合的描述');
       return;
     }
     final id = courseTypes[selectedIndex.value].id;
@@ -46,10 +46,10 @@ class SelectCoursesController extends GetxController {
         // if (res.code == 405) {
         //   MainCoursesController.of.fetchData(needResetGroup: true);
         // }
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
-      ToastUtils.showToast('选择失败!');
+      DialogUtil.showToast('选择失败!');
     }
   }
 }

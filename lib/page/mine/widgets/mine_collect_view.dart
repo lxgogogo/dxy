@@ -21,7 +21,7 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/date_util.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/net_request.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../../../widget/common_tab_widget.dart';
 import '../../../widget/dialog_common.dart';
@@ -326,7 +326,7 @@ class _MineCollectViewState extends State<MineCollectView>
                                           NetRequest().favoriteDelete(
                                               collectList[i].id, (data) {
                                             if (_isMounted) {
-                                              ToastUtils.showToast('删除成功');
+                                              DialogUtil.showToast('删除成功');
                                               collectList.removeAt(i);
                                               setState(() {});
                                               _requestGroupData();

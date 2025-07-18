@@ -5,7 +5,7 @@ import 'package:holdem/model/message.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/log_util.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/item_comment.dart';
 
 import '../../../utils/date_util.dart';
@@ -102,7 +102,7 @@ class MessageCommonItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (item.isDeleted) {
-          ToastUtils.showToast('该$typeName已被删除');
+          DialogUtil.showToast('该$typeName已被删除');
           return;
         }
         onTap?.call();

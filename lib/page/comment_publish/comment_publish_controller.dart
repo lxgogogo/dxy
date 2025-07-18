@@ -71,10 +71,10 @@ class CommentPublishController extends GetxController {
     final isEmpty = HtmlParseUtil.of.isEmptyText(content);
     ;
     if (isEmpty && imageData.isEmpty) {
-      ToastUtils.showToast('评论内容不能为空');
+      DialogUtil.showToast('评论内容不能为空');
       return;
     }
-    EasyLoading.show();
+    DialogUtil.showLoading();
 
     //图片类型：
     if (imageData.isNotEmpty) {
@@ -90,8 +90,8 @@ class CommentPublishController extends GetxController {
           }
         }, (errMsg) {
           //上传文件失败
-          EasyLoading.dismiss();
-          ToastUtils.showToast('上传文件失败，请重新上传');
+          DialogUtil.dismiss();
+          DialogUtil.showToast('上传文件失败，请重新上传');
           _uploadMediaFail();
         }, (int sent, int total) {});
       });
@@ -103,8 +103,8 @@ class CommentPublishController extends GetxController {
   }
 
   void _onSuccess() {
-    EasyLoading.dismiss();
-    ToastUtils.showToast('发布成功');
+    DialogUtil.dismiss();
+    DialogUtil.showToast('发布成功');
     Get.back();
     EventBusUtil.of.fire(EventRefreshComments(relType));
     switch (sourceType) {

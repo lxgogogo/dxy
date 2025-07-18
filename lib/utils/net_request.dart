@@ -6,7 +6,7 @@ import 'package:holdem/utils/api.dart';
 import 'package:holdem/utils/http_utils.dart';
 import 'package:holdem/utils/response.dart' as util_response;
 import 'package:holdem/utils/storage.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 import '../model/upload_file.dart';
 import 'log_utils.dart';
@@ -22,7 +22,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -34,7 +34,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -45,7 +45,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -56,7 +56,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -68,7 +68,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -80,7 +80,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -92,7 +92,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -114,7 +114,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -126,7 +126,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -139,7 +139,7 @@ class NetRequest {
     } else {
       if (resp.message != null && resp.message!.isNotEmpty) {
         if (resp.code != 402) {
-          ToastUtils.showToast(resp.message!);
+          DialogUtil.showToast(resp.message!);
         }
       }
     }
@@ -185,7 +185,7 @@ class NetRequest {
       LogUtils.printAll("getBoardData===>$response");
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -209,7 +209,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -242,7 +242,7 @@ class NetRequest {
     } else {
       onFail(resp.message!);
       print('uploadFile============fail=======');
-      // ToastUtils.showToast('上传文件失败，请重新上传');
+      // DialogUtil.showToast('上传文件失败，请重新上传');
     }
   }
 
@@ -278,7 +278,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -302,7 +302,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -321,7 +321,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -354,7 +354,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -366,7 +366,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -390,7 +390,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -411,7 +411,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       onFail(resp.message ?? '');
-      ToastUtils.showToast(resp.message ?? '');
+      DialogUtil.showToast(resp.message ?? '');
     }
   }
 
@@ -454,7 +454,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -473,7 +473,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -488,7 +488,7 @@ class NetRequest {
       onSuccess(response);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -505,7 +505,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -519,7 +519,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -540,7 +540,7 @@ class NetRequest {
     } else {
       onFail?.call(resp.message ?? '');
       print('uploadFile============fail=======');
-      // ToastUtils.showToast('上传文件失败，请重新上传');
+      // DialogUtil.showToast('上传文件失败，请重新上传');
     }
   }
 
@@ -558,7 +558,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -576,7 +576,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -594,7 +594,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -610,7 +610,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -634,7 +634,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -668,7 +668,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -685,7 +685,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -700,7 +700,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -715,7 +715,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -742,7 +742,7 @@ class NetRequest {
         onError('');
       } else {
         if (resp.code != 402) {
-          ToastUtils.showToast(resp.message ?? '未知错误');
+          DialogUtil.showToast(resp.message ?? '未知错误');
         }
       }
     }
@@ -763,7 +763,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -784,7 +784,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -800,7 +800,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -816,7 +816,7 @@ class NetRequest {
       onSuccess(response['data']);
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -834,7 +834,7 @@ class NetRequest {
       return response['data'];
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
   }
@@ -861,10 +861,10 @@ class NetRequest {
     final response = await HttpUtils.post(Api.threadCreate, params: params, showLoading: true);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
-      ToastUtils.showToast('发布成功');
+      DialogUtil.showToast('发布成功');
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
     return resp.code == 200;
@@ -877,10 +877,10 @@ class NetRequest {
     final response = await HttpUtils.post(Api.threadShield, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
-      // ToastUtils.showToast('屏蔽成功');
+      // DialogUtil.showToast('屏蔽成功');
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
     return resp.code == 200;
@@ -893,10 +893,10 @@ class NetRequest {
     final response = await HttpUtils.post(Api.threadUserShield, params: params, showLoading: false);
     util_response.Response resp = util_response.Response.fromJson(response);
     if (resp.code == 200) {
-      // ToastUtils.showToast('屏蔽成功');
+      // DialogUtil.showToast('屏蔽成功');
     } else {
       if (resp.code != 402) {
-        ToastUtils.showToast(resp.message ?? '未知错误');
+        DialogUtil.showToast(resp.message ?? '未知错误');
       }
     }
     return resp.code == 200;

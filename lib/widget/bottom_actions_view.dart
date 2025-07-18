@@ -22,7 +22,7 @@ import '../page/comment_publish/comment_publish_screen.dart';
 import '../page/feed_detail/feed_detail_screen.dart';
 import '../page/mine/login_helper.dart';
 import '../routes/app_routes_utils.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'like_button/like_button.dart';
 
 class CommonDetailBottomView extends StatefulWidget {
@@ -253,7 +253,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
     });
     if (data is int) {
       if (widget.viewParams.liked != true) {
-        ToastUtils.showToast('点赞成功');
+        DialogUtil.showToast('点赞成功');
         switch (widget.sourceType) {
           case SourceType.video:
             TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
@@ -270,7 +270,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
           // TODO: Handle this case.
         }
       } else {
-        ToastUtils.showToast('取消点赞成功');
+        DialogUtil.showToast('取消点赞成功');
       }
       if (widget.viewParams.liked == true) {
         widget.viewParams.liked = false;
@@ -295,9 +295,9 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
       !(widget.viewParams.favoriteState ?? false),
       (data) {
         if (widget.viewParams.favoriteState != true) {
-          ToastUtils.showToast('收藏成功');
+          DialogUtil.showToast('收藏成功');
         } else {
-          ToastUtils.showToast('取消收藏成功');
+          DialogUtil.showToast('取消收藏成功');
         }
         if (widget.viewParams.favoriteState == true) {
           widget.viewParams.favoriteState = false;
@@ -332,7 +332,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
     if (widget.viewParams.relType == 'thread') {
       NetRequest().threadUpCount(widget.viewParams.relId!, (data) async {
         await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
-        ToastUtils.showToast('分享成功，链接已复制');
+        DialogUtil.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
         TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
@@ -340,7 +340,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
     } else {
       NetRequest().upCount(widget.viewParams.relId!, (data) async {
         await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
-        ToastUtils.showToast('分享成功，链接已复制');
+        DialogUtil.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
         switch (widget.sourceType) {

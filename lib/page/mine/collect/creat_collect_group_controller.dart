@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:get/get.dart';
 import 'package:holdem/routes/app_pages.dart';
 
 import '../../../services/collect_service.dart';
 import '../../../utils/event_bus_util.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 
 class CreatCollectGroupController extends GetxController {
 
@@ -39,18 +39,18 @@ class CreatCollectGroupController extends GetxController {
         'create': true
       });
     } else {
-      EasyLoading.show();
+      DialogUtil.showLoading();
       final res = await CollectService.saveCategoryCollect({
         'name': textController.text,
         'id': id
       });
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
       if (res.isSuccess) {
         EventBusUtil.of.fire(EventRefreshName(textController.text));
-        ToastUtils.showToast('修改成功');
+        DialogUtil.showToast('修改成功');
         Get.back();
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     }
   }

@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 
 part 'web_login_controller.dart';
 
@@ -44,14 +44,14 @@ class WebLoginScreen extends StatelessWidget {
                       isFraudulentWebsiteWarningEnabled: false,
                     ),
                     onLoadStart: (controller, url) {
-                      EasyLoading.show();
+                      DialogUtil.showLoading();
                     },
                     onLoadStop: (controller, url) async {
-                      EasyLoading.dismiss();
+                      DialogUtil.dismiss();
                     },
                     onProgressChanged: (_, progress) {
                       if (progress / 100 > 0.999) {
-                        EasyLoading.dismiss();
+                        DialogUtil.dismiss();
                       }
                     },
                     onWebViewCreated: (webController) async {

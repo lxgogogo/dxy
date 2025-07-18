@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/model/res_base_model.dart';
 import 'package:holdem/utils/http.dart';
 import 'package:holdem/utils/log_util.dart';
@@ -45,7 +45,7 @@ class HttpUtils {
   }) async {
     try {
       if (showLoading) {
-        EasyLoading.show();
+        DialogUtil.showLoading();
       }
       var ret = await Http().post(
         path,
@@ -57,7 +57,7 @@ class HttpUtils {
       Log.d(e.toString());
     } finally {
       if (showLoading) {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       }
     }
     return {};
@@ -93,7 +93,7 @@ class HttpUtils {
     FailureCallback? onFail,
   }) async {
     if (showLoading) {
-      EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+      DialogUtil.showLoading();
     }
     var ret = await Http().postFile(
       path,
@@ -104,7 +104,7 @@ class HttpUtils {
       onFail: onFail,
     );
     if (showLoading) {
-      EasyLoading.dismiss();
+      DialogUtil.dismiss();
     }
     return ret;
   }
@@ -135,7 +135,7 @@ class HttpUtils {
     Response response;
     try {
       if (showLoading) {
-        EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+        DialogUtil.showLoading();
       }
       response = await Http.dio.post(url, data: params ?? {}, options: options);
 
@@ -146,7 +146,7 @@ class HttpUtils {
       return _handleError(e);
     } finally {
       if (showLoading) {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       }
     }
   }
@@ -161,7 +161,7 @@ class HttpUtils {
     Response response;
     try {
       if (showLoading) {
-        EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+        DialogUtil.showLoading();
       }
       response = await Http.dio.post(url, data: params ?? {}, options: options);
 
@@ -172,7 +172,7 @@ class HttpUtils {
       return _handleError(e);
     } finally {
       if (showLoading) {
-        EasyLoading.dismiss();
+        DialogUtil.dismiss();
       }
     }
   }

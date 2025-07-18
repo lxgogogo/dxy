@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:get/get.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -10,7 +10,7 @@ import '../../../model/collect_page_model.dart';
 import '../../../services/collect_service.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/net_request.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../../../widget/dialog_common.dart';
 
@@ -101,33 +101,33 @@ class CollectListController extends GetxController {
   }
 
   void _deleteCollect() async {
-    EasyLoading.show();
+    DialogUtil.showLoading();
     final res = await CollectService.deleteCategory({'id': id});
-    EasyLoading.dismiss();
+    DialogUtil.dismiss();
     if (res.isSuccess) {
       EventBusUtil.of.fire(EventRefreshName(''));
-      ToastUtils.showToast('删除成功');
+      DialogUtil.showToast('删除成功');
       Get.back();
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 
   void _deleteCollectList({String tips = '移出成功'}) async {
-    EasyLoading.show();
+    DialogUtil.showLoading();
     final res = await CollectService.saveCategoryCollect({
       'id': id,
       'deleteIdList': selectIds
     });
     selectIds.clear();
     selectAllCount.value = 0;
-    EasyLoading.dismiss();
+    DialogUtil.dismiss();
     if (res.isSuccess) {
       _reqListData();
       EventBusUtil.of.fire(EventRefreshName(name.value));
-      ToastUtils.showToast(tips);
+      DialogUtil.showToast(tips);
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 
@@ -181,7 +181,7 @@ class CollectListController extends GetxController {
         isDeleting.value = true;
         collectList.refresh();
       } else {
-        ToastUtils.showToast('当前没有可以选择的内容');
+        DialogUtil.showToast('当前没有可以选择的内容');
       }
     } else if (index == 2) {
       Get.toNamed(Routes.createCollect,
@@ -214,7 +214,7 @@ class CollectListController extends GetxController {
 
   void deleteCollectList() {
     if (selectIds.isEmpty) {
-      ToastUtils.showToast('请先选择要移出的内容');
+      DialogUtil.showToast('请先选择要移出的内容');
       return;
     }
     _deleteCollectList();
@@ -225,7 +225,7 @@ class CollectListController extends GetxController {
     final model = collectList[index];
     NetRequest().favoriteDelete(
         model.id, (data) {
-      ToastUtils.showToast('删除成功');
+      DialogUtil.showToast('删除成功');
       selectIds.clear();
       selectAllCount.value = 0;
       collectList.removeAt(index);

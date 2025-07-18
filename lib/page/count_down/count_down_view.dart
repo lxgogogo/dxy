@@ -9,7 +9,7 @@ import 'package:holdem/services/index.dart';
 import 'package:holdem/utils/track_utils.dart';
 
 import '../../constants.dart';
-import '../../utils/toast_utils.dart';
+import '../../utils/dialog_util.dart';
 
 part 'count_down_controller.dart';
 
@@ -59,7 +59,7 @@ class CountDownView extends GetView<CountDownController> {
             valid = Constants.accountRegExp.hasMatch(account);
           }
           if (!valid) {
-            ToastUtils.showToast('请输入正确的$desc');
+            DialogUtil.showToast('请输入正确的$desc');
             return;
           }
           controller.startCountdown(account, verifyType, verifyCodeType);

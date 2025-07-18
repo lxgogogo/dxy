@@ -10,7 +10,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/shadow_wrapper.dart';
 
 import '../constants.dart';
-import '../utils/toast_utils.dart';
+import '../utils/dialog_util.dart';
 import 'close_image_button.dart';
 
 class DialogEditMobile extends StatefulWidget {
@@ -409,12 +409,12 @@ class _DialogEditMobileState extends State<DialogEditMobile> with SingleTickerPr
       code: code,
     );
     if (res.isSuccess) {
-      ToastUtils.showToast('修改成功');
+      DialogUtil.showToast('修改成功');
       UserStore.of.getUserInfo();
       Get.back();
       Get.delete<CountDownController>(tag: '$verifyType$verifyCodeType', force: true);
     } else {
-      ToastUtils.showToast(res.msg);
+      DialogUtil.showToast(res.msg);
     }
   }
 }

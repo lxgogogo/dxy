@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
@@ -25,7 +25,7 @@ import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/log_util.dart';
-import '../../../utils/toast_utils.dart';
+import '../../../utils/dialog_util.dart';
 import '../../../widget/common_operations_sheet.dart';
 import '../../../widget/common_refresher.dart';
 import '../../../widget/no_data.dart';

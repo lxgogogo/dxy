@@ -88,10 +88,10 @@ class WinningStreakController extends GetxController {
       if (res.isSuccess) {
         Get.back();
       } else {
-        ToastUtils.showToast(res.msg);
+        DialogUtil.showToast(res.msg);
       }
     } catch (e) {
-      ToastUtils.showToast(e.toString());
+      DialogUtil.showToast(e.toString());
     }
   }
 

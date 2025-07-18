@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/course_exercises_model.dart';
 import 'package:holdem/services/course_service.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import 'widget/AnswerResultsSheet.dart';
@@ -139,7 +139,7 @@ class CourseExercisesController extends GetxController {
   // TODO: Public Method
   void onPressed() async {
     if (currentPage.value >= practiseList.length) {
-      ToastUtils.showToast('所有题目已练习完了！');
+      DialogUtil.showToast('所有题目已练习完了！');
     }
     if (selectAnswerModel == null) {
       return;

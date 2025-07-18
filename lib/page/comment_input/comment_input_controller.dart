@@ -35,11 +35,11 @@ class CommentInputController extends GetxController {
     });
     final content = converter.convert();
     if (content == '<p><br/></p>') {
-      ToastUtils.showToast('评论内容不能为空');
+      DialogUtil.showToast('评论内容不能为空');
       return;
     }
     NetRequest().commentCreate('comment', relId, content, at: atList, (data) {
-      ToastUtils.showToast('发布成功');
+      DialogUtil.showToast('发布成功');
       Get.back();
       EventBusUtil.of.fire(EventRefreshComments(relType));
       switch (sourceType) {

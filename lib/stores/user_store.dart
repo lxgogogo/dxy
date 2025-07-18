@@ -6,7 +6,7 @@ import 'package:holdem/model/user.dart';
 import 'package:holdem/page/message/message_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/storage.dart';
-import 'package:holdem/utils/toast_utils.dart';
+import 'package:holdem/utils/dialog_util.dart';
 
 import '../model/message_badge_model.dart';
 import '../model/res_base_model.dart';
@@ -33,7 +33,7 @@ class UserStore extends GetxController {
 
   void checkLogin(VoidCallback callback) async {
     if (!isLogin) {
-      //ToastUtils.showToast('请先登录');
+      //DialogUtil.showToast('请先登录');
       Get.toNamed(Routes.login);
       return;
     }

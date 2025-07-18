@@ -45,6 +45,8 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   void _onRefresh() async {
     EventBusUtil.of.fire(EventRefreshFeedTabs());
     pageNum = 1;
+    isLoaded = false;
+    setState(() {});
     reqListData();
   }
 
@@ -202,51 +204,51 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    if (!isLoaded) {
+      return const SizedBox();
+    }
     return SmartRefresher(
       enablePullDown: true,
       enablePullUp: boardPostList.isNotEmpty == true || !noMore,
-      // footer: const SpecialClassicFooter(),
       controller: _refreshController,
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       scrollController: scrollController,
-      child: isLoaded
-          ? boardPostList.isNotEmpty
-              ? CustomScrollView(
-                  slivers: [
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int i) {
-                          return FeedItem(
-                            boardPostList[i],
-                            onShield: () {
-                              if (boardPostList[i].id != null) {
-                                _onShield(boardPostList[i].id!);
-                              }
-                            },
-                            onShieldUser: () {
-                              if (boardPostList[i].user?.id != null) {
-                                _onShieldUser(boardPostList[i].user!.id!);
-                              }
-                            },
-                            onReport: () {
-                              if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
-                                _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
-                              }
-                            },
-                            onTap: () => TrackUtils.trackEvent(
-                              userLogType: '108002',
-                              params: boardPostList[i].id,
-                            ),
-                          );
+      child: boardPostList.isNotEmpty
+          ? CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int i) {
+                      return FeedItem(
+                        boardPostList[i],
+                        onShield: () {
+                          if (boardPostList[i].id != null) {
+                            _onShield(boardPostList[i].id!);
+                          }
                         },
-                        childCount: boardPostList.length,
-                      ),
-                    ),
-                  ],
-                )
-              : const Center(child: NoDataView())
-          : const SizedBox(),
+                        onShieldUser: () {
+                          if (boardPostList[i].user?.id != null) {
+                            _onShieldUser(boardPostList[i].user!.id!);
+                          }
+                        },
+                        onReport: () {
+                          if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
+                            _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
+                          }
+                        },
+                        onTap: () => TrackUtils.trackEvent(
+                          userLogType: '108002',
+                          params: boardPostList[i].id,
+                        ),
+                      );
+                    },
+                    childCount: boardPostList.length,
+                  ),
+                ),
+              ],
+            )
+          : const Center(child: NoDataView()),
     ).scrollToTopWrapper(
       scrollController,
     );

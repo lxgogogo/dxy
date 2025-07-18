@@ -222,16 +222,40 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
           ],
         ),
         Positioned(
-          right: 0,
-          bottom: kBottomNavigationBarHeight + ScreenUtil().bottomBarHeight + 8.w,
+          right: 16.w,
+          bottom: 84.w,
           child: GestureDetector(
-            child: Assets.images.iconPostFeed.image(width: 64.w),
+            child: Container(
+              width: 40.w,
+              height: 40.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    '#557BF6'.hexColor,
+                    '#84BCF9'.hexColor,
+                  ],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: '#58A5FF'.hexColor.withOpacity(0.2),
+                    blurRadius: 10.r,
+                    offset: Offset(0, 5.w),
+                  )
+                ],
+              ),
+              alignment: Alignment.center,
+              child: SvgPicture.asset(
+                Assets.svg.iconPostFeed,
+                width: 20.w,
+                height: 20.w,
+              ),
+            ),
             onTap: () {
               UserStore.of.checkLogin(() {
                 Get.toNamed(Routes.feedPost, arguments: boardInfoList);
               });
             },
-            // shape: CircleBorder(),
           ),
         ),
       ],

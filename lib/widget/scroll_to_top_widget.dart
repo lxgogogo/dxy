@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
+
+import '../gen/assets.gen.dart';
 
 class ScrollToTopWidget extends StatefulWidget {
   final ScrollController scrollController;
@@ -58,7 +62,7 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
         widget.child,
         Positioned(
           right: 16.w,
-          bottom: 48.h,
+          bottom: 30.w,
           child: ValueListenableBuilder<bool>(
             valueListenable: _isVisibleNotifier,
             builder: (context, isVisible, child) {
@@ -68,17 +72,23 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
               return GestureDetector(
                 onTap: _scrollToTop,
                 child: Container(
-                  width: 48.w,
-                  height: 48.w,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
+                  width: 40.w,
+                  height: 40.w,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: '#0050FF1A'.hexColor.withOpacity(0.1),
+                        blurRadius: 6.67.r,
+                      )
+                    ],
                   ),
                   alignment: Alignment.center,
-                  child: Icon(
-                    Icons.keyboard_arrow_up,
-                    color: Colors.white,
-                    size: 24.w,
+                  child: SvgPicture.asset(
+                    Assets.svg.iconToTop,
+                    width: 20.w,
+                    height: 20.w,
                   ),
                 ),
               );

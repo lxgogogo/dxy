@@ -16,6 +16,10 @@ class $AssetsCoursesGen {
   AssetGenImage get iconCourseExcus =>
       const AssetGenImage('assets/courses/icon_course_excus.png');
 
+  /// File path: assets/courses/icon_courses_finished.png
+  AssetGenImage get iconCoursesFinished =>
+      const AssetGenImage('assets/courses/icon_courses_finished.png');
+
   /// File path: assets/courses/icon_courses_true.png
   AssetGenImage get iconCoursesTrue =>
       const AssetGenImage('assets/courses/icon_courses_true.png');
@@ -95,6 +99,7 @@ class $AssetsCoursesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         iconCourseExcus,
+        iconCoursesFinished,
         iconCoursesTrue,
         iconCoursesWrong,
         iconResultsArrow,
@@ -1270,6 +1275,12 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_more_vert.svg
   String get iconMoreVert => 'assets/svg/icon_more_vert.svg';
 
+  /// File path: assets/svg/icon_play_progress.svg
+  String get iconPlayProgress => 'assets/svg/icon_play_progress.svg';
+
+  /// File path: assets/svg/icon_post_feed.svg
+  String get iconPostFeed => 'assets/svg/icon_post_feed.svg';
+
   /// File path: assets/svg/icon_practice.svg
   String get iconPractice => 'assets/svg/icon_practice.svg';
 
@@ -1281,6 +1292,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_refresh.svg
   String get iconRefresh => 'assets/svg/icon_refresh.svg';
+
+  /// File path: assets/svg/icon_replay.svg
+  String get iconReplay => 'assets/svg/icon_replay.svg';
 
   /// File path: assets/svg/icon_scan.svg
   String get iconScan => 'assets/svg/icon_scan.svg';
@@ -1302,6 +1316,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/icon_to_practice.svg
   String get iconToPractice => 'assets/svg/icon_to_practice.svg';
+
+  /// File path: assets/svg/icon_to_top.svg
+  String get iconToTop => 'assets/svg/icon_to_top.svg';
 
   /// File path: assets/svg/icon_uncheck.svg
   String get iconUncheck => 'assets/svg/icon_uncheck.svg';
@@ -1445,10 +1462,13 @@ class $AssetsSvgGen {
         iconLikeWhite,
         iconMore,
         iconMoreVert,
+        iconPlayProgress,
+        iconPostFeed,
         iconPractice,
         iconRank1,
         iconRank2,
         iconRefresh,
+        iconReplay,
         iconScan,
         iconSearch,
         iconSearchHistory,
@@ -1456,6 +1476,7 @@ class $AssetsSvgGen {
         iconToChallenge,
         iconToKnomledge,
         iconToPractice,
+        iconToTop,
         iconUncheck,
         iconVideoPlay,
         iconVideoPlaying,

@@ -16,6 +16,7 @@ import 'package:holdem/utils/app_theme.dart';
 import '../../utils/track_utils.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 import 'widgets/mine_collect_view.dart';
+import 'widgets/mine_tabbar_widget.dart';
 
 part 'mine_controller.dart';
 
@@ -256,12 +257,12 @@ class _MineScreenState extends State<MineScreen>
                     ),
                   )),
                   Expanded(
-                    child: Container(
+                    child: DefaultTabController(length: 3, child: Container(
                       margin: EdgeInsets.only(top: 16.w),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(12.r)),
+                        BorderRadius.vertical(top: Radius.circular(12.r)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -269,43 +270,17 @@ class _MineScreenState extends State<MineScreen>
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 16.w, vertical: 4.w),
-                            child: TabBar(
-                              controller: controller.tabController,
-                              tabs: controller.tabs
-                                  .map((e) => Tab(text: e))
-                                  .toList(),
-                              isScrollable: false,
-                              indicator: RoundUnderlineTabIndicator(
-                                  borderSide: BorderSide(
-                                      width: 2.w,
-                                      color: const Color(0xff4260FF)),
-                                  wantToWith: 12.w,
-                                  insets: EdgeInsets.only(bottom: 3.w)),
-                              enableFeedback: false,
-                              overlayColor:
-                                  WidgetStateProperty.resolveWith<Color>((_) {
-                                return Colors.transparent;
-                              }),
-                              dividerHeight: 0,
-                              labelStyle: TextStyle(
-                                color: const Color(0xff333333),
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              unselectedLabelStyle: TextStyle(
-                                color: const Color(0xff333333),
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              onTap: (int index) {
+                            child: StableTabBar(
+                              tabController: controller.tabController,
+                              onTap: (index) {
                                 TrackUtils.trackEvent(
                                   userLogType: index == 0
                                       ? '113001'
                                       : index == 1
-                                          ? '113002'
-                                          : '113003',
+                                      ? '113002'
+                                      : '113003',
                                 );
-                              },
+                              }
                             ),
                           ),
                           Expanded(
@@ -313,18 +288,18 @@ class _MineScreenState extends State<MineScreen>
                               controller: controller.tabController,
                               physics: const NeverScrollableScrollPhysics(),
                               children: List.generate(controller.tabs.length,
-                                  (index) {
-                                if (index == 1) {
-                                  return const MineCollectView();
-                                } else {
-                                  return MineChildView(tabIndex: index);
-                                }
-                              }),
+                                      (index) {
+                                    if (index == 1) {
+                                      return const MineCollectView();
+                                    } else {
+                                      return MineChildView(tabIndex: index);
+                                    }
+                                  }),
                             ),
                           ),
                         ],
                       ),
-                    ),
+                    ))
                   )
                 ],
               ),

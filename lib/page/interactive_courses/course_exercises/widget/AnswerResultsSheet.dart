@@ -85,7 +85,7 @@ class AnswerResultsWidget extends StatelessWidget {
                     color:
                         isCorrect ? AppTheme.color_39B423 : ColorStyle.cFF3333),
                 child: Text(
-                  '继续',
+                  isCorrect ? '继续' : '重试',
                   style: TextStyle(fontSize: 14.sp, color: Colors.white),
                 ),
               ),

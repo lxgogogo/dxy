@@ -60,7 +60,7 @@ class CourseExercisesController extends GetxController {
     });
   }
 
-  void _result() {
+  void _result({bool isCorrect = true}) {
     submit.value = false;
     for (final m in dataList) {
       m.select = false;
@@ -72,7 +72,9 @@ class CourseExercisesController extends GetxController {
       for (final m in dataList) {
         m.select = false;
       }
-      pageController.jumpToPage(currentPage.value);
+      if (isCorrect) {
+        pageController.jumpToPage(currentPage.value);
+      }
     }
   }
 
@@ -89,9 +91,9 @@ class CourseExercisesController extends GetxController {
         _result();
         Get.back();
       });
-    } else if (data.status == 3){
+    } else if (data.status == 3) {
       // 错题重刷
-      AnswerResultsPageSheet.show(0, () {
+      /*AnswerResultsPageSheet.show(0, () {
         Get.close(0);
         // 判断是否最后答完有连对弹窗
         if (!evenPairs) {
@@ -106,7 +108,7 @@ class CourseExercisesController extends GetxController {
         selectAnswerModel = null;
         pageController.jumpToPage(0);
         _requestData();
-      });
+      });*/
     }
   }
 
@@ -131,9 +133,8 @@ class CourseExercisesController extends GetxController {
   void _playSound(String name) async {
     await audioPlayer.release(); // 每次播放前释放
     await audioPlayer.play(AssetSource('sounds/$name.mp3'));
-    await audioPlayer.onPlayerStateChanged.firstWhere(
-            (state) => state == PlayerState.completed
-    );
+    await audioPlayer.onPlayerStateChanged
+        .firstWhere((state) => state == PlayerState.completed);
   }
 
   // TODO: Public Method
@@ -157,14 +158,15 @@ class CourseExercisesController extends GetxController {
     submit.value = true;
     selectAnswerModel?.isCorrect = data.answer ?? false;
     dataList.refresh();
-    // 答题逻辑，不管对错，继续下一题
-    currentPage.value += 1;
+    // 答题逻辑
     if (data.answer == false) {
       // 答题错误记录
       companiesNumber = 0;
       errorDataList.add(model);
       _playSound('wrong');
     } else {
+      // 答对继续下一题
+      currentPage.value += 1;
       companiesNumber++;
       _playSound('correct');
       // 进度条效果
@@ -179,18 +181,21 @@ class CourseExercisesController extends GetxController {
         data.answer ?? false, data.answerStr ?? '', data.text ?? str,
         (isCorrect) {
       Get.close(0);
-      _result();
+      _result(isCorrect: isCorrect);
     });
-    if (currentPage.value >= practiseList.length) {
-      // 答题结束
-      if ((data.pairsText ?? '').isNotEmpty) {
-        _evenPairs(data, end: true);
+    // 答题正确的情况弹窗
+    if (data.answer == true) {
+      if (currentPage.value >= practiseList.length) {
+        // 答题结束
+        if ((data.pairsText ?? '').isNotEmpty) {
+          _evenPairs(data, end: true);
+        } else {
+          _endAlert(data);
+        }
       } else {
-        _endAlert(data);
+        // 答题未结束
+        _evenPairs(data);
       }
-    } else {
-      // 答题未结束
-      _evenPairs(data);
     }
   }
 

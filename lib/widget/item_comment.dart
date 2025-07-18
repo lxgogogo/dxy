@@ -189,37 +189,24 @@ class _CommentItemState extends State<CommentItem> {
                               child: Container(
                                 width: 56.w,
                                 height: 22.w,
-                                alignment:
-                                Alignment.center,
+                                alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     borderRadius:
-                                    BorderRadius.all(
-                                        Radius
-                                            .circular(
-                                            8.w)),
-                                    border: Border.all(
-                                        width: 1,
-                                        color: ColorStyle
-                                            .c333333
-                                            .withOpacity(
-                                            0.1))),
+                                        BorderRadius.all(Radius.circular(6.w)),
+                                    color: widget.commentBean.followed == true
+                                        ? ColorStyle.c333333.withOpacity(0.1)
+                                        : ColorStyle.c557BF6.withOpacity(0.1)),
                                 child: Text(
-                                  widget.commentBean.followed == true
-                                      ? '已关注'
-                                      : '关注',
-                                  style: TextStyle(
-                                    color: widget.commentBean
-                                        .followed ==
-                                        true
-                                        ? AppTheme
-                                        .color_999999
-                                        : '#557BF6'
-                                        .hexColor,
-                                    fontSize: 10.sp,
-                                    fontWeight:
-                                    FontWeight.w600,
-                                  )
-                                ),
+                                    widget.commentBean.followed == true
+                                        ? '已关注'
+                                        : '关注',
+                                    style: TextStyle(
+                                      color: widget.commentBean.followed == true
+                                          ? AppTheme.color_333333
+                                          : '#557BF6'.hexColor,
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.w600,
+                                    )),
                               ),
                             ),
                           ),
@@ -509,13 +496,15 @@ class _CommentItemState extends State<CommentItem> {
                                                               BorderRadius.all(
                                                                   Radius
                                                                       .circular(
-                                                                          8.w)),
-                                                          border: Border.all(
-                                                              width: 1,
-                                                              color: ColorStyle
-                                                                  .c333333
+                                                                          6.w)),
+                                                          color: reply.followed ==
+                                                                  true
+                                                              ? ColorStyle
+                                                                  .c333333.withOpacity(0.1)
+                                                              : ColorStyle
+                                                                  .c557BF6
                                                                   .withOpacity(
-                                                                      0.1))),
+                                                                      0.1)),
                                                       child: Text(
                                                         reply.followed == true
                                                             ? '已关注'
@@ -525,7 +514,7 @@ class _CommentItemState extends State<CommentItem> {
                                                                       .followed ==
                                                                   true
                                                               ? AppTheme
-                                                                  .color_999999
+                                                                  .color_333333
                                                               : '#557BF6'
                                                                   .hexColor,
                                                           fontSize: 10.sp,

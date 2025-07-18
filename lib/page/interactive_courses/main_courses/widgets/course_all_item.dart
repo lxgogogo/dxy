@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_model.dart';
+import 'package:holdem/stores/user_store.dart';
 
 import '../../../../widget/common_image.dart';
 
@@ -81,41 +82,43 @@ class CourseAllItem extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8.w),
-          Row(
-            children: [
-              if ((item.knowledgeTotal ?? 0) > 0)
-                Expanded(
-                  child: CourseTypeItem(
-                    assetName: Assets.svg.iconKnowledge,
-                    count: item.knowledgeCompleted ?? 0,
-                    total: item.knowledgeTotal ?? 0,
-                    status: item.status,
+          if (UserStore.of.isLogin)...[
+            SizedBox(height: 8.w),
+            Row(
+              children: [
+                if ((item.knowledgeTotal ?? 0) > 0)
+                  Expanded(
+                    child: CourseTypeItem(
+                      assetName: Assets.svg.iconKnowledge,
+                      count: item.knowledgeCompleted ?? 0,
+                      total: item.knowledgeTotal ?? 0,
+                      status: item.status,
+                    ),
                   ),
-                ),
-              if ((item.practiseTotal ?? 0) > 0)
-                Expanded(
-                  child: CourseTypeItem(
-                    assetName: Assets.svg.iconPractice,
-                    count: item.practiseCompleted ?? 0,
-                    total: item.practiseTotal ?? 0,
-                    status: item.status,
+                if ((item.practiseTotal ?? 0) > 0)
+                  Expanded(
+                    child: CourseTypeItem(
+                      assetName: Assets.svg.iconPractice,
+                      count: item.practiseCompleted ?? 0,
+                      total: item.practiseTotal ?? 0,
+                      status: item.status,
+                    ),
                   ),
-                ),
-              if ((item.challengeTotal ?? 0) > 0)
-                Expanded(
-                  child: CourseTypeItem(
-                    assetName: Assets.svg.iconChallenge,
-                    count: item.challengeCompleted ?? 0,
-                    total: item.challengeTotal ?? 0,
-                    status: item.status,
+                if ((item.challengeTotal ?? 0) > 0)
+                  Expanded(
+                    child: CourseTypeItem(
+                      assetName: Assets.svg.iconChallenge,
+                      count: item.challengeCompleted ?? 0,
+                      total: item.challengeTotal ?? 0,
+                      status: item.status,
+                    ),
                   ),
+                CourseStatusBtn(
+                  status: item.status,
                 ),
-              CourseStatusBtn(
-                status: item.status,
-              ),
-            ],
-          )
+              ],
+            )
+          ]
         ],
       ),
     );

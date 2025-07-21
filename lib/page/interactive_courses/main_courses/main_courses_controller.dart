@@ -164,36 +164,11 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
           if (id != null) {
             courseGroup.value = courseGroups.firstWhereOrNull((e) => e.value?.des == id.toString());
             await StorageService.of.setSelectedCourseGroupId(null);
-
-            if (isLogin.value) {
-              courseGroup.value ??= courseGroups.first;
-            } else {
-              var select;
-              for (final model in courseGroups) {
-                final value = model.value;
-                if (value?.des != 'ALL' && value?.tourist == 0) {
-                  select = model;
-                  break;
-                }
-              }
-              courseGroup.value = select;
-            }
+            courseGroup.value ??= courseGroups.first;
 
           } else {
             if (needResetGroup) {
-              if (isLogin.value) {
-                courseGroup.value = courseGroups.first;
-              } else {
-                var select;
-                for (final model in courseGroups) {
-                  final value = model.value;
-                  if (value?.des != 'ALL' && value?.tourist == 0) {
-                    select = model;
-                    break;
-                  }
-                }
-                courseGroup.value = select;
-              }
+              courseGroup.value = courseGroups.first;
             }
           }
           await onRefresh();
@@ -207,7 +182,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   Future<void> getCourseTop() async {
     try {
-      if (UserStore.of.isLogin) {
+      if (isLogin.value) {
         final res = await CourseService.of.courseTop();
         if (res.isSuccess) {
           courseTopModel.value = CourseTopModel.fromJson(res.data);

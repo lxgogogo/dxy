@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -25,25 +24,25 @@ class DialogUtil {
     await SmartDialog.showLoading(
       builder: (context) => Center(
         child: Container(
-          padding: EdgeInsets.all(16.w),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.r),
-            color: Colors.black.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.black,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CupertinoActivityIndicator(
-                radius: 12.r,
+              const CupertinoActivityIndicator(
+                radius: 12,
                 color: Colors.white,
               ),
               if (text.isNotEmpty) ...[
-                SizedBox(height: 4.w),
+                const SizedBox(height: 4),
                 Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 15.sp,
+                    fontSize: 12,
                   ),
                 ),
               ],
@@ -81,10 +80,10 @@ class DialogUtil {
     } else {
       toast = SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.w),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.r),
-            color: Colors.black.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.black,
           ),
           constraints: BoxConstraints(
             maxWidth: Get.width * 0.8,
@@ -92,9 +91,9 @@ class DialogUtil {
           child: Text(
             msg,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 15.sp,
+              fontSize: 12,
             ),
           ),
         ),

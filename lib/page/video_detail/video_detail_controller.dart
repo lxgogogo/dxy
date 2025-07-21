@@ -44,7 +44,6 @@ class VideoDetailController extends GetxController {
   bool haveWatchAlert = false;
 
   // 0-普通视频 1-精选视频
-  int videoType = 0;
   bool isDisposed = false;
   bool isFullScreen = false;
   bool fullScreenOnTap = false;
@@ -127,18 +126,15 @@ class VideoDetailController extends GetxController {
           return;
         }
         detailBean = ArticleDetailBean.fromJson(data);
-        int featured = detailBean?.featured ?? 0;
-        int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
-        bool isLogin = UserStore.of.isLogin;
-        if (isLogin) {
+        if (UserStore.of.isLogin) {
           safeUpdate();
           _watchVideo();
         } else {
           haveWatchPower.value = false;
           safeUpdate();
-          if (featured == 0) {
+          if ((detailBean?.featured ?? 0) == 0) {
             // 普通视频未登录可以观看
-            if (videoWatch != 0) {
+            if ((detailBean?.userlevel?.videoWatch ?? 0) > 0) {
               _watchVideo();
             } else {
               haveWatchAlert = true;
@@ -167,53 +163,51 @@ class VideoDetailController extends GetxController {
     int videoWatch = detailBean?.userlevel?.videoWatch ?? 0;
     int featuredWatch = detailBean?.userlevel?.featured ?? 0;
     Log.d('featured: $featured;videoWatch:$videoWatch;featuredWatch:$featuredWatch');
-    if (videoController == null) {
-      if (detailBean?.videoList?.isNotEmpty == true) {
-        if (childId != null) {
-          final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
-          if (index != -1) {
-            playVideoIndex = index;
+    if (detailBean?.videoList?.isNotEmpty == true) {
+      if (childId != null) {
+        final index = detailBean!.videoList!.indexWhere((e) => e.id == childId);
+        if (index != -1) {
+          playVideoIndex = index;
+        }
+      }
+      if (!haveWatchAlert) {
+        haveWatchAlert = true;
+        if (featured == 1) {
+          if (featuredWatch != 0) {
+            haveWatchPower.value = true;
+            _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+          } else {
+            haveWatchPower.value = false;
+            AppRoutesUtils.haveVideoWatch(featured: featured);
+          }
+        } else {
+          if (videoWatch != 0) {
+            haveWatchPower.value = true;
+            _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
+          } else {
+            haveWatchPower.value = false;
+            AppRoutesUtils.haveVideoWatch(featured: featured);
           }
         }
-        if (!haveWatchAlert) {
-          haveWatchAlert = true;
-          if (featured == 1) {
-            if (featuredWatch != 0) {
-              haveWatchPower.value = true;
-              _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
-            } else {
-              haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch(featured: featured);
-            }
+      }
+    } else {
+      if (!haveWatchAlert) {
+        haveWatchAlert = true;
+        if (featured == 1) {
+          if (featuredWatch != 0) {
+            haveWatchPower.value = true;
+            _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           } else {
-            if (videoWatch != 0) {
-              haveWatchPower.value = true;
-              _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
-            } else {
-              haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch(featured: featured);
-            }
+            haveWatchPower.value = false;
+            AppRoutesUtils.haveVideoWatch(featured: featured);
           }
-        }
-      } else {
-        if (!haveWatchAlert) {
-          haveWatchAlert = true;
-          if (featured == 1) {
-            if (featuredWatch != 0) {
-              haveWatchPower.value = true;
-              _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
-            } else {
-              haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch(featured: featured);
-            }
+        } else {
+          if (videoWatch != 0) {
+            haveWatchPower.value = true;
+            _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
           } else {
-            if (videoWatch != 0) {
-              haveWatchPower.value = true;
-              _startVideoPlayer(detailBean?.video?.sourceUrl ?? '');
-            } else {
-              haveWatchPower.value = false;
-              AppRoutesUtils.haveVideoWatch(featured: featured);
-            }
+            haveWatchPower.value = false;
+            AppRoutesUtils.haveVideoWatch(featured: featured);
           }
         }
       }
@@ -282,21 +276,46 @@ class VideoDetailController extends GetxController {
     }
   }
 
-  void playVideo() {
+  Future<void> playVideo() async {
     if (_isVideoInitialized) {
       if (videoController?.value.isPlaying == true) {
-        videoController?.pause();
+        await videoController?.pause();
       } else {
-        videoController?.play();
+        await videoController?.play();
       }
     }
+  }
+
+  Future<void> onReplay() async {
+    await playVideo();
+    isPlayComplete = false;
+    safeUpdate();
+  }
+
+  void onPlayNewVideo(RecommendVideoModel model) {
+    id = model.id;
+    playVideoIndex = 0;
+    hasUploadEvent = false;
+    isPlayComplete = false;
+    recommendedVideos.clear();
+    comments = null;
+    _pageNum = 1;
+    noMore = false;
+
+    haveWatchPower.value = true;
+    haveWatchAlert = false;
+    isDisposed = false;
+    isFullScreen = false;
+    fullScreenOnTap = false;
+    requestData(showLoading: true);
   }
 
   Future<void> selectVide(int index) async {
     if (playVideoIndex == index) return;
     playVideoIndex = index;
     safeUpdate();
-    _startVideoPlayer(detailBean!.videoList![index].sourceUrl ?? '');
+    final videoUrl = detailBean?.videoList?[playVideoIndex].sourceUrl;
+    await _startVideoPlayer(videoUrl ?? '');
   }
 
   Future<void> loadRecommendedVideos() async {

@@ -5,7 +5,6 @@ import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
@@ -17,13 +16,15 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article_detail.dart';
 import 'package:holdem/model/comment_list.dart';
 import 'package:holdem/page/home/home_screen.dart';
+import 'package:holdem/page/video_detail/widgets/fullscreen_recommended_videos_view.dart';
+import 'package:holdem/page/video_detail/widgets/normal_recommended_videos_view.dart';
 import 'package:holdem/routes/app_routes_utils.dart';
 import 'package:holdem/services/index.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
@@ -36,7 +37,6 @@ import 'package:video_player/video_player.dart';
 import '../../model/recommend_video_model.dart';
 import '../../utils/env.dart';
 import '../../utils/track_utils.dart';
-import 'widgets/recommended_videos_widget.dart';
 import 'widgets/video_child_list_sheet.dart';
 
 part 'video_detail_controller.dart';
@@ -77,13 +77,16 @@ class VideoDetailScreen extends StatelessWidget {
                           child: CustomScrollView(
                             slivers: [
                               SliverToBoxAdapter(
-                                child: GestureDetector(
-                                  onTap: controller.playVideo,
-                                  child: Container(
-                                      padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                                      color: Colors.black,
+                                child: Container(
+                                    padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+                                    color: Colors.black,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (controller.isPlayComplete) return;
+                                        controller.playVideo();
+                                      },
                                       child: SizedBox(
-                                        height: 200.w,
+                                        height: 210.w,
                                         child: Stack(
                                           fit: StackFit.expand,
                                           children: [
@@ -126,8 +129,8 @@ class VideoDetailScreen extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                      )),
-                                ),
+                                      ),
+                                    )),
                               ),
                               SliverPadding(
                                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -328,18 +331,26 @@ class ChewieVideo extends StatelessWidget {
                   ),
                 );
               }),
-          if (controller.isPlayComplete)
+          if (controller.recommendedVideos.isNotEmpty && controller.isPlayComplete)
             Positioned.fill(
-              child: RecommendedVideosWidget(
-                videos: controller.recommendedVideos,
-                onVideoTap: controller.onRecommendedVideoTap,
-                liked: controller.detailBean?.liked ?? false,
-                likeToggle: controller.onLikeButtonTapped,
-                favorited: controller.detailBean?.favorited ?? false,
-                favoriteToggle: controller.favoriteToggle,
-                toShare: controller.toShare,
-                isFullScreen: isFullScreen,
-              ),
+              child: isFullScreen
+                  ? FullscreenRecommendedVideosView(
+                      videos: controller.recommendedVideos,
+                      onVideoTap: controller.onRecommendedVideoTap,
+                      liked: controller.detailBean?.liked ?? false,
+                      likeToggle: controller.onLikeButtonTapped,
+                      favorited: controller.detailBean?.favorited ?? false,
+                      favoriteToggle: controller.favoriteToggle,
+                      toShare: controller.toShare,
+                      onReplay: controller.onReplay,
+                      onPlayNewVideo: controller.onPlayNewVideo,
+                    )
+                  : NormalRecommendedVideosView(
+                      videos: controller.recommendedVideos,
+                      onVideoTap: controller.onRecommendedVideoTap,
+                      onReplay: controller.onReplay,
+                      onPlayNewVideo: controller.onPlayNewVideo,
+                    ),
             ),
         ],
       );

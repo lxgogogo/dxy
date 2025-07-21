@@ -18,6 +18,7 @@ import '../../widget/no_network.dart';
 import '../interactive_courses/main_courses/widgets/course_challenge_alert.dart';
 import 'widgets/course_all_item.dart';
 import 'widgets/course_challenge_item.dart';
+import 'widgets/course_exercises_widget.dart';
 import 'widgets/course_knowledge_item.dart';
 import 'widgets/course_practice_item.dart';
 
@@ -71,13 +72,12 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                           selectOnTap: controller.toKnowledgeSelect
                       ),
                     ),
-                  if (controller.detailBean!.practise != null)
+                  if (controller.detailBean != null &&
+                      controller.detailBean?.practise != null)
                     Padding(
                       padding: EdgeInsets.only(top: 16.w),
-                      child: CoursePracticeItem(
+                      child: CourseExercisesWidget(
                           item: controller.detailBean!.practise!,
-                          onTap: controller.toPractice,
-                          selectOnTap: controller.toPracticeSelect
                       ),
                     ),
                   if (controller.detailBean!.challenge != null)

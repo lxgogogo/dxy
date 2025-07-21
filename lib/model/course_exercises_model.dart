@@ -43,6 +43,8 @@ class CourseExerciseModel {
   int? id;
   String? title;
   String? content;
+  String? answer;
+  bool? select;
   List<CourseExerciseAnswerModel>? options;
 
   CourseExerciseModel({
@@ -50,6 +52,8 @@ class CourseExerciseModel {
     this.title,
     this.content,
     this.options,
+    this.answer,
+    this.select
   });
 
   CourseExerciseModel.fromJson(Map<String, dynamic> map) {
@@ -61,6 +65,9 @@ class CourseExerciseModel {
     }
     if (map["content"] is String) {
       content = map["content"];
+    }
+    if (map["answer"] is String) {
+      answer = map["answer"];
     }
     if (map['options'] is String) {
       final data = json.decode(map['options']);

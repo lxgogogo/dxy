@@ -37,6 +37,8 @@ class CourseModel {
   final CourseModel? challenge;
   List<KnowledgeIndexDtoList>? knowledgeIndexDtoList;
   List<KnowledgeIndexDtoList>? practiseIndexDtoList;
+  var practiseDto;
+  List? practiseList;
 
   double get progress {
     if ((total ?? 0) == 0) return 0;
@@ -70,7 +72,9 @@ class CourseModel {
       this.practise,
       this.challenge,
       this.knowledgeIndexDtoList,
-      this.practiseIndexDtoList});
+      this.practiseIndexDtoList,
+      this.practiseList,
+      this.practiseDto});
 
   factory CourseModel.fromJson(Map<String, dynamic> json) => CourseModel(
         id: json["id"],
@@ -115,6 +119,8 @@ class CourseModel {
         challenge: json["challenge"] == null
             ? null
             : CourseModel.fromJson(json["challenge"]),
+        practiseList: json['practiseList'],
+        practiseDto: json['practiseDto'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -151,6 +157,8 @@ class CourseModel {
         "knowledge": knowledge?.toJson(),
         "practise": practise?.toJson(),
         "challenge": challenge?.toJson(),
+        "practiseList": practiseList,
+        "practiseDto": practiseDto,
       };
 }
 

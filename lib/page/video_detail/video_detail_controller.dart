@@ -319,7 +319,7 @@ class VideoDetailController extends GetxController {
   }
 
   Future<void> loadRecommendedVideos() async {
-    final res = await VideoService.of.recommendedVideos(id: 31);
+    final res = await VideoService.of.recommendedVideos(id: id);
     if (res.isSuccess) {
       final listRes = res.data as List;
       final records = listRes.map((e) => RecommendVideoModel.fromJson(e)).toList();

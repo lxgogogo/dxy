@@ -19,6 +19,7 @@ import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/dialog_common.dart';
 import 'package:holdem/widget/report_sheet.dart';
 
+import '../routes/app_pages.dart';
 import '../services/index.dart';
 import '../stores/config_store.dart';
 import '../utils/date_util.dart';
@@ -155,17 +156,23 @@ class _CommentItemState extends State<CommentItem> {
                               .isMe(widget.commentBean.user?.id), //
                           child: GestureDetector(
                             onTap: () async {
+                              if (!UserStore.of.isLogin) {
+                                Get.toNamed(Routes.login);
+                                return;
+                              }
+                              String name = widget.commentBean.user?.nickname ?? '';
                               String title = '关注';
+                              String content = '确定关注 $name 吗?';
                               if (widget.commentBean.followed == true) {
                                 title = '取消关注';
+                                content = '取消关注 $name 吗?';
                               }
                               await showDialog(
                                 barrierDismissible: true,
                                 context: context,
                                 builder: (context) => CommonDialog(
                                   title: title,
-                                  content:
-                                      '$title${widget.commentBean.user?.nickname ?? ''}',
+                                  content: content,
                                   confirmText: '确认',
                                   onConfirm: () {
                                     Get.close(0);
@@ -450,10 +457,17 @@ class _CommentItemState extends State<CommentItem> {
                                                     .isMe(reply.user?.id),
                                                 child: GestureDetector(
                                                   onTap: () async {
+                                                    if (!UserStore.of.isLogin) {
+                                                      Get.toNamed(Routes.login);
+                                                      return;
+                                                    }
+                                                    String name = reply.user?.nickname ?? '';
                                                     String title = '关注';
+                                                    String content = '确定关注 $name 吗?';
                                                     if (reply.followed ==
                                                         true) {
                                                       title = '取消关注';
+                                                      content = '取消关注 $name 吗?';
                                                     }
                                                     await showDialog(
                                                       barrierDismissible: true,
@@ -461,8 +475,7 @@ class _CommentItemState extends State<CommentItem> {
                                                       builder: (context) =>
                                                           CommonDialog(
                                                         title: title,
-                                                        content:
-                                                            '$title${reply.user?.nickname ?? ''}',
+                                                        content: content,
                                                         confirmText: '确认',
                                                         onConfirm: () {
                                                           Get.close(0);

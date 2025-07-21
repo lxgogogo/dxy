@@ -258,7 +258,7 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                             controller.scrollController,
                           ),
                         ),
-                        SizedBox(height: 90.w),
+                        SafeArea(child: SizedBox(height: 10.w))
                       ],
                     ),
           bottomNavigationBar: controller.detailBean != null

@@ -470,8 +470,24 @@ extension CommentLogic on VideoDetailController {
           recordsSize = dataList.length;
           if (_pageNum == 1) {
             comments = dataList;
+            refreshController.refreshCompleted();
+            if (recordsSize < pageSize) {
+              noMore = true;
+              refreshController.loadNoData();
+            } else {
+              noMore = false;
+              refreshController.resetNoData();
+            }
+          } else {
+            comments?.addAll(dataList);
+            if (recordsSize < pageSize) {
+              noMore = true;
+              refreshController.loadNoData();
+            } else {
+              noMore = false;
+              refreshController.loadComplete();
+            }
           }
-          comments?.addAll(dataList);
           safeUpdate();
         },
       );

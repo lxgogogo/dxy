@@ -34,12 +34,14 @@ class NotLoginCourseAllItem extends StatelessWidget {
           SizedBox(height: 10.w),
           Row(
             children: [
-              if (item.icon?.isNotEmpty == true)
+              if (item.icon?.isNotEmpty == true)...[
                 CommonImage.net(
                   imageUrl: item.icon ?? '',
                   width: 12.w,
                   height: 12.w,
                 ),
+                SizedBox(width: 5.w)
+              ],
               Text(
                 item.title ?? '',
                 style: TextStyle(

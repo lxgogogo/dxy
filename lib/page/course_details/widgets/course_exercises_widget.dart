@@ -15,7 +15,6 @@ import 'package:holdem/services/course_service.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
-import 'package:holdem/utils/dialog_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../interactive_courses/course_exercises/widget/answer_results_page_sheet.dart';
@@ -122,8 +121,29 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         if (!evenPairs) {
           Get.close(0);
         }
-        _canEdit = _completed == widget.item.total ? false : true;
         _result();
+        // 答题完成后要对数据进行查看处理
+        _canEdit = _completed == widget.item.total ? false : true;
+        _currentPage = _practiseList.length - 1;
+        if (!_canEdit) {
+          var selectM;
+          for (int i = 0; i < _practiseList.length; i++) {
+            final m = _practiseList[i];
+            m.select = false;
+            if (i == _practiseList.length - 1) {
+              m.select = true;
+              selectM = m;
+            }
+          }
+          for (final m in _dataList) {
+            m.isCorrect = false;
+            m.select = false;
+            if (m.title == selectM?.answer) {
+              m.select = true;
+              m.isCorrect = true;
+            }
+          }
+        }
       });
     }
   }
@@ -149,8 +169,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // TODO: Tap
 
   void _onPressed() async {
-    if (!_canEdit || _selectAnswerModel == null ||
-        _currentPage >= _practiseList.length) {
+    if (!_canEdit || _selectAnswerModel == null) {
       return;
     }
     final model = _practiseList[_currentPage];
@@ -168,8 +187,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       //_playSound('wrong');
     } else {
       // 答对继续下一题
+      _practiseList[_currentPage].answer = data.answerStr ?? '';
       _completed += 1;
-      if (_currentPage < _practiseList.length) {
+      if (_currentPage < _practiseList.length - 1) {
         _currentPage += 1;
       }
       //_playSound('correct');
@@ -184,7 +204,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         });
     // 答题正确的情况弹窗
     if (data.answer == true) {
-      if (_currentPage >= _practiseList.length) {
+      if (_currentPage == _practiseList.length - 1) {
         // 答题结束
         if ((data.pairsText ?? '').isNotEmpty) {
           _evenPairs(data, end: true);

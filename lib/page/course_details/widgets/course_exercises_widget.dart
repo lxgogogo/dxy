@@ -262,6 +262,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double progress = (_currentPage+1)/_totalPage;
     return Container(
       padding: EdgeInsets.all(16.w).copyWith(right: 0),
       decoration: BoxDecoration(
@@ -354,34 +355,34 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                       SizedBox(width: 60.w)
                   ],
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.r),
-                  child: Container(
-                    width: double.infinity,
-                    height: 4.w,
-                    margin: EdgeInsets.symmetric(vertical: 8.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: widget.item.progress * constraints.maxWidth,
+                Container(
+                  width: double.infinity,
+                  height: 4.w,
+                  margin: EdgeInsets.symmetric(vertical: 8.w),
+                  decoration: BoxDecoration(
+                    color: '#333333'.hexColor.withOpacity(0.05),
+                    borderRadius: BorderRadius.all(Radius.circular(2.w)),
+                  ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          width: progress * constraints.maxWidth,
+                          decoration: BoxDecoration(
                             color: '#557BF6'.hexColor,
-                          ),
-                        );
-                      },
-                    ),
+                            borderRadius: BorderRadius.all(Radius.circular(2.w)),
+                          )
+                        ),
+                      );
+                    },
                   ),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: const ClampingScrollPhysics(),
                   child: Wrap(
-                    spacing: 5.w,
+                    spacing: 8.w,
                     children: List.generate(
                       _practiseList.length,
                           (index) {
@@ -411,7 +412,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                     ? Colors.white
                                     : isCompleted
                                     ? '#557BF6'.hexColor
-                                    : '#333333'.hexColor,
+                                    : '#666666'.hexColor,
                               ),
                             ),
                           ),

@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -15,6 +14,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/model/index_category.dart';
 import 'package:holdem/model/video_bean.dart';
+import 'package:holdem/page/home/widgets/home_course_group.dart';
 import 'package:holdem/page/home/widgets/home_course_item.dart';
 import 'package:holdem/page/home/widgets/home_menu_animation.dart';
 import 'package:holdem/page/home/widgets/home_nemu_item.dart';
@@ -22,6 +22,7 @@ import 'package:holdem/page/home/widgets/home_tag_list_widget.dart';
 import 'package:holdem/page/home/widgets/home_title.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
@@ -29,7 +30,10 @@ import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../model/banner.dart';
+import '../../model/course_group_model.dart';
+import '../../model/course_model.dart';
 import '../../model/home_hot_tag_model.dart';
+import '../../services/course_service.dart';
 import '../../services/home_service.dart';
 import '../../stores/user_store.dart';
 import '../../utils/event_bus_util.dart';
@@ -357,12 +361,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       children: controller.videoItems
                                           .map((e) => VideoHorizontalItem(
                                                 item: e,
-                                                onTap: () =>
-                                                    TrackUtils.trackEvent(userLogType: '101008', params: e.id),
+                                                onTap: () => TrackUtils.trackEvent(userLogType: '101008', params: e.id),
                                               ))
                                           .toList(),
                                     ),
-                                    SizedBox(height: 12.w),
+                                    HomeCourseGroup(),
                                     const HomeTitle(title: '德州教程'),
                                     SizedBox(height: 16.w),
                                     LayoutBuilder(

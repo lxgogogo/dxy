@@ -7,7 +7,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   List<BannerBean> banners = [];
   List<ArticleBean> videoItems = [];
-  List<IndexCategory> courseItems = [];
+
+  List<CourseGroupModel> courseGroups = [];
+  CourseGroupModel? courseGroup;
+  List<CourseModel> courseItems = [];
+
+  List<IndexCategory> oldCourseItems = [];
   List<ArticleBean> bookItems = [];
   List<VideoBean> hotVideos = [];
   List<HomeHotTagModel> tagList = [];
@@ -33,7 +38,8 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   void loadData() {
     loadBanners();
     loadHotVideos();
-    loadCourses();
+    loadCourseGroup();
+    loadOldCourses();
     loadBooks();
     loadHotTags();
     if (UserStore.of.isLogin) {
@@ -173,7 +179,57 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     Get.toNamed(Routes.videoList);
   }
 
+  Future<void> onChangeType(CourseGroupModel type) async {
+    bool canSelect = true;
+    if (!UserStore.of.isLogin) {
+      canSelect = type.value?.tourist != 1 && type.value?.des != 'ALL';
+    }
+    if (canSelect) {
+      courseGroup = type;
+      await loadCourses();
+    } else {
+      DialogUtil.showToast('登录解锁全部内容');
+    }
+  }
+
+  Future<void> loadCourseGroup({bool needResetGroup = false}) async {
+    try {
+      final res = await CourseService.of.courseDefined();
+      if (res.isSuccess) {
+        final listRes = res.data?['courseGroup'] as List? ?? [];
+        courseGroups = listRes.map((e) => CourseGroupModel.fromJson(e)).toList();
+        if (courseGroups.isNotEmpty) {
+          courseGroup = courseGroups.first;
+          safeUpdate();
+          await loadCourses();
+        }
+      }
+    } catch (e) {
+      courseGroups = [];
+      courseGroup = null;
+    }
+  }
+
   Future<void> loadCourses() async {
+    final type = courseGroup?.value?.des;
+    final res = await CourseService.of.courseIndex(
+      type,
+      pageNum: 1,
+      pageSize: 3,
+    );
+    if (res.isSuccess) {
+      final listRes = res.data?['list'] as List? ?? [];
+      final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
+      courseItems.assignAll(records);
+      safeUpdate();
+    }
+  }
+
+  void toCourseDetail(CourseModel item) {
+    Get.toNamed(Routes.courseDetails, arguments: {'id': item.id});
+  }
+
+  Future<void> loadOldCourses() async {
     await NetRequest().courseCategory(
       {
         "parentAlias": "course",
@@ -185,7 +241,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
           data.map((category) => IndexCategory.fromJson(category)),
         );
         if (items.isNotEmpty) {
-          courseItems.assignAll(items);
+          oldCourseItems.assignAll(items);
           safeUpdate();
         }
       },

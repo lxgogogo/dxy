@@ -11,7 +11,7 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
-import 'package:super_tooltip/super_tooltip.dart';
+import 'dart:math' as math;
 
 import '../../gen/assets.gen.dart';
 import '../../model/board_info.dart';
@@ -52,6 +52,8 @@ class _FeedListScreenState extends State<FeedListScreen>
     'like',
   ];
   int filterIndex = 0;
+
+  bool _isDown = true;
 
   final List<GlobalKey> _pageKeys = [
     GlobalKey<FeedListChildViewState>()
@@ -193,16 +195,27 @@ class _FeedListScreenState extends State<FeedListScreen>
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
+                            _isDown = false;
+                            if (mounted) {
+                              setState(() {});
+                            }
                             showCommonOperationsSheet(
                               items: filters,
                               onSelectItem: (int index) {
                                 if (filterIndex != index) {
+                                  _isDown = false;
                                   filterIndex = index;
                                   String order = filterCode[filterIndex];
                                   final keys = _pageKeys[selIndex] as GlobalKey<FeedListChildViewState>;
                                   keys.currentState?.refreshFilter(order);
                                 }
                               },
+                              endAction: () {
+                                _isDown = true;
+                                if (mounted) {
+                                  setState(() {});
+                                }
+                              }
                             );
                           },
                           child: Padding(
@@ -219,11 +232,18 @@ class _FeedListScreenState extends State<FeedListScreen>
                                   ),
                                 ),
                                 SizedBox(width: 4.w),
-                                SvgPicture.asset(
-                                  Assets.svg.arrowDown,
-                                  width: 10.w,
-                                  height: 10.w,
-                                ),
+                                if (_isDown)
+                                  SvgPicture.asset(
+                                    Assets.svg.arrowDown,
+                                    width: 10.w,
+                                    height: 10.w,
+                                  )
+                                else
+                                  Image.asset(
+                                    'assets/images/icon_arrow_up.png',
+                                    width: 10.w,
+                                    height: 10.w,
+                                  )
                               ],
                             ),
                           ),

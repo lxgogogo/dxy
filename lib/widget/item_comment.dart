@@ -106,7 +106,7 @@ class _CommentItemState extends State<CommentItem> {
       content = '确定关注 $name 吗?';
       if (widget.commentBean.followed == true) {
         title = '取消关注';
-        content = '取消关注 $name 吗?';
+        content = '确定取消关注 $name 吗?';
       }
     } else {
       id = data.user?.id ?? 0;
@@ -116,7 +116,7 @@ class _CommentItemState extends State<CommentItem> {
       content = '确定关注 $name 吗?';
       if (data.followed == true) {
         title = '取消关注';
-        content = '取消关注 $name 吗?';
+        content = '确定取消关注 $name 吗?';
       }
     }
     if (followed) {

@@ -4,13 +4,16 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
+import 'scale_button_wraper.dart';
+
 void showCommonOperationsSheet({
   required List<String> items,
   required Function(int index) onSelectItem,
   int? selectedIndex,
   double maxHeight = double.infinity,
   OperationItemBuilder? itemBuilder,
-  Widget? overflowWidget
+  Widget? overflowWidget,
+  Function? endAction
 }) {
   Get.bottomSheet(
     ConstrainedBox(
@@ -24,7 +27,11 @@ void showCommonOperationsSheet({
       ),
     ),
     barrierColor: Colors.black.withOpacity(0.4),
-  );
+  ).whenComplete(() {
+    if (endAction != null) {
+      endAction();
+    }
+  });
 }
 
 typedef OperationItemBuilder = Widget Function(int index);
@@ -63,34 +70,36 @@ class CommonOperationsSheet extends StatelessWidget {
                 children: [
                   ...items.map((e) {
                     final index = items.indexOf(e);
-                    return GestureDetector(
-                        onTap: () {
-                          onSelectItem(index);
-                          Get.back();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                width: 1.w,
-                                color: ColorStyle.c333333.withOpacity(0.05),
-                              ),
+                    return ScaleButtonWrapper(
+                      onTap: () {
+                        onSelectItem(index);
+                        Get.back();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                            bottom: BorderSide(
+                              width: 1.w,
+                              color: ColorStyle.c333333.withOpacity(0.05),
                             ),
                           ),
-                          child: itemBuilder != null
-                              ? itemBuilder!(index)
-                              : Text(
-                            e,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
-                              fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.center,
+                        ),
+                        child: itemBuilder != null
+                            ? itemBuilder!(index)
+                            : Text(
+                          e,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
+                            fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
                           ),
-                        ));
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                    );
                   })
                 ],
               ),

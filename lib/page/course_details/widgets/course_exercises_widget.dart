@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,7 +29,6 @@ class CourseExercisesWidget extends StatefulWidget {
 }
 
 class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
-
   List<CourseExerciseModel> _practiseList = [];
   List<CourseExerciseAnswerModel> _dataList = [];
   CourseExerciseAnswerModel? _selectAnswerModel;
@@ -156,13 +154,13 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           pairsText: data.pairsText ?? '',
           integral: data.integral ?? 0,
           showPairsTips: showPairsTips, () {
-            Get.close(0);
-            Get.close(0);
-            _result();
-            if (end) {
-              _endAlert(data, evenPairs: true);
-            }
-          });
+        Get.close(0);
+        Get.close(0);
+        _result();
+        if (end) {
+          _endAlert(data, evenPairs: true);
+        }
+      });
     }
   }
 
@@ -198,10 +196,10 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     String str = (data.answer ?? false) ? '泰裤辣！' : '不正确';
     AnswerResultsSheet.show(
         data.answer ?? false, data.answerStr ?? '', data.text ?? str,
-            (isCorrect) {
-          Get.close(0);
-          _result(isCorrect: isCorrect);
-        });
+        (isCorrect) {
+      Get.close(0);
+      _result(isCorrect: isCorrect);
+    });
     // 答题正确的情况弹窗
     if (data.answer == true) {
       if (_currentPage == _practiseList.length - 1) {
@@ -262,7 +260,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double progress = (_currentPage+1)/_totalPage;
+    double progress = (_currentPage + 1) / _totalPage;
     return Container(
       padding: EdgeInsets.all(16.w).copyWith(right: 0),
       decoration: BoxDecoration(
@@ -298,8 +296,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
             ],
           ),
           SizedBox(height: 16.w),
-          if (_practiseList.isNotEmpty &&
-              _currentPage < _practiseList.length)
+          if (_practiseList.isNotEmpty && _currentPage < _practiseList.length)
             _buildPageWidget(_practiseList[_currentPage]),
           SizedBox(height: 12.w),
           Padding(
@@ -368,12 +365,14 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                       return Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
-                          width: progress * constraints.maxWidth,
-                          decoration: BoxDecoration(
-                            color: '#557BF6'.hexColor,
-                            borderRadius: BorderRadius.all(Radius.circular(2.w)),
-                          )
-                        ),
+                            width: !_canEdit
+                                ? constraints.maxWidth
+                                : progress * constraints.maxWidth,
+                            decoration: BoxDecoration(
+                              color: '#557BF6'.hexColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2.w)),
+                            )),
                       );
                     },
                   ),
@@ -385,7 +384,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                     spacing: 8.w,
                     children: List.generate(
                       _practiseList.length,
-                          (index) {
+                      (index) {
                         final isCompleted = index < _completed;
                         final model = _practiseList[index];
                         return GestureDetector(
@@ -400,8 +399,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                               color: model.select == true
                                   ? ColorStyle.c557BF6
                                   : isCompleted
-                                  ? '#557BF6'.hexColor.withOpacity(0.1)
-                                  : '#333333'.hexColor.withOpacity(0.1),
+                                      ? '#557BF6'.hexColor.withOpacity(0.1)
+                                      : '#333333'.hexColor.withOpacity(0.1),
                             ),
                             alignment: Alignment.center,
                             child: Text(
@@ -411,8 +410,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                 color: model.select == true
                                     ? Colors.white
                                     : isCompleted
-                                    ? '#557BF6'.hexColor
-                                    : '#666666'.hexColor,
+                                        ? '#557BF6'.hexColor
+                                        : '#666666'.hexColor,
                               ),
                             ),
                           ),
@@ -450,8 +449,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
               return null;
             },
             onTapUrl: (String url) async {
-              return launchUrlString(url,
-                  mode: LaunchMode.externalApplication);
+              return launchUrlString(url, mode: LaunchMode.externalApplication);
             },
           ),
           SizedBox(height: 50.w),

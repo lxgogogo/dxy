@@ -235,6 +235,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
               ],
             ),
           ),
+          SizedBox(height: 15.w)
         ],
       ),
     );

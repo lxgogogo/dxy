@@ -12,7 +12,6 @@ import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
-import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../model/collect_group_model.dart';
@@ -23,7 +22,6 @@ import '../../../utils/event_bus_util.dart';
 import '../../../utils/net_request.dart';
 import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
-import '../../../widget/common_tab_widget.dart';
 import '../../../widget/dialog_common.dart';
 import '../../../widget/no_data.dart';
 import 'mine_collect_item.dart';
@@ -295,59 +293,61 @@ class _MineCollectViewState extends State<MineCollectView>
         final maxWidth = constraints.maxWidth;
         return SlidableAutoCloseBehavior(
           child: SmartRefresher(
-              scrollController: scrollController,
-              enablePullDown: true,
-              enablePullUp: true,
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
-              child: loaded && collectList.isEmpty
-                  ? const Center(child: NoDataView())
-                  : ListView.builder(
-                      itemBuilder: (c, i) {
-                        return Slidable(
-                            groupTag: '1-list',
-                            key: ValueKey('${collectList[i].id}'),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              extentRatio: 42 / maxWidth,
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    await showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (context) => CommonDialog(
-                                        title: '删除收藏',
-                                        content: '确定要删除这个收藏吗？',
-                                        confirmText: '确认',
-                                        onConfirm: () {
-                                          Navigator.of(context).pop();
-                                          NetRequest().favoriteDelete(
-                                              collectList[i].id, (data) {
-                                            if (_isMounted) {
-                                              DialogUtil.showToast('删除成功');
-                                              collectList.removeAt(i);
-                                              setState(() {});
-                                              _requestGroupData();
-                                              TrackUtils.trackEvent(userLogType: '113007');
-                                            }
-                                          });
-                                        },
+                  scrollController: scrollController,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  onLoading: _onLoading,
+                  child: loaded && collectList.isEmpty
+                      ? const Center(child: NoDataView())
+                      : ListView.builder(
+                          itemBuilder: (c, i) {
+                            return Slidable(
+                                groupTag: '1-list',
+                                key: ValueKey('${collectList[i].id}'),
+                                endActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                  extentRatio: 42 / maxWidth,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder: (context) => CommonDialog(
+                                            title: '删除收藏',
+                                            content: '确定要删除这个收藏吗？',
+                                            confirmText: '确认',
+                                            onConfirm: () {
+                                              Navigator.of(context).pop();
+                                              NetRequest().favoriteDelete(
+                                                  collectList[i].id, (data) {
+                                                if (_isMounted) {
+                                                  DialogUtil.showToast('删除成功');
+                                                  collectList.removeAt(i);
+                                                  setState(() {});
+                                                  _requestGroupData();
+                                                  TrackUtils.trackEvent(
+                                                      userLogType: '113007');
+                                                }
+                                              });
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      child: SvgPicture.asset(
+                                        'assets/svg/icon_delete.svg',
+                                        width: 22,
+                                        height: 22,
                                       ),
-                                    );
-                                  },
-                                  child: SvgPicture.asset(
-                                    'assets/svg/icon_delete.svg',
-                                    width: 22,
-                                    height: 22,
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: MyCollectItem(item: collectList[i]));
-                      },
-                      itemCount: collectList.length)).scrollToTopWrapper(
+                                child: MyCollectItem(item: collectList[i]));
+                          },
+                          itemCount: collectList.length))
+              .scrollToTopWrapper(
             scrollController,
           ),
         );
@@ -360,17 +360,19 @@ class _MineCollectViewState extends State<MineCollectView>
       builder: (context, constraints) {
         return SlidableAutoCloseBehavior(
           child: SmartRefresher(
-              enablePullDown: true,
-              enablePullUp: true,
-              controller: _refreshController2,
-              onRefresh: _onRefresh,
-              child: loaded && groupCollectList.isEmpty
-                  ? const Center(child: NoDataView())
-                  : ListView.builder(
-                      itemBuilder: (c, i) {
-                        return _buildGroupItemWidget(i);
-                      },
-                      itemCount: groupCollectList.length)),
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  scrollController: _listController,
+                  controller: _refreshController2,
+                  onRefresh: _onRefresh,
+                  child: loaded && groupCollectList.isEmpty
+                      ? const Center(child: NoDataView())
+                      : ListView.builder(
+                          itemBuilder: (c, i) {
+                            return _buildGroupItemWidget(i);
+                          },
+                          itemCount: groupCollectList.length))
+              .scrollToTopWrapper(_listController),
         );
       },
     );
@@ -403,8 +405,7 @@ class _MineCollectViewState extends State<MineCollectView>
                       blurRadius: 8,
                       spreadRadius: 0),
                 ],
-                color: Colors.white
-            ),
+                color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

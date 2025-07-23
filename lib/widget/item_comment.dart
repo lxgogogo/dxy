@@ -88,7 +88,75 @@ class _CommentItemState extends State<CommentItem> {
     );
   }
 
-  void _followToggle(int id, bool followed, Function callBack) {
+  void _followToggle({int type = 0, var data}) async {
+    if (!UserStore.of.isLogin) {
+      Get.toNamed(Routes.login);
+      return;
+    }
+    String title = '';
+    String content = '';
+    String name = '';
+    int id = 0;
+    bool followed = false;
+    if (type == 0) {
+      id = widget.commentBean.user?.id ?? 0;
+      followed = !(widget.commentBean.followed ?? false);
+      name = widget.commentBean.user?.nickname ?? '';
+      title = '关注';
+      content = '确定关注 $name 吗?';
+      if (widget.commentBean.followed == true) {
+        title = '取消关注';
+        content = '取消关注 $name 吗?';
+      }
+    } else {
+      id = data.user?.id ?? 0;
+      followed = !(data.followed ?? false);
+      name = data.user?.nickname ?? '';
+      title = '关注';
+      content = '确定关注 $name 吗?';
+      if (data.followed == true) {
+        title = '取消关注';
+        content = '取消关注 $name 吗?';
+      }
+    }
+    if (followed) {
+      _submitFollowData(id, followed, () {
+        if (type == 0) {
+          widget.commentBean.followed = followed;
+        } else {
+          data.followed = followed;
+        }
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    } else {
+      await showDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: (context) => CommonDialog(
+            title: title,
+            content: content,
+            confirmText: '确认',
+            onConfirm: () {
+              Get.close(0);
+              _submitFollowData(id, followed, () {
+                if (type == 0) {
+                  widget.commentBean.followed = followed;
+                } else {
+                  data.followed = followed;
+                }
+                if (mounted) {
+                  setState(() {});
+                }
+              });
+            },
+          ));
+    }
+
+  }
+
+  void _submitFollowData(id, followed, Function callBack) {
     UserStore.of.checkLogin(() {
       NetRequest().followerToggle(id, followed, (data) {
         if (followed) {
@@ -96,8 +164,8 @@ class _CommentItemState extends State<CommentItem> {
         } else {
           DialogUtil.showToast('取消关注成功');
         }
+        callBack();
         _updateFollowData(id, followed);
-        callBack(followed);
       });
     });
   }
@@ -156,40 +224,7 @@ class _CommentItemState extends State<CommentItem> {
                               .isMe(widget.commentBean.user?.id), //
                           child: GestureDetector(
                             onTap: () async {
-                              if (!UserStore.of.isLogin) {
-                                Get.toNamed(Routes.login);
-                                return;
-                              }
-                              String name = widget.commentBean.user?.nickname ?? '';
-                              String title = '关注';
-                              String content = '确定关注 $name 吗?';
-                              if (widget.commentBean.followed == true) {
-                                title = '取消关注';
-                                content = '取消关注 $name 吗?';
-                              }
-                              await showDialog(
-                                barrierDismissible: true,
-                                context: context,
-                                builder: (context) => CommonDialog(
-                                  title: title,
-                                  content: content,
-                                  confirmText: '确认',
-                                  onConfirm: () {
-                                    Get.close(0);
-                                    if (mounted) {
-                                      setState(() {
-                                        widget.commentBean.followed =
-                                            !(widget.commentBean.followed ??
-                                                false);
-                                      });
-                                    }
-                                    _followToggle(
-                                        widget.commentBean.user?.id ?? 0,
-                                        widget.commentBean.followed ?? false,
-                                        (value) {});
-                                  },
-                                ),
-                              );
+                              _followToggle(type: 0);
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 4.w),
@@ -457,44 +492,9 @@ class _CommentItemState extends State<CommentItem> {
                                                     .isMe(reply.user?.id),
                                                 child: GestureDetector(
                                                   onTap: () async {
-                                                    if (!UserStore.of.isLogin) {
-                                                      Get.toNamed(Routes.login);
-                                                      return;
-                                                    }
-                                                    String name = reply.user?.nickname ?? '';
-                                                    String title = '关注';
-                                                    String content = '确定关注 $name 吗?';
-                                                    if (reply.followed ==
-                                                        true) {
-                                                      title = '取消关注';
-                                                      content = '取消关注 $name 吗?';
-                                                    }
-                                                    await showDialog(
-                                                      barrierDismissible: true,
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          CommonDialog(
-                                                        title: title,
-                                                        content: content,
-                                                        confirmText: '确认',
-                                                        onConfirm: () {
-                                                          Get.close(0);
-                                                          if (mounted) {
-                                                            setState(() {
-                                                              reply.followed =
-                                                                  !(reply.followed ??
-                                                                      false);
-                                                            });
-                                                          }
-                                                          _followToggle(
-                                                              reply.user?.id ??
-                                                                  0,
-                                                              reply.followed ??
-                                                                  false,
-                                                              (value) {});
-                                                        },
-                                                      ),
-                                                    );
+                                                    _followToggle(
+                                                        type: 0,
+                                                        data: reply);
                                                   },
                                                   child: Container(
                                                     margin: EdgeInsets.only(
@@ -513,7 +513,9 @@ class _CommentItemState extends State<CommentItem> {
                                                           color: reply.followed ==
                                                                   true
                                                               ? ColorStyle
-                                                                  .c333333.withOpacity(0.1)
+                                                                  .c333333
+                                                                  .withOpacity(
+                                                                      0.1)
                                                               : ColorStyle
                                                                   .c557BF6
                                                                   .withOpacity(

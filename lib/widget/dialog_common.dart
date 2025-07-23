@@ -14,6 +14,7 @@ class CommonDialog extends StatelessWidget {
   final String cancelText;
   final bool onlyConfirm;
   final bool showClose;
+  final Widget? contentWidget;
 
   const CommonDialog(
       {super.key,
@@ -24,7 +25,8 @@ class CommonDialog extends StatelessWidget {
       this.confirmText = '确定',
       this.cancelText = '取消',
       this.onlyConfirm = false,
-      this.showClose = true});
+      this.showClose = true,
+      this.contentWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -69,20 +71,19 @@ class CommonDialog extends StatelessWidget {
                     )
                 ],
               ),
-              if (content?.isNotEmpty ?? false)
+              if ((content?.isNotEmpty ?? false) || contentWidget != null)
                 Center(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 16.w, bottom: 24.w),
-                    child: Text(
-                      content ?? '',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 14.w,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
+                      padding: EdgeInsets.only(top: 16.w, bottom: 24.w),
+                      child: contentWidget ?? Text(
+                              content ?? '',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: '#333333'.hexColor,
+                                fontSize: 14.w,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ))
                 )
               else
                 SizedBox(height: 24.w),

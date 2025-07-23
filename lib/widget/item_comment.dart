@@ -94,7 +94,6 @@ class _CommentItemState extends State<CommentItem> {
       return;
     }
     String title = '';
-    String content = '';
     String name = '';
     int id = 0;
     bool followed = false;
@@ -103,20 +102,16 @@ class _CommentItemState extends State<CommentItem> {
       followed = !(widget.commentBean.followed ?? false);
       name = widget.commentBean.user?.nickname ?? '';
       title = '关注';
-      content = '确定关注 $name 吗?';
       if (widget.commentBean.followed == true) {
         title = '取消关注';
-        content = '确定取消关注 $name 吗?';
       }
     } else {
       id = data.user?.id ?? 0;
       followed = !(data.followed ?? false);
       name = data.user?.nickname ?? '';
       title = '关注';
-      content = '确定关注 $name 吗?';
       if (data.followed == true) {
         title = '取消关注';
-        content = '确定取消关注 $name 吗?';
       }
     }
     if (followed) {
@@ -136,7 +131,39 @@ class _CommentItemState extends State<CommentItem> {
           context: context,
           builder: (context) => CommonDialog(
             title: title,
-            content: content,
+            contentWidget: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '确定取消关注 ',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: '#333333'.hexColor,
+                    fontSize: 14.w,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: '#333333'.hexColor,
+                    fontSize: 14.w,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  ' 吗？',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: '#333333'.hexColor,
+                    fontSize: 14.w,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ],
+            ),
             confirmText: '确认',
             onConfirm: () {
               Get.close(0);

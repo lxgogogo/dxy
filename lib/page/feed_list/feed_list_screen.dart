@@ -10,6 +10,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/keepalive_wrapper.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../gen/assets.gen.dart';
@@ -26,13 +27,15 @@ class FeedListScreen extends StatefulWidget {
   State<FeedListScreen> createState() => _FeedListScreenState();
 }
 
-class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProviderStateMixin {
+class _FeedListScreenState extends State<FeedListScreen>
+    with SingleTickerProviderStateMixin {
+  final PageController _pageController = PageController();
   List<BoardInfo> boardInfoList = [];
 
   List<BoardInfo> get showBoardInfoList => [
-        BoardInfo(id: 0, name: '全部'),
-        ...boardInfoList,
-      ];
+    BoardInfo(id: 0, name: '全部'),
+    ...boardInfoList,
+  ];
 
   int selIndex = 0;
 
@@ -50,7 +53,9 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   ];
   int filterIndex = 0;
 
-  final _pageKey = GlobalKey<FeedListChildViewState>();
+  final List<GlobalKey> _pageKeys = [
+    GlobalKey<FeedListChildViewState>()
+  ];
 
   StreamSubscription? eventSubscription;
 
@@ -58,9 +63,10 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
   void initState() {
     super.initState();
     getPlateData();
-    eventSubscription = EventBusUtil.of.on<EventRefreshFeedTabs>().listen((event) {
-      getPlateData();
-    });
+    eventSubscription =
+        EventBusUtil.of.on<EventRefreshFeedTabs>().listen((event) {
+          getPlateData();
+        });
   }
 
   @override
@@ -71,9 +77,14 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
 
   void getPlateData() {
     NetRequest().getBoardData(showLoading: false, (data) {
-      List<BoardInfo> dataList = List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
+      List<BoardInfo> dataList =
+      List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
+      boardInfoList = dataList;
+      _pageKeys.clear();
+      for (int i = 0; i < showBoardInfoList.length; i++) {
+        _pageKeys.add(GlobalKey<FeedListChildViewState>());
+      }
       if (mounted) {
-        boardInfoList = dataList;
         setState(() {});
       }
     });
@@ -119,14 +130,12 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                         onTap: () {
                           selIndex = index;
                           setState(() {});
-                          final order = filterCode[filterIndex];
-                          final boardId = showBoardInfoList[selIndex].id;
-                          if (boardId == null) return;
-                          _pageKey.currentState?.refreshData(
-                            boardId,
-                            order,
+                          final boardId = showBoardInfoList[selIndex].id ?? 0;
+                          _pageController.animateToPage(
+                            index,
+                            duration: const Duration(milliseconds: 100),
+                            curve: Curves.linear,
                           );
-
                           TrackUtils.trackEvent(
                             userLogType: '108001',
                             params: boardId,
@@ -139,25 +148,29 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                           alignment: Alignment.center,
                           decoration: selIndex != index
                               ? ShapeDecoration(
-                                  color: '#333333'.hexColor.withOpacity(0.05),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(24.r),
-                                  ),
-                                )
+                            color: '#333333'.hexColor.withOpacity(0.05),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24.r),
+                            ),
+                          )
                               : BoxDecoration(
-                                  borderRadius: BorderRadius.circular(24.w),
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      '557BF6'.hexColor,
-                                      '84BCF9'.hexColor,
-                                    ],
-                                  ),
-                                ),
+                            borderRadius: BorderRadius.circular(24.w),
+                            gradient: LinearGradient(
+                              colors: [
+                                '557BF6'.hexColor,
+                                '84BCF9'.hexColor,
+                              ],
+                            ),
+                          ),
                           child: Text(
                             showBoardInfoList[index].name!,
                             style: TextStyle(
-                              color: selIndex == index ? Colors.white : '#333333'.hexColor,
-                              fontWeight: selIndex == index ? FontWeight.w600 : FontWeight.w400,
+                              color: selIndex == index
+                                  ? Colors.white
+                                  : '#333333'.hexColor,
+                              fontWeight: selIndex == index
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
                               fontSize: 12.sp,
                             ),
                           ),
@@ -186,7 +199,8 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                                 if (filterIndex != index) {
                                   filterIndex = index;
                                   String order = filterCode[filterIndex];
-                                  _pageKey.currentState?.refreshFilter(order);
+                                  final keys = _pageKeys[selIndex] as GlobalKey<FeedListChildViewState>;
+                                  keys.currentState?.refreshFilter(order);
                                 }
                               },
                             );
@@ -215,7 +229,18 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                           ),
                         ),
                       ),
-                      Expanded(child: FeedListChildView(key: _pageKey)),
+                      Expanded(
+                          child: PageView(
+                            controller: _pageController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            children: [
+                              FeedListChildView(
+                                key: _pageKeys[selIndex],
+                                order: filterCode[filterIndex],
+                                boardId: showBoardInfoList[selIndex].id ?? 0,
+                              ).keepAlive
+                            ],
+                          )),
                     ],
                   )),
             )

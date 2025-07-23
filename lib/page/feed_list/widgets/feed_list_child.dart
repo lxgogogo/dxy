@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/board_list.dart';
@@ -18,13 +19,17 @@ import '../../../widget/report_sheet.dart';
 import '../../../widget/special_classic_footer.dart';
 
 class FeedListChildView extends StatefulWidget {
-  const FeedListChildView({super.key});
+
+  final String order;
+  final int boardId;
+  const FeedListChildView({
+    super.key, required this.boardId, required this.order});
 
   @override
   State<FeedListChildView> createState() => FeedListChildViewState();
 }
 
-class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeepAliveClientMixin {
+class FeedListChildViewState extends State<FeedListChildView> {
   late int tabIdValue;
 
   int pageNum = 1;
@@ -46,7 +51,9 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
     EventBusUtil.of.fire(EventRefreshFeedTabs());
     pageNum = 1;
     isLoaded = false;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     reqListData();
   }
 
@@ -79,11 +86,12 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
 
   @override
   void initState() {
-    tabIdValue = pageId; //widget.tabId;
     super.initState();
-
+    pageId = widget.boardId;
+    tabIdValue = widget.boardId;
+    boardSort = widget.order;
+    tabIdValue = pageId; //widget.tabId;
     reqListData();
-
     tabEvent = EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
       if (event.tabIndex == 1) {
         _onRefresh();
@@ -99,7 +107,9 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
         boardPostList[index].favoriteCount = event.favoriteCount;
         boardPostList[index].likeCount = event.likeCount;
         boardPostList[index].commentCount = event.commentCount;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
   }
@@ -157,7 +167,9 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
       _refreshController.loadFailed();
     } finally {
       isLoaded = true;
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -203,9 +215,8 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     if (!isLoaded) {
-      return const SizedBox();
+      return const CupertinoActivityIndicator(color: Colors.grey);
     }
     return SmartRefresher(
       enablePullDown: true,
@@ -216,44 +227,41 @@ class FeedListChildViewState extends State<FeedListChildView> with AutomaticKeep
       scrollController: scrollController,
       child: boardPostList.isNotEmpty
           ? CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int i) {
-                      return FeedItem(
-                        boardPostList[i],
-                        onShield: () {
-                          if (boardPostList[i].id != null) {
-                            _onShield(boardPostList[i].id!);
-                          }
-                        },
-                        onShieldUser: () {
-                          if (boardPostList[i].user?.id != null) {
-                            _onShieldUser(boardPostList[i].user!.id!);
-                          }
-                        },
-                        onReport: () {
-                          if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
-                            _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
-                          }
-                        },
-                        onTap: () => TrackUtils.trackEvent(
-                          userLogType: '108002',
-                          params: boardPostList[i].id,
-                        ),
-                      );
-                    },
-                    childCount: boardPostList.length,
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int i) {
+                return FeedItem(
+                  boardPostList[i],
+                  onShield: () {
+                    if (boardPostList[i].id != null) {
+                      _onShield(boardPostList[i].id!);
+                    }
+                  },
+                  onShieldUser: () {
+                    if (boardPostList[i].user?.id != null) {
+                      _onShieldUser(boardPostList[i].user!.id!);
+                    }
+                  },
+                  onReport: () {
+                    if (boardPostList[i].id != null && boardPostList[i].user?.id != null) {
+                      _onReport(boardPostList[i].id!, boardPostList[i].user!.id!);
+                    }
+                  },
+                  onTap: () => TrackUtils.trackEvent(
+                    userLogType: '108002',
+                    params: boardPostList[i].id,
                   ),
-                ),
-              ],
-            )
+                );
+              },
+              childCount: boardPostList.length,
+            ),
+          ),
+        ],
+      )
           : const Center(child: NoDataView()),
     ).scrollToTopWrapper(
       scrollController,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

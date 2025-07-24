@@ -87,7 +87,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
                   ),
                 ),
                 imageGallery(),
-                buildBottomToolbar(context),
+                buildBottomToolbar(context)
               ],
             ),
           ),
@@ -210,7 +210,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
   Widget buildBottomToolbar(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12.w),
+        padding: EdgeInsets.symmetric(vertical: 12.w).copyWith(bottom: 24.w),
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.black.withOpacity(0.05)),

@@ -90,8 +90,8 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
                   alignment: Alignment.center,
                   child: SvgPicture.asset(
                     Assets.svg.iconToTop,
-                    width: 20.w,
-                    height: 20.w,
+                    width: 40.w,
+                    height: 40.w,
                   ),
                 ),
               );

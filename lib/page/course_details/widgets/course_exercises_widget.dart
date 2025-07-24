@@ -56,8 +56,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     _totalPage = data['total'] ?? 0;
     if (_completed <= 0) {
       _currentPage = 0;
-    } else {
-      _currentPage = _completed - 1;
+    } else if (_completed < _totalPage) {
+      _currentPage = _completed;
     }
     final practiseData = data['practiseList'] ?? [];
     print('练习题数量:${practiseData.length}');

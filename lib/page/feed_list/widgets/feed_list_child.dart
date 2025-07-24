@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/model/board_list.dart';
 import 'package:holdem/utils/event_bus_util.dart';
@@ -261,6 +262,7 @@ class FeedListChildViewState extends State<FeedListChildView> {
       )
           : const Center(child: NoDataView()),
     ).scrollToTopWrapper(
+      bottom: 30.w,
       scrollController,
     );
   }

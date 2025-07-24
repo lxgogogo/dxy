@@ -59,6 +59,7 @@ class MessageChildViewState extends State<MessageChildView> {
               itemCount: widget.controller.items.length,
             ),
     ).scrollToTopWrapper(
+      bottom: 30.w,
       widget.controller.scrollController,
     );
   }

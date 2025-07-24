@@ -10,12 +10,14 @@ class ScrollToTopWidget extends StatefulWidget {
   final ScrollController scrollController;
   final Widget child;
   final double scrollThreshold;
+  final double? bottom;
 
   const ScrollToTopWidget({
     super.key,
     required this.scrollController,
     required this.child,
     this.scrollThreshold = 0.25,
+    this.bottom
   });
 
   @override
@@ -57,12 +59,13 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double bottom = widget.bottom ?? 30.w; //kToolbarHeight + 30.w
     return Stack(
       children: [
         widget.child,
         Positioned(
           right: 16.w,
-          bottom: 30.w,
+          bottom: bottom,
           child: ValueListenableBuilder<bool>(
             valueListenable: _isVisibleNotifier,
             builder: (context, isVisible, child) {
@@ -101,8 +104,9 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
 }
 
 extension ScrollWrapper on Widget {
-  Widget scrollToTopWrapper(ScrollController scrollController) {
+  Widget scrollToTopWrapper(ScrollController scrollController, {double? bottom}) {
     return ScrollToTopWidget(
+      bottom: bottom,
       scrollController: scrollController,
       child: this,
     );

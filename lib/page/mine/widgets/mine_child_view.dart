@@ -272,6 +272,7 @@ class _MineChildViewState extends State<MineChildView> with TickerProviderStateM
                             : commentDataList.length,
                   ),
           ).scrollToTopWrapper(
+            bottom: 30.w,
             scrollController,
           ),
         );

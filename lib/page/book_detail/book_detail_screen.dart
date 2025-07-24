@@ -276,6 +276,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               ],
                             ),
                           ).scrollToTopWrapper(
+                            bottom: 30.w,
                             controller.scrollController,
                           ),
                         ),

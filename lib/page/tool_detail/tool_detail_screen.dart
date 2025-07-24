@@ -255,6 +255,7 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                               ],
                             ),
                           ).scrollToTopWrapper(
+                            bottom: 30.w,
                             controller.scrollController,
                           ),
                         ),

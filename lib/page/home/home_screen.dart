@@ -457,6 +457,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         ],
                       ),
                     ).scrollToTopWrapper(
+                      bottom: 30.w,
                       controller.scrollController,
                     ),
                     if (controller.isShowHomeMenu)

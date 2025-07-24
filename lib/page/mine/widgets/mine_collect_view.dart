@@ -348,6 +348,7 @@ class _MineCollectViewState extends State<MineCollectView>
                           },
                           itemCount: collectList.length))
               .scrollToTopWrapper(
+            bottom: 30.w,
             scrollController,
           ),
         );
@@ -372,7 +373,7 @@ class _MineCollectViewState extends State<MineCollectView>
                             return _buildGroupItemWidget(i);
                           },
                           itemCount: groupCollectList.length))
-              .scrollToTopWrapper(_listController),
+              .scrollToTopWrapper(bottom: 30.w,_listController),
         );
       },
     );

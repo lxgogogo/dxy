@@ -287,6 +287,7 @@ class FeedDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ).scrollToTopWrapper(
+                        bottom: 30.w,
                         controller.scrollController,
                       ),
                     ),

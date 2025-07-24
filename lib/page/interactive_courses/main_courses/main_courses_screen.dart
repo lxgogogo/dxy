@@ -370,6 +370,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                           ),
                         ),
                       ).scrollToTopWrapper(
+                        bottom: 30.w,
                         controller.scrollController,
                       ),
                     ),

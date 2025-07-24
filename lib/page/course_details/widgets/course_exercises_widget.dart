@@ -518,6 +518,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         child: Container(
           height: 46.w,
           alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
           decoration: BoxDecoration(
               color: bgColor,
               borderRadius: BorderRadius.all(Radius.circular(8.w)),

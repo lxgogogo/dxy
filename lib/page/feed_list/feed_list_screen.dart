@@ -201,6 +201,7 @@ class _FeedListScreenState extends State<FeedListScreen>
                             }
                             showCommonOperationsSheet(
                               items: filters,
+                              selectedIndex: filterIndex,
                               onSelectItem: (int index) {
                                 if (filterIndex != index) {
                                   _isDown = false;

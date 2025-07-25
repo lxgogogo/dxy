@@ -166,8 +166,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                           ];
                         },
                         body: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 16.w)
-                              .copyWith(bottom: 24.w),
+                          margin: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [

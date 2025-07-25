@@ -33,11 +33,16 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   List<CourseExerciseAnswerModel> _dataList = [];
   CourseExerciseAnswerModel? _selectAnswerModel;
   bool _submit = false;
+  bool _isCorrectAnswer = false;
+  // 按钮状态（true：点击后切换下一题，false：提交）
+  bool _buttonState = false;
   int _currentPage = 0;
   int _integral = 0;
   int _completed = 0;
   int _totalPage = 0;
   bool _canEdit = true;
+  String _answerStr = '';
+  String _correctStr = '';
 
   // TODO: Private Method
 
@@ -154,7 +159,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           pairsText: data.pairsText ?? '',
           integral: data.integral ?? 0,
           showPairsTips: showPairsTips, () {
-        Get.close(0);
+        _onContinue();
         Get.close(0);
         _result();
         if (end) {
@@ -193,13 +198,11 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       //_playSound('correct');
     }
     // 结果弹窗
-    String str = (data.answer ?? false) ? '泰裤辣！' : '不正确';
-    AnswerResultsSheet.show(
-        data.answer ?? false, data.answerStr ?? '', data.text ?? str,
-        (isCorrect) {
-      Get.close(0);
-      _result(isCorrect: isCorrect);
-    });
+    _answerStr = (data.answer ?? false) ? '泰裤辣！' : '不正确';
+    _correctStr = data.answerStr ?? '';
+    _isCorrectAnswer = data.answer ?? false;
+    _buttonState = true;
+    _update();
     // 答题正确的情况弹窗
     if (data.answer == true) {
       if (_currentPage == _practiseList.length - 1) {
@@ -216,8 +219,13 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     }
   }
 
+  void _onContinue() {
+    _buttonState = false;
+    _result(isCorrect: _isCorrectAnswer);
+  }
+
   void _selectOnTap(model) {
-    if (_canEdit) {
+    if (_canEdit && !_buttonState) {
       model.select = true;
       _selectAnswerModel = model;
       for (final m in _dataList) {
@@ -461,28 +469,89 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
               })
             ],
           ),
+          if (_buttonState && _canEdit) ...[
+            SizedBox(height: 20.w),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      _isCorrectAnswer
+                          ? Assets.courses.iconCoursesTrue.path
+                          : Assets.courses.iconCoursesWrong.path,
+                      width: 16.w,
+                      height: 16.w,
+                    ),
+                    SizedBox(width: 5.w),
+                    Text(
+                      _answerStr,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          color: _isCorrectAnswer
+                              ? AppTheme.color_39B423
+                              : ColorStyle.cFF3333,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                if (!_isCorrectAnswer) ...[
+                  SizedBox(height: 5.w),
+                  Text('正确答案：$_correctStr',
+                      style: TextStyle(
+                          fontSize: 12.sp,
+                          color: ColorStyle.cFF3333,
+                          fontWeight: FontWeight.w500))
+                ]
+              ],
+            )
+          ],
           SizedBox(height: 20.w),
-          GestureDetector(
-            onTap: _onPressed,
-            child: Container(
-              height: 50.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: _selectAnswerModel == null || !edit
-                      ? ColorStyle.c333333.withOpacity(0.1)
-                      : ColorStyle.c557BF6,
-                  borderRadius: BorderRadius.all(Radius.circular(8.w))),
-              child: Text(
-                !edit ? '已完成' : '提交',
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    color: _selectAnswerModel == null
-                        ? AppTheme.color_999999
-                        : Colors.white,
-                    fontWeight: FontWeight.w600),
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: _onPressed,
+                child: Container(
+                  height: 50.w,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: _selectAnswerModel == null || !edit
+                          ? ColorStyle.c333333.withOpacity(0.1)
+                          : ColorStyle.c557BF6,
+                      borderRadius: BorderRadius.all(Radius.circular(8.w))),
+                  child: Text(
+                    !edit ? '已完成' : '提交',
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        color: _selectAnswerModel == null
+                            ? AppTheme.color_999999
+                            : Colors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
               ),
-            ),
-          ),
+              if (_buttonState && _canEdit)
+                GestureDetector(
+                  onTap: _onContinue,
+                  child: Container(
+                    height: 50.w,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: _isCorrectAnswer
+                            ? AppTheme.color_39B423
+                            : ColorStyle.cFF3333,
+                        borderRadius: BorderRadius.all(Radius.circular(8.w))),
+                    child: Text(
+                      _isCorrectAnswer ? '继续' : '重试',
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+            ],
+          )
         ],
       ),
     );

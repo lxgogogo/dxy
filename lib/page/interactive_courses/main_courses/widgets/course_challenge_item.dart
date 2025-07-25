@@ -21,10 +21,6 @@ class CourseChallengeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.w).copyWith(right: 0),
-      decoration: BoxDecoration(
-        color: '#F9FCFF'.hexColor,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

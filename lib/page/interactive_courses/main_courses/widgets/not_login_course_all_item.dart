@@ -37,8 +37,8 @@ class NotLoginCourseAllItem extends StatelessWidget {
               if (item.icon?.isNotEmpty == true)...[
                 CommonImage.net(
                   imageUrl: item.icon ?? '',
-                  width: 12.w,
-                  height: 12.w,
+                  width: 24.w,
+                  height: 24.w,
                 ),
                 SizedBox(width: 5.w)
               ],

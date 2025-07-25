@@ -3,16 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/login/widgets/user_terms_uncheck.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/utils/app_theme.dart';
 
 import '../../../constants.dart';
-import '../../../model/user.dart';
 import '../../../services/index.dart';
 import '../../../stores/captcha_store.dart';
-import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
-import '../../../utils/event_bus_util.dart';
 import '../../../utils/dialog_util.dart';
 import '../../../utils/track_utils.dart';
 import '../login_screen.dart';
@@ -265,6 +262,7 @@ class _LoginContentState extends State<LoginContent> {
                             isOpen ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                             width: 18.w,
                             height: 18.w,
+                            color: AppTheme.color_999999,
                           ),
                         )
                       ],

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +14,10 @@ import 'package:holdem/stores/config_store.dart';
 import 'package:holdem/widget/close_image_button.dart';
 
 import '../../gen/assets.gen.dart';
-import '../../model/user.dart';
 import '../../services/index.dart';
-import '../../stores/storage.dart';
 import '../../stores/user_store.dart';
 import '../../utils/app_version_checker.dart';
 import '../../utils/env.dart';
-import '../../utils/event_bus_util.dart';
-import '../../utils/dialog_util.dart';
 import '../../widget/button.dart';
 import 'widgets/login_content.dart';
 

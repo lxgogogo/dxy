@@ -260,7 +260,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double progress = (_currentPage + 1) / _totalPage;
+    double progress = _currentPage / _totalPage;
     return Container(
       padding: EdgeInsets.all(16.w).copyWith(right: 0),
       decoration: BoxDecoration(

@@ -134,9 +134,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       AnswerResultsPageSheet.show(1, integral: _integral, () {
         Get.close(0);
         _result();
-        // 答题完成后要对数据进行查看处理
-        _canEdit = _completed == widget.item.total ? false : true;
-        _currentPage = _practiseList.length - 1;
         if (!_canEdit) {
           var selectM;
           for (int i = 0; i < _practiseList.length; i++) {
@@ -226,6 +223,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     if (data.answer == true) {
       if (_currentPage == _practiseList.length - 1) {
         // 答题结束
+        // 答题完成后要对数据进行查看处理
+        _canEdit = _completed == widget.item.total ? false : true;
+        _currentPage = _practiseList.length - 1;
         if ((data.pairsText ?? '').isNotEmpty) {
           _evenPairs(data, end: true);
         } else {
@@ -308,6 +308,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   @override
   Widget build(BuildContext context) {
     double progress = _currentPage / _totalPage;
+    if (!_canEdit) {
+      progress = 1.0;
+    }
     return Container(
       padding: EdgeInsets.all(16.w).copyWith(right: 0),
       decoration: BoxDecoration(

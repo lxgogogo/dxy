@@ -20,6 +20,14 @@ class $AssetsCoursesGen {
   AssetGenImage get iconCoursesFinished =>
       const AssetGenImage('assets/courses/icon_courses_finished.png');
 
+  /// File path: assets/courses/icon_courses_not_login.png
+  AssetGenImage get iconCoursesNotLogin =>
+      const AssetGenImage('assets/courses/icon_courses_not_login.png');
+
+  /// File path: assets/courses/icon_courses_tab_hot.png
+  AssetGenImage get iconCoursesTabHot =>
+      const AssetGenImage('assets/courses/icon_courses_tab_hot.png');
+
   /// File path: assets/courses/icon_courses_true.png
   AssetGenImage get iconCoursesTrue =>
       const AssetGenImage('assets/courses/icon_courses_true.png');
@@ -100,6 +108,8 @@ class $AssetsCoursesGen {
   List<AssetGenImage> get values => [
         iconCourseExcus,
         iconCoursesFinished,
+        iconCoursesNotLogin,
+        iconCoursesTabHot,
         iconCoursesTrue,
         iconCoursesWrong,
         iconResultsArrow,
@@ -129,13 +139,37 @@ class $AssetsEquityCenterGen {
   AssetGenImage get iconCenterBook =>
       const AssetGenImage('assets/equity_center/icon_center_book.png');
 
+  /// File path: assets/equity_center/icon_center_book2.png
+  AssetGenImage get iconCenterBook2 =>
+      const AssetGenImage('assets/equity_center/icon_center_book2.png');
+
+  /// File path: assets/equity_center/icon_center_book3.png
+  AssetGenImage get iconCenterBook3 =>
+      const AssetGenImage('assets/equity_center/icon_center_book3.png');
+
   /// File path: assets/equity_center/icon_center_collect.png
   AssetGenImage get iconCenterCollect =>
       const AssetGenImage('assets/equity_center/icon_center_collect.png');
 
+  /// File path: assets/equity_center/icon_center_collect2.png
+  AssetGenImage get iconCenterCollect2 =>
+      const AssetGenImage('assets/equity_center/icon_center_collect2.png');
+
+  /// File path: assets/equity_center/icon_center_collect3.png
+  AssetGenImage get iconCenterCollect3 =>
+      const AssetGenImage('assets/equity_center/icon_center_collect3.png');
+
   /// File path: assets/equity_center/icon_center_collect_group.png
   AssetGenImage get iconCenterCollectGroup =>
       const AssetGenImage('assets/equity_center/icon_center_collect_group.png');
+
+  /// File path: assets/equity_center/icon_center_collect_group2.png
+  AssetGenImage get iconCenterCollectGroup2 => const AssetGenImage(
+      'assets/equity_center/icon_center_collect_group2.png');
+
+  /// File path: assets/equity_center/icon_center_collect_group3.png
+  AssetGenImage get iconCenterCollectGroup3 => const AssetGenImage(
+      'assets/equity_center/icon_center_collect_group3.png');
 
   /// File path: assets/equity_center/icon_center_high2_button.png
   AssetGenImage get iconCenterHigh2Button =>
@@ -164,6 +198,14 @@ class $AssetsEquityCenterGen {
   /// File path: assets/equity_center/icon_center_high_video.png
   AssetGenImage get iconCenterHighVideo =>
       const AssetGenImage('assets/equity_center/icon_center_high_video.png');
+
+  /// File path: assets/equity_center/icon_center_high_video2.png
+  AssetGenImage get iconCenterHighVideo2 =>
+      const AssetGenImage('assets/equity_center/icon_center_high_video2.png');
+
+  /// File path: assets/equity_center/icon_center_high_video3.png
+  AssetGenImage get iconCenterHighVideo3 =>
+      const AssetGenImage('assets/equity_center/icon_center_high_video3.png');
 
   /// File path: assets/equity_center/icon_center_level_bg.png
   AssetGenImage get iconCenterLevelBg =>
@@ -196,6 +238,14 @@ class $AssetsEquityCenterGen {
   /// File path: assets/equity_center/icon_center_video.png
   AssetGenImage get iconCenterVideo =>
       const AssetGenImage('assets/equity_center/icon_center_video.png');
+
+  /// File path: assets/equity_center/icon_center_video2.png
+  AssetGenImage get iconCenterVideo2 =>
+      const AssetGenImage('assets/equity_center/icon_center_video2.png');
+
+  /// File path: assets/equity_center/icon_center_video3.png
+  AssetGenImage get iconCenterVideo3 =>
+      const AssetGenImage('assets/equity_center/icon_center_video3.png');
 
   /// File path: assets/equity_center/icon_center_yuan_bg.png
   AssetGenImage get iconCenterYuanBg =>
@@ -236,8 +286,14 @@ class $AssetsEquityCenterGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         iconCenterBook,
+        iconCenterBook2,
+        iconCenterBook3,
         iconCenterCollect,
+        iconCenterCollect2,
+        iconCenterCollect3,
         iconCenterCollectGroup,
+        iconCenterCollectGroup2,
+        iconCenterCollectGroup3,
         iconCenterHigh2Button,
         iconCenterHighBg,
         iconCenterHighBg2,
@@ -245,6 +301,8 @@ class $AssetsEquityCenterGen {
         iconCenterHighLevelBg,
         iconCenterHighLevelBg2,
         iconCenterHighVideo,
+        iconCenterHighVideo2,
+        iconCenterHighVideo3,
         iconCenterLevelBg,
         iconCenterNormalBg,
         iconCenterNormalButton,
@@ -253,6 +311,8 @@ class $AssetsEquityCenterGen {
         iconCenterRollHighBg2,
         iconCenterSuo,
         iconCenterVideo,
+        iconCenterVideo2,
+        iconCenterVideo3,
         iconCenterYuanBg,
         iconEquityFocus,
         iconEquityGetFocus,
@@ -483,6 +543,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/icon_apple_circle.png
   AssetGenImage get iconAppleCircle =>
       const AssetGenImage('assets/images/icon_apple_circle.png');
+
+  /// File path: assets/images/icon_arrow_up.png
+  AssetGenImage get iconArrowUp =>
+      const AssetGenImage('assets/images/icon_arrow_up.png');
 
   /// File path: assets/images/icon_collect_add.png
   AssetGenImage get iconCollectAdd =>
@@ -926,6 +990,7 @@ class $AssetsImagesGen {
         icTwitter,
         iconApple,
         iconAppleCircle,
+        iconArrowUp,
         iconCollectAdd,
         iconCollectMore,
         iconCollectNormal,
@@ -1513,7 +1578,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsCoursesGen courses = $AssetsCoursesGen();
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
@@ -1556,7 +1621,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

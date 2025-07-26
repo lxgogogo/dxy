@@ -21,104 +21,87 @@ class CourseAllItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: '#F9FCFF'.hexColor,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 0.w).copyWith(bottom: 12.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          CommonImage.net(
+            imageUrl: item.cover ?? '',
+            radius: 16.w,
+            width: 1.sw - 32.w,
+            height: 192.w,
+          ),
+          SizedBox(height: 10.w),
           Row(
             children: [
-              Stack(
-                children: [
-                  CommonImage.net(
-                    imageUrl: item.cover ?? '',
-                    radius: 4.r,
-                    width: 88.w,
-                    height: 50.w,
-                  ),
-                  if (item.icon?.isNotEmpty == true)
-                    Positioned(
-                      left: 4.w,
-                      top: 4.w,
-                      child: CommonImage.net(
-                        imageUrl: item.icon ?? '',
-                        width: 12.w,
-                        height: 12.w,
-                      ),
-                    ),
-                ],
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      item.title ?? '',
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 2.w),
-                    Text(
-                      item.des ?? '',
-                      style: TextStyle(
-                        color: '#666666'.hexColor,
-                        fontSize: 12.sp,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+              if (item.icon?.isNotEmpty == true)...[
+                CommonImage.net(
+                  imageUrl: item.icon ?? '',
+                  width: 24.w,
+                  height: 24.w,
                 ),
+                SizedBox(width: 5.w)
+              ],
+              Text(
+                item.title ?? '',
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
-          if (UserStore.of.isLogin)...[
-            SizedBox(height: 8.w),
-            Row(
-              children: [
-                if ((item.knowledgeTotal ?? 0) > 0)
-                  Expanded(
-                    child: CourseTypeItem(
+          SizedBox(height: 5.w,),
+          Text(
+            item.des ?? '',
+            style: TextStyle(
+              color: '#666666'.hexColor,
+              fontSize: 12.sp,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 8.w),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  if ((item.knowledgeTotal ?? 0) > 0)...[
+                    CourseTypeItem(
                       assetName: Assets.svg.iconKnowledge,
                       count: item.knowledgeCompleted ?? 0,
                       total: item.knowledgeTotal ?? 0,
-                      status: item.status,
+                      status: item.status
                     ),
-                  ),
-                if ((item.practiseTotal ?? 0) > 0)
-                  Expanded(
-                    child: CourseTypeItem(
+                    SizedBox(width: 10.w)
+                  ],
+                  if ((item.practiseTotal ?? 0) > 0)...[
+                    CourseTypeItem(
                       assetName: Assets.svg.iconPractice,
                       count: item.practiseCompleted ?? 0,
                       total: item.practiseTotal ?? 0,
                       status: item.status,
                     ),
-                  ),
-                if ((item.challengeTotal ?? 0) > 0)
-                  Expanded(
-                    child: CourseTypeItem(
+                    SizedBox(width: 10.w)
+                  ],
+                  if ((item.challengeTotal ?? 0) > 0)
+                    CourseTypeItem(
                       assetName: Assets.svg.iconChallenge,
                       count: item.challengeCompleted ?? 0,
                       total: item.challengeTotal ?? 0,
                       status: item.status,
                     ),
-                  ),
-                CourseStatusBtn(
-                  status: item.status,
-                ),
-              ],
-            )
-          ]
+                ],
+              ),
+              CourseStatusBtn(
+                status: item.status,
+              ),
+            ],
+          )
         ],
       ),
     );

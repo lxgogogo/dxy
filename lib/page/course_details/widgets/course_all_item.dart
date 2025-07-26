@@ -1,13 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_model.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 
 import '../../../../widget/common_image.dart';
 
-class CourseDetailAllItem extends StatelessWidget {
+class CourseDetailAllItem extends StatefulWidget {
   final CourseModel item;
   final VoidCallback? onTap;
 
@@ -18,11 +21,38 @@ class CourseDetailAllItem extends StatelessWidget {
   });
 
   @override
+  State<StatefulWidget> createState() {
+    return _CourseDetailAllItemState();
+  }
+}
+
+class _CourseDetailAllItemState extends State<CourseDetailAllItem> {
+
+  StreamSubscription? _eventSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventSubscription = EventBusUtil.of.on<EventRefreshPractise>().listen((event) {
+      widget.item.practiseCompleted = event.completed;
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _eventSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (item.status == 0) {
-          onTap?.call();
+        if (widget.item.status == 0) {
+          widget.onTap?.call();
         }
       },
       child: Container(
@@ -42,7 +72,7 @@ class CourseDetailAllItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              item.des ?? '',
+              widget.item.des ?? '',
               style: TextStyle(
                 color: '#333333'.hexColor,
                 fontSize: 14.sp,
@@ -54,41 +84,41 @@ class CourseDetailAllItem extends StatelessWidget {
             Row(
               children: [
                 CommonImage.net(
-                  imageUrl: item.icon ?? '',
+                  imageUrl: widget.item.icon ?? '',
                   width: 20.w,
                   height: 20.w,
                 ),
                 SizedBox(width: 12.w),
-                if ((item.knowledgeTotal ?? 0) > 0)
+                if ((widget.item.knowledgeTotal ?? 0) > 0)
                   Expanded(
                     child: CourseTypeItem(
                       assetName: Assets.svg.iconKnowledge,
-                      count: item.knowledgeCompleted ?? 0,
-                      total: item.knowledgeTotal ?? 0,
-                      status: item.status,
+                      count: widget.item.knowledgeCompleted ?? 0,
+                      total: widget.item.knowledgeTotal ?? 0,
+                      status: widget.item.status,
                     ),
                   ),
-                if ((item.practiseTotal ?? 0) > 0)
+                if ((widget.item.practiseTotal ?? 0) > 0)
                   Expanded(
                     child: CourseTypeItem(
                       assetName: Assets.svg.iconPractice,
-                      count: item.practiseCompleted ?? 0,
-                      total: item.practiseTotal ?? 0,
-                      status: item.status,
+                      count: widget.item.practiseCompleted ?? 0,
+                      total: widget.item.practiseTotal ?? 0,
+                      status: widget.item.status,
                     ),
                   ),
-                if ((item.challengeTotal ?? 0) > 0)
+                if ((widget.item.challengeTotal ?? 0) > 0)
                   Expanded(
                     child: CourseTypeItem(
                       assetName: Assets.svg.iconChallenge,
-                      count: item.challengeCompleted ?? 0,
-                      total: item.challengeTotal ?? 0,
-                      status: item.status,
+                      count: widget.item.challengeCompleted ?? 0,
+                      total: widget.item.challengeTotal ?? 0,
+                      status: widget.item.status,
                     ),
                   ),
                 CourseStatusBtn(
-                  status: item.status,
-                  onTap: onTap,
+                  status: widget.item.status,
+                  onTap: widget.onTap,
                 ),
               ],
             )

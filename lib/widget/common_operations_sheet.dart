@@ -93,7 +93,7 @@ class CommonOperationsSheet extends StatelessWidget {
                           e,
                           style: TextStyle(
                             fontSize: 16.sp,
-                            color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
+                            color: selectedIndex == index ? ColorStyle.c557BF6 : '#666666'.hexColor,
                             fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
                           ),
                           textAlign: TextAlign.center,

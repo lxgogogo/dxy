@@ -298,6 +298,23 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
       Assets.equityCenter.iconCenterCollect.path,
       Assets.equityCenter.iconCenterCollectGroup.path,
     ];
+    if (controller.selectIndex >= 2 && controller.selectIndex <= 4) {
+      iconData = [
+        Assets.equityCenter.iconCenterBook2.path,
+        Assets.equityCenter.iconCenterVideo2.path,
+        Assets.equityCenter.iconCenterHighVideo2.path,
+        Assets.equityCenter.iconCenterCollect2.path,
+        Assets.equityCenter.iconCenterCollectGroup2.path,
+      ];
+    } else if (controller.selectIndex > 4) {
+      iconData = [
+        Assets.equityCenter.iconCenterBook3.path,
+        Assets.equityCenter.iconCenterVideo3.path,
+        Assets.equityCenter.iconCenterHighVideo3.path,
+        Assets.equityCenter.iconCenterCollect3.path,
+        Assets.equityCenter.iconCenterCollectGroup3.path,
+      ];
+    }
     const limitTitle = '无限制';
     var contentData = [
       (model.bookDownload ?? 0) == -1

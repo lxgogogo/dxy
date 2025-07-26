@@ -65,64 +65,18 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (controller.isLogin.value)
-                      Container(
-                        height: 56.w,
-                        margin: EdgeInsets.only(
-                            top: ScreenUtil().statusBarHeight, bottom: 10.w),
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Row(
-                          children: [
-                            Assets.images.logoText.image(width: 91.75.w),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: controller.toWinningStreak,
-                              child: Container(
-                                height: 34.w,
-                                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                decoration: BoxDecoration(
-                                  color: '#333333'.hexColor.withOpacity(0.05),
-                                  borderRadius: BorderRadius.circular(40.r),
-                                ),
-                                alignment: Alignment.center,
-                                child: Row(
-                                  children: [
-                                    switch (controller
-                                        .courseTopModel.value?.winningStatus) {
-                                      1 => SvgPicture.asset(
-                                          Assets.svg.iconWinningStatus1,
-                                          width: 16.w,
-                                          height: 16.w,
-                                        ),
-                                      2 => SvgPicture.asset(
-                                          Assets.svg.iconWinningStatus2,
-                                          width: 16.w,
-                                          height: 16.w,
-                                        ),
-                                      3 => SvgPicture.asset(
-                                          Assets.svg.iconWinningStatus3,
-                                          width: 16.w,
-                                          height: 16.w,
-                                        ),
-                                      _ => const SizedBox(),
-                                    },
-                                    // if ((controller.courseTopModel.value?.winningDay ?? 0) > 0) ...[
-                                    SizedBox(width: 8.w),
-                                    Text(
-                                      '${controller.courseTopModel.value?.winningDay ?? 0}',
-                                      style: TextStyle(
-                                        color: '#666666'.hexColor,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    // ],
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 12.w),
-                            Container(
+                    Container(
+                      height: 56.w,
+                      margin: EdgeInsets.only(
+                          top: ScreenUtil().statusBarHeight, bottom: 10.w),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Row(
+                        children: [
+                          Assets.images.logoText.image(width: 91.75.w),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: controller.toWinningStreak,
+                            child: Container(
                               height: 34.w,
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               decoration: BoxDecoration(
@@ -132,40 +86,71 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                               alignment: Alignment.center,
                               child: Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    Assets.svg.iconCourseIntegral,
-                                    width: 16.w,
-                                    height: 16.w,
-                                  ),
+                                  switch (controller
+                                      .courseTopModel.value?.winningStatus) {
+                                    1 => SvgPicture.asset(
+                                      Assets.svg.iconWinningStatus1,
+                                      width: 16.w,
+                                      height: 16.w,
+                                    ),
+                                    2 => SvgPicture.asset(
+                                      Assets.svg.iconWinningStatus2,
+                                      width: 16.w,
+                                      height: 16.w,
+                                    ),
+                                    3 => SvgPicture.asset(
+                                      Assets.svg.iconWinningStatus3,
+                                      width: 16.w,
+                                      height: 16.w,
+                                    ),
+                                    _ => const SizedBox(),
+                                  },
+                                  // if ((controller.courseTopModel.value?.winningDay ?? 0) > 0) ...[
                                   SizedBox(width: 8.w),
                                   Text(
-                                    '${controller.courseTopModel.value?.integral ?? 0}',
+                                    '${controller.courseTopModel.value?.winningDay ?? 0}',
                                     style: TextStyle(
                                       color: '#666666'.hexColor,
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
+                                  // ],
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      )
-                    else
-                      Container(
-                        height: 56.w,
-                        margin:
-                            EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Assets.images.logoText.image(width: 91.75.w),
-                            SizedBox(width: 91.75.w)
-                          ],
-                        ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Container(
+                            height: 34.w,
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
+                            decoration: BoxDecoration(
+                              color: '#333333'.hexColor.withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(40.r),
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.svg.iconCourseIntegral,
+                                  width: 16.w,
+                                  height: 16.w,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  '${controller.courseTopModel.value?.integral ?? 0}',
+                                  style: TextStyle(
+                                    color: '#666666'.hexColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
                     Expanded(
                       child: NestedScrollView(
                         controller: controller.scrollController,
@@ -175,56 +160,18 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                               SliverToBoxAdapter(
                                   child: Padding(
                                 padding:
-                                    EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.w),
+                                    EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.w),
                                 child: CourseInfoView(),
                               ))
                           ];
                         },
                         body: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 16.w)
-                              .copyWith(bottom: 24.w),
-                          padding: EdgeInsets.all(16.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: '#58A5FF'.hexColor.withOpacity(0.1),
-                                blurRadius: 8.63.r,
-                                offset: Offset(0, 4.32.w),
-                              ),
-                            ],
-                          ),
+                          margin: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              GestureDetector(
-                                onTap: _onSelectCourse,
-                                behavior: HitTestBehavior.opaque,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        controller.courseGroup.value?.label ??
-                                            '',
-                                        style: TextStyle(
-                                          color: '#000000'.hexColor,
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    SvgPicture.asset(
-                                      Assets.svg.iconArrowDown,
-                                      width: 20.w,
-                                      height: 20.w,
-                                      color: '#666666'.hexColor,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              SizedBox(height: 6.w),
+                              _buildSelectGroupWidget(),
                               SizedBox(height: 16.w),
                               Expanded(
                                 child: Obx(
@@ -402,46 +349,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                   ],
                 ),
               ),
-              GestureDetector(
-                  onTap: _onSelectCourse,
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    height: 58.w,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(16.w)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: '#0050FF'.hexColor.withOpacity(0.1),
-                          blurRadius: 8.63.w,
-                          offset: Offset(0, 4.32.w),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            controller.courseGroup.value?.label ?? '',
-                            style: TextStyle(
-                              color: '#000000'.hexColor,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        SvgPicture.asset(
-                          Assets.svg.iconArrowDown,
-                          width: 20.w,
-                          height: 20.w,
-                          color: '#666666'.hexColor,
-                        ),
-                      ],
-                    ),
-                  )),
+              _buildSelectGroupWidget(),
               SizedBox(height: 16.w),
               Expanded(
                 child: Obx(
@@ -483,6 +391,49 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                     };
                   },
                 ),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Widget _buildSelectGroupWidget() {
+    return GestureDetector(
+        onTap: _onSelectCourse,
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          height: 58.w,
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(16.w)),
+            boxShadow: [
+              BoxShadow(
+                color: '#0050FF'.hexColor.withOpacity(0.1),
+                blurRadius: 8.63.w,
+                offset: Offset(0, 4.32.w),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  controller.courseGroup.value?.label ?? '',
+                  style: TextStyle(
+                    color: '#000000'.hexColor,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SvgPicture.asset(
+                Assets.svg.iconArrowDown,
+                width: 20.w,
+                height: 20.w,
+                color: '#666666'.hexColor,
               ),
             ],
           ),

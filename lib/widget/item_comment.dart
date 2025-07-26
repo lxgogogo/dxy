@@ -103,7 +103,7 @@ class _CommentItemState extends State<CommentItem> {
       name = widget.commentBean.user?.nickname ?? '';
       title = '关注';
       if (widget.commentBean.followed == true) {
-        title = '取消关注';
+        title = '取消关注用户';
       }
     } else {
       id = data.user?.id ?? 0;
@@ -201,11 +201,17 @@ class _CommentItemState extends State<CommentItem> {
     for (final m in widget.commentsData) {
       if (m.user?.id == id) {
         m.followed = followed;
+        final list = m.replies ?? [];
+        for (final sm in list) {
+          if (sm.user?.id == id) {
+            sm.followed = followed;
+          }
+        }
       }
     }
-    for (final m in widget.commentBean.replies ?? []) {
-      if (m.user?.id == id) {
-        m.followed = followed;
+    for (final sm in widget.commentBean.replies ?? []) {
+      if (sm.user?.id == id) {
+        sm.followed = followed;
       }
     }
     if (mounted) {
@@ -520,7 +526,7 @@ class _CommentItemState extends State<CommentItem> {
                                                 child: GestureDetector(
                                                   onTap: () async {
                                                     _followToggle(
-                                                        type: 0,
+                                                        type: 1,
                                                         data: reply);
                                                   },
                                                   child: Container(

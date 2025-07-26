@@ -158,7 +158,7 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(8.w))),
                             child: Text(
-                              '继续',
+                              '完成',
                               style: TextStyle(
                                   fontSize: 16.sp,
                                   color: Colors.white,

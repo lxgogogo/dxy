@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -345,6 +346,7 @@ class _RegisterContentState extends State<RegisterContent> {
                             _isVisible ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                             width: 18.w,
                             height: 18.w,
+                            color: AppTheme.color_999999,
                           ),
                           onTap: () {
                             setState(() {
@@ -401,6 +403,7 @@ class _RegisterContentState extends State<RegisterContent> {
                             _isVisibleAgain ? 'assets/images/eye_open.png' : 'assets/images/eye_close.png',
                             width: 18.w,
                             height: 18.w,
+                            color: AppTheme.color_999999,
                           ),
                           onTap: () {
                             if (mounted) {

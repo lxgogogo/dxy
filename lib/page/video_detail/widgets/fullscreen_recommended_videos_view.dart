@@ -123,7 +123,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                             borderRadius: BorderRadius.circular(49),
                           ),
                           child: const Text(
-                            '取消联播',
+                            '取消连播',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -154,8 +154,8 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                                   onTap: () => widget.onPlayNewVideo?.call(video),
                                   recommendVideo: video,
                                   animationController: _animationController,
+                                  showAnimate: index == 0 && _isAnimating,
                                   isFullScreen: true,
-                                  showAnimate: index == 0,
                                 ),
                                 Text(
                                   video.title ?? '',

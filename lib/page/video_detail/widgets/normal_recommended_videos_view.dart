@@ -110,6 +110,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                       onTap: () => widget.onPlayNewVideo?.call(widget.videos.first),
                       recommendVideo: widget.videos.first,
                       animationController: _animationController,
+                      showAnimate: _isAnimating,
                       isFullScreen: false,
                     ),
                     Expanded(
@@ -130,24 +131,6 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                           Row(
                             spacing: 40.w,
                             children: [
-                              if (_isAnimating)
-                                GestureDetector(
-                                  onTap: _cancelAnimation,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.3),
-                                      borderRadius: BorderRadius.circular(49.r),
-                                    ),
-                                    child: Text(
-                                      '取消联播',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14.sp,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                               GestureDetector(
                                 onTap: widget.onReplay,
                                 child: Row(
@@ -168,6 +151,24 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                                   ],
                                 ),
                               ),
+                              if (_isAnimating)
+                                GestureDetector(
+                                  onTap: _cancelAnimation,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.3),
+                                      borderRadius: BorderRadius.circular(49.r),
+                                    ),
+                                    child: Text(
+                                      '取消连播',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ],
                           )
                         ],

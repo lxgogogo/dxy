@@ -324,7 +324,7 @@ class VideoDetailController extends GetxController {
       final listRes = res.data as List;
       final records = listRes.map((e) => RecommendVideoModel.fromJson(e)).toList();
       if (records.isNotEmpty) {
-        recommendedVideos.assignAll(records.take(3));
+        recommendedVideos.assignAll(records);
         safeUpdate();
       }
     }

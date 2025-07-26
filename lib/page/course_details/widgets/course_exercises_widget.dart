@@ -185,8 +185,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // TODO: Tap
 
   void _onPressed() async {
-    if (!_canEdit ||
-        _selectAnswerModel == null) {
+    if (!_canEdit || _selectAnswerModel == null) {
       return;
     }
     final model = _practiseList[_currentPage];
@@ -446,22 +445,35 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                             height: 24.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: model.select == true
-                                  ? ColorStyle.c557BF6
-                                  : isCompleted
-                                      ? '#557BF6'.hexColor.withOpacity(0.1)
-                                      : '#333333'.hexColor.withOpacity(0.1),
+                              color: model.completed == false &&
+                                      _currentPage == index &&
+                                      _buttonState == false
+                                  ? ColorStyle.c333333.withOpacity(0.3)
+                                  : model.select == true ||
+                                          (_buttonState &&
+                                              _currentPage - 1 == index &&
+                                              _isCorrectAnswer && _canEdit)
+                                      ? ColorStyle.c557BF6
+                                      : isCompleted
+                                          ? '#557BF6'.hexColor.withOpacity(0.1)
+                                          : '#333333'.hexColor.withOpacity(0.1),
                             ),
                             alignment: Alignment.center,
                             child: Text(
                               '${index + 1}',
                               style: TextStyle(
                                 fontSize: 12.sp,
-                                color: model.select == true
+                                color: (model.completed == false &&
+                                            _currentPage == index &&
+                                            _buttonState == false) ||
+                                        model.select == true ||
+                                        (_buttonState &&
+                                            _currentPage - 1 == index &&
+                                            _isCorrectAnswer && _canEdit)
                                     ? Colors.white
                                     : isCompleted
-                                        ? '#557BF6'.hexColor
-                                        : '#666666'.hexColor,
+                                        ? AppTheme.color_557BF6
+                                        : AppTheme.color_666666,
                               ),
                             ),
                           ),

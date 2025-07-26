@@ -20,7 +20,7 @@ class CourseModel {
   final int? knowledgeTotal;
   final int? knowledgeCompleted;
   final int? practiseTotal;
-  final int? practiseCompleted;
+  int? practiseCompleted;
   final int? challengeTotal;
   final int? challengeCompleted;
   final int? type;

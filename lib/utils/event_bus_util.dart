@@ -80,3 +80,9 @@ class EventRefreshCollect {
 class EventPostFeed {}
 
 class EventRefreshNotice {}
+
+class EventRefreshPractise {
+
+  int completed;
+  EventRefreshPractise({required this.completed});
+}

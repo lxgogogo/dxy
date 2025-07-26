@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,11 +10,11 @@ import 'package:holdem/model/course_exercises_model.dart';
 import 'package:holdem/model/course_model.dart';
 import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
 import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
-import 'package:holdem/page/interactive_courses/course_exercises/widget/AnswerResultsSheet.dart';
 import 'package:holdem/services/course_service.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../interactive_courses/course_exercises/widget/answer_results_page_sheet.dart';
@@ -29,6 +30,7 @@ class CourseExercisesWidget extends StatefulWidget {
 }
 
 class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
+  final _audioPlayer = AudioPlayer();
   List<CourseExerciseModel> _practiseList = [];
   List<CourseExerciseAnswerModel> _dataList = [];
   CourseExerciseAnswerModel? _selectAnswerModel;
@@ -63,6 +65,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       _currentPage = 0;
     } else if (_completed < _totalPage) {
       _currentPage = _completed;
+    } else if (_completed == _totalPage){
+      _currentPage = _totalPage - 1;
     }
     final practiseData = data['practiseList'] ?? [];
     print('练习题数量:${practiseData.length}');
@@ -120,10 +124,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     if (data.status == 2) {
       AnswerResultsPageSheet.show(1, integral: _integral, () {
         Get.close(0);
-        // 判断是否最后答完有连对弹窗
-        if (!evenPairs) {
-          Get.close(0);
-        }
         _result();
         // 答题完成后要对数据进行查看处理
         _canEdit = _completed == widget.item.total ? false : true;
@@ -169,6 +169,13 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     }
   }
 
+  void _playSound(String name) async {
+    await _audioPlayer.release(); // 每次播放前释放
+    await _audioPlayer.play(AssetSource('sounds/$name.mp3'));
+    await _audioPlayer.onPlayerStateChanged
+        .firstWhere((state) => state == PlayerState.completed);
+  }
+
   // TODO: Tap
 
   void _onPressed() async {
@@ -187,7 +194,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     // 答题逻辑
     if (data.answer == false) {
       // 答题错误记录
-      //_playSound('wrong');
+      _playSound('wrong');
     } else {
       // 答对继续下一题
       _practiseList[_currentPage].answer = data.answerStr ?? '';
@@ -195,7 +202,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       if (_currentPage < _practiseList.length - 1) {
         _currentPage += 1;
       }
-      //_playSound('correct');
+      EventBusUtil.of.fire(EventRefreshPractise(completed: _completed));
+      _playSound('correct');
     }
     // 结果弹窗
     _answerStr = (data.answer ?? false) ? '泰裤辣！' : '不正确';
@@ -264,6 +272,12 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   void initState() {
     super.initState();
     _initData();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -523,9 +537,11 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                     !edit ? '已完成' : '提交',
                     style: TextStyle(
                         fontSize: 16.sp,
-                        color: _selectAnswerModel == null
-                            ? AppTheme.color_999999
-                            : Colors.white,
+                        color: !edit
+                            ? ColorStyle.c333333
+                            : _selectAnswerModel == null
+                                ? AppTheme.color_999999
+                                : Colors.white,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -565,21 +581,31 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     Color bgColor = Colors.white;
     Color titleColor = AppTheme.color_333333;
     Color shadowColor = '#0050FF'.hexColor.withOpacity(0.1);
-    if (select && !_submit) {
-      borderColor = AppTheme.color_557BF6;
-      bgColor = AppTheme.color_557BF6.withOpacity(0.1);
-      titleColor = AppTheme.color_557BF6;
-    } else if (select && _submit && isCorrect) {
-      borderColor = AppTheme.color_39B423;
-      bgColor = AppTheme.color_39B423.withOpacity(0.1);
-      titleColor = AppTheme.color_39B423;
-      shadowColor = '#39B423'.hexColor.withOpacity(0.1);
-    } else if (select && _submit && !isCorrect) {
-      borderColor = ColorStyle.cFF3333;
-      bgColor = ColorStyle.cFF3333.withOpacity(0.1);
-      titleColor = ColorStyle.cFF3333;
-      shadowColor = '#FF3333'.hexColor.withOpacity(0.1);
+    if (!_canEdit) {
+      if (select && !_submit) {
+        borderColor = AppTheme.color_39B423;
+        bgColor = AppTheme.color_39B423.withOpacity(0.1);
+        titleColor = AppTheme.color_557BF6;
+        shadowColor = '#39B423'.hexColor.withOpacity(0.1);
+      }
+    } else {
+      if (select && !_submit) {
+        borderColor = AppTheme.color_557BF6;
+        bgColor = AppTheme.color_557BF6.withOpacity(0.1);
+        titleColor = AppTheme.color_557BF6;
+      } else if (select && _submit && isCorrect) {
+        borderColor = AppTheme.color_39B423;
+        bgColor = AppTheme.color_39B423.withOpacity(0.1);
+        titleColor = AppTheme.color_39B423;
+        shadowColor = '#39B423'.hexColor.withOpacity(0.1);
+      } else if (select && _submit && !isCorrect) {
+        borderColor = ColorStyle.cFF3333;
+        bgColor = ColorStyle.cFF3333.withOpacity(0.1);
+        titleColor = ColorStyle.cFF3333;
+        shadowColor = '#FF3333'.hexColor.withOpacity(0.1);
+      }
     }
+
     return GestureDetector(
         onTap: () {
           _selectOnTap(model);

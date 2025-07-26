@@ -45,6 +45,7 @@ class CourseExerciseModel {
   String? content;
   String? answer;
   bool? select;
+  bool? completed;
   List<CourseExerciseAnswerModel>? options;
 
   CourseExerciseModel({
@@ -53,7 +54,8 @@ class CourseExerciseModel {
     this.content,
     this.options,
     this.answer,
-    this.select
+    this.select,
+    this.completed
   });
 
   CourseExerciseModel.fromJson(Map<String, dynamic> map) {

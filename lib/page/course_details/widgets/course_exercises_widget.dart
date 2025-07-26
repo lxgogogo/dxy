@@ -65,15 +65,24 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       _currentPage = 0;
     } else if (_completed < _totalPage) {
       _currentPage = _completed;
-    } else if (_completed == _totalPage){
+    } else if (_completed == _totalPage) {
       _currentPage = _totalPage - 1;
     }
     final practiseData = data['practiseList'] ?? [];
     print('练习题数量:${practiseData.length}');
     print('_currentPage:$_currentPage');
     List<CourseExerciseModel> saveData = [];
-    for (final json in practiseData) {
+    for (int i = 0; i < practiseData.length; i++) {
+      final json = practiseData[i];
       CourseExerciseModel model = CourseExerciseModel.fromJson(json);
+      if (!_canEdit) {
+        model.completed = true;
+      } else {
+        model.completed = false;
+        if (i < _currentPage) {
+          model.completed = true;
+        }
+      }
       saveData.add(model);
     }
     _practiseList = saveData;
@@ -179,7 +188,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // TODO: Tap
 
   void _onPressed() async {
-    if (!_canEdit || _selectAnswerModel == null) {
+    if (!_canEdit ||
+        _selectAnswerModel == null) {
       return;
     }
     final model = _practiseList[_currentPage];
@@ -198,6 +208,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     } else {
       // 答对继续下一题
       _practiseList[_currentPage].answer = data.answerStr ?? '';
+      _practiseList[_currentPage].completed = true;
       _completed += 1;
       if (_currentPage < _practiseList.length - 1) {
         _currentPage += 1;
@@ -233,7 +244,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   }
 
   void _selectOnTap(model) {
-    if (_canEdit && !_buttonState) {
+    // 没有答完+按钮状态是提交+该题未答
+    final pModel = _practiseList[_currentPage];
+    if (_canEdit && !_buttonState && pModel.completed == false) {
       model.select = true;
       _selectAnswerModel = model;
       for (final m in _dataList) {
@@ -247,12 +260,24 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   }
 
   void _progressOnTap(int index) {
-    if (_canEdit) return;
+    final model = _practiseList[index];
+    if (model.completed == false || (_canEdit && index > _completed)) {
+      // 选中的是当前的答题
+      if (index == _completed) {
+        _currentPage = index;
+        for (final m in _practiseList) {
+          m.select = false;
+        }
+        _dataList = model.options ?? [];
+        _onContinue();
+      }
+      return;
+    }
+    _onContinue();
     _currentPage = index;
     for (final m in _practiseList) {
       m.select = false;
     }
-    final model = _practiseList[index];
     model.select = true;
     _dataList = model.options ?? [];
     for (final m in _dataList) {
@@ -455,6 +480,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     return Padding(
       padding: EdgeInsets.only(right: 16.w),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if ((model.title ?? '').isNotEmpty)
             Row(
@@ -464,8 +490,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                   style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black
-                  ),
+                      color: Colors.black),
                 )
               ],
             ),
@@ -523,12 +548,18 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                   ],
                 ),
                 if (!_isCorrectAnswer) ...[
-                  SizedBox(height: 5.w),
-                  Text('正确答案：$_correctStr',
-                      style: TextStyle(
-                          fontSize: 12.sp,
-                          color: ColorStyle.cFF3333,
-                          fontWeight: FontWeight.w600))
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 5.w),
+                        Text('正确答案：$_correctStr',
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                color: ColorStyle.cFF3333,
+                                fontWeight: FontWeight.w600))
+                      ],
+                    ),
+                  )
                 ]
               ],
             )
@@ -547,10 +578,13 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                           : ColorStyle.c557BF6,
                       borderRadius: BorderRadius.all(Radius.circular(8.w))),
                   child: Text(
-                    !edit ? '已完成' : '提交',
+                    !edit || _practiseList[_currentPage].completed == true
+                        ? '已完成'
+                        : '提交',
                     style: TextStyle(
                         fontSize: 16.sp,
-                        color: !edit
+                        color: !edit ||
+                                _practiseList[_currentPage].completed == true
                             ? ColorStyle.c333333
                             : _selectAnswerModel == null
                                 ? AppTheme.color_999999
@@ -594,7 +628,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     Color bgColor = Colors.white;
     Color titleColor = AppTheme.color_333333;
     Color shadowColor = '#0050FF'.hexColor.withOpacity(0.1);
-    if (!_canEdit) {
+    final pModel = _practiseList[_currentPage];
+    if (pModel.completed == true || !_canEdit) {
       if (select && !_submit) {
         borderColor = AppTheme.color_39B423;
         bgColor = AppTheme.color_39B423.withOpacity(0.1);

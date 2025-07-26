@@ -93,6 +93,9 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                       }),
                                 ),
                               ),
+                            SliverToBoxAdapter(
+                              child: SizedBox(height: 16.w),
+                            )
                           ],
                         ),
                       ),

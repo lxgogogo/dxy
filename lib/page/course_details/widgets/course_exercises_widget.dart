@@ -456,6 +456,19 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       padding: EdgeInsets.only(right: 16.w),
       child: Column(
         children: [
+          if ((model.title ?? '').isNotEmpty)
+            Row(
+              children: [
+                Text(
+                  model.title ?? '',
+                  style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black
+                  ),
+                )
+              ],
+            ),
           SizedBox(height: 10.w),
           HtmlWidget(
             model.content ?? '',
@@ -515,7 +528,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                       style: TextStyle(
                           fontSize: 12.sp,
                           color: ColorStyle.cFF3333,
-                          fontWeight: FontWeight.w500))
+                          fontWeight: FontWeight.w600))
                 ]
               ],
             )
@@ -585,7 +598,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       if (select && !_submit) {
         borderColor = AppTheme.color_39B423;
         bgColor = AppTheme.color_39B423.withOpacity(0.1);
-        titleColor = AppTheme.color_557BF6;
+        titleColor = AppTheme.color_39B423;
         shadowColor = '#39B423'.hexColor.withOpacity(0.1);
       }
     } else {

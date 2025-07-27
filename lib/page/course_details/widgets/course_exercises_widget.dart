@@ -259,6 +259,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   }
 
   void _progressOnTap(int index) {
+    if (_currentPage == index) {
+      return;
+    }
     final model = _practiseList[index];
     if (model.completed == false || (_canEdit && index > _completed)) {
       // 选中的是当前的答题

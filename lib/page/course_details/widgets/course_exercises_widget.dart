@@ -134,9 +134,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       AnswerResultsPageSheet.show(1, integral: _integral, () {
         Get.close(0);
         _result();
-        // 答题完成后要对数据进行查看处理
-        _canEdit = _completed == widget.item.total ? false : true;
-        _currentPage = _practiseList.length - 1;
         if (!_canEdit) {
           var selectM;
           for (int i = 0; i < _practiseList.length; i++) {
@@ -188,8 +185,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // TODO: Tap
 
   void _onPressed() async {
-    if (!_canEdit ||
-        _selectAnswerModel == null) {
+    if (!_canEdit || _selectAnswerModel == null) {
       return;
     }
     final model = _practiseList[_currentPage];
@@ -226,6 +222,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     if (data.answer == true) {
       if (_currentPage == _practiseList.length - 1) {
         // 答题结束
+        // 答题完成后要对数据进行查看处理
+        _canEdit = _completed == widget.item.total ? false : true;
+        _currentPage = _practiseList.length - 1;
         if ((data.pairsText ?? '').isNotEmpty) {
           _evenPairs(data, end: true);
         } else {
@@ -260,6 +259,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   }
 
   void _progressOnTap(int index) {
+    if (_currentPage == index) {
+      return;
+    }
     final model = _practiseList[index];
     if (model.completed == false || (_canEdit && index > _completed)) {
       // 选中的是当前的答题
@@ -308,6 +310,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   @override
   Widget build(BuildContext context) {
     double progress = _currentPage / _totalPage;
+    if (!_canEdit) {
+      progress = 1.0;
+    }
     return Container(
       padding: EdgeInsets.all(16.w).copyWith(right: 0),
       decoration: BoxDecoration(
@@ -443,22 +448,35 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                             height: 24.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: model.select == true
-                                  ? ColorStyle.c557BF6
-                                  : isCompleted
-                                      ? '#557BF6'.hexColor.withOpacity(0.1)
-                                      : '#333333'.hexColor.withOpacity(0.1),
+                              color: model.completed == false &&
+                                      _currentPage == index &&
+                                      _buttonState == false
+                                  ? ColorStyle.c333333.withOpacity(0.3)
+                                  : model.select == true ||
+                                          (_buttonState &&
+                                              _currentPage - 1 == index &&
+                                              _isCorrectAnswer && _canEdit)
+                                      ? ColorStyle.c557BF6
+                                      : isCompleted
+                                          ? '#557BF6'.hexColor.withOpacity(0.1)
+                                          : '#333333'.hexColor.withOpacity(0.1),
                             ),
                             alignment: Alignment.center,
                             child: Text(
                               '${index + 1}',
                               style: TextStyle(
                                 fontSize: 12.sp,
-                                color: model.select == true
+                                color: (model.completed == false &&
+                                            _currentPage == index &&
+                                            _buttonState == false) ||
+                                        model.select == true ||
+                                        (_buttonState &&
+                                            _currentPage - 1 == index &&
+                                            _isCorrectAnswer && _canEdit)
                                     ? Colors.white
                                     : isCompleted
-                                        ? '#557BF6'.hexColor
-                                        : '#666666'.hexColor,
+                                        ? AppTheme.color_557BF6
+                                        : AppTheme.color_666666,
                               ),
                             ),
                           ),

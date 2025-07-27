@@ -24,6 +24,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   bool isFetching = false;
 
+  RxBool showAlert = false.obs;
+
   ScrollController scrollController = ScrollController();
 
   @override

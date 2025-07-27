@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/dialog_util.dart';
@@ -14,6 +15,7 @@ import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_image.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
 
 import '../../../gen/assets.gen.dart';
 import '../../../mixins/refresh_controller_mixin.dart';
@@ -177,7 +179,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                 child: Obx(
                                   () {
                                     if (!controller.hasLoaded.value) {
-                                      return const SizedBox();
+                                      return const CupertinoActivityIndicator(color: Colors.grey);
                                     }
                                     if (controller.courseItems.isEmpty) {
                                       return const Center(child: NoDataView());
@@ -355,7 +357,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                 child: Obx(
                   () {
                     if (!controller.hasLoaded.value) {
-                      return const SizedBox();
+                      return const CupertinoActivityIndicator(color: Colors.grey);
                     }
                     if (controller.courseItems.isEmpty) {
                       return const Center(child: NoDataView());
@@ -429,18 +431,22 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SvgPicture.asset(
-                Assets.svg.iconArrowDown,
-                width: 20.w,
-                height: 20.w,
-                color: '#666666'.hexColor,
-              ),
+              Transform.rotate(
+                angle: controller.showAlert.value ? pi : 0, // 180度，使用弧度制
+                child: SvgPicture.asset(
+                  Assets.svg.iconArrowDown,
+                  width: 20.w,
+                  height: 20.w,
+                  color: '#666666'.hexColor,
+                ),
+              )
             ],
           ),
         ));
   }
 
   void _onSelectCourse() {
+    controller.showAlert.value = !controller.showAlert.value;
     int? selectedIndex;
     if (controller.courseGroup.value != null) {
       selectedIndex = controller.courseGroups.indexWhere(
@@ -452,8 +458,13 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
         selectedIndex: selectedIndex,
         items: controller.courseGroups.map((e) => e.label ?? '').toList(),
         onSelectItem: (int index) {
-          final model = controller.courseGroups[index];
-          controller.onChangeType(model);
+          if (controller.isLogin.value) {
+            final model = controller.courseGroups[index];
+            controller.onChangeType(model);
+          }
+        },
+        endAction: () {
+          controller.showAlert.value = false;
         },
         itemBuilder: (int index) {
           final item = controller.courseGroups[index];

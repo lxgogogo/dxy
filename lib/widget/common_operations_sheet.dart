@@ -6,15 +6,14 @@ import 'package:holdem/utils/color_style_util.dart';
 
 import 'scale_button_wraper.dart';
 
-void showCommonOperationsSheet({
-  required List<String> items,
-  required Function(int index) onSelectItem,
-  int? selectedIndex,
-  double maxHeight = double.infinity,
-  OperationItemBuilder? itemBuilder,
-  Widget? overflowWidget,
-  Function? endAction
-}) {
+void showCommonOperationsSheet(
+    {required List<String> items,
+    required Function(int index) onSelectItem,
+    int? selectedIndex,
+    double maxHeight = double.infinity,
+    OperationItemBuilder? itemBuilder,
+    Widget? overflowWidget,
+    Function? endAction}) {
   Get.bottomSheet(
     ConstrainedBox(
       constraints: BoxConstraints(maxHeight: maxHeight),
@@ -43,14 +42,13 @@ class CommonOperationsSheet extends StatelessWidget {
   final OperationItemBuilder? itemBuilder;
   final Widget? overflowWidget;
 
-  const CommonOperationsSheet({
-    super.key,
-    required this.items,
-    required this.onSelectItem,
-    this.selectedIndex,
-    this.itemBuilder,
-    this.overflowWidget
-  });
+  const CommonOperationsSheet(
+      {super.key,
+      required this.items,
+      required this.onSelectItem,
+      this.selectedIndex,
+      this.itemBuilder,
+      this.overflowWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -65,47 +63,53 @@ class CommonOperationsSheet extends StatelessWidget {
               ),
             ),
             child: SingleChildScrollView(
+              physics: overflowWidget != null
+                  ? const NeverScrollableScrollPhysics()
+                  : const BouncingScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ...items.map((e) {
                     final index = items.indexOf(e);
                     return ScaleButtonWrapper(
-                      onTap: () {
-                        onSelectItem(index);
-                        Get.back();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 1.w,
-                              color: ColorStyle.c333333.withOpacity(0.05),
+                        onTap: () {
+                          onSelectItem(index);
+                          Get.back();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 12.w),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 1.w,
+                                color: ColorStyle.c333333.withOpacity(0.05),
+                              ),
                             ),
                           ),
-                        ),
-                        child: itemBuilder != null
-                            ? itemBuilder!(index)
-                            : Text(
-                          e,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: selectedIndex == index ? ColorStyle.c557BF6 : '#666666'.hexColor,
-                            fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    );
+                          child: itemBuilder != null
+                              ? itemBuilder!(index)
+                              : Text(
+                                  e,
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: selectedIndex == index
+                                        ? ColorStyle.c557BF6
+                                        : '#666666'.hexColor,
+                                    fontWeight: selectedIndex == index
+                                        ? FontWeight.w500
+                                        : FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                        ));
                   })
                 ],
               ),
             )),
-        if (overflowWidget != null)
-          overflowWidget!
+        if (overflowWidget != null) overflowWidget!
       ],
     );
   }

@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_model.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 
 import '../../../../widget/common_image.dart';
@@ -28,11 +30,20 @@ class CourseDetailAllItem extends StatefulWidget {
 
 class _CourseDetailAllItemState extends State<CourseDetailAllItem> {
 
+  bool _isLogin = false;
   StreamSubscription? _eventSubscription;
+
+  void _onFocusGained() {
+    _isLogin = UserStore.of.isLogin;
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _isLogin = UserStore.of.isLogin;
     _eventSubscription = EventBusUtil.of.on<EventRefreshPractise>().listen((event) {
       widget.item.practiseCompleted = event.completed;
       if (mounted) {
@@ -49,80 +60,85 @@ class _CourseDetailAllItemState extends State<CourseDetailAllItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (widget.item.status == 0) {
-          widget.onTap?.call();
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [
-            BoxShadow(
-              color: '#58A5FF'.hexColor.withOpacity(0.1),
-              blurRadius: 8.63.r,
-              offset: Offset(0, 4.32.w),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.item.des ?? '',
-              style: TextStyle(
-                color: '#333333'.hexColor,
-                fontSize: 14.sp,
+    return FocusDetector(
+      onFocusGained: _onFocusGained,
+      child: GestureDetector(
+        onTap: () {
+          if (widget.item.status == 0) {
+            widget.onTap?.call();
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [
+              BoxShadow(
+                color: '#58A5FF'.hexColor.withOpacity(0.1),
+                blurRadius: 8.63.r,
+                offset: Offset(0, 4.32.w),
               ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: 12.w),
-            Row(
-              children: [
-                CommonImage.net(
-                  imageUrl: widget.item.icon ?? '',
-                  width: 20.w,
-                  height: 20.w,
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                widget.item.des ?? '',
+                style: TextStyle(
+                  color: '#333333'.hexColor,
+                  fontSize: 14.sp,
                 ),
-                SizedBox(width: 12.w),
-                if ((widget.item.knowledgeTotal ?? 0) > 0)
-                  Expanded(
-                    child: CourseTypeItem(
-                      assetName: Assets.svg.iconKnowledge,
-                      count: widget.item.knowledgeCompleted ?? 0,
-                      total: widget.item.knowledgeTotal ?? 0,
-                      status: widget.item.status,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (_isLogin)...[
+                SizedBox(height: 12.w),
+                Row(
+                  children: [
+                    CommonImage.net(
+                      imageUrl: widget.item.icon ?? '',
+                      width: 20.w,
+                      height: 20.w,
                     ),
-                  ),
-                if ((widget.item.practiseTotal ?? 0) > 0)
-                  Expanded(
-                    child: CourseTypeItem(
-                      assetName: Assets.svg.iconPractice,
-                      count: widget.item.practiseCompleted ?? 0,
-                      total: widget.item.practiseTotal ?? 0,
+                    SizedBox(width: 12.w),
+                    if ((widget.item.knowledgeTotal ?? 0) > 0)
+                      Expanded(
+                        child: CourseTypeItem(
+                          assetName: Assets.svg.iconKnowledge,
+                          count: widget.item.knowledgeCompleted ?? 0,
+                          total: widget.item.knowledgeTotal ?? 0,
+                          status: widget.item.status,
+                        ),
+                      ),
+                    if ((widget.item.practiseTotal ?? 0) > 0)
+                      Expanded(
+                        child: CourseTypeItem(
+                          assetName: Assets.svg.iconPractice,
+                          count: widget.item.practiseCompleted ?? 0,
+                          total: widget.item.practiseTotal ?? 0,
+                          status: widget.item.status,
+                        ),
+                      ),
+                    if ((widget.item.challengeTotal ?? 0) > 0)
+                      Expanded(
+                        child: CourseTypeItem(
+                          assetName: Assets.svg.iconChallenge,
+                          count: widget.item.challengeCompleted ?? 0,
+                          total: widget.item.challengeTotal ?? 0,
+                          status: widget.item.status,
+                        ),
+                      ),
+                    CourseStatusBtn(
                       status: widget.item.status,
+                      onTap: widget.onTap,
                     ),
-                  ),
-                if ((widget.item.challengeTotal ?? 0) > 0)
-                  Expanded(
-                    child: CourseTypeItem(
-                      assetName: Assets.svg.iconChallenge,
-                      count: widget.item.challengeCompleted ?? 0,
-                      total: widget.item.challengeTotal ?? 0,
-                      status: widget.item.status,
-                    ),
-                  ),
-                CourseStatusBtn(
-                  status: widget.item.status,
-                  onTap: widget.onTap,
-                ),
-              ],
-            )
-          ],
+                  ],
+                )
+              ]
+            ],
+          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_model.dart';
+import 'package:holdem/stores/user_store.dart';
 
 import '../../../../widget/common_image.dart';
 
@@ -91,24 +92,25 @@ class CourseDetailChallengeItem extends StatelessWidget {
                           fontSize: 12.sp,
                         ),
                       ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            Assets.svg.iconCourseIntegral,
-                            width: 16.w,
-                            height: 16.w,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            '$integral',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
+                      if (UserStore.of.isLogin)
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              Assets.svg.iconCourseIntegral,
+                              width: 16.w,
+                              height: 16.w,
                             ),
-                          ),
-                        ],
-                      ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              '$integral',
+                              style: TextStyle(
+                                color: '#333333'.hexColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        )
                     ],
                   ),
                   ClipRRect(
@@ -165,7 +167,8 @@ class CourseDetailChallengeItem extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Row(
+                              if (UserStore.of.isLogin)
+                                Row(
                                 children: [
                                   SvgPicture.asset(
                                     Assets.svg.iconCourseIntegral,

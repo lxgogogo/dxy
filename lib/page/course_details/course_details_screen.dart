@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
 import '../../model/course_model.dart';
@@ -83,7 +84,8 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   ),
                                 ),
                               ),
-                            if (controller.detailBean!.challenge != null)
+                            if (controller.detailBean!.challenge != null &&
+                                UserStore.of.isLogin)
                               SliverPadding(
                                 padding: EdgeInsets.only(top: 16.w),
                                 sliver: SliverToBoxAdapter(

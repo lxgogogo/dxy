@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -484,10 +485,10 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: selectedIndex == index
-                        ? '#333333'.hexColor
-                        : '#666666'.hexColor,
+                        ? ColorStyle.c333333
+                        : AppTheme.color_666666,
                     fontWeight: selectedIndex == index
-                        ? FontWeight.w500
+                        ? FontWeight.w600
                         : FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,

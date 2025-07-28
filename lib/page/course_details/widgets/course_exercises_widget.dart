@@ -394,7 +394,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                           ),
                           SizedBox(width: 4.w),
                           Text(
-                            '$_integral',
+                            '${widget.item.integral ?? 0}',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,

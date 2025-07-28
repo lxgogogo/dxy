@@ -38,6 +38,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // 按钮状态（true：点击后切换下一题，false：提交）
   bool _buttonState = false;
   int _currentPage = 0;
+  int _progress = 0;
   int _integral = 0;
   int _completed = 0;
   int _totalPage = 0;
@@ -67,6 +68,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     } else if (_completed == _totalPage) {
       _currentPage = _totalPage - 1;
     }
+    _progress = _currentPage;
     final practiseData = data['practiseList'] ?? [];
     print('练习题数量:${practiseData.length}');
     print('_currentPage:$_currentPage');
@@ -207,6 +209,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       _completed += 1;
       if (_currentPage < _practiseList.length - 1) {
         _currentPage += 1;
+        _progress += 1;
       }
       EventBusUtil.of.fire(EventRefreshPractise(completed: _completed));
       _playSound('correct');
@@ -224,6 +227,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         // 答题完成后要对数据进行查看处理
         _canEdit = _completed == widget.item.total ? false : true;
         _currentPage = _practiseList.length - 1;
+        _progress = _currentPage;
         if ((data.pairsText ?? '').isNotEmpty) {
           _evenPairs(data, end: true);
         } else {
@@ -308,7 +312,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double progress = _currentPage / _totalPage;
+    double progress = _progress / _totalPage;
     if (!_canEdit) {
       progress = 1.0;
     }
@@ -554,6 +558,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                       children: [
                         SizedBox(height: 5.w),
                         Text('正确答案：$_correctStr',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 12.sp,
                                 color: ColorStyle.cFF3333,

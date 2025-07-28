@@ -308,11 +308,8 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
               Container(
                 height: 56.w,
                 margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Assets.images.logoText.image(width: 91.75.w), SizedBox(width: 91.75.w)],
-                ),
+                alignment: Alignment.centerLeft,
+                child: Assets.images.logoText.image(width: 91.75.w)
               ),
               _buildSelectGroupWidget(),
               SizedBox(height: 16.w),

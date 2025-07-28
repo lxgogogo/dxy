@@ -513,6 +513,9 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 width: 72.w,
                 height: 28.w,
                 alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                    color: ColorStyle.c333333.withOpacity(0.1)),
                 child: Text(
                   '已完成',
                   style: TextStyle(

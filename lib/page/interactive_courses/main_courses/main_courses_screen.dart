@@ -33,6 +33,7 @@ import '../../../utils/dialog_util.dart';
 import '../../../widget/common_operations_sheet.dart';
 import '../../../widget/common_refresher.dart';
 import '../../../widget/no_data.dart';
+import '../../course_details/widgets/course_exercises_widget.dart';
 import '../../course_details/widgets/course_knowledge_item.dart';
 import '../../home/home_screen.dart';
 import 'widgets/course_all_item.dart';
@@ -242,13 +243,15 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
+                                            cacheExtent: 10000,
                                             padding: EdgeInsets.zero,
                                             itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {
                                               final item = controller.courseItems[index];
                                               return GestureDetector(
                                                 onTap: () => controller.toPractice(item),
-                                                child: CoursePracticeItem(
+                                                child: CourseExercisesWidget(
+                                                  showTitle: false,
                                                   item: item,
                                                 ),
                                               );

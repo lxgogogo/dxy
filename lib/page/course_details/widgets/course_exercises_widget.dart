@@ -19,8 +19,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../interactive_courses/course_exercises/widget/answer_results_page_sheet.dart';
 
 class CourseExercisesWidget extends StatefulWidget {
+  final bool showTitle;
   final CourseModel item;
-  const CourseExercisesWidget({super.key, required this.item});
+  const CourseExercisesWidget({super.key, required this.item, this.showTitle = true});
 
   @override
   State<StatefulWidget> createState() {
@@ -332,25 +333,27 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              SvgPicture.asset(
-                Assets.svg.iconPractice,
-                width: 16.w,
-                height: 16.w,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '练习',
-                style: TextStyle(
-                  color: '#000000'.hexColor,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
+          if (widget.showTitle)...[
+            Row(
+              children: [
+                SvgPicture.asset(
+                  Assets.svg.iconPractice,
+                  width: 16.w,
+                  height: 16.w,
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.w),
+                SizedBox(width: 8.w),
+                Text(
+                  '练习',
+                  style: TextStyle(
+                    color: '#000000'.hexColor,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.w)
+          ],
           if (_practiseList.isNotEmpty && _currentPage < _practiseList.length)
             _buildPageWidget(_practiseList[_currentPage]),
           SizedBox(height: 12.w),

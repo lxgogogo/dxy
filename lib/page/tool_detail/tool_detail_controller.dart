@@ -130,28 +130,9 @@ class ToolDetailController extends GetxController {
               refreshController.loadComplete();
             }
           }
-          comments?.addAll(dataList);
           safeUpdate();
         },
       );
-      if (pageNum == 1) {
-        refreshController.refreshCompleted();
-        if (recordsSize < pageSize) {
-          noMore = true;
-          refreshController.loadNoData();
-        } else {
-          noMore = false;
-          refreshController.resetNoData();
-        }
-      } else {
-        if (recordsSize < pageSize) {
-          noMore = true;
-          refreshController.loadNoData();
-        } else {
-          noMore = false;
-          refreshController.loadComplete();
-        }
-      }
     } catch (e) {
       refreshController.loadFailed();
     } finally {

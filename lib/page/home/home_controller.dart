@@ -221,6 +221,18 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
       courseItems.assignAll(records);
+      final des = courseGroup?.value?.des;
+      if (des == 'knowledge') {
+        for (final item in courseItems) {
+          final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+          final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+          if (startIndex != -1) {
+            knowledgeIndexDtoList[startIndex].isSelected = true;
+          } else {
+            knowledgeIndexDtoList.first.isSelected = true;
+          }
+        }
+      }
       safeUpdate();
     }
   }
@@ -295,5 +307,65 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     tagId = value.id ?? 0;
     await loadVideos();
     DialogUtil.dismiss();
+  }
+
+  Future<void> toKnowledge(CourseModel item) async {
+    final id = item.id;
+    if (id == null) return;
+    try {
+      final res = await CourseService.of.courseRead(id);
+      if (res.isSuccess) {
+        // fetchData(needResetGroup: false);
+        final contentType = item.contentType;
+        final contentId = item.contentId;
+        final subContentId = item.subContentId;
+        AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
+      } else {
+        DialogUtil.showToast(res.msg);
+      }
+    } catch (e) {
+      Log.e(e.toString());
+    }
+  }
+
+  void onSelectKnowledgeItem(int index, int childIndex) {
+    final knowledgeIndexDtoList = courseItems[index].knowledgeIndexDtoList ?? [];
+    for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
+      final model = knowledgeIndexDtoList[i];
+      model.isSelected = false;
+      if (i == childIndex) {
+        model.isSelected = true;
+      }
+    }
+    safeUpdate();
+  }
+
+  void toPractice(CourseModel item) {
+    final id = item.id;
+    if (id == null) return;
+    Get.toNamed(Routes.coursesExercises, arguments: {'id': item.courseId ?? 0});
+  }
+
+  void toChallenge(CourseModel item) {
+    final id = item.id;
+    if (id == null) return;
+  }
+
+  void toChallengeItem(CourseModel item, ChallengeIndexDtoList model) {
+    final id = model.id;
+    if (id == null) return;
+    CourseChallengeAlert.show(id, model.status, title: model.content ?? '', content: model.desc ?? '', callBack: () {
+      // model.status = 1;
+      // item.completed = (item.completed ?? 0)+1;
+      // courseItems.refresh();
+      // page = 1;
+      // getCourseTop();
+      // loadData();
+    }, errorBack: () {
+      // page = 1;
+      // courseItems.refresh();
+      // getCourseTop();
+      // loadData();
+    });
   }
 }

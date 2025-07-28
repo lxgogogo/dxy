@@ -8,13 +8,12 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_exercises_model.dart';
 import 'package:holdem/model/course_model.dart';
-import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
-import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/services/course_service.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/event_bus_util.dart';
+import 'package:holdem/widget/common_html/common_html_widget.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../interactive_courses/course_exercises/widget/answer_results_page_sheet.dart';
@@ -513,23 +512,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
               ],
             ),
           SizedBox(height: 10.w),
-          HtmlWidget(
-            model.content ?? '',
-            customStylesBuilder: htmlCustomStyles,
-            factoryBuilder: () => HtmlFactoryBuilder(
-              context,
-              content: model.content ?? '',
-            ),
-            customWidgetBuilder: (element) {
-              if (element.localName == 'table') {
-                return const SizedBox();
-              }
-              return null;
-            },
-            onTapUrl: (String url) async {
-              return launchUrlString(url, mode: LaunchMode.externalApplication);
-            },
-          ),
+          CommonHtmlWidget(content: model.content ?? ''),
           SizedBox(height: 50.w),
           Wrap(
             runSpacing: 10.w,

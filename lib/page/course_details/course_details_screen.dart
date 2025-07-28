@@ -21,6 +21,7 @@ import 'widgets/course_exercises_widget.dart';
 import 'widgets/course_knowledge_item.dart';
 
 part 'course_details_binding.dart';
+
 part 'course_details_controller.dart';
 
 class CourseDetailsScreen extends StatefulWidget {
@@ -67,9 +68,10 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                 padding: EdgeInsets.only(top: 16.w),
                                 sliver: SliverToBoxAdapter(
                                   child: CourseDetailKnowledgeItem(
-                                      item: controller.detailBean!.knowledge!,
-                                      onTap: controller.toKnowledge,
-                                      selectOnTap: controller.toKnowledgeSelect),
+                                    item: controller.detailBean!.knowledge!,
+                                    onTap: controller.toKnowledge,
+                                    onSelectItem: controller.onSelectKnowledgeItem,
+                                  ),
                                 ),
                               ),
                             if (controller.detailBean != null && controller.detailBean?.practise != null)

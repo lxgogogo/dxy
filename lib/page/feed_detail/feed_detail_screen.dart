@@ -5,25 +5,21 @@ import 'package:chewie/chewie.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
-import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
-import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/net_request.dart';
-import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/bottom_actions_view.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/item_comment.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/no_network.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
-import 'package:html/dom.dart' as dom;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
@@ -36,6 +32,7 @@ import '../../services/index.dart';
 import '../../stores/config_store.dart';
 import '../../utils/date_util.dart';
 import '../../utils/track_utils.dart';
+import '../../widget/common_html/common_html_widget.dart';
 import '../../widget/feed_more_action.dart';
 import '../../widget/report_sheet.dart';
 import '../search_tag/widgets/search_tag_child_view.dart';
@@ -209,27 +206,8 @@ class FeedDetailScreen extends StatelessWidget {
                               SliverToBoxAdapter(
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 12.w),
-                                  child: HtmlWidget(
-                                    controller.detailBean!.content!,
-                                    textStyle: TextStyle(
-                                      color: '#333333'.hexColor,
-                                      fontSize: 16.sp,
-                                    ),
-                                    customStylesBuilder: htmlCustomStyles,
-                                    factoryBuilder: () =>
-                                        HtmlFactoryBuilder(context, content: controller.detailBean!.content!),
-                                    customWidgetBuilder: (dom.Element element) {
-                                      if (element.localName == 'table') {
-                                        return const SizedBox();
-                                      }
-                                      // if(element.localName=='p'){
-                                      //   return Text(element.text,style: TextStyle(color: '#333333'.hexColor.withOpacity(0.7)),);
-                                      // }
-                                      return null;
-                                    },
-                                    onTapUrl: (String url) async {
-                                      return launchUrlString(url, mode: LaunchMode.externalApplication);
-                                    },
+                                  child: CommonHtmlWidget(
+                                    content: controller.detailBean!.content!,
                                   ),
                                 ),
                               ),

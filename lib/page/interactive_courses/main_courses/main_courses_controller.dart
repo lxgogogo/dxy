@@ -167,7 +167,6 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
             courseGroup.value = courseGroups.firstWhereOrNull((e) => e.value?.des == id.toString());
             await StorageService.of.setSelectedCourseGroupId(null);
             courseGroup.value ??= courseGroups.first;
-
           } else {
             if (needResetGroup) {
               courseGroup.value = courseGroups.first;
@@ -208,6 +207,18 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
       courseItems.addAll(records);
+      final des = courseGroup.value?.value?.des;
+      if (des == 'knowledge') {
+        for (final item in courseItems) {
+          final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+          final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+          if (startIndex != -1) {
+            knowledgeIndexDtoList[startIndex].isSelected = true;
+          } else {
+            knowledgeIndexDtoList.first.isSelected = true;
+          }
+        }
+      }
       return records;
     }
     return null;
@@ -276,6 +287,18 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     }
   }
 
+  void onSelectKnowledgeItem(int index, int childIndex) {
+    final knowledgeIndexDtoList = courseItems[index].knowledgeIndexDtoList ?? [];
+    for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
+      final model = knowledgeIndexDtoList[i];
+      model.isSelected = false;
+      if (i == childIndex) {
+        model.isSelected = true;
+      }
+    }
+    courseItems.refresh();
+  }
+
   void toPractice(CourseModel item) {
     if (isFetching) return;
     final id = item.id;
@@ -294,7 +317,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     if (id == null) return;
     CourseChallengeAlert.show(id, model.status, title: model.content ?? '', content: model.desc ?? '', callBack: () {
       model.status = 1;
-      item.completed = (item.completed ?? 0)+1;
+      item.completed = (item.completed ?? 0) + 1;
       courseItems.refresh();
       page = 1;
       getCourseTop();
@@ -313,9 +336,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   Future<void> onContinue() async {
     try {
-      final res = await CourseService.of.courseRemind({
-        'remindType': 'top'
-      },showLoading: true);
+      final res = await CourseService.of.courseRemind({'remindType': 'top'}, showLoading: true);
       if (res.isSuccess) {
         Get.back();
       } else {

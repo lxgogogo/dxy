@@ -8,6 +8,11 @@ import 'package:holdem/gen/assets.gen.dart';
 import '../../../stores/user_store.dart';
 import '../../../widget/common_image.dart';
 import '../../../widget/common_operations_sheet.dart';
+import '../../course_details/widgets/course_knowledge_item.dart';
+import '../../interactive_courses/main_courses/widgets/course_all_item.dart';
+import '../../interactive_courses/main_courses/widgets/course_challenge_item.dart';
+import '../../interactive_courses/main_courses/widgets/course_knowledge_item.dart';
+import '../../interactive_courses/main_courses/widgets/course_practice_item.dart';
 import '../home_screen.dart';
 
 class HomeCourseGroup extends StatelessWidget {
@@ -49,59 +54,42 @@ class HomeCourseGroup extends StatelessWidget {
               SizedBox(height: 16.w),
               Column(
                 spacing: 12.w,
-                children: controller.courseItems
-                    .map(
-                      (e) => GestureDetector(
-                        onTap: () => controller.toCourseDetail(e),
-                        child: Container(
-                          height: 94.w,
-                          decoration: BoxDecoration(
-                            color: '#F9FCFF'.hexColor,
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          padding: EdgeInsets.all(6.w),
-                          child: Row(
-                            spacing: 6.w,
-                            children: [
-                              CommonImage.net(
-                                imageUrl: e.cover ?? '',
-                                radius: 8.r,
-                                width: 136.w,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      e.title ?? '',
-                                      style: TextStyle(
-                                        color: '#333333'.hexColor,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(height: 4.w),
-                                    Text(
-                                      e.des ?? '',
-                                      style: TextStyle(
-                                        color: '#666666'.hexColor,
-                                        fontSize: 12.sp,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                children: controller.courseItems.map(
+                  (item) {
+                    final des = controller.courseGroup?.value?.des;
+                    return switch (des) {
+                      'knowledge' => CourseDetailKnowledgeItem(
+                          item: item,
+                          onTap: () => controller.toKnowledge(item),
+                          onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
+                            controller.courseItems.indexOf(item),
+                            childIndex,
                           ),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      'challenge' => GestureDetector(
+                          onTap: () => controller.toChallenge(item),
+                          child: CourseChallengeItem(
+                            item: item,
+                            onTap: (value1, value2) {
+                              controller.toChallengeItem(value1, value2);
+                            },
+                          ),
+                        ),
+                      'practise' => GestureDetector(
+                          onTap: () => controller.toPractice(item),
+                          child: CoursePracticeItem(
+                            item: item,
+                          ),
+                        ),
+                      _ => GestureDetector(
+                          onTap: () => controller.toCourseDetail(item),
+                          child: CourseAllItem(
+                            item: item,
+                          ),
+                        ),
+                    };
+                  },
+                ).toList(),
               ),
             ],
           );

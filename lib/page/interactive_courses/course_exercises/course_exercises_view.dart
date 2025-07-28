@@ -2,19 +2,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_exercises_model.dart';
-import 'package:holdem/page/feed_detail/widgets/html_factory_builder.dart';
-import 'package:holdem/page/feed_detail/widgets/html_style_builder.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../widget/common_html/common_html_widget.dart';
 import 'course_exercises_controller.dart';
 
 class CourseExercisesPage extends StatefulWidget {
@@ -25,8 +22,7 @@ class CourseExercisesPage extends StatefulWidget {
 }
 
 class _CourseExercisesPageState extends State<CourseExercisesPage> {
-  final CourseExercisesController controller =
-      Get.put(CourseExercisesController());
+  final CourseExercisesController controller = Get.put(CourseExercisesController());
 
   @override
   void dispose() {
@@ -40,9 +36,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
       double width = 1.sw - 126.w;
       double progress = 0;
       if (controller.totalPage > 0 && controller.practiseList.isNotEmpty) {
-        progress = width *
-            ((controller.currentPage.value + controller.completed.value) /
-                controller.totalPage);
+        progress = width * ((controller.currentPage.value + controller.completed.value) / controller.totalPage);
       }
       return Container(
         margin: EdgeInsets.only(top: 56.w),
@@ -90,27 +84,19 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
                           height: 8.w,
                           decoration: BoxDecoration(
                               color: AppTheme.color_333333.withOpacity(0.05),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.w))),
+                              borderRadius: BorderRadius.all(Radius.circular(20.w))),
                         ),
                         Container(
                           width: progress,
                           height: 8.w,
                           decoration: BoxDecoration(
-                              color: AppTheme.color_557BF6,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.w))),
+                              color: AppTheme.color_557BF6, borderRadius: BorderRadius.all(Radius.circular(20.w))),
                         ),
                         if (controller.isCorrect.value)
                           Positioned(
                               left: -65 + progress,
-                              child: Lottie.asset(
-                                  'assets/lottie/progressbar_lizi.json',
-                                  width: 20.w,
-                                  height: 8.w,
-                                  fit: BoxFit.fitHeight,
-                                  repeat: true,
-                                  animate: true))
+                              child: Lottie.asset('assets/lottie/progressbar_lizi.json',
+                                  width: 20.w, height: 8.w, fit: BoxFit.fitHeight, repeat: true, animate: true))
                       ],
                     ),
                   ),
@@ -128,8 +114,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
                           AutoSizeText(
                             '${controller.integral}',
                             minFontSize: 7,
-                            style: TextStyle(
-                                fontSize: 14.sp, color: AppTheme.color_666666),
+                            style: TextStyle(fontSize: 14.sp, color: AppTheme.color_666666),
                           )
                         ],
                       ))
@@ -170,24 +155,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10.w),
-              HtmlWidget(
-                model.content ?? '',
-                customStylesBuilder: htmlCustomStyles,
-                factoryBuilder: () => HtmlFactoryBuilder(
-                  context,
-                  content: model.content ?? '',
-                ),
-                customWidgetBuilder: (element) {
-                  if (element.localName == 'table') {
-                    return const SizedBox();
-                  }
-                  return null;
-                },
-                onTapUrl: (String url) async {
-                  return launchUrlString(url,
-                      mode: LaunchMode.externalApplication);
-                },
-              ),
+              CommonHtmlWidget(content: model.content ?? ''),
               SizedBox(height: 50.w),
               Wrap(
                 runSpacing: 10.w,
@@ -208,17 +176,13 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
             height: 50.w,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: controller.selectAnswerModel == null
-                    ? ColorStyle.c333333.withOpacity(0.1)
-                    : ColorStyle.c557BF6,
+                color: controller.selectAnswerModel == null ? ColorStyle.c333333.withOpacity(0.1) : ColorStyle.c557BF6,
                 borderRadius: BorderRadius.all(Radius.circular(8.w))),
             child: Text(
               '提交',
               style: TextStyle(
                   fontSize: 16.sp,
-                  color: controller.selectAnswerModel == null
-                      ? AppTheme.color_999999
-                      : Colors.white,
+                  color: controller.selectAnswerModel == null ? AppTheme.color_999999 : Colors.white,
                   fontWeight: FontWeight.w600),
             ),
           ),
@@ -262,11 +226,7 @@ class _CourseExercisesPageState extends State<CourseExercisesPage> {
               color: bgColor,
               borderRadius: BorderRadius.all(Radius.circular(8.w)),
               boxShadow: [
-                BoxShadow(
-                    color: shadowColor,
-                    offset: const Offset(0, 4.32),
-                    blurRadius: 8.63,
-                    spreadRadius: 0)
+                BoxShadow(color: shadowColor, offset: const Offset(0, 4.32), blurRadius: 8.63, spreadRadius: 0)
               ],
               border: Border.all(width: 1.w, color: borderColor)),
           child: Text(

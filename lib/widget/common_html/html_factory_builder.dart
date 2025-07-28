@@ -42,23 +42,16 @@ class HtmlFactoryBuilder extends WidgetFactory {
       final semanticLabel = image?.alt ?? image?.title;
       return LayoutBuilder(builder: (context, constraints) {
 
-        return Container(
-          margin: EdgeInsets.only(top: 12.w),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.w),
+        return CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.fill,
+          placeholder: (context, url) => Image.asset(
+            'assets/images/image_loading_def.png',
+            width: constraints.maxWidth / 1.5,
           ),
-          child: CachedNetworkImage(
-            imageUrl: url,
-            fit: BoxFit.fill,
-            placeholder: (context, url) => Image.asset(
-              'assets/images/image_loading_def.png',
-              width: constraints.maxWidth / 1.5,
-            ),
-            errorWidget: (context, url, error) => Image.asset(
-              'assets/images/image_loading_def.png',
-              width: constraints.maxWidth / 1.5,
-            ),
+          errorWidget: (context, url, error) => Image.asset(
+            'assets/images/image_loading_def.png',
+            width: constraints.maxWidth / 1.5,
           ),
         );
       });

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:holdem/utils/date_util.dart';
 import 'package:holdem/widget/item_comment.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:html/dom.dart' as dom;
 
 import '../../../widget/common_app_bar.dart';
-import '../../feed_detail/widgets/html_factory_builder.dart';
-import '../../feed_detail/widgets/html_style_builder.dart';
+import '../../../widget/common_html/common_html_widget.dart';
 import 'message_notice_detail_controller.dart';
 
 class MessageNoticeDetailPage extends StatefulWidget {
@@ -72,23 +68,9 @@ class _MessageNoticeDetailPageState extends State<MessageNoticeDetailPage> {
                                     border: Border.all(
                                         width: 0.5.w,
                                         color: ColorStyle.c333333.withOpacity(0.1))),
-                                child: HtmlWidget(
-                                  controller.detailData.value.content  ?? '',
-                                  customStylesBuilder: htmlCustomStyles,
-                                  factoryBuilder: () => HtmlFactoryBuilder(
-                                    context,
-                                    content: controller.detailData.value.content  ?? '',
-                                  ),
-                                  customWidgetBuilder: (dom.Element element) {
-                                    if (element.localName == 'table') {
-                                      return const SizedBox();
-                                    }
-                                    return null;
-                                  },
-                                  onTapUrl: (String url) async {
-                                    return launchUrlString(url, mode: LaunchMode.externalApplication);
-                                  },
-                                )
+                                child: CommonHtmlWidget(
+                                  content: controller.detailData.value.content  ?? '',
+                                ),
                             )
                         ),
                         SizedBox(height: 5.w),

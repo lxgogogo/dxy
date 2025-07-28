@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DurationText extends StatelessWidget {
   final int durationInSeconds;
+  final TextStyle? textStyle;
 
-  const DurationText({super.key, required this.durationInSeconds});
+  const DurationText({super.key, required this.durationInSeconds, this.textStyle});
 
   String formatDuration(int seconds) {
     int hours = (seconds ~/ 3600);
@@ -26,7 +27,7 @@ class DurationText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       formatDuration(durationInSeconds),
-      style: TextStyle(
+      style: textStyle ?? TextStyle(
         color: Colors.white,
         fontSize: 10.sp,
       ),

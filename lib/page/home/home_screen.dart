@@ -33,11 +33,14 @@ import '../../model/banner.dart';
 import '../../model/course_group_model.dart';
 import '../../model/course_model.dart';
 import '../../model/home_hot_tag_model.dart';
+import '../../routes/app_routes_utils.dart';
 import '../../services/course_service.dart';
 import '../../services/home_service.dart';
 import '../../stores/user_store.dart';
 import '../../utils/event_bus_util.dart';
+import '../../utils/log_util.dart';
 import '../../utils/track_utils.dart';
+import '../interactive_courses/main_courses/widgets/course_challenge_alert.dart';
 
 part 'home_controller.dart';
 
@@ -365,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                               ))
                                           .toList(),
                                     ),
-                                    HomeCourseGroup(),
+                                    const HomeCourseGroup(),
                                     const HomeTitle(title: '德州教程'),
                                     SizedBox(height: 16.w),
                                     LayoutBuilder(

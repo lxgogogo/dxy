@@ -390,8 +390,8 @@ class _CupertinoControlsState extends State<CupertinoControls>
               });
             },
       child: CenterPlayButton(
-        backgroundColor: widget.backgroundColor,
-        iconColor: widget.iconColor,
+        backgroundColor: Colors.white,
+        iconColor: Colors.black,
         isFinished: isFinished,
         isPlaying: controller.value.isPlaying,
         show: showPlayButton,

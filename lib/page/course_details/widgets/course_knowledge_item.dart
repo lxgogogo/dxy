@@ -64,7 +64,7 @@ class CourseDetailKnowledgeItem extends StatelessWidget {
             ),
             SizedBox(height: 12.w),
             Text(
-              item.infoTitle ?? '',
+              knowledgeIndexDto?.title ?? '',
               style: TextStyle(
                 color: '#000000'.hexColor,
                 fontSize: 18.sp,

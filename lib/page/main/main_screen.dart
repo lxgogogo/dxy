@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:app_links/app_links.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -38,127 +39,134 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MainController>(
-      init: MainController(),
-      builder: (controller) {
-        return Scaffold(
-          body: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Column(
-                children: [
-                  Expanded(
-                    child: PageView(
-                      controller: controller.pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        const HomeScreen().keepAlive,
-                        const FeedListScreen().keepAlive,
-                        const MainCoursesScreen().keepAlive,
-                        const MessagePage().keepAlive,
-                        const MineScreen().keepAlive,
-                      ],
+    return AnnotatedRegion(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+      ),
+      child: GetBuilder<MainController>(
+        init: MainController(),
+        builder: (controller) {
+          return Scaffold(
+            body: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Column(
+                  children: [
+                    Expanded(
+                      child: PageView(
+                        controller: controller.pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          const HomeScreen().keepAlive,
+                          const FeedListScreen().keepAlive,
+                          const MainCoursesScreen().keepAlive,
+                          const MessagePage().keepAlive,
+                          const MineScreen().keepAlive,
+                        ],
+                      ),
                     ),
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(18.r),
-                    ),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
-                      child: Container(
-                        padding: EdgeInsets.only(top: 4.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        child: BottomNavigationBar(
-                          currentIndex: controller.tabIndex,
-                          type: BottomNavigationBarType.fixed,
-                          backgroundColor: Colors.transparent,
-                          elevation: 0.0,
-                          selectedFontSize: 10.sp,
-                          unselectedFontSize: 10.sp,
-                          selectedItemColor: '#557BF6'.hexColor,
-                          unselectedItemColor: '#333333'.hexColor,
-                          showSelectedLabels: true,
-                          showUnselectedLabels: true,
-                          useLegacyColorScheme: false,
-                          onTap: controller.onTabBarItem,
-                          items: [
-                            _buildBarItem(
-                              icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
-                              label: '首页',
-                            ),
-                            _buildBarItem(
-                              icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
-                              label: '论坛',
-                            ),
-                            _buildBarItem(
-                                icon: controller.tabIndex == 2 ? Assets.svg.navIconCourseAct : Assets.svg.navIconCourse,
-                                label: '课程',
-                                hot: true
-                            ),
-                            _buildBarItem(
-                              icon: controller.tabIndex == 3 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
-                              label: '消息',
-                              badge: Obx(() {
-                                final badgeCount = UserStore.of.badgeModel.value?.total ?? 0;
-                                if (badgeCount > 0) {
-                                  return Positioned(
-                                      top: -7.5.w,
-                                      right: -7.5.w,
-                                      child: Container(
-                                          width: 16.w,
-                                          height: 16.w,
-                                          padding: EdgeInsets.all(1.w),
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(8.w)), color: Colors.red),
-                                          child: AutoSizeText(
-                                            '${badgeCount > 99 ? '99' : badgeCount}',
-                                            minFontSize: 6,
-                                            style: TextStyle(
-                                              fontSize: 9.sp,
-                                              color: Colors.white,
-                                            ),
-                                          )));
-                                }
-                                return const SizedBox();
-                              }),
-                            ),
-                            _buildBarItem(
-                              icon: controller.tabIndex == 4 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
-                              label: '我的',
-                            ),
-                          ],
+                    ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(18.r),
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 4.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                          child: BottomNavigationBar(
+                            currentIndex: controller.tabIndex,
+                            type: BottomNavigationBarType.fixed,
+                            backgroundColor: Colors.transparent,
+                            elevation: 0.0,
+                            selectedFontSize: 10.sp,
+                            unselectedFontSize: 10.sp,
+                            selectedItemColor: '#557BF6'.hexColor,
+                            unselectedItemColor: '#333333'.hexColor,
+                            showSelectedLabels: true,
+                            showUnselectedLabels: true,
+                            useLegacyColorScheme: false,
+                            onTap: controller.onTabBarItem,
+                            items: [
+                              _buildBarItem(
+                                icon: controller.tabIndex == 0 ? Assets.svg.navIconHomeAct : Assets.svg.navIconHome,
+                                label: '首页',
+                              ),
+                              _buildBarItem(
+                                icon: controller.tabIndex == 1 ? Assets.svg.navIconFeedAct : Assets.svg.navIconFeed,
+                                label: '论坛',
+                              ),
+                              _buildBarItem(
+                                  icon:
+                                      controller.tabIndex == 2 ? Assets.svg.navIconCourseAct : Assets.svg.navIconCourse,
+                                  label: '课程',
+                                  hot: true),
+                              _buildBarItem(
+                                icon:
+                                    controller.tabIndex == 3 ? Assets.svg.navIconMessageAct : Assets.svg.navIconMessage,
+                                label: '消息',
+                                badge: Obx(() {
+                                  final badgeCount = UserStore.of.badgeModel.value?.total ?? 0;
+                                  if (badgeCount > 0) {
+                                    return Positioned(
+                                        top: -7.5.w,
+                                        right: -7.5.w,
+                                        child: Container(
+                                            width: 16.w,
+                                            height: 16.w,
+                                            padding: EdgeInsets.all(1.w),
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(8.w)),
+                                                color: Colors.red),
+                                            child: AutoSizeText(
+                                              '${badgeCount > 99 ? '99' : badgeCount}',
+                                              minFontSize: 6,
+                                              style: TextStyle(
+                                                fontSize: 9.sp,
+                                                color: Colors.white,
+                                              ),
+                                            )));
+                                  }
+                                  return const SizedBox();
+                                }),
+                              ),
+                              _buildBarItem(
+                                icon: controller.tabIndex == 4 ? Assets.svg.navIconMineAct : Assets.svg.navIconMine,
+                                label: '我的',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Positioned(
-                bottom: kToolbarHeight+MediaQuery.of(context).padding.bottom-10.w,
-                child: Image.asset(
-                  'assets/courses/icon_courses_tab_hot.png',
-                  height: 23.w,
-                  fit: BoxFit.cover,
+                  ],
                 ),
-              )
-            ],
-          ),
-          backgroundColor: Colors.white,
-        );
-      },
+                Positioned(
+                  bottom: kToolbarHeight + MediaQuery.of(context).padding.bottom - 10.w,
+                  child: Image.asset(
+                    'assets/courses/icon_courses_tab_hot.png',
+                    height: 23.w,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              ],
+            ),
+            backgroundColor: Colors.white,
+          );
+        },
+      ),
     );
   }
 
-  BottomNavigationBarItem _buildBarItem({
-    required String icon,
-    required String label,
-    Widget? badge,
-    bool hot = false
-  }) {
+  BottomNavigationBarItem _buildBarItem(
+      {required String icon, required String label, Widget? badge, bool hot = false}) {
     return BottomNavigationBarItem(
       icon: Stack(
         clipBehavior: Clip.none,
@@ -169,7 +177,6 @@ class _MainScreenState extends State<MainScreen> {
             height: 24.w,
           ),
           if (badge != null) badge
-
         ],
       ),
       label: label,

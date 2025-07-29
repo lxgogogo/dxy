@@ -132,44 +132,48 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                   ],
                 ),
                 const SizedBox(height: 24),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 12,
-                    children: List.generate(
-                      widget.videos.length,
-                      (index) {
-                        final video = widget.videos[index];
-                        return GestureDetector(
-                          onTap: () => widget.onVideoTap?.call(video),
-                          child: SizedBox(
-                            width: 180,
-                            child: Column(
-                              spacing: 8,
-                              children: [
-                                RecommendVideoItem(
-                                  onTap: () => widget.onPlayNewVideo?.call(video),
-                                  recommendVideo: video,
-                                  animationController: _animationController,
-                                  showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
-                                  isFullScreen: true,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        spacing: 12,
+                        children: List.generate(
+                          widget.videos.length,
+                          (index) {
+                            final video = widget.videos[index];
+                            return GestureDetector(
+                              onTap: () => widget.onVideoTap?.call(video),
+                              child: SizedBox(
+                                width: 180,
+                                child: Column(
+                                  spacing: 8,
+                                  children: [
+                                    RecommendVideoItem(
+                                      onTap: () => widget.onPlayNewVideo?.call(video),
+                                      recommendVideo: video,
+                                      animationController: _animationController,
+                                      showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
+                                      isFullScreen: true,
+                                    ),
+                                    Text(
+                                      video.title ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  video.title ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  }
                 ),
               ],
             ),
@@ -251,7 +255,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                     widget.favorited == true ? Assets.svg.iconBottomFavorited : Assets.svg.iconBottomFavorite,
                     width: 24,
                     height: 24,
-                    color: Colors.white,
+                    color: widget.favorited == true ? null : Colors.white,
                   ),
                   const Text(
                     '收藏',

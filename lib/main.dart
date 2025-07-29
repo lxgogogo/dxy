@@ -114,17 +114,7 @@ class MyApp extends StatelessWidget {
               hintColor: Colors.transparent,
               hoverColor: Colors.transparent,
               splashColor: Colors.transparent,
-              appBarTheme: AppBarTheme(
-                scrolledUnderElevation: 0.0,
-                titleTextStyle: TextStyle(
-                  fontSize: 16.sp,
-                  color: Color(0xff2C2C2C),
-                ),
-              ),
-              // 设置最大宽度为 960px
-              // 可根据需求调整该值
             ),
-            // home: WebFitPage(child: SplashScreen()),
             builder: FlutterSmartDialog.init(
               builder: (BuildContext context, Widget? child) {
                 return MediaQuery(

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_api_availability/google_api_availability.dart';
@@ -22,7 +23,11 @@ class PreConfig {
   static Future<void> init() async {
     if (!_didInit) {
       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-      // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+      SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent,
+      );
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
       await Get.putAsync<StorageService>(
         () => StorageService().init(),
         permanent: true,

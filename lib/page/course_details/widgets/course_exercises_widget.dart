@@ -227,7 +227,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       _playSound('correct');
     }
     // 结果弹窗
-    _answerStr = (data.answer ?? false) ? '泰裤辣！' : '不正确';
+    _answerStr = (data.answer ?? false) ? data.text ?? '泰库拉！' : '不正确';
     _correctStr = data.answerStr ?? '';
     _isCorrectAnswer = data.answer ?? false;
     _buttonState = true;

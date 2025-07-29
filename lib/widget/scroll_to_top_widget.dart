@@ -54,7 +54,9 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
   }
 
   void _scrollToTop() {
-    widget.scrollController.jumpTo(0);
+    widget.scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.linear);
   }
 
   @override

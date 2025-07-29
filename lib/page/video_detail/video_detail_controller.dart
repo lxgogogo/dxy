@@ -21,6 +21,8 @@ class VideoDetailController extends GetxController {
   ChewieController? chewieController;
   bool hasUploadEvent = false;
   bool isPlayComplete = false;
+  Timer? recommendTimer;
+  bool _recommendTimerCancelled = false; // 添加取消标志
   RxList<RecommendVideoModel> recommendedVideos = <RecommendVideoModel>[].obs;
 
   List<CommentBean>? comments;
@@ -242,6 +244,11 @@ class VideoDetailController extends GetxController {
       if (currentDuration >= totalDuration) {
         if (detailBean?.videoList?.isNotEmpty == true) {
           if (playVideoIndex == detailBean!.videoList!.length - 1) {
+            recommendTimer = Timer(const Duration(seconds: 5), () {
+              if (!_recommendTimerCancelled && recommendedVideos.isNotEmpty) {
+                onPlayNewVideo(recommendedVideos.first);
+              }
+            });
             isPlayComplete = true;
             safeUpdate();
             return;
@@ -252,6 +259,11 @@ class VideoDetailController extends GetxController {
           safeUpdate();
           _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
         } else {
+          recommendTimer = Timer(const Duration(seconds: 5), () {
+            if (!_recommendTimerCancelled && recommendedVideos.isNotEmpty) {
+              onPlayNewVideo(recommendedVideos.first);
+            }
+          });
           isPlayComplete = true;
           safeUpdate();
         }
@@ -289,7 +301,15 @@ class VideoDetailController extends GetxController {
   Future<void> onReplay() async {
     await playVideo();
     isPlayComplete = false;
+    recommendTimer = null;
+    _recommendTimerCancelled = false; // 重置标志
     safeUpdate();
+  }
+
+  void cancelRecommendTimer() {
+    _recommendTimerCancelled = true;
+    recommendTimer?.cancel();
+    recommendTimer = null;
   }
 
   Future<void> onPlayNewVideo(RecommendVideoModel model) async {
@@ -297,6 +317,8 @@ class VideoDetailController extends GetxController {
     playVideoIndex = 0;
     hasUploadEvent = false;
     isPlayComplete = false;
+    recommendTimer = null;
+    _recommendTimerCancelled = false; // 重置标志
     recommendedVideos.clear();
     comments = null;
     _pageNum = 1;
@@ -341,7 +363,7 @@ class VideoDetailController extends GetxController {
     if (!fullScreenOnTap) {
       if (_isVideoInitialized) {
         if (videoController?.value.isPlaying == false) {
-          videoController?.play();
+          // videoController?.play();
         }
       }
     } else {

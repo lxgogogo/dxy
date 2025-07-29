@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
   final Function(RecommendVideoModel recommendVideo)? onVideoTap;
   final VoidCallback? onReplay;
   final Function(RecommendVideoModel model)? onPlayNewVideo;
+  final Timer? recommendTimer;
+  final VoidCallback? onCancelTimer; // 添加取消timer的回调
 
   const FullscreenRecommendedVideosView({
     super.key,
@@ -31,6 +34,8 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
     this.toShare,
     this.onReplay,
     this.onPlayNewVideo,
+    this.recommendTimer,
+    this.onCancelTimer,
   });
 
   @override
@@ -40,7 +45,6 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
 class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedVideosView>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  bool _isAnimating = false;
 
   @override
   void initState() {
@@ -50,23 +54,16 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
         vsync: this,
         duration: const Duration(seconds: 5),
       );
-      _animationController.addStatusListener((status) {
-        if (status == AnimationStatus.completed && _isAnimating) {
-          widget.onPlayNewVideo?.call(widget.videos.first);
-        }
-      });
       _animationController.forward();
-      _isAnimating = true;
-      setState(() {});
     }
   }
 
   void _cancelAnimation() {
-    if (!_isAnimating) return;
+    // 调用Controller的取消方法
+    widget.onCancelTimer?.call();
+    // 停止本地动画
     _animationController.stop();
     _animationController.reset();
-    _isAnimating = false;
-    setState(() {});
   }
 
   @override
@@ -113,7 +110,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                       ),
                     ),
                     Opacity(
-                      opacity: _isAnimating ? 1 : 0,
+                      opacity: widget.recommendTimer?.isActive == true ? 1 : 0,
                       child: GestureDetector(
                         onTap: _cancelAnimation,
                         child: Container(
@@ -154,7 +151,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                                   onTap: () => widget.onPlayNewVideo?.call(video),
                                   recommendVideo: video,
                                   animationController: _animationController,
-                                  showAnimate: index == 0 && _isAnimating,
+                                  showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
                                   isFullScreen: true,
                                 ),
                                 Text(

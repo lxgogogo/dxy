@@ -12,13 +12,8 @@ class ScrollToTopWidget extends StatefulWidget {
   final double scrollThreshold;
   final double? bottom;
 
-  const ScrollToTopWidget({
-    super.key,
-    required this.scrollController,
-    required this.child,
-    this.scrollThreshold = 0.25,
-    this.bottom
-  });
+  const ScrollToTopWidget(
+      {super.key, required this.scrollController, required this.child, this.scrollThreshold = 0.25, this.bottom});
 
   @override
   State<ScrollToTopWidget> createState() => _ScrollToTopWidgetState();
@@ -54,9 +49,11 @@ class _ScrollToTopWidgetState extends State<ScrollToTopWidget> {
   }
 
   void _scrollToTop() {
-    widget.scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.linear);
+    widget.scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.linear,
+    );
   }
 
   @override

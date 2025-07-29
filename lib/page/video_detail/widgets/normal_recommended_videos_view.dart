@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:holdem/extensions/string_extensions.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../../model/recommend_video_model.dart';
-import '../../../widget/like_button/like_button.dart';
 import 'item_recommended_video.dart';
 
 class NormalRecommendedVideosView extends StatefulWidget {
@@ -16,6 +16,8 @@ class NormalRecommendedVideosView extends StatefulWidget {
   final Function(RecommendVideoModel recommendVideo)? onVideoTap;
   final VoidCallback? onReplay;
   final Function(RecommendVideoModel model)? onPlayNewVideo;
+  final Timer? recommendTimer;
+  final VoidCallback? onCancelTimer; // 添加取消timer的回调
 
   const NormalRecommendedVideosView({
     super.key,
@@ -23,6 +25,8 @@ class NormalRecommendedVideosView extends StatefulWidget {
     this.onVideoTap,
     this.onReplay,
     this.onPlayNewVideo,
+    this.recommendTimer,
+    this.onCancelTimer,
   });
 
   @override
@@ -31,7 +35,6 @@ class NormalRecommendedVideosView extends StatefulWidget {
 
 class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosView> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  bool _isAnimating = false;
 
   @override
   void initState() {
@@ -41,23 +44,16 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
         vsync: this,
         duration: const Duration(seconds: 5),
       );
-      _animationController.addStatusListener((status) {
-        if (status == AnimationStatus.completed && _isAnimating) {
-          widget.onPlayNewVideo?.call(widget.videos.first);
-        }
-      });
       _animationController.forward();
-      _isAnimating = true;
-      setState(() {});
     }
   }
 
   void _cancelAnimation() {
-    if (!_isAnimating) return;
+    // 调用Controller的取消方法
+    widget.onCancelTimer?.call();
+    // 停止本地动画
     _animationController.stop();
     _animationController.reset();
-    _isAnimating = false;
-    setState(() {});
   }
 
   @override
@@ -110,7 +106,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                       onTap: () => widget.onPlayNewVideo?.call(widget.videos.first),
                       recommendVideo: widget.videos.first,
                       animationController: _animationController,
-                      showAnimate: _isAnimating,
+                      showAnimate: widget.recommendTimer?.isActive == true,
                       isFullScreen: false,
                     ),
                     Expanded(
@@ -151,7 +147,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                                   ],
                                 ),
                               ),
-                              if (_isAnimating)
+                              if (widget.recommendTimer?.isActive == true)
                                 GestureDetector(
                                   onTap: _cancelAnimation,
                                   child: Container(

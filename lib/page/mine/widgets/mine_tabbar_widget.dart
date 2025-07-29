@@ -22,7 +22,7 @@ class _StableTabBarState extends State<StableTabBar> {
   final double selectedFontSize = 18.sp;
   final double unselectedFontSize = 16.sp;
   final Color selectedColor = const Color(0xff333333);
-  final Color unselectedColor = const Color(0xff333333);
+  final Color unselectedColor = const Color(0xff999999);
   int selectIndex = 0;
 
   @override

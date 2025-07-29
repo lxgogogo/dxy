@@ -64,7 +64,7 @@ class FeedItem extends StatelessWidget {
                     style: TextStyle(
                       color: '#333333'.hexColor,
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                     softWrap: true,
                     maxLines: 1,

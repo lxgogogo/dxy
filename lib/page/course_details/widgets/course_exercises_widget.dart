@@ -338,7 +338,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         borderRadius: BorderRadius.circular(16.w),
         boxShadow: [
           BoxShadow(
-            color: '#58A5FF'.hexColor.withOpacity(0.1),
+            color: '#0050FF'.hexColor.withOpacity(0.1),
             blurRadius: 8.63.r,
             offset: Offset(0, 4.32.w),
           ),

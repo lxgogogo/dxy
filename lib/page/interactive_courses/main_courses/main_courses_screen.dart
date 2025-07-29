@@ -62,7 +62,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
           if (controller.isLogin.value) {
             return Scaffold(
                 extendBodyBehindAppBar: true,
-                backgroundColor: Colors.transparent,
+                backgroundColor: '#F7F8FC'.hexColor,
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

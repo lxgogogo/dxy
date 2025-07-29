@@ -220,16 +220,18 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     if (res.isSuccess) {
       final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
-      courseItems.assignAll(records);
+      courseItems.assignAll(records.take(2));
       final des = courseGroup?.value?.des;
       if (des == 'knowledge') {
         for (final item in courseItems) {
           final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
-          final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
-          if (startIndex != -1) {
-            knowledgeIndexDtoList[startIndex].isSelected = true;
-          } else {
-            knowledgeIndexDtoList.first.isSelected = true;
+          if (knowledgeIndexDtoList.isNotEmpty) {
+            final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+            if (startIndex != -1) {
+              knowledgeIndexDtoList[startIndex].isSelected = true;
+            } else {
+              knowledgeIndexDtoList.first.isSelected = true;
+            }
           }
         }
       }
@@ -310,21 +312,43 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   Future<void> toKnowledge(CourseModel item) async {
-    final id = item.id;
-    if (id == null) return;
-    try {
-      final res = await CourseService.of.courseRead(id);
-      if (res.isSuccess) {
-        // fetchData(needResetGroup: false);
-        final contentType = item.contentType;
-        final contentId = item.contentId;
-        final subContentId = item.subContentId;
-        AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
-      } else {
-        DialogUtil.showToast(res.msg);
+    final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+    final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
+    if (knowledgeIndexDto == null) {
+      return;
+    }
+    int? contentId;
+    int? subContentId;
+    String? contentType;
+    if (knowledgeIndexDto.contentVideo != null) {
+      contentId = knowledgeIndexDto.contentVideo!.id;
+      subContentId = knowledgeIndexDto.contentVideo!.listId;
+      contentType = subContentId != null ? 'videoList' : 'video';
+    } else if (knowledgeIndexDto.contentArticle != null) {
+      contentId = knowledgeIndexDto.contentArticle!.id;
+      contentType = 'article';
+    }
+    if (knowledgeIndexDto.status == 1) {
+      AppRoutesUtils.toDetail(
+        contentType,
+        contentId,
+        subContentId: subContentId,
+      );
+    } else {
+      try {
+        final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
+        if (res.isSuccess) {
+          AppRoutesUtils.toDetail(
+            contentType,
+            contentId,
+            subContentId: subContentId,
+          );
+        } else {
+          DialogUtil.showToast(res.msg);
+        }
+      } catch (e) {
+        Log.e(e.toString());
       }
-    } catch (e) {
-      Log.e(e.toString());
     }
   }
 

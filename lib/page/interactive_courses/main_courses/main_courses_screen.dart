@@ -1,10 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:holdem/utils/app_theme.dart';
-import 'package:holdem/utils/color_style_util.dart';
-import 'package:holdem/utils/dialog_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focus_detector/focus_detector.dart';
@@ -12,11 +10,12 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/main/main_screen.dart';
 import 'package:holdem/services/course_service.dart';
+import 'package:holdem/utils/app_theme.dart';
+import 'package:holdem/utils/color_style_util.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_image.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
-import 'package:intl/intl.dart';
-import 'dart:math';
 
 import '../../../gen/assets.gen.dart';
 import '../../../mixins/refresh_controller_mixin.dart';
@@ -29,18 +28,15 @@ import '../../../stores/storage.dart';
 import '../../../stores/user_store.dart';
 import '../../../utils/event_bus_util.dart';
 import '../../../utils/log_util.dart';
-import '../../../utils/dialog_util.dart';
 import '../../../widget/common_operations_sheet.dart';
 import '../../../widget/common_refresher.dart';
 import '../../../widget/no_data.dart';
 import '../../course_details/widgets/course_exercises_widget.dart';
-import '../../course_details/widgets/course_knowledge_item.dart';
 import '../../home/home_screen.dart';
 import 'widgets/course_all_item.dart';
 import 'widgets/course_challenge_alert.dart';
 import 'widgets/course_challenge_item.dart';
 import 'widgets/course_knowledge_item.dart';
-import 'widgets/course_practice_item.dart';
 import 'widgets/courses_info_view.dart';
 import 'widgets/not_login_course_all_item.dart';
 
@@ -199,7 +195,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                               final item = controller.courseItems[index];
                                               return GestureDetector(
                                                 onTap: () => controller.toKnowledge(item),
-                                                child: CourseDetailKnowledgeItem(
+                                                child: CourseKnowledgeItem(
                                                   item: item,
                                                   onTap: () => controller.toKnowledge(item),
                                                   onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
@@ -309,11 +305,10 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: 56.w,
-                margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-                alignment: Alignment.centerLeft,
-                child: Assets.images.logoText.image(width: 91.75.w)
-              ),
+                  height: 56.w,
+                  margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+                  alignment: Alignment.centerLeft,
+                  child: Assets.images.logoText.image(width: 91.75.w)),
               _buildSelectGroupWidget(),
               SizedBox(height: 16.w),
               Expanded(

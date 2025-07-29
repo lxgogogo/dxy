@@ -56,11 +56,13 @@ class CourseDetailsController extends GetxController {
         // 获取数据
         detailBean = CourseModel.fromJson(res.data);
         final knowledgeIndexDtoList = detailBean?.knowledge?.knowledgeIndexDtoList ?? [];
-        final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
-        if (startIndex != -1) {
-          knowledgeIndexDtoList[startIndex].isSelected = true;
-        } else {
-          knowledgeIndexDtoList.first.isSelected = true;
+        if (knowledgeIndexDtoList.isNotEmpty) {
+          final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+          if (startIndex != -1) {
+            knowledgeIndexDtoList[startIndex].isSelected = true;
+          } else {
+            knowledgeIndexDtoList.first.isSelected = true;
+          }
         }
         CourseModel practise = detailBean?.practise ?? CourseModel();
         final practiseIndexDtoList = practise.practiseIndexDtoList ?? [];
@@ -124,25 +126,40 @@ class CourseDetailsController extends GetxController {
 
   Future<void> toKnowledge() async {
     if (isFetching) return;
-    final id = detailBean!.knowledge!.id;
-    if (id == null) return;
-    bool isFinish =
-        (detailBean?.knowledge?.total ?? 0) > 0 && detailBean?.knowledge?.completed == detailBean?.knowledge?.total;
-    if (isFinish) {
-      final contentType = detailBean!.knowledge!.contentType;
-      final contentId = detailBean!.knowledge!.contentId;
-      final subContentId = detailBean!.knowledge!.subContentId;
-      AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId);
+    final knowledgeIndexDtoList = detailBean?.knowledge?.knowledgeIndexDtoList ?? [];
+    final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
+    if (knowledgeIndexDto == null) {
+      return;
+    }
+    int? contentId;
+    int? subContentId;
+    String? contentType;
+    if (knowledgeIndexDto.contentVideo != null) {
+      contentId = knowledgeIndexDto.contentVideo!.id;
+      subContentId = knowledgeIndexDto.contentVideo!.listId;
+      contentType = subContentId != null ? 'videoList' : 'video';
+    } else if (knowledgeIndexDto.contentArticle != null) {
+      contentId = knowledgeIndexDto.contentArticle!.id;
+      contentType = 'article';
+    }
+    if (knowledgeIndexDto.status == 1) {
+      AppRoutesUtils.toDetail(
+        contentType,
+        contentId,
+        subContentId: subContentId,
+      );
     } else {
       try {
-        final res = await CourseService.of.courseRead(id);
+        final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
         if (res.isSuccess) {
-          final contentType = detailBean!.knowledge!.contentType;
-          final contentId = detailBean!.knowledge!.contentId;
-          final subContentId = detailBean!.knowledge!.subContentId;
-          AppRoutesUtils.toDetail(contentType, contentId, subContentId: subContentId, callBack: (value) {
-            requestDetail();
-          });
+          AppRoutesUtils.toDetail(
+            contentType,
+            contentId,
+            subContentId: subContentId,
+            callBack: (value) {
+              requestDetail();
+            },
+          );
         } else {
           DialogUtil.showToast(res.msg);
         }

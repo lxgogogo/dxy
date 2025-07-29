@@ -134,7 +134,7 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
                   valueListenable: videoPlayerController!,
                   builder: (context, value, Widget? child) {
                     return Visibility(
-                      visible: !value.isPlaying,
+                      visible: !value.isInitialized,
                       child: ClipRRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 29.62, sigmaY: 29.62),

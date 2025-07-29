@@ -5,221 +5,148 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 
 import '../../../../model/course_model.dart';
+import '../../../../widget/common_html/common_html_widget.dart';
 import '../../../../widget/common_image.dart';
+import '../../../course_details/widgets/course_knowledge_video_view.dart';
+import '../../../course_details/widgets/course_progress_view.dart';
 
 class CourseKnowledgeItem extends StatelessWidget {
   final CourseModel item;
+  final VoidCallback? onTap;
+  final Function(int index)? onSelectItem;
 
   const CourseKnowledgeItem({
     super.key,
     required this.item,
+    this.onTap,
+    this.onSelectItem,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12.w).copyWith(right: 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              CommonImage.net(
-                imageUrl: item.icon ?? '',
-                radius: 4.r,
-                width: 44.w,
-                height: 44.w,
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      item.title ?? '',
-                      style: TextStyle(
-                        color: '#333333'.hexColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (item.infoTitle?.isNotEmpty == true) ...[
-                      SizedBox(height: 2.w),
+    final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+    final currentIndex = knowledgeIndexDtoList.indexWhere((element) => element.isSelected == true);
+    final knowledgeIndexDto = currentIndex >= 0 ? knowledgeIndexDtoList[currentIndex] : null;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: '#58A5FF'.hexColor.withOpacity(0.1),
+              blurRadius: 8.63.r,
+              offset: Offset(0, 4.32.w),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                CommonImage.net(
+                  imageUrl: item.icon ?? '',
+                  radius: 4.r,
+                  width: 44.w,
+                  height: 44.w,
+                ),
+                SizedBox(width: 8.w),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       Text(
-                        item.infoTitle ?? '',
+                        item.title ?? '',
                         style: TextStyle(
-                          color: '#666666'.hexColor,
-                          fontSize: 12.sp,
+                          color: '#333333'.hexColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                  ],
-                ),
-              ),
-              Container(
-                height: 28.w,
-                padding: EdgeInsets.all(1.r),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                  gradient: LinearGradient(
-                    colors: [
-                      '#557BF6'.hexColor.withOpacity(0.4),
-                      '#557BF6'.hexColor.withOpacity(0),
-                    ],
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                    color: Colors.white,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.horizontal(left: Radius.circular(28.r)),
-                      gradient: LinearGradient(
-                        colors: [
-                          '#557BF6'.hexColor.withOpacity(0.2),
-                          '#557BF6'.hexColor.withOpacity(0),
-                        ],
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          Assets.svg.iconToKnomledge,
-                          width: 16.w,
-                          height: 16.w,
-                        ),
-                        SizedBox(width: 4.w),
+                      if (item.infoTitle?.isNotEmpty == true) ...[
+                        SizedBox(height: 2.w),
                         Text(
-                          item.contentType.sourceActionTypeDesc,
+                          item.infoTitle ?? '',
                           style: TextStyle(
-                            color: '#557BF6'.hexColor,
+                            color: '#666666'.hexColor,
                             fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12.w),
-          Padding(
-            padding: EdgeInsets.only(right: 12.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        text: '进度：',
-                        children: [
-                          TextSpan(
-                            text: '${item.completed ?? 0}',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          TextSpan(
-                            text: '/${item.total ?? 0}',
-                          ),
-                        ],
-                      ),
-                      style: TextStyle(
-                        color: '#666666'.hexColor,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          Assets.svg.iconCourseIntegral,
-                          width: 16.w,
-                          height: 16.w,
-                        ),
-                        SizedBox(width: 4.w),
-                        Text(
-                          '${item.integral ?? 0}',
-                          style: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.r),
-                  child: Container(
-                    width: double.infinity,
-                    height: 4.w,
-                    margin: EdgeInsets.symmetric(vertical: 8.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: item.progress * constraints.maxWidth,
-                            color: '#557BF6'.hexColor,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const ClampingScrollPhysics(),
-                  child: Wrap(
-                    spacing: 5.w,
-                    children: List.generate(
-                      item.total ?? 0,
-                      (index) {
-                        final isCompleted = index < (item.completed ?? 0);
-                        return Container(
-                          width: 24.w,
-                          height: 24.w,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                isCompleted ? '#557BF6'.hexColor.withOpacity(0.1) : '#333333'.hexColor.withOpacity(0.1),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '${index + 1}',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: isCompleted ? '#557BF6'.hexColor : '#333333'.hexColor,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    ],
                   ),
                 ),
               ],
             ),
-          )
-        ],
+            SizedBox(height: 12.w),
+            Text(
+              item.infoTitle ?? '',
+              style: TextStyle(
+                color: '#000000'.hexColor,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 12.w),
+            if (knowledgeIndexDto?.contentArticle != null)
+              ClipRect(
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    HeightLimiter(
+                      maxHeight: 166.w,
+                      child: CommonHtmlWidget(
+                        content: knowledgeIndexDto?.contentArticle?.content ?? '',
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 12.w,
+                      child: GestureDetector(
+                        onTap: onTap,
+                        child: Container(
+                          height: 28.w,
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          decoration: BoxDecoration(
+                            color: '#557BF6'.hexColor.withValues(alpha: 0.7),
+                            borderRadius: BorderRadius.circular(100.r),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '查看全文',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (knowledgeIndexDto?.contentVideo != null)
+              KnowledgeVideoView(
+                contentVideo: knowledgeIndexDto?.contentVideo,
+                onTapDetail: onTap,
+              ),
+            SizedBox(height: 12.w),
+            CourseProgressView(
+              item: item,
+              onSelectItem: onSelectItem,
+            ),
+          ],
+        ),
       ),
     );
   }

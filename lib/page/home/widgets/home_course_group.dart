@@ -58,7 +58,7 @@ class HomeCourseGroup extends StatelessWidget {
                   (item) {
                     final des = controller.courseGroup?.value?.des;
                     return switch (des) {
-                      'knowledge' => CourseDetailKnowledgeItem(
+                      'knowledge' => CourseKnowledgeItem(
                           item: item,
                           onTap: () => controller.toKnowledge(item),
                           onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(

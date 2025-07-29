@@ -92,9 +92,9 @@ class DialogUtil {
           child: Text(
             msg,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: 14,
             ),
           ),
         ),

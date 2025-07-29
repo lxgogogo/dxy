@@ -22,8 +22,13 @@ class CourseExercisesWidget extends StatefulWidget {
   final bool showTitle;
   final CourseModel item;
   final int pageType; //1-详情 0-首页
+  final Function? endFunction;
   const CourseExercisesWidget(
-      {super.key, required this.item, this.showTitle = true, this.pageType = 0});
+      {super.key,
+      required this.item,
+      this.showTitle = true,
+      this.pageType = 0,
+      this.endFunction});
 
   @override
   State<StatefulWidget> createState() {
@@ -239,6 +244,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           _evenPairs(data, end: true);
         } else {
           _endAlert(data);
+        }
+        if (widget.endFunction != null) {
+          widget.endFunction!();
         }
       } else {
         // 答题未结束
@@ -515,16 +523,12 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if ((model.title ?? '').isNotEmpty)
-            Row(
-              children: [
-                Text(
-                  model.title ?? '',
-                  style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black),
-                )
-              ],
+            Text(
+              model.title ?? '',
+              style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
             ),
           SizedBox(height: 10.w),
           CommonHtmlWidget(content: model.content ?? ''),

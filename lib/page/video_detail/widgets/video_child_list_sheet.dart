@@ -100,7 +100,7 @@ class VideoChildListSheet extends StatelessWidget {
                               text: e.title ?? '',
                               style: TextStyle(
                                 fontSize: 16.sp,
-                                color: selectedIndex == index ? '#557BF6'.hexColor : '#666666'.hexColor,
+                                color: selectedIndex == index ? '#557BF6'.hexColor : '#333333'.hexColor,
                                 fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
                               ),
                             )

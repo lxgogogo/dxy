@@ -64,7 +64,7 @@ class ThreeDBookItem extends StatelessWidget {
                           style: TextStyle(
                             color: '#333333'.hexColor,
                             fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

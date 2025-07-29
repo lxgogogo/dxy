@@ -56,81 +56,86 @@ class _MineScreenState extends State<MineScreen>
                         SizedBox(height: ScreenUtil().statusBarHeight),
                         SizedBox(
                           height: 56.w,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(Routes.equityCenter);
-                                },
-                                child: Container(
-                                  width: 84.w,
-                                  height: 24.w,
-                                  margin: EdgeInsets.only(left: 16.w),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(12.w)),
-                                      border: Border.all(
-                                          width: 1.w,
-                                          color: AppTheme.color_557BF6)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        Assets.images.icMinePowerCenter.path,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      SizedBox(width: 2.w),
-                                      Text(
-                                        '权益中心',
-                                        style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: AppTheme.color_557BF6),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Get.toNamed(Routes.scan);
+                                      Get.toNamed(Routes.equityCenter);
                                     },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 8.w,
-                                          left: 16.w,
-                                          top: 6.w,
-                                          bottom: 6.w),
-                                      child: SvgPicture.asset(
-                                        Assets.svg.iconScan,
-                                        width: 24.w,
-                                        height: 24.w,
+                                    child: Container(
+                                      width: 84.w,
+                                      height: 24.w,
+                                      margin: EdgeInsets.only(left: 16.w),
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(12.w)),
+                                          border: Border.all(
+                                              width: 1.w,
+                                              color: AppTheme.color_557BF6)),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            Assets.images.icMinePowerCenter.path,
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                          SizedBox(width: 2.w),
+                                          Text(
+                                            '权益中心',
+                                            style: TextStyle(
+                                                fontSize: 12.sp,
+                                                color: AppTheme.color_557BF6),
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(Routes.setting);
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 16.w,
-                                          left: 8.w,
-                                          top: 6.w,
-                                          bottom: 6.w),
-                                      child: SvgPicture.asset(
-                                        Assets.svg.iconSetting,
-                                        width: 24.w,
-                                        height: 24.w,
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.scan);
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 8.w,
+                                              left: 16.w,
+                                              top: 6.w,
+                                              bottom: 6.w),
+                                          child: SvgPicture.asset(
+                                            Assets.svg.iconScan,
+                                            width: 24.w,
+                                            height: 24.w,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  )
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.setting);
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 16.w,
+                                              left: 8.w,
+                                              top: 6.w,
+                                              bottom: 6.w),
+                                          child: SvgPicture.asset(
+                                            Assets.svg.iconSetting,
+                                            width: 24.w,
+                                            height: 24.w,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ],
-                              )
+                              ),
+                              SizedBox(height: 10.w)
                             ],
                           ),
                         ),

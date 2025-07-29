@@ -292,7 +292,7 @@ class VideoDetailController extends GetxController {
     safeUpdate();
   }
 
-  void onPlayNewVideo(RecommendVideoModel model) {
+  Future<void> onPlayNewVideo(RecommendVideoModel model) async {
     id = model.id;
     playVideoIndex = 0;
     hasUploadEvent = false;
@@ -307,6 +307,13 @@ class VideoDetailController extends GetxController {
     isDisposed = false;
     isFullScreen = false;
     fullScreenOnTap = false;
+
+    final events = await Connectivity().checkConnectivity();
+    noNetwork = events.contains(ConnectivityResult.none);
+    if (noNetwork) {
+      DialogUtil.showToast('请检查网络');
+      return;
+    }
     requestData(showLoading: true);
   }
 

@@ -10,6 +10,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   List<CourseGroupModel> courseGroups = [];
   CourseGroupModel? courseGroup;
+  bool showAlert = false;
   List<CourseModel> courseItems = [];
 
   List<IndexCategory> oldCourseItems = [];

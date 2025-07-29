@@ -220,6 +220,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                   likeBuilder: (bool isLiked) {
                     return SvgPicture.asset(
                       isLiked ? Assets.svg.iconBottomLiked : Assets.svg.iconBottomLike,
+                      color: isLiked ? null : Colors.white,
                     );
                   },
                   bubblesColor: const BubblesColor(
@@ -253,6 +254,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                     widget.favorited == true ? Assets.svg.iconBottomFavorited : Assets.svg.iconBottomFavorite,
                     width: 24,
                     height: 24,
+                    color: Colors.white,
                   ),
                   const Text(
                     '收藏',
@@ -273,6 +275,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                     Assets.svg.iconBottomShare,
                     width: 24,
                     height: 24,
+                    color: Colors.white,
                   ),
                   const Text(
                     '转发',

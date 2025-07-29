@@ -1,14 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 
 import '../../../stores/user_store.dart';
 import '../../../widget/common_image.dart';
 import '../../../widget/common_operations_sheet.dart';
-import '../../course_details/widgets/course_knowledge_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_all_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_challenge_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_knowledge_item.dart';
@@ -42,12 +44,15 @@ class HomeCourseGroup extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SvgPicture.asset(
-                      Assets.svg.iconArrowDown,
-                      width: 20.w,
-                      height: 20.w,
-                      color: '#666666'.hexColor,
-                    ),
+                    Transform.rotate(
+                      angle: controller.showAlert ? pi : 0, // 180度，使用弧度制
+                      child: SvgPicture.asset(
+                        Assets.svg.iconArrowDown,
+                        width: 20.w,
+                        height: 20.w,
+                        color: '#666666'.hexColor,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -99,6 +104,9 @@ class HomeCourseGroup extends StatelessWidget {
   }
 
   void _onSelectCourse(HomeController controller) {
+    controller.showAlert = true;
+    controller.safeUpdate();
+
     int? selectedIndex;
     if (controller.courseGroup != null) {
       selectedIndex = controller.courseGroups.indexWhere(
@@ -112,6 +120,10 @@ class HomeCourseGroup extends StatelessWidget {
         onSelectItem: (int index) {
           final model = controller.courseGroups[index];
           controller.onChangeType(model);
+        },
+        endAction: () {
+          controller.showAlert = false;
+          controller.safeUpdate();
         },
         itemBuilder: (int index) {
           final item = controller.courseGroups[index];
@@ -131,7 +143,7 @@ class HomeCourseGroup extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
-                    fontWeight: selectedIndex == index ? FontWeight.w500 : FontWeight.w400,
+                    fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),

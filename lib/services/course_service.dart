@@ -101,6 +101,24 @@ class CourseService {
     return model;
   }
 
+  Future<CourseAnswerModel> courseListAnswer(data, Function callBack) async {
+    final res = await HttpUtils.postNew(Api.courseAnswer, params: data, showLoading: true);
+    if (res?.isSuccess == true) {
+      if (res?.data == null) {
+        callBack();
+        DialogUtil.showToast('当前课程内容已被更改，请稍后再试');
+        return CourseAnswerModel();
+      } else {
+        CourseAnswerModel model = CourseAnswerModel.fromJson(res?.data);
+        return model;
+      }
+    } else {
+      DialogUtil.showToast(res?.msg ?? '');
+      callBack();
+    }
+    return CourseAnswerModel();
+  }
+
   Future<CourseAnswerModel> courseAnswer(data) async {
     final res = await HttpUtils.postNew(Api.courseAnswer, params: data, showLoading: true);
     if (res?.isSuccess == true) {

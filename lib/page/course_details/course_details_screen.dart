@@ -80,6 +80,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                 padding: EdgeInsets.only(top: 16.w),
                                 sliver: SliverToBoxAdapter(
                                   child: CourseExercisesWidget(
+                                    pageType: 1,
                                     item: controller.detailBean!.practise!,
                                   ),
                                 ),

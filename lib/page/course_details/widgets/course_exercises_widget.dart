@@ -21,7 +21,9 @@ import '../../interactive_courses/course_exercises/widget/answer_results_page_sh
 class CourseExercisesWidget extends StatefulWidget {
   final bool showTitle;
   final CourseModel item;
-  const CourseExercisesWidget({super.key, required this.item, this.showTitle = true});
+  final int pageType; //1-详情 0-首页
+  const CourseExercisesWidget(
+      {super.key, required this.item, this.showTitle = true, this.pageType = 0});
 
   @override
   State<StatefulWidget> createState() {
@@ -192,7 +194,11 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     }
     final model = _practiseList[_currentPage];
     final req = {'id': model.id, 'answer': _selectAnswerModel?.title ?? ''};
-    final data = await CourseService.of.courseAnswer(req);
+    final data = await CourseService.of.courseListAnswer(req, () {
+      if (widget.pageType == 1) {
+        Get.back();
+      }
+    });
     if (data.id == null || data.status == null) {
       return;
     }
@@ -333,7 +339,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showTitle)...[
+          if (widget.showTitle) ...[
             Row(
               children: [
                 SvgPicture.asset(
@@ -461,7 +467,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                   : model.select == true ||
                                           (_buttonState &&
                                               _currentPage - 1 == index &&
-                                              _isCorrectAnswer && _canEdit)
+                                              _isCorrectAnswer &&
+                                              _canEdit)
                                       ? ColorStyle.c557BF6
                                       : isCompleted
                                           ? '#557BF6'.hexColor.withOpacity(0.1)
@@ -478,7 +485,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                         model.select == true ||
                                         (_buttonState &&
                                             _currentPage - 1 == index &&
-                                            _isCorrectAnswer && _canEdit)
+                                            _isCorrectAnswer &&
+                                            _canEdit)
                                     ? Colors.white
                                     : isCompleted
                                         ? AppTheme.color_557BF6
@@ -598,7 +606,10 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                             : _selectAnswerModel == null
                                 ? AppTheme.color_999999
                                 : Colors.white,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: !edit ||
+                                _practiseList[_currentPage].completed == true
+                            ? FontWeight.w400
+                            : FontWeight.w600),
                   ),
                 ),
               ),

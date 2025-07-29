@@ -64,44 +64,47 @@ class CourseAllItem extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 8.w),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  if ((item.knowledgeTotal ?? 0) > 0)...[
-                    CourseTypeItem(
-                      assetName: Assets.svg.iconKnowledge,
-                      count: item.knowledgeCompleted ?? 0,
-                      total: item.knowledgeTotal ?? 0,
-                      status: item.status
-                    ),
-                    SizedBox(width: 10.w)
+          if (UserStore.of.isLogin)...[
+            SizedBox(height: 8.w),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    if ((item.knowledgeTotal ?? 0) > 0)...[
+                      CourseTypeItem(
+                          assetName: Assets.svg.iconKnowledge,
+                          count: item.knowledgeCompleted ?? 0,
+                          total: item.knowledgeTotal ?? 0,
+                          status: item.status
+                      ),
+                      SizedBox(width: 10.w)
+                    ],
+                    if ((item.practiseTotal ?? 0) > 0)...[
+                      CourseTypeItem(
+                        assetName: Assets.svg.iconPractice,
+                        count: item.practiseCompleted ?? 0,
+                        total: item.practiseTotal ?? 0,
+                        status: item.status,
+                      ),
+                      SizedBox(width: 10.w)
+                    ],
+                    if ((item.challengeTotal ?? 0) > 0)
+                      CourseTypeItem(
+                        assetName: Assets.svg.iconChallenge,
+                        count: item.challengeCompleted ?? 0,
+                        total: item.challengeTotal ?? 0,
+                        status: item.status,
+                      ),
                   ],
-                  if ((item.practiseTotal ?? 0) > 0)...[
-                    CourseTypeItem(
-                      assetName: Assets.svg.iconPractice,
-                      count: item.practiseCompleted ?? 0,
-                      total: item.practiseTotal ?? 0,
-                      status: item.status,
-                    ),
-                    SizedBox(width: 10.w)
-                  ],
-                  if ((item.challengeTotal ?? 0) > 0)
-                    CourseTypeItem(
-                      assetName: Assets.svg.iconChallenge,
-                      count: item.challengeCompleted ?? 0,
-                      total: item.challengeTotal ?? 0,
-                      status: item.status,
-                    ),
-                ],
-              ),
-              CourseStatusBtn(
-                status: item.status,
-              ),
-            ],
-          )
+                ),
+                CourseStatusBtn(
+                  status: item.status,
+                ),
+              ],
+            )
+          ]
+
         ],
       ),
     );

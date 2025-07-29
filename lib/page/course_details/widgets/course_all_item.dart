@@ -46,6 +46,14 @@ class _CourseDetailAllItemState extends State<CourseDetailAllItem> {
     _isLogin = UserStore.of.isLogin;
     _eventSubscription = EventBusUtil.of.on<EventRefreshPractise>().listen((event) {
       widget.item.practiseCompleted = event.completed;
+      if (widget.item.knowledgeCompleted == widget.item.knowledgeTotal &&
+          widget.item.practiseCompleted == widget.item.practiseTotal &&
+          widget.item.challengeCompleted == widget.item.challengeTotal) {
+        // 已完成
+      }else {
+        // 进行中
+        widget.item.status = 1;
+      }
       if (mounted) {
         setState(() {});
       }

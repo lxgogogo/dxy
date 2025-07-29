@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/color_style_util.dart';
 
 import '../../../../model/course_model.dart';
@@ -48,7 +49,8 @@ class CourseProgressView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
             ),
-            Row(
+            if (UserStore.of.isLogin)
+              Row(
               children: [
                 SvgPicture.asset(
                   Assets.svg.iconCourseIntegral,

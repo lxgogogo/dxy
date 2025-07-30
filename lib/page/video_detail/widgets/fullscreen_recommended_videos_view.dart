@@ -131,45 +131,50 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                   ],
                 ),
                 const SizedBox(height: 24),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 12,
-                    children: List.generate(
-                      widget.videos.length,
-                      (index) {
-                        final video = widget.videos[index];
-                        return SizedBox(
-                          width: 180,
-                          child: Column(
-                            spacing: 8,
-                            children: [
-                              RecommendVideoItem(
-                                onTap: () {
-                                  _cancelAnimation();
-                                  widget.onPlayNewVideo?.call(video);
-                                },
-                                recommendVideo: video,
-                                animationController: _animationController,
-                                showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
-                                isFullScreen: true,
-                              ),
-                              Text(
-                                video.title ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
+                LayoutBuilder(builder: (context, constraints) {
+                  final itemWidth = (constraints.maxWidth - 12 * 2) / 3;
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      spacing: 12,
+                      children: List.generate(
+                        widget.videos.length,
+                        (index) {
+                          final video = widget.videos[index];
+                          return SizedBox(
+                            width: itemWidth,
+                            child: Column(
+                              spacing: 8,
+                              children: [
+                                RecommendVideoItem(
+                                  onTap: () {
+                                    _cancelAnimation();
+                                    widget.onPlayNewVideo?.call(video);
+                                  },
+                                  recommendVideo: video,
+                                  animationController: _animationController,
+                                  showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
+                                  isFullScreen: true,
+                                  width: itemWidth,
+                                  height: itemWidth / (180 / 100),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                                Text(
+                                  video.title ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
           ),

@@ -16,6 +16,8 @@ class RecommendVideoItem extends StatelessWidget {
     this.isFullScreen = false,
     this.showAnimate = true,
     this.onTap,
+    this.width,
+    this.height,
   });
 
   final RecommendVideoModel recommendVideo;
@@ -23,14 +25,16 @@ class RecommendVideoItem extends StatelessWidget {
   final bool isFullScreen;
   final bool showAnimate;
   final VoidCallback? onTap;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: isFullScreen ? 180 : 126.w,
-        height: isFullScreen ? 100 : 70.w,
+        width: width ?? 126.w,
+        height: height ?? 70.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.r),
         ),

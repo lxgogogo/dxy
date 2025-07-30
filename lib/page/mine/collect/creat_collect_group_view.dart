@@ -88,6 +88,7 @@ class _CreatCollectGroupPageState extends State<CreatCollectGroupPage> {
       VoidCallback? onEditingComplete,
       List<TextInputFormatter>? inputFormatters}) {
     return TextField(
+      cursorColor: ColorStyle.c557BF6,
       controller: textController,
       style: TextStyle(
         color: Colors.black,

@@ -245,7 +245,6 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                             itemBuilder: (BuildContext context, int index) {
                                               final item = controller.courseItems[index];
                                               return CourseExercisesWidget(
-                                                  showTitle: false,
                                                   item: item,
                                                   endFunction: (value) {
                                                     controller.endFunction(value);

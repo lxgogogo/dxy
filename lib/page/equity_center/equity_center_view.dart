@@ -195,8 +195,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                   ' ${item.minPoints ?? 0}',
                                   style: TextStyle(
                                       fontSize: 12.sp,
-                                      color: item.titleColor,
-                                      fontWeight: FontWeight.w600),
+                                      color: item.titleColor),
                                 ),
                               ),
                               Padding(
@@ -209,8 +208,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                       fontSize: 12.sp,
                                       color: (item.titleColor ??
                                           ColorStyle.c333333)
-                                          .withOpacity(0.5),
-                                      fontWeight: FontWeight.w400),
+                                          .withOpacity(0.5)),
                                 ),
                               )
                             ],
@@ -228,8 +226,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                                 '${controller.integral}',
                                 style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: item.titleColor,
-                                    fontWeight: FontWeight.w600),
+                                    color: item.titleColor),
                               ),
                             ],
                           ),
@@ -515,13 +512,13 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                    color: ColorStyle.c333333.withOpacity(0.1)),
+                    color: ColorStyle.c557BF6.withOpacity(0.1)),
                 child: Text(
                   '已完成',
                   style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
-                      color: AppTheme.color_999999),
+                      color: ColorStyle.c557BF6.withOpacity(0.7)),
                 ),
               )
           ],

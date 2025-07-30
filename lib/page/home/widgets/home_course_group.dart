@@ -11,6 +11,7 @@ import 'package:holdem/gen/assets.gen.dart';
 import '../../../stores/user_store.dart';
 import '../../../widget/common_image.dart';
 import '../../../widget/common_operations_sheet.dart';
+import '../../course_details/widgets/course_exercises_widget.dart';
 import '../../interactive_courses/main_courses/widgets/course_all_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_challenge_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_knowledge_item.dart';
@@ -66,7 +67,8 @@ class HomeCourseGroup extends StatelessWidget {
                       'knowledge' => CourseKnowledgeItem(
                           item: item,
                           onTap: () => controller.toKnowledge(item),
-                          onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
+                          onSelectItem: (int childIndex) =>
+                              controller.onSelectKnowledgeItem(
                             controller.courseItems.indexOf(item),
                             childIndex,
                           ),
@@ -80,11 +82,9 @@ class HomeCourseGroup extends StatelessWidget {
                             },
                           ),
                         ),
-                      'practise' => GestureDetector(
-                          onTap: () => controller.toPractice(item),
-                          child: CoursePracticeItem(
-                            item: item,
-                          ),
+                      'practise' => CourseExercisesWidget(
+                          showTitle: false,
+                          item: item,
                         ),
                       _ => GestureDetector(
                           onTap: () => controller.toCourseDetail(item),
@@ -142,8 +142,12 @@ class HomeCourseGroup extends StatelessWidget {
                   item.label ?? '',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
-                    fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
+                    color: selectedIndex == index
+                        ? '#333333'.hexColor
+                        : '#666666'.hexColor,
+                    fontWeight: selectedIndex == index
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),

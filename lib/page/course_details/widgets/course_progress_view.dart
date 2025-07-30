@@ -9,15 +9,16 @@ import 'package:holdem/utils/color_style_util.dart';
 import '../../../../model/course_model.dart';
 
 class CourseProgressView extends StatelessWidget {
+  final CourseModel item;
   final Function(int index)? onSelectItem;
+  final int notCompletedIndex;
 
   const CourseProgressView({
     super.key,
     required this.item,
     this.onSelectItem,
+    required this.notCompletedIndex,
   });
-
-  final CourseModel item;
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +52,23 @@ class CourseProgressView extends StatelessWidget {
             ),
             if (UserStore.of.isLogin)
               Row(
-              children: [
-                SvgPicture.asset(
-                  Assets.svg.iconCourseIntegral,
-                  width: 16.w,
-                  height: 16.w,
-                ),
-                SizedBox(width: 4.w),
-                Text(
-                  '${item.integral ?? 0}',
-                  style: TextStyle(
-                    color: '#333333'.hexColor,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
+                children: [
+                  SvgPicture.asset(
+                    Assets.svg.iconCourseIntegral,
+                    width: 16.w,
+                    height: 16.w,
                   ),
-                ),
-              ],
-            ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    '${item.integral ?? 0}',
+                    style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
         ClipRRect(
@@ -104,14 +105,20 @@ class CourseProgressView extends StatelessWidget {
                 final childItem = item.knowledgeIndexDtoList![index];
                 final isCompleted = childItem.status == 1;
                 return GestureDetector(
-                  onTap: () => onSelectItem?.call(index),
+                  onTap: () {
+                    if (notCompletedIndex == -1 || index <= notCompletedIndex) {
+                      onSelectItem?.call(index);
+                    }
+                  },
                   child: Container(
                     width: 24.w,
                     height: 24.w,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: childItem.isSelected == true
-                          ? ColorStyle.c557BF6
+                          ? isCompleted
+                              ? '#557BF6'.hexColor
+                              : '#333333'.hexColor.withOpacity(0.3)
                           : isCompleted
                               ? '#557BF6'.hexColor.withOpacity(0.1)
                               : '#333333'.hexColor.withOpacity(0.1),

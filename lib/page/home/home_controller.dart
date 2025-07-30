@@ -353,8 +353,26 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     }
   }
 
-  void onSelectKnowledgeItem(int index, int childIndex) {
+  Future<void> onSelectKnowledgeItem(int index, int childIndex) async {
     final knowledgeIndexDtoList = courseItems[index].knowledgeIndexDtoList ?? [];
+    final knowledgeIndexDto = knowledgeIndexDtoList[childIndex];
+    if (knowledgeIndexDto.status == 1) {
+      if (knowledgeIndexDto.contentVideo == null && knowledgeIndexDto.contentArticle == null) {
+        final res = await CourseService.of.knowledgeInfo(
+          knowledgeIndexDto.subContentId ?? knowledgeIndexDto.contentId ?? 0,
+        );
+        if (res.isSuccess) {
+          if (res.data['contentVideo'] != null) {
+            knowledgeIndexDtoList[childIndex].contentVideo = ContentVideo.fromJson(res.data['contentVideo']);
+          } else if (res.data['contentArticle'] != null) {
+            knowledgeIndexDtoList[childIndex].contentArticle = ContentArticle.fromJson(res.data['contentArticle']);
+          }
+        } else {
+          DialogUtil.showToast(res.msg);
+        }
+      }
+    }
+
     for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
       final model = knowledgeIndexDtoList[i];
       model.isSelected = false;
@@ -381,7 +399,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     if (id == null) return;
     CourseChallengeAlert.show(id, model.status, title: model.content ?? '', content: model.desc ?? '', callBack: () {
       model.status = 1;
-      item.completed = (item.completed ?? 0)+1;
+      item.completed = (item.completed ?? 0) + 1;
       safeUpdate();
     }, errorBack: () {
       loadCourses();

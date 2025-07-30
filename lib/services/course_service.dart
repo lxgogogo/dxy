@@ -156,4 +156,9 @@ class CourseService {
     final res = await HttpUtils.postNew(Api.courseChallenge, showLoading: true, params: {'id': id});
     return res ?? ResBaseModel.defaultRes;
   }
+
+  Future<ResBaseModel> knowledgeInfo(int id) async {
+    final res = await HttpUtils.postNew(Api.knowledgeInfo, showLoading: true, params: {'id': id});
+    return res ?? ResBaseModel.defaultRes;
+  }
 }

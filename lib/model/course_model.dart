@@ -155,8 +155,8 @@ class CourseModel {
 class KnowledgeIndexDtoList {
   final int? id;
   final String? title;
-  final ContentVideo? contentVideo;
-  final ContentArticle? contentArticle;
+  ContentVideo? contentVideo;
+  ContentArticle? contentArticle;
   final int? contentId;
   final int? subContentId;
   final int? status;

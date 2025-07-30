@@ -177,9 +177,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   autoplay: true,
                                                   onIndexChanged: controller.onIndexChanged,
                                                   pagination: SwiperPagination(
-                                                      margin: EdgeInsets.only(bottom: 26.w),
+                                                      margin: EdgeInsets.only(bottom: 23.w),
                                                       builder: DotSwiperPaginationBuilder(
-                                                        color: Colors.white,
+                                                        color: '#333333'.hexColor.withValues(alpha: 0.1),
                                                         activeColor: '#557BF6'.hexColor,
                                                         size: 6.w,
                                                         activeSize: 6.w,

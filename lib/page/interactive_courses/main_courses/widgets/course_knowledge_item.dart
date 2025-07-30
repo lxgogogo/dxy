@@ -25,8 +25,9 @@ class CourseKnowledgeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
-    final currentIndex = knowledgeIndexDtoList.indexWhere((element) => element.isSelected == true);
+    final currentIndex = knowledgeIndexDtoList.indexWhere((e) => e.isSelected == true);
     final knowledgeIndexDto = currentIndex >= 0 ? knowledgeIndexDtoList[currentIndex] : null;
+    final notCompletedIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -144,6 +145,7 @@ class CourseKnowledgeItem extends StatelessWidget {
             CourseProgressView(
               item: item,
               onSelectItem: onSelectItem,
+              notCompletedIndex: notCompletedIndex,
             ),
           ],
         ),

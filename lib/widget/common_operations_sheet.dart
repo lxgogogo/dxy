@@ -33,7 +33,7 @@ void showCommonOperationsSheet(
   });
 }
 
-typedef OperationItemBuilder = Widget Function(int index);
+typedef OperationItemBuilder = Widget Function(int index, bool hasSelected);
 
 class CommonOperationsSheet extends StatelessWidget {
   final List<String> items;
@@ -90,7 +90,7 @@ class CommonOperationsSheet extends StatelessWidget {
                             ),
                           ),
                           child: itemBuilder != null
-                              ? itemBuilder!(index)
+                              ? itemBuilder!(index, selectedIndex == index)
                               : Text(
                                   e,
                                   style: TextStyle(
@@ -99,7 +99,7 @@ class CommonOperationsSheet extends StatelessWidget {
                                         ? ColorStyle.c557BF6
                                         : '#666666'.hexColor,
                                     fontWeight: selectedIndex == index
-                                        ? FontWeight.w500
+                                        ? FontWeight.w600
                                         : FontWeight.w400,
                                   ),
                                   textAlign: TextAlign.center,

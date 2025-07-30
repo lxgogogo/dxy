@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 50.0,
     this.fontSize = 15,
-    this.fontWeight = FontWeight.w500,
+    this.fontWeight = FontWeight.w600,
     this.textColor = const Color(0xffdff3ff),
     this.disable = false,
     this.showOpacityAnimation = true,

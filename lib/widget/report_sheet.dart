@@ -32,7 +32,7 @@ class ReportSheet extends StatelessWidget {
               style: TextStyle(
                 color: '#2c2c2c'.hexColor,
                 fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
             ),
@@ -55,7 +55,7 @@ class ReportSheet extends StatelessWidget {
                         style: TextStyle(
                           color: '#3B5078'.hexColor,
                           fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),

@@ -17,7 +17,6 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
   final Function? favoriteToggle;
   final Function? toShare;
   final List<RecommendVideoModel> videos;
-  final Function(RecommendVideoModel recommendVideo)? onVideoTap;
   final VoidCallback? onReplay;
   final Function(RecommendVideoModel model)? onPlayNewVideo;
   final Timer? recommendTimer;
@@ -28,7 +27,6 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
     required this.liked,
     required this.favorited,
     required this.videos,
-    this.onVideoTap,
     this.likeToggle,
     this.favoriteToggle,
     this.toShare,
@@ -64,6 +62,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
     // 停止本地动画
     _animationController.stop();
     _animationController.reset();
+    setState(() {});
   }
 
   @override
@@ -132,48 +131,44 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                   ],
                 ),
                 const SizedBox(height: 24),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        spacing: 12,
-                        children: List.generate(
-                          widget.videos.length,
-                          (index) {
-                            final video = widget.videos[index];
-                            return GestureDetector(
-                              onTap: () => widget.onVideoTap?.call(video),
-                              child: SizedBox(
-                                width: 180,
-                                child: Column(
-                                  spacing: 8,
-                                  children: [
-                                    RecommendVideoItem(
-                                      onTap: () => widget.onPlayNewVideo?.call(video),
-                                      recommendVideo: video,
-                                      animationController: _animationController,
-                                      showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
-                                      isFullScreen: true,
-                                    ),
-                                    Text(
-                                      video.title ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 12,
+                    children: List.generate(
+                      widget.videos.length,
+                      (index) {
+                        final video = widget.videos[index];
+                        return SizedBox(
+                          width: 180,
+                          child: Column(
+                            spacing: 8,
+                            children: [
+                              RecommendVideoItem(
+                                onTap: () {
+                                  _cancelAnimation();
+                                  widget.onPlayNewVideo?.call(video);
+                                },
+                                recommendVideo: video,
+                                animationController: _animationController,
+                                showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
+                                isFullScreen: true,
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  }
+                              Text(
+                                video.title ?? '',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),

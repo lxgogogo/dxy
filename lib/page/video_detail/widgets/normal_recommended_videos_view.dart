@@ -13,7 +13,6 @@ import 'item_recommended_video.dart';
 
 class NormalRecommendedVideosView extends StatefulWidget {
   final List<RecommendVideoModel> videos;
-  final Function(RecommendVideoModel recommendVideo)? onVideoTap;
   final VoidCallback? onReplay;
   final Function(RecommendVideoModel model)? onPlayNewVideo;
   final Timer? recommendTimer;
@@ -22,7 +21,6 @@ class NormalRecommendedVideosView extends StatefulWidget {
   const NormalRecommendedVideosView({
     super.key,
     required this.videos,
-    this.onVideoTap,
     this.onReplay,
     this.onPlayNewVideo,
     this.recommendTimer,
@@ -54,6 +52,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
     // 停止本地动画
     _animationController.stop();
     _animationController.reset();
+    setState(() {});
   }
 
   @override
@@ -103,7 +102,10 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                   spacing: 8.w,
                   children: [
                     RecommendVideoItem(
-                      onTap: () => widget.onPlayNewVideo?.call(widget.videos.first),
+                      onTap: () {
+                        _cancelAnimation();
+                        widget.onPlayNewVideo?.call(widget.videos.first);
+                      },
                       recommendVideo: widget.videos.first,
                       animationController: _animationController,
                       showAnimate: widget.recommendTimer?.isActive == true,

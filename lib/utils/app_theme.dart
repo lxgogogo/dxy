@@ -34,19 +34,19 @@ class AppTheme {
 
 
   static const TextStyle text3B5078Size23 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 23,
     color: color_3B5078,
   );
 
   static const TextStyle text3B5078Size20 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 20,
     color: color_3B5078,
   );
 
   static const TextStyle text3B5078Size17 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 17,
     color: color_3B5078,
   );
@@ -61,7 +61,7 @@ class AppTheme {
     color: color_3B5078,
   );
   static const TextStyle text3B5078Size16 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 16,
     color: color_3B5078,
   );
@@ -77,12 +77,12 @@ class AppTheme {
     color: color_3B5078,
   );
   static const TextStyle text3B5078Size15 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 15,
     color: color_3B5078,
   );
   static const TextStyle text3B5078Size22 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 20,
     color: color_3B5078,
   );
@@ -144,19 +144,19 @@ class AppTheme {
   );
 
   static const TextStyle text999999Size16W500 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 16,
     color: color_999999,
   );
 
   static const TextStyle text000000Size16W500 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 16,
     color: color_000000,
   );
 
   static const TextStyle text999999Size13 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 13,
     color: color_999999,
   );
@@ -179,13 +179,13 @@ class AppTheme {
   );
 
   static const TextStyle text333333Size15 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 15,
     color: color_333333,
   );
 
   static const TextStyle text333333Size16 = TextStyle(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 16,
     color: color_333333,
   );

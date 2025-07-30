@@ -52,7 +52,7 @@ class CourseItem extends StatelessWidget {
                         collectBean.title!,
                         style: TextStyle(
                           color: '#333333'.hexColor,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

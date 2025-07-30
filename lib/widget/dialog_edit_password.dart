@@ -178,7 +178,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                       style: TextStyle(
                                         color: '#333333'.hexColor,
                                         fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                       maxLines: 1,
                                       obscureText: _originalPwdObscureText,
@@ -260,7 +260,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                       style: TextStyle(
                                         color: '#333333'.hexColor,
                                         fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                       maxLines: 1,
                                       obscureText: _newPwdObscureText,
@@ -357,7 +357,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
                                       style: TextStyle(
                                         color: '#333333'.hexColor,
                                         fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                       maxLines: 1,
                                       obscureText: _confirmPwdObscureText,
@@ -498,7 +498,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
           style: TextStyle(
             color: '#333333'.hexColor,
             fontSize: 14.w,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         Opacity(
@@ -508,7 +508,7 @@ class _DialogEditPasswordState extends State<DialogEditPassword> with SingleTick
             style: TextStyle(
               color: '#333333'.hexColor,
               fontSize: 14.w,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

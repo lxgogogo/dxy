@@ -102,7 +102,7 @@ class CourseDetailKnowledgeItem extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),

@@ -81,7 +81,7 @@ class CommonDialog extends StatelessWidget {
                               style: TextStyle(
                                 color: '#333333'.hexColor,
                                 fontSize: 14.w,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ))
                 )

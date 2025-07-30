@@ -158,7 +158,7 @@ class MyCommentItem extends StatelessWidget {
                 //         style: TextStyle(
                 //           color: const Color(0xff2a2a2a),
                 //           fontSize: 14.w,
-                //           fontWeight: FontWeight.w500,
+                //           fontWeight: FontWeight.w600,
                 //         ),
                 //         maxLines: 1,
                 //         overflow: TextOverflow.ellipsis,

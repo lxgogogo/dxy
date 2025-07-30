@@ -135,7 +135,7 @@ class _ReviseEmailPageState extends State<ReviseEmailPage> {
                         style: TextStyle(
                           color: const Color(0xff3b5078),
                           fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
                         keyboardType: TextInputType.number,

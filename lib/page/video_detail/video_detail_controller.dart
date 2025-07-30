@@ -385,7 +385,6 @@ class VideoDetailController extends GetxController {
     safeUpdate();
   }
 
-  void onRecommendedVideoTap(RecommendVideoModel recommendVideo) {}
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
     final success = await _likeToggle.call();

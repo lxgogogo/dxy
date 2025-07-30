@@ -135,7 +135,7 @@ class _DialogDeleteAccountState extends State<DialogDeleteAccount> with SingleTi
                     style: TextStyle(
                       color: '#333333'.hexColor,
                       fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,
                     decoration: InputDecoration(

@@ -196,18 +196,18 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                       ),
                       if (UserStore.of.user?.id != widget.viewParams.author?.id)
                         GestureDetector(
-                        onTap: _favoriteToggle,
-                        child: CountCommentBadge(
-                          count: widget.viewParams.favoriteCount.abbreviateNumber,
-                          iconWidget: SvgPicture.asset(
-                            widget.viewParams.favoriteState == true
-                                ? Assets.svg.iconBottomFavorited
-                                : Assets.svg.iconBottomFavorite,
-                            width: 24.w,
-                            height: 24.w,
+                          onTap: _favoriteToggle,
+                          child: CountCommentBadge(
+                            count: widget.viewParams.favoriteCount.abbreviateNumber,
+                            iconWidget: SvgPicture.asset(
+                              widget.viewParams.favoriteState == true
+                                  ? Assets.svg.iconBottomFavorited
+                                  : Assets.svg.iconBottomFavorite,
+                              width: 24.w,
+                              height: 24.w,
+                            ),
                           ),
                         ),
-                      ),
                       GestureDetector(
                         onTap: _toCommentList,
                         child: CountCommentBadge(
@@ -393,7 +393,7 @@ class TagListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 12.w),
+      margin: EdgeInsets.only(top: 8.w, bottom: 12.w),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

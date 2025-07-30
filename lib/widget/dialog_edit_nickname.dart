@@ -94,7 +94,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 14.w,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           SizedBox(width: 8.w),
@@ -127,7 +127,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                       style: TextStyle(
                                         color: '#333333'.hexColor,
                                         fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                       maxLines: 1,
                                       inputFormatters: <TextInputFormatter>[
@@ -172,7 +172,7 @@ class _DialogEditNicknameState extends State<DialogEditNickname> with SingleTick
                                         style: TextStyle(
                                           color: '#333333'.hexColor,
                                           fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       );
                                     })

@@ -147,7 +147,7 @@ class _PersonalScreenState extends State<PersonalScreen> {
                                           maxLines: 1,
                                           minFontSize: 8,
                                           style: TextStyle(
-                                              fontSize: 10.sp, fontWeight: FontWeight.w500, color: Colors.white),
+                                              fontSize: 10.sp, fontWeight: FontWeight.w600, color: Colors.white),
                                         ),
                                       )
                                     ],

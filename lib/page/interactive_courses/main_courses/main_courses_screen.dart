@@ -422,7 +422,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
         endAction: () {
           controller.showAlert.value = false;
         },
-        itemBuilder: (int index) {
+        itemBuilder: (int index, bool hasSelected) {
           final item = controller.courseGroups[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,

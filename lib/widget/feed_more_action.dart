@@ -28,6 +28,16 @@ class _FeedMoreActionState extends State<FeedMoreAction> {
           final actions = widget.actions.keys.toList();
           showCommonOperationsSheet(
             items: actions,
+            itemBuilder: (int index, bool hasSelected) {
+              return Text(
+                actions[index],
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: '#333333'.hexColor,
+                ),
+                textAlign: TextAlign.center,
+              );
+            },
             onSelectItem: (int index) {
               widget.actions[actions[index]]?.call();
             },

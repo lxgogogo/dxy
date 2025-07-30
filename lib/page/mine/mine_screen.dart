@@ -210,7 +210,7 @@ class _MineScreenState extends State<MineScreen>
                                           minFontSize: 8,
                                           style: TextStyle(
                                               fontSize: 10.sp,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                               color: Colors.white),
                                         ),
                                       )

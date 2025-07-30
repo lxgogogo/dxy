@@ -337,7 +337,6 @@ class ChewieVideo extends StatelessWidget {
               child: isFullScreen
                   ? FullscreenRecommendedVideosView(
                       videos: controller.recommendedVideos,
-                      onVideoTap: controller.onRecommendedVideoTap,
                       liked: controller.detailBean?.liked ?? false,
                       likeToggle: controller.onLikeButtonTapped,
                       favorited: controller.detailBean?.favorited ?? false,
@@ -350,7 +349,6 @@ class ChewieVideo extends StatelessWidget {
                     )
                   : NormalRecommendedVideosView(
                       videos: controller.recommendedVideos,
-                      onVideoTap: controller.onRecommendedVideoTap,
                       onReplay: controller.onReplay,
                       onPlayNewVideo: controller.onPlayNewVideo,
                       recommendTimer: controller.recommendTimer,

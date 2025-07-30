@@ -171,7 +171,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                         maxLines: 1,
                         style: TextStyle(
                             fontSize: 10.sp,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: ColorStyle.white)),
                   ),
                   const Expanded(child: SizedBox()),
@@ -393,7 +393,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                       style: TextStyle(
                           fontSize: 12.sp,
                           color: model.titleColor,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 5.w),
                     Text(

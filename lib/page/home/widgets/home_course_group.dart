@@ -125,7 +125,7 @@ class HomeCourseGroup extends StatelessWidget {
           controller.showAlert = false;
           controller.safeUpdate();
         },
-        itemBuilder: (int index) {
+        itemBuilder: (int index, bool hasSelected) {
           final item = controller.courseGroups[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,

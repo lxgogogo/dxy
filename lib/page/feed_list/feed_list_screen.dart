@@ -27,37 +27,16 @@ class FeedListScreen extends StatefulWidget {
   State<FeedListScreen> createState() => _FeedListScreenState();
 }
 
-class _FeedListScreenState extends State<FeedListScreen>
-    with SingleTickerProviderStateMixin {
+class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   List<BoardInfo> boardInfoList = [];
 
   List<BoardInfo> get showBoardInfoList => [
-    BoardInfo(id: 0, name: '全部'),
-    ...boardInfoList,
-  ];
+        BoardInfo(id: 0, name: '全部'),
+        ...boardInfoList,
+      ];
 
   int selIndex = 0;
-
-  List<String> filters = [
-    '最近更新',
-    '热度最高',
-    '回帖最多',
-    '点赞最多',
-  ];
-  List<String> filterCode = [
-    'time',
-    'popular',
-    'comment',
-    'like',
-  ];
-  int filterIndex = 0;
-
-  bool _isDown = true;
-
-  final List<GlobalKey> _pageKeys = [
-    GlobalKey<FeedListChildViewState>()
-  ];
 
   StreamSubscription? eventSubscription;
 
@@ -65,10 +44,9 @@ class _FeedListScreenState extends State<FeedListScreen>
   void initState() {
     super.initState();
     getPlateData();
-    eventSubscription =
-        EventBusUtil.of.on<EventRefreshFeedTabs>().listen((event) {
-          getPlateData();
-        });
+    eventSubscription = EventBusUtil.of.on<EventRefreshFeedTabs>().listen((event) {
+      getPlateData();
+    });
   }
 
   @override
@@ -79,13 +57,8 @@ class _FeedListScreenState extends State<FeedListScreen>
 
   void getPlateData() {
     NetRequest().getBoardData(showLoading: false, (data) {
-      List<BoardInfo> dataList =
-      List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
+      List<BoardInfo> dataList = List<BoardInfo>.from(data.map((plate) => BoardInfo.fromJson(plate)));
       boardInfoList = dataList;
-      _pageKeys.clear();
-      for (int i = 0; i < showBoardInfoList.length; i++) {
-        _pageKeys.add(GlobalKey<FeedListChildViewState>());
-      }
       if (mounted) {
         setState(() {});
       }
@@ -150,29 +123,25 @@ class _FeedListScreenState extends State<FeedListScreen>
                           alignment: Alignment.center,
                           decoration: selIndex != index
                               ? ShapeDecoration(
-                            color: '#333333'.hexColor.withOpacity(0.05),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24.r),
-                            ),
-                          )
+                                  color: '#333333'.hexColor.withOpacity(0.05),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24.r),
+                                  ),
+                                )
                               : BoxDecoration(
-                            borderRadius: BorderRadius.circular(24.w),
-                            gradient: LinearGradient(
-                              colors: [
-                                '557BF6'.hexColor,
-                                '84BCF9'.hexColor,
-                              ],
-                            ),
-                          ),
+                                  borderRadius: BorderRadius.circular(24.w),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      '557BF6'.hexColor,
+                                      '84BCF9'.hexColor,
+                                    ],
+                                  ),
+                                ),
                           child: Text(
                             showBoardInfoList[index].name!,
                             style: TextStyle(
-                              color: selIndex == index
-                                  ? Colors.white
-                                  : '#333333'.hexColor,
-                              fontWeight: selIndex == index
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                              color: selIndex == index ? Colors.white : '#333333'.hexColor,
+                              fontWeight: selIndex == index ? FontWeight.w600 : FontWeight.w400,
                               fontSize: 12.sp,
                             ),
                           ),
@@ -189,80 +158,14 @@ class _FeedListScreenState extends State<FeedListScreen>
                     borderRadius: BorderRadius.circular(12.r),
                     color: Colors.white,
                   ),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: GestureDetector(
-                          onTap: () {
-                            _isDown = false;
-                            if (mounted) {
-                              setState(() {});
-                            }
-                            showCommonOperationsSheet(
-                              items: filters,
-                              selectedIndex: filterIndex,
-                              onSelectItem: (int index) {
-                                if (filterIndex != index) {
-                                  _isDown = false;
-                                  filterIndex = index;
-                                  String order = filterCode[filterIndex];
-                                  final keys = _pageKeys[selIndex] as GlobalKey<FeedListChildViewState>;
-                                  keys.currentState?.refreshFilter(order);
-                                }
-                              },
-                              endAction: () {
-                                _isDown = true;
-                                if (mounted) {
-                                  setState(() {});
-                                }
-                              }
-                            );
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.all(12.w),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  filters[filterIndex],
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: '#666666'.hexColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(width: 4.w),
-                                if (_isDown)
-                                  SvgPicture.asset(
-                                    Assets.svg.arrowDown,
-                                    width: 10.w,
-                                    height: 10.w,
-                                  )
-                                else
-                                  Image.asset(
-                                    'assets/images/icon_arrow_up.png',
-                                    width: 10.w,
-                                    height: 10.w,
-                                  )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                          child: PageView(
-                            controller: _pageController,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: [
-                              FeedListChildView(
-                                key: _pageKeys[selIndex],
-                                order: filterCode[filterIndex],
-                                boardId: showBoardInfoList[selIndex].id ?? 0,
-                              ).keepAlive
-                            ],
-                          )),
-                    ],
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: List.generate(showBoardInfoList.length, (index) {
+                      return FeedListChildView(
+                        boardId: showBoardInfoList[selIndex].id ?? 0,
+                      ).keepAlive;
+                    }).toList(),
                   )),
             )
           ],

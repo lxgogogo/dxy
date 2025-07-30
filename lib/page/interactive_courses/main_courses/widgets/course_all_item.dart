@@ -61,7 +61,7 @@ class CourseAllItem extends StatelessWidget {
               color: '#666666'.hexColor,
               fontSize: 12.sp,
             ),
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           if (UserStore.of.isLogin)...[

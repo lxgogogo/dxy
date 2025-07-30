@@ -68,7 +68,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                           style: TextStyle(
                             color: ColorStyle.c333333,
                             fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                           maxLines: 1,
                           decoration: InputDecoration(

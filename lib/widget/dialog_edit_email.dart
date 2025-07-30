@@ -134,7 +134,7 @@ class _DialogEditEmailState extends State<DialogEditEmail>
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           SizedBox(width: 8.w),
@@ -154,7 +154,7 @@ class _DialogEditEmailState extends State<DialogEditEmail>
                                 style: TextStyle(
                                   color: '#333333'.hexColor,
                                   fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 maxLines: 1,
                                 decoration: InputDecoration(
@@ -206,7 +206,7 @@ class _DialogEditEmailState extends State<DialogEditEmail>
                               style: TextStyle(
                                 color: '#333333'.hexColor,
                                 fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
@@ -234,7 +234,7 @@ class _DialogEditEmailState extends State<DialogEditEmail>
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           SizedBox(width: 8.w),
@@ -257,7 +257,7 @@ class _DialogEditEmailState extends State<DialogEditEmail>
                                     style: TextStyle(
                                       color: const Color(0xff3b5078),
                                       fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                     maxLines: 1,
                                     keyboardType: TextInputType.number,
@@ -318,7 +318,7 @@ class _DialogEditEmailState extends State<DialogEditEmail>
                               style: TextStyle(
                                 color: '#333333'.hexColor,
                                 fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),

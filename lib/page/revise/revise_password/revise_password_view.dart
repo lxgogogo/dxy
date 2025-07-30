@@ -73,7 +73,7 @@ class _RevisePasswordPageState extends State<RevisePasswordPage> {
                             style: TextStyle(
                               color: AppTheme.color_333333,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                             maxLines: 1,
                             obscureText:
@@ -164,7 +164,7 @@ class _RevisePasswordPageState extends State<RevisePasswordPage> {
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                             maxLines: 1,
                             obscureText: controller.newPwdObscureText.value,
@@ -251,7 +251,7 @@ class _RevisePasswordPageState extends State<RevisePasswordPage> {
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                             maxLines: 1,
                             obscureText: controller.confirmPwdObscureText.value,

@@ -47,7 +47,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   bool _buttonState = false;
   int _currentPage = 0;
   int _progress = 0;
-  int _integral = 0;
   int _completed = 0;
   int _totalPage = 0;
   bool _canEdit = true;
@@ -66,7 +65,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     _completed = widget.item.completed ?? 0;
     _canEdit = _completed == widget.item.total ? false : true;
     final data = widget.item.practiseDto ?? {};
-    _integral = data['integral'] ?? 0;
     _completed = data['completed'] ?? 0;
     _totalPage = data['total'] ?? 0;
     if (_completed <= 0) {
@@ -140,7 +138,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // 全对
   void _endAlert(data, {bool evenPairs = false}) {
     if (data.status == 2) {
-      AnswerResultsPageSheet.show(1, integral: _integral, () {
+      AnswerResultsPageSheet.show(1, integral: data.pairsIntegral ?? 0, () {
         Get.close(0);
         _result();
         if (!_canEdit) {
@@ -414,7 +412,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                           ),
                           SizedBox(width: 4.w),
                           Text(
-                            '${widget.item.integral ?? 0}',
+                            '${_practiseList[_currentPage].integral ?? 0}',
                             style: TextStyle(
                               color: '#333333'.hexColor,
                               fontSize: 12.sp,

@@ -46,6 +46,7 @@ class CourseExerciseModel {
   String? answer;
   bool? select;
   bool? completed;
+  int? integral;
   List<CourseExerciseAnswerModel>? options;
 
   CourseExerciseModel({
@@ -55,12 +56,16 @@ class CourseExerciseModel {
     this.options,
     this.answer,
     this.select,
-    this.completed
+    this.completed,
+    this.integral
   });
 
   CourseExerciseModel.fromJson(Map<String, dynamic> map) {
     if (map["id"] is int) {
       id = map["id"];
+    }
+    if (map["integral"] is int) {
+      integral = map["integral"];
     }
     if (map["title"] is String) {
       title = map["title"];

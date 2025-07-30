@@ -247,7 +247,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                               return CourseExercisesWidget(
                                                   showTitle: false,
                                                   item: item,
-                                                  endFunction: controller.onFocusGained
+                                                  endFunction: controller.endFunction
                                               );
                                             },
                                             separatorBuilder: (_, __) => SizedBox(height: 12.w),

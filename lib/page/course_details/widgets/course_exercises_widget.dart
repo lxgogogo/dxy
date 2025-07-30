@@ -246,11 +246,14 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           _endAlert(data);
         }
         if (widget.endFunction != null) {
-          widget.endFunction!();
+          widget.endFunction!(true);
         }
       } else {
         // 答题未结束
         _evenPairs(data);
+        if (widget.endFunction != null) {
+          widget.endFunction!(false);
+        }
       }
     }
   }

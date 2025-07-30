@@ -13,7 +13,7 @@ class CourseTopModel {
   final int? courseCompleted; //已完成的课程数
   final int? courseRemaining; //剩余课程
   final int? knowledgeRemaining; //剩余知识
-  final int? practiseRemaining; //剩余练习
+  int? practiseRemaining; //剩余练习
   final int? challengeRemaining; //剩余挑战
   final int? integralPunch;
 

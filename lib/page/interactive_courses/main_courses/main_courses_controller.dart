@@ -373,4 +373,18 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     // final nowFormatter = DateFormat('yyyy-MM-dd').format(now);
     // await StorageService.of.setLastPopupDate(nowFormatter);
   }
+
+  void endFunction(value) {
+    if (value == true) {
+      onFocusGained();
+    } else {
+      int practiseRemaining = courseTopModel.value?.practiseRemaining ?? 0;
+      if (practiseRemaining - 1 < 0) {
+        courseTopModel.value?.practiseRemaining = 0;
+      } else {
+        courseTopModel.value?.practiseRemaining = practiseRemaining - 1;
+      }
+      courseTopModel.refresh();
+    }
+  }
 }

@@ -380,17 +380,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     final id = model.id;
     if (id == null) return;
     CourseChallengeAlert.show(id, model.status, title: model.content ?? '', content: model.desc ?? '', callBack: () {
-      // model.status = 1;
-      // item.completed = (item.completed ?? 0)+1;
-      // courseItems.refresh();
-      // page = 1;
-      // getCourseTop();
-      // loadData();
+      model.status = 1;
+      item.completed = (item.completed ?? 0)+1;
+      safeUpdate();
     }, errorBack: () {
-      // page = 1;
-      // courseItems.refresh();
-      // getCourseTop();
-      // loadData();
+      loadCourses();
+      safeUpdate();
     });
   }
 }

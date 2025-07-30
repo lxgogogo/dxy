@@ -378,6 +378,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     if (value == true) {
       onFocusGained();
     } else {
+      getCourseTop();
       int practiseRemaining = courseTopModel.value?.practiseRemaining ?? 0;
       if (practiseRemaining - 1 < 0) {
         courseTopModel.value?.practiseRemaining = 0;

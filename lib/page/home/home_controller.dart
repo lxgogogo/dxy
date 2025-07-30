@@ -388,4 +388,10 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       safeUpdate();
     });
   }
+
+  void endFunction(value) {
+    if (value == true) {
+      loadCourses();
+    }
+  }
 }

@@ -332,6 +332,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     if (!_canEdit) {
       progress = 1.0;
     }
+    if (_practiseList.isEmpty) {
+      return const SizedBox();
+    }
     return Container(
       padding: EdgeInsets.all(16.w).copyWith(right: 0),
       decoration: BoxDecoration(
@@ -411,14 +414,15 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                             height: 16.w,
                           ),
                           SizedBox(width: 4.w),
-                          Text(
-                            '${_practiseList[_currentPage].integral ?? 0}',
-                            style: TextStyle(
-                              color: '#333333'.hexColor,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
+                          if (_practiseList.isNotEmpty)
+                            Text(
+                              '${_practiseList[_currentPage].integral ?? 0}',
+                              style: TextStyle(
+                                color: '#333333'.hexColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
                         ],
                       )
                     else

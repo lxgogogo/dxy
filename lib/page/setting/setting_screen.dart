@@ -79,9 +79,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     children: [
                       Text('修改密码', style: TextStyle(fontSize: 14.sp, color: AppTheme.color_333333)),
                       ImageIcon(
-                        const AssetImage('assets/images/edit_password.png'),
-                        size: 12.w,
-                        color: AppTheme.color_999999,
+                        const AssetImage('assets/images/item_arrow.png'),
+                        size: 22.w,
                       )
                     ],
                   ),
@@ -121,6 +120,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       ],
                     ),
                   )),
+              Container(
+                color: AppTheme.color_1A000000,
+                height: 0.5.w,
+              ),
             ],
           ),
         ),

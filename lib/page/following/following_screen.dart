@@ -6,6 +6,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/model/userdata_list.dart';
 import 'package:holdem/utils/net_request.dart';
+import 'package:holdem/widget/common_app_bar.dart';
 import 'package:holdem/widget/no_data.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -119,24 +120,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/back.png',
-            width: 22.w,
-            height: 22.w,
-          ),
-          onPressed: () {
-            UserStore.of.getUserInfo();
-            Get.back();
-          },
-        ),
-        backgroundColor: Colors.transparent,
-        title: Text(
-          widget.isFollowPage ? '我的关注' : '我的粉丝',
-          style: AppTheme.text333333Size17,
-        ),
-        centerTitle: true,
+      appBar: CommonAppBar.arrowBack(
+        context,
+        title: widget.isFollowPage ? '我的关注' : '我的粉丝',
+        onBack: () {
+          UserStore.of.getUserInfo();
+          Get.back();
+        }
       ),
       backgroundColor: Colors.white,
       body: SmartRefresher(
@@ -148,7 +138,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
         onLoading: _onLoading,
         child: items.isNotEmpty
             ? ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.w).copyWith(top: 5.w),
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
@@ -192,6 +182,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
     String title = '';
     bool followed = items[index].followed ?? false;
     bool isfans = items[index].isfans ?? false;
+    Color bgColor = AppTheme.color_333333.withOpacity(0.1);
+    Color titleColor = AppTheme.color_333333;
     if (widget.isFollowPage) {
       if (isfans) {
         title = '互相关注';
@@ -201,8 +193,11 @@ class _FollowingScreenState extends State<FollowingScreen> {
       } else {
         if (followed) {
           title = '已关注';
+          titleColor = AppTheme.color_999999;
         } else {
           title = '+关注';
+          titleColor = AppTheme.color_557BF6;
+          bgColor = AppTheme.color_557BF6.withOpacity(0.1);
         }
       }
     } else {
@@ -256,15 +251,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
         height: 28.w,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppTheme.color_333333.withOpacity(0.1),
+          color: bgColor,
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Text(
           title,
           style: TextStyle(
-            color: title == '已关注'
-                ? AppTheme.color_999999
-                : AppTheme.color_333333,
+            color: titleColor,
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
           ),

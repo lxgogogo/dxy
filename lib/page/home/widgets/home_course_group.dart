@@ -85,6 +85,9 @@ class HomeCourseGroup extends StatelessWidget {
                       'practise' => CourseExercisesWidget(
                           showTitle: false,
                           item: item,
+                          endFunction: (value) {
+                            controller.endFunction(value);
+                          }
                         ),
                       _ => GestureDetector(
                           onTap: () => controller.toCourseDetail(item),

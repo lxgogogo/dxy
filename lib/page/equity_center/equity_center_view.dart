@@ -27,23 +27,22 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
   Widget build(BuildContext context) {
     return Obx(() => Stack(
       children: [
+        Positioned(
+          bottom: 0,
+          child: Container(
+            width: 1.sw,
+            height: 1.sh,
+            color: ColorStyle.cF5F5F5,
+          ),
+        ),
         if (controller.isLoading.value)
           const SizedBox()
         else
           Image.asset(
             controller.bg.value,
             width: 1.sw,
-            height: 1.sh,
-            fit: BoxFit.fill,
+            fit: BoxFit.fitWidth,
           ),
-        Positioned(
-          bottom: 0,
-          child: Container(
-            width: 1.sw,
-            height: 260.w,
-            color: ColorStyle.cF5F5F5,
-          ),
-        ),
         Scaffold(
             backgroundColor: controller.isLoading.value
                 ? Colors.white
@@ -55,6 +54,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
               child: CupertinoActivityIndicator(color: Colors.grey),
             )
                 : SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -269,7 +269,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     }
   }
 
-  Future<void> toKnowledge(CourseModel item) async {
+  Future<void> toKnowledge(CourseModel item, {Duration? duration}) async {
     final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
     final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
     if (knowledgeIndexDto == null) {
@@ -291,6 +291,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         contentType,
         contentId,
         subContentId: subContentId,
+        duration: duration,
       );
     } else {
       try {
@@ -300,6 +301,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
             contentType,
             contentId,
             subContentId: subContentId,
+            duration: duration,
           );
         } else {
           DialogUtil.showToast(res.msg);

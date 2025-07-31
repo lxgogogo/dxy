@@ -22,6 +22,9 @@ class CourseProgressView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+    final currentIndex = knowledgeIndexDtoList.indexWhere((e) => e.isSelected == true);
+    final knowledgeIndexDto = currentIndex >= 0 ? knowledgeIndexDtoList[currentIndex] : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -60,7 +63,7 @@ class CourseProgressView extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    '${item.integral ?? 0}',
+                    '${knowledgeIndexDto?.integral ?? 0}',
                     style: TextStyle(
                       color: '#333333'.hexColor,
                       fontSize: 12.sp,

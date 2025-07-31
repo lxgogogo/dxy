@@ -312,7 +312,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     DialogUtil.dismiss();
   }
 
-  Future<void> toKnowledge(CourseModel item) async {
+  Future<void> toKnowledge(CourseModel item, {Duration? duration}) async {
     final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
     final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
     if (knowledgeIndexDto == null) {
@@ -334,6 +334,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         contentType,
         contentId,
         subContentId: subContentId,
+        duration: duration,
       );
     } else {
       try {
@@ -343,6 +344,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
             contentType,
             contentId,
             subContentId: subContentId,
+            duration: duration,
           );
         } else {
           DialogUtil.showToast(res.msg);

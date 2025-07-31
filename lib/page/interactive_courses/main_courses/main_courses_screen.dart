@@ -197,7 +197,10 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                                 onTap: () => controller.toKnowledge(item),
                                                 child: CourseKnowledgeItem(
                                                   item: item,
-                                                  onTap: () => controller.toKnowledge(item),
+                                                  onTapDetail: ({Duration? duration}) => controller.toKnowledge(
+                                                    item,
+                                                    duration: duration,
+                                                  ),
                                                   onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
                                                     index,
                                                     childIndex,

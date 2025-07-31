@@ -124,7 +124,7 @@ class CourseDetailsController extends GetxController {
     );
   }
 
-  Future<void> toKnowledge() async {
+  Future<void> toKnowledge({Duration? duration}) async {
     if (isFetching) return;
     final knowledgeIndexDtoList = detailBean?.knowledge?.knowledgeIndexDtoList ?? [];
     final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
@@ -147,6 +147,7 @@ class CourseDetailsController extends GetxController {
         contentType,
         contentId,
         subContentId: subContentId,
+        duration: duration,
       );
     } else {
       try {
@@ -156,6 +157,7 @@ class CourseDetailsController extends GetxController {
             contentType,
             contentId,
             subContentId: subContentId,
+            duration: duration,
             callBack: (value) {
               requestDetail();
             },
@@ -166,6 +168,27 @@ class CourseDetailsController extends GetxController {
       } catch (e) {
         Log.e(e.toString());
       }
+    }
+  }
+
+  Future<void> onKnowledgeVideoComplete() async {
+    try {
+      final knowledgeIndexDtoList = detailBean?.knowledge?.knowledgeIndexDtoList ?? [];
+      final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
+      if (knowledgeIndexDto != null) {
+        if (knowledgeIndexDto.status == 1) {
+          return;
+        }
+        knowledgeIndexDto.status = 1;
+        final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
+        if (res.isSuccess) {
+          await requestDetail();
+        } else {
+          DialogUtil.showToast(res.msg);
+        }
+      }
+    } catch (e) {
+      Log.e(e.toString());
     }
   }
 

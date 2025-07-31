@@ -12,13 +12,15 @@ import '../../../course_details/widgets/course_progress_view.dart';
 
 class CourseKnowledgeItem extends StatelessWidget {
   final CourseModel item;
-  final VoidCallback? onTap;
+  final Function({Duration? duration}) onTapDetail;
+  final VoidCallback? onVideoComplete;
   final Function(int index)? onSelectItem;
 
   const CourseKnowledgeItem({
     super.key,
     required this.item,
-    this.onTap,
+    required this.onTapDetail,
+    this.onVideoComplete,
     this.onSelectItem,
   });
 
@@ -28,127 +30,102 @@ class CourseKnowledgeItem extends StatelessWidget {
     final currentIndex = knowledgeIndexDtoList.indexWhere((e) => e.isSelected == true);
     final knowledgeIndexDto = currentIndex >= 0 ? knowledgeIndexDtoList[currentIndex] : null;
     final notCompletedIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [
-            BoxShadow(
-              color: '#58A5FF'.hexColor.withOpacity(0.1),
-              blurRadius: 8.63.r,
-              offset: Offset(0, 4.32.w),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                CommonImage.net(
-                  imageUrl: item.icon ?? '',
-                  radius: 4.r,
-                  width: 44.w,
-                  height: 44.w,
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: '#58A5FF'.hexColor.withOpacity(0.1),
+            blurRadius: 8.63.r,
+            offset: Offset(0, 4.32.w),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            spacing: 8.w,
+            children: [
+              SvgPicture.asset(
+                Assets.svg.iconKnowledge,
+                width: 16.w,
+                height: 16.w,
+              ),
+              Text(
+                '知识',
+                style: TextStyle(
+                  color: '#000000'.hexColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
                 ),
-                SizedBox(width: 8.w),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        item.title ?? '',
-                        style: TextStyle(
-                          color: '#333333'.hexColor,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (item.infoTitle?.isNotEmpty == true) ...[
-                        SizedBox(height: 2.w),
-                        Text(
-                          item.infoTitle ?? '',
-                          style: TextStyle(
-                            color: '#666666'.hexColor,
-                            fontSize: 12.sp,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ],
+              ),
+            ],
+          ),
+          SizedBox(height: 12.w),
+          Text(
+            knowledgeIndexDto?.title ?? '',
+            style: TextStyle(
+              color: '#000000'.hexColor,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(height: 12.w),
+          if (knowledgeIndexDto?.contentArticle != null)
+            ClipRect(
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  HeightLimiter(
+                    maxHeight: 166.w,
+                    child: CommonHtmlWidget(
+                      content: knowledgeIndexDto?.contentArticle?.content ?? '',
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12.w),
-            Text(
-              knowledgeIndexDto?.title ?? '',
-              style: TextStyle(
-                color: '#000000'.hexColor,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: 12.w),
-            if (knowledgeIndexDto?.contentArticle != null)
-              ClipRect(
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    HeightLimiter(
-                      maxHeight: 166.w,
-                      child: CommonHtmlWidget(
-                        content: knowledgeIndexDto?.contentArticle?.content ?? '',
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 12.w,
-                      child: GestureDetector(
-                        onTap: onTap,
-                        child: Container(
-                          height: 28.w,
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          decoration: BoxDecoration(
-                            color: '#557BF6'.hexColor.withValues(alpha: 0.7),
-                            borderRadius: BorderRadius.circular(100.r),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '查看全文',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  Positioned(
+                    bottom: 12.w,
+                    child: GestureDetector(
+                      onTap: () => onTapDetail.call(),
+                      child: Container(
+                        height: 28.w,
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        decoration: BoxDecoration(
+                          color: '#557BF6'.hexColor.withValues(alpha: 0.7),
+                          borderRadius: BorderRadius.circular(100.r),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '查看全文',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              )
-            else if (knowledgeIndexDto?.contentVideo != null)
-              KnowledgeVideoView(
-                contentVideo: knowledgeIndexDto?.contentVideo,
-                onTapDetail: onTap,
+                  ),
+                ],
               ),
-            SizedBox(height: 12.w),
-            CourseProgressView(
-              item: item,
-              onSelectItem: onSelectItem,
-              notCompletedIndex: notCompletedIndex,
+            )
+          else if (knowledgeIndexDto?.contentVideo != null)
+            KnowledgeVideoView(
+              contentVideo: knowledgeIndexDto?.contentVideo,
+              onTapDetail: onTapDetail,
+              onVideoComplete: onVideoComplete,
             ),
-          ],
-        ),
+          SizedBox(height: 12.w),
+          CourseProgressView(
+            item: item,
+            onSelectItem: onSelectItem,
+            notCompletedIndex: notCompletedIndex,
+          ),
+        ],
       ),
     );
   }

@@ -117,8 +117,13 @@ class AppRoutesUtils {
             }));
   }
 
-  static Future<T?>? toDetail<T>(String? contentType, int? contentId,
-      {int? subContentId, Function? callBack}) {
+  static Future<T?>? toDetail<T>(
+    String? contentType,
+    int? contentId, {
+    int? subContentId,
+    Function? callBack,
+    Duration? duration,
+  }) {
     if (contentType == null || contentId == null) return null;
     if (contentType == 'book') {
       return Get.toNamed(Routes.bookDetail, arguments: contentId)?.then((value) {
@@ -142,8 +147,11 @@ class AppRoutesUtils {
         return null;
       });
     } else if (contentType == 'video' || contentType == 'videoList') {
-      return Get.toNamed(Routes.videoDetail,
-          arguments: {'id': contentId, 'childId': subContentId})?.then((value) {
+      return Get.toNamed(Routes.videoDetail, arguments: {
+        'id': contentId,
+        'childId': subContentId,
+        'duration': duration,
+      })?.then((value) {
         if (callBack != null) {
           callBack(value);
         }

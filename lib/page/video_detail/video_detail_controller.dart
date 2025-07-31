@@ -5,6 +5,7 @@ class VideoDetailController extends GetxController {
 
   int? id;
   int? childId;
+  Duration? duration;
 
   bool noNetwork = false;
 
@@ -54,6 +55,7 @@ class VideoDetailController extends GetxController {
   void onInit() {
     id = Get.arguments['id'] as int?;
     childId = Get.arguments['childId'] as int?;
+    duration = Get.arguments['duration'] as Duration?;
     super.onInit();
     _eventSubscription = EventBusUtil.of.on<EventRefreshComments>().listen((event) {
       detailBean?.commentCount = (detailBean?.commentCount ?? 0) + 1;
@@ -222,13 +224,17 @@ class VideoDetailController extends GetxController {
     safeUpdate();
     videoController = VideoPlayerController.networkUrl(Uri.parse(link))
       ..addListener(videoListener)
-      ..initialize().then((_) {
+      ..initialize().then((_) async {
         videoNotifier.initChewieController(videoController!, (value) {
           isFullScreen = value;
           fullScreenOnTap = true;
         });
         _isVideoInitialized = true;
         safeUpdate();
+        if (duration != null) {
+          await videoNotifier.chewieController?.seekTo(duration!);
+          duration = null;
+        }
         if (!hasUploadEvent) {
           hasUploadEvent = true;
           TrackUtils.trackEvent(userLogType: '103011', params: id);
@@ -384,7 +390,6 @@ class VideoDetailController extends GetxController {
   void followOnTap() {
     safeUpdate();
   }
-
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
     final success = await _likeToggle.call();

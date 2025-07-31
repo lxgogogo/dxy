@@ -24,7 +24,7 @@ class HomeCourseGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 24.w),
+      padding: EdgeInsets.only(top: 24.w),
       child: GetBuilder<HomeController>(
         builder: (controller) {
           return Column(
@@ -66,9 +66,11 @@ class HomeCourseGroup extends StatelessWidget {
                     return switch (des) {
                       'knowledge' => CourseKnowledgeItem(
                           item: item,
-                          onTap: () => controller.toKnowledge(item),
-                          onSelectItem: (int childIndex) =>
-                              controller.onSelectKnowledgeItem(
+                          onTapDetail: ({Duration? duration}) => controller.toKnowledge(
+                            item,
+                            duration: duration,
+                          ),
+                          onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
                             controller.courseItems.indexOf(item),
                             childIndex,
                           ),
@@ -86,8 +88,7 @@ class HomeCourseGroup extends StatelessWidget {
                           item: item,
                           endFunction: (value) {
                             controller.endFunction(value);
-                          }
-                        ),
+                          }),
                       _ => GestureDetector(
                           onTap: () => controller.toCourseDetail(item),
                           child: CourseAllItem(
@@ -144,12 +145,8 @@ class HomeCourseGroup extends StatelessWidget {
                   item.label ?? '',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    color: selectedIndex == index
-                        ? '#333333'.hexColor
-                        : '#666666'.hexColor,
-                    fontWeight: selectedIndex == index
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                    color: selectedIndex == index ? '#333333'.hexColor : '#666666'.hexColor,
+                    fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),

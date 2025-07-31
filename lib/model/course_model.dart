@@ -159,7 +159,8 @@ class KnowledgeIndexDtoList {
   ContentArticle? contentArticle;
   final int? contentId;
   final int? subContentId;
-  final int? status;
+  int? status;
+  final int? integral;
   bool isSelected;
 
   KnowledgeIndexDtoList({
@@ -170,6 +171,7 @@ class KnowledgeIndexDtoList {
     this.contentId,
     this.subContentId,
     this.status,
+    this.integral,
     this.isSelected = false,
   });
 
@@ -181,6 +183,7 @@ class KnowledgeIndexDtoList {
         contentId: json["contentId"],
         subContentId: json["subContentId"],
         status: json["status"],
+        integral: json["integral"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -191,6 +194,7 @@ class KnowledgeIndexDtoList {
         "contentId": contentId,
         "subContentId": subContentId,
         "status": status,
+        "integral": integral,
       };
 }
 

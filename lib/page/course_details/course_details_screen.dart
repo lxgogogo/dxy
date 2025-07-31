@@ -70,7 +70,10 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                 sliver: SliverToBoxAdapter(
                                   child: CourseDetailKnowledgeItem(
                                     item: controller.detailBean!.knowledge!,
-                                    onTap: controller.toKnowledge,
+                                    onTapDetail: ({Duration? duration}) => controller.toKnowledge(
+                                      duration: duration,
+                                    ),
+                                    onVideoComplete: controller.onKnowledgeVideoComplete,
                                     onSelectItem: controller.onSelectKnowledgeItem,
                                   ),
                                 ),
@@ -85,8 +88,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   ),
                                 ),
                               ),
-                            if (controller.detailBean!.challenge != null &&
-                                UserStore.of.isLogin)
+                            if (controller.detailBean!.challenge != null && UserStore.of.isLogin)
                               SliverPadding(
                                 padding: EdgeInsets.only(top: 16.w),
                                 sliver: SliverToBoxAdapter(

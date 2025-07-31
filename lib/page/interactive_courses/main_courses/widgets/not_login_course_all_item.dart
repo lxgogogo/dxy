@@ -22,48 +22,77 @@ class NotLoginCourseAllItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 0.w).copyWith(bottom: 12.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: '#58A5FF'.hexColor.withOpacity(0.1),
+            blurRadius: 8.63.r,
+            offset: Offset(0, 4.32.w),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CommonImage.net(
-            imageUrl: item.cover ?? '',
-            radius: 16.w,
+          Container(
             width: 1.sw - 32.w,
             height: 192.w,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.w),
+                  topRight: Radius.circular(16.w),
+                )
+            ),
+            child: CommonImage.net2(
+                imageUrl: item.cover ?? '',
+                width: 1.sw - 32.w,
+                height: 192.w,
+                fit: BoxFit.fitWidth
+            ),
           ),
           SizedBox(height: 10.w),
-          Row(
-            children: [
-              if (item.icon?.isNotEmpty == true)...[
-                CommonImage.net(
-                  imageUrl: item.icon ?? '',
-                  width: 24.w,
-                  height: 24.w,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    if (item.icon?.isNotEmpty == true)...[
+                      CommonImage.net(
+                        imageUrl: item.icon ?? '',
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                      SizedBox(width: 5.w)
+                    ],
+                    Text(
+                      item.title ?? '',
+                      style: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                SizedBox(width: 5.w)
+                SizedBox(height: 5.w,),
+                Text(
+                  item.des ?? '',
+                  style: TextStyle(
+                    color: '#666666'.hexColor,
+                    fontSize: 12.sp,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
-              Text(
-                item.title ?? '',
-                style: TextStyle(
-                  color: '#333333'.hexColor,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-          SizedBox(height: 5.w,),
-          Text(
-            item.des ?? '',
-            style: TextStyle(
-              color: '#666666'.hexColor,
-              fontSize: 12.sp,
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          )
         ],
       ),
     );

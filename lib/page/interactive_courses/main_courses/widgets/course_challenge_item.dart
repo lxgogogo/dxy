@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_model.dart';
+import 'package:holdem/utils/app_theme.dart';
 
 import '../../../../widget/common_image.dart';
 
@@ -21,6 +22,17 @@ class CourseChallengeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.w).copyWith(right: 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: '#58A5FF'.hexColor.withOpacity(0.1),
+            blurRadius: 8.63.r,
+            offset: Offset(0, 4.32.w),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -110,9 +122,8 @@ class CourseChallengeItem extends StatelessWidget {
                           TextSpan(
                             text: '${item.completed ?? 0}',
                             style: TextStyle(
-                              color: '#333333'.hexColor,
+                              color: AppTheme.color_333333,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           TextSpan(
@@ -121,7 +132,7 @@ class CourseChallengeItem extends StatelessWidget {
                         ],
                       ),
                       style: TextStyle(
-                        color: '#666666'.hexColor,
+                        color: AppTheme.color_666666,
                         fontSize: 12.sp,
                       ),
                     ),

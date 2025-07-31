@@ -21,7 +21,7 @@ import '../../interactive_courses/course_exercises/widget/answer_results_page_sh
 class CourseExercisesWidget extends StatefulWidget {
   final bool showTitle;
   final CourseModel item;
-  final int pageType; //1-详情 0-首页
+  final int pageType; //1-详情 0-首页 2-home主页
   final Function? endFunction;
   const CourseExercisesWidget(
       {super.key,
@@ -327,6 +327,15 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant CourseExercisesWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('didUpdateWidget=======');
+    if (widget.pageType == 2) {
+      _initData();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double progress = _progress / _totalPage;
     if (!_canEdit) {
@@ -390,9 +399,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                           TextSpan(
                             text: '$_completed',
                             style: TextStyle(
-                              color: '#333333'.hexColor,
+                              color: AppTheme.color_666666,
                               fontSize: 12.sp,
-                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           TextSpan(
@@ -401,7 +409,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                         ],
                       ),
                       style: TextStyle(
-                        color: '#666666'.hexColor,
+                        color: AppTheme.color_666666,
                         fontSize: 12.sp,
                       ),
                     ),
@@ -418,7 +426,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                             Text(
                               '${_practiseList[_currentPage].integral ?? 0}',
                               style: TextStyle(
-                                color: '#333333'.hexColor,
+                                color: AppTheme.color_333333,
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -589,7 +597,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                 ]
               ],
             )
-          ],
+          ]
+          else
+            SizedBox(height: 30.w),
           SizedBox(height: 20.w),
           Stack(
             children: [

@@ -7,6 +7,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/course_model.dart';
 import 'package:holdem/stores/user_store.dart';
+import 'package:holdem/utils/app_theme.dart';
 
 import '../../../../widget/common_image.dart';
 
@@ -175,16 +176,15 @@ class CourseTypeItem extends StatelessWidget {
                 TextSpan(
                   text: '$total',
                   style: TextStyle(
-                    color: '#666666'.hexColor,
+                    color: AppTheme.color_666666,
                     fontSize: 12.sp,
                   ),
                 ),
               ],
             ),
             style: TextStyle(
-              color: '#333333'.hexColor,
+              color: AppTheme.color_666666,
               fontSize: 12.sp,
-              fontWeight: FontWeight.w700,
             ),
           ),
         ],

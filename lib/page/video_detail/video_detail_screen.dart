@@ -287,7 +287,7 @@ class VideoDetailScreen extends StatelessWidget {
                       postId: controller.id,
                       relId: controller.id,
                       relType: NetRequest.COMMENT_TYPE_CONTENT,
-                      favoriteState: controller.detailBean?.favorited ?? false,
+                      favorited: controller.detailBean?.favorited ?? false,
                       liked: controller.detailBean?.liked ?? false,
                       shareLink: controller.shareLink,
                       likeCount: controller.detailBean?.likeCount ?? 0,

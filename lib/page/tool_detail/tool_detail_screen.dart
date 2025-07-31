@@ -268,7 +268,7 @@ class _ToolDetailScreenState extends State<ToolDetailScreen> {
                     postId: controller.id,
                     relId: controller.id,
                     relType: NetRequest.COMMENT_TYPE_CONTENT,
-                    favoriteState: controller.detailBean?.favorited ?? false,
+                    favorited: controller.detailBean?.favorited ?? false,
                     liked: controller.detailBean?.liked ?? false,
                     shareLink: 'details/tool-${controller.id}',
                     likeCount: controller.detailBean?.likeCount ?? 0,

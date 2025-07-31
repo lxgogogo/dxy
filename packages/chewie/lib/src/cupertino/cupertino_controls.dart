@@ -67,16 +67,16 @@ class _CupertinoControlsState extends State<CupertinoControls>
     if (_latestValue.hasError) {
       return chewieController.errorBuilder != null
           ? chewieController.errorBuilder!(
-              context,
-              chewieController.videoPlayerController.value.errorDescription!,
-            )
+        context,
+        chewieController.videoPlayerController.value.errorDescription!,
+      )
           : const Center(
-              child: Icon(
-                CupertinoIcons.exclamationmark_circle,
-                color: Colors.white,
-                size: 42,
-              ),
-            );
+        child: Icon(
+          CupertinoIcons.exclamationmark_circle,
+          color: Colors.white,
+          size: 42,
+        ),
+      );
     }
 
     final backgroundColor = widget.backgroundColor;
@@ -175,9 +175,9 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   GestureDetector _buildOptionsButton(
-    Color iconColor,
-    double barHeight,
-  ) {
+      Color iconColor,
+      double barHeight,
+      ) {
     final options = <OptionItem>[];
 
     if (chewieController.additionalOptions != null &&
@@ -199,7 +199,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
             builder: (context) => CupertinoOptionsDialog(
               options: options,
               cancelButtonText:
-                  chewieController.optionsTranslation?.cancelButtonText,
+              chewieController.optionsTranslation?.cancelButtonText,
             ),
           );
           if (_latestValue.isPlaying) {
@@ -260,11 +260,11 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   Widget _buildBottomBar(
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double buttonPadding,
-  ) {
+      Color backgroundColor,
+      Color iconColor,
+      double barHeight,
+      double buttonPadding,
+      ) {
     return AnimatedOpacity(
       opacity: notifier.hideStuff ? 0.0 : 1.0,
       duration: const Duration(milliseconds: 300),
@@ -284,40 +284,40 @@ class _CupertinoControlsState extends State<CupertinoControls>
               color: backgroundColor,
               child: chewieController.isLive
                   ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        _buildPlayPause(controller, iconColor, barHeight),
-                        _buildLive(iconColor),
-                      ],
-                    )
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _buildPlayPause(controller, iconColor, barHeight),
+                  _buildLive(iconColor),
+                ],
+              )
                   : Row(
-                      children: <Widget>[
-                        if (chewieController.isFullScreen)
-                          _buildSkipBack(iconColor, barHeight),
-                        _buildPlayPause(controller, iconColor, barHeight),
-                        if (chewieController.isFullScreen)
-                          _buildSkipForward(iconColor, barHeight),
-                        _buildPosition(iconColor),
-                        _buildProgressBar(),
-                        _buildRemaining(iconColor),
-                        _buildSubtitleToggle(iconColor, barHeight),
-                        if (chewieController.allowPlaybackSpeedChanging)
-                          if (chewieController.isFullScreen)
-                          _buildSpeedButton(controller, iconColor, barHeight)
-                        else
-                          if (chewieController.allowFullScreen)
-                            _buildExpandButton(
-                              Colors.transparent,
-                              iconColor,
-                              barHeight,
-                              buttonPadding,
-                            ),
-                        if (chewieController.additionalOptions != null &&
-                            chewieController
-                                .additionalOptions!(context).isNotEmpty)
-                          _buildOptionsButton(iconColor, barHeight),
-                      ],
-                    ),
+                children: <Widget>[
+                  if (chewieController.isFullScreen)
+                    _buildSkipBack(iconColor, barHeight),
+                  _buildPlayPause(controller, iconColor, barHeight),
+                  if (chewieController.isFullScreen)
+                    _buildSkipForward(iconColor, barHeight),
+                  _buildPosition(iconColor),
+                  _buildProgressBar(),
+                  _buildRemaining(iconColor),
+                  _buildSubtitleToggle(iconColor, barHeight),
+                  if (chewieController.allowPlaybackSpeedChanging)
+                    if (chewieController.isFullScreen)
+                      _buildSpeedButton(controller, iconColor, barHeight)
+                    else
+                      if (chewieController.allowFullScreen)
+                        _buildExpandButton(
+                          Colors.transparent,
+                          iconColor,
+                          barHeight,
+                          buttonPadding,
+                        ),
+                  if (chewieController.additionalOptions != null &&
+                      chewieController
+                          .additionalOptions!(context).isNotEmpty)
+                    _buildOptionsButton(iconColor, barHeight),
+                ],
+              ),
             ),
           ),
         ),
@@ -336,11 +336,11 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   GestureDetector _buildExpandButton(
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double buttonPadding,
-  ) {
+      Color backgroundColor,
+      Color iconColor,
+      double barHeight,
+      double buttonPadding,
+      ) {
     return GestureDetector(
       onTap: _onExpandCollapse,
       child: AnimatedOpacity(
@@ -383,15 +383,15 @@ class _CupertinoControlsState extends State<CupertinoControls>
       onTap: _latestValue.isPlaying
           ? _cancelAndRestartTimer
           : () {
-              _hideTimer?.cancel();
+        _hideTimer?.cancel();
 
-              setState(() {
-                notifier.hideStuff = false;
-              });
-            },
+        setState(() {
+          notifier.hideStuff = false;
+        });
+      },
       child: CenterPlayButton(
-        backgroundColor: Colors.white,
-        iconColor: Colors.black,
+        backgroundColor: widget.backgroundColor,
+        iconColor: widget.iconColor,
         isFinished: isFinished,
         isPlaying: controller.value.isPlaying,
         show: showPlayButton,
@@ -401,12 +401,12 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   GestureDetector _buildMuteButton(
-    VideoPlayerController controller,
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double buttonPadding,
-  ) {
+      VideoPlayerController controller,
+      Color backgroundColor,
+      Color iconColor,
+      double barHeight,
+      double buttonPadding,
+      ) {
     return GestureDetector(
       onTap: () {
         _cancelAndRestartTimer();
@@ -447,10 +447,10 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   GestureDetector _buildPlayPause(
-    VideoPlayerController controller,
-    Color iconColor,
-    double barHeight,
-  ) {
+      VideoPlayerController controller,
+      Color iconColor,
+      double barHeight,
+      ) {
     return GestureDetector(
       onTap: _playPause,
       child: Container(
@@ -568,10 +568,10 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   GestureDetector _buildSpeedButton(
-    VideoPlayerController controller,
-    Color iconColor,
-    double barHeight,
-  ) {
+      VideoPlayerController controller,
+      Color iconColor,
+      double barHeight,
+      ) {
     return GestureDetector(
       onTap: () async {
         _hideTimer?.cancel();
@@ -622,11 +622,11 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   Widget _buildTopBar(
-    Color backgroundColor,
-    Color iconColor,
-    double barHeight,
-    double buttonPadding,
-  ) {
+      Color backgroundColor,
+      Color iconColor,
+      double barHeight,
+      double buttonPadding,
+      ) {
     return Container(
       height: barHeight,
       margin: EdgeInsets.only(
@@ -875,19 +875,19 @@ class _PlaybackSpeedDialog extends StatelessWidget {
       actions: _speeds
           .map(
             (e) => CupertinoActionSheetAction(
-              onPressed: () {
-                Navigator.of(context).pop(e);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (e == _selected)
-                    Icon(Icons.check, size: 20.0, color: selectedColor),
-                  Text(e.toString()),
-                ],
-              ),
-            ),
-          )
+          onPressed: () {
+            Navigator.of(context).pop(e);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (e == _selected)
+                Icon(Icons.check, size: 20.0, color: selectedColor),
+              Text(e.toString()),
+            ],
+          ),
+        ),
+      )
           .toList(),
     );
   }

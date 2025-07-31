@@ -1,6 +1,7 @@
 part of 'book_detail_screen.dart';
 
 class BookDetailController extends GetxController {
+  static BookDetailController get of => Get.find<BookDetailController>(tag: '${Get.arguments}',);
   int? id;
 
   ArticleDetailBean? detailBean;

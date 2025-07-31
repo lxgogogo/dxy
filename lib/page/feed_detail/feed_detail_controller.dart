@@ -1,6 +1,7 @@
 part of 'feed_detail_screen.dart';
 
 class FeedDetailController extends GetxController with StayReportGetxMixin {
+  static FeedDetailController get of => Get.find<FeedDetailController>(tag: '${Get.arguments}');
   int? id;
 
   BoardBean? detailBean;

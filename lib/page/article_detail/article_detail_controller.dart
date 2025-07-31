@@ -1,6 +1,7 @@
 part of 'article_detail_screen.dart';
 
 class ArticleDetailController extends GetxController with StayReportGetxMixin {
+  static ArticleDetailController get of => Get.find<ArticleDetailController>(tag: '${Get.arguments}',);
   int? id;
 
   ArticleDetailBean? detailBean;

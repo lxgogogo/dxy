@@ -1,7 +1,7 @@
 part of 'video_detail_screen.dart';
 
 class VideoDetailController extends GetxController {
-  static VideoDetailController get of => Get.find();
+  static VideoDetailController get of => Get.find<VideoDetailController>();
 
   int? id;
   int? childId;

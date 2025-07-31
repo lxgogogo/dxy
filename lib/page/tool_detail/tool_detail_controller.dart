@@ -1,6 +1,7 @@
 part of 'tool_detail_screen.dart';
 
 class ToolDetailController extends GetxController {
+  static ToolDetailController get of => Get.find<ToolDetailController>(tag: '${Get.arguments}',);
   int? id;
 
   ArticleDetailBean? detailBean;

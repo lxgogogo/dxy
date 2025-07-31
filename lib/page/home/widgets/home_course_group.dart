@@ -15,7 +15,6 @@ import '../../course_details/widgets/course_exercises_widget.dart';
 import '../../interactive_courses/main_courses/widgets/course_all_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_challenge_item.dart';
 import '../../interactive_courses/main_courses/widgets/course_knowledge_item.dart';
-import '../../interactive_courses/main_courses/widgets/course_practice_item.dart';
 import '../home_screen.dart';
 
 class HomeCourseGroup extends StatelessWidget {
@@ -24,7 +23,7 @@ class HomeCourseGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 24.w),
+      padding: EdgeInsets.symmetric(vertical: 24.w),
       child: GetBuilder<HomeController>(
         builder: (controller) {
           return Column(

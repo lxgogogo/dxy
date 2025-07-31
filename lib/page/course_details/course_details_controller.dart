@@ -33,17 +33,8 @@ class CourseDetailsController extends GetxController {
       final res = await CourseService.of.courseInfo(id, showLoading: false);
       if (res.isSuccess) {
         // 先判断哪个选中(缓存起来)
-        PractiseIndexDtoList? selectKnow;
         PractiseIndexDtoList? selectPractise;
         if (detailBean != null) {
-          // CourseModel know = detailBean?.knowledge ?? CourseModel();
-          // final knowledgeIndexDtoList = know.knowledgeIndexDtoList ?? [];
-          // for (int i = 0; i < knowledgeIndexDtoList.length; i++) {
-          //   final model = knowledgeIndexDtoList[i];
-          //   if (model.select == true) {
-          //     selectKnow = model;
-          //   }
-          // }
           CourseModel practise = detailBean?.practise ?? CourseModel();
           final practiseIndexDtoList = practise.practiseIndexDtoList ?? [];
           for (int i = 0; i < practiseIndexDtoList.length; i++) {
@@ -61,7 +52,7 @@ class CourseDetailsController extends GetxController {
           if (startIndex != -1) {
             knowledgeIndexDtoList[startIndex].isSelected = true;
           } else {
-            knowledgeIndexDtoList.first.isSelected = true;
+            knowledgeIndexDtoList.last.isSelected = true;
           }
         }
         CourseModel practise = detailBean?.practise ?? CourseModel();

@@ -275,7 +275,7 @@ class FeedDetailScreen extends StatelessWidget {
                       postId: controller.id,
                       relId: controller.id,
                       relType: NetRequest.COMMENT_TYPE_THREAD,
-                      favoriteState: controller.detailBean?.favorited!,
+                      favorited: controller.detailBean?.favorited!,
                       liked: controller.detailBean?.liked!,
                       shareLink: 'details/thread-${controller.id}',
                       likeCount: controller.detailBean?.likeCount ?? 0,

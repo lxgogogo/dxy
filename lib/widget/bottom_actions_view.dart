@@ -7,7 +7,9 @@ import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/tag_model.dart';
+import 'package:holdem/page/article_detail/article_detail_screen.dart';
 import 'package:holdem/page/home/home_screen.dart';
+import 'package:holdem/page/video_detail/video_detail_screen.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/env.dart';
@@ -18,9 +20,11 @@ import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/item_comment.dart';
 
 import '../model/user.dart';
+import '../page/book_detail/book_detail_screen.dart';
 import '../page/comment_publish/comment_publish_screen.dart';
 import '../page/feed_detail/feed_detail_screen.dart';
 import '../page/mine/login_helper.dart';
+import '../page/tool_detail/tool_detail_screen.dart';
 import '../routes/app_routes_utils.dart';
 import '../utils/dialog_util.dart';
 import 'like_button/like_button.dart';
@@ -44,199 +48,200 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 12.w),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
-                )),
-            alignment: Alignment.topCenter,
-            child: Row(
-              children: <Widget>[
-                SizedBox(width: 16.w),
-                if (widget.viewParams.relType != NetRequest.COMMENT_TYPE_THREAD)
-                  Container(
-                    height: 32.w,
-                    padding: EdgeInsets.only(right: 8.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Assets.images.logoDxy.image(
-                          width: 30.w,
-                          height: 30.w,
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Text(
-                              '德学院官方',
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                color: '##333333'.hexColor,
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 12.w),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    top: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
+                  )),
+              alignment: Alignment.topCenter,
+              child: Row(
+                children: <Widget>[
+                  SizedBox(width: 16.w),
+                  if (widget.viewParams.relType != NetRequest.COMMENT_TYPE_THREAD)
+                    Container(
+                      height: 32.w,
+                      padding: EdgeInsets.only(right: 8.w),
+                      decoration: BoxDecoration(
+                        color: '#333333'.hexColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Assets.images.logoDxy.image(
+                            width: 30.w,
+                            height: 30.w,
+                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: Text(
+                                '德学院官方',
+                                style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: '##333333'.hexColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                else
-                  Container(
-                    height: 32.w,
-                    padding: EdgeInsets.only(right: 8.w),
-                    decoration: BoxDecoration(
-                      color: '#333333'.hexColor.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        BorderAvatar(
-                          avatar: widget.viewParams.author?.avatar ?? '',
-                          borderWidth: 0,
-                        ),
-                        Flexible(
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: 60.w),
-                            margin: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Text(
-                              widget.viewParams.author?.nickname ?? '',
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                color: '##333333'.hexColor,
+                        ],
+                      ),
+                    )
+                  else
+                    Container(
+                      height: 32.w,
+                      padding: EdgeInsets.only(right: 8.w),
+                      decoration: BoxDecoration(
+                        color: '#333333'.hexColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          BorderAvatar(
+                            avatar: widget.viewParams.author?.avatar ?? '',
+                            borderWidth: 0,
+                          ),
+                          Flexible(
+                            child: Container(
+                              constraints: BoxConstraints(maxWidth: 60.w),
+                              margin: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: Text(
+                                widget.viewParams.author?.nickname ?? '',
+                                style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: '##333333'.hexColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
-                        if ((widget.viewParams.author?.id ?? 0) != 0)
-                          Visibility(
-                            visible: !UserStore.of.isMe(widget.viewParams.author?.id),
-                            child: GestureDetector(
-                              onTap: () {
-                                Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(right: 4.w),
+                          if ((widget.viewParams.author?.id ?? 0) != 0)
+                            Visibility(
+                              visible: !UserStore.of.isMe(widget.viewParams.author?.id),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
+                                },
                                 child: Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    widget.viewParams.author?.followed == true ? '已关注' : '+关注',
-                                    style: TextStyle(
-                                      color: '#557BF6'.hexColor,
-                                      fontSize: 10.sp,
-                                      fontWeight: FontWeight.w600,
+                                  margin: EdgeInsets.only(right: 4.w),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      widget.viewParams.author?.followed == true ? '已关注' : '+关注',
+                                      style: TextStyle(
+                                        color: '#557BF6'.hexColor,
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+                        ],
+                      ),
+                    ),
+                  //  if (widget.viewParams.relType == 'thread')
+                  // CountCommentBadge(
+                  //   count: widget.viewParams.likeCount.abbreviateNumber,
+                  //   iconWidget: SizedBox(
+                  //     child: CountLikeAni(
+                  //       count: '',
+                  //       liked: widget.viewParams.liked == true,
+                  //       likeWidget: SizedBox(
+                  //         width: 20.w,
+                  //         child: widget.viewParams.liked == true
+                  //             ? SvgPicture.asset(Assets.svg.liked)
+                  //             : SvgPicture.asset(Assets.svg.like),
+                  //       ),
+                  //       onToggleLike: _likeToggle,
+                  //       usePlaceHolder: false,
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CountCommentBadge(
+                          count: widget.viewParams.likeCount.abbreviateNumber,
+                          iconWidget: LikeButton(
+                              isLiked: widget.viewParams.liked,
+                              size: 24.w,
+                              padding: EdgeInsets.zero,
+                              onTap: onLikeButtonTapped,
+                              likeBuilder: (bool isLiked) {
+                                return SvgPicture.asset(
+                                  isLiked ? Assets.svg.iconBottomLiked : Assets.svg.iconBottomLike,
+                                );
+                              },
+                              bubblesColor: const BubblesColor(
+                                dotPrimaryColor: Color(0xFF557BF6),
+                                dotSecondaryColor: Color(0xFF557BF6),
+                                dotThirdColor: Color(0xFF557BF6),
+                                dotLastColor: Color(0xFF557BF6),
+                              ),
+                              circleColor: const CircleColor(
+                                start: Color(0xFF557BF6),
+                                end: Color(0xFF557BF6),
+                              ),
+                              likeCountPadding: EdgeInsets.zero,
+                              countBuilder: (_, __, ___) => const SizedBox()),
+                        ),
+                        if (UserStore.of.user?.id != widget.viewParams.author?.id)
+                          GestureDetector(
+                            onTap: _favoriteToggle,
+                            child: CountCommentBadge(
+                              count: widget.viewParams.favoriteCount.abbreviateNumber,
+                              iconWidget: SvgPicture.asset(
+                                widget.viewParams.favorited == true
+                                    ? Assets.svg.iconBottomFavorited
+                                    : Assets.svg.iconBottomFavorite,
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                            ),
                           ),
+                        GestureDetector(
+                          onTap: _toCommentList,
+                          child: CountCommentBadge(
+                              iconWidget: SvgPicture.asset(
+                                Assets.svg.iconBottomComment,
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                              count: widget.viewParams.commentCount.abbreviateNumber),
+                        ),
+                        GestureDetector(
+                          onTap: _toShare,
+                          child: CountCommentBadge(
+                              iconWidget: SvgPicture.asset(
+                                Assets.svg.iconBottomShare,
+                                width: 24.w,
+                                height: 24.w,
+                              ),
+                              count: widget.viewParams.shareCount.abbreviateNumber),
+                        ),
                       ],
                     ),
                   ),
-                //  if (widget.viewParams.relType == 'thread')
-                // CountCommentBadge(
-                //   count: widget.viewParams.likeCount.abbreviateNumber,
-                //   iconWidget: SizedBox(
-                //     child: CountLikeAni(
-                //       count: '',
-                //       liked: widget.viewParams.liked == true,
-                //       likeWidget: SizedBox(
-                //         width: 20.w,
-                //         child: widget.viewParams.liked == true
-                //             ? SvgPicture.asset(Assets.svg.liked)
-                //             : SvgPicture.asset(Assets.svg.like),
-                //       ),
-                //       onToggleLike: _likeToggle,
-                //       usePlaceHolder: false,
-                //     ),
-                //   ),
-                // ),
-                SizedBox(width: 8.w),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CountCommentBadge(
-                        count: widget.viewParams.likeCount.abbreviateNumber,
-                        iconWidget: LikeButton(
-                            isLiked: widget.viewParams.liked,
-                            size: 24.w,
-                            padding: EdgeInsets.zero,
-                            onTap: onLikeButtonTapped,
-                            likeBuilder: (bool isLiked) {
-                              return SvgPicture.asset(
-                                isLiked ? Assets.svg.iconBottomLiked : Assets.svg.iconBottomLike,
-                              );
-                            },
-                            bubblesColor: const BubblesColor(
-                              dotPrimaryColor: Color(0xFF557BF6),
-                              dotSecondaryColor: Color(0xFF557BF6),
-                              dotThirdColor: Color(0xFF557BF6),
-                              dotLastColor: Color(0xFF557BF6),
-                            ),
-                            circleColor: const CircleColor(
-                              start: Color(0xFF557BF6),
-                              end: Color(0xFF557BF6),
-                            ),
-                            likeCountPadding: EdgeInsets.zero,
-                            countBuilder: (_, __, ___) => const SizedBox()),
-                      ),
-                      if (UserStore.of.user?.id != widget.viewParams.author?.id)
-                        GestureDetector(
-                          onTap: _favoriteToggle,
-                          child: CountCommentBadge(
-                            count: widget.viewParams.favoriteCount.abbreviateNumber,
-                            iconWidget: SvgPicture.asset(
-                              widget.viewParams.favoriteState == true
-                                  ? Assets.svg.iconBottomFavorited
-                                  : Assets.svg.iconBottomFavorite,
-                              width: 24.w,
-                              height: 24.w,
-                            ),
-                          ),
-                        ),
-                      GestureDetector(
-                        onTap: _toCommentList,
-                        child: CountCommentBadge(
-                            iconWidget: SvgPicture.asset(
-                              Assets.svg.iconBottomComment,
-                              width: 24.w,
-                              height: 24.w,
-                            ),
-                            count: widget.viewParams.commentCount.abbreviateNumber),
-                      ),
-                      GestureDetector(
-                        onTap: _toShare,
-                        child: CountCommentBadge(
-                            iconWidget: SvgPicture.asset(
-                              Assets.svg.iconBottomShare,
-                              width: 24.w,
-                              height: 24.w,
-                            ),
-                            count: widget.viewParams.shareCount.abbreviateNumber),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 6.w)
-              ],
+                  SizedBox(width: 6.w)
+                ],
+              ),
             ),
-          ),
-          SafeArea(child: SizedBox(height: 0.1.w))
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -255,21 +260,6 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
     if (data is int) {
       if (widget.viewParams.liked != true) {
         DialogUtil.showToast('点赞成功');
-        switch (widget.sourceType) {
-          case SourceType.video:
-            TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
-            break;
-          case SourceType.course:
-            TrackUtils.trackEvent(userLogType: '105002', params: widget.viewParams.relId);
-            break;
-          case SourceType.book:
-            TrackUtils.trackEvent(userLogType: '107003', params: widget.viewParams.relId);
-            break;
-          case SourceType.feed:
-            TrackUtils.trackEvent(userLogType: '109002', params: widget.viewParams.relId);
-          case SourceType.tool:
-          // TODO: Handle this case.
-        }
       } else {
         DialogUtil.showToast('取消点赞成功');
       }
@@ -281,6 +271,38 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         widget.viewParams.likeCount = widget.viewParams.likeCount + 1;
       }
       setState(() {});
+      switch (widget.sourceType) {
+        case SourceType.video:
+          if (widget.viewParams.liked == true) {
+            TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
+          }
+          VideoDetailController.of.detailBean?.liked = widget.viewParams.liked;
+          VideoDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
+          break;
+        case SourceType.course:
+          if (widget.viewParams.liked == true) {
+            TrackUtils.trackEvent(userLogType: '105002', params: widget.viewParams.relId);
+          }
+          ArticleDetailController.of.detailBean?.liked = widget.viewParams.liked;
+          ArticleDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
+          break;
+        case SourceType.book:
+          if (widget.viewParams.liked == true) {
+            TrackUtils.trackEvent(userLogType: '107003', params: widget.viewParams.relId);
+          }
+          BookDetailController.of.detailBean?.liked = widget.viewParams.liked;
+          BookDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
+          break;
+        case SourceType.feed:
+          if (widget.viewParams.liked == true) {
+            TrackUtils.trackEvent(userLogType: '109002', params: widget.viewParams.relId);
+          }
+          FeedDetailController.of.detailBean?.liked = widget.viewParams.liked;
+          FeedDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
+        case SourceType.tool:
+          ToolDetailController.of.detailBean?.liked = widget.viewParams.liked;
+          ToolDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
+      }
       return true;
     }
     return false;
@@ -293,35 +315,45 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
     NetRequest().favoriteToggle(
       widget.viewParams.relType,
       widget.viewParams.relId,
-      !(widget.viewParams.favoriteState ?? false),
+      !(widget.viewParams.favorited ?? false),
       (data) {
-        if (widget.viewParams.favoriteState != true) {
+        if (widget.viewParams.favorited != true) {
           DialogUtil.showToast('收藏成功');
         } else {
           DialogUtil.showToast('取消收藏成功');
         }
-        if (widget.viewParams.favoriteState == true) {
-          widget.viewParams.favoriteState = false;
+        if (widget.viewParams.favorited == true) {
+          widget.viewParams.favorited = false;
           widget.viewParams.favoriteCount = widget.viewParams.favoriteCount - 1;
         } else {
-          widget.viewParams.favoriteState = true;
+          widget.viewParams.favorited = true;
           widget.viewParams.favoriteCount = widget.viewParams.favoriteCount + 1;
         }
         setState(() {});
-        // EventBusUtil.of.fire(EventRefreshPage(widget.viewParams.relType ?? ''));
-        // switch (widget.sourceType) {
-        //   case SourceType.video:
-        //     TrackUtils.trackEvent(userLogType: '103004', params: widget.viewParams.relId);
-        //     break;
-        //   case SourceType.course:
-        //     TrackUtils.trackEvent(userLogType: '105003', params: widget.viewParams.relId);
-        //     break;
-        //   case SourceType.book:
-        //     TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
-        //     break;
-        //   case SourceType.feed:
-        //     TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
-        // }
+        switch (widget.sourceType) {
+          case SourceType.video:
+            // TrackUtils.trackEvent(userLogType: '103004', params: widget.viewParams.relId);
+            VideoDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            VideoDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
+            break;
+          case SourceType.course:
+            // TrackUtils.trackEvent(userLogType: '105003', params: widget.viewParams.relId);
+            ArticleDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            ArticleDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
+            break;
+          case SourceType.book:
+            // TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
+            BookDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            BookDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
+            break;
+          case SourceType.feed:
+            // TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
+            FeedDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            FeedDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
+          case SourceType.tool:
+            ToolDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            ToolDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
+        }
       },
       (msg) {
         AppRoutesUtils.haveCollect();
@@ -347,18 +379,23 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         switch (widget.sourceType) {
           case SourceType.video:
             TrackUtils.trackEvent(userLogType: '103005', params: widget.viewParams.relId);
+            VideoDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
             break;
           case SourceType.course:
+            ArticleDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
             TrackUtils.trackEvent(userLogType: '105004', params: widget.viewParams.relId);
             break;
           case SourceType.book:
+            BookDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
             TrackUtils.trackEvent(userLogType: '107005', params: widget.viewParams.relId);
             break;
           case SourceType.feed:
+            FeedDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
             TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
             break;
           case SourceType.tool:
-          // TODO: Handle this case.
+            ToolDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
+            break;
         }
       });
     }
@@ -436,7 +473,7 @@ class DetailViewParams {
   int? postId; //帖子id
   int? relId; // 评论对象id
   String? relType; //  评论对象类型   // thread 帖子，content 内容，comment 评论
-  bool? favoriteState; //收藏状态 true  false
+  bool? favorited; //收藏状态 true  false
   bool? liked; //点赞状态 true  false
   String? shareLink; //分享
   int likeCount;
@@ -451,7 +488,7 @@ class DetailViewParams {
     required this.relType,
     this.liked = false,
     this.likeCount = 0,
-    this.favoriteState = false,
+    this.favorited = false,
     this.favoriteCount = 0,
     required this.shareLink,
     this.commentCount = 0,

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/color_style_util.dart';
-
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'scale_button_wraper.dart';
 
 void showCommonOperationsSheet(
@@ -35,7 +35,7 @@ void showCommonOperationsSheet(
 
 typedef OperationItemBuilder = Widget Function(int index, bool hasSelected);
 
-class CommonOperationsSheet extends StatelessWidget {
+class CommonOperationsSheet extends StatefulWidget {
   final List<String> items;
   final Function(int index) onSelectItem;
   final int? selectedIndex;
@@ -51,6 +51,28 @@ class CommonOperationsSheet extends StatelessWidget {
       this.overflowWidget});
 
   @override
+  State<CommonOperationsSheet> createState() => _CommonOperationsSheetState();
+}
+
+class _CommonOperationsSheetState extends State<CommonOperationsSheet> {
+  final AutoScrollController _scrollController = AutoScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (_scrollController.hasClients) {
+        if (widget.selectedIndex != null) {
+          _scrollController.scrollToIndex(
+            widget.selectedIndex!,
+            preferPosition: AutoScrollPosition.begin,
+          );
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -63,22 +85,24 @@ class CommonOperationsSheet extends StatelessWidget {
               ),
             ),
             child: SingleChildScrollView(
-              physics: overflowWidget != null
-                  ? const NeverScrollableScrollPhysics()
-                  : const BouncingScrollPhysics(),
+              controller: _scrollController,
+              physics:
+                  widget.overflowWidget != null ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  ...items.map((e) {
-                    final index = items.indexOf(e);
-                    return ScaleButtonWrapper(
+                children: List.generate(widget.items.length, (index) {
+                  final item = widget.items[index];
+                  return AutoScrollTag(
+                    key: ValueKey(index),
+                    index: index,
+                    controller: _scrollController,
+                    child: ScaleButtonWrapper(
                         onTap: () {
-                          onSelectItem(index);
+                          widget.onSelectItem(index);
                           Get.back();
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.w, vertical: 12.w),
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.w),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -89,27 +113,29 @@ class CommonOperationsSheet extends StatelessWidget {
                               ),
                             ),
                           ),
-                          child: itemBuilder != null
-                              ? itemBuilder!(index, selectedIndex == index)
+                          child: widget.itemBuilder != null
+                              ? widget.itemBuilder!(index, widget.selectedIndex == index)
                               : Text(
-                                  e,
+                                  item,
                                   style: TextStyle(
                                     fontSize: 16.sp,
-                                    color: selectedIndex == index
-                                        ? ColorStyle.c557BF6
-                                        : '#666666'.hexColor,
-                                    fontWeight: selectedIndex == index
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
+                                    color: widget.selectedIndex == index ? ColorStyle.c557BF6 : '#666666'.hexColor,
+                                    fontWeight: widget.selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                        ));
-                  })
-                ],
+                        )),
+                  );
+                }),
+                // children: [
+                //   ...widget.items.map((e) {
+                //     final index = widget.items.indexOf(e);
+                //
+                //   })
+                // ],
               ),
             )),
-        if (overflowWidget != null) overflowWidget!
+        if (widget.overflowWidget != null) widget.overflowWidget!
       ],
     );
   }

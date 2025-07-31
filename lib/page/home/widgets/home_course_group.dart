@@ -83,7 +83,6 @@ class HomeCourseGroup extends StatelessWidget {
                           ),
                         ),
                       'practise' => CourseExercisesWidget(
-                          showTitle: false,
                           item: item,
                           endFunction: (value) {
                             controller.endFunction(value);

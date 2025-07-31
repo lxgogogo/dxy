@@ -62,7 +62,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
           if (controller.isLogin.value) {
             return Scaffold(
                 extendBodyBehindAppBar: true,
-                backgroundColor: '#F7F8FC'.hexColor,
+                backgroundColor: AppTheme.color_F7F8FC,
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -297,7 +297,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
   Widget _notLoginPage() {
     return Scaffold(
         extendBodyBehindAppBar: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppTheme.color_F7F8FC,
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(

@@ -25,4 +25,24 @@ class CommonImage {
           ),
         ),
       );
+
+  static Widget net2({
+    required String imageUrl,
+    double? width,
+    double? height,
+    BoxFit? fit,
+    double radius = 0,
+  }) =>
+      CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: fit ?? BoxFit.cover,
+        width: width,
+        height: height,
+        placeholder: (context, url) => Assets.images.imageLoadingDef.image(
+          fit: BoxFit.fill,
+        ),
+        errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+          fit: BoxFit.fill,
+        ),
+      );
 }

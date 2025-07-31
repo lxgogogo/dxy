@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 duration: const Duration(milliseconds: 100),
                                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                                 decoration: BoxDecoration(
-                                  color: '#F3F8FF'.hexColor,
+                                  color: '#F7F8FC'.hexColor,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.stretch,

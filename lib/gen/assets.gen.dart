@@ -1343,6 +1343,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/icon_play_progress.svg
   String get iconPlayProgress => 'assets/svg/icon_play_progress.svg';
 
+  /// File path: assets/svg/icon_play_rect.svg
+  String get iconPlayRect => 'assets/svg/icon_play_rect.svg';
+
   /// File path: assets/svg/icon_post_feed.svg
   String get iconPostFeed => 'assets/svg/icon_post_feed.svg';
 
@@ -1528,6 +1531,7 @@ class $AssetsSvgGen {
         iconMore,
         iconMoreVert,
         iconPlayProgress,
+        iconPlayRect,
         iconPostFeed,
         iconPractice,
         iconRank1,
@@ -1578,7 +1582,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  const Assets._();
+  Assets._();
 
   static const $AssetsCoursesGen courses = $AssetsCoursesGen();
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
@@ -1621,7 +1625,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.medium,
+    FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
   }) {

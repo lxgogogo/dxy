@@ -16,6 +16,7 @@ import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../utils/track_utils.dart';
+import '../../widget/common_tabbar.dart';
 import '../../widget/custom_underline_tab_indicator.dart';
 import '../../widget/dialog_common.dart';
 
@@ -97,32 +98,9 @@ class SearchScreen extends GetView<SearchController> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TabBar(
+                        CommonTabBar(
                           controller: controller.tabController,
-                          tabs: SearchType.values
-                              .map((e) => Tab(text: e.title))
-                              .toList(),
-                          isScrollable: true,
-                          tabAlignment: TabAlignment.start,
-                          indicator: RoundUnderlineTabIndicator(
-                            borderSide: BorderSide(width: 2.w, color: const Color(0xff4260FF)),
-                            wantToWith: 12.w,
-                          ),
-                          enableFeedback: false,
-                          overlayColor: WidgetStateProperty.resolveWith<Color>((_) {
-                            return Colors.transparent;
-                          }),
-                          dividerHeight: 0,
-                          labelStyle: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            color: '#333333'.hexColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          tabs: SearchType.values.map((e) => e.title).toList(),
                         ),
                         Expanded(
                           child: TabBarView(

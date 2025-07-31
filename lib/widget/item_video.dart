@@ -62,36 +62,47 @@ class VideoItem extends StatelessWidget {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: ClipRRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 16.23, sigmaY: 16.23),
-                        child: Container(
-                          height: 22.w,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(horizontal: 8.w),
-                          color: Colors.white.withOpacity(0.2),
-                          child: Row(
-                            children: [
-                              Assets.images.iconPlay.image(
-                                width: 10.w,
-                                height: 10.w,
-                              ),
-                              SizedBox(width: 4.w),
-                              Expanded(
-                                child: Text(
-                                  '${item.viewCount?.abbreviateNumber ?? '0'}次播放',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.sp,
-                                  ),
-                                ),
-                              ),
-                              DurationText(
-                                durationInSeconds: item.duration ?? 0,
-                              ),
-                            ],
-                          ),
+                    child: Container(
+                      height: 22.w,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [
+                            0.0572,
+                            0.6034,
+                            0.9448,
+                          ],
+                          colors: [
+                            Colors.black.withOpacity(0.0),
+                            Colors.black.withOpacity(0.5),
+                            Colors.black,
+                          ],
                         ),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            Assets.svg.iconPlayRect,
+                            width: 12.w,
+                            height: 12.w,
+                          ),
+                          SizedBox(width: 2.w),
+                          Expanded(
+                            child: Text(
+                              '${item.viewCount?.abbreviateNumber ?? '0'}次播放',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ),
+                          DurationText(
+                            durationInSeconds: item.duration ?? 0,
+                          ),
+                        ],
                       ),
                     ),
                   ),

@@ -256,7 +256,7 @@ class _CountLikeAniState extends State<CountLikeAni> {
                   );
             },
             likeCountPadding: EdgeInsets.zero,
-            countBuilder: (_, __, ___) => widget.count == '0'
+            countBuilder: (_, bool isLiked, ___) => widget.count == '0'
                 ? Text(
                     '点赞',
                     style: TextStyle(
@@ -267,6 +267,10 @@ class _CountLikeAniState extends State<CountLikeAni> {
                 : CountText(
                     count: widget.count,
                     usePlaceHolder: widget.usePlaceHolder,
+                    countTextStyle: TextStyle(
+                      color: isLiked ? '557BF6'.hexColor : '#999999'.hexColor,
+                      fontSize: 12.sp,
+                    ),
                   ),
             bubblesColor: const BubblesColor(
               dotPrimaryColor: Color(0xFF557BF6),
@@ -319,10 +323,12 @@ class CountText extends StatelessWidget {
   const CountText({
     super.key,
     required this.count,
+    this.countTextStyle,
     this.usePlaceHolder = true,
   });
 
   final String count;
+  final TextStyle? countTextStyle;
   final bool usePlaceHolder;
 
   @override
@@ -335,9 +341,10 @@ class CountText extends StatelessWidget {
               opacity: 0,
               child: Text(
                 '000.0M',
-                style: TextStyle(
-                  fontSize: 10.sp,
-                ),
+                style: countTextStyle ??
+                    TextStyle(
+                      fontSize: 10.sp,
+                    ),
               ),
             ),
           ),
@@ -345,18 +352,20 @@ class CountText extends StatelessWidget {
             opacity: 0,
             child: Text(
               '000',
-              style: TextStyle(
-                fontSize: 10.sp,
-              ),
+              style: countTextStyle ??
+                  TextStyle(
+                    fontSize: 10.sp,
+                  ),
             ),
           ),
         ],
         Text(
           count,
-          style: TextStyle(
-            color: '#999999'.hexColor,
-            fontSize: 12.sp,
-          ),
+          style: countTextStyle ??
+              TextStyle(
+                color: '#999999'.hexColor,
+                fontSize: 12.sp,
+              ),
         ),
       ],
     );

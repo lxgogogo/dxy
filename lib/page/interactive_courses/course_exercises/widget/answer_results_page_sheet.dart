@@ -115,8 +115,9 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                       animate: true,
                     ),
                   ),
-                  if (_showBtn && UserStore.of.isLogin)...[
-                    Positioned(
+                  if (_showBtn)...[
+                    if (UserStore.of.isLogin)
+                      Positioned(
                         top: top + 330.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
@@ -71,26 +72,26 @@ class HomeCourseGroup extends StatelessWidget {
                     final item = controller.courseItems[index];
                     return switch (controller.courseGroup?.value?.des) {
                       'knowledge' => CourseKnowledgeItem(
-                          item: item,
-                          onTapDetail: ({Duration? duration}) => controller.toKnowledge(
-                            item,
-                            duration: duration,
-                          ),
-                          onVideoComplete: () => controller.onKnowledgeVideoComplete(index),
-                          onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
-                            controller.courseItems.indexOf(item),
-                            childIndex,
-                          ),
+                        item: item,
+                        onTapDetail: ({Duration? duration}) => controller.toKnowledge(
+                          item,
+                          duration: duration,
                         ),
+                        onVideoComplete: () => controller.onKnowledgeVideoComplete(index),
+                        onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
+                          controller.courseItems.indexOf(item),
+                          childIndex,
+                        ),
+                      ),
                       'challenge' => GestureDetector(
-                          onTap: () => controller.toChallenge(item),
-                          child: CourseChallengeItem(
-                            item: item,
-                            onTap: (value1, value2) {
-                              controller.toChallengeItem(value1, value2);
-                            },
-                          ),
+                        onTap: () => controller.toChallenge(item),
+                        child: CourseChallengeItem(
+                          item: item,
+                          onTap: (value1, value2) {
+                            controller.toChallengeItem(value1, value2);
+                          },
                         ),
+                      ),
                       'practise' => CourseExercisesWidget(
                           pageType: 2,
                           item: item,
@@ -98,11 +99,11 @@ class HomeCourseGroup extends StatelessWidget {
                             controller.endFunction(value);
                           }),
                       _ => GestureDetector(
-                          onTap: () => controller.toCourseDetail(item),
-                          child: CourseAllItem(
-                            item: item,
-                          ),
+                        onTap: () => controller.toCourseDetail(item),
+                        child: CourseAllItem(
+                          item: item,
                         ),
+                      ),
                     };
                   }),
                 ),

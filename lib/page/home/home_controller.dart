@@ -26,6 +26,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   bool isHotVideosLoading = false;
   late AnimationController animationController;
+  bool isFirstLoad = false;
 
   @override
   void onInit() {
@@ -97,6 +98,16 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         hotVideos[hotVideoIndex].viewCount = event.viewCount;
         safeUpdate();
       }
+    });
+    EventBusUtil.of.on<EventLogout>().listen((event) {
+      courseGroups = [];
+      courseGroup = null;
+      courseItems = [];
+      loadData();
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
+      safeUpdate();
     });
   }
 
@@ -265,6 +276,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       }
       courseItems.assignAll(records.take(2));
       safeUpdate();
+      isFirstLoad = true;
     }
   }
 
@@ -466,5 +478,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       loadCourses();
     }
     EventBusUtil.of.fire(EventHomeRefreshPractise());
+  }
+
+  void onFocusGained() {
+    if (isFirstLoad) {
+      print('home-onFocusGained');
+      loadCourses();
+    }
   }
 }

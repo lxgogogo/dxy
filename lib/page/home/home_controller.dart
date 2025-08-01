@@ -36,10 +36,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     super.onInit();
   }
 
-  void loadData() {
+  void loadData({bool needResetGroup = true}) {
     loadBanners();
     loadHotVideos();
-    loadCourseGroup();
+    if (needResetGroup) {
+      loadCourseGroup();
+    }
     loadOldCourses();
     loadBooks();
     loadHotTags();
@@ -71,7 +73,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     });
     EventBusUtil.of.on<EventChangeMainTab>().listen((event) {
       if (event.tabIndex == 0) {
-        loadData();
+        loadData(needResetGroup: false);
       }
     });
     EventBusUtil.of.on<EventLoginSuccess>().listen((event) {
@@ -193,7 +195,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     }
   }
 
-  Future<void> loadCourseGroup({bool needResetGroup = false}) async {
+  Future<void> loadCourseGroup() async {
     try {
       final res = await CourseService.of.courseDefined();
       if (res.isSuccess) {

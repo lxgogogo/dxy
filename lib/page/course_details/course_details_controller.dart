@@ -48,11 +48,24 @@ class CourseDetailsController extends GetxController {
         detailBean = CourseModel.fromJson(res.data);
         final knowledgeIndexDtoList = detailBean?.knowledge?.knowledgeIndexDtoList ?? [];
         if (knowledgeIndexDtoList.isNotEmpty) {
+          final selectedIndex = knowledgeIndexDtoList.indexWhere((e) => e.isSelected);
           final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
-          if (startIndex != -1) {
-            knowledgeIndexDtoList[startIndex].isSelected = true;
+          if (selectedIndex != -1) {
+            if (startIndex != -1) {
+              if (startIndex > selectedIndex) {
+                knowledgeIndexDtoList[startIndex].isSelected = true;
+              } else {
+                knowledgeIndexDtoList[selectedIndex].isSelected = true;
+              }
+            } else {
+              knowledgeIndexDtoList[selectedIndex].isSelected = true;
+            }
           } else {
-            knowledgeIndexDtoList.last.isSelected = true;
+            if (startIndex != -1) {
+              knowledgeIndexDtoList[startIndex].isSelected = true;
+            } else {
+              knowledgeIndexDtoList.first.isSelected = true;
+            }
           }
         }
         CourseModel practise = detailBean?.practise ?? CourseModel();
@@ -126,11 +139,11 @@ class CourseDetailsController extends GetxController {
     int? subContentId;
     String? contentType;
     if (knowledgeIndexDto.contentVideo != null) {
-      contentId = knowledgeIndexDto.contentVideo!.id;
-      subContentId = knowledgeIndexDto.contentVideo!.listId;
+      contentId = knowledgeIndexDto.contentId;
+      subContentId = knowledgeIndexDto.subContentId;
       contentType = subContentId != null ? 'videoList' : 'video';
     } else if (knowledgeIndexDto.contentArticle != null) {
-      contentId = knowledgeIndexDto.contentArticle!.id;
+      contentId = knowledgeIndexDto.contentId;
       contentType = 'article';
     }
     if (knowledgeIndexDto.status == 1) {

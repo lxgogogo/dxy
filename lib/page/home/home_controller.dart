@@ -215,6 +215,19 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   Future<void> loadCourses() async {
     final type = courseGroup?.value?.des;
+    List<KnowledgeIndexDtoList> selectedKnowledgeIndexDtos = [];
+    if (type == 'knowledge') {
+      for (final item in courseItems) {
+        final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+        if (knowledgeIndexDtoList.isNotEmpty) {
+          for (final dto in knowledgeIndexDtoList) {
+            if (dto.isSelected) {
+              selectedKnowledgeIndexDtos.add(dto);
+            }
+          }
+        }
+      }
+    }
     final res = await CourseService.of.courseIndex(
       type,
       pageNum: 1,
@@ -223,13 +236,25 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     if (res.isSuccess) {
       final listRes = res.data?['list'] as List? ?? [];
       final records = listRes.map((e) => CourseModel.fromJson(e)).toList();
-      courseItems.assignAll(records.take(2));
-      final des = courseGroup?.value?.des;
-      if (des == 'knowledge') {
-        for (final item in courseItems) {
-          final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
-          if (knowledgeIndexDtoList.isNotEmpty) {
-            final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+      for (final item in records) {
+        final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
+        if (knowledgeIndexDtoList.isNotEmpty) {
+          final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+          bool hasAppliedSelected = false;
+          if (selectedKnowledgeIndexDtos.isNotEmpty) {
+            for (final selectedDto in selectedKnowledgeIndexDtos) {
+              final matchIndex = knowledgeIndexDtoList.indexWhere((e) => e.id == selectedDto.id);
+              if (matchIndex != -1) {
+                if (startIndex == -1 || matchIndex < startIndex) {
+                  knowledgeIndexDtoList[matchIndex] = selectedDto;
+                  knowledgeIndexDtoList[matchIndex].isSelected = true;
+                  hasAppliedSelected = true;
+                  break;
+                }
+              }
+            }
+          }
+          if (!hasAppliedSelected) {
             if (startIndex != -1) {
               knowledgeIndexDtoList[startIndex].isSelected = true;
             } else {
@@ -238,6 +263,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
           }
         }
       }
+      courseItems.assignAll(records.take(2));
       safeUpdate();
     }
   }
@@ -324,11 +350,11 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     int? subContentId;
     String? contentType;
     if (knowledgeIndexDto.contentVideo != null) {
-      contentId = knowledgeIndexDto.contentVideo!.id;
-      subContentId = knowledgeIndexDto.contentVideo!.listId;
+      contentId = knowledgeIndexDto.contentId;
+      subContentId = knowledgeIndexDto.subContentId;
       contentType = subContentId != null ? 'videoList' : 'video';
     } else if (knowledgeIndexDto.contentArticle != null) {
-      contentId = knowledgeIndexDto.contentArticle!.id;
+      contentId = knowledgeIndexDto.contentId;
       contentType = 'article';
     }
     if (knowledgeIndexDto.status == 1) {

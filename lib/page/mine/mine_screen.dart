@@ -61,39 +61,77 @@ class _MineScreenState extends State<MineScreen>
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(Routes.equityCenter);
-                                    },
-                                    child: Container(
-                                      width: 84.w,
-                                      height: 24.w,
-                                      margin: EdgeInsets.only(left: 16.w),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(12.w)),
-                                          border: Border.all(
-                                              width: 1.w,
-                                              color: AppTheme.color_557BF6)),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            Assets.images.icMinePowerCenter.path,
-                                            width: 16,
-                                            height: 16,
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.equityCenter);
+                                        },
+                                        child: Container(
+                                          width: 84.w,
+                                          height: 24.w,
+                                          margin: EdgeInsets.only(left: 16.w),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.all(Radius.circular(12.w)),
+                                              border: Border.all(
+                                                  width: 1.w,
+                                                  color: AppTheme.color_557BF6)),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                Assets.images.icMinePowerCenter.path,
+                                                width: 16,
+                                                height: 16,
+                                              ),
+                                              SizedBox(width: 2.w),
+                                              Text(
+                                                '权益中心',
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: AppTheme.color_557BF6),
+                                              )
+                                            ],
                                           ),
-                                          SizedBox(width: 2.w),
-                                          Text(
-                                            '权益中心',
-                                            style: TextStyle(
-                                                fontSize: 12.sp,
-                                                color: AppTheme.color_557BF6),
-                                          )
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                      /*GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(Routes.pointsConversion);
+                                        },
+                                        child: Container(
+                                          width: 84.w,
+                                          height: 24.w,
+                                          margin: EdgeInsets.only(left: 10.w),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.all(Radius.circular(12.w)),
+                                              border: Border.all(
+                                                  width: 1.w,
+                                                  color: AppTheme.color_557BF6)),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset(
+                                                Assets.images.iconPoints.path,
+                                                width: 16,
+                                                height: 16,
+                                              ),
+                                              SizedBox(width: 2.w),
+                                              Text(
+                                                '积分兑换',
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: AppTheme.color_557BF6),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),*/
+                                    ],
                                   ),
                                   Row(
                                     children: [

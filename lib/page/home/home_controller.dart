@@ -437,5 +437,6 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     if (value == true) {
       loadCourses();
     }
+    EventBusUtil.of.fire(EventHomeRefreshPractise());
   }
 }

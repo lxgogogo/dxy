@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/color_style_util.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vibration/vibration.dart';
@@ -114,7 +115,7 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                       animate: true,
                     ),
                   ),
-                  if (_showBtn)...[
+                  if (_showBtn && UserStore.of.isLogin)...[
                     Positioned(
                         top: top + 330.w,
                         child: Row(
@@ -190,7 +191,7 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                     ),
                   ),
                   if (widget.showPairsTips)
-                    if (_showBtn)
+                    if (_showBtn && UserStore.of.isLogin)
                       Positioned(
                         top: top + 330.w,
                         child: Row(

@@ -26,6 +26,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   bool isHotVideosLoading = false;
   late AnimationController animationController;
+  bool isFirstLoad = false;
 
   @override
   void onInit() {
@@ -239,6 +240,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         }
       }
       safeUpdate();
+      isFirstLoad = true;
     }
   }
 
@@ -440,5 +442,12 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       loadCourses();
     }
     EventBusUtil.of.fire(EventHomeRefreshPractise());
+  }
+
+  void onFocusGained() {
+    if (isFirstLoad) {
+      print('home-onFocusGained');
+      loadCourses();
+    }
   }
 }

@@ -201,6 +201,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                                     item,
                                                     duration: duration,
                                                   ),
+                                                  onVideoComplete: () => controller.onKnowledgeVideoComplete(index),
                                                   onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
                                                     index,
                                                     childIndex,

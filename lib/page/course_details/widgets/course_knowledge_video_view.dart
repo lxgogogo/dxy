@@ -4,6 +4,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
+import 'package:holdem/widget/common_image.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../model/course_model.dart';
@@ -57,6 +58,19 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
           videoPlayerController: _videoController!,
           showOptions: false,
           showControlsOnInitialize: false,
+          overlay: ValueListenableBuilder<VideoPlayerValue>(
+              valueListenable: _videoController!,
+              builder: (_, videoPlayerValue, __) {
+                if (videoPlayerValue.position > Duration.zero) {
+                  return const SizedBox();
+                }
+                return SizedBox.expand(
+                  child: CommonImage.net(
+                    imageUrl: widget.contentVideo?.thumbnail ?? '',
+                    fit: BoxFit.cover,
+                  ),
+                );
+              }),
         );
         if (mounted) {
           setState(() {});

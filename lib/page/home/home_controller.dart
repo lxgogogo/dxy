@@ -345,6 +345,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
             contentId,
             subContentId: subContentId,
             duration: duration,
+            callBack: (value) {
+              loadCourses();
+            },
           );
         } else {
           DialogUtil.showToast(res.msg);
@@ -352,6 +355,27 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       } catch (e) {
         Log.e(e.toString());
       }
+    }
+  }
+
+  Future<void> onKnowledgeVideoComplete(int childIndex) async {
+    try {
+      final knowledgeIndexDtoList = courseItems[childIndex].knowledgeIndexDtoList ?? [];
+      final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
+      if (knowledgeIndexDto != null) {
+        if (knowledgeIndexDto.status == 1) {
+          return;
+        }
+        knowledgeIndexDto.status = 1;
+        final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
+        if (res.isSuccess) {
+          await loadCourses();
+        } else {
+          DialogUtil.showToast(res.msg);
+        }
+      }
+    } catch (e) {
+      Log.e(e.toString());
     }
   }
 

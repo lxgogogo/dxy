@@ -10,11 +10,9 @@ import 'package:holdem/model/search_top.dart';
 import 'package:holdem/page/search/widgets/search_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/services/index.dart';
-import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/storage.dart';
 import 'package:holdem/utils/dialog_util.dart';
-import 'package:holdem/widget/common_tabbar_widget.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../utils/track_utils.dart';
@@ -98,23 +96,20 @@ class SearchScreen extends GetView<SearchController> {
               backgroundColor: Colors.white,
               body: controller.showResult
                   ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        CommonTabBar(
-                          controller: controller.tabController,
-                          tabs: SearchType.values.map((e) => e.title).toList(),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            controller: controller.tabController,
-                            children: SearchType.values
-                                .map((e) => SearchChildView(type: e).keepAlive)
-                                .toList(),
-                          ),
-                        )
-                      ],
-                    )
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CommonTabBar(
+                    controller: controller.tabController,
+                    tabs: SearchType.values.map((e) => e.title).toList(),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: controller.tabController,
+                      children: SearchType.values.map((e) => SearchChildView(type: e).keepAlive).toList(),
+                    ),
+                  )
+                ],
+              )
                   : buildSearchHistory(context),
             );
           }),
@@ -246,12 +241,11 @@ class SearchScreen extends GetView<SearchController> {
                   children: [
                     ...List.generate(
                       controller.historyItems.length,
-                      (index) {
+                          (index) {
                         return GestureDetector(
                           onTap: TrackUtils.trackedTap(
                             onTap: () {
-                              controller.controller.text =
-                                  controller.historyItems[index];
+                              controller.controller.text = controller.historyItems[index];
                               controller.onSearch(context);
                             },
                             userLogType: '110003',
@@ -321,7 +315,7 @@ class SearchScreen extends GetView<SearchController> {
             children: [
               ...List.generate(
                 controller.hotTagItems.length,
-                (index) {
+                    (index) {
                   return GestureDetector(
                     onTap: () {
                       // Get.toNamed(Routes.searchTag, arguments: {
@@ -339,21 +333,17 @@ class SearchScreen extends GetView<SearchController> {
                       } else if (item.type == 'tool') {
                         eventName = '工具';
                         Get.toNamed(Routes.toolDetail, arguments: id);
-                      } else if (item.type == 'video' ||
-                          item.type == 'videoList') {
+                      } else if (item.type == 'video' || item.type == 'videoList') {
                         eventName = '视频';
                         Get.toNamed(Routes.videoDetail, arguments: {'id': id});
                       } else if (item.type == 'thread') {
                         eventName = '帖子';
                         Get.toNamed(Routes.feedDetail, arguments: id);
                       }
-                      TrackUtils.trackEvent(
-                          userLogType: '110002',
-                          params: [id.toString(), eventName].join(','));
+                      TrackUtils.trackEvent(userLogType: '110002', params: [id.toString(), eventName].join(','));
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.w),
                       decoration: BoxDecoration(
                         color: '#557BF6'.hexColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(40.r),

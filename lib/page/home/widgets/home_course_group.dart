@@ -59,45 +59,45 @@ class HomeCourseGroup extends StatelessWidget {
               SizedBox(height: 16.w),
               Column(
                 spacing: 12.w,
-                children: controller.courseItems.map(
-                  (item) {
-                    final des = controller.courseGroup?.value?.des;
-                    return switch (des) {
-                      'knowledge' => CourseKnowledgeItem(
-                          item: item,
-                          onTapDetail: ({Duration? duration}) => controller.toKnowledge(
-                            item,
-                            duration: duration,
-                          ),
-                          onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
-                            controller.courseItems.indexOf(item),
-                            childIndex,
-                          ),
-                        ),
-                      'challenge' => GestureDetector(
-                          onTap: () => controller.toChallenge(item),
-                          child: CourseChallengeItem(
-                            item: item,
-                            onTap: (value1, value2) {
-                              controller.toChallengeItem(value1, value2);
-                            },
-                          ),
-                        ),
-                      'practise' => CourseExercisesWidget(
-                          pageType: 2,
-                          item: item,
-                          endFunction: (value) {
-                            controller.endFunction(value);
-                          }),
-                      _ => GestureDetector(
-                          onTap: () => controller.toCourseDetail(item),
-                          child: CourseAllItem(
-                            item: item,
-                          ),
-                        ),
-                    };
-                  },
-                ).toList(),
+                children: List.generate(controller.courseItems.length,  (index) {
+                  final item = controller.courseItems[index];
+                  return switch (controller.courseGroup?.value?.des) {
+                    'knowledge' => CourseKnowledgeItem(
+                      item: item,
+                      onTapDetail: ({Duration? duration}) => controller.toKnowledge(
+                        item,
+                        duration: duration,
+                      ),
+                      onVideoComplete: () => controller.onKnowledgeVideoComplete(index),
+                      onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
+                        controller.courseItems.indexOf(item),
+                        childIndex,
+                      ),
+                    ),
+                    'challenge' => GestureDetector(
+                      onTap: () => controller.toChallenge(item),
+                      child: CourseChallengeItem(
+                        item: item,
+                        onTap: (value1, value2) {
+                          controller.toChallengeItem(value1, value2);
+                        },
+                      ),
+                    ),
+                    'practise' => CourseExercisesWidget(
+                        pageType: 2,
+                        item: item,
+                        endFunction: (value) {
+                          controller.endFunction(value);
+                        }),
+                    _ => GestureDetector(
+                      onTap: () => controller.toCourseDetail(item),
+                      child: CourseAllItem(
+                        item: item,
+                      ),
+                    ),
+                  };
+
+                }),
               ),
             ],
           );

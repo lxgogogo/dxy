@@ -302,6 +302,9 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
             contentId,
             subContentId: subContentId,
             duration: duration,
+            callBack: (value) {
+              loadData();
+            },
           );
         } else {
           DialogUtil.showToast(res.msg);
@@ -309,6 +312,27 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       } catch (e) {
         Log.e(e.toString());
       }
+    }
+  }
+
+  Future<void> onKnowledgeVideoComplete(int index) async {
+    try {
+      final knowledgeIndexDtoList = courseItems[index].knowledgeIndexDtoList ?? [];
+      final knowledgeIndexDto = knowledgeIndexDtoList.firstWhereOrNull((e) => e.isSelected);
+      if (knowledgeIndexDto != null) {
+        if (knowledgeIndexDto.status == 1) {
+          return;
+        }
+        knowledgeIndexDto.status = 1;
+        final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
+        if (res.isSuccess) {
+          await loadData();
+        } else {
+          DialogUtil.showToast(res.msg);
+        }
+      }
+    } catch (e) {
+      Log.e(e.toString());
     }
   }
 

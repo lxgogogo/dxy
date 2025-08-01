@@ -178,7 +178,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                       return const CupertinoActivityIndicator(color: Colors.grey);
                                     }
                                     if (controller.courseItems.isEmpty) {
-                                      return const Center(child: NoDataView());
+                                      return const NoDataView(text: '这里空空的什么也没有');
                                     }
                                     final des = controller.courseGroup.value?.value?.des;
                                     return switch (des) {

@@ -173,7 +173,7 @@ class VideoItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                item.createdAt != null ? DateFormat('yy.MM.dd').format(item.createdAt!) : '',
+                item.createdAt != null ? DateFormat('yyyy.MM.dd').format(item.createdAt!) : '',
                 style: TextStyle(
                   color: '#999999'.hexColor,
                   fontSize: 10.sp,
@@ -323,7 +323,7 @@ class VideoHorizontalItem extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            item.createdAt != null ? DateFormat('yy.MM.dd').format(item.createdAt!) : '',
+                            item.createdAt != null ? DateFormat('yyyy.MM.dd').format(item.createdAt!) : '',
                             style: TextStyle(
                               color: '#999999'.hexColor,
                               fontSize: 10.sp,

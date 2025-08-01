@@ -62,7 +62,7 @@ class HomeCourseGroup extends StatelessWidget {
               ),
               SizedBox(height: 16.w),
               if (controller.courseItems.isEmpty)
-                const Center(child: NoDataView())
+                const Center(child: NoDataView(text: '这里空空的什么也没有'))
               else
                 Column(
                   spacing: 12.w,

@@ -7,6 +7,8 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:holdem/utils/log_util.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../gen/assets.gen.dart';
+
 class HtmlFactoryBuilder extends WidgetFactory {
   final BuildContext context;
   final String content;
@@ -26,7 +28,6 @@ class HtmlFactoryBuilder extends WidgetFactory {
   /// Builds [Image].
   @override
   Widget? buildImageWidget(BuildTree tree, ImageSource src) {
-
     final url = src.url;
 
     ImageProvider? provider;
@@ -41,17 +42,12 @@ class HtmlFactoryBuilder extends WidgetFactory {
       final image = src.image;
       final semanticLabel = image?.alt ?? image?.title;
       return LayoutBuilder(builder: (context, constraints) {
-
         return CachedNetworkImage(
           imageUrl: url,
           fit: BoxFit.fill,
-          placeholder: (context, url) => Image.asset(
-            'assets/images/image_loading_def.png',
-            width: constraints.maxWidth / 1.5,
-          ),
-          errorWidget: (context, url, error) => Image.asset(
-            'assets/images/image_loading_def.png',
-            width: constraints.maxWidth / 1.5,
+          placeholder: (context, url) => const SizedBox(),
+          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+            fit: BoxFit.fill,
           ),
         );
       });

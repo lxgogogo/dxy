@@ -76,49 +76,53 @@ class CourseKnowledgeItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: 12.w),
-          if (knowledgeIndexDto?.contentArticle != null)
-            ClipRect(
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  HeightLimiter(
-                    maxHeight: 166.w,
-                    child: CommonHtmlWidget(
-                      content: knowledgeIndexDto?.contentArticle?.content ?? '',
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 12.w,
-                    child: GestureDetector(
-                      onTap: () => onTapDetail.call(),
-                      child: Container(
-                        height: 28.w,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        decoration: BoxDecoration(
-                          color: '#557BF6'.hexColor.withValues(alpha: 0.7),
-                          borderRadius: BorderRadius.circular(100.r),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '查看全文',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w600,
+          SizedBox(
+            height: 166.w,
+            child: knowledgeIndexDto?.contentArticle != null
+                ? ClipRect(
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        HeightLimiter(
+                          maxHeight: 166.w,
+                          child: CommonHtmlWidget(
+                            content: knowledgeIndexDto?.contentArticle?.content ?? '',
                           ),
                         ),
-                      ),
+                        Positioned(
+                          bottom: 12.w,
+                          child: GestureDetector(
+                            onTap: () => onTapDetail.call(),
+                            child: Container(
+                              height: 28.w,
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                color: '#557BF6'.hexColor.withValues(alpha: 0.7),
+                                borderRadius: BorderRadius.circular(100.r),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                '查看全文',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            )
-          else if (knowledgeIndexDto?.contentVideo != null)
-            KnowledgeVideoView(
-              contentVideo: knowledgeIndexDto?.contentVideo,
-              onTapDetail: onTapDetail,
-              onVideoComplete: onVideoComplete,
-            ),
+                  )
+                : knowledgeIndexDto?.contentVideo != null
+                    ? KnowledgeVideoView(
+                        contentVideo: knowledgeIndexDto?.contentVideo,
+                        onTapDetail: onTapDetail,
+                        onVideoComplete: onVideoComplete,
+                      )
+                    : const SizedBox(),
+          ),
           SizedBox(height: 12.w),
           CourseProgressView(
             item: item,

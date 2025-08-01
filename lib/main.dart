@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           footerBuilder: () => CustomFooter(
             builder: (context, mode) {
               Widget body;
-              TextStyle style = TextStyle(color: Colors.grey, fontSize: 14.sp);
+              TextStyle style = TextStyle(color: Colors.grey, fontSize: 10.sp);
               if (mode == LoadStatus.idle) {
                 body = Text('加载更多', style: style);
               } else if (mode == LoadStatus.loading) {

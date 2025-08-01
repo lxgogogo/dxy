@@ -1,13 +1,14 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
-import 'package:holdem/widget/common_image.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../model/course_model.dart';
+import '../../../gen/assets.gen.dart';
 
 class KnowledgeVideoView extends StatefulWidget {
   final ContentVideo? contentVideo;
@@ -65,9 +66,13 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
                   return const SizedBox();
                 }
                 return SizedBox.expand(
-                  child: CommonImage.net(
+                  child: CachedNetworkImage(
                     imageUrl: widget.contentVideo?.thumbnail ?? '',
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => const SizedBox(),
+                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 );
               }),

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/routes/app_pages.dart';
 
 import '../../../stores/user_store.dart';
 import '../../../widget/common_image.dart';
@@ -161,17 +162,22 @@ class HomeCourseGroup extends StatelessWidget {
           );
         },
         overflowWidget: !UserStore.of.isLogin
-            ? Container(
-                width: 1.sw,
-                height: 478.w - 60.w,
-                margin: EdgeInsets.only(top: 60.w),
-                color: Colors.white.withOpacity(0.9),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/courses/icon_courses_not_login.png',
-                  width: 128.w,
-                  fit: BoxFit.cover,
-                ))
+            ? GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.login);
+          },
+          child: Container(
+              width: 1.sw,
+              height: 478.w - 60.w,
+              margin: EdgeInsets.only(top: 60.w),
+              color: Colors.white.withOpacity(0.9),
+              alignment: Alignment.center,
+              child: Image.asset(
+                'assets/courses/icon_courses_not_login.png',
+                width: 128.w,
+                fit: BoxFit.cover,
+              )),
+        )
             : null);
   }
 }

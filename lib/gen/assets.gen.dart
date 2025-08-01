@@ -616,6 +616,14 @@ class $AssetsImagesGen {
   AssetGenImage get iconPlay =>
       const AssetGenImage('assets/images/icon_play.png');
 
+  /// File path: assets/images/icon_points.png
+  AssetGenImage get iconPoints =>
+      const AssetGenImage('assets/images/icon_points.png');
+
+  /// File path: assets/images/icon_points_coin.png
+  AssetGenImage get iconPointsCoin =>
+      const AssetGenImage('assets/images/icon_points_coin.png');
+
   /// File path: assets/images/icon_post_feed.png
   AssetGenImage get iconPostFeed =>
       const AssetGenImage('assets/images/icon_post_feed.png');
@@ -1008,6 +1016,8 @@ class $AssetsImagesGen {
         iconNoticeSystemN,
         iconNoticeUserN,
         iconPlay,
+        iconPoints,
+        iconPointsCoin,
         iconPostFeed,
         iconScan,
         iconSetting,
@@ -1582,7 +1592,7 @@ class $AssetsSvgGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsCoursesGen courses = $AssetsCoursesGen();
   static const $AssetsEquityCenterGen equityCenter = $AssetsEquityCenterGen();
@@ -1625,7 +1635,7 @@ class AssetGenImage {
     bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

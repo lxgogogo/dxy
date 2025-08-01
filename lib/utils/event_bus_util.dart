@@ -86,3 +86,8 @@ class EventRefreshPractise {
   int completed;
   EventRefreshPractise({required this.completed});
 }
+
+class EventHomeRefreshPractise {
+
+  EventHomeRefreshPractise();
+}

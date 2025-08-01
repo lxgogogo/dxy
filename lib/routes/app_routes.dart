@@ -51,4 +51,5 @@ abstract class Routes {
   static const coursesExercises = '/coursesExercises';
   static const courseDetails = '/courseDetails';
   static const winningStreak = '/winningStreak';
+  static const pointsConversion = '/pointsConversion';
 }

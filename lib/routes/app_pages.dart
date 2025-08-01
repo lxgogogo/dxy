@@ -22,6 +22,8 @@ import 'package:holdem/page/mine/collect/collect_list_view.dart';
 import 'package:holdem/page/mine/collect/creat_collect_group_view.dart';
 import 'package:holdem/page/mine/collect/finish_creat_collect_group_view.dart';
 import 'package:holdem/page/personal/personal_screen.dart';
+import 'package:holdem/page/points/points_conversion_binding.dart';
+import 'package:holdem/page/points/points_conversion_view.dart';
 import 'package:holdem/page/revise/delete_account/delete_account_view.dart';
 import 'package:holdem/page/revise/revise_account/revise_account_view.dart';
 import 'package:holdem/page/revise/revise_email/revise_email_view.dart';
@@ -232,6 +234,11 @@ class AppPages {
       name: Routes.winningStreak,
       page: () => const WinningStreakScreen(),
       binding: WinningStreakBinding(),
+    ),
+    GetPage(
+      name: Routes.pointsConversion,
+      page: () => const PointsConversionPage(),
+      binding: PointsConversionBinding(),
     ),
   ];
 }

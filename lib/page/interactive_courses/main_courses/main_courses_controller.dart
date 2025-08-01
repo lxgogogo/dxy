@@ -21,6 +21,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
 
   StreamSubscription? refreshEvent;
   StreamSubscription? outSubscription;
+  StreamSubscription? homeSubscription;
 
   bool isFetching = false;
 
@@ -44,6 +45,14 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       courseItems.value = [];
       hasLoaded.value = false;
       onFocusGained();
+    });
+    homeSubscription = EventBusUtil.of.on<EventHomeRefreshPractise>().listen((event) {
+      if (courseGroup.value?.value?.des == 'practise') {
+        hasLoaded.value = false;
+        fetchData().whenComplete(() {
+          hasLoaded.value = true;
+        });
+      }
     });
     super.onReady();
   }

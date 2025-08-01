@@ -99,6 +99,16 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         safeUpdate();
       }
     });
+    EventBusUtil.of.on<EventLogout>().listen((event) {
+      courseGroups = [];
+      courseGroup = null;
+      courseItems = [];
+      loadData();
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
+      safeUpdate();
+    });
   }
 
   @override

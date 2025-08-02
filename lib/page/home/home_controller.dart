@@ -467,6 +467,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       model.status = 1;
       item.completed = (item.completed ?? 0) + 1;
       safeUpdate();
+      loadCourses();
     }, errorBack: () {
       loadCourses();
       safeUpdate();

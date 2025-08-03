@@ -483,7 +483,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                               shape: BoxShape.circle,
                               color: model.completed == false &&
                                       _currentPage == index &&
-                                      _buttonState == false
+                                      (_buttonState == false ||
+                                          _buttonState && !_isCorrectAnswer)
                                   ? ColorStyle.c333333.withOpacity(0.3)
                                   : model.select == true ||
                                           (_buttonState &&
@@ -502,7 +503,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                 fontSize: 12.sp,
                                 color: (model.completed == false &&
                                             _currentPage == index &&
-                                            _buttonState == false) ||
+                                            (_buttonState == false ||
+                                                _buttonState &&
+                                                    !_isCorrectAnswer)) ||
                                         model.select == true ||
                                         (_buttonState &&
                                             _currentPage - 1 == index &&
@@ -597,8 +600,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                 ]
               ],
             )
-          ]
-          else
+          ] else
             SizedBox(height: 30.w),
           SizedBox(height: 20.w),
           Stack(

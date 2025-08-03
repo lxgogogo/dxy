@@ -52,9 +52,6 @@ class CommonUtils{
         String currencySymbol = '',
         int decimalLength = 4,
         bool showMoreZero = true}) {
-    if (!isShowCurrency) {
-      currencySymbol = "";
-    }
     String zero = '';
     for (int i = 0; i < decimalLength; i++) {
       zero += '0';
@@ -114,7 +111,7 @@ class CommonUtils{
         // 去除末尾0
         //String lessPrice = '${Decimal.tryParse(newPrice) ?? 0}';
         s = double.tryParse(newPrice) == 0 ? "" : s;
-        return "$s$currencySymbol$newPrice";
+        return "$s$currencySymbol$newPrice.$decimalPrice";
       }
     }
     String priceInText = "";
@@ -140,7 +137,7 @@ class CommonUtils{
       }
     }
     if (array.length == 1) {
-      newPrices = "$s$currencySymbol${priceInText.trim()}";
+      newPrices = "$s$currencySymbol${priceInText.trim()}.$zero";
     } else {
       String dprice = "0.$decimalPrice";
       // 去除末尾0

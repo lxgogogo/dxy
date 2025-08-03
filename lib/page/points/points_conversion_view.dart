@@ -35,7 +35,25 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
         appBar: CommonAppBar.arrowBack(context, title: '积分兑换'),
         body: SafeArea(child: Obx(() {
           final dxyBalance = controller.dxyBalance.value;
-          final dpkBalance = '${controller.pointsData['dpkBalance'] ?? 0.00}';
+          final dpkBalance = controller.dpkBalance.value;
+          String title1 = '我的积分';
+          String title2 = '德扑克金币';
+          String money1 = CommonUtils.thousandthPercentile(dxyBalance,
+              decimalLength: 2);
+          String money2 = CommonUtils.thousandthPercentile(dpkBalance,
+              decimalLength: 2);
+          String icon1 = 'assets/images/icon_points_point.png';
+          String icon2 = 'assets/images/icon_points_coin.png';
+          if (!controller.isPointToCoin.value) {
+            title1 = '德扑克金币';
+            title2 = '我的积分';
+            money1 = CommonUtils.thousandthPercentile(dpkBalance,
+                decimalLength: 2);
+            money2 = CommonUtils.thousandthPercentile(dxyBalance,
+                decimalLength: 2);
+            icon1 = 'assets/images/icon_points_coin.png';
+            icon2 = 'assets/images/icon_points_point.png';
+          }
           return GestureDetector(
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
@@ -52,28 +70,32 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildCardWidget(
-                                  '我的积分',
-                                  CommonUtils.thousandthPercentile(dxyBalance,
-                                      decimalLength: 2),
-                                  'assets/images/icon_points_point.png',
+                                  title1,
+                                  money1,
+                                  icon1,
                                   'assets/images/icon_points_go.png'),
                               SizedBox(height: 16.w),
                               _buildCardWidget(
-                                  '德扑克金币',
-                                  CommonUtils.thousandthPercentile(dpkBalance,
-                                      decimalLength: 2),
-                                  'assets/images/icon_points_coin.png',
+                                  title2,
+                                  money2,
+                                  icon2,
                                   'assets/images/icon_points_come.png'),
                             ],
                           ),
                           Positioned(
                             top: 140.w,
                             left: (1.sw - 32.w) / 2,
-                            child: Image.asset(
-                              'assets/images/icon_points_change.png',
-                              width: 32.w,
-                              height: 32.w,
-                            ),
+                            child: GestureDetector(
+                              onTap: controller.changeOnTap,
+                              child: Transform.rotate(
+                                angle: controller.animation.value,
+                                child: Image.asset(
+                                  'assets/images/icon_points_change.png',
+                                  width: 32.w,
+                                  height: 32.w,
+                                )
+                              )
+                            )
                           )
                         ],
                       ),

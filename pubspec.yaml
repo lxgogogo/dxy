@@ -2,7 +2,7 @@ name: holdem
 description: A new Flutter project.
 publish_to: none
 
-version: 1.8.0+269
+version: 1.8.0+270
 
 environment:
   sdk: '>=3.6.0 <4.0.0'
@@ -68,7 +68,7 @@ dependencies:
   scroll_to_index: ^3.0.1
   lottie: ^3.2.0
   flutter_inappwebview: 6.1.5
-  app_links: ^6.3.3
+  app_links: ^6.4.0
   smooth_page_indicator: ^1.2.1
   #  visibility_detector: ^0.4.0+2
   focus_detector: ^2.0.1

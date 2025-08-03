@@ -4,8 +4,6 @@ import 'package:holdem/services/points_service.dart';
 import 'package:holdem/utils/dialog_util.dart';
 
 class PointsConversionController extends GetxController with GetSingleTickerProviderStateMixin{
-  late AnimationController animationController;
-  late Animation<double> animation;
   final TextEditingController textEditingController = TextEditingController();
   var pointsData = {}.obs;
   RxInt coinAutoTransStatus = 1.obs;
@@ -19,20 +17,10 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
   void onReady() {
     super.onReady();
     _requestData();
-    animationController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-    // 创建角度动画（0 ~ 360度 → 0.0 ~ 2π弧度）
-    animation = Tween<double>(begin: 0, end: 2 * 3.14159265359).animate(animationController)
-      ..addListener(() {
-
-      });
   }
 
   @override
   void onClose() {
-    animationController.dispose();
     textEditingController.dispose();
     super.onClose();
   }
@@ -116,6 +104,5 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
     tips.value = '';
     textEditingController.text = '';
     isPointToCoin.value = !isPointToCoin.value;
-    animationController.forward();
   }
 }

@@ -11,6 +11,7 @@ import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
 import 'points_conversion_controller.dart';
+import 'widget/rotate_image_widget.dart';
 
 class PointsConversionPage extends StatefulWidget {
   const PointsConversionPage({Key? key}) : super(key: key);
@@ -85,16 +86,8 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
                           Positioned(
                             top: 140.w,
                             left: (1.sw - 32.w) / 2,
-                            child: GestureDetector(
+                            child: RotateImageDemo(
                               onTap: controller.changeOnTap,
-                              child: Transform.rotate(
-                                angle: controller.animation.value,
-                                child: Image.asset(
-                                  'assets/images/icon_points_change.png',
-                                  width: 32.w,
-                                  height: 32.w,
-                                )
-                              )
                             )
                           )
                         ],

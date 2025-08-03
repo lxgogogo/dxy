@@ -232,14 +232,41 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         final knowledgeIndexDtoList = item.knowledgeIndexDtoList ?? [];
         if (knowledgeIndexDtoList.isNotEmpty) {
           final startIndex = knowledgeIndexDtoList.indexWhere((e) => e.status == 0);
+
+          /// 希望你看得懂 😄
           bool hasAppliedSelected = false;
           if (selectedKnowledgeIndexDtos.isNotEmpty) {
             for (final selectedDto in selectedKnowledgeIndexDtos) {
               final matchIndex = knowledgeIndexDtoList.indexWhere((e) => e.id == selectedDto.id);
               if (matchIndex != -1) {
-                if (startIndex == -1 || matchIndex < startIndex) {
-                  knowledgeIndexDtoList[matchIndex] = selectedDto;
+                final currentItem = knowledgeIndexDtoList[matchIndex];
+                if (selectedDto.status == 1) {
+                  knowledgeIndexDtoList[matchIndex].contentVideo = selectedDto.contentVideo;
+                  knowledgeIndexDtoList[matchIndex].contentArticle = selectedDto.contentArticle;
                   knowledgeIndexDtoList[matchIndex].isSelected = true;
+                  hasAppliedSelected = true;
+                  break;
+                } else if (selectedDto.status == 0) {
+                  if (currentItem.status == 1) {
+                    knowledgeIndexDtoList[matchIndex].contentVideo = selectedDto.contentVideo;
+                    knowledgeIndexDtoList[matchIndex].contentArticle = selectedDto.contentArticle;
+                    int? nextUnreadIndex;
+                    for (int i = matchIndex + 1; i < knowledgeIndexDtoList.length; i++) {
+                      if (knowledgeIndexDtoList[i].status == 0) {
+                        nextUnreadIndex = i;
+                        break;
+                      }
+                    }
+                    if (nextUnreadIndex != null) {
+                      knowledgeIndexDtoList[nextUnreadIndex].isSelected = true;
+                    } else {
+                      knowledgeIndexDtoList.last.isSelected = true;
+                    }
+                  } else {
+                    knowledgeIndexDtoList[matchIndex].contentVideo = selectedDto.contentVideo;
+                    knowledgeIndexDtoList[matchIndex].contentArticle = selectedDto.contentArticle;
+                    knowledgeIndexDtoList[matchIndex].isSelected = true;
+                  }
                   hasAppliedSelected = true;
                   break;
                 }
@@ -250,7 +277,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
             if (startIndex != -1) {
               knowledgeIndexDtoList[startIndex].isSelected = true;
             } else {
-              knowledgeIndexDtoList.first.isSelected = true;
+              knowledgeIndexDtoList.last.isSelected = true;
             }
           }
         }

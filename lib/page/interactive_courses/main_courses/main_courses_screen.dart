@@ -68,8 +68,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                   children: [
                     Container(
                       height: 56.w,
-                      margin: EdgeInsets.only(
-                          top: ScreenUtil().statusBarHeight, bottom: 10.w),
+                      margin: EdgeInsets.only(top: ScreenUtil().statusBarHeight, bottom: 10.w),
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Row(
                         children: [
@@ -87,8 +86,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                               alignment: Alignment.center,
                               child: Row(
                                 children: [
-                                  switch (controller
-                                      .courseTopModel.value?.winningStatus) {
+                                  switch (controller.courseTopModel.value?.winningStatus) {
                                     1 => SvgPicture.asset(
                                         Assets.svg.iconWinningStatus1,
                                         width: 16.w,
@@ -160,8 +158,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                             if (controller.isLogin.value)
                               SliverToBoxAdapter(
                                   child: Padding(
-                                padding:
-                                    EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.w),
+                                padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.w),
                                 child: CourseInfoView(),
                               ))
                           ];
@@ -178,154 +175,107 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                 child: Obx(
                                   () {
                                     if (!controller.hasLoaded.value) {
-                                      return const CupertinoActivityIndicator(
-                                          color: Colors.grey);
+                                      return const CupertinoActivityIndicator(color: Colors.grey);
                                     }
                                     if (controller.courseItems.isEmpty) {
                                       return const NoDataView(text: '这里空空的什么也没有');
                                     }
-                                    final des = controller
-                                        .courseGroup.value?.value?.des;
+                                    final des = controller.courseGroup.value?.value?.des;
                                     return switch (des) {
                                       'knowledge' => CommonRefresher(
-                                          controller:
-                                              controller.refreshController,
+                                          controller: controller.refreshController,
                                           onLoading: controller.onLoading,
                                           enablePullDown: false,
-                                          enablePullUp: controller
-                                                      .courseItems.isNotEmpty ==
-                                                  true ||
-                                              !controller.noMore,
+                                          enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount:
-                                                controller.courseItems.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final item =
-                                                  controller.courseItems[index];
+                                            itemCount: controller.courseItems.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
-                                                onTap: () => controller
-                                                    .toKnowledge(item),
+                                                onTap: () => controller.toKnowledge(item),
                                                 child: CourseKnowledgeItem(
                                                   item: item,
-                                                  onTapDetail:
-                                                      ({Duration? duration}) =>
-                                                          controller
-                                                              .toKnowledge(
+                                                  onTapDetail: ({Duration? duration}) => controller.toKnowledge(
                                                     item,
                                                     duration: duration,
                                                   ),
-                                                  onVideoComplete: () => controller
-                                                      .onKnowledgeVideoComplete(
-                                                          index),
-                                                  onSelectItem: (int
-                                                          childIndex) =>
-                                                      controller
-                                                          .onSelectKnowledgeItem(
+                                                  onVideoComplete: () => controller.onKnowledgeVideoComplete(index),
+                                                  onSelectItem: (int childIndex) => controller.onSelectKnowledgeItem(
                                                     index,
                                                     childIndex,
                                                   ),
                                                 ),
                                               );
                                             },
-                                            separatorBuilder: (_, __) =>
-                                                SizedBox(height: 12.w),
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
                                           ),
                                         ),
                                       'challenge' => CommonRefresher(
-                                          controller:
-                                              controller.refreshController,
+                                          controller: controller.refreshController,
                                           onLoading: controller.onLoading,
                                           enablePullDown: false,
-                                          enablePullUp: controller
-                                                      .courseItems.isNotEmpty ==
-                                                  true ||
-                                              !controller.noMore,
+                                          enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount:
-                                                controller.courseItems.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final item =
-                                                  controller.courseItems[index];
+                                            itemCount: controller.courseItems.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
-                                                onTap: () => controller
-                                                    .toChallenge(item),
+                                                onTap: () => controller.toChallenge(item),
                                                 child: CourseChallengeItem(
                                                   item: item,
                                                   onTap: (value1, value2) {
-                                                    controller.toChallengeItem(
-                                                        value1, value2);
+                                                    controller.toChallengeItem(value1, value2);
                                                   },
                                                 ),
                                               );
                                             },
-                                            separatorBuilder: (_, __) =>
-                                                SizedBox(height: 12.w),
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
                                           ),
                                         ),
                                       'practise' => CommonRefresher(
-                                          controller:
-                                              controller.refreshController,
+                                          controller: controller.refreshController,
                                           onLoading: controller.onLoading,
                                           enablePullDown: false,
-                                          enablePullUp: controller
-                                                      .courseItems.isNotEmpty ==
-                                                  true ||
-                                              !controller.noMore,
+                                          enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
                                             cacheExtent: 10000,
                                             padding: EdgeInsets.zero,
-                                            itemCount:
-                                                controller.courseItems.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final item =
-                                                  controller.courseItems[index];
+                                            itemCount: controller.courseItems.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.courseItems[index];
                                               return CourseExercisesWidget(
                                                   item: item,
                                                   endFunction: (value) {
-                                                    controller
-                                                        .endFunction(value);
+                                                    controller.endFunction(value);
                                                   });
                                             },
-                                            separatorBuilder: (_, __) =>
-                                                SizedBox(height: 12.w),
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
                                           ),
                                         ),
                                       _ => CommonRefresher(
-                                          controller:
-                                              controller.refreshController,
+                                          controller: controller.refreshController,
                                           onLoading: controller.onLoading,
                                           enablePullDown: false,
-                                          enablePullUp: controller
-                                                      .courseItems.isNotEmpty ==
-                                                  true ||
-                                              !controller.noMore,
+                                          enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
                                             padding: EdgeInsets.zero,
-                                            itemCount:
-                                                controller.courseItems.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final item =
-                                                  controller.courseItems[index];
+                                            itemCount: controller.courseItems.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              final item = controller.courseItems[index];
                                               return GestureDetector(
-                                                onTap: () => controller
-                                                    .toCourseDetail(item),
+                                                onTap: () => controller.toCourseDetail(item),
                                                 child: CourseAllItem(
                                                   item: item,
                                                 ),
                                               );
                                             },
-                                            separatorBuilder: (_, __) =>
-                                                SizedBox(height: 12.w),
+                                            separatorBuilder: (_, __) => SizedBox(height: 12.w),
                                           ),
                                         ),
                                     };
@@ -367,8 +317,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                 child: Obx(
                   () {
                     if (!controller.hasLoaded.value) {
-                      return const CupertinoActivityIndicator(
-                          color: Colors.grey);
+                      return const CupertinoActivityIndicator(color: Colors.grey);
                     }
                     if (controller.courseItems.isEmpty) {
                       return const Center(child: NoDataView());
@@ -382,9 +331,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                           controller: controller.refreshController,
                           onLoading: controller.onLoading,
                           enablePullDown: false,
-                          enablePullUp:
-                              controller.courseItems.isNotEmpty == true ||
-                                  !controller.noMore,
+                          enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                           isLoading: controller.isLoading,
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
@@ -494,12 +441,8 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                   item.label ?? '',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    color: selectedIndex == index
-                        ? ColorStyle.c333333
-                        : AppTheme.color_666666,
-                    fontWeight: selectedIndex == index
-                        ? FontWeight.w600
-                        : FontWeight.w400,
+                    color: selectedIndex == index ? ColorStyle.c333333 : AppTheme.color_666666,
+                    fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),

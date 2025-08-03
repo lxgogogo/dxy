@@ -97,7 +97,7 @@ class _MineScreenState extends State<MineScreen>
                                           ),
                                         ),
                                       ),
-                                      /*GestureDetector(
+                                      GestureDetector(
                                         onTap: () {
                                           Get.toNamed(Routes.pointsConversion);
                                         },
@@ -130,7 +130,7 @@ class _MineScreenState extends State<MineScreen>
                                             ],
                                           ),
                                         ),
-                                      ),*/
+                                      ),
                                     ],
                                   ),
                                   Row(

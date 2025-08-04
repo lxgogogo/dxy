@@ -6,6 +6,7 @@ import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/model/article.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/widget/common_image.dart';
 
 class ThreeDBookItem extends StatelessWidget {
   const ThreeDBookItem({
@@ -88,13 +89,11 @@ class ThreeDBookItem extends StatelessWidget {
             ),
             Positioned(
               top: 0,
-              child: CachedNetworkImage(
+              child: CommonImage.net(
                 imageUrl: item.stereoCover ?? '',
                 width: 95.w,
                 height: 122.w,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
               ),
             ),
           ],

@@ -17,11 +17,17 @@ class CommonImage {
           fit: fit ?? BoxFit.cover,
           width: width,
           height: height,
-          placeholder: (context, url) => Assets.images.imageLoadingDef.image(
-            fit: BoxFit.fill,
+          placeholder: (context, url) => Container(
+            color: Colors.white,
+            child: Assets.images.imageLoadingDef.image(
+              fit: BoxFit.contain,
+            ),
           ),
-          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
-            fit: BoxFit.fill,
+          errorWidget: (context, url, error) => Container(
+            color: Colors.white,
+            child: Assets.images.imageLoadingDef.image(
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       );

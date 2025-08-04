@@ -63,17 +63,23 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
               valueListenable: _videoController!,
               builder: (_, videoPlayerValue, __) {
                 if (videoPlayerValue.position > Duration.zero) {
-                  return Container(
-                    color: Colors.black,
-                  );
+                  return const SizedBox();
                 }
-                return SizedBox.expand(
-                  child: CachedNetworkImage(
-                    imageUrl: widget.contentVideo?.thumbnail ?? '',
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const SizedBox(),
-                    errorWidget: (context, url, error) => const SizedBox(),
-                  ),
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black,
+                      ),
+                    ),
+                    CachedNetworkImage(
+                      imageUrl: widget.contentVideo?.thumbnail ?? '',
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const SizedBox(),
+                      errorWidget: (context, url, error) => const SizedBox(),
+                    ),
+                  ],
                 );
               }),
         );

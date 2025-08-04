@@ -254,4 +254,10 @@ class CourseDetailsController extends GetxController {
       Get.back();
     });
   }
+
+  void endFunction(value) {
+    if (value == true) {
+      requestDetail();
+    }
+  }
 }

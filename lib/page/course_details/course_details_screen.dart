@@ -85,6 +85,9 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                   child: CourseExercisesWidget(
                                     pageType: 1,
                                     item: controller.detailBean!.practise!,
+                                      endFunction: (value) {
+                                        controller.endFunction(value);
+                                      }
                                   ),
                                 ),
                               ),

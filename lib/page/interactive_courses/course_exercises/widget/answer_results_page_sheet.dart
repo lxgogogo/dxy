@@ -116,7 +116,7 @@ class _AnswerResultsPageWidgetState extends State<AnswerResultsPageWidget> {
                     ),
                   ),
                   if (_showBtn)...[
-                    if (UserStore.of.isLogin)
+                    if (UserStore.of.isLogin && widget.integral > 0)
                       Positioned(
                         top: top + 330.w,
                         child: Row(

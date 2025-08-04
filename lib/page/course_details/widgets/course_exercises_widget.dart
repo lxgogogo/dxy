@@ -52,6 +52,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   bool _canEdit = true;
   String _answerStr = '';
   String _correctStr = '';
+  String _content = '';
+  String _title = '';
 
   // TODO: Private Method
 
@@ -96,6 +98,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     if (_practiseList.isNotEmpty) {
       final practiseModel = _practiseList[_currentPage];
       _dataList = practiseModel.options ?? [];
+      _title = practiseModel.title ?? '';
+      _content = practiseModel.content ?? '';
       if (!_canEdit) {
         for (int i = 0; i < _practiseList.length; i++) {
           final m = _practiseList[i];
@@ -127,6 +131,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       // 判断是否答题正确
       if (isCorrect) {
         _dataList = _practiseList[_currentPage].options ?? [];
+        _title = _practiseList[_currentPage].title ?? '';
+        _content = _practiseList[_currentPage].content ?? '';
         for (final m in _dataList) {
           m.select = false;
         }
@@ -161,6 +167,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           }
         }
       });
+      if (widget.endFunction != null) {
+        widget.endFunction!(true);
+      }
     }
   }
 
@@ -229,7 +238,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     _correctStr = data.answerStr ?? '';
     _isCorrectAnswer = data.answer ?? false;
     _buttonState = true;
-    _update();
     // 答题正确的情况弹窗
     if (data.answer == true) {
       if (_currentPage == _practiseList.length - 1) {
@@ -242,9 +250,6 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           _evenPairs(data, end: true);
         } else {
           _endAlert(data);
-        }
-        if (widget.endFunction != null) {
-          widget.endFunction!(true);
         }
       } else {
         // 答题未结束
@@ -290,6 +295,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
           m.select = false;
         }
         _dataList = model.options ?? [];
+        _title = model.title ?? '';
+        _content = model.content ?? '';
         _onContinue();
       }
       return;
@@ -301,6 +308,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     }
     model.select = true;
     _dataList = model.options ?? [];
+    _title = model.title ?? '';
+    _content = model.content ?? '';
     for (final m in _dataList) {
       m.select = false;
       m.isCorrect = false;
@@ -538,7 +547,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if ((model.title ?? '').isNotEmpty)
+          if (_title.isNotEmpty)
             Text(
               model.title ?? '',
               style: TextStyle(
@@ -547,7 +556,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                   color: Colors.black),
             ),
           SizedBox(height: 10.w),
-          CommonHtmlWidget(content: model.content ?? ''),
+          CommonHtmlWidget(content: _content),
           SizedBox(height: 50.w),
           Wrap(
             runSpacing: 10.w,

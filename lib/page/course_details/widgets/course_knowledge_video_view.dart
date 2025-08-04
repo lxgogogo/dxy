@@ -8,7 +8,6 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../model/course_model.dart';
-import '../../../gen/assets.gen.dart';
 
 class KnowledgeVideoView extends StatefulWidget {
   final ContentVideo? contentVideo;
@@ -71,9 +70,7 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
                     imageUrl: widget.contentVideo?.thumbnail ?? '',
                     fit: BoxFit.cover,
                     placeholder: (context, url) => const SizedBox(),
-                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(
-                      fit: BoxFit.fill,
-                    ),
+                    errorWidget: (context, url, error) => const SizedBox(),
                   ),
                 );
               }),
@@ -113,9 +110,11 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
         if ((currentDuration + 1) >= totalDuration) {
           isVideoCompleted = true;
           widget.onVideoComplete?.call();
-          if (_chewieController?.isFullScreen == true) {
-            _chewieController?.exitFullScreen();
-          }
+          Future.delayed(const Duration(milliseconds: 150), () {
+            if (_chewieController?.isFullScreen == true) {
+              _chewieController?.exitFullScreen();
+            }
+          });
         }
       }
     }

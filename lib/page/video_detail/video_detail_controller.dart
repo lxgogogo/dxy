@@ -68,6 +68,7 @@ class VideoDetailController extends GetxController {
   void onClose() {
     isDisposed = true;
 
+    cancelRecommendTimer();
     /// 上传视频已播放时长
     _uploadVideoReport();
     _eventSubscription?.cancel();

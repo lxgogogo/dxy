@@ -441,8 +441,6 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
         final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
         if (res.isSuccess) {
           await loadCourses();
-        } else {
-          DialogUtil.showToast(res.msg);
         }
       }
     } catch (e) {

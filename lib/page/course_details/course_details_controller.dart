@@ -186,8 +186,6 @@ class CourseDetailsController extends GetxController {
         final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
         if (res.isSuccess) {
           await requestDetail();
-        } else {
-          DialogUtil.showToast(res.msg);
         }
       }
     } catch (e) {

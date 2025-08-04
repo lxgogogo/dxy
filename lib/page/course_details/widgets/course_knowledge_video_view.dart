@@ -29,6 +29,7 @@ class KnowledgeVideoView extends StatefulWidget {
 class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
   VideoPlayerController? _videoController;
   ChewieController? _chewieController;
+  bool isVideoCompleted = false;
 
   @override
   void initState() {
@@ -84,6 +85,7 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
   }
 
   Future<void> _startVideoPlayer(String link) async {
+    isVideoCompleted = false;
     if (_videoController == null) {
       _initController(link);
     } else {
@@ -104,11 +106,14 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
 
   void _videoListener() {
     if (_videoController == null) return;
-    final currentDuration = _videoController!.value.position.inSeconds;
-    if (currentDuration > 0) {
-      final totalDuration = _videoController!.value.duration.inSeconds;
-      if (currentDuration >= totalDuration) {
-        widget.onVideoComplete?.call();
+    if (!isVideoCompleted) {
+      final currentDuration = _videoController!.value.position.inSeconds;
+      if (currentDuration > 0) {
+        final totalDuration = _videoController!.value.duration.inSeconds;
+        if ((currentDuration + 1) >= totalDuration) {
+          widget.onVideoComplete?.call();
+          isVideoCompleted = true;
+        }
       }
     }
   }

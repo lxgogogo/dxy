@@ -247,7 +247,7 @@ class VideoDetailController extends GetxController {
     final currentDuration = videoController!.value.position.inSeconds;
     if (currentDuration > 0) {
       final totalDuration = videoController!.value.duration.inSeconds;
-      if (currentDuration >= totalDuration) {
+      if ((currentDuration + 1) >= totalDuration) {
         if (detailBean?.videoList?.isNotEmpty == true) {
           if (playVideoIndex == detailBean!.videoList!.length - 1) {
             recommendTimer = Timer(const Duration(seconds: 5), () {

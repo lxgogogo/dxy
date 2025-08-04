@@ -71,7 +71,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
   Future<void> fetchData({bool needResetGroup = false}) async {
     isFetching = true;
     await Future.wait([
-      getCourseTop(),
+      loadCourseTop(),
       getCourseGroup(needResetGroup: needResetGroup),
     ]).whenComplete(() async {
       isFetching = false;
@@ -190,7 +190,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
     }
   }
 
-  Future<void> getCourseTop() async {
+  Future<void> loadCourseTop() async {
     try {
       if (isLogin.value) {
         final res = await CourseService.of.courseTop();
@@ -365,6 +365,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
             subContentId: subContentId,
             duration: duration,
             callBack: (value) {
+              loadCourseTop();
               loadData();
             },
           );
@@ -387,9 +388,8 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         }
         final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
         if (res.isSuccess) {
-          await loadData();
-        } else {
-          DialogUtil.showToast(res.msg);
+          loadCourseTop();
+          loadData();
         }
       }
     } catch (e) {
@@ -447,12 +447,12 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
       item.completed = (item.completed ?? 0) + 1;
       courseItems.refresh();
       page = 1;
-      getCourseTop();
+      loadCourseTop();
       loadData();
     }, errorBack: () {
       page = 1;
       courseItems.refresh();
-      getCourseTop();
+      loadCourseTop();
       loadData();
     });
   }
@@ -485,7 +485,7 @@ class MainCoursesController extends GetxController with RefreshControllerMixin {
         hasLoaded.value = true;
       });
     } else {
-      getCourseTop();
+      loadCourseTop();
       int practiseRemaining = courseTopModel.value?.practiseRemaining ?? 0;
       if (practiseRemaining - 1 < 0) {
         courseTopModel.value?.practiseRemaining = 0;

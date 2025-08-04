@@ -183,7 +183,6 @@ class CourseDetailsController extends GetxController {
         if (knowledgeIndexDto.status == 1) {
           return;
         }
-        knowledgeIndexDto.status = 1;
         final res = await CourseService.of.courseRead(knowledgeIndexDto.id);
         if (res.isSuccess) {
           await requestDetail();

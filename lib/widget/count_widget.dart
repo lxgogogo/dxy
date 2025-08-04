@@ -90,7 +90,7 @@ class CountCommentBadge extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 2.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(2.r),
                   ),
                   child: Text(
                     count,

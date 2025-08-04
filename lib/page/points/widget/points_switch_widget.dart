@@ -33,11 +33,11 @@ class _TextInsideCupertinoSwitchState extends State<TextInsideCupertinoSwitch> {
   @override
   void initState() {
     super.initState();
-    _value = widget.value;
   }
 
   @override
   Widget build(BuildContext context) {
+    _value = widget.value;
     return GestureDetector(
       onTap: () {
         if (widget.onChanged != null) {

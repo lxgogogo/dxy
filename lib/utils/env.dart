@@ -107,7 +107,7 @@ class Env {
     }
   }
 
-  static String telegramLogin = 'https://telegram-login-dev.dx252.com?type=app';
-  static String googleLogin = 'https://google-login-dev.dx252.com?type=app';
-  static String appleLogin = 'https://apple-login-dev.dx252.com';
+  static String telegramLogin = 'https://telegram-login-dev.dx259.com?type=app';
+  static String googleLogin = 'https://google-login-dev.dx259.com?type=app';
+  static String appleLogin = 'https://apple-login-dev.dx259.com';
 }

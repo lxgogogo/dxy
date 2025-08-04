@@ -113,6 +113,9 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
         if ((currentDuration + 1) >= totalDuration) {
           isVideoCompleted = true;
           widget.onVideoComplete?.call();
+          if (_chewieController?.isFullScreen == true) {
+            _chewieController?.exitFullScreen();
+          }
         }
       }
     }

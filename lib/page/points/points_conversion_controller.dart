@@ -73,9 +73,9 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
 
   void allOnTap() {
     if (isPointToCoin.value) {
-      textEditingController.text = '${int.tryParse(dxyBalance.value) ?? 0}';
+      textEditingController.text = '${(double.tryParse(dxyBalance.value) ?? 0).toInt()}';
     } else {
-      textEditingController.text = '${int.tryParse(dpkBalance.value) ?? 0}';
+      textEditingController.text = '${(double.tryParse(dpkBalance.value) ?? 0).toInt()}';
     }
     textOnChanged(textEditingController.text);
   }

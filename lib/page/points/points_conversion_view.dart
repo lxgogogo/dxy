@@ -215,7 +215,6 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
   }
 
   Widget _buildSwitchWidget() {
-    int coinAutoTransStatus = controller.coinAutoTransStatus.value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -227,7 +226,7 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
               color: AppTheme.color_666666),
         ),
         TextInsideCupertinoSwitch(
-          value: coinAutoTransStatus == 1 ? true : false,
+          value: controller.coinAutoTransStatus.value == 1 ? true : false,
           onChanged: controller.onChanged,
           activeText: '开',
           inactiveText: '关',

@@ -144,6 +144,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // 全对
   void _endAlert(data, {bool evenPairs = false}) {
     if (data.status == 2) {
+      _buttonState = false;
       AnswerResultsPageSheet.show(1, integral: data.pairsIntegral ?? 0, () {
         Get.close(0);
         _result();
@@ -549,7 +550,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         children: [
           if (_title.isNotEmpty)
             Text(
-              model.title ?? '',
+              _title,
               style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,

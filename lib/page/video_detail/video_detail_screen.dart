@@ -377,10 +377,6 @@ class VideoNotifier extends ChangeNotifier {
         return ChewieVideo(notifier: this, isFullScreen: true);
       },
       // deviceOrientationsOnEnterFullScreen: DeviceOrientation.values,
-      deviceOrientationsAfterFullScreen: [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ],
     );
     notifyListeners();
   }

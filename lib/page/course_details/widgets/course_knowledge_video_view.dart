@@ -110,11 +110,11 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
         if ((currentDuration + 1) >= totalDuration) {
           isVideoCompleted = true;
           widget.onVideoComplete?.call();
-          Future.delayed(const Duration(milliseconds: 150), () {
-            if (_chewieController?.isFullScreen == true) {
-              _chewieController?.exitFullScreen();
+          if (_chewieController?.isFullScreen == true) {
+            if (mounted) {
+              Navigator.of(context).pop();
             }
-          });
+          }
         }
       }
     }

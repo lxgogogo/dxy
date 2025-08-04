@@ -23,7 +23,7 @@ class VideoDetailController extends GetxController {
   bool hasUploadEvent = false;
   bool isPlayComplete = false;
   Timer? recommendTimer;
-  bool _recommendTimerCancelled = false; // 添加取消标志
+  RxBool recommendTimerCancelled = false.obs; // 添加取消标志
   RxList<RecommendVideoModel> recommendedVideos = <RecommendVideoModel>[].obs;
 
   List<CommentBean>? comments;
@@ -252,7 +252,7 @@ class VideoDetailController extends GetxController {
         if (detailBean?.videoList?.isNotEmpty == true) {
           if (playVideoIndex == detailBean!.videoList!.length - 1) {
             recommendTimer = Timer(const Duration(seconds: 5), () {
-              if (!_recommendTimerCancelled && recommendedVideos.isNotEmpty) {
+              if (!recommendTimerCancelled.value && recommendedVideos.isNotEmpty) {
                 onPlayNewVideo(recommendedVideos.first);
               }
             });
@@ -267,7 +267,7 @@ class VideoDetailController extends GetxController {
           _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
         } else {
           recommendTimer = Timer(const Duration(seconds: 5), () {
-            if (!_recommendTimerCancelled && recommendedVideos.isNotEmpty) {
+            if (!recommendTimerCancelled.value && recommendedVideos.isNotEmpty) {
               onPlayNewVideo(recommendedVideos.first);
             }
           });
@@ -313,7 +313,7 @@ class VideoDetailController extends GetxController {
   }
 
   void cancelRecommendTimer() {
-    _recommendTimerCancelled = true;
+    recommendTimerCancelled.value = true;
     recommendTimer?.cancel();
     recommendTimer = null;
   }
@@ -324,7 +324,7 @@ class VideoDetailController extends GetxController {
     hasUploadEvent = false;
     isPlayComplete = false;
     recommendTimer = null;
-    _recommendTimerCancelled = false; // 重置标志
+    recommendTimerCancelled.value = false; // 重置标志
     recommendedVideos.clear();
     comments = null;
     _pageNum = 1;

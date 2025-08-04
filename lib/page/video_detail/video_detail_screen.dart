@@ -351,7 +351,6 @@ class ChewieVideo extends StatelessWidget {
                       videos: controller.recommendedVideos,
                       onReplay: controller.onReplay,
                       onPlayNewVideo: controller.onPlayNewVideo,
-                      recommendTimer: controller.recommendTimer,
                       onCancelTimer: controller.cancelRecommendTimer,
                     ),
             ),

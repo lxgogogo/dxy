@@ -9,13 +9,13 @@ import 'package:holdem/extensions/string_extensions.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../../model/recommend_video_model.dart';
+import '../video_detail_screen.dart';
 import 'item_recommended_video.dart';
 
 class NormalRecommendedVideosView extends StatefulWidget {
   final List<RecommendVideoModel> videos;
   final VoidCallback? onReplay;
   final Function(RecommendVideoModel model)? onPlayNewVideo;
-  final Timer? recommendTimer;
   final VoidCallback? onCancelTimer; // 添加取消timer的回调
 
   const NormalRecommendedVideosView({
@@ -23,7 +23,6 @@ class NormalRecommendedVideosView extends StatefulWidget {
     required this.videos,
     this.onReplay,
     this.onPlayNewVideo,
-    this.recommendTimer,
     this.onCancelTimer,
   });
 
@@ -101,16 +100,18 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                 child: Row(
                   spacing: 8.w,
                   children: [
-                    RecommendVideoItem(
-                      onTap: () {
-                        _cancelAnimation();
-                        widget.onPlayNewVideo?.call(widget.videos.first);
-                      },
-                      recommendVideo: widget.videos.first,
-                      animationController: _animationController,
-                      showAnimate: widget.recommendTimer?.isActive == true,
-                      isFullScreen: false,
-                    ),
+                    Obx(() {
+                      return RecommendVideoItem(
+                        onTap: () {
+                          _cancelAnimation();
+                          widget.onPlayNewVideo?.call(widget.videos.first);
+                        },
+                        recommendVideo: widget.videos.first,
+                        animationController: _animationController,
+                        showAnimate: !VideoDetailController.of.recommendTimerCancelled.value,
+                        isFullScreen: false,
+                      );
+                    }),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -152,24 +153,28 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                                   ],
                                 ),
                               ),
-                              if (widget.recommendTimer?.isActive == true)
-                                GestureDetector(
-                                  onTap: _cancelAnimation,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.3),
-                                      borderRadius: BorderRadius.circular(49.r),
-                                    ),
-                                    child: Text(
-                                      '取消连播',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14.sp,
+                                Obx(() {
+                                  if (!VideoDetailController.of.recommendTimerCancelled.value) {
+                                    return GestureDetector(
+                                      onTap: _cancelAnimation,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.w),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withValues(alpha: 0.3),
+                                          borderRadius: BorderRadius.circular(49.r),
+                                        ),
+                                        child: Text(
+                                          '取消连播',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.sp,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
+                                    );
+                                  }
+                                  return const SizedBox();
+                                }),
                             ],
                           )
                         ],

@@ -63,7 +63,9 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
               valueListenable: _videoController!,
               builder: (_, videoPlayerValue, __) {
                 if (videoPlayerValue.position > Duration.zero) {
-                  return const SizedBox();
+                  return Container(
+                    color: Colors.black,
+                  );
                 }
                 return SizedBox.expand(
                   child: CachedNetworkImage(

@@ -305,10 +305,9 @@ class VideoDetailController extends GetxController {
   }
 
   Future<void> onReplay() async {
+    cancelRecommendTimer();
     await playVideo();
     isPlayComplete = false;
-    recommendTimer = null;
-    _recommendTimerCancelled = false; // 重置标志
     safeUpdate();
   }
 

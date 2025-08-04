@@ -11,6 +11,7 @@ import 'package:holdem/widget/button.dart';
 import 'package:holdem/widget/common_app_bar.dart';
 
 import 'points_conversion_controller.dart';
+import 'widget/points_switch_widget.dart';
 import 'widget/rotate_image_widget.dart';
 
 class PointsConversionPage extends StatefulWidget {
@@ -225,15 +226,11 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
               fontWeight: FontWeight.w600,
               color: AppTheme.color_666666),
         ),
-        SizedBox(
-          width: 40.w,
-          child: Transform.scale(
-            scale: 0.7,
-            child: CupertinoSwitch(
-                value: coinAutoTransStatus == 1 ? true : false,
-                activeColor: '#34C759'.hexColor,
-                onChanged: controller.onChanged),
-          ),
+        TextInsideCupertinoSwitch(
+          value: coinAutoTransStatus == 1 ? true : false,
+          onChanged: controller.onChanged,
+          activeText: '开',
+          inactiveText: '关',
         )
       ],
     );

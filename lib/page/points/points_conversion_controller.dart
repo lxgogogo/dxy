@@ -65,7 +65,7 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
         if (double.tryParse(text)! > double.tryParse(dpkBalance.value)! ||
             double.tryParse(dpkBalance.value) == 0.00) {
           canTap.value = false;
-          tips.value = '请输入有效转换额度';
+          tips.value = '金币不足';
         }
       }
     }

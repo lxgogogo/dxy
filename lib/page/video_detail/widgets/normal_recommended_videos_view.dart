@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -130,7 +131,10 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                             spacing: 40.w,
                             children: [
                               GestureDetector(
-                                onTap: widget.onReplay,
+                                onTap: () {
+                                  _cancelAnimation();
+                                  widget.onReplay?.call();
+                                },
                                 child: Row(
                                   spacing: 4.w,
                                   children: [

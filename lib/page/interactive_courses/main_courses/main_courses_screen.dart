@@ -189,6 +189,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
+                                            cacheExtent: 10000,
                                             padding: EdgeInsets.zero,
                                             itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {

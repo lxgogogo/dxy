@@ -188,7 +188,10 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: widget.onReplay,
+          onTap: () {
+            _cancelAnimation();
+            widget.onReplay?.call();
+          },
           child: Column(
             spacing: 8,
             children: [

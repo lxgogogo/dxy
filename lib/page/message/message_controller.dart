@@ -14,7 +14,7 @@ class MessageController extends GetxController with GetSingleTickerProviderState
       } ??
       0;
 
-  int tabIndex = 0;
+  RxInt tabIndex = 0.obs;
 
   RxInt notifiesOfficial = 0.obs;
   RxInt notifiesPrivate = 0.obs;
@@ -28,8 +28,8 @@ class MessageController extends GetxController with GetSingleTickerProviderState
       vsync: this,
     )..addListener(() {
         if (tabController.indexIsChanging) return;
-        loadTabChild(preMessageType: MessageType.values[tabIndex]);
-        tabIndex = tabController.index;
+        loadTabChild(preMessageType: MessageType.values[tabIndex.value]);
+        tabIndex.value = tabController.index;
       });
     for (final type in MessageType.values) {
       Get.lazyPut(() => MessageChildController(type), tag: messageType.type);

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/page/message/widgets/message_child_view.dart';
 import 'package:holdem/services/message_service.dart';
+import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/widget/keepalive_wrapper.dart';
 
 import '../../gen/assets.gen.dart';
@@ -78,6 +79,7 @@ class _MessagePageState extends State<MessagePage>
                     Padding(
                       padding: EdgeInsets.zero,
                       child: Obx(() {
+                        int index = -1;
                         return TabBar(
                           controller: controller.tabController,
                           tabs: MessageType.values.map((e) {
@@ -91,11 +93,21 @@ class _MessagePageState extends State<MessagePage>
                               MessageType.favorite =>
                               UserStore.of.badgeModel.value?.favorite,
                             };
+                            index++;
                             return Tab(
                               child: Stack(
                                 clipBehavior: Clip.none,
                                 children: [
-                                  Text(e.title),
+                                  Text(
+                                      e.title,
+                                    style: TextStyle(
+                                      color: controller.tabIndex.value == index ?
+                                      const Color(0xff2c2c2c) :
+                                      AppTheme.color_666666,
+                                      fontSize: controller.tabIndex.value == index ? 16.sp : 14.sp,
+                                      fontWeight: controller.tabIndex.value == index ? FontWeight.w600 : FontWeight.w400,
+                                    ),
+                                  ),
                                   if ((unReadCount ?? 0) > 0)
                                     Positioned(
                                       right: -4.w,
@@ -129,16 +141,6 @@ class _MessagePageState extends State<MessagePage>
                           }),
                           dividerHeight: 0,
                           labelPadding: EdgeInsets.symmetric(horizontal: 20.w),
-                          labelStyle: TextStyle(
-                            color: const Color(0xff2c2c2c),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            color: const Color(0xff666666),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
                         );
                       }),
                     ),

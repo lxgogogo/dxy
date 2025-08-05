@@ -127,56 +127,62 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Row(
-                            spacing: 40.w,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  _cancelAnimation();
-                                  widget.onReplay?.call();
-                                },
-                                behavior: HitTestBehavior.opaque,
-                                child: Row(
-                                  spacing: 4.w,
-                                  children: [
-                                    SvgPicture.asset(
-                                      Assets.svg.iconReplay,
-                                      width: 20.w,
-                                      height: 20.w,
-                                    ),
-                                    Text(
-                                      '重播',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12.sp,
+                          Container(
+                            height: 30.w,
+                            padding: EdgeInsets.only(left: 20.w),
+                            child: Row(
+                              spacing: 40.w,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _cancelAnimation();
+                                    widget.onReplay?.call();
+                                  },
+                                  behavior: HitTestBehavior.opaque,
+                                  child: Row(
+                                    spacing: 4.w,
+                                    children: [
+                                      SvgPicture.asset(
+                                        Assets.svg.iconReplay,
+                                        width: 20.w,
+                                        height: 20.w,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                                Obx(() {
-                                  if (!VideoDetailController.of.recommendTimerCancelled.value) {
-                                    return GestureDetector(
-                                      onTap: _cancelAnimation,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.w),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.3),
-                                          borderRadius: BorderRadius.circular(49.r),
+                                      Text(
+                                        '重播',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.sp,
                                         ),
-                                        child: Text(
-                                          '取消连播',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.sp,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                  Obx(() {
+                                    if (!VideoDetailController.of.recommendTimerCancelled.value) {
+                                      return GestureDetector(
+                                        onTap: _cancelAnimation,
+                                        child: Container(
+                                          height: 30.w,
+                                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withValues(alpha: 0.3),
+                                            borderRadius: BorderRadius.circular(49.r),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '取消连播',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14.sp,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  }
-                                  return const SizedBox();
-                                }),
-                            ],
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  }),
+                              ],
+                            ),
                           )
                         ],
                       ),

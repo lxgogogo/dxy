@@ -1,3 +1,5 @@
+// dart format width=80
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,7 +7,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/widgets.dart';
 
@@ -167,9 +169,21 @@ class $AssetsEquityCenterGen {
   AssetGenImage get iconCenterCollectGroup2 => const AssetGenImage(
       'assets/equity_center/icon_center_collect_group2.png');
 
+  /// File path: assets/equity_center/icon_center_collect_group2_h.png
+  AssetGenImage get iconCenterCollectGroup2H => const AssetGenImage(
+      'assets/equity_center/icon_center_collect_group2_h.png');
+
   /// File path: assets/equity_center/icon_center_collect_group3.png
   AssetGenImage get iconCenterCollectGroup3 => const AssetGenImage(
       'assets/equity_center/icon_center_collect_group3.png');
+
+  /// File path: assets/equity_center/icon_center_collect_group3_h.png
+  AssetGenImage get iconCenterCollectGroup3H => const AssetGenImage(
+      'assets/equity_center/icon_center_collect_group3_h.png');
+
+  /// File path: assets/equity_center/icon_center_collect_group_h.png
+  AssetGenImage get iconCenterCollectGroupH => const AssetGenImage(
+      'assets/equity_center/icon_center_collect_group_h.png');
 
   /// File path: assets/equity_center/icon_center_high2_button.png
   AssetGenImage get iconCenterHigh2Button =>
@@ -293,7 +307,10 @@ class $AssetsEquityCenterGen {
         iconCenterCollect3,
         iconCenterCollectGroup,
         iconCenterCollectGroup2,
+        iconCenterCollectGroup2H,
         iconCenterCollectGroup3,
+        iconCenterCollectGroup3H,
+        iconCenterCollectGroupH,
         iconCenterHigh2Button,
         iconCenterHighBg,
         iconCenterHighBg2,
@@ -620,9 +637,25 @@ class $AssetsImagesGen {
   AssetGenImage get iconPoints =>
       const AssetGenImage('assets/images/icon_points.png');
 
+  /// File path: assets/images/icon_points_change.png
+  AssetGenImage get iconPointsChange =>
+      const AssetGenImage('assets/images/icon_points_change.png');
+
   /// File path: assets/images/icon_points_coin.png
   AssetGenImage get iconPointsCoin =>
       const AssetGenImage('assets/images/icon_points_coin.png');
+
+  /// File path: assets/images/icon_points_come.png
+  AssetGenImage get iconPointsCome =>
+      const AssetGenImage('assets/images/icon_points_come.png');
+
+  /// File path: assets/images/icon_points_go.png
+  AssetGenImage get iconPointsGo =>
+      const AssetGenImage('assets/images/icon_points_go.png');
+
+  /// File path: assets/images/icon_points_point.png
+  AssetGenImage get iconPointsPoint =>
+      const AssetGenImage('assets/images/icon_points_point.png');
 
   /// File path: assets/images/icon_post_feed.png
   AssetGenImage get iconPostFeed =>
@@ -1017,7 +1050,11 @@ class $AssetsImagesGen {
         iconNoticeUserN,
         iconPlay,
         iconPoints,
+        iconPointsChange,
         iconPointsCoin,
+        iconPointsCome,
+        iconPointsGo,
+        iconPointsPoint,
         iconPostFeed,
         iconScan,
         iconSetting,
@@ -1607,12 +1644,14 @@ class AssetGenImage {
     this._assetName, {
     this.size,
     this.flavors = const {},
+    this.animation,
   });
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -1681,4 +1720,16 @@ class AssetGenImage {
   String get path => _assetName;
 
   String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({
+    required this.isAnimation,
+    required this.duration,
+    required this.frames,
+  });
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }

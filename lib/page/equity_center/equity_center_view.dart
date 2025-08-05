@@ -327,6 +327,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
     var titleData = ['书籍下载', '基本视频', '高级视频', '收藏', '收藏分类'];
     List<Map<String, dynamic>> data = [];
     for (int i = 0; i < iconData.length; i++) {
+      String icon = iconData[i];
       bool suo = true;
       if (i == 0 && (model.bookDownload ?? 0) > 0 ||
           (model.bookDownload ?? 0) == -1) {
@@ -344,8 +345,17 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
           (model.favoriteCategory ?? 0) == -1) {
         suo = false;
       }
+      if (i == 4 && !suo) {
+        if (controller.selectIndex >= 2 && controller.selectIndex <= 4) {
+          icon = Assets.equityCenter.iconCenterCollectGroup2H.path;
+        } else if (controller.selectIndex > 4) {
+          icon = Assets.equityCenter.iconCenterCollectGroup3H.path;
+        } else {
+          icon = Assets.equityCenter.iconCenterCollectGroupH.path;
+        }
+      }
       data.add({
-        'icon': iconData[i],
+        'icon': icon,
         'title': titleData[i],
         'content': contentData[i],
         'suo': suo
@@ -512,7 +522,7 @@ class _EquityCenterPageState extends State<EquityCenterPage> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8.w)),
-                    color: ColorStyle.c557BF6.withOpacity(0.1)),
+                    color: ColorStyle.c333333.withOpacity(0.1)),
                 child: Text(
                   '已完成',
                   style: TextStyle(

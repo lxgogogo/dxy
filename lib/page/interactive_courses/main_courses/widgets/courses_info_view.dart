@@ -16,105 +16,119 @@ class CourseInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '我的进度',
-              style: TextStyle(
-                color: '#000000'.hexColor,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: '#58A5FF'.hexColor.withOpacity(0.1),
+            blurRadius: 8.63.r,
+            offset: Offset(0, 4.32.w),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '我的进度',
+                style: TextStyle(
+                  color: '#000000'.hexColor,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            Text(
-              '完成度：${(controller.courseProgress * 100).toStringAsFixed(0)}%',
-              style: TextStyle(
-                color: '#666666'.hexColor,
-                fontSize: 12.sp,
+              Text(
+                '完成度：${(controller.courseProgress * 100).toStringAsFixed(0)}%',
+                style: TextStyle(
+                  color: '#666666'.hexColor,
+                  fontSize: 12.sp,
+                ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8.w),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10.r),
-          child: Container(
-            width: double.infinity,
-            height: 4.w,
-            decoration: BoxDecoration(
-              color: '#333333'.hexColor.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    width: controller.courseProgress * constraints.maxWidth,
-                    color: '#557BF6'.hexColor,
-                  ),
-                );
-              },
+            ],
+          ),
+          SizedBox(height: 8.w),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.r),
+            child: Container(
+              width: double.infinity,
+              height: 4.w,
+              decoration: BoxDecoration(
+                color: '#333333'.hexColor.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      width: controller.courseProgress * constraints.maxWidth,
+                      color: '#557BF6'.hexColor,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 16.w),
-        LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final itemWidth = (constraints.maxWidth - 11.w) / 2;
-            return Wrap(
-              spacing: 11.w,
-              runSpacing: 13.w,
-              children: [
-                _buildMenuItem(
-                  itemWidth,
-                  title: '课程',
-                  content: '${controller.courseTopModel.value?.courseRemaining ?? 0}',
-                  assetName: Assets.svg.iconCourseAll,
-                  backgroundColor: '#EBF5FF'.hexColor,
-                  onTap: () {
-                    _toChangeType('course');
-                  },
-                ),
-                _buildMenuItem(
-                  itemWidth,
-                  title: '知识',
-                  content: '${controller.courseTopModel.value?.knowledgeRemaining ?? 0}',
-                  assetName: Assets.svg.iconCourseKnowledge,
-                  backgroundColor: '#FEF1EC'.hexColor,
-                  onTap: () {
-                    _toChangeType('knowledge');
-                  },
-                ),
-                _buildMenuItem(
-                  itemWidth,
-                  title: '练习',
-                  content: '${controller.courseTopModel.value?.practiseRemaining ?? 0}',
-                  assetName: Assets.svg.iconCoursePractice,
-                  backgroundColor: '#EBFCFF'.hexColor,
-                  onTap: () {
-                    _toChangeType('practise');
-                  },
-                ),
-                _buildMenuItem(
-                  itemWidth,
-                  title: '挑战',
-                  content: '${controller.courseTopModel.value?.challengeRemaining ?? 0}',
-                  assetName: Assets.svg.iconCourseChallenge,
-                  backgroundColor: '#F6EBFF'.hexColor,
-                  onTap: () {
-                    _toChangeType('challenge');
-                  },
-                ),
-              ],
-            );
-          },
-        ),
-      ],
+          SizedBox(height: 16.w),
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final itemWidth = (constraints.maxWidth - 11.w) / 2;
+              return Wrap(
+                spacing: 11.w,
+                runSpacing: 13.w,
+                children: [
+                  _buildMenuItem(
+                    itemWidth,
+                    title: '课程',
+                    content: '${controller.courseTopModel.value?.courseRemaining ?? 0}',
+                    assetName: Assets.svg.iconCourseAll,
+                    backgroundColor: '#EBF5FF'.hexColor,
+                    onTap: () {
+                      _toChangeType('course');
+                    },
+                  ),
+                  _buildMenuItem(
+                    itemWidth,
+                    title: '知识',
+                    content: '${controller.courseTopModel.value?.knowledgeRemaining ?? 0}',
+                    assetName: Assets.svg.iconCourseKnowledge,
+                    backgroundColor: '#FEF1EC'.hexColor,
+                    onTap: () {
+                      _toChangeType('knowledge');
+                    },
+                  ),
+                  _buildMenuItem(
+                    itemWidth,
+                    title: '练习',
+                    content: '${controller.courseTopModel.value?.practiseRemaining ?? 0}',
+                    assetName: Assets.svg.iconCoursePractice,
+                    backgroundColor: '#EBFCFF'.hexColor,
+                    onTap: () {
+                      _toChangeType('practise');
+                    },
+                  ),
+                  _buildMenuItem(
+                    itemWidth,
+                    title: '挑战',
+                    content: '${controller.courseTopModel.value?.challengeRemaining ?? 0}',
+                    assetName: Assets.svg.iconCourseChallenge,
+                    backgroundColor: '#F6EBFF'.hexColor,
+                    onTap: () {
+                      _toChangeType('challenge');
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 

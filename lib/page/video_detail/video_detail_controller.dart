@@ -251,13 +251,16 @@ class VideoDetailController extends GetxController {
       if ((currentDuration + 1) >= totalDuration) {
         if (detailBean?.videoList?.isNotEmpty == true) {
           if (playVideoIndex == detailBean!.videoList!.length - 1) {
-            recommendTimer = Timer(const Duration(seconds: 5), () {
-              if (!recommendTimerCancelled.value && recommendedVideos.isNotEmpty) {
-                onPlayNewVideo(recommendedVideos.first);
-              }
-            });
-            isPlayComplete = true;
-            safeUpdate();
+            if (!isPlayComplete) {
+              recommendTimerCancelled.value = false;
+              recommendTimer = Timer(const Duration(seconds: 5), () {
+                if (!recommendTimerCancelled.value && recommendedVideos.isNotEmpty) {
+                  onPlayNewVideo(recommendedVideos.first);
+                }
+              });
+              isPlayComplete = true;
+              safeUpdate();
+            }
             return;
             // playVideoIndex = 0;
           } else {
@@ -266,13 +269,16 @@ class VideoDetailController extends GetxController {
           safeUpdate();
           _startVideoPlayer(detailBean!.videoList![playVideoIndex].sourceUrl ?? '');
         } else {
-          recommendTimer = Timer(const Duration(seconds: 5), () {
-            if (!recommendTimerCancelled.value && recommendedVideos.isNotEmpty) {
-              onPlayNewVideo(recommendedVideos.first);
-            }
-          });
-          isPlayComplete = true;
-          safeUpdate();
+          if (!isPlayComplete) {
+            recommendTimerCancelled.value = false;
+            recommendTimer = Timer(const Duration(seconds: 5), () {
+              if (!recommendTimerCancelled.value && recommendedVideos.isNotEmpty) {
+                onPlayNewVideo(recommendedVideos.first);
+              }
+            });
+            isPlayComplete = true;
+            safeUpdate();
+          }
         }
       }
     }
@@ -306,7 +312,9 @@ class VideoDetailController extends GetxController {
   }
 
   Future<void> onReplay() async {
-    cancelRecommendTimer();
+    recommendTimer?.cancel();
+    recommendTimer = null;
+    recommendTimerCancelled.value = false;
     await playVideo();
     isPlayComplete = false;
     safeUpdate();
@@ -315,16 +323,17 @@ class VideoDetailController extends GetxController {
   void cancelRecommendTimer() {
     recommendTimerCancelled.value = true;
     recommendTimer?.cancel();
-    recommendTimer = null;
   }
 
   Future<void> onPlayNewVideo(RecommendVideoModel model) async {
+    recommendTimer?.cancel();
+    recommendTimer = null;
+    recommendTimerCancelled.value = false;
+    isPlayComplete = false;
+
     id = model.id;
     playVideoIndex = 0;
     hasUploadEvent = false;
-    isPlayComplete = false;
-    recommendTimer = null;
-    recommendTimerCancelled.value = false; // 重置标志
     recommendedVideos.clear();
     comments = null;
     _pageNum = 1;

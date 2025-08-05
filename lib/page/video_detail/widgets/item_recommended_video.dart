@@ -11,7 +11,7 @@ import '../../../model/recommend_video_model.dart';
 class RecommendVideoItem extends StatelessWidget {
   const RecommendVideoItem({
     super.key,
-    required this.recommendVideo,
+    this.recommendVideo,
     required this.animationController,
     this.isFullScreen = false,
     this.showAnimate = true,
@@ -20,7 +20,7 @@ class RecommendVideoItem extends StatelessWidget {
     this.height,
   });
 
-  final RecommendVideoModel recommendVideo;
+  final RecommendVideoModel? recommendVideo;
   final AnimationController animationController;
   final bool isFullScreen;
   final bool showAnimate;
@@ -43,7 +43,7 @@ class RecommendVideoItem extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             CommonImage.net(
-              imageUrl: recommendVideo.cover ?? '',
+              imageUrl: recommendVideo?.cover ?? '',
             ),
             if (showAnimate) ...[
               Positioned.fill(

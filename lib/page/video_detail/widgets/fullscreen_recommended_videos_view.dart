@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../model/recommend_video_model.dart';
 import '../../../widget/like_button/like_button.dart';
+import '../video_detail_screen.dart';
 import 'item_recommended_video.dart';
 
 class FullscreenRecommendedVideosView extends StatefulWidget {
@@ -19,7 +20,6 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
   final List<RecommendVideoModel> videos;
   final VoidCallback? onReplay;
   final Function(RecommendVideoModel model)? onPlayNewVideo;
-  final Timer? recommendTimer;
   final VoidCallback? onCancelTimer; // 添加取消timer的回调
 
   const FullscreenRecommendedVideosView({
@@ -32,7 +32,6 @@ class FullscreenRecommendedVideosView extends StatefulWidget {
     this.toShare,
     this.onReplay,
     this.onPlayNewVideo,
-    this.recommendTimer,
     this.onCancelTimer,
   });
 
@@ -108,26 +107,28 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                         color: Colors.white,
                       ),
                     ),
-                    Opacity(
-                      opacity: widget.recommendTimer?.isActive == true ? 1 : 0,
-                      child: GestureDetector(
-                        onTap: _cancelAnimation,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(49),
-                          ),
-                          child: const Text(
-                            '取消连播',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                    Obx(() {
+                      return Opacity(
+                        opacity: !VideoDetailController.of.recommendTimerCancelled.value ? 1 : 0,
+                        child: GestureDetector(
+                          onTap: _cancelAnimation,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(49),
+                            ),
+                            child: const Text(
+                              '取消连播',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -139,25 +140,28 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                       spacing: 12,
                       children: List.generate(
                         widget.videos.length,
-                        (index) {
+                            (index) {
                           final video = widget.videos[index];
                           return SizedBox(
                             width: itemWidth,
                             child: Column(
                               spacing: 8,
                               children: [
-                                RecommendVideoItem(
-                                  onTap: () {
-                                    _cancelAnimation();
-                                    widget.onPlayNewVideo?.call(video);
-                                  },
-                                  recommendVideo: video,
-                                  animationController: _animationController,
-                                  showAnimate: index == 0 && widget.recommendTimer?.isActive == true,
-                                  isFullScreen: true,
-                                  width: itemWidth,
-                                  height: itemWidth / (180 / 100),
-                                ),
+                                Obx(() {
+                                  final recommendTimerCancelled = VideoDetailController.of.recommendTimerCancelled.value;
+                                  return RecommendVideoItem(
+                                    onTap: () {
+                                      _cancelAnimation();
+                                      widget.onPlayNewVideo?.call(video);
+                                    },
+                                    recommendVideo: video,
+                                    animationController: _animationController,
+                                    showAnimate: index == 0 && !recommendTimerCancelled,
+                                    isFullScreen: true,
+                                    width: itemWidth,
+                                    height: itemWidth / (180 / 100),
+                                  );
+                                }),
                                 Text(
                                   video.title ?? '',
                                   style: const TextStyle(

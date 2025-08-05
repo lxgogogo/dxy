@@ -106,7 +106,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                           _cancelAnimation();
                           widget.onPlayNewVideo?.call(widget.videos.first);
                         },
-                        recommendVideo: widget.videos.first,
+                        recommendVideo: widget.videos.firstOrNull,
                         animationController: _animationController,
                         showAnimate: !VideoDetailController.of.recommendTimerCancelled.value,
                         isFullScreen: false,

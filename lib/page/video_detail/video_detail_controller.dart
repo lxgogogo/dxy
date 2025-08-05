@@ -314,8 +314,8 @@ class VideoDetailController extends GetxController {
   Future<void> onReplay() async {
     recommendTimer?.cancel();
     recommendTimer = null;
-    recommendTimerCancelled.value = false;
-    await playVideo();
+    await videoController?.seekTo(Duration.zero);
+    await videoController?.play();
     isPlayComplete = false;
     safeUpdate();
   }
@@ -328,8 +328,8 @@ class VideoDetailController extends GetxController {
   Future<void> onPlayNewVideo(RecommendVideoModel model) async {
     recommendTimer?.cancel();
     recommendTimer = null;
-    recommendTimerCancelled.value = false;
     isPlayComplete = false;
+    safeUpdate();
 
     id = model.id;
     playVideoIndex = 0;

@@ -119,7 +119,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                         spacing: 6.w,
                         children: [
                           Text(
-                            widget.videos.first.title ?? '',
+                            widget.videos.firstOrNull?.title ?? '',
                             style: TextStyle(
                               fontSize: 14.sp,
                               color: Colors.white,
@@ -135,6 +135,7 @@ class _NormalRecommendedVideosViewState extends State<NormalRecommendedVideosVie
                                   _cancelAnimation();
                                   widget.onReplay?.call();
                                 },
+                                behavior: HitTestBehavior.opaque,
                                 child: Row(
                                   spacing: 4.w,
                                   children: [

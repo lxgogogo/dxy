@@ -78,108 +78,111 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
         child: Container(
           color: Colors.black.withValues(alpha: 0.7),
           child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: Get.back,
-                  behavior: HitTestBehavior.opaque,
-                  child: SizedBox(
-                    height: kToolbarHeight,
-                    child: SvgPicture.asset(
-                      Assets.svg.iconBack,
-                      width: 24,
-                      height: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                _buildActionsRow(),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      '推荐视频',
-                      style: TextStyle(
-                        fontSize: 16,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: Get.back,
+                    behavior: HitTestBehavior.opaque,
+                    child: SizedBox(
+                      height: kToolbarHeight,
+                      child: SvgPicture.asset(
+                        Assets.svg.iconBack,
+                        width: 24,
+                        height: 24,
                         color: Colors.white,
                       ),
                     ),
-                    Obx(() {
-                      return Opacity(
-                        opacity: !VideoDetailController.of.recommendTimerCancelled.value ? 1 : 0,
-                        child: GestureDetector(
-                          onTap: _cancelAnimation,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(49),
-                            ),
-                            child: const Text(
-                              '取消连播',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
+                  ),
+                  const SizedBox(height: 24),
+                  _buildActionsRow(),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '推荐视频',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Obx(() {
+                        return Opacity(
+                          opacity: !VideoDetailController.of.recommendTimerCancelled.value ? 1 : 0,
+                          child: GestureDetector(
+                            onTap: _cancelAnimation,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.3),
+                                borderRadius: BorderRadius.circular(49),
+                              ),
+                              child: const Text(
+                                '取消连播',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                LayoutBuilder(builder: (context, constraints) {
-                  final itemWidth = (constraints.maxWidth - 12 * 2) / 3;
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      spacing: 12,
-                      children: List.generate(
-                        widget.videos.length,
-                            (index) {
-                          final video = widget.videos[index];
-                          return SizedBox(
-                            width: itemWidth,
-                            child: Column(
-                              spacing: 8,
-                              children: [
-                                Obx(() {
-                                  final recommendTimerCancelled = VideoDetailController.of.recommendTimerCancelled.value;
-                                  return RecommendVideoItem(
-                                    onTap: () {
-                                      _cancelAnimation();
-                                      widget.onPlayNewVideo?.call(video);
-                                    },
-                                    recommendVideo: video,
-                                    animationController: _animationController,
-                                    showAnimate: index == 0 && !recommendTimerCancelled,
-                                    isFullScreen: true,
-                                    width: itemWidth,
-                                    height: itemWidth / (180 / 100),
-                                  );
-                                }),
-                                Text(
-                                  video.title ?? '',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                        );
+                      }),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  LayoutBuilder(builder: (context, constraints) {
+                    final itemWidth = (constraints.maxWidth - 12 * 2) / 3;
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        spacing: 12,
+                        children: List.generate(
+                          widget.videos.length,
+                              (index) {
+                            final video = widget.videos[index];
+                            return SizedBox(
+                              width: itemWidth,
+                              child: Column(
+                                spacing: 8,
+                                children: [
+                                  Obx(() {
+                                    final recommendTimerCancelled = VideoDetailController.of.recommendTimerCancelled.value;
+                                    return RecommendVideoItem(
+                                      onTap: () {
+                                        _cancelAnimation();
+                                        widget.onPlayNewVideo?.call(video);
+                                      },
+                                      recommendVideo: video,
+                                      animationController: _animationController,
+                                      showAnimate: index == 0 && !recommendTimerCancelled,
+                                      isFullScreen: true,
+                                      width: itemWidth,
+                                      height: itemWidth / (180 / 100),
+                                    );
+                                  }),
+                                  Text(
+                                    video.title ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                }),
-              ],
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         ),
@@ -196,6 +199,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
             _cancelAnimation();
             widget.onReplay?.call();
           },
+          behavior: HitTestBehavior.opaque,
           child: Column(
             spacing: 8,
             children: [

@@ -69,6 +69,7 @@ class VideoDetailController extends GetxController {
     isDisposed = true;
 
     cancelRecommendTimer();
+
     /// 上传视频已播放时长
     _uploadVideoReport();
     _eventSubscription?.cancel();
@@ -99,7 +100,6 @@ class VideoDetailController extends GetxController {
     Future.wait([
       requestDetail(),
       _loadComments(),
-      loadRecommendedVideos(),
     ]).whenComplete(() {
       if (showLoading) {
         DialogUtil.dismiss();
@@ -131,6 +131,7 @@ class VideoDetailController extends GetxController {
           return;
         }
         detailBean = ArticleDetailBean.fromJson(data);
+        await loadRecommendedVideos();
         if (UserStore.of.isLogin) {
           safeUpdate();
           _watchVideo();
@@ -363,7 +364,11 @@ class VideoDetailController extends GetxController {
   }
 
   Future<void> loadRecommendedVideos() async {
-    final res = await VideoService.of.recommendedVideos(id: id);
+    int? queryId = id;
+    if (detailBean?.videoList?.isNotEmpty == true) {
+      queryId = detailBean!.videoList!.last.id;
+    }
+    final res = await VideoService.of.recommendedVideos(id: queryId);
     if (res.isSuccess) {
       final listRes = res.data as List;
       final records = listRes.map((e) => RecommendVideoModel.fromJson(e)).toList();

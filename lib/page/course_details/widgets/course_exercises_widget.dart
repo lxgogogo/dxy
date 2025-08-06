@@ -2,7 +2,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
@@ -12,9 +11,9 @@ import 'package:holdem/services/course_service.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
+import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/widget/common_html/common_html_widget.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../interactive_courses/course_exercises/widget/answer_results_page_sheet.dart';
 
@@ -299,6 +298,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         _title = model.title ?? '';
         _content = model.content ?? '';
         _onContinue();
+      } else {
+        DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_currentPage+1}题');
       }
       return;
     }

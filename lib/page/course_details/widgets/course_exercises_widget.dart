@@ -299,6 +299,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         _content = model.content ?? '';
         _onContinue();
       } else {
+        print('${_completed}:$index');
         DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_currentPage+1}题');
       }
       return;
@@ -465,7 +466,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                 ? constraints.maxWidth
                                 : progress * constraints.maxWidth,
                             decoration: BoxDecoration(
-                              color: '#557BF6'.hexColor,
+                              color: ColorStyle.c557BF6,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(2.w)),
                             )),
@@ -496,7 +497,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                       _currentPage == index &&
                                       (_buttonState == false ||
                                           _buttonState && !_isCorrectAnswer)
-                                  ? ColorStyle.c333333.withOpacity(0.3)
+                                  ? ColorStyle.c557BF6
                                   : model.select == true ||
                                           (_buttonState &&
                                               _currentPage - 1 == index &&
@@ -504,8 +505,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                               _canEdit)
                                       ? ColorStyle.c557BF6
                                       : isCompleted
-                                          ? '#557BF6'.hexColor.withOpacity(0.1)
-                                          : '#333333'.hexColor.withOpacity(0.1),
+                                          ? ColorStyle.c557BF6.withOpacity(0.1)
+                                          : ColorStyle.c333333.withOpacity(0.1),
                             ),
                             alignment: Alignment.center,
                             child: Text(

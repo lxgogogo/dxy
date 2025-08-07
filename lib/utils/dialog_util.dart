@@ -116,7 +116,7 @@ class DialogUtil {
       maskWidget: maskWidget,
       consumeEvent: consumeEvent,
       debounce: debounce ?? true,
-      displayType: displayType,
+      displayType: displayType ?? SmartToastType.onlyRefresh,
       builder: (_) => toast,
     );
   }

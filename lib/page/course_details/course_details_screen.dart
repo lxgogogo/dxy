@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -52,7 +53,11 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                   onRefresh: controller.refreshData,
                 )
               : controller.detailBean == null
-                  ? const SizedBox()
+                  ? const Center(
+                      child: CupertinoActivityIndicator(
+                        color: Colors.grey,
+                      ),
+                    )
                   : SafeArea(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -83,12 +88,11 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                 padding: EdgeInsets.only(top: 16.w),
                                 sliver: SliverToBoxAdapter(
                                   child: CourseExercisesWidget(
-                                    pageType: 1,
-                                    item: controller.detailBean!.practise!,
+                                      pageType: 1,
+                                      item: controller.detailBean!.practise!,
                                       endFunction: (value) {
                                         controller.endFunction(value);
-                                      }
-                                  ),
+                                      }),
                                 ),
                               ),
                             if (controller.detailBean!.challenge != null && UserStore.of.isLogin)

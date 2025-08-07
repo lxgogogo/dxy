@@ -75,6 +75,7 @@ class VideoDetailScreen extends StatelessWidget {
                           controller: controller.refreshController,
                           onLoading: controller.onLoading,
                           child: CustomScrollView(
+                            physics: const ClampingScrollPhysics(),
                             slivers: [
                               SliverToBoxAdapter(
                                 child: Container(

@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
@@ -299,8 +300,8 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
         _content = model.content ?? '';
         _onContinue();
       } else {
-        print('${_completed}:$index');
-        DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_currentPage+1}题');
+        DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_currentPage + 1}题',
+            displayType: SmartToastType.last);
       }
       return;
     }

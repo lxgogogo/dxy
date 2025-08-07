@@ -219,7 +219,7 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '进入德扑克时自动带入积分',
+          '进入德扑克的时侯自动带入积分',
           style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,

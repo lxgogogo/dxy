@@ -47,6 +47,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   bool _buttonState = false;
   int _currentPage = 0;
   int _progress = 0;
+  int _progressIndex = 0;
   int _completed = 0;
   int _totalPage = 0;
   bool _canEdit = true;
@@ -202,10 +203,15 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   // TODO: Tap
 
   void _onPressed() async {
-    if (!_canEdit || _selectAnswerModel == null) {
+    if (_selectAnswerModel == null) {
       return;
     }
     final model = _practiseList[_currentPage];
+    if (model.completed == false && _currentPage != _progress) {
+      DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_progress + 1}题',
+          displayType: SmartToastType.last);
+      return;
+    }
     final req = {'id': model.id, 'answer': _selectAnswerModel?.title ?? ''};
     final data = await CourseService.of.courseListAnswer(req, () {
       if (widget.pageType == 1) {
@@ -263,6 +269,9 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
   }
 
   void _onContinue() {
+    for (final m in _practiseList) {
+      m.select = false;
+    }
     _buttonState = false;
     _result(isCorrect: _isCorrectAnswer);
   }
@@ -271,42 +280,31 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
     // 没有答完+按钮状态是提交+该题未答
     final pModel = _practiseList[_currentPage];
     if (_canEdit && !_buttonState && pModel.completed == false) {
-      model.select = true;
-      _selectAnswerModel = model;
-      for (final m in _dataList) {
-        m.select = false;
-        if (m.id == model.id) {
-          m.select = true;
+      if (_currentPage == _progress) {
+        model.select = true;
+        _selectAnswerModel = model;
+        for (final m in _dataList) {
+          m.select = false;
+          if (m.id == model.id) {
+            m.select = true;
+          }
         }
+        _update();
+      } else {
+        DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_progress + 1}题',
+            displayType: SmartToastType.last);
       }
-      _update();
     }
   }
 
   void _progressOnTap(int index) {
-    if (_currentPage == index) {
+    if (_progressIndex == index) {
       return;
     }
     final model = _practiseList[index];
-    if (model.completed == false || (_canEdit && index > _completed)) {
-      // 选中的是当前的答题
-      if (index == _completed) {
-        _currentPage = index;
-        for (final m in _practiseList) {
-          m.select = false;
-        }
-        _dataList = model.options ?? [];
-        _title = model.title ?? '';
-        _content = model.content ?? '';
-        _onContinue();
-      } else {
-        DialogUtil.showToast('请按顺序进行答题，当前需先完成第${_currentPage + 1}题',
-            displayType: SmartToastType.last);
-      }
-      return;
-    }
     _onContinue();
     _currentPage = index;
+    _progressIndex = index;
     for (final m in _practiseList) {
       m.select = false;
     }
@@ -498,7 +496,7 @@ class _CourseExercisesWidgetState extends State<CourseExercisesWidget> {
                                       _currentPage == index &&
                                       (_buttonState == false ||
                                           _buttonState && !_isCorrectAnswer)
-                                  ? ColorStyle.c557BF6
+                                  ? ColorStyle.c333333.withOpacity(0.3)
                                   : model.select == true ||
                                           (_buttonState &&
                                               _currentPage - 1 == index &&

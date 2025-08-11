@@ -10,11 +10,11 @@ import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
 import 'package:holdem/page/mine/widgets/mine_child_view.dart';
 import 'package:holdem/routes/app_pages.dart';
+import 'package:holdem/services/points_service.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 
 import '../../utils/track_utils.dart';
-import '../../widget/custom_underline_tab_indicator.dart';
 import 'widgets/mine_collect_view.dart';
 import 'widgets/mine_tabbar_widget.dart';
 
@@ -114,7 +114,7 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                                   ),
                                                   SizedBox(width: 2.w),
                                                   Text(
-                                                    '积分兑换',
+                                                    '积分转换',
                                                     style: TextStyle(fontSize: 12.sp, color: AppTheme.color_557BF6),
                                                   )
                                                 ],
@@ -251,6 +251,19 @@ class _MineScreenState extends State<MineScreen> with AutomaticKeepAliveClientMi
                                             },
                                             child: Text(
                                               '粉丝 ${UserStore.of.user?.fansCount.abbreviateNumber ?? '0'}',
+                                              style: TextStyle(
+                                                color: AppTheme.color_666666,
+                                                fontSize: 12.sp,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(Routes.pointsConversion);
+                                            },
+                                            child: Text(
+                                              '积分 ${controller.dxyBalance.value}',
                                               style: TextStyle(
                                                 color: AppTheme.color_666666,
                                                 fontSize: 12.sp,

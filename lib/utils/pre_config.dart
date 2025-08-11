@@ -14,6 +14,7 @@ import 'package:holdem/utils/storage.dart';
 import '../services/index.dart';
 import '../stores/captcha_store.dart';
 import '../stores/config_store.dart';
+import '../stores/localize_store.dart';
 import 'env.dart';
 import 'interceptors.dart';
 
@@ -43,8 +44,7 @@ class PreConfig {
       );
       GooglePlayServicesAvailability? availability;
       if (Platform.isAndroid) {
-        availability = await GoogleApiAvailability.instance
-            .checkGooglePlayServicesAvailability();
+        availability = await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
       }
       if (availability?.value != 5) {
         await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -54,6 +54,10 @@ class PreConfig {
         permanent: true,
       );
       StorageUtil().init();
+      Get.put<LocalizeStore>(
+        LocalizeStore(),
+        permanent: true,
+      );
       Get.put<UserStore>(
         UserStore(),
         permanent: true,

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -10,6 +11,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'i18n/d_pokers_i18n.dart';
 import 'utils/env.dart';
 import 'utils/pre_config.dart';
 
@@ -98,13 +100,13 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
               FlutterQuillLocalizations.delegate,
             ],
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('zh', 'CN'),
-            ],
-            localeResolutionCallback: (locale, Iterable<Locale> supportedLocales) {
+            translations: DPokersI18n(),
+            supportedLocales: DPokersI18n.supported,
+            localeResolutionCallback: (Locale? locale, Iterable<Locale> supportedLocales) {
               return locale;
             },
+            fallbackLocale: DPokersI18n.fallback,
+            locale: Get.locale,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: AppTheme.color_008EFF),
               useMaterial3: true,

@@ -168,12 +168,12 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                           cacheKey: controller.banners[index].imgMobile ?? '',
                                                           placeholder: (context, url) =>
                                                               Assets.images.imageLoadingDef.image(
-                                                                fit: BoxFit.fill,
-                                                              ),
+                                                            fit: BoxFit.fill,
+                                                          ),
                                                           errorWidget: (context, url, error) =>
                                                               Assets.images.imageLoadingDef.image(
-                                                                fit: BoxFit.cover,
-                                                              ),
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
                                                       );
                                                     },
@@ -255,6 +255,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                 ),
                                                 HomeMenuItem(
                                                   itemWidth: itemWidth,
+                                                  name: '互动课程',
+                                                  nameEn: 'Course',
+                                                  imagePath: Assets.images.iconHomeMainCourse.path,
+                                                  onTap: () {
+                                                    controller.changeMainTab(2);
+                                                  },
+                                                ),
+                                                HomeMenuItem(
+                                                  itemWidth: itemWidth,
                                                   name: '德州教程',
                                                   nameEn: 'Tutorial',
                                                   imagePath: Assets.images.iconHomeCourse.path,
@@ -273,16 +282,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                     userLogType: '101004',
                                                   ),
                                                 ),
-                                                HomeMenuItem(
-                                                  itemWidth: itemWidth,
-                                                  name: '实用工具',
-                                                  nameEn: 'Tools',
-                                                  imagePath: Assets.images.iconHomeTool.path,
-                                                  onTap: TrackUtils.trackedTap(
-                                                    onTap: () => Get.toNamed(Routes.toolList),
-                                                    userLogType: '101014',
-                                                  ),
-                                                ),
+                                                // HomeMenuItem(
+                                                //   itemWidth: itemWidth,
+                                                //   name: '实用工具',
+                                                //   nameEn: 'Tools',
+                                                //   imagePath: Assets.images.iconHomeTool.path,
+                                                //   onTap: TrackUtils.trackedTap(
+                                                //     onTap: () => Get.toNamed(Routes.toolList),
+                                                //     userLogType: '101014',
+                                                //   ),
+                                                // ),
                                               ],
                                             );
                                           },
@@ -335,24 +344,24 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             children: controller.hotVideos
                                                 .map(
                                                   (e) => SizedBox(
-                                                width: itemWidth,
-                                                child: VideoItem(
-                                                  onTap: () =>
-                                                      TrackUtils.trackEvent(userLogType: '101006', params: e.id),
-                                                  item: ArticleBean(
-                                                      id: e.id,
-                                                      cover: e.cover,
-                                                      viewCount: e.viewCount,
-                                                      duration: e.duration,
-                                                      title: e.title,
-                                                      createdAt: e.createdAt,
-                                                      type: e.type,
-                                                      likeCount: e.likeCount,
-                                                      commentCount: e.commentCount,
-                                                      featured: e.featured),
-                                                ),
-                                              ),
-                                            )
+                                                    width: itemWidth,
+                                                    child: VideoItem(
+                                                      onTap: () =>
+                                                          TrackUtils.trackEvent(userLogType: '101006', params: e.id),
+                                                      item: ArticleBean(
+                                                          id: e.id,
+                                                          cover: e.cover,
+                                                          viewCount: e.viewCount,
+                                                          duration: e.duration,
+                                                          title: e.title,
+                                                          createdAt: e.createdAt,
+                                                          type: e.type,
+                                                          likeCount: e.likeCount,
+                                                          commentCount: e.commentCount,
+                                                          featured: e.featured),
+                                                    ),
+                                                  ),
+                                                )
                                                 .toList(),
                                           );
                                         },
@@ -366,9 +375,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                         runSpacing: 12.w,
                                         children: controller.videoItems
                                             .map((e) => VideoHorizontalItem(
-                                          item: e,
-                                          onTap: () => TrackUtils.trackEvent(userLogType: '101008', params: e.id),
-                                        ))
+                                                  item: e,
+                                                  onTap: () =>
+                                                      TrackUtils.trackEvent(userLogType: '101008', params: e.id),
+                                                ))
                                             .toList(),
                                       ),
                                       const HomeCourseGroup(),
@@ -446,10 +456,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                             runSpacing: 12.w,
                                             children: controller.bookItems
                                                 .map((e) => ThreeDBookItem(
-                                                itemWidth: itemWidth,
-                                                item: e,
-                                                onTap: () =>
-                                                    TrackUtils.trackEvent(userLogType: '101012', params: e.id)))
+                                                    itemWidth: itemWidth,
+                                                    item: e,
+                                                    onTap: () =>
+                                                        TrackUtils.trackEvent(userLogType: '101012', params: e.id)))
                                                 .toList(),
                                           );
                                         },

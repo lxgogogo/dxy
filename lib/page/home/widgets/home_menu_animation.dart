@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/gen/assets.gen.dart';
+import 'package:holdem/page/home/home_screen.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../../utils/track_utils.dart';
@@ -63,6 +64,15 @@ class HomeMenu extends StatelessWidget {
                 ),
                 SizedBox(width: 6.w),
                 MenuItem(
+                  name: '互动课程',
+                  nameEn: 'Course',
+                  imagePath: Assets.images.iconHomeMainCourse.path,
+                  onTap: () {
+                    HomeController.of.changeMainTab(2);
+                  },
+                ),
+                SizedBox(width: 6.w),
+                MenuItem(
                   name: '德州教程',
                   nameEn: 'Tutorial',
                   imagePath: Assets.images.iconHomeCourse.path,
@@ -81,16 +91,16 @@ class HomeMenu extends StatelessWidget {
                     userLogType: '101004',
                   ),
                 ),
-                SizedBox(width: 6.w),
-                MenuItem(
-                  name: '实用工具',
-                  nameEn: 'Tools',
-                  imagePath: Assets.images.iconHomeTool.path,
-                  onTap: TrackUtils.trackedTap(
-                    onTap: () => Get.toNamed(Routes.toolList),
-                    userLogType: '101014',
-                  ),
-                ),
+                // SizedBox(width: 6.w),
+                // MenuItem(
+                //   name: '实用工具',
+                //   nameEn: 'Tools',
+                //   imagePath: Assets.images.iconHomeTool.path,
+                //   onTap: TrackUtils.trackedTap(
+                //     onTap: () => Get.toNamed(Routes.toolList),
+                //     userLogType: '101014',
+                //   ),
+                // ),
               ],
             ),
           ),

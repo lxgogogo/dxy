@@ -374,7 +374,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   }
 
   changeMainTab(int i) {
-    Get.find<MainController>().onTabBarItem(1);
+    Get.find<MainController>().onTabBarItem(i);
   }
 
   void tagOnTap(value) async {

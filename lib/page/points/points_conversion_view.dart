@@ -34,7 +34,7 @@ class _PointsConversionPageState extends State<PointsConversionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CommonAppBar.arrowBack(context, title: '积分兑换'),
+        appBar: CommonAppBar.arrowBack(context, title: '积分转换'),
         body: SafeArea(child: Obx(() {
           final dxyBalance = controller.dxyBalance.value;
           final dpkBalance = controller.dpkBalance.value;

@@ -7,13 +7,6 @@ class CommentPublishController extends GetxController {
 
   CommentPublishController(this.relType, this.relId, this.sourceType);
 
-  // @override
-  // void onInit() {
-  //   relType = Get.arguments['relType'] as String? ?? '';
-  //   relId = Get.arguments['relId'] as int? ?? 0;
-  //   super.onInit();
-  // }
-
   final QuillController quillController = QuillController.basic();
   final FocusNode focusNode = FocusNode();
 
@@ -22,6 +15,23 @@ class CommentPublishController extends GetxController {
   final aitUserBeanList = <UserProfile>[]; //@返回的所有用户集合，
 
   String aitUserContent = ''; //@用户的内容
+
+  bool canSubmit = false;
+
+  @override
+  void onReady() {
+    quillController.addListener(() {
+      final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
+        List.castFrom(quillController.document.toDelta().toJson()),
+        ConverterOptions.forEmail(),
+      );
+      final content = converter.convert();
+      final isEmptyText = HtmlParseUtil.of.isEmptyText(content);
+      canSubmit = !isEmptyText || imageData.isNotEmpty;
+      safeUpdate();
+    });
+    super.onReady();
+  }
 
   openFilePicker() async {
     final ImagePicker picker = ImagePicker();
@@ -69,7 +79,6 @@ class CommentPublishController extends GetxController {
       imageUrlList.clear();
     }
     final isEmpty = HtmlParseUtil.of.isEmptyText(content);
-    ;
     if (isEmpty && imageData.isEmpty) {
       DialogUtil.showToast('评论内容不能为空');
       return;
@@ -121,7 +130,7 @@ class CommentPublishController extends GetxController {
         TrackUtils.trackEvent(userLogType: '109005', params: relId);
         break;
       case SourceType.tool:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
   }
 

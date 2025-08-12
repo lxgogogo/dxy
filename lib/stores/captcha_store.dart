@@ -23,7 +23,8 @@ class CaptchaStore extends GetxController {
   void initCaptcha() {
     final config = GT4SessionConfiguration()
       ..language = "zho"
-      ..debugEnable = false;
+      ..debugEnable = false
+      ..canceledOnTouchOutside = false;
     captcha = Gt4FlutterPlugin("a1180705fb3ea00bafb693d8cb40cafd", config);
     captcha!.addEventHandler(
       onShow: (Map<String, dynamic> message) async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/safe_update_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/model/user.dart';
 import 'package:holdem/page/home/home_screen.dart';
@@ -13,6 +14,7 @@ import 'package:holdem/utils/net_request.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 import '../../utils/dialog_util.dart';
+import '../../utils/html_parse_util.dart';
 import '../../utils/track_utils.dart';
 
 part 'comment_input_controller.dart';
@@ -107,7 +109,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
                       child: Text(
                         '发布',
                         style: TextStyle(
-                          color: '#557BF6'.hexColor,
+                          color: controller.canSubmit ? '#557BF6'.hexColor :'#999999'.hexColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
                         ),

@@ -260,7 +260,7 @@ class CommentPublishScreen extends GetView<CommentPublishController> {
               child: Text(
                 '发布',
                 style: TextStyle(
-                  color: '#557BF6'.hexColor,
+                  color: controller.canSubmit ? '#557BF6'.hexColor :'#999999'.hexColor,
                   fontWeight: FontWeight.w600,
                   fontSize: 14.sp,
                 ),

@@ -189,6 +189,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
+                                            physics: const ClampingScrollPhysics(),
                                             cacheExtent: 10000,
                                             padding: EdgeInsets.zero,
                                             itemCount: controller.courseItems.length,
@@ -220,6 +221,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
+                                            physics: const ClampingScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {
@@ -244,6 +246,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
+                                            physics: const ClampingScrollPhysics(),
                                             cacheExtent: 10000,
                                             padding: EdgeInsets.zero,
                                             itemCount: controller.courseItems.length,
@@ -265,6 +268,7 @@ class _MainCoursesScreenState extends State<MainCoursesScreen> {
                                           enablePullUp: controller.courseItems.isNotEmpty == true || !controller.noMore,
                                           isLoading: controller.isLoading,
                                           child: ListView.separated(
+                                            physics: const ClampingScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             itemCount: controller.courseItems.length,
                                             itemBuilder: (BuildContext context, int index) {

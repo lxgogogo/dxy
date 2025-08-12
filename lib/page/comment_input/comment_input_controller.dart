@@ -17,7 +17,22 @@ class CommentInputController extends GetxController {
 
   final aitUserBeanList = <UserProfile>[];
 
-  bool canSend = false;
+  bool canSubmit = false;
+
+  @override
+  void onReady() {
+    quillController.addListener(() {
+      final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(
+        List.castFrom(quillController.document.toDelta().toJson()),
+        ConverterOptions.forEmail(),
+      );
+      final content = converter.convert();
+      final isEmptyText = HtmlParseUtil.of.isEmptyText(content);
+      canSubmit = !isEmptyText;
+      safeUpdate();
+    });
+    super.onReady();
+  }
 
   void submit() {
     final QuillDeltaToHtmlConverter converter = QuillDeltaToHtmlConverter(

@@ -20,7 +20,7 @@ class DialogUtil {
   static Future<void> showLoading({
     String text = '',
   }) async {
-    unFocusKeyBoard();
+    // unFocusKeyBoard();
     dismiss();
     await SmartDialog.showLoading(
       builder: (context) => Center(

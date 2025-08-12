@@ -42,6 +42,7 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
     final res = await PointsService.coinAutoTransStatus({'status': status});
     if (res?.isSuccess) {
       coinAutoTransStatus.value = value == true ? 1 : 0;
+      DialogUtil.showToast('开关切换成功');
     }
   }
 
@@ -104,6 +105,5 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
     tips.value = '';
     textEditingController.text = '';
     isPointToCoin.value = !isPointToCoin.value;
-    DialogUtil.showToast('开关切换成功');
   }
 }

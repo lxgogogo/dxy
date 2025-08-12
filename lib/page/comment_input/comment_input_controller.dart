@@ -14,6 +14,7 @@ class CommentInputController extends GetxController {
   );
 
   final QuillController quillController = QuillController.basic();
+  final FocusNode focusNode = FocusNode();
 
   final aitUserBeanList = <UserProfile>[];
 

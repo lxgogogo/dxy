@@ -40,7 +40,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
       builder: (logic) {
         return Container(
           padding:
-              EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.w).copyWith(bottom: ScreenUtil().bottomBarHeight),
+              EdgeInsets.symmetric(horizontal: 15.w, vertical: 18.w),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(
@@ -59,6 +59,7 @@ class CommentInputScreen extends GetView<CommentInputController> {
                       padding: EdgeInsets.symmetric(vertical: 8.w),
                       child: QuillEditor.basic(
                         controller: controller.quillController,
+                        focusNode: controller.focusNode,
                         config: QuillEditorConfig(
                           showCursor: true,
                           embedBuilders: FlutterQuillEmbeds.editorBuilders(),

@@ -406,6 +406,8 @@ class _CommentItemState extends State<CommentItem> {
                       onTap: () {
                         UserStore.of.checkLogin(() {
                           Get.bottomSheet(
+                            isScrollControlled: true,
+                            enableDrag: false,
                             CommentInputScreen(
                               relType: widget.commentBean.relType ?? '',
                               relId: widget.commentBean.id ?? 0,

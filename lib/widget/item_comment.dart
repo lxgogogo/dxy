@@ -103,7 +103,7 @@ class _CommentItemState extends State<CommentItem> {
       name = widget.commentBean.user?.nickname ?? '';
       title = '关注';
       if (widget.commentBean.followed == true) {
-        title = '取消关注用户';
+        title = '取消关注';
       }
     } else {
       id = data.user?.id ?? 0;

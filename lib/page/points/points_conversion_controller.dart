@@ -104,5 +104,6 @@ class PointsConversionController extends GetxController with GetSingleTickerProv
     tips.value = '';
     textEditingController.text = '';
     isPointToCoin.value = !isPointToCoin.value;
+    DialogUtil.showToast('开关切换成功');
   }
 }

@@ -155,6 +155,7 @@ class FeedPostScreen extends GetView<FeedPostController> {
           GestureDetector(
             onTap: () {
               showCommonOperationsSheet(
+                selectedIndex: controller.prefixIndex,
                 items: controller.boardInfoList.map((e) => e.name ?? '').toList(),
                 onSelectItem: (int index) {
                   if (controller.prefixIndex != index) {
@@ -319,8 +320,8 @@ class FeedPostScreen extends GetView<FeedPostController> {
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 0.5.w),
-            )),
+          bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 0.5.w),
+        )),
         child: Wrap(
           spacing: 12.w,
           runSpacing: 8.w,

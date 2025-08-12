@@ -65,7 +65,6 @@ class _CommonOperationsSheetState extends State<CommonOperationsSheet> {
         if (widget.selectedIndex != null) {
           _scrollController.scrollToIndex(
             widget.selectedIndex!,
-            preferPosition: AutoScrollPosition.begin,
           );
         }
       }

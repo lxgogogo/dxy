@@ -55,7 +55,6 @@ class _VideoChildListSheetState extends State<VideoChildListSheet> {
         if (widget.selectedIndex != null) {
           _scrollController.scrollToIndex(
             widget.selectedIndex!,
-            preferPosition: AutoScrollPosition.begin,
           );
         }
       }

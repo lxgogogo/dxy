@@ -64,6 +64,7 @@ class FeedListChildViewState extends State<FeedListChildView> {
   StreamSubscription? tabEvent;
   StreamSubscription? postFeedEvent;
   StreamSubscription? refreshNumEventObs;
+  StreamSubscription? refreshDataEventObs;
 
   void _onRefresh() async {
     EventBusUtil.of.fire(EventRefreshFeedTabs());
@@ -119,6 +120,9 @@ class FeedListChildViewState extends State<FeedListChildView> {
       boardSort = NetRequest.BOARD_SORT_TIME;
       _onRefresh();
     });
+    refreshDataEventObs = EventBusUtil.of.on<EventPostFeed>().listen((event) {
+      _onRefresh();
+    });
     refreshNumEventObs = EventBusUtil.of.on<EventRefreshNum>().listen((event) {
       final index = boardPostList.indexWhere((e) => e.id == event.id);
       if (index != -1) {
@@ -137,6 +141,7 @@ class FeedListChildViewState extends State<FeedListChildView> {
     tabEvent?.cancel();
     postFeedEvent?.cancel();
     scrollController.dispose();
+    refreshDataEventObs?.cancel();
     super.dispose();
   }
 

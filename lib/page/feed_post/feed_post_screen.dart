@@ -315,13 +315,13 @@ class FeedPostScreen extends GetView<FeedPostController> {
 
   Widget buildTagList(FeedPostController controller) {
     return SafeArea(
-      child: Container(
-        margin: EdgeInsets.only(right: 16.w, top: 16.w),
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-            border: Border(
-          bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 0.5.w),
-        )),
+      child: Padding(
+        padding: EdgeInsets.only(right: 16.w, top: 16.w),
+        // alignment: Alignment.centerLeft,
+        // decoration: BoxDecoration(
+        //     border: Border(
+        //   bottom: BorderSide(color: '#000000'.hexColor.withOpacity(0.05), width: 0.5.w),
+        // )),
         child: Wrap(
           spacing: 12.w,
           runSpacing: 8.w,

@@ -237,14 +237,15 @@ class FeedListChildViewState extends State<FeedListChildView> {
       return const CupertinoActivityIndicator(color: Colors.grey);
     }
     return SmartRefresher(
-      enablePullDown: true,
+      enablePullDown: false,
       enablePullUp: boardPostList.isNotEmpty == true || !noMore,
       controller: _refreshController,
-      onRefresh: _onRefresh,
+      // onRefresh: _onRefresh,
       onLoading: _onLoading,
       scrollController: scrollController,
       child: boardPostList.isNotEmpty
           ? CustomScrollView(
+              physics: const ClampingScrollPhysics(),
               slivers: [
                 SliverToBoxAdapter(
                   child: Column(

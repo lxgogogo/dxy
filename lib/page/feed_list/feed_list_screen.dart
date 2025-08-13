@@ -164,7 +164,7 @@ class _FeedListScreenState extends State<FeedListScreen> with SingleTickerProvid
                     children: List.generate(showBoardInfoList.length, (index) {
                       return FeedListChildView(
                         boardId: showBoardInfoList[selIndex].id ?? 0,
-                      ).keepAlive;
+                      );
                     }).toList(),
                   )),
             )

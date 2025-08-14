@@ -13,6 +13,7 @@ import 'package:holdem/page/home/home_screen.dart';
 import 'package:holdem/stores/user_store.dart';
 import 'package:holdem/utils/app_theme.dart';
 import 'package:holdem/utils/color_style_util.dart';
+import 'package:holdem/utils/event_bus_util.dart';
 import 'package:holdem/utils/media_helper.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/count_widget.dart';
@@ -192,6 +193,7 @@ class _CommentItemState extends State<CommentItem> {
         }
         callBack();
         _updateFollowData(id, followed);
+        EventBusUtil.of.fire(EventUserFollow(id: id, followed: followed));
       });
     });
   }
@@ -200,6 +202,13 @@ class _CommentItemState extends State<CommentItem> {
     for (final m in widget.commentsData) {
       if (m.user?.id == id) {
         m.followed = followed;
+        final list = m.replies ?? [];
+        for (final sm in list) {
+          if (sm.user?.id == id) {
+            sm.followed = followed;
+          }
+        }
+      } else {
         final list = m.replies ?? [];
         for (final sm in list) {
           if (sm.user?.id == id) {
@@ -228,7 +237,9 @@ class _CommentItemState extends State<CommentItem> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         BorderAvatar(
-          avatar: widget.commentBean.user != null ? widget.commentBean.user!.avatar! : '',
+          avatar: widget.commentBean.user != null
+              ? widget.commentBean.user!.avatar!
+              : '',
           borderWidth: 0,
         ),
         SizedBox(width: 8.w),
@@ -250,7 +261,8 @@ class _CommentItemState extends State<CommentItem> {
                       ),
                       if ((widget.commentBean.user?.id ?? 0) != 0)
                         Visibility(
-                          visible: !UserStore.of.isMe(widget.commentBean.user?.id), //
+                          visible: !UserStore.of
+                              .isMe(widget.commentBean.user?.id), //
                           child: GestureDetector(
                             onTap: () async {
                               _followToggle(type: 0);
@@ -262,11 +274,15 @@ class _CommentItemState extends State<CommentItem> {
                                 height: 22.w,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(6.w)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(6.w)),
                                     color: widget.commentBean.followed == true
                                         ? ColorStyle.c333333.withOpacity(0.1)
                                         : ColorStyle.c557BF6.withOpacity(0.1)),
-                                child: Text(widget.commentBean.followed == true ? '已关注' : '关注',
+                                child: Text(
+                                    widget.commentBean.followed == true
+                                        ? '已关注'
+                                        : '关注',
                                     style: TextStyle(
                                       color: widget.commentBean.followed == true
                                           ? AppTheme.color_333333
@@ -284,9 +300,11 @@ class _CommentItemState extends State<CommentItem> {
                   if (showReport)
                     GestureDetector(
                       onTap: () {
-                        if (widget.commentBean.id != null && widget.commentBean.user?.id != null) {
+                        if (widget.commentBean.id != null &&
+                            widget.commentBean.user?.id != null) {
                           UserStore.of.checkLogin(() {
-                            _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                            _onReport(widget.commentBean.id!,
+                                widget.commentBean.user!.id!);
                           });
                         }
                       },
@@ -322,7 +340,10 @@ class _CommentItemState extends State<CommentItem> {
                       onTap: () {
                         MediaHelper().imagePerView(
                           context,
-                          widget.commentBean.files?.map((e) => e.url ?? '').toList() ?? [],
+                          widget.commentBean.files
+                                  ?.map((e) => e.url ?? '')
+                                  .toList() ??
+                              [],
                           index,
                         );
                       },
@@ -331,8 +352,12 @@ class _CommentItemState extends State<CommentItem> {
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: widget.commentBean.files?[index].url ?? '',
-                          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+                          placeholder: (context, url) => Assets
+                              .images.imageLoadingDef
+                              .image(fit: BoxFit.fill),
+                          errorWidget: (context, url, error) => Assets
+                              .images.imageLoadingDef
+                              .image(fit: BoxFit.fill),
                         ),
                       ),
                     );
@@ -353,13 +378,18 @@ class _CommentItemState extends State<CommentItem> {
                   const Spacer(),
                   if (!widget.isReply) ...[
                     CountLikeAni(
-                      count: widget.commentBean.likeCount?.abbreviateNumber ?? '0',
+                      count:
+                          widget.commentBean.likeCount?.abbreviateNumber ?? '0',
                       liked: widget.commentBean.liked ?? false,
                       usePlaceHolder: false,
                       likeWidget: Center(
                         child: SvgPicture.asset(
-                          widget.commentBean.liked == true ? Assets.svg.liked : Assets.svg.like,
-                          color: widget.commentBean.liked == true ? null : '#999999'.hexColor,
+                          widget.commentBean.liked == true
+                              ? Assets.svg.liked
+                              : Assets.svg.like,
+                          color: widget.commentBean.liked == true
+                              ? null
+                              : '#999999'.hexColor,
                           width: 14.w,
                           height: 14.w,
                         ),
@@ -368,26 +398,36 @@ class _CommentItemState extends State<CommentItem> {
                         final data = await NetRequest().newContentLike({
                           'relType': 'comment',
                           'relId': widget.commentBean.id,
-                          'state': widget.commentBean.liked == true ? false : true
+                          'state':
+                              widget.commentBean.liked == true ? false : true
                         });
                         if (data is int) {
                           widget.commentBean.liked = !widget.commentBean.liked!;
                           int count = widget.commentBean.likeCount!;
-                          widget.commentBean.likeCount = widget.commentBean.liked! ? count + 1 : count - 1;
+                          widget.commentBean.likeCount =
+                              widget.commentBean.liked! ? count + 1 : count - 1;
                           if (widget.commentBean.liked == true) {
                             DialogUtil.showToast('点赞成功');
                             switch (widget.sourceType) {
                               case SourceType.video:
-                                TrackUtils.trackEvent(userLogType: '103008', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '103008',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.course:
-                                TrackUtils.trackEvent(userLogType: '105007', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '105007',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.book:
-                                TrackUtils.trackEvent(userLogType: '107008', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '107008',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.feed:
-                                TrackUtils.trackEvent(userLogType: '109007', params: widget.sourceId);
+                                TrackUtils.trackEvent(
+                                    userLogType: '109007',
+                                    params: widget.sourceId);
                                 break;
                               case SourceType.tool:
                               // TODO: Handle this case.
@@ -419,7 +459,9 @@ class _CommentItemState extends State<CommentItem> {
                       },
                       child: (widget.commentBean.replyCount ?? 0) > 0
                           ? CountReply(
-                              count: widget.commentBean.replyCount?.abbreviateNumber ?? '0',
+                              count: widget.commentBean.replyCount
+                                      ?.abbreviateNumber ??
+                                  '0',
                               usePlaceHolder: false,
                               iconWidget: SvgPicture.asset(
                                 Assets.svg.feedComment,
@@ -474,7 +516,8 @@ class _CommentItemState extends State<CommentItem> {
                               SizedBox(width: 8.w),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Row(
                                       children: [
@@ -490,30 +533,52 @@ class _CommentItemState extends State<CommentItem> {
                                             ),
                                             if ((reply.user?.id ?? 0) != 0)
                                               Visibility(
-                                                visible: !UserStore.of.isMe(reply.user?.id),
+                                                visible: !UserStore.of
+                                                    .isMe(reply.user?.id),
                                                 child: GestureDetector(
                                                   onTap: () async {
-                                                    _followToggle(type: 1, data: reply);
+                                                    _followToggle(
+                                                        type: 1, data: reply);
                                                   },
                                                   child: Container(
-                                                    margin: EdgeInsets.only(left: 4.w),
+                                                    margin: EdgeInsets.only(
+                                                        left: 4.w),
                                                     child: Container(
                                                       width: 56.w,
                                                       height: 22.w,
-                                                      alignment: Alignment.center,
+                                                      alignment:
+                                                          Alignment.center,
                                                       decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.all(Radius.circular(6.w)),
-                                                          color: reply.followed == true
-                                                              ? ColorStyle.c333333.withOpacity(0.1)
-                                                              : ColorStyle.c557BF6.withOpacity(0.1)),
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          6.w)),
+                                                          color: reply.followed ==
+                                                                  true
+                                                              ? ColorStyle
+                                                                  .c333333
+                                                                  .withOpacity(
+                                                                      0.1)
+                                                              : ColorStyle
+                                                                  .c557BF6
+                                                                  .withOpacity(
+                                                                      0.1)),
                                                       child: Text(
-                                                        reply.followed == true ? '已关注' : '关注',
+                                                        reply.followed == true
+                                                            ? '已关注'
+                                                            : '关注',
                                                         style: TextStyle(
-                                                          color: reply.followed == true
-                                                              ? AppTheme.color_333333
-                                                              : '#557BF6'.hexColor,
+                                                          color: reply
+                                                                      .followed ==
+                                                                  true
+                                                              ? AppTheme
+                                                                  .color_333333
+                                                              : '#557BF6'
+                                                                  .hexColor,
                                                           fontSize: 10.sp,
-                                                          fontWeight: FontWeight.w600,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
                                                       ),
                                                     ),
@@ -526,10 +591,15 @@ class _CommentItemState extends State<CommentItem> {
                                         if (showReplyReport)
                                           GestureDetector(
                                             onTap: () {
-                                              if (widget.commentBean.id != null &&
-                                                  widget.commentBean.user?.id != null) {
+                                              if (widget.commentBean.id !=
+                                                      null &&
+                                                  widget.commentBean.user?.id !=
+                                                      null) {
                                                 UserStore.of.checkLogin(() {
-                                                  _onReport(widget.commentBean.id!, widget.commentBean.user!.id!);
+                                                  _onReport(
+                                                      widget.commentBean.id!,
+                                                      widget.commentBean.user!
+                                                          .id!);
                                                 });
                                               }
                                             },
@@ -562,45 +632,63 @@ class _CommentItemState extends State<CommentItem> {
                                         ),
                                         const Spacer(),
                                         CountLikeAni(
-                                          count: reply.likeCount.abbreviateNumber,
+                                          count:
+                                              reply.likeCount.abbreviateNumber,
                                           liked: reply.liked ?? false,
                                           likeWidget: Center(
                                             child: SvgPicture.asset(
-                                              reply.liked == true ? Assets.svg.liked : Assets.svg.like,
-                                              color: reply.liked == true ? null : '#999999'.hexColor,
+                                              reply.liked == true
+                                                  ? Assets.svg.liked
+                                                  : Assets.svg.like,
+                                              color: reply.liked == true
+                                                  ? null
+                                                  : '#999999'.hexColor,
                                               width: 14.w,
                                               height: 14.w,
                                             ),
                                           ),
                                           usePlaceHolder: false,
                                           onToggleLike: () async {
-                                            final data = await NetRequest().newContentLike({
+                                            final data = await NetRequest()
+                                                .newContentLike({
                                               'relType': 'comment',
                                               'relId': reply.id,
-                                              'state': reply.liked == true ? false : true
+                                              'state': reply.liked == true
+                                                  ? false
+                                                  : true
                                             });
                                             if (data is int) {
                                               reply.liked = !reply.liked!;
                                               int count = reply.likeCount!;
-                                              reply.likeCount = reply.liked! ? count + 1 : count - 1;
+                                              reply.likeCount = reply.liked!
+                                                  ? count + 1
+                                                  : count - 1;
                                               if (reply.liked == true) {
                                                 DialogUtil.showToast('点赞成功');
                                                 switch (widget.sourceType) {
                                                   case SourceType.video:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '103009', params: widget.sourceId);
+                                                        userLogType: '103009',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.course:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '105008', params: widget.sourceId);
+                                                        userLogType: '105008',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.book:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '107009', params: widget.sourceId);
+                                                        userLogType: '107009',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.feed:
                                                     TrackUtils.trackEvent(
-                                                        userLogType: '109008', params: widget.sourceId);
+                                                        userLogType: '109008',
+                                                        params:
+                                                            widget.sourceId);
                                                     break;
                                                   case SourceType.tool:
                                                   // TODO: Handle this case.
@@ -629,14 +717,16 @@ class _CommentItemState extends State<CommentItem> {
                         margin: EdgeInsets.only(left: 38.w, top: 4.w),
                         child: Row(
                           children: [
-                            if ((widget.commentBean.replyCount ?? 0) > (widget.commentBean.replies?.length ?? 0)) ...[
+                            if ((widget.commentBean.replyCount ?? 0) >
+                                (widget.commentBean.replies?.length ?? 0)) ...[
                               GestureDetector(
                                 onTap: () {
                                   getReplyList();
                                 },
                                 child: Container(
                                   height: 22.w,
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: '#333333'.hexColor.withOpacity(0.05),
@@ -664,12 +754,15 @@ class _CommentItemState extends State<CommentItem> {
                               GestureDetector(
                                 onTap: () {
                                   pageNum = 1;
-                                  widget.commentBean.replies = List.of(widget.commentBean.replies?.take(2) ?? []);
+                                  widget.commentBean.replies = List.of(
+                                      widget.commentBean.replies?.take(2) ??
+                                          []);
                                   setState(() {});
                                 },
                                 child: Container(
                                   height: 22.w,
-                                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.w),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: const Color(0xfff2f4f6),
@@ -769,8 +862,10 @@ class BorderAvatar extends StatelessWidget {
           // cacheKey: avatar,
           // memCacheWidth: avatarSize.toInt(),
           // memCacheHeight: avatarSize.toInt(),
-          placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-          errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          placeholder: (context, url) =>
+              Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
+          errorWidget: (context, url, error) =>
+              Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
         ),
       ),
     );

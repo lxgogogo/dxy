@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,8 +47,33 @@ class CommonDetailBottomView extends StatefulWidget {
 }
 
 class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
+
+  bool _followed = false;
+  int _userId = 0;
+  StreamSubscription? _followSubs;
+
+  @override
+  void initState() {
+    super.initState();
+    _followed = widget.viewParams.author?.followed ?? false;
+    _userId = widget.viewParams.author?.id ?? 0;
+    _followSubs = EventBusUtil.of.on<EventUserFollow>().listen((event) {
+      if (_userId > 0 && _userId == event.id) {
+        _followed = event.followed;
+        if (mounted) {setState(() {});}
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _followSubs?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -144,13 +171,11 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                                   child: Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      widget.viewParams.author?.followed == true
+                                      _followed
                                           ? '已关注'
                                           : '+关注',
                                       style: TextStyle(
-                                        color: widget.viewParams.author
-                                                    ?.followed ==
-                                                true
+                                        color: _followed
                                             ? ColorStyle.c333333
                                             : '#557BF6'.hexColor,
                                         fontSize: 10.sp,

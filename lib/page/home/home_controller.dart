@@ -366,6 +366,8 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
       Get.toNamed(Routes.videoDetail, arguments: {'id': id});
     } else if (bean.jumpType == 'thread') {
       Get.toNamed(Routes.feedDetail, arguments: id);
+    } else if (bean.jumpType == 'tool') {
+      Get.toNamed(Routes.toolDetail, arguments: id);
     }
   }
 

@@ -367,7 +367,7 @@ class _MineCollectViewState extends State<MineCollectView>
                   controller: _refreshController2,
                   onRefresh: _onRefresh,
                   child: loaded && groupCollectList.isEmpty
-                      ? const Center(child: NoDataView())
+                      ? const Center(child: NoDataView(text: '暂无分类',))
                       : ListView.builder(
                           itemBuilder: (c, i) {
                             return _buildGroupItemWidget(i);

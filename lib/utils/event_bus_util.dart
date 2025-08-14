@@ -79,6 +79,12 @@ class EventRefreshCollect {
 
 class EventPostFeed {}
 
+class EventUserFollow {
+  int id;
+  bool followed;
+  EventUserFollow({required this.id, required this.followed});
+}
+
 class EventRefreshNotice {}
 
 class EventRefreshPractise {

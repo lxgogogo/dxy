@@ -43,7 +43,7 @@ class MessageChildViewState extends State<MessageChildView> {
       onLoading: widget.controller.onLoading,
       child: widget.controller.loaded && widget.controller.items.isEmpty
           ? const Center(
-              child: NoDataView(),
+              child: NoDataView(text: '这里暂时没有数据哦，快去交流互动吧',),
             )
           : ListView.builder(
               padding: EdgeInsets.symmetric(vertical: 12.w),

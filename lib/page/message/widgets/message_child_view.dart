@@ -50,7 +50,7 @@ class MessageChildViewState extends State<MessageChildView> {
               itemBuilder: (c, i) => MessageCommonItem(
                 item: widget.controller.items[i],
                 onTap: TrackUtils.trackedTap(
-                  onTap: () => jumpPage(widget.controller.items[i]),
+                  onTap: () => widget.controller.jumpPage(widget.controller.items[i]),
                   userLogType: '114001',
                   params: widget.controller.items[i].jumpId,
                 ),
@@ -62,25 +62,5 @@ class MessageChildViewState extends State<MessageChildView> {
       bottom: 30.w,
       widget.controller.scrollController,
     );
-  }
-
-  jumpPage(MessageBean bean) {
-    if (bean.jumpId == null) {
-      return;
-    }
-    int id = bean.jumpId!;
-    if (bean.jumpType == 'content') {
-      if (bean.resourceType == 'book') {
-        Get.toNamed(Routes.bookDetail, arguments: id);
-      } else if (bean.resourceType == 'tool') {
-        Get.toNamed(Routes.toolDetail, arguments: id);
-      }else if (bean.resourceType == 'article') {
-        Get.toNamed(Routes.articleDetail, arguments: id);
-      } else if (bean.resourceType == 'video' || bean.resourceType == 'videoList') {
-        Get.toNamed(Routes.videoDetail, arguments: {'id': id});
-      }
-    } else if (bean.jumpType == 'thread') {
-      Get.toNamed(Routes.feedDetail, arguments: id);
-    }
   }
 }

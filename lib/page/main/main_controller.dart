@@ -25,6 +25,10 @@ class MainController extends GetxController with WidgetsBindingObserver {
         return;
       }
     }
+    tabIndex = index;
+    safeUpdate();
+    EventBusUtil.of.fire(EventChangeMainTab(tabIndex));
+
     pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 100),
@@ -84,15 +88,8 @@ class MainController extends GetxController with WidgetsBindingObserver {
   @override
   void onReady() {
     super.onReady();
-    pageController.addListener(() {
-      tabIndex = pageController.page?.toInt() ?? 0;
-      safeUpdate();
-      DebounceThrottle.throttle(() {
-        EventBusUtil.of.fire(EventChangeMainTab(tabIndex));
-      });
-    });
     eventSubscription = EventBusUtil.of.on<EventLogout>().listen((event) {
-      pageController.jumpToPage(0);
+      onTabBarItem(0);
     });
     refreshNoticeSubs = EventBusUtil.of.on<EventRefreshNotice>().listen((event) {
       UserStore.of.refreshBadge();

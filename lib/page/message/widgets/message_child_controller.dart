@@ -49,6 +49,30 @@ class MessageChildController extends GetxController {
     super.onClose();
   }
 
+  void jumpPage(MessageBean bean) {
+    if (bean.jumpId == null) {
+      return;
+    }
+    int id = bean.jumpId!;
+    String routeName = '';
+    if (bean.jumpType == 'content') {
+      if (bean.resourceType == 'book') {
+        routeName = Routes.bookDetail;
+      } else if (bean.resourceType == 'tool') {
+        routeName = Routes.toolDetail;
+      } else if (bean.resourceType == 'article') {
+        routeName = Routes.articleDetail;
+      } else if (bean.resourceType == 'video' || bean.resourceType == 'videoList') {
+        routeName = Routes.videoDetail;
+      }
+    } else if (bean.jumpType == 'thread') {
+      routeName = Routes.feedDetail;
+    }
+    if (routeName.isNotEmpty) {
+      Get.toNamed(routeName, arguments: id);
+    }
+  }
+
   Future<void> loadData() async {
     try {
       int recordsSize = 0;

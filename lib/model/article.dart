@@ -19,6 +19,7 @@ class ArticleBean {
   String? type;
   DateTime? updatedAt;
   int? featured;
+  String? previewUrl;
 
   ArticleBean(
       {this.author,
@@ -38,6 +39,7 @@ class ArticleBean {
       this.title,
       this.type,
       this.updatedAt,
+      this.previewUrl,
         this.featured});
 
   ArticleBean.fromJson(Map<String, dynamic> json) {
@@ -100,6 +102,9 @@ class ArticleBean {
     if (json["featured"] is int) {
       featured = json["featured"];
     }
+    if (json["previewUrl"] is String) {
+      previewUrl = json["previewUrl"];
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -119,6 +124,7 @@ class ArticleBean {
     _data["updated_at"] = updatedAt;
     _data['duration'] = duration;
     _data['featured'] = featured;
+    _data['previewUrl'] = previewUrl;
     return _data;
   }
 }

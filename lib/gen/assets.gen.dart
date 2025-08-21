@@ -1152,6 +1152,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/course_fail.json
   String get courseFail => 'assets/lottie/course_fail.json';
 
+  /// File path: assets/lottie/course_icon.json
+  String get courseIcon => 'assets/lottie/course_icon.json';
+
   /// File path: assets/lottie/course_perfect_1.json
   String get coursePerfect1 => 'assets/lottie/course_perfect_1.json';
 
@@ -1206,9 +1209,22 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/progressbar_lizi.json
   String get progressbarLizi => 'assets/lottie/progressbar_lizi.json';
 
+  /// File path: assets/lottie/recommend_icon.json
+  String get recommendIcon => 'assets/lottie/recommend_icon.json';
+
+  /// File path: assets/lottie/tools_icon.json
+  String get toolsIcon => 'assets/lottie/tools_icon.json';
+
+  /// File path: assets/lottie/tutorial_icon.json
+  String get tutorialIcon => 'assets/lottie/tutorial_icon.json';
+
+  /// File path: assets/lottie/video_icon.json
+  String get videoIcon => 'assets/lottie/video_icon.json';
+
   /// List of all assets
   List<String> get values => [
         courseFail,
+        courseIcon,
         coursePerfect1,
         coursePerfect2,
         coursePerfect3,
@@ -1226,7 +1242,11 @@ class $AssetsLottieGen {
         courseResult9,
         playVideo,
         playVideoGrey,
-        progressbarLizi
+        progressbarLizi,
+        recommendIcon,
+        toolsIcon,
+        tutorialIcon,
+        videoIcon
       ];
 }
 

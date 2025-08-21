@@ -1,6 +1,6 @@
 part of 'home_screen.dart';
 
-class HomeController extends GetxController with GetSingleTickerProviderStateMixin {
+class HomeController extends GetxController with GetTickerProviderStateMixin {
   static HomeController get of => Get.find<HomeController>();
 
   final ScrollController scrollController = ScrollController();
@@ -28,27 +28,39 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   late AnimationController animationController;
   bool isFirstLoad = false;
 
+  // 菜单项动画控制器
+  late List<AnimationController> menuAnimationControllers;
+
   @override
   void onInit() {
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     );
+
+    menuAnimationControllers = List.generate(
+      4,
+      (index) => AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 1500),
+      )..value = 1.0,
+    );
+
     super.onInit();
   }
 
   void loadData({bool needResetGroup = true}) {
-    loadBanners();
-    loadHotVideos();
-    if (needResetGroup) {
-      loadCourseGroup();
-    }
-    loadOldCourses();
-    loadBooks();
-    loadHotTags();
-    if (UserStore.of.isLogin) {
-      UserStore.of.getUserInfo();
-    }
+    Future.wait([
+      loadBanners(),
+      loadHotVideos(),
+      if (needResetGroup) loadCourseGroup(),
+      loadOldCourses(),
+      loadBooks(),
+      loadHotTags(),
+      if (UserStore.of.isLogin) UserStore.of.getUserInfo(),
+    ]).whenComplete(() {
+      _startCourseAnimations();
+    });
   }
 
   bool hasNetwork = false;
@@ -58,7 +70,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     super.onReady();
     final result = await Connectivity().checkConnectivity();
     hasNetwork = !result.contains(ConnectivityResult.none);
-    if (hasNetwork) loadData();
+    if (hasNetwork) {
+      loadData();
+    }
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       if (!hasNetwork) {
         final hasNetwork = !result.contains(ConnectivityResult.none);
@@ -114,6 +128,9 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
   @override
   void onClose() {
     animationController.dispose();
+    for (final controller in menuAnimationControllers) {
+      controller.dispose();
+    }
     super.onClose();
   }
 
@@ -182,7 +199,7 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
     });
   }
 
-  void loadHotTags() async {
+  Future<void> loadHotTags() async {
     tagList = await HomeService.queryTopHeatTag({'pageNum': 1, 'pageSize': 100});
     tagId = tagList[0].id ?? 0;
     loadVideos();
@@ -514,8 +531,37 @@ class HomeController extends GetxController with GetSingleTickerProviderStateMix
 
   void onFocusGained() {
     if (isFirstLoad) {
-      print('home-onFocusGained');
       loadCourses();
+    }
+  }
+
+  /// 启动菜单项动画序列
+  void _startCourseAnimations() {
+    _animateMenuItems();
+  }
+
+  /// 依次启动每个菜单项的动画
+  void _animateMenuItems() {
+    _animateMenuItemAtIndex(0);
+  }
+
+  /// 递归播放动画，一个播放完成后再播放下一个
+  void _animateMenuItemAtIndex(int index) {
+    if (index >= menuAnimationControllers.length) return;
+
+    try {
+      // 从0.0开始播放到1.0
+      menuAnimationControllers[index].reset();
+      menuAnimationControllers[index].forward().then((_) {
+        // 当前动画播放完成后，间隔100ms播放下一个
+        if (index < menuAnimationControllers.length - 1) {
+          Timer(const Duration(milliseconds: 100), () {
+            _animateMenuItemAtIndex(index + 1);
+          });
+        }
+      });
+    } catch (e) {
+      // AnimationController 已被销毁时忽略错误
     }
   }
 }

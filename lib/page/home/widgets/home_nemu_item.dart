@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/widget/scale_button_wraper.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeMenuItem extends StatelessWidget {
   const HomeMenuItem({
@@ -11,14 +12,16 @@ class HomeMenuItem extends StatelessWidget {
     required this.itemWidth,
     required this.name,
     required this.nameEn,
-    required this.imagePath,
+    required this.lottiePath,
+    this.animationController,
     this.onTap,
   });
 
   final double itemWidth;
   final String name;
   final String nameEn;
-  final String imagePath;
+  final String lottiePath;
+  final AnimationController? animationController;
   final VoidCallback? onTap;
 
   @override
@@ -74,11 +77,14 @@ class HomeMenuItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Image.asset(
-                    imagePath,
-                    width: 60.w,
-                    height: 60.w,
-                  ),
+                  if (animationController != null)
+                    Lottie.asset(
+                      lottiePath,
+                      width: 60.w,
+                      height: 60.w,
+                      controller: animationController,
+                      repeat: false,
+                    )
                 ],
               ),
             ),

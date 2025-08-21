@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../model/app_version.dart';
 import '../services/index.dart';
-import '../widget/dialog_common.dart';
+import '../widget/dialog_common_new.dart';
 
 class AppVersionChecker {
   static final AppVersionChecker of = AppVersionChecker._();
@@ -47,8 +47,8 @@ class AppVersionChecker {
               context: Get.context!,
               builder: (context) => WillPopScope(
                 onWillPop: () async => false,
-                child: CommonDialog(
-                  title: forceUpdate ? '更新以获得最佳体验' : '有新版本可以更新',
+                child: NewCommonDialog(
+                  title: '德学院 App 更新说明',
                   content: appVersion.description,
                   confirmText: '立即更新',
                   cancelText: '下次再说',

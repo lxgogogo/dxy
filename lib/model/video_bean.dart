@@ -37,19 +37,14 @@ class Video {
   factory Video.fromMap(Map<String, dynamic> json) => Video(
         code: json["code"],
         message: json["message"],
-        videoBean: json["data"] == null
-            ? []
-            : List<VideoBean>.from(
-                json["data"]!.map((x) => VideoBean.fromMap(x))),
+        videoBean: json["data"] == null ? [] : List<VideoBean>.from(json["data"]!.map((x) => VideoBean.fromMap(x))),
         traceId: json["traceId"],
       );
 
   Map<String, dynamic> toMap() => {
         "code": code,
         "message": message,
-        "videoBean": videoBean == null
-            ? []
-            : List<dynamic>.from(videoBean!.map((x) => x.toMap())),
+        "videoBean": videoBean == null ? [] : List<dynamic>.from(videoBean!.map((x) => x.toMap())),
         "traceId": traceId,
       };
 }
@@ -67,6 +62,8 @@ class VideoBean {
   final String? type;
   final DateTime? createdAt;
   final int? featured;
+  final String? previewUrl;
+
   VideoBean(
       {this.id,
       this.title,
@@ -79,7 +76,9 @@ class VideoBean {
       this.popularCount,
       this.type,
       this.createdAt,
+      this.previewUrl,
       this.featured});
+
   factory VideoBean.fromMap(Map<String, dynamic> json) => VideoBean(
         id: json["id"],
         title: json["title"],
@@ -92,9 +91,8 @@ class VideoBean {
         popularCount: json["popularCount"],
         type: json["type"],
         featured: json["featured"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
+        previewUrl: json["previewUrl"],
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
       );
 
   Map<String, dynamic> toMap() => {
@@ -109,6 +107,7 @@ class VideoBean {
         "popularCount": popularCount,
         "type": type,
         "createdAt": createdAt?.toIso8601String(),
-        "featured": featured
+        "featured": featured,
+        "previewUrl": previewUrl,
       };
 }

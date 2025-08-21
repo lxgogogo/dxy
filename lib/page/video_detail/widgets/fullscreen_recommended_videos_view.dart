@@ -81,6 +81,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
@@ -96,9 +97,7 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
                   _buildActionsRow(),
-                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -133,7 +132,6 @@ class _FullscreenRecommendedVideosViewState extends State<FullscreenRecommendedV
                       }),
                     ],
                   ),
-                  const SizedBox(height: 24),
                   LayoutBuilder(builder: (context, constraints) {
                     final itemWidth = (constraints.maxWidth - 12 * 2) / 3;
                     return SingleChildScrollView(

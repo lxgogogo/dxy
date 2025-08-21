@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
@@ -26,6 +27,7 @@ import 'package:holdem/routes/app_pages.dart';
 import 'package:holdem/utils/dialog_util.dart';
 import 'package:holdem/utils/net_request.dart';
 import 'package:holdem/widget/item_video.dart';
+import 'package:holdem/widget/item_video_preview.dart';
 import 'package:holdem/widget/scroll_to_top_widget.dart';
 import 'package:holdem/widget/three_d_book_item.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -247,7 +249,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   itemWidth: itemWidth,
                                                   name: '精彩视频',
                                                   nameEn: 'Video',
-                                                  imagePath: Assets.images.iconHomeVideo.path,
+                                                  lottiePath: Assets.lottie.videoIcon,
+                                                  animationController: controller.menuAnimationControllers[0],
                                                   onTap: TrackUtils.trackedTap(
                                                     onTap: () => Get.toNamed(Routes.videoList),
                                                     userLogType: '101002',
@@ -257,7 +260,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   itemWidth: itemWidth,
                                                   name: '互动课程',
                                                   nameEn: 'Course',
-                                                  imagePath: Assets.images.iconHomeMainCourse.path,
+                                                  lottiePath: Assets.lottie.courseIcon,
+                                                  animationController: controller.menuAnimationControllers[1],
                                                   onTap: () {
                                                     controller.changeMainTab(2);
                                                   },
@@ -266,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   itemWidth: itemWidth,
                                                   name: '德州教程',
                                                   nameEn: 'Tutorial',
-                                                  imagePath: Assets.images.iconHomeCourse.path,
+                                                  lottiePath: Assets.lottie.tutorialIcon,
+                                                  animationController: controller.menuAnimationControllers[2],
                                                   onTap: TrackUtils.trackedTap(
                                                     onTap: () => Get.toNamed(Routes.course),
                                                     userLogType: '101003',
@@ -276,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                                   itemWidth: itemWidth,
                                                   name: '好书推荐',
                                                   nameEn: 'Recommend',
-                                                  imagePath: Assets.images.iconHomeBook.path,
+                                                  lottiePath: Assets.lottie.recommendIcon,
+                                                  animationController: controller.menuAnimationControllers[3],
                                                   onTap: TrackUtils.trackedTap(
                                                     onTap: () => Get.toNamed(Routes.boolList),
                                                     userLogType: '101004',
@@ -341,28 +347,56 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           return Wrap(
                                             spacing: 11.w,
                                             runSpacing: 12.w,
-                                            children: controller.hotVideos
-                                                .map(
-                                                  (e) => SizedBox(
+                                            children: List.generate(
+                                              controller.hotVideos.length,
+                                              (index) {
+                                                final e = controller.hotVideos[index];
+                                                if (index == 0) {
+                                                  return SizedBox(
                                                     width: itemWidth,
-                                                    child: VideoItem(
-                                                      onTap: () =>
-                                                          TrackUtils.trackEvent(userLogType: '101006', params: e.id),
+                                                    child: ItemVideoPreview(
+                                                      onTap: () {
+                                                        TrackUtils.trackEvent(userLogType: '101006', params: e.id);
+                                                      },
                                                       item: ArticleBean(
-                                                          id: e.id,
-                                                          cover: e.cover,
-                                                          viewCount: e.viewCount,
-                                                          duration: e.duration,
-                                                          title: e.title,
-                                                          createdAt: e.createdAt,
-                                                          type: e.type,
-                                                          likeCount: e.likeCount,
-                                                          commentCount: e.commentCount,
-                                                          featured: e.featured),
+                                                        id: e.id,
+                                                        cover: e.cover,
+                                                        viewCount: e.viewCount,
+                                                        duration: e.duration,
+                                                        title: e.title,
+                                                        createdAt: e.createdAt,
+                                                        type: e.type,
+                                                        likeCount: e.likeCount,
+                                                        commentCount: e.commentCount,
+                                                        featured: e.featured,
+                                                        previewUrl: e.previewUrl,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                                return SizedBox(
+                                                  width: itemWidth,
+                                                  child: VideoItem(
+                                                    onTap: () {
+                                                      TrackUtils.trackEvent(userLogType: '101006', params: e.id);
+                                                    },
+                                                    item: ArticleBean(
+                                                      id: e.id,
+                                                      cover: e.cover,
+                                                      viewCount: e.viewCount,
+                                                      duration: e.duration,
+                                                      title: e.title,
+                                                      createdAt: e.createdAt,
+                                                      type: e.type,
+                                                      likeCount: e.likeCount,
+                                                      commentCount: e.commentCount,
+                                                      featured: e.featured,
+                                                      previewUrl: e.previewUrl,
                                                     ),
                                                   ),
-                                                )
-                                                .toList(),
+                                                );
+                                              },
+                                            ),
                                           );
                                         },
                                       ),

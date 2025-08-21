@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +13,6 @@ import 'package:holdem/widget/count_widget.dart';
 import 'package:holdem/widget/duration_text.dart';
 import 'package:intl/intl.dart';
 
-import '../utils/date_util.dart';
 import '../utils/log_utils.dart';
 
 class VideoItem extends StatelessWidget {
@@ -34,8 +31,6 @@ class VideoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // case ：增加权限 跳转视频详情
-        LogUtils.printAll("跳转视频详情====");
         Get.toNamed(
           Routes.videoDetail,
           arguments: {'id': item.id},

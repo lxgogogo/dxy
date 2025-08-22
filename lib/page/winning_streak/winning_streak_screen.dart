@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,13 +38,16 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
       ),
       backgroundColor: '#F7F8FC'.hexColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Obx(() {
-                return Container(
+        child: Obx(() {
+          if (!controller.hasLoaded) {
+            return const CupertinoActivityIndicator(color: Colors.grey);
+          }
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
                   padding: EdgeInsets.all(16.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -62,30 +66,33 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                       Row(
                         children: [
                           switch (controller.detailBean.value?.status) {
-                            1 => Padding(
-                                padding: EdgeInsets.only(right: 12.w),
-                                child: SvgPicture.asset(
-                                  Assets.svg.iconWinningStatus1,
-                                  width: 28.w,
-                                  height: 28.w,
+                            1 =>
+                                Padding(
+                                  padding: EdgeInsets.only(right: 12.w),
+                                  child: SvgPicture.asset(
+                                    Assets.svg.iconWinningStatus1,
+                                    width: 28.w,
+                                    height: 28.w,
+                                  ),
                                 ),
-                              ),
-                            2 => Padding(
-                                padding: EdgeInsets.only(right: 12.w),
-                                child: SvgPicture.asset(
-                                  Assets.svg.iconWinningStatus2,
-                                  width: 28.w,
-                                  height: 28.w,
+                            2 =>
+                                Padding(
+                                  padding: EdgeInsets.only(right: 12.w),
+                                  child: SvgPicture.asset(
+                                    Assets.svg.iconWinningStatus2,
+                                    width: 28.w,
+                                    height: 28.w,
+                                  ),
                                 ),
-                              ),
-                            3 => Padding(
-                                padding: EdgeInsets.only(right: 12.w),
-                                child: SvgPicture.asset(
-                                  Assets.svg.iconWinningStatus3,
-                                  width: 28.w,
-                                  height: 28.w,
+                            3 =>
+                                Padding(
+                                  padding: EdgeInsets.only(right: 12.w),
+                                  child: SvgPicture.asset(
+                                    Assets.svg.iconWinningStatus3,
+                                    width: 28.w,
+                                    height: 28.w,
+                                  ),
                                 ),
-                              ),
                             _ => const SizedBox(),
                           },
                           Text(
@@ -123,126 +130,126 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                       )
                     ],
                   ),
-                );
-              }),
-              SizedBox(height: 16.w),
-              Container(
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: '#58A5FF'.hexColor.withOpacity(0.1),
-                      blurRadius: 8.63.r,
-                      offset: Offset(0, 4.32.w),
-                    ),
-                  ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      '连胜目标',
-                      style: TextStyle(
-                        color: '#000000'.hexColor,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
+                SizedBox(height: 16.w),
+                Container(
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: '#58A5FF'.hexColor.withOpacity(0.1),
+                        blurRadius: 8.63.r,
+                        offset: Offset(0, 4.32.w),
                       ),
-                    ),
-                    SizedBox(height: 12.w),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Obx(() {
-                          final targets = controller.detailBean.value?.target ?? [];
-                          final winnerDay = controller.detailBean.value?.winnerDay ?? 0;
-                          if (targets.isEmpty) return const SizedBox();
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        '连胜目标',
+                        style: TextStyle(
+                          color: '#000000'.hexColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(height: 12.w),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Obx(() {
+                            final targets = controller.detailBean.value?.target ?? [];
+                            final winnerDay = controller.detailBean.value?.winnerDay ?? 0;
+                            if (targets.isEmpty) return const SizedBox();
 
-                          double progressWidth = 0;
-                          final totalWidth = constraints.maxWidth;
+                            double progressWidth = 0;
+                            final totalWidth = constraints.maxWidth;
 
-                          if (winnerDay <= targets.first) {
-                            // 小于等于第一个目标
-                            progressWidth = 0;
-                          } else if (winnerDay >= targets.last) {
-                            // 大于等于最后一个目标
-                            progressWidth = totalWidth;
-                          } else {
-                            // 在两个目标之间
-                            for (int i = 0; i < targets.length - 1; i++) {
-                              final start = targets[i];
-                              final end = targets[i + 1];
-                              if (winnerDay == start) {
-                                progressWidth = i * totalWidth / (targets.length - 1);
-                                break;
-                              } else if (winnerDay > start && winnerDay < end) {
-                                final percent = (winnerDay - start) / (end - start);
-                                progressWidth = (i + percent) * totalWidth / (targets.length - 1);
-                                break;
+                            if (winnerDay <= targets.first) {
+                              // 小于等于第一个目标
+                              progressWidth = 0;
+                            } else if (winnerDay >= targets.last) {
+                              // 大于等于最后一个目标
+                              progressWidth = totalWidth;
+                            } else {
+                              // 在两个目标之间
+                              for (int i = 0; i < targets.length - 1; i++) {
+                                final start = targets[i];
+                                final end = targets[i + 1];
+                                if (winnerDay == start) {
+                                  progressWidth = i * totalWidth / (targets.length - 1);
+                                  break;
+                                } else if (winnerDay > start && winnerDay < end) {
+                                  final percent = (winnerDay - start) / (end - start);
+                                  progressWidth = (i + percent) * totalWidth / (targets.length - 1);
+                                  break;
+                                }
                               }
                             }
-                          }
 
-                          return Stack(
-                            alignment: Alignment.centerLeft,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10.r),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 10.w,
-                                  decoration: BoxDecoration(
-                                    color: '#333333'.hexColor.withOpacity(0.05),
-                                    borderRadius: BorderRadius.circular(20.r),
-                                  ),
-                                  alignment: Alignment.centerLeft,
+                            return Stack(
+                              alignment: Alignment.centerLeft,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.r),
                                   child: Container(
-                                    width: progressWidth,
-                                    color: '#557BF6'.hexColor,
+                                    width: double.infinity,
+                                    height: 10.w,
+                                    decoration: BoxDecoration(
+                                      color: '#333333'.hexColor.withOpacity(0.05),
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      width: progressWidth,
+                                      color: '#557BF6'.hexColor,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              // 目标点
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: List.generate(targets.length, (index) {
-                                  final isReached = winnerDay >= targets[index];
-                                  return Container(
-                                    width: 24.w,
-                                    height: 24.w,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: isReached ? '#557BF6'.hexColor : Colors.white,
-                                      border: Border.all(
-                                        color: isReached ? '#557BF6'.hexColor : '#999999'.hexColor,
-                                        width: 2,
+                                // 目标点
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: List.generate(targets.length, (index) {
+                                    final isReached = winnerDay >= targets[index];
+                                    return Container(
+                                      width: 24.w,
+                                      height: 24.w,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: isReached ? '#557BF6'.hexColor : Colors.white,
+                                        border: Border.all(
+                                          color: isReached ? '#557BF6'.hexColor : '#999999'.hexColor,
+                                          width: 2,
+                                        ),
                                       ),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '${targets[index]}',
-                                      style: TextStyle(
-                                        color: isReached ? Colors.white : '#999999'.hexColor,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w600,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '${targets[index]}',
+                                        style: TextStyle(
+                                          color: isReached ? Colors.white : '#999999'.hexColor,
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                }),
-                              ),
-                            ],
-                          );
-                        });
-                      },
-                    ),
-                  ],
+                                    );
+                                  }),
+                                ),
+                              ],
+                            );
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 16.w),
-              _buildCalendar(),
-            ],
-          ),
-        ),
+                SizedBox(height: 16.w),
+                _buildCalendar(),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -474,8 +481,8 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                             borderRadius: isRangeStart
                                 ? BorderRadius.horizontal(left: Radius.circular(40.r))
                                 : isRangeEnd
-                                    ? BorderRadius.horizontal(right: Radius.circular(40.r))
-                                    : BorderRadius.zero,
+                                ? BorderRadius.horizontal(right: Radius.circular(40.r))
+                                : BorderRadius.zero,
                             color: '#557BF6'.hexColor.withOpacity(0.1),
                           ),
                           alignment: Alignment.center,
@@ -597,16 +604,19 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     super.dispose();
   }
 
-  bool _isSignInDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
-        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 1,
+  bool _isSignInDay(DateTime day, List<PractiseList> practiseList) =>
+      practiseList.any(
+            (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 1,
       );
 
-  bool _isFreezingDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
-        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 2,
+  bool _isFreezingDay(DateTime day, List<PractiseList> practiseList) =>
+      practiseList.any(
+            (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 2,
       );
 
-  bool _isNextDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
-        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 3,
+  bool _isNextDay(DateTime day, List<PractiseList> practiseList) =>
+      practiseList.any(
+            (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 3,
       );
 
   /// 判断是否是签到范围的开始日期
@@ -614,11 +624,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     // 检查前一天
     final previousDay = day.subtract(const Duration(days: 1));
     final hasPreviousSignIn =
-        practiseList.any((e) => DateUtils.isSameDay(previousDay, e.punchDate) && (e.type == 1 || e.type == 2));
+    practiseList.any((e) => DateUtils.isSameDay(previousDay, e.punchDate) && (e.type == 1 || e.type == 2));
 
     // 检查当天是否有签到或冻结
     final hasCurrentSignIn =
-        practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
+    practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
 
     // 如果当天有签到/冻结，且前一天没有，则为开始日期
     return hasCurrentSignIn && !hasPreviousSignIn;
@@ -629,11 +639,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     // 检查后一天
     final nextDay = day.add(const Duration(days: 1));
     final hasNextSignIn =
-        practiseList.any((e) => DateUtils.isSameDay(nextDay, e.punchDate) && (e.type == 1 || e.type == 2));
+    practiseList.any((e) => DateUtils.isSameDay(nextDay, e.punchDate) && (e.type == 1 || e.type == 2));
 
     // 检查当天是否有签到或冻结
     final hasCurrentSignIn =
-        practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
+    practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
     // 如果当天有签到/冻结，且后一天没有，则为结束日期
     return hasCurrentSignIn && !hasNextSignIn;
   }

@@ -4,12 +4,12 @@ class WinningStreakController extends GetxController {
   Rx<CoursePunchModel?> detailBean = Rx<CoursePunchModel?>(null);
   final Rx<DateTime> focusedDay = Rx<DateTime>(DateTime.now());
 
-  bool isFetching = false;
+  bool hasLoaded = false;
 
   @override
   void onReady() {
-    loadData(DateTime.now());
     super.onReady();
+    loadData(DateTime.now());
   }
 
   // TODO: Private Method
@@ -110,7 +110,7 @@ class WinningStreakController extends GetxController {
         _fetchData();
       }
     } finally {
-      // isFetching = false;
+      hasLoaded = false;
     }
   }
 }

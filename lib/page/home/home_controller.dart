@@ -5,6 +5,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   final ScrollController scrollController = ScrollController();
 
+  bool hasLoaded = false;
+
   List<BannerBean> banners = [];
   List<ArticleBean> videoItems = [];
 
@@ -26,7 +28,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   bool isHotVideosLoading = false;
   late AnimationController animationController;
-  bool isFirstLoad = false;
+  bool hasLoadCourse = false;
 
   // 菜单项动画控制器
   late List<AnimationController> menuAnimationControllers;
@@ -60,6 +62,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       if (UserStore.of.isLogin) UserStore.of.getUserInfo(),
     ]).whenComplete(() {
       _startCourseAnimations();
+      hasLoaded = true;
     });
   }
 
@@ -325,7 +328,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       }
       courseItems.assignAll(records.take(2));
       safeUpdate();
-      isFirstLoad = true;
+      hasLoadCourse = true;
     }
   }
 
@@ -530,13 +533,14 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   void onFocusGained() {
-    if (isFirstLoad) {
+    if (hasLoadCourse) {
       loadCourses();
     }
   }
 
   /// 启动菜单项动画序列
   void _startCourseAnimations() {
+    if (hasLoaded) return;
     _animateMenuItems();
   }
 

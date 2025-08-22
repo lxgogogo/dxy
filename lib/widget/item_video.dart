@@ -14,6 +14,7 @@ import 'package:holdem/widget/duration_text.dart';
 import 'package:intl/intl.dart';
 
 import '../utils/log_utils.dart';
+import 'common_image.dart';
 
 class VideoItem extends StatelessWidget {
   final ArticleBean item;
@@ -47,11 +48,8 @@ class VideoItem extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  CachedNetworkImage(
-                    fit: BoxFit.cover,
+                  CommonImage.net(
                     imageUrl: item.cover ?? '',
-                    placeholder: (context, url) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
-                    errorWidget: (context, url, error) => Assets.images.imageLoadingDef.image(fit: BoxFit.fill),
                   ),
                   Positioned(
                     left: 0,

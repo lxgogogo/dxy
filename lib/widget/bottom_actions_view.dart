@@ -342,7 +342,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   }
 
   void _favoriteToggle() {
-    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
+    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客\n登录/注册后即可收藏精彩内容')) {
       return;
     }
     NetRequest().favoriteToggle(

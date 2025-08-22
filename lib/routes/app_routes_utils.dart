@@ -43,7 +43,7 @@ class AppRoutesUtils {
 
   // 是否有下载书籍权限
   static bool haveDownLoadBook(bool haveDown) {
-    if (!haveLogin(title: '请登录后下载', content: '您当前的身份为访客\n登录后即可下载书籍')) {
+    if (!haveLogin(title: '请登录后下载', content: '您当前的身份为访客\n登录/注册后即可下载书籍')) {
       return false;
     } else if (!haveDown) {
       String powerName = UserStore.of.user?.userLevel?.name ?? '';

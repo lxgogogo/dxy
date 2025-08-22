@@ -39,8 +39,12 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
       backgroundColor: '#F7F8FC'.hexColor,
       body: SafeArea(
         child: Obx(() {
-          if (!controller.hasLoaded) {
-            return const CupertinoActivityIndicator(color: Colors.grey);
+          if (controller.hasLoaded.isFalse) {
+            return const Center(
+              child: CupertinoActivityIndicator(
+                color: Colors.grey,
+              ),
+            );
           }
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -66,33 +70,30 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                       Row(
                         children: [
                           switch (controller.detailBean.value?.status) {
-                            1 =>
-                                Padding(
-                                  padding: EdgeInsets.only(right: 12.w),
-                                  child: SvgPicture.asset(
-                                    Assets.svg.iconWinningStatus1,
-                                    width: 28.w,
-                                    height: 28.w,
-                                  ),
+                            1 => Padding(
+                                padding: EdgeInsets.only(right: 12.w),
+                                child: SvgPicture.asset(
+                                  Assets.svg.iconWinningStatus1,
+                                  width: 28.w,
+                                  height: 28.w,
                                 ),
-                            2 =>
-                                Padding(
-                                  padding: EdgeInsets.only(right: 12.w),
-                                  child: SvgPicture.asset(
-                                    Assets.svg.iconWinningStatus2,
-                                    width: 28.w,
-                                    height: 28.w,
-                                  ),
+                              ),
+                            2 => Padding(
+                                padding: EdgeInsets.only(right: 12.w),
+                                child: SvgPicture.asset(
+                                  Assets.svg.iconWinningStatus2,
+                                  width: 28.w,
+                                  height: 28.w,
                                 ),
-                            3 =>
-                                Padding(
-                                  padding: EdgeInsets.only(right: 12.w),
-                                  child: SvgPicture.asset(
-                                    Assets.svg.iconWinningStatus3,
-                                    width: 28.w,
-                                    height: 28.w,
-                                  ),
+                              ),
+                            3 => Padding(
+                                padding: EdgeInsets.only(right: 12.w),
+                                child: SvgPicture.asset(
+                                  Assets.svg.iconWinningStatus3,
+                                  width: 28.w,
+                                  height: 28.w,
                                 ),
+                              ),
                             _ => const SizedBox(),
                           },
                           Text(
@@ -481,8 +482,8 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
                             borderRadius: isRangeStart
                                 ? BorderRadius.horizontal(left: Radius.circular(40.r))
                                 : isRangeEnd
-                                ? BorderRadius.horizontal(right: Radius.circular(40.r))
-                                : BorderRadius.zero,
+                                    ? BorderRadius.horizontal(right: Radius.circular(40.r))
+                                    : BorderRadius.zero,
                             color: '#557BF6'.hexColor.withOpacity(0.1),
                           ),
                           alignment: Alignment.center,
@@ -604,19 +605,16 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     super.dispose();
   }
 
-  bool _isSignInDay(DateTime day, List<PractiseList> practiseList) =>
-      practiseList.any(
-            (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 1,
+  bool _isSignInDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
+        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 1,
       );
 
-  bool _isFreezingDay(DateTime day, List<PractiseList> practiseList) =>
-      practiseList.any(
-            (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 2,
+  bool _isFreezingDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
+        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 2,
       );
 
-  bool _isNextDay(DateTime day, List<PractiseList> practiseList) =>
-      practiseList.any(
-            (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 3,
+  bool _isNextDay(DateTime day, List<PractiseList> practiseList) => practiseList.any(
+        (e) => DateUtils.isSameDay(day, e.punchDate) && e.type == 3,
       );
 
   /// 判断是否是签到范围的开始日期
@@ -624,11 +622,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     // 检查前一天
     final previousDay = day.subtract(const Duration(days: 1));
     final hasPreviousSignIn =
-    practiseList.any((e) => DateUtils.isSameDay(previousDay, e.punchDate) && (e.type == 1 || e.type == 2));
+        practiseList.any((e) => DateUtils.isSameDay(previousDay, e.punchDate) && (e.type == 1 || e.type == 2));
 
     // 检查当天是否有签到或冻结
     final hasCurrentSignIn =
-    practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
+        practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
 
     // 如果当天有签到/冻结，且前一天没有，则为开始日期
     return hasCurrentSignIn && !hasPreviousSignIn;
@@ -639,11 +637,11 @@ class _WinningStreakScreenState extends State<WinningStreakScreen> {
     // 检查后一天
     final nextDay = day.add(const Duration(days: 1));
     final hasNextSignIn =
-    practiseList.any((e) => DateUtils.isSameDay(nextDay, e.punchDate) && (e.type == 1 || e.type == 2));
+        practiseList.any((e) => DateUtils.isSameDay(nextDay, e.punchDate) && (e.type == 1 || e.type == 2));
 
     // 检查当天是否有签到或冻结
     final hasCurrentSignIn =
-    practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
+        practiseList.any((e) => DateUtils.isSameDay(day, e.punchDate) && (e.type == 1 || e.type == 2));
     // 如果当天有签到/冻结，且后一天没有，则为结束日期
     return hasCurrentSignIn && !hasNextSignIn;
   }

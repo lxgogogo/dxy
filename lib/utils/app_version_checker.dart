@@ -48,7 +48,7 @@ class AppVersionChecker {
               builder: (context) => WillPopScope(
                 onWillPop: () async => false,
                 child: NewCommonDialog(
-                  title: '德学院 App 更新说明',
+                  title: '德学院APP更新说明',
                   content: appVersion.description,
                   confirmText: '立即更新',
                   cancelText: '下次再说',

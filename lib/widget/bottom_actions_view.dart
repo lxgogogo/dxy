@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,7 +48,6 @@ class CommonDetailBottomView extends StatefulWidget {
 }
 
 class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
-
   bool _followed = false;
   int _userId = 0;
   StreamSubscription? _followSubs;
@@ -60,7 +60,9 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
     _followSubs = EventBusUtil.of.on<EventUserFollow>().listen((event) {
       if (_userId > 0 && _userId == event.id) {
         _followed = event.followed;
-        if (mounted) {setState(() {});}
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
   }
@@ -73,7 +75,6 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -85,16 +86,13 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(
-                    top: BorderSide(
-                        color: '#333333'.hexColor.withOpacity(0.1),
-                        width: 0.5.w),
+                    top: BorderSide(color: '#333333'.hexColor.withOpacity(0.1), width: 0.5.w),
                   )),
               alignment: Alignment.topCenter,
               child: Row(
                 children: <Widget>[
                   SizedBox(width: 16.w),
-                  if (widget.viewParams.relType !=
-                      NetRequest.COMMENT_TYPE_THREAD)
+                  if (widget.viewParams.relType != NetRequest.COMMENT_TYPE_THREAD)
                     Container(
                       height: 32.w,
                       padding: EdgeInsets.only(right: 8.w),
@@ -158,26 +156,19 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                           ),
                           if ((widget.viewParams.author?.id ?? 0) != 0)
                             Visibility(
-                              visible: !UserStore.of
-                                  .isMe(widget.viewParams.author?.id),
+                              visible: !UserStore.of.isMe(widget.viewParams.author?.id),
                               child: GestureDetector(
                                 onTap: () {
-                                  Get.find<FeedDetailController>(
-                                          tag: Get.arguments.toString())
-                                      .followToggle();
+                                  Get.find<FeedDetailController>(tag: Get.arguments.toString()).followToggle();
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(right: 4.w),
                                   child: Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      _followed
-                                          ? '已关注'
-                                          : '+关注',
+                                      _followed ? '已关注' : '+关注',
                                       style: TextStyle(
-                                        color: _followed
-                                            ? ColorStyle.c333333
-                                            : '#557BF6'.hexColor,
+                                        color: _followed ? ColorStyle.c333333 : '#557BF6'.hexColor,
                                         fontSize: 10.sp,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -221,9 +212,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                               onTap: onLikeButtonTapped,
                               likeBuilder: (bool isLiked) {
                                 return SvgPicture.asset(
-                                  isLiked
-                                      ? Assets.svg.iconBottomLiked
-                                      : Assets.svg.iconBottomLike,
+                                  isLiked ? Assets.svg.iconBottomLiked : Assets.svg.iconBottomLike,
                                 );
                               },
                               bubblesColor: const BubblesColor(
@@ -239,13 +228,11 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                               likeCountPadding: EdgeInsets.zero,
                               countBuilder: (_, __, ___) => const SizedBox()),
                         ),
-                        if (UserStore.of.user?.id !=
-                            widget.viewParams.author?.id)
+                        if (UserStore.of.user?.id != widget.viewParams.author?.id)
                           GestureDetector(
                             onTap: _favoriteToggle,
                             child: CountCommentBadge(
-                              count: widget
-                                  .viewParams.favoriteCount.abbreviateNumber,
+                              count: widget.viewParams.favoriteCount.abbreviateNumber,
                               iconWidget: SvgPicture.asset(
                                 widget.viewParams.favorited == true
                                     ? Assets.svg.iconBottomFavorited
@@ -263,8 +250,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                                 width: 24.w,
                                 height: 24.w,
                               ),
-                              count: widget
-                                  .viewParams.commentCount.abbreviateNumber),
+                              count: widget.viewParams.commentCount.abbreviateNumber),
                         ),
                         GestureDetector(
                           onTap: _toShare,
@@ -274,8 +260,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                                 width: 24.w,
                                 height: 24.w,
                               ),
-                              count: widget
-                                  .viewParams.shareCount.abbreviateNumber),
+                              count: widget.viewParams.shareCount.abbreviateNumber),
                         ),
                       ],
                     ),
@@ -296,6 +281,10 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   }
 
   Future<bool> _likeToggle() async {
+    if (!UserStore.of.isLogin) {
+      Get.toNamed(Routes.login);
+      return false;
+    }
     final data = await NetRequest().newContentLike({
       'relType': widget.viewParams.relType,
       'relId': widget.viewParams.relId,
@@ -318,44 +307,34 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
       switch (widget.sourceType) {
         case SourceType.video:
           if (widget.viewParams.liked == true) {
-            TrackUtils.trackEvent(
-                userLogType: '103003', params: widget.viewParams.relId);
+            TrackUtils.trackEvent(userLogType: '103003', params: widget.viewParams.relId);
           }
           VideoDetailController.of.detailBean?.liked = widget.viewParams.liked;
-          VideoDetailController.of.detailBean?.likeCount =
-              widget.viewParams.likeCount;
+          VideoDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
           break;
         case SourceType.course:
           if (widget.viewParams.liked == true) {
-            TrackUtils.trackEvent(
-                userLogType: '105002', params: widget.viewParams.relId);
+            TrackUtils.trackEvent(userLogType: '105002', params: widget.viewParams.relId);
           }
-          ArticleDetailController.of.detailBean?.liked =
-              widget.viewParams.liked;
-          ArticleDetailController.of.detailBean?.likeCount =
-              widget.viewParams.likeCount;
+          ArticleDetailController.of.detailBean?.liked = widget.viewParams.liked;
+          ArticleDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
           break;
         case SourceType.book:
           if (widget.viewParams.liked == true) {
-            TrackUtils.trackEvent(
-                userLogType: '107003', params: widget.viewParams.relId);
+            TrackUtils.trackEvent(userLogType: '107003', params: widget.viewParams.relId);
           }
           BookDetailController.of.detailBean?.liked = widget.viewParams.liked;
-          BookDetailController.of.detailBean?.likeCount =
-              widget.viewParams.likeCount;
+          BookDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
           break;
         case SourceType.feed:
           if (widget.viewParams.liked == true) {
-            TrackUtils.trackEvent(
-                userLogType: '109002', params: widget.viewParams.relId);
+            TrackUtils.trackEvent(userLogType: '109002', params: widget.viewParams.relId);
           }
           FeedDetailController.of.detailBean?.liked = widget.viewParams.liked;
-          FeedDetailController.of.detailBean?.likeCount =
-              widget.viewParams.likeCount;
+          FeedDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
         case SourceType.tool:
           ToolDetailController.of.detailBean?.liked = widget.viewParams.liked;
-          ToolDetailController.of.detailBean?.likeCount =
-              widget.viewParams.likeCount;
+          ToolDetailController.of.detailBean?.likeCount = widget.viewParams.likeCount;
       }
       return true;
     }
@@ -363,8 +342,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   }
 
   void _favoriteToggle() {
-    if (!AppRoutesUtils.haveLogin(
-        title: '请登录后收藏', content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
+    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客\n登录后即可收藏精彩内容')) {
       return;
     }
     NetRequest().favoriteToggle(
@@ -388,36 +366,26 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
         switch (widget.sourceType) {
           case SourceType.video:
             // TrackUtils.trackEvent(userLogType: '103004', params: widget.viewParams.relId);
-            VideoDetailController.of.detailBean?.favorited =
-                widget.viewParams.favorited;
-            VideoDetailController.of.detailBean?.favoriteCount =
-                widget.viewParams.favoriteCount;
+            VideoDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            VideoDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
             break;
           case SourceType.course:
             // TrackUtils.trackEvent(userLogType: '105003', params: widget.viewParams.relId);
-            ArticleDetailController.of.detailBean?.favorited =
-                widget.viewParams.favorited;
-            ArticleDetailController.of.detailBean?.favoriteCount =
-                widget.viewParams.favoriteCount;
+            ArticleDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            ArticleDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
             break;
           case SourceType.book:
             // TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
-            BookDetailController.of.detailBean?.favorited =
-                widget.viewParams.favorited;
-            BookDetailController.of.detailBean?.favoriteCount =
-                widget.viewParams.favoriteCount;
+            BookDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            BookDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
             break;
           case SourceType.feed:
             // TrackUtils.trackEvent(userLogType: '107004', params: widget.viewParams.relId);
-            FeedDetailController.of.detailBean?.favorited =
-                widget.viewParams.favorited;
-            FeedDetailController.of.detailBean?.favoriteCount =
-                widget.viewParams.favoriteCount;
+            FeedDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            FeedDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
           case SourceType.tool:
-            ToolDetailController.of.detailBean?.favorited =
-                widget.viewParams.favorited;
-            ToolDetailController.of.detailBean?.favoriteCount =
-                widget.viewParams.favoriteCount;
+            ToolDetailController.of.detailBean?.favorited = widget.viewParams.favorited;
+            ToolDetailController.of.detailBean?.favoriteCount = widget.viewParams.favoriteCount;
         }
       },
       (msg) {
@@ -429,49 +397,37 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
   void _toShare() {
     if (widget.viewParams.relType == 'thread') {
       NetRequest().threadUpCount(widget.viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(
-            text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         DialogUtil.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
-        TrackUtils.trackEvent(
-            userLogType: '109004', params: widget.viewParams.relId);
+        TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
       });
     } else {
       NetRequest().upCount(widget.viewParams.relId!, (data) async {
-        await Clipboard.setData(ClipboardData(
-            text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
+        await Clipboard.setData(ClipboardData(text: '${Env.shareHost}/${widget.viewParams.shareLink}'));
         DialogUtil.showToast('分享成功，链接已复制');
         widget.viewParams.shareCount = widget.viewParams.shareCount + 1;
         setState(() {});
         switch (widget.sourceType) {
           case SourceType.video:
-            TrackUtils.trackEvent(
-                userLogType: '103005', params: widget.viewParams.relId);
-            VideoDetailController.of.detailBean?.shareCount =
-                widget.viewParams.shareCount;
+            TrackUtils.trackEvent(userLogType: '103005', params: widget.viewParams.relId);
+            VideoDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
             break;
           case SourceType.course:
-            ArticleDetailController.of.detailBean?.shareCount =
-                widget.viewParams.shareCount;
-            TrackUtils.trackEvent(
-                userLogType: '105004', params: widget.viewParams.relId);
+            ArticleDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
+            TrackUtils.trackEvent(userLogType: '105004', params: widget.viewParams.relId);
             break;
           case SourceType.book:
-            BookDetailController.of.detailBean?.shareCount =
-                widget.viewParams.shareCount;
-            TrackUtils.trackEvent(
-                userLogType: '107005', params: widget.viewParams.relId);
+            BookDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
+            TrackUtils.trackEvent(userLogType: '107005', params: widget.viewParams.relId);
             break;
           case SourceType.feed:
-            FeedDetailController.of.detailBean?.shareCount =
-                widget.viewParams.shareCount;
-            TrackUtils.trackEvent(
-                userLogType: '109004', params: widget.viewParams.relId);
+            FeedDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
+            TrackUtils.trackEvent(userLogType: '109004', params: widget.viewParams.relId);
             break;
           case SourceType.tool:
-            ToolDetailController.of.detailBean?.shareCount =
-                widget.viewParams.shareCount;
+            ToolDetailController.of.detailBean?.shareCount = widget.viewParams.shareCount;
             break;
         }
       });

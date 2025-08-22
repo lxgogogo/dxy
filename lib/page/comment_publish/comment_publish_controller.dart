@@ -25,6 +25,13 @@ class CommentPublishController extends GetxController {
         List.castFrom(quillController.document.toDelta().toJson()),
         ConverterOptions.forEmail(),
       );
+      converter.renderCustomWith = ((customOp, contextOp) {
+        if (customOp.insert.type == 'at') {
+          final Map<String, dynamic> dataMap = jsonDecode(customOp.insert.value);
+          return "<span style='color: #249cfc; position: relative; z-index: 1;'>@${dataMap['nickname']} </span>";
+        }
+        return '';
+      });
       final content = converter.convert();
       final isEmptyText = HtmlParseUtil.of.isEmptyText(content);
       canSubmit = !isEmptyText || imageData.isNotEmpty;

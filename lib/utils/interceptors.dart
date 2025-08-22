@@ -59,7 +59,6 @@ class ResponseInterceptors extends InterceptorsWrapper {
       if (Get.currentRoute != Routes.login) {
         if (code == 401) {
           DebounceThrottle.debounce(() {
-            DialogUtil.showToast(msg ?? '请先登录');
             UserStore.of.clearUserStorage();
             Get.until((route) => route.settings.name == Routes.main);
             EventBusUtil.of.fire(EventLogout());

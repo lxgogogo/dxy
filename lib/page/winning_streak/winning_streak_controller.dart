@@ -4,7 +4,7 @@ class WinningStreakController extends GetxController {
   Rx<CoursePunchModel?> detailBean = Rx<CoursePunchModel?>(null);
   final Rx<DateTime> focusedDay = Rx<DateTime>(DateTime.now());
 
-  bool hasLoaded = false;
+  RxBool hasLoaded = false.obs;
 
   @override
   void onReady() {
@@ -104,13 +104,13 @@ class WinningStreakController extends GetxController {
     // isFetching = true;
     try {
       final formatData = DateFormat('yyyy-MM').format(date);
-      final res = await CourseService.of.coursePunch(formatData, showLoading: true);
+      final res = await CourseService.of.coursePunch(formatData, showLoading: false);
       if (res.isSuccess) {
         detailBean.value = CoursePunchModel.fromJson(res.data);
         _fetchData();
       }
     } finally {
-      hasLoaded = false;
+      hasLoaded.value = true;
     }
   }
 }

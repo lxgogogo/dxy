@@ -18,15 +18,15 @@ class CommonDialog extends StatelessWidget {
 
   const CommonDialog(
       {super.key,
-      required this.title,
-      this.content,
-      this.onConfirm,
-      this.onCancel,
-      this.confirmText = '确定',
-      this.cancelText = '取消',
-      this.onlyConfirm = false,
-      this.showClose = true,
-      this.contentWidget});
+        required this.title,
+        this.content,
+        this.onConfirm,
+        this.onCancel,
+        this.confirmText = '确定',
+        this.cancelText = '取消',
+        this.onlyConfirm = false,
+        this.showClose = true,
+        this.contentWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -34,123 +34,122 @@ class CommonDialog extends StatelessWidget {
       alignment: Alignment.center,
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.zero,
-      child: ShadowWrapper(
-        borderRadius: 16.r,
-        margin: EdgeInsets.only(left: 32.w, right: 32.w),
-        child: Container(
-          padding: EdgeInsets.only(bottom: 24.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Stack(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 24.w),
-                      child: Text(
-                        title,
-                        style: TextStyle(
-                          color: '#333333'.hexColor,
-                          fontSize: 16.w,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 32.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 24.w),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: '#333333'.hexColor,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  if (showClose)
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: CloseImageButton(
-                        color: '#333333'.hexColor.withOpacity(0.5),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    )
-                ],
-              ),
-              if ((content?.isNotEmpty ?? false) || contentWidget != null)
-                Center(
-                  child: Padding(
-                      padding: EdgeInsets.only(top: 16.w, bottom: 24.w),
-                      child: contentWidget ?? Text(
-                              content ?? '',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: '#333333'.hexColor,
-                                fontSize: 14.w,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ))
-                )
-              else
-                SizedBox(height: 24.w),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (!onlyConfirm) ...[
-                    InkWell(
+                ),
+                if (showClose)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: CloseImageButton(
+                      color: '#333333'.hexColor.withOpacity(0.5),
                       onTap: () {
-                        onCancel?.call();
                         Navigator.of(context).pop();
                       },
-                      child: Container(
-                        width: 96.w,
-                        height: 36.w,
-                        decoration: ShapeDecoration(
-                          color: '#333333'.hexColor.withOpacity(0.1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.w),
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          cancelText,
-                          style: TextStyle(
-                            color: '#333333'.hexColor.withOpacity(0.7),
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ),
                     ),
-                    SizedBox(width: 24.w),
-                  ],
-                  InkWell(
+                  )
+              ],
+            ),
+            if ((content?.isNotEmpty ?? false) || contentWidget != null)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.w),
+                child: contentWidget ??
+                    Text(
+                      content ?? '',
+                      style: TextStyle(
+                        color: '#333333'.hexColor,
+                        fontSize: 14.sp,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+              )
+            else
+              SizedBox(height: 24.w),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (!onlyConfirm) ...[
+                  GestureDetector(
                     onTap: () {
-                      onConfirm?.call();
+                      onCancel?.call();
+                      Navigator.of(context).pop();
                     },
                     child: Container(
                       width: 96.w,
                       height: 36.w,
                       decoration: ShapeDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment(1.00, 0.00),
-                          end: Alignment(-1, 0),
-                          colors: [
-                            Color(0xFF84BCF9),
-                            Color(0xFF557BF6),
-                          ],
-                        ),
+                        color: '#333333'.hexColor.withOpacity(0.1),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.w),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        confirmText,
+                        cancelText,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: '#333333'.hexColor.withOpacity(0.7),
                           fontSize: 14.sp,
                         ),
                       ),
                     ),
                   ),
+                  SizedBox(width: 24.w),
                 ],
-              ),
-            ],
-          ),
+                GestureDetector(
+                  onTap: () {
+                    onConfirm?.call();
+                  },
+                  child: Container(
+                    width: 96.w,
+                    height: 36.w,
+                    decoration: ShapeDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment(1.00, 0.00),
+                        end: Alignment(-1, 0),
+                        colors: [
+                          Color(0xFF84BCF9),
+                          Color(0xFF557BF6),
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      confirmText,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 24.w),
+          ],
         ),
       ),
     );

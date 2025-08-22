@@ -1,14 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:holdem/extensions/string_extensions.dart';
 import 'package:holdem/utils/dialog_util.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/app_version.dart';
 import '../services/index.dart';
-import '../widget/dialog_common_new.dart';
+import '../widget/dialog_common.dart';
 
 class AppVersionChecker {
   static final AppVersionChecker of = AppVersionChecker._();
@@ -47,9 +49,16 @@ class AppVersionChecker {
               context: Get.context!,
               builder: (context) => WillPopScope(
                 onWillPop: () async => false,
-                child: NewCommonDialog(
+                child: CommonDialog(
                   title: '德学院APP更新说明',
-                  content: appVersion.description,
+                  contentWidget: Text(
+                    appVersion.description ?? '',
+                    style: TextStyle(
+                      color: '#666666'.hexColor,
+                      fontSize: 14.sp,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                   confirmText: '立即更新',
                   cancelText: '下次再说',
                   showClose: false,
@@ -80,7 +89,7 @@ class AppVersionChecker {
           if (!showTips) return;
           DialogUtil.showToast('当前已经是最新版本');
         }
-      }/* else {
+      } /* else {
         DialogUtil.showToast(res.msg);
       }*/
     } finally {

@@ -28,7 +28,7 @@ class AppRoutesUtils {
                 child: CommonDialog(
                     title: title,
                     content: content,
-                    confirmText: '好',
+                    confirmText: '登录/注册',
                     onlyConfirm: true,
                     showClose: false,
                     onConfirm: () {

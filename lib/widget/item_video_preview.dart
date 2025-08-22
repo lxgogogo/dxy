@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:holdem/extensions/num_extensions.dart';
 import 'package:holdem/extensions/string_extensions.dart';
+import 'package:holdem/widget/common_image.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
@@ -38,7 +39,7 @@ class _ItemVideoPreviewState extends State<ItemVideoPreview> {
   @override
   void initState() {
     super.initState();
-    _startVideoPlayer('https://dev-dx-pachong.dx252.com/video/20250820/P_zbY3iGlSCr8VmCUW.mp4');
+    _startVideoPlayer(widget.item.previewUrl ?? '');
   }
 
   @override
@@ -51,14 +52,16 @@ class _ItemVideoPreviewState extends State<ItemVideoPreview> {
   @override
   void didUpdateWidget(covariant ItemVideoPreview oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.item.previewUrl != widget.item.previewUrl) {
+    if (oldWidget.item.previewUrl != widget.item.previewUrl) {
       _startVideoPlayer(widget.item.previewUrl ?? '');
     }
   }
 
   void _initController(String link) {
-    _videoController = VideoPlayerController.networkUrl(Uri.parse(link))
-      ..initialize().then((_) {
+    _videoController = VideoPlayerController.networkUrl(
+      Uri.parse(link),
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    )..initialize().then((_) {
         _chewieController = ChewieController(
           videoPlayerController: _videoController!,
           autoInitialize: true,
@@ -67,29 +70,20 @@ class _ItemVideoPreviewState extends State<ItemVideoPreview> {
           showControlsOnInitialize: false,
           showOptions: false,
           overlay: ValueListenableBuilder<VideoPlayerValue>(
-            valueListenable: _videoController!,
-            builder: (_, videoPlayerValue, __) {
-              if (videoPlayerValue.position > Duration.zero) {
-                return const SizedBox();
-              }
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      color: Colors.black,
+              valueListenable: _videoController!,
+              builder: (_, videoPlayerValue, __) {
+                if (videoPlayerValue.position > Duration.zero) {
+                  return const SizedBox();
+                }
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CommonImage.net(
+                      imageUrl: widget.item.cover ?? '',
                     ),
-                  ),
-                  CachedNetworkImage(
-                    imageUrl: widget.item.cover ?? '',
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const SizedBox(),
-                    errorWidget: (context, url, error) => const SizedBox(),
-                  ),
-                ],
-              );
-            },
-          ),
+                  ],
+                );
+              }),
         );
         _chewieController!.setVolume(0);
         if (mounted) {
@@ -137,7 +131,6 @@ class _ItemVideoPreviewState extends State<ItemVideoPreview> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.black,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     clipBehavior: Clip.hardEdge,
@@ -150,8 +143,8 @@ class _ItemVideoPreviewState extends State<ItemVideoPreview> {
                                   controller: _chewieController!,
                                 ),
                               )
-                            : const Center(
-                                child: CircularProgressIndicator(),
+                            : CommonImage.net(
+                                imageUrl: widget.item.cover ?? '',
                               ),
                       ],
                     ),

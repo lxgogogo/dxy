@@ -34,7 +34,6 @@ class ItemVideoPreview extends StatefulWidget {
 class _ItemVideoPreviewState extends State<ItemVideoPreview> {
   VideoPlayerController? _videoController;
   ChewieController? _chewieController;
-  bool isVideoCompleted = false;
 
   @override
   void initState() {
@@ -93,7 +92,9 @@ class _ItemVideoPreviewState extends State<ItemVideoPreview> {
   }
 
   Future<void> _startVideoPlayer(String link) async {
-    isVideoCompleted = false;
+    _chewieController?.dispose();
+    _chewieController = null;
+    setState(() {});
     if (_videoController == null) {
       _initController(link);
     } else {

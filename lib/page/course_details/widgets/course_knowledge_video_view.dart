@@ -8,6 +8,7 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../model/course_model.dart';
+import '../../../widget/common_image.dart';
 
 class KnowledgeVideoView extends StatefulWidget {
   final ContentVideo? contentVideo;
@@ -57,8 +58,9 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
       ..initialize().then((_) {
         _chewieController = ChewieController(
           videoPlayerController: _videoController!,
-          showOptions: false,
+          autoInitialize: true,
           showControlsOnInitialize: false,
+          showOptions: false,
           overlay: ValueListenableBuilder<VideoPlayerValue>(
               valueListenable: _videoController!,
               builder: (_, videoPlayerValue, __) {
@@ -68,16 +70,8 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
                 return Stack(
                   fit: StackFit.expand,
                   children: [
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.black,
-                      ),
-                    ),
-                    CachedNetworkImage(
+                    CommonImage.net(
                       imageUrl: widget.contentVideo?.thumbnail ?? '',
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const SizedBox(),
-                      errorWidget: (context, url, error) => const SizedBox(),
                     ),
                   ],
                 );
@@ -90,6 +84,9 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
   }
 
   Future<void> _startVideoPlayer(String link) async {
+    _chewieController?.dispose();
+    _chewieController = null;
+    setState(() {});
     isVideoCompleted = false;
     if (_videoController == null) {
       _initController(link);
@@ -149,8 +146,8 @@ class _KnowledgeVideoViewState extends State<KnowledgeVideoView> {
                   ? Chewie(
                       controller: _chewieController!,
                     )
-                  : const Center(
-                      child: CircularProgressIndicator(),
+                  : CommonImage.net(
+                      imageUrl: widget.contentVideo?.thumbnail ?? '',
                     ),
               Positioned(
                 top: 12.w,

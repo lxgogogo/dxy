@@ -368,6 +368,7 @@ class VideoNotifier extends ChangeNotifier {
   void initChewieController(videoPlayerController, Function fullScreenCallBack) {
     _chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
+      autoInitialize: true,
       autoPlay: true,
       showOptions: false,
       showControlsOnInitialize: false,

@@ -57,7 +57,7 @@ class AppVersionChecker {
                       color: '#666666'.hexColor,
                       fontSize: 14.sp,
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                   ),
                   confirmText: '立即更新',
                   cancelText: '下次再说',

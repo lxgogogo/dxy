@@ -138,19 +138,14 @@ class VideoDetailController extends GetxController {
         } else {
           haveWatchPower.value = false;
           safeUpdate();
-          if ((detailBean?.featured ?? 0) == 0) {
-            // 普通视频未登录可以观看
-            if ((detailBean?.userlevel?.videoWatch ?? 0) > 0) {
-              _watchVideo();
-            } else {
-              haveWatchAlert = true;
-              AppRoutesUtils.haveLogin(title: '当前观看视频已达上限', content: '您当前的身份为访客\n请登录/注册后观看');
-            }
+          if ((detailBean?.userlevel?.videoWatch ?? 0) > 0) {
+            _watchVideo();
           } else {
-            if (!haveWatchAlert) {
-              haveWatchAlert = true;
-              AppRoutesUtils.haveLogin(title: '请登录后观看', content: '您当前的身份为访客\n请登录/注册后观看');
-            }
+            haveWatchAlert = true;
+            AppRoutesUtils.haveLogin(
+              title: '当前观看视频已达上限',
+              content: '您当前的身份为访客，请登录/注册后观看',
+            );
           }
         }
         EventBusUtil.of.fire(EventRefreshNum(
@@ -443,7 +438,7 @@ class VideoDetailController extends GetxController {
     if (detailBean == null) {
       return;
     }
-    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客\n登录/注册后即可收藏精彩内容')) {
+    if (!AppRoutesUtils.haveLogin(title: '请登录后收藏', content: '您当前的身份为访客，登录/注册后即可收藏精彩内容')) {
       return;
     }
     NetRequest().favoriteToggle(

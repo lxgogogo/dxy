@@ -111,11 +111,11 @@ class VideoDetailController extends GetxController {
     if (detailBean != null && videoController != null) {
       int videoType = detailBean?.featured ?? 0;
       final currentDuration = videoController?.value.position.inSeconds;
-      if ((videoType == 1 && UserStore.of.isLogin) || videoType == 0) {
-        if ((currentDuration ?? 0) > 1) {
-          await CommonService.of
-              .uploadBenefits({'type': videoType == 1 ? 'featured' : 'video', 'value': currentDuration});
-        }
+      if ((currentDuration ?? 0) > 1) {
+        await CommonService.of.uploadBenefits({
+          'type': videoType == 1 ? 'featured' : 'video',
+          'value': currentDuration,
+        });
       }
     }
   }

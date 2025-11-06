@@ -111,7 +111,7 @@ class _CommonDetailBottomViewState extends State<CommonDetailBottomView> {
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 4.w),
                               child: Text(
-                                '德学院官方',
+                                '德信竞技官方',
                                 style: TextStyle(
                                   fontSize: 10.sp,
                                   color: '##333333'.hexColor,

@@ -50,7 +50,7 @@ class AppVersionChecker {
               builder: (context) => WillPopScope(
                 onWillPop: () async => false,
                 child: CommonDialog(
-                  title: '德学院APP更新说明',
+                  title: '德信竞技APP更新说明',
                   contentWidget: Text(
                     appVersion.description ?? '',
                     style: TextStyle(

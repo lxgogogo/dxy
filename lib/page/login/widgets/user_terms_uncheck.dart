@@ -24,7 +24,7 @@ class UserTermsUncheck extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(
-                text: '德学院',
+                text: '德信竞技',
                 style: TextStyle(
                   color: '#333333'.hexColor,
                   fontSize: 12.sp,

@@ -22,7 +22,7 @@ class ScanResultScreen extends StatelessWidget {
     return GetBuilder<ScanResultController>(
       init: ScanResultController(),
       builder: (controller) => Scaffold(
-        appBar: CommonAppBar.arrowBack(context, title: '扫码登录德学院'),
+        appBar: CommonAppBar.arrowBack(context, title: '扫码登录德信竞技'),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,7 +37,7 @@ class ScanResultScreen extends StatelessWidget {
               controller.isSuccess
                   ? '登录成功'
                   : controller.isValid
-                      ? '德学院登录确认'
+                      ? '德信竞技登录确认'
                       : '当前二维码已过期',
               style: TextStyle(
                 color: '#333333'.hexColor,

@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
           //   return false;
           // },
           child: GetMaterialApp(
-            title: '德学院',
+            title: '德信竞技',
             debugShowCheckedModeBanner: false,
             navigatorObservers: [
               FlutterSmartDialog.observer,

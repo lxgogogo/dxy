@@ -517,7 +517,7 @@ class _RegisterContentState extends State<RegisterContent> {
     Get.toNamed(
       Routes.termsAndPrivacy,
       arguments: {
-        'title': '《德学院用户注册协议》',
+        'title': '《德信竞技用户注册协议》',
       },
     );
   }

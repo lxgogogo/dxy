@@ -77,7 +77,7 @@ class ScanScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '扫码登录德学院',
+                        '扫码登录德信竞技',
                         style: TextStyle(
                           fontSize: 14.sp,
                           color: Colors.white,

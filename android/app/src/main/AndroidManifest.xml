@@ -6,7 +6,7 @@
         android:name="${applicationName}"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="德学院">
+        android:label="德信竞技">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
